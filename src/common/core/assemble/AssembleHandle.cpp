@@ -33,6 +33,7 @@ AssembleHandle::AssembleHandle()
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
 , m_integerPrimary(-1)
+, m_withoutRowid(false)
 , m_cellStatement(getStatement())
 , m_statementForUpdateSequence(StatementUpdate()
                                .update("sqlite_sequence")
@@ -133,8 +134,17 @@ bool AssembleHandle::assembleTable(const UnsafeStringView &tableName,
     markErrorAsUnignorable();
     if (succeed) {
         m_table = tableName;
+        auto attribute = getTableAttribute(Schema::main(), tableName);
+        if (attribute.hasValue()) {
+            m_withoutRowid = attribute->withoutRowid;
+        }
     }
     return succeed;
+}
+
+bool AssembleHandle::isAssemblingTableWithoutRowid() const
+{
+    return m_withoutRowid;
 }
 
 bool AssembleHandle::assembleCell(const Repair::Cell &cell)
@@ -145,9 +155,11 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
     }
     WCTAssert(m_cellStatement->isPrepared());
     m_cellStatement->reset();
-    m_cellStatement->bindInteger(cell.getRowID(), 1);
+    if (!m_withoutRowid) {
+        m_cellStatement->bindInteger(cell.getRowID(), 1);
+    }
     for (int i = 0; i < cell.getCount(); ++i) {
-        int bindIndex = i + 2;
+        int bindIndex = m_withoutRowid ? i + 1 : i + 2;
         switch (cell.getValueType(i)) {
         case Repair::Cell::Integer:
             m_cellStatement->bindInteger(cell.integerValue(i), bindIndex);
@@ -189,7 +201,10 @@ bool AssembleHandle::lazyPrepareCell()
     auto &metas = optionalMetas.value();
     m_integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas);
 
-    Columns columns = { Column::rowid() };
+    Columns columns = {};
+    if (!m_withoutRowid) {
+        columns.push_back(Column::rowid());
+    }
     for (const auto &meta : metas) {
         columns.push_back(Column(meta.name));
     }

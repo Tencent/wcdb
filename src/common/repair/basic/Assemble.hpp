@@ -50,6 +50,7 @@ public:
     virtual bool
     assembleTable(const UnsafeStringView &tableName, const UnsafeStringView &sql)
     = 0;
+    virtual bool isAssemblingTableWithoutRowid() const = 0;
     virtual bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
     void markDuplicatedAsIgnorable(bool ignorable);

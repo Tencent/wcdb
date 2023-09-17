@@ -95,10 +95,9 @@ bool Mechanic::work()
     for (const auto &element : m_material->contentsMap) {
         numberOfPages += element.second.verifiedPagenos.size();
     }
-    if (numberOfPages == 0) {
-        return exit(true);
-    }
-    setPageWeight(Fraction(1, numberOfPages + m_pager.getDisposedWalPages()));
+    // If there are only without-rowid tables in the db, numbersOfLeafTablePages will be 0
+    setPageWeight(Fraction(
+    1, (numberOfPages == 0 ? 1 : numberOfPages) + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
         for (const auto &contentElement : m_material->contentsMap) {
@@ -110,18 +109,27 @@ bool Mechanic::work()
                 continue;
             }
 
-            for (const auto &verifiedPagenosElement : contentElement.second.verifiedPagenos) {
-                if (isErrorCritial()) {
-                    break;
+            if (!m_assembleDelegate->isAssemblingTableWithoutRowid()) {
+                for (const auto &verifiedPagenosElement : contentElement.second.verifiedPagenos) {
+                    if (isErrorCritial()) {
+                        break;
+                    }
+                    m_checksum = verifiedPagenosElement.second;
+                    if (!crawl(verifiedPagenosElement.first)) {
+                        tryUpgradeCrawlerError();
+                    }
                 }
-                m_checksum = verifiedPagenosElement.second;
-                if (!crawl(verifiedPagenosElement.first)) {
+            } else if (contentElement.second.rootPage > 1) {
+                if (!crawl(contentElement.second.rootPage)) {
                     tryUpgradeCrawlerError();
                 }
             }
             assembleAssociatedSQLs(contentElement.second.associatedSQLs);
         }
         markAsAssembled();
+    }
+    if (numberOfPages == 0 && !isErrorCritial() && getScore().value() == 0) {
+        Scoreable::increaseScore(1);
     }
     return exit();
 }
@@ -137,23 +145,28 @@ void Mechanic::onCellCrawled(const Cell &cell)
 
 bool Mechanic::willCrawlPage(const Page &page, int)
 {
-    increaseProgress(getPageWeight().value());
+    if (page.getType() == Page::Type::LeafTable) {
+        increaseProgress(getPageWeight().value());
+    }
     if (isErrorCritial()) {
         return false;
     }
-    if (page.getType() != Page::Type::LeafTable) {
+    if (page.getType() == Page::Type::LeafTable) {
+        if (page.getData().hash() != m_checksum) {
+            markAsCorrupted(page.number,
+                            StringView::formatted(
+                            "Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
+            return false;
+        }
+        markPageAsCounted(page);
+    } else if (page.isIndexPage()) {
+        markPageAsCounted(page);
+    } else {
         markAsCorrupted(page.number,
                         StringView::formatted(
                         "Unexpected page type: %d.", page.getType(), page.getType()));
         return false;
     }
-    if (page.getData().hash() != m_checksum) {
-        markAsCorrupted(page.number,
-                        StringView::formatted(
-                        "Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
-        return false;
-    }
-    markPageAsCounted(page);
     return true;
 }
 

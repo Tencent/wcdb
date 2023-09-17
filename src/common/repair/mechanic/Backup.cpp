@@ -441,6 +441,9 @@ bool Backup::willCrawlPage(const Page &page, int height)
         }
         return false;
     }
+    case Page::Type::InteriorIndex:
+    case Page::Type::LeafIndex:
+        return false;
     default:
         markAsCorrupted(
         page.number, StringView::formatted("Unexpected page type: %d", page.getType()));

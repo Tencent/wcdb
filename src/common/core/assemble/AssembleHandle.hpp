@@ -58,12 +58,14 @@ protected:
 public:
     bool assembleTable(const UnsafeStringView &tableName,
                        const UnsafeStringView &sql) override final;
+    bool isAssemblingTableWithoutRowid() const override final;
     bool assembleCell(const Repair::Cell &cell) override final;
 
 protected:
     bool lazyPrepareCell();
     int64_t m_integerPrimary;
     StringView m_table;
+    bool m_withoutRowid;
     HandleStatement *m_cellStatement;
 
 #pragma mark - Assemble - Sequence

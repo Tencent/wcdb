@@ -66,10 +66,6 @@ bool Material::serialize(Serialization &serialization) const
             markAsEmpty("SQL");
             return false;
         }
-        if (element->verifiedPagenos.size() == 0) {
-            markAsEmpty("Pageno");
-            return false;
-        }
         if (!element->serialize(encoder)) {
             return false;
         }
@@ -326,10 +322,6 @@ bool Material::Content::deserialize(Deserialization &deserialization)
         return false;
     }
     int numberOfPages = (int) varint;
-    if (numberOfPages == 0) {
-        markAsCorrupt("NumberOfPages");
-        return false;
-    }
     verifiedPagenos.clear();
     for (int i = 0; i < numberOfPages; ++i) {
         std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();

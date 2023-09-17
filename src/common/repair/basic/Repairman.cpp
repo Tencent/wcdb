@@ -192,6 +192,9 @@ void Repairman::onErrorCritical()
 #pragma mark - Evaluation
 void Repairman::markCellAsCounted(const Cell &cell)
 {
+    if (cell.getPage().isIndexPage()) {
+        return;
+    }
     int numberOfCells = cell.getPage().getNumberOfCells();
     WCTAssert(numberOfCells != 0);
     if (numberOfCells > 0) {
