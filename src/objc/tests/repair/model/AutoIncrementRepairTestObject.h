@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/9/15.
 //
 
 /*
@@ -22,25 +22,8 @@
  * limitations under the License.
  */
 
-#import "BackupTestCase.h"
-#import "CoreConst.h"
+#import "RepairTestObject.h"
 
-@implementation BackupTestCase
-
-- (void)executeTest:(void (^)())operation
-{
-    [self.database setCipherKey:nil];
-    [self insertPresetObjects];
-    operation();
-    [self.database removeFiles];
-    [self.database setCipherKey:Random.shared.data];
-    [self insertPresetObjects];
-    operation();
-}
-
-- (int)framesForTolerance
-{
-    return 10;
-}
+@interface AutoIncrementRepairTestObject : RepairTestObjectBase <RepairTestObject>
 
 @end

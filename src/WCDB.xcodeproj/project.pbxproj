@@ -859,6 +859,10 @@
 		0DE08A2429CBE79C009A7CA3 /* CrossPlatform.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */; };
 		0DE08A2629CBE79C009A7CA3 /* WCTOperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */; };
 		0DE08A2B29CBEB4E009A7CA3 /* WCTFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */; };
+		0DE68B362AB45C27008BD74C /* RepairTestObjectBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B352AB45C27008BD74C /* RepairTestObjectBase.mm */; };
+		0DE68B3B2AB45F6C008BD74C /* NormalRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */; };
+		0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */; };
+		0DE68B412AB466F1008BD74C /* WithoutRowidRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */; };
 		0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
@@ -3093,6 +3097,7 @@
 		75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75CE3F002812E1A400E132F6 /* WCTAPIBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75CE3EFF2812E1A400E132F6 /* WCTAPIBridge.mm */; };
 		75CFB5DC293F30A200F97FA5 /* AutoAddColumnTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75CFB5DB293F30A200F97FA5 /* AutoAddColumnTests.swift */; };
+		75D2A9BE2AB49C890024B8B2 /* Random+RepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D2A9BC2AB49B2D0024B8B2 /* Random+RepairTestObject.mm */; };
 		75D4834228A79AD3004FDD3C /* CPPTraceTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834128A79AD3004FDD3C /* CPPTraceTest.mm */; };
 		75D4834528A7A827004FDD3C /* CPPTableTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834428A7A827004FDD3C /* CPPTableTestCase.mm */; };
 		75D4834928A7C42F004FDD3C /* Random+CPPTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75D4834828A7C42F004FDD3C /* Random+CPPTestObject.mm */; };
@@ -3674,6 +3679,15 @@
 		0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTFileManager.cpp; sourceTree = "<group>"; };
 		0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CrossPlatform.c; sourceTree = "<group>"; };
 		0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTOperationQueue.cpp; sourceTree = "<group>"; };
+		0DE68B352AB45C27008BD74C /* RepairTestObjectBase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestObjectBase.mm; sourceTree = "<group>"; };
+		0DE68B372AB45C36008BD74C /* RepairTestObjectBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestObjectBase.h; sourceTree = "<group>"; };
+		0DE68B382AB45EE8008BD74C /* RepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestObject.h; sourceTree = "<group>"; };
+		0DE68B392AB45F5F008BD74C /* NormalRepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NormalRepairTestObject.h; sourceTree = "<group>"; };
+		0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NormalRepairTestObject.mm; sourceTree = "<group>"; };
+		0DE68B3C2AB461A0008BD74C /* AutoIncrementRepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoIncrementRepairTestObject.h; sourceTree = "<group>"; };
+		0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoIncrementRepairTestObject.mm; sourceTree = "<group>"; };
+		0DE68B3F2AB466E5008BD74C /* WithoutRowidRepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WithoutRowidRepairTestObject.h; sourceTree = "<group>"; };
+		0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WithoutRowidRepairTestObject.mm; sourceTree = "<group>"; };
 		0DF1089529C05559004ED764 /* StatementSelectInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementSelectInterface.swift; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
@@ -4686,6 +4700,8 @@
 		75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTAPIBridge.h; sourceTree = "<group>"; };
 		75CE3EFF2812E1A400E132F6 /* WCTAPIBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTAPIBridge.mm; sourceTree = "<group>"; };
 		75CFB5DB293F30A200F97FA5 /* AutoAddColumnTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoAddColumnTests.swift; sourceTree = "<group>"; };
+		75D2A9BC2AB49B2D0024B8B2 /* Random+RepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+RepairTestObject.mm"; sourceTree = "<group>"; };
+		75D2A9BD2AB49B390024B8B2 /* Random+RepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+RepairTestObject.h"; sourceTree = "<group>"; };
 		75D4834128A79AD3004FDD3C /* CPPTraceTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPTraceTest.mm; sourceTree = "<group>"; };
 		75D4834328A79CCE004FDD3C /* CPPTestCaseAssertion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPTestCaseAssertion.h; sourceTree = "<group>"; };
 		75D4834428A7A827004FDD3C /* CPPTableTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPTableTestCase.mm; sourceTree = "<group>"; };
@@ -5707,6 +5723,19 @@
 			path = platform;
 			sourceTree = "<group>";
 		};
+		0DE68B342AB45ADB008BD74C /* model */ = {
+			isa = PBXGroup;
+			children = (
+				0DE68B392AB45F5F008BD74C /* NormalRepairTestObject.h */,
+				0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */,
+				0DE68B3C2AB461A0008BD74C /* AutoIncrementRepairTestObject.h */,
+				0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */,
+				0DE68B3F2AB466E5008BD74C /* WithoutRowidRepairTestObject.h */,
+				0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		2321243920172865008146EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -6413,8 +6442,8 @@
 		234F049D227A9EFA00DD65A2 /* repair */ = {
 			isa = PBXGroup;
 			children = (
-				234F0733227AA5C700DD65A2 /* BackupTestCase.h */,
-				234F0731227AA5C700DD65A2 /* BackupTestCase.mm */,
+				75D2A9BB2AB497D70024B8B2 /* common */,
+				0DE68B342AB45ADB008BD74C /* model */,
 				234F072F227AA5C600DD65A2 /* BackupTests.mm */,
 				234F0730227AA5C700DD65A2 /* DepositTests.mm */,
 				234F0732227AA5C700DD65A2 /* RetrieveRobustyTests.mm */,
@@ -7422,6 +7451,20 @@
 				75535245290E63E5008376AB /* CPPFTS5Tests.mm */,
 			);
 			path = fts;
+			sourceTree = "<group>";
+		};
+		75D2A9BB2AB497D70024B8B2 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				0DE68B372AB45C36008BD74C /* RepairTestObjectBase.h */,
+				0DE68B352AB45C27008BD74C /* RepairTestObjectBase.mm */,
+				0DE68B382AB45EE8008BD74C /* RepairTestObject.h */,
+				75D2A9BD2AB49B390024B8B2 /* Random+RepairTestObject.h */,
+				75D2A9BC2AB49B2D0024B8B2 /* Random+RepairTestObject.mm */,
+				234F0733227AA5C700DD65A2 /* BackupTestCase.h */,
+				234F0731227AA5C700DD65A2 /* BackupTestCase.mm */,
+			);
+			path = common;
 			sourceTree = "<group>";
 		};
 		75E76AE12917ADF400073CCA /* virtual_table */ = {
@@ -9762,6 +9805,7 @@
 				234F0609227AA4F600DD65A2 /* StatementCreateIndexTests.mm in Sources */,
 				234F0608227AA4F600DD65A2 /* StatementAttachTests.mm in Sources */,
 				0D0CD7A12A6FBE0C00F89C6B /* MigrateTests.mm in Sources */,
+				0DE68B362AB45C27008BD74C /* RepairTestObjectBase.mm in Sources */,
 				234F063D227AA50800DD65A2 /* ColumnCodingObject.mm in Sources */,
 				234F06A6227AA55400DD65A2 /* AdditionalORMObject.mm in Sources */,
 				234F05F3227AA4F600DD65A2 /* ExpressionTests.mm in Sources */,
@@ -9785,6 +9829,7 @@
 				234F05EC227AA4F600DD65A2 /* ConflictTests.mm in Sources */,
 				234F05FC227AA4F600DD65A2 /* RaiseFunctionTests.mm in Sources */,
 				234F05ED227AA4F600DD65A2 /* WCTResultColumnTests.mm in Sources */,
+				0DE68B3B2AB45F6C008BD74C /* NormalRepairTestObject.mm in Sources */,
 				39327B9F22CF276600AABD4B /* ObjectsBasedFactory.mm in Sources */,
 				234F05EF227AA4F600DD65A2 /* JoinConstraintTests.mm in Sources */,
 				234F0607227AA4F600DD65A2 /* StatementDropIndexTests.mm in Sources */,
@@ -9818,6 +9863,7 @@
 				234F063F227AA50800DD65A2 /* StringCodingObject.m in Sources */,
 				39327B8522CF275900AABD4B /* Random.mm in Sources */,
 				39327BAB22CF276600AABD4B /* TablesBasedFactory.mm in Sources */,
+				0DE68B412AB466F1008BD74C /* WithoutRowidRepairTestObject.mm in Sources */,
 				234F05E0227AA4F600DD65A2 /* StatementTests.mm in Sources */,
 				234F06EB227AA58E00DD65A2 /* OldRemapObject.mm in Sources */,
 				234F0602227AA4F600DD65A2 /* FilterTests.mm in Sources */,
@@ -9885,11 +9931,13 @@
 				39327B2B22CF271F00AABD4B /* TableTestCase.mm in Sources */,
 				234F05EA227AA4F600DD65A2 /* OrderingTermTests.mm in Sources */,
 				39327B8F22CF276000AABD4B /* TestCaseObject.mm in Sources */,
+				0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */,
 				234F05E8227AA4F600DD65A2 /* StatementReleaseTests.mm in Sources */,
 				39327B8122CF275900AABD4B /* Random+WCDB.mm in Sources */,
 				39327B6B22CF275200AABD4B /* TestCaseCounter.mm in Sources */,
 				234F0640227AA50800DD65A2 /* ColumnCodingTests.mm in Sources */,
 				234F06EE227AA58E00DD65A2 /* NewRemapObject.mm in Sources */,
+				75D2A9BE2AB49C890024B8B2 /* Random+RepairTestObject.mm in Sources */,
 				234F0617227AA4F600DD65A2 /* JoinTests.mm in Sources */,
 				234F0618227AA4F600DD65A2 /* StatementInsertTests.mm in Sources */,
 				234F0736227AA5C700DD65A2 /* DepositTests.mm in Sources */,

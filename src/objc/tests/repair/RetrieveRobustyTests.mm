@@ -97,7 +97,7 @@
     NSString* currentTable = nil;
     BOOL checkpointed = NO; // leave wal exists
     while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
-        if (currentTable == nil || Random.shared.uint8 % 10 == 0) {
+        if (currentTable == nil || Random.shared.uint16 % 1000 == 0) {
             currentTable = [Random.shared tableNameWithPrefix:self.tablePrefix];
             if (![self.database createTable:currentTable withClass:TestCaseObject.class]) {
                 TestCaseFailure();
@@ -114,8 +114,8 @@
             TestCaseFailure();
             return NO;
         }
-        if (Random.shared.uint8 % 10 == 0) {
-            if (![self.database truncateCheckpoint]) {
+        if (Random.shared.uint8 % 100 == 0) {
+            if (![self.database passiveCheckpoint]) {
                 TestCaseFailure();
                 return NO;
             }
@@ -196,37 +196,35 @@
 {
     NSArray* sizes = @[
         @(10 * 1024 * 1024),
-#ifndef WCDB_QUICK_TESTS
         @(100 * 1024 * 1024),
+#ifndef WCDB_QUICK_TESTS
         @(1024 * 1024 * 1024),
 #endif
     ];
+    [self.database enableAutoBackup:YES];
     for (NSNumber* size in sizes) {
         self.expectedDatabaseSize = size.integerValue;
         [self.database removeFiles];
-        [self
-        executeTest:^{
-            TestCaseAssertTrue([self fillDatabaseUntilMeetExpectedSize]);
+        TestCaseAssertTrue([self fillDatabaseUntilMeetExpectedSize]);
 
-            NSDictionary<NSString*, NSArray<TestCaseObject*>*>* expectedTableObjects = [self getTableObjects];
-            TestCaseAssertTrue(expectedTableObjects != nil);
+        NSDictionary<NSString*, NSArray<TestCaseObject*>*>* expectedTableObjects = [self getTableObjects];
+        TestCaseAssertTrue(expectedTableObjects != nil);
 
-            TestCaseAssertTrue([self.database backup]);
+        TestCaseAssertTrue([self.database backup]);
 
-            double attackedRadio = [self pageBasedAttackAsExpectedRadio];
+        double attackedRadio = [self pageBasedAttackAsExpectedRadio];
 
-            double retrievedScore = [self.database retrieve:nullptr];
+        double retrievedScore = [self.database retrieve:nullptr];
 
-            NSDictionary<NSString*, NSArray<TestCaseObject*>*>* retrievedTableObjects = [self getTableObjects];
-            TestCaseAssertTrue(retrievedTableObjects != nil);
+        NSDictionary<NSString*, NSArray<TestCaseObject*>*>* retrievedTableObjects = [self getTableObjects];
+        TestCaseAssertTrue(retrievedTableObjects != nil);
 
-            double objectsScore = [self getObjectsScoreFromRetrievedTableObjects:retrievedTableObjects andExpectedTableObjects:expectedTableObjects];
+        double objectsScore = [self getObjectsScoreFromRetrievedTableObjects:retrievedTableObjects andExpectedTableObjects:expectedTableObjects];
 
-            TestCaseLog(@"Radio: attacked: %.8f, expected %.8f", attackedRadio, self.expectedAttackRadio);
-            TestCaseLog(@"Score: retrieve: %.8f, objects: %.8f", retrievedScore, objectsScore);
+        TestCaseLog(@"Radio: attacked: %.8f, expected %.8f", attackedRadio, self.expectedAttackRadio);
+        TestCaseLog(@"Score: retrieve: %.8f, objects: %.8f", retrievedScore, objectsScore);
 
-            TestCaseAssertTrue([self isToleranceForRetrieveScore:retrievedScore andObjectsScore:objectsScore]);
-        }];
+        TestCaseAssertTrue([self isToleranceForRetrieveScore:retrievedScore andObjectsScore:objectsScore]);
     }
 }
 

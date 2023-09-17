@@ -247,7 +247,7 @@
 
 - (uint16_t)uint16
 {
-    return (*self.uniformUInt8.get())(*self.engine.get());
+    return (*self.uniformUInt16.get())(*self.engine.get());
 }
 
 - (int16_t)int16

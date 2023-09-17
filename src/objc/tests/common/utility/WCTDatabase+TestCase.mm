@@ -40,6 +40,11 @@
     return [self.path stringByAppendingString:@"-wal"];
 }
 
+- (NSString *)incrementalMaterialPath
+{
+    return [self.path stringByAppendingString:@"-incremental.material"];
+}
+
 - (NSString *)firstMaterialPath
 {
     return [self.path stringByAppendingString:@"-first.material"];
@@ -123,9 +128,7 @@
             if (size == 0) {
                 result = 0;
             } else if (size > self.walHeaderSize) {
-                if ((size - self.walHeaderSize) % self.walFrameSize == 0) {
-                    result = (size - self.walHeaderSize) / self.walFrameSize;
-                }
+                result = (size - self.walHeaderSize) / self.walFrameSize;
             }
         } else {
             TestCaseLog(@"%@", error);
