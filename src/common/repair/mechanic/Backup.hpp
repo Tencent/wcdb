@@ -29,6 +29,7 @@
 #include "MasterCrawler.hpp"
 #include "Material.hpp"
 #include "SequenceCrawler.hpp"
+#include <memory>
 #include <vector>
 
 namespace WCDB {
@@ -112,11 +113,14 @@ protected:
     Material m_material;
     SharedIncrementalMaterial m_incrementalMaterial;
     Material::Content &getOrCreateContent(const UnsafeStringView &tableName);
-    std::map<uint32_t, uint32_t> m_verifiedPagenos;
+
+    typedef Material::VerifiedPages VerifiedPages;
+    VerifiedPages m_verifiedPagenos;
 
     typedef IncrementalMaterial::Pages IncrementalPages;
-    IncrementalPages m_verifyingPagenos;
-    std::set<uint32_t> m_unchangedLeaves;
+    IncrementalPages *m_verifyingPagenos;
+    std::vector<bool> m_unchangedLeaves;
+    int m_unchangedLeavesCount;
 
 #pragma mark - Filter
 public:

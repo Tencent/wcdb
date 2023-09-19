@@ -83,7 +83,12 @@ bool BackupDelegateHolder::isDelegateValid() const
 
 #pragma mark - Initialize
 Backup::Backup(const UnsafeStringView &path)
-: Crawlable(), m_pager(path), m_incrementalMaterial(nullptr), m_masterCrawler()
+: Crawlable()
+, m_pager(path)
+, m_incrementalMaterial(nullptr)
+, m_verifyingPagenos(nullptr)
+, m_unchangedLeavesCount(0)
+, m_masterCrawler()
 {
     setAssociatedPager(&m_pager);
     m_masterCrawler.setAssociatedPager(&m_pager);
@@ -104,9 +109,17 @@ bool Backup::work(SharedIncrementalMaterial incrementalMaterial)
         if (!fullBackup()) {
             return false;
         }
-        m_incrementalMaterial = incrementalMaterial;
+        if (incrementalMaterial != nullptr) {
+            //Avoid to be changed during the backup
+            m_incrementalMaterial
+            = std::make_shared<IncrementalMaterial>(*incrementalMaterial);
+        }
     } else {
-        m_incrementalMaterial = incrementalMaterial;
+        if (incrementalMaterial != nullptr) {
+            //Avoid to be changed during the backup
+            m_incrementalMaterial
+            = std::make_shared<IncrementalMaterial>(*incrementalMaterial);
+        }
         if (!incrementalBackup()) {
             return false;
         }
@@ -219,7 +232,7 @@ bool Backup::incrementalBackup()
         setError(m_pager.getError());
         return false;
     }
-    m_verifyingPagenos = m_incrementalMaterial->pages;
+    m_verifyingPagenos = &m_incrementalMaterial->pages;
     int schemaCookie = m_pager.getSchemaCookie();
     if (schemaCookie != m_incrementalMaterial->info.lastSchemaCookie
         || m_material.info.seqTableRootPage == Material::UnknownPageNo) {
@@ -237,7 +250,7 @@ bool Backup::incrementalBackup()
         m_pager.disposeWal();
         for (auto iter = m_material.contentsList.begin();
              iter != m_material.contentsList.end();) {
-            auto &content = **iter;
+            auto &content = *iter;
             if (content.checked) {
                 iter++;
             } else {
@@ -255,48 +268,58 @@ bool Backup::incrementalBackup()
             return false;
         }
     }
-    if (m_verifyingPagenos.size() == 0) {
+
+    if (m_verifyingPagenos->size() == 0) {
         return true;
     }
+
+    uint32_t pageCount = m_pager.getNumberOfPages();
+    WCTAssert(pageCount > 0);
+    m_unchangedLeaves.resize(pageCount, false);
+    m_unchangedLeavesCount = 0;
+
     auto &contentList = m_material.contentsList;
     for (auto &content : contentList) {
-        auto &pages = content->verifiedPagenos;
+        auto &pages = content.verifiedPagenos;
         for (auto page = pages.begin(); page != pages.end();) {
-            if (m_verifyingPagenos.find(page->first) != m_verifyingPagenos.end()) {
-                page = pages.erase(page);
-            } else {
-                m_unchangedLeaves.insert(page->first);
-                page++;
+            if (m_verifyingPagenos->find(page->number) != m_verifyingPagenos->end()) {
+                // Need to be verified
+                page->number = 0;
+            } else if (page->number <= pageCount) {
+                m_unchangedLeaves[page->number - 1] = true;
+                m_unchangedLeavesCount++;
             }
+            page++;
         }
     }
-    for (auto iter = m_verifyingPagenos.begin(); iter != m_verifyingPagenos.end();) {
+    for (auto iter = m_verifyingPagenos->begin(); iter != m_verifyingPagenos->end();) {
         auto &page = iter->second;
         if (page.type != Page::Type::LeafTable) {
-            iter = m_verifyingPagenos.erase(iter);
+            iter = m_verifyingPagenos->erase(iter);
         } else {
             iter++;
         }
     }
-    if (m_verifyingPagenos.size() == 0) {
+    if (m_verifyingPagenos->size() == 0) {
         return true;
     }
     for (auto iter = contentList.begin(); iter != contentList.end();) {
-        WCTAssert((*iter)->rootPage > 1 && (*iter)->rootPage != Material::UnknownPageNo);
-        if (!crawl((*iter)->rootPage)) {
+        WCTAssert(iter->rootPage > 1 && iter->rootPage != Material::UnknownPageNo);
+        if (!crawl(iter->rootPage)) {
             setError(m_pager.getError());
             return false;
         }
         if (m_verifiedPagenos.size() > 0) {
-            (*iter)->verifiedPagenos.insert(m_verifiedPagenos.begin(),
-                                            m_verifiedPagenos.end());
+            iter->verifiedPagenos.insert(iter->verifiedPagenos.end(),
+                                         m_verifiedPagenos.begin(),
+                                         m_verifiedPagenos.end());
             m_verifiedPagenos.clear();
             contentList.insert(contentList.begin(), *iter);
             iter = contentList.erase(iter);
         } else {
             iter++;
         }
-        if (m_verifyingPagenos.size() == 0) {
+        if (m_verifyingPagenos->size() == 0) {
             return true;
         }
     }
@@ -346,7 +369,7 @@ void Backup::updateMaterial(bool isIncremental)
         info.walSalt = m_incrementalMaterial->info.currentWalSalt;
         info.nBackFill = m_incrementalMaterial->info.currentNBackFill;
     } else {
-        m_incrementalMaterial = std::make_shared<Repair::IncrementalMaterial>();
+        m_incrementalMaterial = std::make_shared<IncrementalMaterial>();
         info.walSalt = m_pager.getWalSalt();
         info.nBackFill = m_pager.getNBackFill();
         m_incrementalMaterial->info.lastCheckPointFinish
@@ -376,11 +399,11 @@ Material::Content &Backup::getOrCreateContent(const UnsafeStringView &tableName)
     auto &contentsMap = m_material.contentsMap;
     auto iter = contentsMap.find(tableName);
     if (iter == contentsMap.end()) {
-        iter = contentsMap.emplace(tableName, Material::Content()).first;
-        m_material.contentsList.push_back(&(iter->second));
+        m_material.contentsList.emplace_back();
+        m_material.contentsList.back().tableName = tableName;
+        iter = contentsMap.emplace(tableName, &(m_material.contentsList.back())).first;
     }
-    iter->second.tableName = tableName;
-    return iter->second;
+    return (*iter->second);
 }
 
 #pragma mark - Filter
@@ -401,17 +424,27 @@ bool Backup::filter(const UnsafeStringView &tableName)
 #pragma mark - Crawlable
 bool Backup::canCrawlPage(uint32_t pageno)
 {
-    if (m_unchangedLeaves.find(pageno) != m_unchangedLeaves.end()) {
-        return false;
-    }
-    auto iter = m_verifyingPagenos.find(pageno);
-    if (iter != m_verifyingPagenos.end()) {
-        m_verifiedPagenos[iter->first] = iter->second.hash;
-        m_verifyingPagenos.erase(iter);
-        if (m_verifyingPagenos.size() == 0) {
-            suspend();
+    if (m_verifyingPagenos != nullptr) {
+        //Incremental backup
+        if (pageno > m_unchangedLeaves.size() || pageno == 0) {
+            markAsCorrupted(
+            pageno,
+            StringView::formatted(
+            "Page %u exceeds max pageno %u", pageno, m_unchangedLeaves.size()));
+            return false;
         }
-        return false;
+        if (m_unchangedLeaves[pageno - 1]) {
+            return false;
+        }
+        auto iter = m_verifyingPagenos->find(pageno);
+        if (iter != m_verifyingPagenos->end()) {
+            m_verifiedPagenos.emplace_back(iter->first, iter->second.hash);
+            m_verifyingPagenos->erase(iter);
+            if (m_verifyingPagenos->size() == 0) {
+                suspend();
+            }
+            return false;
+        }
     }
     return true;
 }
@@ -433,12 +466,8 @@ bool Backup::willCrawlPage(const Page &page, int height)
     case Page::Type::InteriorTable:
         return true;
     case Page::Type::LeafTable: {
-        WCTAssert(m_unchangedLeaves.size() == 0);
-        bool emplaced
-        = m_verifiedPagenos.emplace(page.number, page.getData().hash()).second;
-        if (!emplaced) {
-            markAsCorrupted(page.number, "Page is already crawled.");
-        }
+        WCTAssert(m_unchangedLeavesCount == 0);
+        m_verifiedPagenos.emplace_back(page.number, page.getData().hash());
         return false;
     }
     case Page::Type::InteriorIndex:
@@ -460,7 +489,9 @@ void Backup::onCrawlerError()
 #pragma mark - MasterCrawlerDelegate
 void Backup::onMasterPageCrawled(const Page &page)
 {
-    m_verifyingPagenos.erase(page.number);
+    if (m_verifyingPagenos != nullptr) {
+        m_verifyingPagenos->erase(page.number);
+    }
 }
 
 void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
@@ -503,7 +534,9 @@ void Backup::onMasterCrawlerError()
 #pragma mark - SequenceCrawlerDelegate
 void Backup::onSequencePageCrawled(const Page &page)
 {
-    m_verifyingPagenos.erase(page.number);
+    if (m_verifyingPagenos != nullptr) {
+        m_verifyingPagenos->erase(page.number);
+    }
 }
 
 void Backup::onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence)

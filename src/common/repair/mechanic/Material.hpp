@@ -99,6 +99,14 @@ public:
 
 #pragma mark - Content
 public:
+    typedef struct Page {
+    public:
+        uint32_t number;
+        uint32_t hash;
+        Page(uint32_t number, uint32_t hash);
+        ~Page();
+    } Page;
+    typedef std::vector<Page> VerifiedPages;
     class Content final : public Serializable, public Deserializable {
     public:
         Content();
@@ -109,7 +117,7 @@ public:
         std::list<StringView> associatedSQLs;
         uint32_t rootPage;
         int64_t sequence;
-        std::map<uint32_t, uint32_t> verifiedPagenos;
+        VerifiedPages verifiedPagenos;
         bool checked; //It will not be saved to file
 #pragma mark - Serializable
     public:
@@ -119,8 +127,8 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
-    std::list<Content *> contentsList;
-    StringViewMap<Content> contentsMap;
+    std::list<Content> contentsList;
+    StringViewMap<Content *> contentsMap;
 };
 
 } //namespace Repair

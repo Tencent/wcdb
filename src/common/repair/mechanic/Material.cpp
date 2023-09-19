@@ -58,15 +58,15 @@ bool Material::serialize(Serialization &serialization) const
     //Contents
     Serialization encoder;
     for (const auto &element : contentsList) {
-        if (element->tableName.empty()) {
+        if (element.tableName.empty()) {
             markAsEmpty("TableName");
             return false;
         }
-        if (element->sql.length() == 0) {
+        if (element.sql.length() == 0) {
             markAsEmpty("SQL");
             return false;
         }
-        if (!element->serialize(encoder)) {
+        if (!element.serialize(encoder)) {
             return false;
         }
     }
@@ -120,13 +120,13 @@ bool Material::deserialize(Deserialization &deserialization)
 
     Deserialization decoder(decompressed.value());
     while (!decoder.ended()) {
-        Content content;
+        contentsList.emplace_back();
+        Content &content = contentsList.back();
         if (!content.deserialize(decoder)) {
             return false;
         }
         StringView tableName = content.tableName;
-        contentsMap[tableName] = std::move(content);
-        contentsList.push_back(&contentsMap[tableName]);
+        contentsMap[tableName] = &content;
     }
     return true;
 }
@@ -224,6 +224,10 @@ bool Material::Info::deserialize(Deserialization &deserialization)
 }
 
 #pragma mark - Content
+Material::Page::Page(uint32_t n, uint32_t h) : number(n), hash(h){};
+
+Material::Page::~Page() = default;
+
 Material::Content::Content()
 : rootPage(UnknownPageNo), sequence(0), checked(false)
 {
@@ -247,16 +251,42 @@ bool Material::Content::serialize(Serialization &serialization) const
             return false;
         }
     }
-
-    if (!serialization.putVarint(verifiedPagenos.size())) {
-        return false;
-    }
-    for (const auto &element : verifiedPagenos) {
-        if (!serialization.putVarint(element.first)
-            || !serialization.put4BytesUInt(element.second)) {
+    VerifiedPages *pages = const_cast<VerifiedPages *>(&verifiedPagenos);
+    std::sort(pages->begin(), pages->end(), [](const Page &a, const Page &b) {
+        return a.number < b.number;
+    });
+    uint32_t prePageNo = 0;
+    for (int i = 0; i < verifiedPagenos.size(); i++) {
+        const auto &page = verifiedPagenos[i];
+        if (page.number == 0) {
+            WCTAssert(prePageNo == 0);
+            // Deleted pages
+            continue;
+        }
+        if (prePageNo == 0) {
+            if (!serialization.putVarint(verifiedPagenos.size() - i)) {
+                return false;
+            }
+            if (!serialization.putVarint(page.number)) {
+                return false;
+            }
+        } else {
+            WCTAssert(page.number > prePageNo);
+            if (!serialization.putVarint(page.number - prePageNo)) {
+                return false;
+            }
+        }
+        prePageNo = page.number;
+        if (!serialization.put4BytesUInt(page.hash)) {
             return false;
         }
     }
+
+    // No leaf page
+    if (prePageNo == 0 && !serialization.putVarint(0)) {
+        return false;
+    }
+
     return true;
 }
 
@@ -322,7 +352,8 @@ bool Material::Content::deserialize(Deserialization &deserialization)
         return false;
     }
     int numberOfPages = (int) varint;
-    verifiedPagenos.clear();
+    uint64_t prePageNo = 0;
+    verifiedPagenos.reserve(numberOfPages);
     for (int i = 0; i < numberOfPages; ++i) {
         std::tie(lengthOfVarint, varint) = deserialization.advanceVarint();
         if (lengthOfVarint == 0) {
@@ -334,7 +365,12 @@ bool Material::Content::deserialize(Deserialization &deserialization)
             return false;
         }
         uint32_t checksum = deserialization.advance4BytesUInt();
-        verifiedPagenos[(uint32_t) varint] = checksum;
+        if (deserialization.version() >= 0x01000001) {
+            verifiedPagenos.emplace_back((uint32_t) (varint + prePageNo), checksum);
+            prePageNo += varint;
+        } else {
+            verifiedPagenos.emplace_back((uint32_t) varint, checksum);
+        }
     }
     return true;
 }

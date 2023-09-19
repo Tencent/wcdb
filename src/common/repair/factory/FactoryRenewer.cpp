@@ -229,22 +229,22 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
             auto iter = infos.find(element.first);
             if (iter == infos.end()) {
                 iter = infos.emplace(std::move(element.first), Info()).first;
-                iter->second.sql = std::move(element.second.sql);
-                iter->second.associatedSQLs = std::move(element.second.associatedSQLs);
+                iter->second.sql = std::move(element.second->sql);
+                iter->second.associatedSQLs = std::move(element.second->associatedSQLs);
             } else {
-                if (iter->second.sql != element.second.sql) {
+                if (iter->second.sql != element.second->sql) {
                     Error error(Error::Code::Mismatch,
                                 Error::Level::Notice,
                                 "Different sqls is found in materials.");
                     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
                     error.infos.insert_or_assign("MaterialPaths", materialPath);
-                    error.infos.insert_or_assign("SQL1", element.second.sql);
+                    error.infos.insert_or_assign("SQL1", element.second->sql);
                     error.infos.insert_or_assign("SQL2", iter->second.sql);
                     Notifier::shared().notify(error);
                 }
             }
-            if (element.second.sequence > iter->second.sequence) {
-                iter->second.sequence = element.second.sequence;
+            if (element.second->sequence > iter->second.sequence) {
+                iter->second.sequence = element.second->sequence;
             }
         }
         return true;

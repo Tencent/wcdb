@@ -93,7 +93,7 @@ bool Mechanic::work()
 
     int numberOfPages = 0;
     for (const auto &element : m_material->contentsMap) {
-        numberOfPages += element.second.verifiedPagenos.size();
+        numberOfPages += element.second->verifiedPagenos.size();
     }
     // If there are only without-rowid tables in the db, numbersOfLeafTablePages will be 0
     setPageWeight(Fraction(
@@ -104,27 +104,28 @@ bool Mechanic::work()
             if (isErrorCritial()) {
                 break;
             }
-            if (!assembleTable(contentElement.first, contentElement.second.sql)
-                || !assembleSequence(contentElement.first, contentElement.second.sequence)) {
+            if (!assembleTable(contentElement.first, contentElement.second->sql)
+                || !assembleSequence(contentElement.first,
+                                     contentElement.second->sequence)) {
                 continue;
             }
 
             if (!m_assembleDelegate->isAssemblingTableWithoutRowid()) {
-                for (const auto &verifiedPagenosElement : contentElement.second.verifiedPagenos) {
+                for (const auto &verifiedPagenosElement : contentElement.second->verifiedPagenos) {
                     if (isErrorCritial()) {
                         break;
                     }
-                    m_checksum = verifiedPagenosElement.second;
-                    if (!crawl(verifiedPagenosElement.first)) {
+                    m_checksum = verifiedPagenosElement.hash;
+                    if (!crawl(verifiedPagenosElement.number)) {
                         tryUpgradeCrawlerError();
                     }
                 }
-            } else if (contentElement.second.rootPage > 1) {
-                if (!crawl(contentElement.second.rootPage)) {
+            } else if (contentElement.second->rootPage > 1) {
+                if (!crawl(contentElement.second->rootPage)) {
                     tryUpgradeCrawlerError();
                 }
             }
-            assembleAssociatedSQLs(contentElement.second.associatedSQLs);
+            assembleAssociatedSQLs(contentElement.second->associatedSQLs);
         }
         markAsAssembled();
     }

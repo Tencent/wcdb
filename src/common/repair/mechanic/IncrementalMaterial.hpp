@@ -27,8 +27,8 @@
 #include "EncryptedSerialization.hpp"
 #include "Page.hpp"
 #include "StringView.hpp"
-#include <map>
 #include <stdlib.h>
+#include <unordered_map>
 #include <vector>
 
 namespace WCDB {
@@ -116,7 +116,7 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
-    typedef std::map<uint32_t, Page> Pages;
+    typedef std::unordered_map<uint32_t, Page> Pages;
 
     Pages pages;
 };
