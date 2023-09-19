@@ -40,6 +40,7 @@ android:
         <<: *android_build_config 
         api_level: 19
     ammdev:
+      name: wcdb-android
       dependencies:
         <<: *default_dependencies
       dependency_options: &default_dependency_options
