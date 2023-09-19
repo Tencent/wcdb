@@ -104,7 +104,7 @@ jlong WCDBJNIHandleClassMethod(getLastInsertRowid, jlong self)
 jboolean WCDBJNIHandleClassMethod(isInTransaction, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
-    return WCDBHandleGetLastInsertedRowID(selfStruct);
+    return WCDBHandleIsInTransaction(selfStruct);
 }
 
 jboolean WCDBJNIHandleClassMethod(beginTransaction, jlong self)

@@ -898,7 +898,7 @@ public abstract class HandleOperation extends CppObject {
     public void execute(Statement statement) throws WCDBException {
         Handle handle = getHandle(statement.isWriteStatement());
         WCDBException exception = null;
-        if(!handle.execute(handle.getCppHandle(), CppObject.get(statement))) {
+        if(!Handle.execute(handle.getCppHandle(), CppObject.get(statement))) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -912,7 +912,7 @@ public abstract class HandleOperation extends CppObject {
     public void execute(String sql) throws WCDBException {
         Handle handle = getHandle(false);
         WCDBException exception = null;
-        if(!handle.executeSQL(handle.getCppHandle(), sql)) {
+        if(!Handle.executeSQL(handle.getCppHandle(), sql)) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -925,13 +925,13 @@ public abstract class HandleOperation extends CppObject {
 
     public boolean isInTransaction() throws WCDBException{
         Handle handle = getHandle(false);
-        return handle.isInTransaction(handle.getCppHandle());
+        return Handle.isInTransaction(handle.getCppHandle());
     }
 
     public void beginTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
-        if(!handle.isInTransaction(handle.getCppHandle())) {
+        if(!Handle.beginTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -945,7 +945,7 @@ public abstract class HandleOperation extends CppObject {
     public void commitTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
-        if(!handle.commitTransaction(handle.getCppHandle())) {
+        if(!Handle.commitTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
         if(autoInvalidateHandle()) {
@@ -958,7 +958,7 @@ public abstract class HandleOperation extends CppObject {
 
     public void rollbackTransaction() throws WCDBException {
         Handle handle = getHandle(true);
-        handle.rollbackTransaction(handle.getCppHandle());
+        Handle.rollbackTransaction(handle.getCppHandle());
         if(autoInvalidateHandle()) {
             handle.invalidate();
         }
