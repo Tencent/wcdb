@@ -859,6 +859,7 @@ bool AbstractHandle::setCipherKey(const UnsafeData &data)
 
 Data AbstractHandle::getRawCipherKey(const Schema &schema)
 {
+    WCTAssert(isOpened());
     void *rawCipher = NULL;
     int rawCipherSize = 0;
     int index = sqlcipher_find_db_index(m_handle, schema.syntax().name.data());
@@ -869,6 +870,20 @@ Data AbstractHandle::getRawCipherKey(const Schema &schema)
     }
     WCTAssert(rawCipherSize == 99);
     return Data((unsigned char *) rawCipher, rawCipherSize);
+}
+
+bool AbstractHandle::hasCipher() const
+{
+    WCTAssert(isOpened());
+    void *rawCipher = NULL;
+    int rawCipherSize = 0;
+    int index = sqlcipher_find_db_index(m_handle, "main");
+    sqlite3CodecGetKey(m_handle, index, &rawCipher, &rawCipherSize);
+
+    if (rawCipher == NULL || rawCipherSize == 0) {
+        return false;
+    }
+    return true;
 }
 
 bool AbstractHandle::setCipherPageSize(int pageSize)

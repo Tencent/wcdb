@@ -252,8 +252,9 @@ private:
 public:
     size_t getCipherPageSize();
     void *getCipherContext();
-    bool setCipherKey(const UnsafeData &data);
+    virtual bool setCipherKey(const UnsafeData &data);
     Data getRawCipherKey(const Schema &schema = Schema::main());
+    bool hasCipher() const;
     bool setCipherPageSize(int pageSize);
     StringView getCipherSalt();
     bool setCipherSalt(const UnsafeStringView &salt);

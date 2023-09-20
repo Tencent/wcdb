@@ -122,15 +122,8 @@ FactoryBackup::saveIncrementalMaterial(const UnsafeStringView& database,
     bool succeed = false;
     if (m_cipherDelegate->isCipherDB()) {
         material->setCipherDelegate(m_cipherDelegate);
-        StringView salt = material->getCipherSalt();
-        if (salt.length() == 0) {
-            salt = m_cipherDelegate->getCipherSalt();
-            if (salt.length() == 0) {
-                setError(m_cipherDelegate->getCipherError());
-                return NullOpt;
-            }
-        }
-        succeed = material->encryptedSerialize(materialPath, salt);
+        StringView salt = m_cipherDelegate->tryGetSaltFromDatabase(database).value();
+        succeed = material->encryptedSerialize(materialPath);
         material->setCipherDelegate(nullptr);
     } else {
         succeed = material->serialize(materialPath);
@@ -155,16 +148,7 @@ FactoryBackup::saveMaterial(const UnsafeStringView& database, const Material& ma
             return NullOpt;
         }
     } else {
-        StringView salt = material.getCipherSalt();
-        if (salt.length() == 0) {
-            salt = m_cipherDelegate->getCipherSalt();
-            if (salt.length() == 0) {
-                setError(m_cipherDelegate->getCipherError());
-                return NullOpt;
-            }
-        }
-        WCTAssert(salt.length() == 32);
-        if (!material.encryptedSerialize(materialPath.value(), salt)) {
+        if (!material.encryptedSerialize(materialPath.value())) {
             assignWithSharedThreadedError();
             return NullOpt;
         }

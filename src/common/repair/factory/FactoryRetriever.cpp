@@ -109,6 +109,17 @@ bool FactoryRetriever::work()
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
     backup.setBackupSharedDelegate(m_sharedDelegate);
     backup.setCipherDelegate(m_cipherDelegate);
+    if (m_cipherDelegate->isCipherDB()) {
+        auto salt = m_cipherDelegate->tryGetSaltFromDatabase(database);
+        if (!salt.succeed()) {
+            setCriticalErrorWithSharedThreadedError();
+            return false;
+        }
+        if (!m_cipherDelegate->switchCipherSalt(salt.value())) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return false;
+        }
+    }
     if (!backup.work(database)) {
         setCriticalError(backup.getError());
         return exit(false);
@@ -173,7 +184,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                 useMaterial = material.deserialize(materialPath);
             } else {
                 material.setCipherDelegate(m_cipherDelegate);
-                useMaterial = material.decryptedDeserialize(materialPath);
+                useMaterial = material.decryptedDeserialize(materialPath, true);
             }
 
             if (useMaterial) {
@@ -235,14 +246,14 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     fullCrawler.filter(factory.getFilter());
     fullCrawler.setCipherDelegate(m_cipherDelegate);
     if (!useMaterial) {
-        auto salt = tryGetCiperSaltFromPath(databasePath);
+        auto salt = m_cipherDelegate->tryGetSaltFromDatabase(databasePath);
         if (!salt.succeed()) {
+            setCriticalErrorWithSharedThreadedError();
             return false;
         }
-        if (salt->length() == 32) {
-            m_cipherDelegate->closeCipher();
-            m_cipherDelegate->openCipherInMemory();
-            m_cipherDelegate->setCipherSalt(salt.value());
+        if (!m_cipherDelegate->switchCipherSalt(salt.value())) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return false;
         }
     }
 
@@ -260,31 +271,6 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 
     increaseScore(databasePath, score);
     return true;
-}
-
-Optional<StringView>
-FactoryRetriever::tryGetCiperSaltFromPath(const UnsafeStringView &databasePath)
-{
-    int saltLength = 16;
-    auto size = FileManager::getFileSize(databasePath);
-    if (size.failed() || size.value() < saltLength) {
-        return StringView();
-    }
-    FileHandle handle(databasePath);
-    Optional<StringView> result;
-    if (!handle.open(FileHandle::Mode::ReadOnly)) {
-        setCriticalErrorWithSharedThreadedError();
-        return result;
-    }
-    Data saltData = handle.read(saltLength);
-    if (saltData.size() != saltLength) {
-        setCriticalErrorWithSharedThreadedError();
-        return result;
-    }
-    if (strncmp("SQLite format 3\000", (const char *) saltData.buffer(), saltLength) == 0) {
-        return StringView();
-    }
-    return StringView::hexString(saltData);
 }
 
 #pragma mark - Report

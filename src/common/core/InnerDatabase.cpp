@@ -353,7 +353,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
         }
         if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
             std::clock_t openTime
-            = (std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000);
+            = (std::clock_t)((std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000));
             int memoryUsed, tableCount, indexCount, triggerCount;
             if (handle->getSchemaInfo(memoryUsed, tableCount, indexCount, triggerCount)) {
                 StringViewMap<Value> info;
@@ -367,6 +367,19 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
                 DBOperationNotifier::shared().notifyOperation(
                 this, DBOperationNotifier::Operation::OpenHandle, info);
             }
+        }
+    } else if (slot == HandleSlotCipher) {
+        CipherHandle *cipherHandle = static_cast<CipherHandle *>(handle);
+        if (!cipherHandle->openCipherInMemory()) {
+            setThreadedError(cipherHandle->getCipherError());
+            return false;
+        }
+        auto salt = cipherHandle->tryGetSaltFromDatabase(getPath());
+        if (salt.failed()) {
+            assignWithSharedThreadedError();
+            return false;
+        } else if (salt.value().length() > 0) {
+            cipherHandle->setCipherSalt(salt.value());
         }
     }
 
@@ -565,13 +578,10 @@ void InnerDatabase::tryLoadIncremetalMaterial()
         return;
     }
     CipherHandle *cipherHandle = static_cast<CipherHandle *>(handle.get());
-    if (!cipherHandle->openCipherInMemory()) {
-        return;
-    }
     bool useMaterial = false;
     if (cipherHandle->isCipherDB()) {
         material->setCipherDelegate(cipherHandle);
-        useMaterial = material->decryptedDeserialize(materialPath);
+        useMaterial = material->decryptedDeserialize(materialPath, false);
         material->setCipherDelegate(nullptr);
     } else {
         useMaterial = material->deserialize(materialPath);
@@ -613,21 +623,10 @@ bool InnerDatabase::backup(bool interruptible)
         return false; // mark as succeed if it's not an auto initialize action.
     }
 
-    RecyclableHandle backupCipherHandle = flowOut(HandleType::BackupCipher);
-    if (backupCipherHandle == nullptr) {
-        return false;
-    }
-    CipherHandle *operationBackupCipherHandle
-    = static_cast<CipherHandle *>(backupCipherHandle.get());
-    if (!operationBackupCipherHandle->openCipherInMemory()) {
-        return false;
-    }
-
     RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
-    WCTAssert(backupReadHandle.get() != backupCipherHandle.get());
     OperationHandle *operationBackupReadHandle
     = static_cast<OperationHandle *>(backupReadHandle.get());
 
@@ -638,6 +637,14 @@ bool InnerDatabase::backup(bool interruptible)
     if (backupWriteHandle == nullptr) {
         return false;
     }
+
+    RecyclableHandle backupCipherHandle = flowOut(HandleType::BackupCipher);
+    if (backupCipherHandle == nullptr) {
+        return false;
+    }
+    CipherHandle *operationBackupCipherHandle
+    = static_cast<CipherHandle *>(backupCipherHandle.get());
+    WCTAssert(backupReadHandle.get() != backupCipherHandle.get());
 
     WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
     WCTAssert(backupWriteHandle.get() != backupCipherHandle.get());
@@ -723,7 +730,6 @@ bool InnerDatabase::deposit()
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
-        WCTAssert(!cipherHandle->isOpened());
 
         Core::shared().setThreadedDatabase(path);
 
@@ -798,7 +804,6 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
-        WCTAssert(!cipherHandle->isOpened());
 
         Core::shared().setThreadedDatabase(path);
 

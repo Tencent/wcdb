@@ -24,12 +24,14 @@
 
 #include "CipherHandle.hpp"
 #include "Assertion.hpp"
+#include "FileManager.hpp"
+#include "SQLite.h"
 
 namespace WCDB {
 
 #pragma mark - Cipher
 
-CipherHandle::CipherHandle() : InnerHandle()
+CipherHandle::CipherHandle() : InnerHandle(), m_isInitializing(false)
 {
 }
 
@@ -40,11 +42,71 @@ const Error &CipherHandle::getCipherError() const
     return InnerHandle::getError();
 }
 
+bool CipherHandle::execute(const Statement &statement)
+{
+    //Filter out encryption-irrelevant statements during the initialization phase
+    if (m_isInitializing && !statement.getDescription().hasPrefix("PRAGMA cipher_")
+        && !statement.getDescription().hasPrefix("PRAGMA kdf_iter")) {
+        return true;
+    } else {
+        return InnerHandle::execute(statement);
+    }
+}
+
+bool CipherHandle::setCipherKey(const UnsafeData &data)
+{
+    if (m_isInitializing && data.size() == 99) {
+        UnsafeStringView cipher
+        = UnsafeStringView((const char *) data.buffer(), data.size());
+        if (cipher.hasPrefix("x'") && cipher.hasSuffix("'")) {
+            void *buffer = malloc(67 * sizeof(unsigned char));
+            if (buffer == nullptr) {
+                notifyError(SQLITE_NOMEM, "", "Malloc memory for cipher fail");
+                return false;
+            }
+            memcpy(buffer, data.buffer(), 66 * sizeof(unsigned char));
+            ((char *) buffer)[66] = '\'';
+            bool ret
+            = InnerHandle::setCipherKey(UnsafeData((unsigned char *) buffer, 67));
+            free(buffer);
+            return ret;
+        }
+    }
+    return InnerHandle::setCipherKey(data);
+}
+
+Optional<StringView> CipherHandle::tryGetSaltFromDatabase(const UnsafeStringView &path)
+{
+    Optional<StringView> result;
+    auto size = FileManager::getFileSize(path);
+    if (size.failed()) {
+        return result;
+    }
+    int saltLength = 16;
+    if (size.value() < saltLength) {
+        return StringView();
+    }
+    FileHandle handle(path);
+    if (!handle.open(FileHandle::Mode::ReadOnly)) {
+        return result;
+    }
+    Data saltData = handle.read(saltLength);
+    if (saltData.size() != saltLength) {
+        return result;
+    }
+    if (strncmp("SQLite format 3\000", (const char *) saltData.buffer(), saltLength) == 0) {
+        return StringView();
+    }
+    return StringView::hexString(saltData);
+}
+
 bool CipherHandle::openCipherInMemory()
 {
-    WCTAssert(getPath().equal(":memory:") || !isOpened());
     InnerHandle::setPath(":memory:");
-    return InnerHandle::open();
+    m_isInitializing = true;
+    bool ret = InnerHandle::open();
+    m_isInitializing = false;
+    return ret;
 }
 
 void CipherHandle::closeCipher()
@@ -54,32 +116,40 @@ void CipherHandle::closeCipher()
 
 bool CipherHandle::isCipherDB()
 {
-    if (!isOpened()) {
-        openCipherInMemory();
-    }
-    return InnerHandle::getRawCipherKey().size() > 0;
+    WCTAssert(isOpened());
+    return InnerHandle::hasCipher();
 }
 
 void *CipherHandle::getCipherContext()
 {
-    if (!isOpened()) {
-        return nullptr;
-    }
+    WCTAssert(isOpened());
     return AbstractHandle::getCipherContext();
 }
 
 size_t CipherHandle::getCipherPageSize()
 {
+    WCTAssert(isOpened());
     return AbstractHandle::getCipherPageSize();
 }
 
 StringView CipherHandle::getCipherSalt()
 {
+    WCTAssert(isOpened());
     return AbstractHandle::getCipherSalt();
 }
 
 bool CipherHandle::setCipherSalt(const UnsafeStringView &salt)
 {
+    WCTAssert(isOpened());
+    return AbstractHandle::setCipherSalt(salt);
+}
+
+bool CipherHandle::switchCipherSalt(const UnsafeStringView &salt)
+{
+    closeCipher();
+    if (!openCipherInMemory()) {
+        return false;
+    }
     return AbstractHandle::setCipherSalt(salt);
 }
 

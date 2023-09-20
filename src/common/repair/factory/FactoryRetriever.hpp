@@ -59,7 +59,6 @@ protected:
 
 protected:
     bool restore(const UnsafeStringView &database);
-    Optional<StringView> tryGetCiperSaltFromPath(const UnsafeStringView &database);
     const StringView databaseFileName;
 
 #pragma mark - Report

@@ -36,9 +36,8 @@ namespace Repair {
 #pragma mark - Serializable
 EncryptedSerializable::~EncryptedSerializable() = default;
 
-Data EncryptedSerializable::encryptedSerialize(const UnsafeStringView &salt) const
+Data EncryptedSerializable::encryptedSerialize() const
 {
-    WCTAssert(salt.size() == saltBytes * 2);
     Data rawData = serialize();
     if (rawData.empty()) {
         return false;
@@ -46,10 +45,6 @@ Data EncryptedSerializable::encryptedSerialize(const UnsafeStringView &salt) con
 
     CipherDelegate *cipherDelegate = getCipherDelegate();
     WCTAssert(cipherDelegate != nullptr);
-    if (!cipherDelegate->openCipherInMemory()) {
-        setThreadedError(std::move(cipherDelegate->getCipherError()));
-        return false;
-    }
     size_t pageSize = cipherDelegate->getCipherPageSize();
     if (pageSize == 0) {
         setThreadedError(std::move(cipherDelegate->getCipherError()));
@@ -57,10 +52,8 @@ Data EncryptedSerializable::encryptedSerialize(const UnsafeStringView &salt) con
     }
     WCTAssert((pageSize & (pageSize - 1)) == 0);
 
-    if (!cipherDelegate->setCipherSalt(salt)) {
-        setThreadedError(std::move(cipherDelegate->getCipherError()));
-        return false;
-    }
+    StringView salt = cipherDelegate->getCipherSalt();
+    WCTAssert(salt.length() == saltBytes * 2);
 
     void *pCodec = cipherDelegate->getCipherContext();
     WCTAssert(pCodec != nullptr);
@@ -113,16 +106,16 @@ Data EncryptedSerializable::encryptedSerialize(const UnsafeStringView &salt) con
             dataAddr += usableSize;
         }
     }
-    WCTAssert(salt.compare(StringView::hexString(encryptData.subdata(saltBytes))) == 0);
+    StringView salt2 = StringView::hexString(encryptData.subdata(saltBytes));
+    WCTAssert(salt2.compare(salt) == 0);
     return encryptData;
 }
 
-bool EncryptedSerializable::encryptedSerialize(const UnsafeStringView &path,
-                                               const UnsafeStringView &salt) const
+bool EncryptedSerializable::encryptedSerialize(const UnsafeStringView &path) const
 {
     WCTAssert(path.length() > 0);
 
-    Data encryptData = encryptedSerialize(salt);
+    Data encryptData = encryptedSerialize();
     FileHandle fileHandle(path);
     if (!fileHandle.open(FileHandle::Mode::OverWrite)) {
         return false;
@@ -136,15 +129,10 @@ bool EncryptedSerializable::encryptedSerialize(const UnsafeStringView &path,
 #pragma mark - Deserializable
 DecryptedDeserializable::~DecryptedDeserializable() = default;
 
-bool DecryptedDeserializable::decryptedDeserialize(Data &rawData)
+bool DecryptedDeserializable::decryptedDeserialize(Data &rawData, bool reloadSalt)
 {
     CipherDelegate *cipherDelegate = getCipherDelegate();
     WCTAssert(cipherDelegate != nullptr);
-
-    if (!cipherDelegate->openCipherInMemory()) {
-        setThreadedError(std::move(cipherDelegate->getCipherError()));
-        return false;
-    }
 
     size_t pageSize = cipherDelegate->getCipherPageSize();
     if (pageSize == 0) {
@@ -157,10 +145,12 @@ bool DecryptedDeserializable::decryptedDeserialize(Data &rawData)
         return false;
     }
 
-    StringView salt = StringView::hexString(rawData.subdata(saltBytes));
-    if (!cipherDelegate->setCipherSalt(salt)) {
-        setThreadedError(std::move(cipherDelegate->getCipherError()));
-        return false;
+    if (reloadSalt) {
+        StringView salt = StringView::hexString(rawData.subdata(saltBytes));
+        if (!cipherDelegate->switchCipherSalt(salt)) {
+            setThreadedError(std::move(cipherDelegate->getCipherError()));
+            return false;
+        }
     }
 
     void *pCodec = cipherDelegate->getCipherContext();
@@ -198,16 +188,10 @@ bool DecryptedDeserializable::decryptedDeserialize(Data &rawData)
     if (!deserialize(decryptData)) {
         return false;
     }
-    m_cipherSalt = salt;
     return true;
 }
 
-StringView DecryptedDeserializable::getCipherSalt() const
-{
-    return m_cipherSalt;
-}
-
-bool DecryptedDeserializable::decryptedDeserialize(const UnsafeStringView &path)
+bool DecryptedDeserializable::decryptedDeserialize(const UnsafeStringView &path, bool reloadSalt)
 {
     FileHandle fileHandle(path);
     if (!fileHandle.open(FileHandle::Mode::ReadOnly)) {
@@ -218,7 +202,7 @@ bool DecryptedDeserializable::decryptedDeserialize(const UnsafeStringView &path)
     if (rawData.empty()) {
         return false;
     }
-    return decryptedDeserialize(rawData);
+    return decryptedDeserialize(rawData, reloadSalt);
 }
 
 } //namespace Repair

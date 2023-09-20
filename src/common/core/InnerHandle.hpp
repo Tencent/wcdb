@@ -66,7 +66,7 @@ private:
 
 #pragma mark - Statement
 public:
-    bool execute(const Statement &statement);
+    virtual bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
 
     bool prepare(const Statement &statement);

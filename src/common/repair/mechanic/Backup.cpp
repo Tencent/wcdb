@@ -143,11 +143,10 @@ Optional<bool> Backup::tryLoadLatestMaterial(SharedIncrementalMaterial increment
     if (materialPath->empty()) {
         return false;
     }
-    m_cipherDelegate->openCipherInMemory();
     bool useMaterial = false;
     if (m_cipherDelegate->isCipherDB()) {
         m_material.setCipherDelegate(m_cipherDelegate);
-        useMaterial = m_material.decryptedDeserialize(materialPath.value());
+        useMaterial = m_material.decryptedDeserialize(materialPath.value(), false);
     } else {
         useMaterial = m_material.deserialize(materialPath.value());
     }

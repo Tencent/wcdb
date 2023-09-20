@@ -34,6 +34,10 @@ public:
     CipherHandle();
     ~CipherHandle() override final;
 
+    bool execute(const Statement &statement) override final;
+    bool setCipherKey(const UnsafeData &data) override final;
+    Optional<StringView> tryGetSaltFromDatabase(const UnsafeStringView &path) override final;
+
 #pragma mark - Cipher
 public:
     const Error &getCipherError() const override final;
@@ -45,6 +49,8 @@ public:
     size_t getCipherPageSize() override final;
     StringView getCipherSalt() override final;
     bool setCipherSalt(const UnsafeStringView &salt) override final;
+    bool switchCipherSalt(const UnsafeStringView &salt) override final;
+    bool m_isInitializing;
 };
 
 } // namespace WCDB

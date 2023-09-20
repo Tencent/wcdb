@@ -164,6 +164,17 @@ bool FactoryRenewer::prepare()
         backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
         backup.setBackupSharedDelegate(m_sharedDelegate);
         backup.setCipherDelegate(m_cipherDelegate);
+        if (m_cipherDelegate->isCipherDB()) {
+            auto salt = m_cipherDelegate->tryGetSaltFromDatabase(tempDatabase);
+            if (!salt.succeed()) {
+                assignWithSharedThreadedError();
+                return false;
+            }
+            if (!m_cipherDelegate->switchCipherSalt(salt.value())) {
+                setError(m_cipherDelegate->getCipherError());
+                return false;
+            }
+        }
         if (!backup.work(tempDatabase)) {
             setError(backup.getError());
             return false;
@@ -215,7 +226,7 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
             succeed = material.deserialize(materialPath);
         } else {
             material.setCipherDelegate(m_cipherDelegate);
-            succeed = material.decryptedDeserialize(materialPath);
+            succeed = material.decryptedDeserialize(materialPath, true);
         }
         if (!succeed) {
             if (ThreadedErrors::shared().getThreadedError().isCorruption()) {

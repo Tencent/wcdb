@@ -37,8 +37,8 @@ constexpr const uint8_t saltBytes = 16;
 class EncryptedSerializable : public Serializable {
 public:
     virtual ~EncryptedSerializable() override = 0;
-    Data encryptedSerialize(const UnsafeStringView &salt) const;
-    bool encryptedSerialize(const UnsafeStringView &path, const UnsafeStringView &salt) const;
+    Data encryptedSerialize() const;
+    bool encryptedSerialize(const UnsafeStringView &path) const;
 
 protected:
     virtual CipherDelegate *getCipherDelegate() const = 0;
@@ -48,16 +48,12 @@ protected:
 class DecryptedDeserializable : public Deserializable {
 public:
     virtual ~DecryptedDeserializable() override = 0;
-    bool decryptedDeserialize(Data &rawData);
-    bool decryptedDeserialize(const UnsafeStringView &path);
-    StringView getCipherSalt() const;
+    bool decryptedDeserialize(Data &rawData, bool reloadSalt);
+    bool decryptedDeserialize(const UnsafeStringView &path, bool reloadSalt);
     virtual void decryptFail(const UnsafeStringView &element) const = 0;
 
 protected:
     virtual CipherDelegate *getCipherDelegate() const = 0;
-
-private:
-    StringView m_cipherSalt;
 };
 
 } //namespace Repair
