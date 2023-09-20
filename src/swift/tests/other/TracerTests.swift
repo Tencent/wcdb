@@ -112,7 +112,7 @@ class TracerTests: DatabaseTestCase {
 
         // When
         XCTAssertThrowsError(
-            try database.getRows(on: Column.all, fromTable: tableName)
+            try database.getRows(on: Column.all(), fromTable: tableName)
         )
 
         XCTAssertTrue(`catch`)
@@ -165,7 +165,7 @@ class TracerTests: DatabaseTestCase {
 
         // When
         XCTAssertThrowsError(
-            try database.getRows(on: Column.all, fromTable: tableName)
+            try database.getRows(on: Column.all(), fromTable: tableName)
         )
 
         XCTAssertTrue(`catch`)

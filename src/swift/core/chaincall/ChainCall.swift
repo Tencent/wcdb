@@ -249,7 +249,7 @@ extension RowSelectChainCallInterface where Self: HandleRepresentable {
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) throws -> RowSelect {
         return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
-                                    [Column.all] : resultColumnConvertibleList,
+                                    [Column.all()] : resultColumnConvertibleList,
                                     fromTables: tables,
                                     isDistinct: isDistinct)
     }
@@ -264,7 +264,7 @@ extension RowSelectChainCallInterface where Self: HandleRepresentable {
                                  fromTable table: String,
                                  isDistinct: Bool = false) throws -> RowSelect {
         return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
-                                    [Column.all] : resultColumnConvertibleList,
+                                    [Column.all()] : resultColumnConvertibleList,
                                     fromTable: table,
                                     isDistinct: isDistinct)
     }

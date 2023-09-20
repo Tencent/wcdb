@@ -70,7 +70,7 @@ extension WCTBridgeProperty: PropertyOperable {
 
 public extension Array where Element==WCTBridgeProperty {
     var any: Column {
-        return Column.all
+        return Column.all()
     }
 }
 

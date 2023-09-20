@@ -28,7 +28,7 @@ import WCDB
 class AdvanceTests: CRUDTestCase {
 
     func testHandleStatement() {
-        let statement = StatementSelect().select(Column.all).from(Master.builtinTableName)
+        let statement = StatementSelect().select(Column.all()).from(Master.builtinTableName)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
 
         WCDBAssertNoThrowReturned(try handle.prepare(statement))
@@ -37,7 +37,7 @@ class AdvanceTests: CRUDTestCase {
 
     func testHandleStatementRead() {
         // Give
-        let statement = StatementSelect().select(Column.all).from(TestObject.name)
+        let statement = StatementSelect().select(Column.all()).from(TestObject.name)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
         XCTAssertNoThrow(try handle.prepare(statement))
 
@@ -155,7 +155,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: HandleStatementTypedObject.self))
         XCTAssertNoThrow(try database.insert(HandleStatementTypedObject(), intoTable: tableName))
 
-        let statement = StatementSelect().select(Column.all).from(tableName)
+        let statement = StatementSelect().select(Column.all()).from(tableName)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
         XCTAssertNoThrow(try handle.prepare(statement))
         XCTAssertNoThrow(try handle.step())
@@ -279,7 +279,7 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testExecFailed() {
-        let statement = StatementSelect().select(Column.all).from("nonexistentTable")
+        let statement = StatementSelect().select(Column.all()).from("nonexistentTable")
         XCTAssertThrowsError(try database.exec(statement))
     }
 
@@ -452,7 +452,7 @@ class AdvanceTests: CRUDTestCase {
         // Give
         database.close()
         database.setConfig(named: "testConfigFailed", withInvocation: { (handle) throws in
-            try handle.exec(StatementSelect().select(Column.all).from("nonexistentTable"))
+            try handle.exec(StatementSelect().select(Column.all()).from("nonexistentTable"))
         })
         // When
         XCTAssertFalse(database.canOpen)
@@ -893,18 +893,18 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try targetDatabase.create(table: targetTableName, of: TestObject.self))
         let targetTable = targetDatabase.getTable(named: targetTableName, of: TestObject.self)
 
-        XCTAssertEqual(try? targetTable.getValue(on: Column.all.count()).int64Value, 1)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all().count()).int64Value, 1)
 
         XCTAssertNoThrow(try targetTable.delete(where: TestObject.Properties.variable1 == 2))
-        XCTAssertEqual(try? sourceTable.getValue(on: Column.all.count()).int64Value, 3)
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all().count()).int64Value, 3)
 
         XCTAssertNoThrow(try targetTable.update(on: TestObject.Properties.variable2, with: ["newContent"], where: TestObject.Properties.variable1 == 3))
 
         XCTAssertEqual(try? targetTable.getValue(on: TestObject.Properties.variable2, where: TestObject.Properties.variable1 == 3).stringValue, "newContent")
 
         XCTAssertNoThrow(try targetTable.delete(where: TestObject.Properties.variable1 == 3))
-        XCTAssertEqual(try? sourceTable.getValue(on: Column.all.count()).int64Value, 2)
-        XCTAssertEqual(try? targetTable.getValue(on: Column.all.count()).int64Value, 0)
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all().count()).int64Value, 2)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all().count()).int64Value, 0)
 
         let newObject = TestObject()
         newObject.variable1 = 4
@@ -913,8 +913,8 @@ class AdvanceTests: CRUDTestCase {
 
         let dbNewObject = WCDBAssertNoThrowReturned(try targetTable.getObject(on: TestObject.Properties.all, where: TestObject.Properties.variable1 == 4))
         XCTAssertTrue(dbNewObject != nil && dbNewObject!.variable2 == "d")
-        XCTAssertEqual(try? sourceTable.getValue(on: Column.all.count()).int64Value, 2)
-        XCTAssertEqual(try? targetTable.getValue(on: Column.all.count()).int64Value, 1)
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all().count()).int64Value, 2)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all().count()).int64Value, 1)
 
         targetDatabase.close()
         XCTAssertEqual(targetDatabase.isMigrated(), false)
