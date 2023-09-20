@@ -98,10 +98,14 @@ bool FactoryBackup::doBackUp(const UnsafeStringView& database, bool interruptibl
     }
 
     SharedIncrementalMaterial newIncrementalMaterial = backup.getIncrementalMaterial();
-    if (!saveIncrementalMaterial(database, newIncrementalMaterial).hasValue()) {
-        return false;
+    auto config = Core::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
+    if (config.succeed() && config.value().length() > 0
+        && atoi(config.value().data()) == 1) {
+        if (!saveIncrementalMaterial(database, newIncrementalMaterial).hasValue()) {
+            return false;
+        }
+        Core::shared().tryRegisterIncrementalMaterial(database, newIncrementalMaterial);
     }
-    Core::shared().tryRegisterIncrementalMaterial(database, newIncrementalMaterial);
 
     if (interruptible) {
         notifiyBackupEnd(
