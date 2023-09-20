@@ -195,7 +195,7 @@
         NSMutableArray<NSString *> *expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread *tracedThread = [NSThread currentThread];
         __weak CPPDatabaseTestCase *weakSelf = self;
-        self.database->tracePerformance([weakSelf, tracedThread, expectedSQLs, trace](long, const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, double, const void *) {
+        self.database->traceSQL([weakSelf, tracedThread, expectedSQLs, trace](long, const WCDB::UnsafeStringView &, const void *, const WCDB::UnsafeStringView &sql, const WCDB::UnsafeStringView &) {
             CPPDatabaseTestCase *strongSelf = weakSelf;
             if (!strongSelf.expectSQLsInAllThreads && tracedThread != [NSThread currentThread]) {
                 // skip other thread sqls due to the setting

@@ -46,6 +46,7 @@
         database.walPath,
         database.firstMaterialPath,
         database.lastMaterialPath,
+        database.incrementalMaterialPath,
         [database.factoryRestorePath stringByAppendingPathComponent:path.lastPathComponent],
         database.journalPath,
         database.shmPath,

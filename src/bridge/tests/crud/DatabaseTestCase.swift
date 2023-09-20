@@ -31,13 +31,13 @@ class DatabaseTestCase: BaseTestCase {
         super.setUp()
         database = Database(at: self.recommendedPath)
         database.tag = recommendTag
-        Database.globalTrace { error in
+        Database.globalTraceError { error in
             assert(error.level != .Fatal)
             print("Time: \(Date()),\(error)")
         }
     }
 
     override func tearDown() {
-        Database.globalTrace(ofError: nil)
+        Database.globalTraceError(nil)
     }
 }
