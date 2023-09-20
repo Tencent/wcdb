@@ -24,7 +24,7 @@ package com.tencent.wcdb.base;
 
 public class CppObject implements CppObjectConvertible {
     static {
-        System.loadLibrary("wcdb-android");
+        System.loadLibrary("wcdb_android");
     }
     @Override
     protected void finalize() throws Throwable {
