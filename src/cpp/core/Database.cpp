@@ -51,6 +51,7 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
+        Core::shared().setThreadedDatabase(path);
         if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
             && FileManager::createFile(path)) {
             resolvePath = realpath(path.data(), nullptr);
@@ -63,6 +64,7 @@ Database::Database(const UnsafeStringView& path)
             }
             FileManager::removeItem(path);
         }
+        Core::shared().setThreadedDatabase(nullptr);
     }
     if (resolvePath != nullptr) {
         UnsafeStringView newPath = UnsafeStringView(resolvePath);

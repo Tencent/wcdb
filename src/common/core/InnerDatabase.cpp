@@ -153,6 +153,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             m_initialized = true;
             continue;
         }
+        Core::shared().setThreadedDatabase(path);
         if (!FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))) {
             assignWithSharedThreadedError();
             break;
@@ -175,6 +176,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             assignWithSharedThreadedError();
             break;
         }
+        Core::shared().setThreadedDatabase(nullptr);
         m_initialized = true;
     } while (true);
     return nullptr;

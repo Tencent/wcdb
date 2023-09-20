@@ -467,7 +467,7 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
 bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory)
 {
     if (directory.length() == 0) {
-        Error error(Error::Code::IOError, Error::Level::Error, "empty directory");
+        Error error(Error::Code::IOError, Error::Level::Error, "Empty directory");
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
