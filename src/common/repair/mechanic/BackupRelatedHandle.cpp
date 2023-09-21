@@ -55,7 +55,18 @@ const Error &BackupRelatedHandle::getBackupError() const
 bool BackupRelatedHandle::acquireBackupSharedLock()
 {
     WCTAssert(isOpened());
-    return setCheckPointLock(true);
+    int maxRryTimes = 5;
+    do {
+        if (setCheckPointLock(true)) {
+            return true;
+        }
+        if (m_error.code() != Error::Code::Busy) {
+            return false;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        maxRryTimes--;
+    } while (maxRryTimes > 0);
+    return false;
 }
 
 bool BackupRelatedHandle::releaseBackupSharedLock()

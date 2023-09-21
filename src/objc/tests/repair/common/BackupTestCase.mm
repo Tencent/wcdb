@@ -43,6 +43,12 @@
     return g_testClasses;
 }
 
+- (void)setUp
+{
+    [super setUp];
+    [WCTDatabase setABTestConfigWithName:@"clicfg_wcdb_incremental_backup" andValue:@"1"];
+}
+
 - (NSMutableArray<NSObject<RepairTestObject>*>*)objects
 {
     return m_objects;

@@ -263,4 +263,46 @@
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 }
 
+- (void)test_incremental_backup_interrupted
+{
+    __block bool tested = false;
+    [self.database traceError:^(WCTError *error) {
+        if (error.level == WCTErrorLevelWarning && [error.message isEqualToString:@"Expired incremental Material"]) {
+            tested = true;
+        }
+    }];
+    [self.database enableAutoBackup:YES];
+    [self.database enableAutoCheckpoint:NO];
+
+    //Initialize backup matrial
+    [self createTable];
+    XCTAssertTrue([self.table insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:2]]);
+    XCTAssertTrue([self.database passiveCheckpoint]);
+    XCTAssertTrue([self.database backup]);
+    usleep(10000);
+    XCTAssertFalse(tested);
+
+    //Incremental backup
+    XCTAssertTrue([self.table insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:2]]);
+    XCTAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+    XCTAssertFalse(tested);
+
+    [self.database enableAutoBackup:false];
+
+    //Incremental backup interrupted
+    XCTAssertTrue([self.table insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:2]]);
+    XCTAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+    XCTAssertFalse(tested);
+
+    [self.database enableAutoBackup:true];
+
+    //Incremental backup matrial expired
+    XCTAssertTrue([self.table insertObjects:[Random.shared autoIncrementTestCaseObjectsWithCount:2]]);
+    XCTAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+    XCTAssertTrue(tested);
+}
+
 @end

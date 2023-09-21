@@ -221,7 +221,7 @@ bool Wal::doInitialize()
         WCTAssert(m_nbackfill == 0 || (m_salt == Salt{ 0, 0 })
                   || (m_nbackfill == m_shm.getBackfill() && m_salt == m_shm.getSalt())
                   || (m_shm.getBackfill() == 0
-                      && isCheckpointIncreasedSalt(m_shm.getSalt(), m_salt)));
+                      && isCheckpointIncreasedSalt(m_salt, m_shm.getSalt())));
         m_nbackfill = m_shm.getBackfill();
         m_salt = m_shm.getSalt();
         maxWalFrame = m_shm.getMaxFrame();
