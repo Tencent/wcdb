@@ -183,13 +183,24 @@ std::wstring UnsafeStringView::getWString() const
 }
 #endif
 
-#define READ_UTF16(zIn, TERM, c)                                                        \
+#define READ_UTF16LE(zIn, TERM, c)                                                      \
     {                                                                                   \
         c = (*zIn++);                                                                   \
         c += ((*zIn++) << 8);                                                           \
         if (c >= 0xD800 && c < 0xE000 && TERM) {                                        \
             int c2 = (*zIn++);                                                          \
             c2 += ((*zIn++) << 8);                                                      \
+            c = (c2 & 0x03FF) + ((c & 0x003F) << 10) + (((c & 0x03C0) + 0x0040) << 10); \
+        }                                                                               \
+    }
+
+#define READ_UTF16BE(zIn, TERM, c)                                                      \
+    {                                                                                   \
+        c = ((*zIn++) << 8);                                                            \
+        c += (*zIn++);                                                                  \
+        if (c >= 0xD800 && c < 0xE000 && TERM) {                                        \
+            int c2 = ((*zIn++) << 8);                                                   \
+            c2 += (*zIn++);                                                             \
             c = (c2 & 0x03FF) + ((c & 0x003F) << 10) + (((c & 0x03C0) + 0x0040) << 10); \
         }                                                                               \
     }
@@ -221,12 +232,23 @@ UnsafeStringView::createFromUTF16(const char16_t* utf16Str, size_t length, char*
     if (length == 0) {
         return UnsafeStringView();
     }
-    const char16_t* in = utf16Str;
+    const char* in = (const char*) utf16Str;
+    const char* end = (const char*) (utf16Str + length);
     char* out = buffer;
     unsigned int c;
-    while (in - utf16Str < length) {
-        READ_UTF16(in, in - utf16Str < length, c);
-        WRITE_UTF8(out, c);
+    static bool s_isBigEndian = []() -> bool {
+        short int n = 0x1;
+        char* p = (char*) &n;
+        return p[0] != 1;
+    }();
+    while (in < end) {
+        if (s_isBigEndian) {
+            READ_UTF16BE(in, in < end, c)
+            WRITE_UTF8(out, c);
+        } else {
+            READ_UTF16LE(in, in < end, c)
+            WRITE_UTF8(out, c);
+        }
     }
     *out = 0;
     return UnsafeStringView(buffer, out - buffer);
