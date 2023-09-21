@@ -2938,6 +2938,18 @@
 		75294DB429C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
 		75294DB529C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
 		75294DB629C75058005E7FC0 /* OperationQueueForMemory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */; };
+		7529C7702ABC4D6600518293 /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
+		7529C7712ABC4D6A00518293 /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
+		7529C7722ABC4D6D00518293 /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
+		7529C7732ABC4D8300518293 /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
+		7529C7742ABC4D8400518293 /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
+		7529C7752ABC4D8500518293 /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
+		7529C7762ABC4D8C00518293 /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
+		7529C7772ABC4D8D00518293 /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
+		7529C7782ABC4D8E00518293 /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
+		7529C7792ABC4D9900518293 /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
+		7529C77A2ABC4D9900518293 /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
+		7529C77B2ABC4D9A00518293 /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
 		752C7E3D28C8E16800C9FFA6 /* ORMDeleteTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3C28C8E16800C9FFA6 /* ORMDeleteTests.mm */; };
 		752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */; };
 		752CF3F8293A490F009ED8FB /* BindingBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752CF3F6293A490F009ED8FB /* BindingBridge.cpp */; };
@@ -7559,6 +7571,7 @@
 				037C3AA12897E33600328EC8 /* Convertible.hpp in Headers */,
 				037C3AA22897E33600328EC8 /* Initializeable.hpp in Headers */,
 				037C3AA52897E33600328EC8 /* Recyclable.hpp in Headers */,
+				7529C77A2ABC4D9900518293 /* CipherHandle.hpp in Headers */,
 				037C3AA62897E33600328EC8 /* CoreConst.h in Headers */,
 				037C3AA72897E33600328EC8 /* Cell.hpp in Headers */,
 				037C3AA82897E33600328EC8 /* MigrateHandle.hpp in Headers */,
@@ -7774,6 +7787,7 @@
 				03AFD34928B8B88300EF5E56 /* CPPORM.h in Headers */,
 				037C3BCB2897E33600328EC8 /* FTSError.hpp in Headers */,
 				037C3BCC2897E33600328EC8 /* Mechanic.hpp in Headers */,
+				7529C7742ABC4D8400518293 /* BackupRelatedHandle.hpp in Headers */,
 				037C3BCF2897E33600328EC8 /* SyntaxJoinConstraint.hpp in Headers */,
 				037C3BD02897E33600328EC8 /* ErrorProne.hpp in Headers */,
 				037C3BD52897E33600328EC8 /* StatementCommit.hpp in Headers */,
@@ -8294,6 +8308,7 @@
 				7521D8A5291E9ABB009642EF /* CommonTableExpression.hpp in Headers */,
 				7521D8A6291E9ABB009642EF /* ValueArray.hpp in Headers */,
 				7521D8A7291E9ABB009642EF /* WCTTable+Table.h in Headers */,
+				7529C7732ABC4D8300518293 /* BackupRelatedHandle.hpp in Headers */,
 				7521D8A8291E9ABB009642EF /* Console.hpp in Headers */,
 				7521D8A9291E9ABB009642EF /* NSObject+WCTColumnCoding.h in Headers */,
 				7521D8AA291E9ABB009642EF /* WCTDatabase+Test.h in Headers */,
@@ -8617,6 +8632,7 @@
 				7521DA3E291E9ABB009642EF /* CipherConfig.hpp in Headers */,
 				7521DA3F291E9ABB009642EF /* SyntaxRollbackSTMT.hpp in Headers */,
 				7521DA41291E9ABB009642EF /* MigratingHandle.hpp in Headers */,
+				7529C7792ABC4D9900518293 /* CipherHandle.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8841,6 +8857,7 @@
 				7521DD54291EA349009642EF /* WinqBridge.h in Headers */,
 				7521DD55291EA349009642EF /* StatementDropViewBridge.h in Headers */,
 				7521DD56291EA349009642EF /* StatementSelectBridge.h in Headers */,
+				7529C77B2ABC4D9A00518293 /* CipherHandle.hpp in Headers */,
 				7521DD57291EA349009642EF /* BindParameterBridge.h in Headers */,
 				7521DD58291EA349009642EF /* StatementDropTriggerBridge.h in Headers */,
 				7521DD59291EA349009642EF /* ErrorBridge.h in Headers */,
@@ -8928,6 +8945,7 @@
 				7521DDCB291EA349009642EF /* SyntaxVacuumSTMT.hpp in Headers */,
 				7521DDCC291EA349009642EF /* Material.hpp in Headers */,
 				7521DDCD291EA349009642EF /* SyntaxInsertSTMT.hpp in Headers */,
+				7529C7752ABC4D8500518293 /* BackupRelatedHandle.hpp in Headers */,
 				7521DDCE291EA349009642EF /* AggregateFunction.hpp in Headers */,
 				7521DDE229208EB6009642EF /* WCTAPIBridge.h in Headers */,
 				7521DDD1291EA349009642EF /* FactoryRenewer.hpp in Headers */,
@@ -9444,6 +9462,7 @@
 				037C38F42897E33600328EC8 /* Notifier.cpp in Sources */,
 				0DE08A2429CBE79C009A7CA3 /* CrossPlatform.c in Sources */,
 				037C38F62897E33600328EC8 /* SyntaxDropViewSTMT.cpp in Sources */,
+				7529C7712ABC4D6A00518293 /* CipherHandle.cpp in Sources */,
 				037C38F92897E33600328EC8 /* OrderingTerm.cpp in Sources */,
 				037C38FB2897E33600328EC8 /* ColumnType.cpp in Sources */,
 				03D077EE28C1F072009A3B18 /* TableOperation.cpp in Sources */,
@@ -9605,6 +9624,7 @@
 				037C3A162897E33600328EC8 /* PerformanceTraceConfig.cpp in Sources */,
 				0D5363EA290A65390026A4DC /* Master.cpp in Sources */,
 				037C3A172897E33600328EC8 /* StatementCommit.cpp in Sources */,
+				7529C7772ABC4D8D00518293 /* BackupRelatedHandle.cpp in Sources */,
 				037C3A1A2897E33600328EC8 /* AutoCheckpointConfig.cpp in Sources */,
 				037C3A1D2897E33600328EC8 /* Filter.cpp in Sources */,
 				037C3A1E2897E33600328EC8 /* Thread.cpp in Sources */,
@@ -9871,7 +9891,6 @@
 				234F06D8227AA57D00DD65A2 /* ColumnConstraintPrimary.mm in Sources */,
 				39327B6F22CF275200AABD4B /* TestCaseLog.mm in Sources */,
 				234F061C227AA4F600DD65A2 /* ResultColumnTests.mm in Sources */,
-				0D5F8BC929F77CD800939603 /* CipherDatabaseMigratingCompatibleTests.mm in Sources */,
 				234F06AE227AA56300DD65A2 /* VirtualTableFTS4Object.mm in Sources */,
 				39327B1F22CF271F00AABD4B /* BaseTestCase.mm in Sources */,
 				03BF4B3E2888FA3800A30500 /* DatabaseTestCase.mm in Sources */,
@@ -9907,7 +9926,6 @@
 				234F061D227AA4F600DD65A2 /* StatementDropTriggerTests.mm in Sources */,
 				234F060F227AA4F600DD65A2 /* StatementCreateViewTests.mm in Sources */,
 				234F0613227AA4F600DD65A2 /* WCTPropertyTests.mm in Sources */,
-				0D5F8BCB29F77D2F00939603 /* CipherDatabaseMigrationCompatibleTests.mm in Sources */,
 				234F06F5227AA59600DD65A2 /* ConvenientSelectTests.mm in Sources */,
 				234F061F227AA4F600DD65A2 /* PragmaTests.mm in Sources */,
 				234F06D5227AA57D00DD65A2 /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
@@ -10690,6 +10708,7 @@
 				7521D763291E9ABB009642EF /* WCTHandle.mm in Sources */,
 				7521D764291E9ABB009642EF /* ThreadedErrors.cpp in Sources */,
 				7521D769291E9ABB009642EF /* WCTObjCAccessor.mm in Sources */,
+				7529C7702ABC4D6600518293 /* CipherHandle.cpp in Sources */,
 				7521D76A291E9ABB009642EF /* StatementCreateTrigger.cpp in Sources */,
 				7521D76B291E9ABB009642EF /* DatabasePool.cpp in Sources */,
 				7521D76D291E9ABB009642EF /* WCTMigrationInfo.mm in Sources */,
@@ -10721,6 +10740,7 @@
 				7521D79D291E9ABB009642EF /* HandlePool.cpp in Sources */,
 				7521D79F291E9ABB009642EF /* SyntaxWindowDef.cpp in Sources */,
 				7521D7A0291E9ABB009642EF /* WCTValue.mm in Sources */,
+				7529C7762ABC4D8C00518293 /* BackupRelatedHandle.cpp in Sources */,
 				7521D7A1291E9ABB009642EF /* WCTDatabase+File.mm in Sources */,
 				7521D7A3291E9ABB009642EF /* WCTDatabase+Monitor.mm in Sources */,
 				7521D7A4291E9ABB009642EF /* PagerRelated.cpp in Sources */,
@@ -11116,6 +11136,7 @@
 				7521DB6B291EA349009642EF /* SyntaxExplainSTMT.cpp in Sources */,
 				7521DB6D291EA349009642EF /* StatementVacuum.swift in Sources */,
 				7521DB70291EA349009642EF /* SyntaxLiteralValue.cpp in Sources */,
+				7529C7722ABC4D6D00518293 /* CipherHandle.cpp in Sources */,
 				7521DB71291EA349009642EF /* StatementUpdateBridge.cpp in Sources */,
 				7521DB72291EA349009642EF /* StringView.cpp in Sources */,
 				7521DB73291EA349009642EF /* LiteralValue.swift in Sources */,
@@ -11190,6 +11211,7 @@
 				7521DBC2291EA349009642EF /* SyntaxQualifiedTableName.cpp in Sources */,
 				7521DBC3291EA349009642EF /* SyntaxSchema.cpp in Sources */,
 				7521DBC5291EA349009642EF /* Database.swift in Sources */,
+				7529C7782ABC4D8E00518293 /* BackupRelatedHandle.cpp in Sources */,
 				7521DBC6291EA349009642EF /* TableConfiguration.swift in Sources */,
 				7521DBC7291EA349009642EF /* Convertible.swift in Sources */,
 				7521DBCA291EA349009642EF /* Schema.swift in Sources */,
