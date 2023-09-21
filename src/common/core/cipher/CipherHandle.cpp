@@ -59,6 +59,9 @@ bool CipherHandle::setCipherKey(const UnsafeData &data)
         UnsafeStringView cipher
         = UnsafeStringView((const char *) data.buffer(), data.size());
         if (cipher.hasPrefix("x'") && cipher.hasSuffix("'")) {
+            // In this case, the cipher is made up of a 64-bit raw key and a 32-bit salt,
+            // and we need to remove the salt part.
+            // Please see: https://www.zetetic.net/sqlcipher/sqlcipher-api/#key
             void *buffer = malloc(67 * sizeof(unsigned char));
             if (buffer == nullptr) {
                 notifyError(SQLITE_NOMEM, "", "Malloc memory for cipher fail");
