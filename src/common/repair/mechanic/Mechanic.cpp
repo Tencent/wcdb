@@ -89,7 +89,7 @@ bool Mechanic::work()
     for (const auto &element : m_material->contentsMap) {
         numberOfPages += element.second->verifiedPagenos.size();
     }
-    // If there are only without-rowid tables in the db, numbersOfLeafTablePages will be 0
+    // If there are only without-rowid tables in the db, numberOfPages will be 0
     setPageWeight(Fraction(
     1, (numberOfPages == 0 ? 1 : numberOfPages) + m_pager.getDisposedWalPages()));
 

@@ -222,7 +222,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            reportMechanic(mechanic.getScore(),
+            reportMechanic(mechanic,
                            databasePath,
                            SteadyClock::timeIntervalSinceSteadyClockToNow(before),
                            materialTime);
@@ -259,9 +259,8 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
-        reportFullCrawler(fullCrawler.getScore(),
-                          databasePath,
-                          SteadyClock::timeIntervalSinceSteadyClockToNow(before));
+        reportFullCrawler(
+        fullCrawler, databasePath, SteadyClock::timeIntervalSinceSteadyClockToNow(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         setCriticalError(fullCrawler.getError());
@@ -274,7 +273,7 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
 }
 
 #pragma mark - Report
-void FactoryRetriever::reportMechanic(const Fraction &score,
+void FactoryRetriever::reportMechanic(const Mechanic &mechanic,
                                       const UnsafeStringView &path,
                                       double cost,
                                       const Time &material)
@@ -282,7 +281,10 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     Error error(Error::Code::Notice, Error::Level::Notice, "Mechanic Retrieve Report.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
-    error.infos.insert_or_assign("Score", score.value());
+    error.infos.insert_or_assign("Score", mechanic.getScore().value());
+    error.infos.insert_or_assign("TotalPageCount", mechanic.getTotalPageCount());
+    error.infos.insert_or_assign("DepositedWalPageCount",
+                                 mechanic.getDisposedWalPageCount());
     auto optionalMaterial = material.stringify();
     if (optionalMaterial.succeed()) {
         error.infos.insert_or_assign("Material", optionalMaterial.value());
@@ -293,7 +295,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     Notifier::shared().notify(error);
 }
 
-void FactoryRetriever::reportFullCrawler(const Fraction &score,
+void FactoryRetriever::reportFullCrawler(const FullCrawler &fullCrawler,
                                          const UnsafeStringView &path,
                                          double cost)
 {
@@ -301,7 +303,8 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign(ErrorStringKeyPath, path);
-    error.infos.insert_or_assign("Score", score.value());
+    error.infos.insert_or_assign("Score", fullCrawler.getScore().value());
+    error.infos.insert_or_assign("TotalPageCount", fullCrawler.getTotalPageCount());
     finishReportOfPerformance(error, path, cost);
     error.infos.insert_or_assign(
     "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));

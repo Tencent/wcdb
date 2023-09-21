@@ -156,6 +156,19 @@ Optional<bool> Backup::tryLoadLatestMaterial(SharedIncrementalMaterial increment
     }
     if (m_material.info.walSalt != incrementalMaterial->info.lastWalSalt
         || m_material.info.nBackFill != incrementalMaterial->info.lastNBackFill) {
+        Error error(Error::Code::Error, Error::Level::Warning, "Mismatch incremental Material");
+        error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+        error.infos.insert_or_assign(ErrorStringKeyPath, m_pager.getPath());
+        error.infos.insert_or_assign("currentSalt",
+                                     (((uint64_t) m_material.info.walSalt.second) << 32)
+                                     | m_material.info.walSalt.first);
+        error.infos.insert_or_assign(
+        "newSalt",
+        (((uint64_t) incrementalMaterial->info.lastWalSalt.second) << 32)
+        | incrementalMaterial->info.lastWalSalt.first);
+        error.infos.insert_or_assign("currentNBackFill", m_material.info.nBackFill);
+        error.infos.insert_or_assign("newNBackFill", incrementalMaterial->info.lastNBackFill);
+        Notifier::shared().notify(error);
         m_material = Material();
         return false;
     }
