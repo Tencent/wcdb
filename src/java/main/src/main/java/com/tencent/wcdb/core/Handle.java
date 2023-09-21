@@ -189,7 +189,6 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
         } catch (WCDBException e) {
             ret = 2;
         }
-        CancellationSignal signal = new CancellationSignal();
         return ret;
     }
 
