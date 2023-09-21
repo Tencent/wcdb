@@ -28,6 +28,7 @@
 #include "FileManager.hpp"
 #include "Notifier.hpp"
 #include "SQLite.h"
+#include <string.h>
 
 namespace WCDB {
 

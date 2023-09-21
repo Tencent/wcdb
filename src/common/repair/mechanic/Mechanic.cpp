@@ -124,7 +124,8 @@ bool Mechanic::work()
         markAsAssembled();
     }
     if (numberOfPages == 0 && !isErrorCritial() && getScore().value() == 0) {
-        Scoreable::increaseScore(1);
+        increaseScore(1);
+        markSegmentedScoreCounted();
     }
     return exit();
 }
