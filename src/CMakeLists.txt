@@ -323,6 +323,7 @@ if (WIN32)
             $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
             $<$<CONFIG:Release>:/MT> #--|
     )
+    add_compile_options(/MP)
     add_compile_options(/wd4068)  # Disable unknown pragma warnings
     add_compile_options(/wd4996)
     add_compile_options(/wd4715)
