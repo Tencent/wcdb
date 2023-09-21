@@ -94,7 +94,7 @@ watchos:
       all: apple_build/watchos/release/static/output
 
 
-macos-all:
+macos:
   build_types: shared, static
   build:
     system: custom

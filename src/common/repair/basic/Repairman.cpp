@@ -51,7 +51,10 @@ const StringView &Repairman::getPath() const
 
 int64_t Repairman::getTotalPageCount() const
 {
-    return (int64_t) (1.0 / m_pageWeight.value());
+    if(m_pageWeight.value() > 0){
+        return (int64_t) (1.0 / m_pageWeight.value());
+    }
+    return 0;
 }
 
 int Repairman::getDisposedWalPageCount() const

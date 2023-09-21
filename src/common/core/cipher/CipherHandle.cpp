@@ -26,6 +26,7 @@
 #include "Assertion.hpp"
 #include "FileManager.hpp"
 #include "SQLite.h"
+#include <string.h>
 
 namespace WCDB {
 
