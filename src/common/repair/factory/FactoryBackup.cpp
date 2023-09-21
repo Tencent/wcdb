@@ -23,6 +23,7 @@
  */
 
 #include "FactoryBackup.hpp"
+#include "Core.hpp"
 #include "CoreConst.h"
 #include "Data.hpp"
 #include "Factory.hpp"
@@ -35,51 +36,128 @@ namespace Repair {
 
 FactoryBackup::~FactoryBackup() = default;
 
-bool FactoryBackup::work(const UnsafeStringView& database)
+bool FactoryBackup::work(const UnsafeStringView& database, bool interruptible)
 {
-    auto materialPath = Factory::materialForSerializingForDatabase(database);
-    if (!materialPath.succeed()) {
-        assignWithSharedThreadedError();
+    m_sharedDelegate->setBackupPath(database);
+    m_exclusiveDelegate->setBackupPath(database);
+
+    //acquire checkpoint lock to avoid checkpoint during whole iteration of backup
+    if (!m_sharedDelegate->acquireBackupSharedLock()) {
         return false;
     }
 
-    notifiyBackupBegin(database);
+    bool succeed = doBackUp(database, interruptible);
+
+    if (!m_sharedDelegate->releaseBackupSharedLock() && succeed) {
+        setError(m_sharedDelegate->getBackupError());
+        return false;
+    }
+
+    return succeed;
+}
+
+bool FactoryBackup::doBackUp(const UnsafeStringView& database, bool interruptible)
+{
+    SharedIncrementalMaterial incrementalMaterial
+    = Core::shared().tryGetIncrementalMaterial(database);
+    Optional<size_t> incrementalMaterialSize = 0;
+    if (interruptible && incrementalMaterial != nullptr) {
+        incrementalMaterialSize = saveIncrementalMaterial(database, incrementalMaterial);
+        if (!incrementalMaterialSize.hasValue()) {
+            return false;
+        }
+        if (Time::now().seconds() - incrementalMaterial->info.lastBackupTime < OperationQueueTimeIntervalForBackup
+            && incrementalMaterial->pages.size() < BackupMaxIncrementalPageCount) {
+            return true;
+        }
+    }
+
+    if (interruptible) {
+        notifiyBackupBegin(database);
+    }
 
     Backup backup(database);
     backup.setCipherDelegate(m_cipherDelegate);
     backup.setBackupSharedDelegate(m_sharedDelegate);
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
     backup.filter(factory.getFilter());
-    if (!backup.work()) {
+    if (!backup.work(incrementalMaterial)) {
         // Treat database empty error as succeed
         if (backup.getError().code() == Error::Code::Empty) {
-            notifiyBackupEnd(database, materialPath.value(), backup);
+            notifiyBackupEnd(database, 0, 0, backup.getMaterial(), incrementalMaterial);
             return true;
         }
         setError(backup.getError());
         return false;
     }
 
-    if (!m_sharedDelegate->isCipherDB()) {
-        if (!backup.getMaterial().serialize(materialPath.value())) {
-            assignWithSharedThreadedError();
+    const Material& material = backup.getMaterial();
+    auto materialSize = saveMaterial(database, material);
+    if (!materialSize.hasValue()) {
+        return false;
+    }
+
+    SharedIncrementalMaterial newIncrementalMaterial = backup.getIncrementalMaterial();
+    auto config = Core::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
+    if (config.succeed() && config.value().length() > 0
+        && atoi(config.value().data()) == 1) {
+        if (!saveIncrementalMaterial(database, newIncrementalMaterial).hasValue()) {
             return false;
+        }
+        Core::shared().tryRegisterIncrementalMaterial(database, newIncrementalMaterial);
+    }
+
+    if (interruptible) {
+        notifiyBackupEnd(
+        database, materialSize.value(), incrementalMaterialSize.value(), material, newIncrementalMaterial);
+    }
+    return true;
+}
+
+Optional<size_t>
+FactoryBackup::saveIncrementalMaterial(const UnsafeStringView& database,
+                                       SharedIncrementalMaterial material)
+{
+    WCTAssert(material != nullptr);
+    if (material == nullptr) {
+        return 0;
+    }
+    StringView materialPath = Repair::Factory::incrementalMaterialPathForDatabase(database);
+    bool succeed = false;
+    if (m_cipherDelegate->isCipherDB()) {
+        material->setCipherDelegate(m_cipherDelegate);
+        StringView salt = m_cipherDelegate->tryGetSaltFromDatabase(database).value();
+        succeed = material->encryptedSerialize(materialPath);
+        material->setCipherDelegate(nullptr);
+    } else {
+        succeed = material->serialize(materialPath);
+    }
+    if (!succeed) {
+        return NullOpt;
+    }
+    return FileManager::getFileSize(materialPath);
+}
+
+Optional<size_t>
+FactoryBackup::saveMaterial(const UnsafeStringView& database, const Material& material)
+{
+    auto materialPath = Factory::materialForSerializingForDatabase(database);
+    if (!materialPath.succeed()) {
+        assignWithSharedThreadedError();
+        return NullOpt;
+    }
+    if (!m_cipherDelegate->isCipherDB()) {
+        if (!material.serialize(materialPath.value())) {
+            assignWithSharedThreadedError();
+            return NullOpt;
         }
     } else {
-        StringView salt = m_sharedDelegate->getCipherSalt();
-        if (salt.length() == 0) {
-            setError(m_sharedDelegate->getCipherError());
-            return false;
-        }
-        WCTAssert(salt.length() == 32) if (!backup.getMaterial().encryptedSerialize(
-                                           materialPath.value(), salt))
-        {
+        if (!material.encryptedSerialize(materialPath.value())) {
             assignWithSharedThreadedError();
-            return false;
+            return NullOpt;
         }
     }
-    notifiyBackupEnd(database, materialPath.value(), backup);
-    return true;
+    return FileManager::getFileSize(materialPath.value());
 }
 
 void FactoryBackup::notifiyBackupBegin(const UnsafeStringView& database)
@@ -90,26 +168,28 @@ void FactoryBackup::notifiyBackupBegin(const UnsafeStringView& database)
 }
 
 void FactoryBackup::notifiyBackupEnd(const UnsafeStringView& database,
-                                     const UnsafeStringView& materialPath,
-                                     Backup& backup)
+                                     size_t materialSize,
+                                     size_t incrementalMaterialSize,
+                                     const Material& material,
+                                     SharedIncrementalMaterial incrementalMaterial)
 {
-    auto fileSize = FileManager::getFileSize(materialPath);
-    if (fileSize.succeed()) {
-        uint32_t associatedTableCount = 0;
-        uint32_t leafPageCount = 0;
-        for (auto content : backup.getMaterial().contents) {
-            associatedTableCount += content.second.associatedSQLs.size();
-            leafPageCount += content.second.verifiedPagenos.size();
-        }
-        Error error(Error::Code::Notice, Error::Level::Notice, "Backup End.");
-        error.infos.insert_or_assign("Size", fileSize.value());
-        error.infos.insert_or_assign("WalFrameCount", backup.getMaterial().info.numberOfWalFrames);
-        error.infos.insert_or_assign("TableCount", backup.getMaterial().contents.size());
-        error.infos.insert_or_assign("AssociatedTableCount", associatedTableCount);
-        error.infos.insert_or_assign("LeafPageCount", leafPageCount);
-        error.infos.insert_or_assign(ErrorStringKeyPath, database);
-        Notifier::shared().notify(error);
+    uint32_t associatedTableCount = 0;
+    uint32_t leafPageCount = 0;
+    for (auto content : material.contentsMap) {
+        associatedTableCount += content.second->associatedSQLs.size();
+        leafPageCount += content.second->verifiedPagenos.size();
     }
+    Error error(Error::Code::Notice, Error::Level::Notice, "Backup End.");
+    error.infos.insert_or_assign("Incremental",
+                                 incrementalMaterial != nullptr
+                                 && incrementalMaterial->info.incrementalBackupTimes > 0);
+    error.infos.insert_or_assign("MaterialSize", materialSize);
+    error.infos.insert_or_assign("LastIncrementalMaterialSize", incrementalMaterialSize);
+    error.infos.insert_or_assign("TableCount", material.contentsMap.size());
+    error.infos.insert_or_assign("AssociatedTableCount", associatedTableCount);
+    error.infos.insert_or_assign("LeafPageCount", leafPageCount);
+    error.infos.insert_or_assign(ErrorStringKeyPath, database);
+    Notifier::shared().notify(error);
 }
 
 } //namespace Repair

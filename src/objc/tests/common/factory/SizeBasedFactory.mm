@@ -53,7 +53,7 @@
 {
     WCDB_UNUSED(quality);
 
-    int numberOfObjects = (int) (self.quality * self.tolerance / 4096.0 * 10);
+    int numberOfObjects = (int) (self.quality * self.tolerance / 4096.0);
     if (numberOfObjects <= 0) {
         numberOfObjects = 1;
     }
@@ -69,8 +69,8 @@
 - (double)qualityOfPrototype:(WCTDatabase*)prototype
 {
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:prototype.walPath]) {
-        TestCaseAssertTrue([prototype truncateCheckpoint]);
+    if (Random.shared.uint8 % 4 == 0) {
+        TestCaseAssertTrue([prototype passiveCheckpoint]);
     }
     return [fileManager getFileSizeIfExists:prototype.path];
 }

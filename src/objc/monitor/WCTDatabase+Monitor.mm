@@ -87,15 +87,42 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
 }
 
+- (void)traceSQL:(WCTSQLTraceBlock)trace
+{
+    if (trace != nil) {
+        WCDB::InnerHandle::SQLNotification callback = [trace](const WCDB::Tag& tag,
+                                                              const WCDB::UnsafeStringView& path,
+                                                              const void* handle,
+                                                              const WCDB::UnsafeStringView& sql,
+                                                              const WCDB::UnsafeStringView& info) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql], info.length() > 0 ? [NSString stringWithView:info.data()] : nil);
+        };
+        _database->setConfig(WCDB::SQLTraceConfigName,
+                             std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),
+                             WCDB::Configs::Priority::Highest);
+    } else {
+        _database->removeConfig(WCDB::SQLTraceConfigName);
+    }
+}
+
 + (void)globalTraceSQL:(WCTSQLTraceBlock)trace
 {
     WCDB::InnerHandle::SQLNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
+        callback = [trace](const WCDB::Tag& tag,
+                           const WCDB::UnsafeStringView& path,
+                           const void* handle,
+                           const WCDB::UnsafeStringView& sql,
+                           const WCDB::UnsafeStringView& info) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql], info.length() > 0 ? [NSString stringWithView:info.data()] : nil);
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
+}
+
+- (void)enableFullSQLTrace:(BOOL)enable
+{
+    _database->setFullSQLTraceEnable(enable);
 }
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
@@ -109,20 +136,6 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
                              WCDB::Configs::Priority::Highest);
     } else {
         _database->removeConfig(WCDB::PerformanceTraceConfigName);
-    }
-}
-
-- (void)traceSQL:(WCTSQLTraceBlock)trace
-{
-    if (trace != nil) {
-        WCDB::InnerHandle::SQLNotification callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
-        };
-        _database->setConfig(WCDB::SQLTraceConfigName,
-                             std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),
-                             WCDB::Configs::Priority::Highest);
-    } else {
-        _database->removeConfig(WCDB::SQLTraceConfigName);
     }
 }
 

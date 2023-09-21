@@ -47,10 +47,6 @@ public:
     UnsafeStringView(const UnsafeStringView& other);
     UnsafeStringView(UnsafeStringView&& other);
 
-#ifdef _WIN32
-    std::wstring getWString() const;
-#endif
-
     UnsafeStringView& operator=(const UnsafeStringView& other);
     UnsafeStringView& operator=(UnsafeStringView&& other);
     bool operator==(const UnsafeStringView& other) const;
@@ -74,6 +70,14 @@ private:
     const char* m_data = "";
     size_t m_length = 0;
     std::atomic<int>* m_referenceCount = nullptr;
+
+#pragma mark - UTF16
+public:
+#ifdef _WIN32
+    std::wstring getWString() const;
+#endif
+    static UnsafeStringView
+    createFromUTF16(const char16_t* utf16Str, size_t length, char* buffer);
 
 #pragma mark - UnsafeStringView - Comparison
 public:

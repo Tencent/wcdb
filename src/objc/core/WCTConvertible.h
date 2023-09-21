@@ -72,6 +72,12 @@ public:
     static LiteralValue asLiteralValue(NSNumber *number);
 };
 
+template<>
+class WCDB_API LiteralValueConvertible<NSDate *> final : public std::true_type {
+public:
+    static LiteralValue asLiteralValue(NSDate *date);
+};
+
 #if OBJC_BOOL_IS_CHAR
 template<>
 class WCDB_API LiteralValueConvertible<BOOL> final : public std::true_type {

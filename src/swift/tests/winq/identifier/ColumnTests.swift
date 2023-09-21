@@ -28,9 +28,9 @@ import WCDB
 class ColumnTests: BaseTestCase {
 
     func testColumn() {
-        WINQAssertEqual(Column.all, "*")
+        WINQAssertEqual(Column.all(), "*")
 
-        WINQAssertEqual(Column.rowid, "rowid")
+        WINQAssertEqual(Column.rowid(), "rowid")
 
         WINQAssertEqual(Column(named: "testColumn"), "testColumn")
 

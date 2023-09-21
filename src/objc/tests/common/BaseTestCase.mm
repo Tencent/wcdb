@@ -84,13 +84,13 @@
         switch (error.level) {
         case WCTErrorLevelIgnore:
         case WCTErrorLevelDebug:
+            if (self.skipDebugLog) {
+                break;
+            }
 #ifndef DEBUG
             break;
 #endif
         case WCTErrorLevelNotice:
-            if (self.skipDebugLog) {
-                break;
-            }
             // passthrough
         default:
             TestCaseLog(@"%@ Thread %@: %@", currentThread.isMainThread ? @"*" : @"-", threadName, error);

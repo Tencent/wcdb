@@ -103,7 +103,8 @@ typedef void (*WCDBSQLTracer)(void* _Nullable context,
                               long tag,
                               const char* _Nonnull path,
                               unsigned long long handleId,
-                              const char* _Nonnull sql);
+                              const char* _Nonnull sql,
+                              const char* _Nullable info);
 void WCDBDatabaseGlobalTraceSQL2(WCDBSQLTracer _Nullable tracer,
                                  void* _Nullable context,
                                  WCDBContextDestructor _Nullable destructor);
@@ -111,6 +112,8 @@ void WCDBDatabaseTraceSQL2(CPPDatabase database,
                            WCDBSQLTracer _Nullable tracer,
                            void* _Nullable context,
                            WCDBContextDestructor _Nullable destructor);
+
+void WCDBDatabaseSetFullSQLTraceEnable(CPPDatabase database, bool enable);
 
 void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer);
 void WCDBDatabaseTraceError(CPPDatabase database, SwiftClosure* _Nullable tracer);

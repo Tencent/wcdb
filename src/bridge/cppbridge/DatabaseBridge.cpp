@@ -36,7 +36,7 @@ WCDBDefineMultiArgumentSwiftClosureBridgedType(
 WCDBSwiftPerformanceTracer, void, long, const char*, uint64_t, const char*, double);
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(
-WCDBSwiftSQLTracer, void, long, const char*, uint64_t, const char*)
+WCDBSwiftSQLTracer, void, long, const char*, uint64_t, const char*, const char*)
 
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftErrorTracer, void, CPPError)
 
@@ -369,10 +369,11 @@ void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer)
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
         callback = [bridgedTracer](const WCDB::Tag& tag,
                                    const WCDB::UnsafeStringView& path,
+                                   const void* handle,
                                    const WCDB::UnsafeStringView& sql,
-                                   const void* handle) {
+                                   const WCDB::UnsafeStringView& info) {
             WCDBSwiftClosureCallWithMultiArgument(
-            bridgedTracer, tag, path.data(), (uint64_t) handle, sql.data());
+            bridgedTracer, tag, path.data(), (uint64_t) handle, sql.data(), info.data());
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -384,14 +385,15 @@ void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer)
     = WCDBCreateSwiftBridgedClosure(WCDBSwiftSQLTracer, tracer);
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
-        WCDB::InnerHandle::SQLNotification callback
-        = [bridgedTracer](const WCDB::Tag& tag,
-                          const WCDB::UnsafeStringView& path,
-                          const WCDB::UnsafeStringView& sql,
-                          const void* handle) {
-              WCDBSwiftClosureCallWithMultiArgument(
-              bridgedTracer, tag, path.data(), (uint64_t) handle, sql.data());
-          };
+        WCDB::InnerHandle::SQLNotification callback =
+        [bridgedTracer](const WCDB::Tag& tag,
+                        const WCDB::UnsafeStringView& path,
+                        const void* handle,
+                        const WCDB::UnsafeStringView& sql,
+                        const WCDB::UnsafeStringView& info) {
+            WCDBSwiftClosureCallWithMultiArgument(
+            bridgedTracer, tag, path.data(), (uint64_t) handle, sql.data(), info.data());
+        };
         cppDatabase->setConfig(WCDB::SQLTraceConfigName,
                                std::static_pointer_cast<WCDB::Config>(
                                std::make_shared<WCDB::SQLTraceConfig>(callback)),
@@ -410,10 +412,15 @@ void WCDBDatabaseGlobalTraceSQL2(WCDBSQLTracer _Nullable tracer,
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
         callback = [recyclableContext, tracer](const WCDB::Tag& tag,
                                                const WCDB::UnsafeStringView& path,
+                                               const void* handle,
                                                const WCDB::UnsafeStringView& sql,
-                                               const void* handle) {
-            tracer(
-            recyclableContext.get(), tag, path.data(), (uint64_t) handle, sql.data());
+                                               const WCDB::UnsafeStringView& info) {
+            tracer(recyclableContext.get(),
+                   tag,
+                   path.data(),
+                   (uint64_t) handle,
+                   sql.data(),
+                   info.data());
         };
     }
     WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
@@ -430,10 +437,15 @@ void WCDBDatabaseTraceSQL2(CPPDatabase database,
         WCDB::InnerHandle::SQLNotification callback
         = [recyclableContext, tracer](const WCDB::Tag& tag,
                                       const WCDB::UnsafeStringView& path,
+                                      const void* handle,
                                       const WCDB::UnsafeStringView& sql,
-                                      const void* handle) {
-              tracer(
-              recyclableContext.get(), tag, path.data(), (uint64_t) handle, sql.data());
+                                      const WCDB::UnsafeStringView& info) {
+              tracer(recyclableContext.get(),
+                     tag,
+                     path.data(),
+                     (uint64_t) handle,
+                     sql.data(),
+                     info.data());
           };
         cppDatabase->setConfig(WCDB::SQLTraceConfigName,
                                std::static_pointer_cast<WCDB::Config>(
@@ -442,6 +454,12 @@ void WCDBDatabaseTraceSQL2(CPPDatabase database,
     } else {
         cppDatabase->removeConfig(WCDB::SQLTraceConfigName);
     }
+}
+
+void WCDBDatabaseSetFullSQLTraceEnable(CPPDatabase database, bool enable)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    cppDatabase->setFullSQLTraceEnable(enable);
 }
 
 void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer)

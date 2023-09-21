@@ -28,11 +28,12 @@
 namespace WCDB {
 
 AssembleHandle::AssembleHandle()
-: InnerHandle()
+: BackupRelatedHandle()
 , Repair::AssembleDelegate()
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
 , m_integerPrimary(-1)
+, m_withoutRowid(false)
 , m_cellStatement(getStatement())
 , m_statementForUpdateSequence(StatementUpdate()
                                .update("sqlite_sequence")
@@ -43,9 +44,6 @@ AssembleHandle::AssembleHandle()
                                .insertIntoTable("sqlite_sequence")
                                .columns({ Column("name"), Column("seq") })
                                .values(BindParameter::bindParameters(2)))
-, m_statementForReadTransaction(StatementBegin().beginDeferred())
-, m_statementForAcquireReadLock(
-  StatementSelect().select(1).from(Syntax::masterTable).limit(0))
 {
 }
 
@@ -136,8 +134,17 @@ bool AssembleHandle::assembleTable(const UnsafeStringView &tableName,
     markErrorAsUnignorable();
     if (succeed) {
         m_table = tableName;
+        auto attribute = getTableAttribute(Schema::main(), tableName);
+        if (attribute.hasValue()) {
+            m_withoutRowid = attribute->withoutRowid;
+        }
     }
     return succeed;
+}
+
+bool AssembleHandle::isAssemblingTableWithoutRowid() const
+{
+    return m_withoutRowid;
 }
 
 bool AssembleHandle::assembleCell(const Repair::Cell &cell)
@@ -148,9 +155,11 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
     }
     WCTAssert(m_cellStatement->isPrepared());
     m_cellStatement->reset();
-    m_cellStatement->bindInteger(cell.getRowID(), 1);
+    if (!m_withoutRowid) {
+        m_cellStatement->bindInteger(cell.getRowID(), 1);
+    }
     for (int i = 0; i < cell.getCount(); ++i) {
-        int bindIndex = i + 2;
+        int bindIndex = m_withoutRowid ? i + 1 : i + 2;
         switch (cell.getValueType(i)) {
         case Repair::Cell::Integer:
             m_cellStatement->bindInteger(cell.integerValue(i), bindIndex);
@@ -179,6 +188,14 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
     return succeed;
 }
 
+void AssembleHandle::markDuplicatedAsReplaceable(bool replaceable)
+{
+    if (isDuplicatedReplaceable() != replaceable && m_cellStatement->isPrepared()) {
+        m_cellStatement->finalize();
+    }
+    AssembleDelegate::markDuplicatedAsReplaceable(replaceable);
+}
+
 bool AssembleHandle::lazyPrepareCell()
 {
     if (m_cellStatement->isPrepared()) {
@@ -192,12 +209,17 @@ bool AssembleHandle::lazyPrepareCell()
     auto &metas = optionalMetas.value();
     m_integerPrimary = ColumnMeta::getIndexOfIntegerPrimary(metas);
 
-    Columns columns = { Column::rowid() };
+    Columns columns = {};
+    if (!m_withoutRowid) {
+        columns.push_back(Column::rowid());
+    }
     for (const auto &meta : metas) {
         columns.push_back(Column(meta.name));
     }
     StatementInsert statement = StatementInsert().insertIntoTable(m_table);
-    if (isDuplicatedIgnorable()) {
+    if (isDuplicatedReplaceable()) {
+        statement.orReplace();
+    } else if (isDuplicatedIgnorable()) {
         statement.orIgnore();
     }
     statement.columns(columns).values(BindParameter::bindParameters(columns.size()));
@@ -263,98 +285,6 @@ bool AssembleHandle::markSequenceAsAssembling()
 bool AssembleHandle::markSequenceAsAssembled()
 {
     return executeStatement(StatementDropTable().dropTable(s_dummySequence).ifExists());
-}
-
-#pragma mark - Backup
-void AssembleHandle::setBackupPath(const UnsafeStringView &path)
-{
-    InnerHandle::setPath(path);
-}
-
-const StringView &AssembleHandle::getBackupPath() const
-{
-    return InnerHandle::getPath();
-}
-
-const Error &AssembleHandle::getBackupError() const
-{
-    return InnerHandle::getError();
-}
-
-void AssembleHandle::finishBackup()
-{
-    InnerHandle::close();
-}
-
-bool AssembleHandle::acquireBackupSharedLock()
-{
-    return open() && execute(m_statementForReadTransaction)
-           && execute(m_statementForAcquireReadLock);
-}
-
-bool AssembleHandle::releaseBackupSharedLock()
-{
-    rollbackTransaction();
-    return true;
-}
-
-bool AssembleHandle::acquireBackupExclusiveLock()
-{
-    return open() && beginTransaction();
-}
-
-bool AssembleHandle::releaseBackupExclusiveLock()
-{
-    rollbackTransaction();
-    return true;
-}
-
-const Error &AssembleHandle::getCipherError() const
-{
-    return InnerHandle::getError();
-}
-
-bool AssembleHandle::openCipherInMemory(bool onlyUsedCipherKey)
-{
-    InnerHandle::setPath(":memory:");
-    if (onlyUsedCipherKey) {
-        return InnerHandle::openPureCipherDB();
-    } else {
-        return InnerHandle::open();
-    }
-}
-
-bool AssembleHandle::isCipherDB() const
-{
-    return InnerHandle::isCipherDB();
-}
-
-void AssembleHandle::closeCipher()
-{
-    InnerHandle::close();
-}
-
-void *AssembleHandle::getCipherContext()
-{
-    if (!isOpened()) {
-        return nullptr;
-    }
-    return AbstractHandle::getCipherContext();
-}
-
-size_t AssembleHandle::getCipherPageSize()
-{
-    return AbstractHandle::getCipherPageSize();
-}
-
-StringView AssembleHandle::getCipherSalt()
-{
-    return AbstractHandle::getCipherSalt();
-}
-
-bool AssembleHandle::setCipherSalt(const UnsafeStringView &salt)
-{
-    return AbstractHandle::setCipherSalt(salt);
 }
 
 } // namespace WCDB

@@ -78,19 +78,6 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
     other.m_length = 0;
 }
 
-#ifdef _WIN32
-std::wstring UnsafeStringView::getWString() const
-{
-    std::wstring wstring;
-    int wlen = MultiByteToWideChar(CP_UTF8, 0, m_data, m_length, NULL, 0);
-    if (wlen > 0) {
-        wstring.resize(static_cast<size_t>(wlen));
-        MultiByteToWideChar(CP_UTF8, 0, m_data, m_length, &wstring[0], wlen);
-    }
-    return wstring;
-}
-#endif
-
 UnsafeStringView::~UnsafeStringView()
 {
     if ((uint64_t) m_referenceCount <= ConstanceReference) {
@@ -179,6 +166,70 @@ bool UnsafeStringView::empty() const
 const char& UnsafeStringView::at(offset_t off) const
 {
     return m_data[off];
+}
+
+#pragma mark - UTF16
+
+#ifdef _WIN32
+std::wstring UnsafeStringView::getWString() const
+{
+    std::wstring wstring;
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, m_data, m_length, NULL, 0);
+    if (wlen > 0) {
+        wstring.resize(static_cast<size_t>(wlen));
+        MultiByteToWideChar(CP_UTF8, 0, m_data, m_length, &wstring[0], wlen);
+    }
+    return wstring;
+}
+#endif
+
+#define READ_UTF16(zIn, TERM, c)                                                        \
+    {                                                                                   \
+        c = (*zIn++);                                                                   \
+        c += ((*zIn++) << 8);                                                           \
+        if (c >= 0xD800 && c < 0xE000 && TERM) {                                        \
+            int c2 = (*zIn++);                                                          \
+            c2 += ((*zIn++) << 8);                                                      \
+            c = (c2 & 0x03FF) + ((c & 0x003F) << 10) + (((c & 0x03C0) + 0x0040) << 10); \
+        }                                                                               \
+    }
+
+#define u8 unsigned char
+
+#define WRITE_UTF8(zOut, c)                                                    \
+    {                                                                          \
+        if (c < 0x00080) {                                                     \
+            *zOut++ = (u8) (c & 0xFF);                                         \
+        } else if (c < 0x00800) {                                              \
+            *zOut++ = 0xC0 + (u8) ((c >> 6) & 0x1F);                           \
+            *zOut++ = 0x80 + (u8) (c & 0x3F);                                  \
+        } else if (c < 0x10000) {                                              \
+            *zOut++ = 0xE0 + (u8) ((c >> 12) & 0x0F);                          \
+            *zOut++ = 0x80 + (u8) ((c >> 6) & 0x3F);                           \
+            *zOut++ = 0x80 + (u8) (c & 0x3F);                                  \
+        } else {                                                               \
+            *zOut++ = 0xF0 + (u8) ((c >> 18) & 0x07);                          \
+            *zOut++ = 0x80 + (u8) ((c >> 12) & 0x3F);                          \
+            *zOut++ = 0x80 + (u8) ((c >> 6) & 0x3F);                           \
+            *zOut++ = 0x80 + (u8) (c & 0x3F);                                  \
+        }                                                                      \
+    }
+
+UnsafeStringView
+UnsafeStringView::createFromUTF16(const char16_t* utf16Str, size_t length, char* buffer)
+{
+    if (length == 0) {
+        return UnsafeStringView();
+    }
+    const char16_t* in = utf16Str;
+    char* out = buffer;
+    unsigned int c;
+    while (in - utf16Str < length) {
+        READ_UTF16(in, in - utf16Str < length, c);
+        WRITE_UTF8(out, c);
+    }
+    *out = 0;
+    return UnsafeStringView(buffer, out - buffer);
 }
 
 #pragma mark - UnsafeStringView - Comparison

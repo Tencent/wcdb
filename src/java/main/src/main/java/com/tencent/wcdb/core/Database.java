@@ -219,15 +219,14 @@ public class Database extends HandleORMOperation {
     public void tracePerformance(PerformanceTracer tracer) {
         tracePerformance(cppObj, tracer);
     }
-
     private static native void tracePerformance(long self, PerformanceTracer tracer);
 
     public interface SQLTracer {
-        void onTrace(long tag, String path, long handleId, String sql);
+        void onTrace(long tag, String path, long handleId, String sql, String info);
     }
 
-    private static void onTraceSQL(SQLTracer tracer, long tag,  String path, long handleId, String sql) {
-        tracer.onTrace(tag, path, handleId, sql);
+    private static void onTraceSQL(SQLTracer tracer, long tag,  String path, long handleId, String sql, String info) {
+        tracer.onTrace(tag, path, handleId, sql, info);
     }
 
     public static native void globalTraceSQL(SQLTracer tracer);
@@ -237,6 +236,12 @@ public class Database extends HandleORMOperation {
     }
 
     private static native void traceSQL(long self, SQLTracer tracer);
+
+    public void setFullSQLTraceEnable(boolean enable) {
+        setFullSQLTraceEnable(cppObj, enable);
+    }
+
+    private static native void setFullSQLTraceEnable(long self, boolean enable);
 
     public interface ExceptionTracer {
         void onTrace(WCDBException exception);

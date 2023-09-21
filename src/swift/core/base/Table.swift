@@ -456,7 +456,7 @@ extension Table: RowSelectTableInterface {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
-        return try getRows(on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
+        return try getRows(on: resultColumnConvertibleList.isEmpty ? [Column.all()] : resultColumnConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: limit,
@@ -476,7 +476,7 @@ extension Table: RowSelectTableInterface {
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
-        return try getRows(on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
+        return try getRows(on: resultColumnConvertibleList.isEmpty ? [Column.all()] : resultColumnConvertibleList,
                            where: condition,
                            orderBy: orderList,
                            limit: 1,
@@ -666,7 +666,7 @@ extension Table: TableRowSelectChainCallInterface {
     public func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
                                  isDistinct: Bool = false) throws -> RowSelect {
         return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
-                                    [Column.all] : resultColumnConvertibleList,
+                                    [Column.all()] : resultColumnConvertibleList,
                                     isDistinct: isDistinct)
     }
 

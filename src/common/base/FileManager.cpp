@@ -347,6 +347,22 @@ Optional<bool> FileManager::fileExists(const UnsafeStringView &file)
     return NullOpt;
 }
 
+Optional<bool> FileManager::fileExistsAndNotEmpty(const UnsafeStringView &file)
+{
+    StatType s;
+    if (StatFunc(GetPathString(file), &s) == 0) {
+        if ((s.st_mode & S_IFMT) == S_IFDIR) {
+            return false;
+        } else {
+            return s.st_size > 0;
+        }
+    } else if (errno == ENOENT) {
+        return false;
+    }
+    setThreadedError(file);
+    return NullOpt;
+}
+
 Optional<bool> FileManager::directoryExists(const UnsafeStringView &directory)
 {
     auto result = itemExists(directory);

@@ -884,6 +884,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "traceSQL",
       "(J" WCDBJNIDatabaseSignature "$SQLTracer;)V",
       (void *) WCDBJNIDatabaseFuncName(traceSQL) },
+    { "setFullSQLTraceEnable", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(setFullSQLTraceEnable) },
     { "globalTraceException",
       "(" WCDBJNIDatabaseSignature "$ExceptionTracer;)V",
       (void *) WCDBJNIDatabaseFuncName(globalTraceError) },

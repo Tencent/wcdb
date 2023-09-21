@@ -201,7 +201,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
         return try getRows(
-            on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
+            on: resultColumnConvertibleList.isEmpty ? [Column.all()] : resultColumnConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
@@ -215,7 +215,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
         return try getRow(
-            on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
+            on: resultColumnConvertibleList.isEmpty ? [Column.all()] : resultColumnConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,

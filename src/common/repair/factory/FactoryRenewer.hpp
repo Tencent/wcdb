@@ -53,6 +53,7 @@ protected:
         Info();
         StringView sql;
         int64_t sequence;
+        std::list<StringView> associatedSQLs;
     };
     typedef struct Info Info;
 

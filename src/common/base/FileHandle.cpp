@@ -164,6 +164,16 @@ Data FileHandle::read(size_t size)
         if (got == readSize) {
             break;
         }
+#ifndef _WIN32
+        if (got <= 0) {
+            auto err = errno;
+            if (err == EDEVERR || err == EILSEQ || err == EINVAL) {
+                setThreadedError("This file may be permanently damaged");
+                prior = 0;
+                break;
+            }
+        }
+#endif
         if (got < 0) {
             if (errno == EINTR) {
                 got = 1;
@@ -257,6 +267,15 @@ MappedData FileHandle::map(offset_t offset, size_t length, SharedHighWater highW
     }
 
 #ifndef _WIN32
+
+    // Avoid to mmap permanently corrupted files
+    if (offset == 0) {
+        auto testData = read(4);
+        if (testData.size() <= 0) {
+            return MappedData::null();
+        }
+    }
+
     void *mapped = mmap(
     nullptr, roundedSize, PROT_READ, MAP_SHARED | MAP_NOEXTEND | MAP_NORESERVE, m_fd, roundedOffset);
     if (mapped == MAP_FAILED) {
@@ -360,11 +379,11 @@ void FileHandle::markErrorAsIgnorable(bool flag)
     m_errorIgnorable = flag;
 }
 
-void FileHandle::setThreadedError()
+void FileHandle::setThreadedError(const UnsafeStringView &message)
 {
     Error error;
     error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
-    error.setSystemCode(errno, Error::Code::IOError);
+    error.setSystemCode(errno, Error::Code::IOError, message);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     Notifier::shared().notify(error);
     SharedThreadedErrorProne::setThreadedError(std::move(error));

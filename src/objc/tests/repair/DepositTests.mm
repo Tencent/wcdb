@@ -23,6 +23,7 @@
  */
 
 #import "BackupTestCase.h"
+#import "Random+RepairTestObject.h"
 
 @interface DepositTests : BackupTestCase
 
@@ -34,21 +35,24 @@
 {
     [self
     executeTest:^{
-        TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
         int rowId = (int) self.objects.count;
-
         {
             // 1.
             TestCaseAssertTrue([self.database backup]);
             TestCaseAssertTrue([self.database deposit]);
 
-            NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(TestCaseObject.allProperties.count()).from(self.tableName)].numberValue;
+            NSNumber* count = [self.database getValueFromStatement:WCDB::StatementSelect().select([self.testClass allProperties].count()).from(self.tableName)].numberValue;
             TestCaseAssertTrue(count != nil);
             TestCaseAssertTrue(count.integerValue == 0);
 
-            TestCaseAssertTrue([self.table insertObject:object]);
-            ++rowId;
-            TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+            if ([self.testClass isAutoIncrement]) {
+                NSObject<RepairTestObject>* object = [Random.shared repairObjectWithClass:self.testClass andIdentifier:0];
+                object.isAutoIncrement = YES;
+
+                TestCaseAssertTrue([self.table insertObject:object]);
+                ++rowId;
+                TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+            }
         }
 
         {
@@ -60,9 +64,14 @@
             TestCaseAssertTrue(count != nil);
             TestCaseAssertTrue(count.integerValue == 0);
 
-            TestCaseAssertTrue([self.table insertObject:object]);
-            ++rowId;
-            TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+            if ([self.testClass isAutoIncrement]) {
+                NSObject<RepairTestObject>* object = [Random.shared repairObjectWithClass:self.testClass andIdentifier:0];
+                object.isAutoIncrement = YES;
+
+                TestCaseAssertTrue([self.table insertObject:object]);
+                ++rowId;
+                TestCaseAssertTrue(object.lastInsertedRowID == rowId);
+            }
         }
 
         TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.factoryPath]);

@@ -33,6 +33,7 @@
 
 #include "AssembleHandle.hpp"
 #include "BusyRetryConfig.hpp"
+#include "CipherHandle.hpp"
 #include "Core.hpp"
 #include "DBOperationNotifier.hpp"
 #include "MigrateHandle.hpp"
@@ -50,7 +51,9 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_initialized(false)
 , m_closing(0)
 , m_tag(Tag::invalid())
+, m_fullSQLTrace(false)
 , m_factory(path)
+, m_needLoadIncremetalMaterial(false)
 , m_migration(this)
 , m_migratedCallback(nullptr)
 , m_isInMemory(false)
@@ -200,6 +203,11 @@ void InnerDatabase::removeConfig(const UnsafeStringView &name)
     m_configs.erase(StringView(name));
 }
 
+void InnerDatabase::setFullSQLTraceEnable(bool enable)
+{
+    m_fullSQLTrace = enable;
+}
+
 #pragma mark - Handle
 RecyclableHandle InnerDatabase::getHandle(bool writeHint)
 {
@@ -279,6 +287,9 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
     case HandleSlotMigrate:
         handle = std::make_shared<MigrateHandle>();
         break;
+    case HandleSlotCipher:
+        handle = std::make_shared<CipherHandle>();
+        break;
     case HandleSlotAssemble:
         handle = std::make_shared<AssembleHandle>();
         break;
@@ -318,8 +329,8 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     WCTAssert(handle != nullptr);
 
     handle->setType(type);
+    handle->setFullSQLTraceEnable(m_fullSQLTrace);
     HandleSlot slot = slotOfHandleType(type);
-    HandleCategory category = categoryOfHandleType(type);
 
     Configs configs;
     {
@@ -332,7 +343,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
         return false;
     }
 
-    if (slot != HandleSlotAssemble && category != HandleCategoryCipher) {
+    if (slot != HandleSlotAssemble && slot != HandleSlotCipher) {
         handle->setPath(path);
         bool hasOpened = handle->isOpened();
         std::clock_t start = std::clock();
@@ -342,7 +353,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
         }
         if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
             std::clock_t openTime
-            = (std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000);
+            = (std::clock_t)((std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000));
             int memoryUsed, tableCount, indexCount, triggerCount;
             if (handle->getSchemaInfo(memoryUsed, tableCount, indexCount, triggerCount)) {
                 StringViewMap<Value> info;
@@ -357,8 +368,19 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
                 this, DBOperationNotifier::Operation::OpenHandle, info);
             }
         }
-    } else {
-        handle->clearPath();
+    } else if (slot == HandleSlotCipher) {
+        CipherHandle *cipherHandle = static_cast<CipherHandle *>(handle);
+        if (!cipherHandle->openCipherInMemory()) {
+            setThreadedError(cipherHandle->getCipherError());
+            return false;
+        }
+        auto salt = cipherHandle->tryGetSaltFromDatabase(getPath());
+        if (salt.failed()) {
+            assignWithSharedThreadedError();
+            return false;
+        } else if (salt.value().length() > 0) {
+            cipherHandle->setCipherSalt(salt.value());
+        }
     }
 
     return true;
@@ -512,6 +534,7 @@ std::list<StringView> InnerDatabase::pathsOfDatabase(const UnsafeStringView &dat
     return {
         StringView(database),
         InnerHandle::walPathOfDatabase(database),
+        Repair::Factory::incrementalMaterialPathForDatabase(database),
         Repair::Factory::firstMaterialPathForDatabase(database),
         Repair::Factory::lastMaterialPathForDatabase(database),
         Repair::Factory::factoryPathForDatabase(database),
@@ -527,6 +550,63 @@ void InnerDatabase::setInMemory()
 }
 
 #pragma mark - Repair
+
+void InnerDatabase::markNeedLoadIncremetalMaterial()
+{
+    m_needLoadIncremetalMaterial = true;
+}
+
+void InnerDatabase::tryLoadIncremetalMaterial()
+{
+    if (!m_needLoadIncremetalMaterial) {
+        return;
+    }
+    const StringView &databasePath = getPath();
+    StringView materialPath
+    = Repair::Factory::incrementalMaterialPathForDatabase(databasePath);
+    auto exist = FileManager::fileExists(materialPath);
+    if (!exist.hasValue()) {
+        return;
+    }
+    if (!exist.value()) {
+        m_needLoadIncremetalMaterial = false;
+        return;
+    }
+    SharedIncrementalMaterial material = std::make_shared<Repair::IncrementalMaterial>();
+    RecyclableHandle handle = flowOut(HandleType::BackupCipher);
+    if (handle == nullptr) {
+        return;
+    }
+    CipherHandle *cipherHandle = static_cast<CipherHandle *>(handle.get());
+    bool useMaterial = false;
+    if (cipherHandle->isCipherDB()) {
+        material->setCipherDelegate(cipherHandle);
+        useMaterial = material->decryptedDeserialize(materialPath, false);
+        material->setCipherDelegate(nullptr);
+    } else {
+        useMaterial = material->deserialize(materialPath);
+    }
+    if (useMaterial) {
+        if (material->pages.size() < BackupMaxAllowIncrementalPageCount) {
+            Core::shared().tryRegisterIncrementalMaterial(getPath(), material);
+        } else {
+            FileManager::removeItem(materialPath);
+            Error error(Error::Code::Error, Error::Level::Warning, "Remove large incremental material");
+            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+            error.infos.insert_or_assign(ErrorStringKeyPath, databasePath);
+            error.infos.insert_or_assign("PageCount", material->pages.size());
+            Notifier::shared().notify(error);
+        }
+    } else {
+        FileManager::removeItem(materialPath);
+        Error error(Error::Code::Error, Error::Level::Warning, "Remove unresolved incremental material");
+        error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
+        error.infos.insert_or_assign(ErrorStringKeyPath, databasePath);
+        Notifier::shared().notify(error);
+    }
+    m_needLoadIncremetalMaterial = false;
+}
+
 void InnerDatabase::filterBackup(const BackupFilter &tableShouldBeBackedup)
 {
     LockGuard memoryGuard(m_memory);
@@ -542,30 +622,33 @@ bool InnerDatabase::backup(bool interruptible)
     if (!initializedGuard.valid()) {
         return false; // mark as succeed if it's not an auto initialize action.
     }
-    WCTRemedialAssert(
-    !isInTransaction(), "Backup can't be run in transaction.", return false;);
 
     RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
+    OperationHandle *operationBackupReadHandle
+    = static_cast<OperationHandle *>(backupReadHandle.get());
+
+    WCTRemedialAssert(
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);
+
     RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
     }
-    RecyclableHandle cipherHandle = flowOut(HandleType::BackupCipher);
-    if (cipherHandle == nullptr) {
+
+    RecyclableHandle backupCipherHandle = flowOut(HandleType::BackupCipher);
+    if (backupCipherHandle == nullptr) {
         return false;
     }
+    CipherHandle *operationBackupCipherHandle
+    = static_cast<CipherHandle *>(backupCipherHandle.get());
+    WCTAssert(backupReadHandle.get() != backupCipherHandle.get());
 
     WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
-    WCTAssert(backupReadHandle.get() != cipherHandle.get());
-    WCTAssert(backupWriteHandle.get() != cipherHandle.get());
+    WCTAssert(backupWriteHandle.get() != backupCipherHandle.get());
 
-    WCTAssert(!cipherHandle->isOpened());
-
-    OperationHandle *operationBackupReadHandle
-    = static_cast<OperationHandle *>(backupReadHandle.get());
     OperationHandle *operationBackupWriteHandle
     = static_cast<OperationHandle *>(backupWriteHandle.get());
     if (interruptible) {
@@ -586,14 +669,12 @@ bool InnerDatabase::backup(bool interruptible)
     Core::shared().setThreadedDatabase(path);
 
     Repair::FactoryBackup backup = m_factory.backup();
-    backup.setBackupSharedDelegate(
-    static_cast<OperationHandle *>(backupReadHandle.get()));
+    backup.setBackupSharedDelegate(operationBackupReadHandle);
     backup.setBackupExclusiveDelegate(
     static_cast<OperationHandle *>(backupWriteHandle.get()));
-    backup.setCipherDelegate(static_cast<Repair::BackupSharedDelegate *>(
-    static_cast<OperationHandle *>(cipherHandle.get())));
+    backup.setCipherDelegate(operationBackupCipherHandle);
 
-    bool succeed = backup.work(getPath());
+    bool succeed = backup.work(getPath(), interruptible);
     if (!succeed) {
         if (backup.getError().level == Error::Level::Ignore) {
             succeed = true;
@@ -607,7 +688,6 @@ bool InnerDatabase::backup(bool interruptible)
         operationBackupWriteHandle->markErrorAsUnignorable();
         operationBackupReadHandle->markErrorAsUnignorable();
     }
-    cipherHandle->close();
     Core::shared().setThreadedDatabase("");
     return succeed;
 }
@@ -650,7 +730,6 @@ bool InnerDatabase::deposit()
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
-        WCTAssert(!cipherHandle->isOpened());
 
         Core::shared().setThreadedDatabase(path);
 
@@ -661,8 +740,7 @@ bool InnerDatabase::deposit()
         static_cast<AssembleHandle *>(backupWriteHandle.get()));
         renewer.setAssembleDelegate(
         static_cast<AssembleHandle *>(assemblerHandle.get()));
-        renewer.setCipherDelegate(static_cast<Repair::AssembleDelegate *>(
-        static_cast<AssembleHandle *>(cipherHandle.get())));
+        renewer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
@@ -726,7 +804,6 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         WCTAssert(!backupReadHandle->isOpened());
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
-        WCTAssert(!cipherHandle->isOpened());
 
         Core::shared().setThreadedDatabase(path);
 
@@ -737,8 +814,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         static_cast<AssembleHandle *>(backupWriteHandle.get()));
         retriever.setAssembleDelegate(
         static_cast<AssembleHandle *>(assemblerHandle.get()));
-        retriever.setCipherDelegate(static_cast<Repair::AssembleDelegate *>(
-        static_cast<AssembleHandle *>(cipherHandle.get())));
+        retriever.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
         retriever.setProgressCallback(onProgressUpdated);
         if (retriever.work()) {
             result = retriever.getScore().value();
@@ -773,7 +849,8 @@ bool InnerDatabase::removeMaterials()
     bool result = false;
     close([&result, this]() {
         result = FileManager::removeItems(
-        { Repair::Factory::firstMaterialPathForDatabase(path),
+        { Repair::Factory::incrementalMaterialPathForDatabase(path),
+          Repair::Factory::firstMaterialPathForDatabase(path),
           Repair::Factory::lastMaterialPathForDatabase(path) });
         if (!result) {
             assignWithSharedThreadedError();
@@ -910,6 +987,8 @@ bool InnerDatabase::checkpoint(bool interruptible, CheckPointMode mode)
             setThreadedError(std::move(error));
             return false;
         }
+
+        tryLoadIncremetalMaterial();
 
         WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
         OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());

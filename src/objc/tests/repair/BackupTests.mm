@@ -24,6 +24,7 @@
 
 #import "BackupTestCase.h"
 #import "CoreConst.h"
+#import "Random+RepairTestObject.h"
 
 @interface BackupTests : BackupTestCase
 
@@ -31,145 +32,235 @@
 
 @implementation BackupTests
 
-- (void)test_backup
+- (void)test_insert
+{
+    __block NSArray *newObjects = nil;
+    [self
+    executeFullTest:^{
+        newObjects = [[Random shared] repairObjectsWithClass:self.testClass andCount:100 startingFromIdentifier:self.objects.lastObject.identifier + 1];
+        XCTAssertTrue([self.table insertObjects:newObjects]);
+    }
+    withCheck:^{
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        [self checkObjects:self.objects containedIn:allObjects];
+        if (!self.corruptHeader || self.incrementalBackup) {
+            [self checkObjects:newObjects containedIn:allObjects];
+        }
+    }];
+}
+
+- (void)test_update
 {
     [self
-    executeTest:^{
-        TestCaseAssertTrue([self.database backup]);
+    executeFullTest:^{
+        XCTAssertTrue([self.table updateProperty:[self.testClass textValue] toValue:@"abc" where:[self.testClass identifier] < 50]);
+    }
+    withCheck:^{
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        if (!self.corruptHeader || self.incrementalBackup) {
+            for (NSObject<RepairTestObject> *object in self.objects) {
+                if (object.identifier < 50) {
+                    object.textValue = @"abc";
+                }
+            }
+        }
+        [self checkObjects:self.objects containedIn:allObjects];
+    }];
+}
+
+- (void)test_delete
+{
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.table deleteObjectsWhere:[self.testClass identifier] > 50]);
+    }
+    withCheck:^{
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        if (!self.corruptHeader || self.incrementalBackup) {
+            [self.objects removeObjectsInRange:NSMakeRange(50, 50)];
+        }
+        [self checkObjects:self.objects containedIn:allObjects];
+    }];
+}
+
+- (void)test_rename_table
+{
+    NSString *newTable = @"newTable";
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.database execute:WCDB::StatementAlterTable().alterTable(self.tableName).renameToTable(newTable)]);
+        self.table = [self.database getTable:newTable withClass:self.testClass];
+    }
+    withCheck:^{
+        if (self.corruptHeader && !self.incrementalBackup) {
+            self.table = [self.database getTable:self.tableName withClass:self.testClass];
+        }
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        [self checkObjects:self.objects containedIn:allObjects];
+    }];
+}
+
+- (void)test_add_new_column
+{
+    NSString *newColumn = @"newColumn";
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.database execute:WCDB::StatementAlterTable().alterTable(self.tableName).addColumn(WCDB::ColumnDef(newColumn, WCDB::ColumnType::Integer))]);
+    }
+    withCheck:^{
+        if (self.incrementalBackup) {
+            WCTOneRow *row = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column(newColumn)).from(self.tableName)];
+            XCTAssertTrue(row != nil && row.count == 1 && row[0] == [NSNull null]);
+        }
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        [self checkObjects:self.objects containedIn:allObjects];
+    }];
+}
+
+- (void)test_drop_table
+{
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.database dropTable:self.tableName]);
+    }
+    withCheck:^{
+        if (!self.incrementalBackup) {
+            NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+            [self checkObjects:self.objects containedIn:allObjects];
+        } else {
+            XCTAssertFalse([self.database tableExists:self.tableName]);
+        }
+    }];
+}
+
+- (void)test_truncate_checkpoint
+{
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.database truncateCheckpoint]);
+    }
+    withCheck:^{
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        if (!self.corruptHeader || self.incrementalBackup) {
+            [self checkObjects:self.objects containedIn:allObjects];
+        }
+        XCTAssertTrue(allObjects.count > 0);
+    }];
+}
+
+- (void)test_vacuum
+{
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.database execute:WCDB::StatementVacuum().vacuum()]);
+    }
+    withCheck:^{
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        [self checkObjects:self.objects containedIn:allObjects];
     }];
 }
 
 - (void)test_dual_backup
 {
-    [self
-    executeTest:^{
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-        TestCaseAssertTrue([self.database backup]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+    TestCaseAssertTrue([self.database backup]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-        [NSThread sleepForTimeInterval:1];
-        TestCaseAssertTrue([self.database backup]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-        TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+    [NSThread sleepForTimeInterval:0.1];
+    TestCaseAssertTrue([self.database backup]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-        {
-            // old one will be replaced
-            NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
-            TestCaseAssertTrue(firstBackupModifiedDate != nil);
-            NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
-            TestCaseAssertTrue(lastBackupModifiedDate != nil);
-            TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedAscending);
-        }
+    {
+        // old one will be replaced
+        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
+        TestCaseAssertTrue(firstBackupModifiedDate != nil);
+        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
+        TestCaseAssertTrue(lastBackupModifiedDate != nil);
+        TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedAscending);
+    }
 
-        [NSThread sleepForTimeInterval:1];
-        TestCaseAssertTrue([self.database backup]);
+    [NSThread sleepForTimeInterval:0.1];
+    TestCaseAssertTrue([self.database backup]);
 
-        {
-            // old one will be replaced
-            NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
-            TestCaseAssertTrue(firstBackupModifiedDate != nil);
-            NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
-            TestCaseAssertTrue(lastBackupModifiedDate != nil);
-            TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedDescending);
-        }
-    }];
+    {
+        // old one will be replaced
+        NSDate *firstBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.firstMaterialPath error:nil][NSFileModificationDate];
+        TestCaseAssertTrue(firstBackupModifiedDate != nil);
+        NSDate *lastBackupModifiedDate = [self.fileManager attributesOfItemAtPath:self.database.lastMaterialPath error:nil][NSFileModificationDate];
+        TestCaseAssertTrue(lastBackupModifiedDate != nil);
+        TestCaseAssertTrue([firstBackupModifiedDate compare:lastBackupModifiedDate] == NSOrderedDescending);
+    }
 }
 
 - (void)test_empty_backup
 {
-    [self
-    executeTest:^{
+    [self executeTest:^{
         TestCaseAssertTrue([self.database removeFiles]);
-        TestCaseAssertTrue([self.database backup]);
-    }];
-}
-
-- (void)test_wal
-{
-    [self
-    executeTest:^{
-        TestCaseAssertTrue([[self.fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
-        TestCaseAssertTrue([self.database backup]);
-    }];
-}
-
-- (void)test_empty_wal
-{
-    [self
-    executeTest:^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] > 0);
-        TestCaseAssertTrue([self.database truncateCheckpoint]);
-        TestCaseAssertTrue([[fileManager attributesOfItemAtPath:self.database.walPath error:nil] fileSize] == 0);
         TestCaseAssertTrue([self.database backup]);
     }];
 }
 
 - (void)test_filter
 {
-    [self insertPresetObjects];
-    [self.database filterBackup:nil];
-    TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
-
     [self.database filterBackup:^BOOL(NSString *tableName) {
-        WCDB_UNUSED(tableName)
-        return NO;
+        if ([tableName isEqualToString:self.tableName]) {
+            return false;
+        }
+        return true;
     }];
-    [NSThread sleepForTimeInterval:1];
-    TestCaseAssertTrue([self.database backup]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
-
-    NSInteger firstMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.firstMaterialPath];
-    NSInteger lastMaterialSize = (NSInteger) [self.fileManager getFileSizeIfExists:self.database.lastMaterialPath];
-    TestCaseAssertTrue(firstMaterialSize > lastMaterialSize);
+    [self
+    executeFullTest:^{
+    }
+    withCheck:^{
+        XCTAssertFalse([self.database tableExists:self.tableName]);
+    }];
 }
 
 - (void)test_backup_fail
 {
-    [self
-    executeTest:^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.firstMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
-        TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.lastMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.firstMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
+    TestCaseAssertTrue([fileManager createDirectoryAtPath:self.database.lastMaterialPath withIntermediateDirectories:YES attributes:nil error:nil]);
 
-        TestCaseAssertFalse([self.database backup]);
-    }];
-}
-
-- (BOOL)checkAutoBackedup
-{
-    TestCaseObject *object = [Random.shared autoIncrementTestCaseObject];
-    TestCaseAssertTrue([self.table insertObject:object]);
-
-    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
-    TestCaseAssertTrue([self.database passiveCheckpoint]);
-
-    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
-    return [self.fileManager fileExistsAtPath:self.database.firstMaterialPath];
+    TestCaseAssertFalse([self.database backup]);
 }
 
 - (void)test_auto_backup_when_checkpointed
 {
-    [self
-    executeTest:^{
-        [self.database enableAutoCheckpoint:NO];
-        [self.database enableAutoBackup:YES];
-        TestCaseAssertTrue([self checkAutoBackedup]);
-    }];
-}
+    [self.database enableAutoCheckpoint:NO];
+    [self.database enableAutoBackup:YES];
+    TestCaseObject *object = [Random.shared autoIncrementTestCaseObject];
+    XCTAssertTrue([self createTable]);
+    TestCaseAssertTrue([self.table insertObject:object]);
 
-- (int)getInteriorTablePage
-{
-    WCDB::Column pagetype("pagetype");
-    WCDB::Column pageno("pageno");
-    WCTValue *value = [self.database getValueOnResultColumn:pageno fromTable:@"dbStat" where:pagetype == "internal"];
-    return value.numberValue.intValue;
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.incrementalMaterialPath]);
+    TestCaseAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.incrementalMaterialPath]);
+
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.incrementalMaterialPath]);
+
+    TestCaseAssertTrue([self.table insertObject:object]);
+    TestCaseAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
+
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
+
+    TestCaseAssertTrue([self.table insertObject:object]);
+    TestCaseAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 }
 
 @end

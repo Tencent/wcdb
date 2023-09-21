@@ -30,7 +30,7 @@ class FileTests: DatabaseTestCase {
     func testPaths() {
         // Give
         let path = self.recommendedPath.path
-        let expertedPaths = [path, path+"-wal", path+"-shm", path+"-journal", path+"-first.material", path+"-last.material", path+".factory"]
+        let expertedPaths = [path, path+"-wal", path+"-shm", path+"-journal", path+"-first.material", path+"-last.material", path+"-incremental.material", path+".factory"]
         // Then
         XCTAssertEqual(database.paths.sorted(), expertedPaths.sorted())
     }
@@ -45,6 +45,7 @@ class FileTests: DatabaseTestCase {
                             URL(fileURLWithPath: path+"-journal"),
                             URL(fileURLWithPath: path+"-first.material"),
                             URL(fileURLWithPath: path+"-last.material"),
+                            URL(fileURLWithPath: path+"-incremental.material"),
                             URL(fileURLWithPath: path+".factory")]
         // Then
         func sorter(left: URL, right: URL) -> Bool {

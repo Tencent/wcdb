@@ -66,7 +66,7 @@ private:
 
 #pragma mark - Statement
 public:
-    bool execute(const Statement &statement);
+    virtual bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
 
     bool prepare(const Statement &statement);
@@ -135,11 +135,6 @@ protected:
 
 private:
     TransactionEvent *m_transactionEvent;
-
-#pragma mark - Cipher
-protected:
-    bool openPureCipherDB();
-    bool isCipherDB() const;
 };
 
 class ConfiguredHandle final : public InnerHandle {

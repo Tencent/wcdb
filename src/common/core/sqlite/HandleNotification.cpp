@@ -75,7 +75,8 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
         const char *sql = static_cast<const char *>(X);
         if (sql) {
             AbstractHandle *handle = getHandle();
-            postSQLTraceNotification(handle->getTag(), handle->getPath(), sql, getHandle());
+            postSQLTraceNotification(
+            handle->getTag(), handle->getPath(), getHandle(), sql, "");
         }
     } break;
     case SQLITE_TRACE_PROFILE: {
@@ -93,7 +94,7 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
 void HandleNotification::setupTraceNotifications()
 {
     unsigned flag = 0;
-    if (!m_sqlNotifications.empty()) {
+    if (!m_sqlNotifications.empty() && !m_fullSQLTrace) {
         flag |= SQLITE_TRACE_STMT;
     }
     if (!m_performanceNotifications.empty()) {
@@ -107,6 +108,15 @@ void HandleNotification::setupTraceNotifications()
 }
 
 #pragma mark - SQL
+void HandleNotification::setFullSQLTraceEnable(bool enable)
+{
+    bool before = m_fullSQLTrace;
+    m_fullSQLTrace = enable;
+    if (before != enable) {
+        setupTraceNotifications();
+    }
+}
+
 bool HandleNotification::areSQLTraceNotificationsSet() const
 {
     return !m_sqlNotifications.empty();
@@ -129,12 +139,12 @@ void HandleNotification::setNotificationWhenSQLTraced(const UnsafeStringView &na
 
 void HandleNotification::postSQLTraceNotification(const Tag &tag,
                                                   const UnsafeStringView &path,
+                                                  const void *handle,
                                                   const UnsafeStringView &sql,
-                                                  const void *handle)
+                                                  const UnsafeStringView &info)
 {
-    WCTAssert(!m_sqlNotifications.empty());
     for (const auto &element : m_sqlNotifications) {
-        element.second(tag, path, sql, handle);
+        element.second(tag, path, handle, sql, info);
     }
 }
 
@@ -229,12 +239,6 @@ void HandleNotification::postCommittedNotification(const UnsafeStringView &path,
 }
 
 #pragma mark - Checkpoint
-void HandleNotification::checkpointed(void *p, sqlite3 *handle, const char *name)
-{
-    WCTAssert(p != nullptr);
-    HandleNotification *notification = reinterpret_cast<HandleNotification *>(p);
-    notification->postCheckpointNotification(sqlite3_db_filename(handle, name));
-}
 
 bool HandleNotification::areCheckpointNotificationsSet() const
 {
@@ -244,19 +248,22 @@ bool HandleNotification::areCheckpointNotificationsSet() const
 void HandleNotification::setupCheckpointNotifications()
 {
     if (!m_checkpointedNotifications.empty()) {
-        sqlite3_wal_checkpoint_handler(
-        getRawHandle(), HandleNotification::checkpointed, this);
+        sqlite3_wal_checkpoint_handler(getRawHandle(),
+                                       HandleNotification::checkpointBegin,
+                                       HandleNotification::checkpointPage,
+                                       HandleNotification::checkpointFinish,
+                                       this);
     } else {
-        sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr);
+        sqlite3_wal_checkpoint_handler(getRawHandle(), nullptr, nullptr, nullptr, nullptr);
     }
 }
 
 void HandleNotification::setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                                         const CheckpointedNotification &checkpointed)
+                                                         Optional<CheckPointNotification> notification)
 {
     bool stateBefore = areCheckpointNotificationsSet();
-    if (checkpointed != nullptr) {
-        m_checkpointedNotifications[name] = checkpointed;
+    if (notification.hasValue()) {
+        m_checkpointedNotifications[name] = notification.value();
     } else {
         m_checkpointedNotifications.erase(name);
     }
@@ -266,11 +273,70 @@ void HandleNotification::setNotificationWhenCheckpointed(const UnsafeStringView 
     }
 }
 
-void HandleNotification::postCheckpointNotification(const UnsafeStringView &path)
+void HandleNotification::checkpointBegin(void *ctx, int nBackFill, int mxFrame, int salt1, int salt2)
+{
+    WCTAssert(ctx != nullptr);
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(ctx);
+    notification->postCheckpointBeginNotification(
+    notification->getHandle(), nBackFill, mxFrame, salt1, salt2);
+}
+
+void HandleNotification::postCheckpointBeginNotification(AbstractHandle *handle,
+                                                         uint32_t nBackFill,
+                                                         uint32_t mxFrame,
+                                                         uint32_t salt1,
+                                                         uint32_t salt2)
 {
     WCTAssert(areCheckpointNotificationsSet());
     for (const auto &element : m_checkpointedNotifications) {
-        element.second(path);
+        if (element.second.begin == nullptr) {
+            continue;
+        }
+        element.second.begin(handle, nBackFill, mxFrame, salt1, salt2);
+    }
+}
+
+void HandleNotification::checkpointPage(void *ctx, int pageNo, void *data, int size)
+{
+    WCTAssert(ctx != nullptr);
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(ctx);
+    notification->postCheckpointPageNotification(
+    notification->getHandle(), pageNo, UnsafeData((unsigned char *) data, size));
+}
+
+void HandleNotification::postCheckpointPageNotification(AbstractHandle *handle,
+                                                        uint32_t pageNo,
+                                                        const UnsafeData &data)
+{
+    WCTAssert(areCheckpointNotificationsSet());
+    for (const auto &element : m_checkpointedNotifications) {
+        if (element.second.page == nullptr) {
+            continue;
+        }
+        element.second.page(handle, pageNo, data);
+    }
+}
+
+void HandleNotification::checkpointFinish(void *ctx, int nBackFill, int mxFrame, int salt1, int salt2)
+{
+    WCTAssert(ctx != nullptr);
+    HandleNotification *notification = reinterpret_cast<HandleNotification *>(ctx);
+    notification->postCheckpointFinishNotification(
+    notification->getHandle(), nBackFill, mxFrame, salt1, salt2);
+}
+
+void HandleNotification::postCheckpointFinishNotification(AbstractHandle *handle,
+                                                          uint32_t nBackFill,
+                                                          uint32_t mxFrame,
+                                                          uint32_t salt1,
+                                                          uint32_t salt2)
+{
+    WCTAssert(areCheckpointNotificationsSet());
+    for (const auto &element : m_checkpointedNotifications) {
+        if (element.second.finish == nullptr) {
+            continue;
+        }
+        element.second.finish(handle, nBackFill, mxFrame, salt1, salt2);
     }
 }
 

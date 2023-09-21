@@ -40,7 +40,7 @@ public:
 protected:
     friend class SequenceCrawler;
 
-    virtual void onSequencePageCrawled(const Page &page);
+    virtual void onSequencePageCrawled(const Page &page) = 0;
     virtual void onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence) = 0;
     virtual void onSequenceCrawlerError() = 0;
 };

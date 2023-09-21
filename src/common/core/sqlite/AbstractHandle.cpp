@@ -42,6 +42,7 @@ AbstractHandle::AbstractHandle()
 , m_cacheTransactionError(TransactionError::Allowed)
 , m_notification(this)
 , m_tableMonitorForbidden(false)
+, m_fullSQLTrace(false)
 , m_canBeSuspended(false)
 {
 }
@@ -632,6 +633,15 @@ void AbstractHandle::setWALFilePersist(int persist)
     m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
 }
 
+bool AbstractHandle::setCheckPointLock(bool enable)
+{
+    if (m_path.compare(":memory:") == 0) {
+        return true;
+    }
+    WCTAssert(isOpened());
+    return APIExit(sqlite3_lock_checkpoint(m_handle, enable));
+}
+
 #pragma mark - Notification
 void AbstractHandle::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                   const SQLNotification &onTraced)
@@ -662,10 +672,10 @@ void AbstractHandle::unsetNotificationWhenCommitted(const UnsafeStringView &name
 }
 
 void AbstractHandle::setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                                     const CheckpointedNotification &checkpointed)
+                                                     Optional<CheckPointNotification> notification)
 {
     WCTAssert(isOpened());
-    m_notification.setNotificationWhenCheckpointed(name, checkpointed);
+    m_notification.setNotificationWhenCheckpointed(name, notification);
 }
 
 void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotification)
@@ -694,6 +704,25 @@ bool AbstractHandle::needMonitorTable()
 void AbstractHandle::setTableMonitorEnable(bool enable)
 {
     m_tableMonitorForbidden = !enable;
+}
+
+void AbstractHandle::setFullSQLTraceEnable(bool enable)
+{
+    m_fullSQLTrace = enable;
+    if (isOpened()) {
+        m_notification.setFullSQLTraceEnable(enable);
+    }
+}
+
+bool AbstractHandle::isFullSQLEnable()
+{
+    return m_fullSQLTrace;
+}
+
+void AbstractHandle::postSQLNotification(const UnsafeStringView &sql,
+                                         const UnsafeStringView &info)
+{
+    m_notification.postSQLTraceNotification(m_tag, m_path, m_handle, sql, info);
 }
 
 #pragma mark - Error
@@ -830,6 +859,7 @@ bool AbstractHandle::setCipherKey(const UnsafeData &data)
 
 Data AbstractHandle::getRawCipherKey(const Schema &schema)
 {
+    WCTAssert(isOpened());
     void *rawCipher = NULL;
     int rawCipherSize = 0;
     int index = sqlcipher_find_db_index(m_handle, schema.syntax().name.data());
@@ -840,6 +870,20 @@ Data AbstractHandle::getRawCipherKey(const Schema &schema)
     }
     WCTAssert(rawCipherSize == 99);
     return Data((unsigned char *) rawCipher, rawCipherSize);
+}
+
+bool AbstractHandle::hasCipher() const
+{
+    WCTAssert(isOpened());
+    void *rawCipher = NULL;
+    int rawCipherSize = 0;
+    int index = sqlcipher_find_db_index(m_handle, "main");
+    sqlite3CodecGetKey(m_handle, index, &rawCipher, &rawCipherSize);
+
+    if (rawCipher == NULL || rawCipherSize == 0) {
+        return false;
+    }
+    return true;
 }
 
 bool AbstractHandle::setCipherPageSize(int pageSize)

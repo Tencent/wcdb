@@ -91,6 +91,14 @@ LiteralValue LiteralValueConvertible<NSNumber*>::asLiteralValue(NSNumber* number
     return (int64_t) number.integerValue;
 }
 
+LiteralValue LiteralValueConvertible<NSDate*>::asLiteralValue(NSDate* date)
+{
+    if (date == nil) {
+        return LiteralValue(nullptr);
+    }
+    return [date timeIntervalSince1970];
+}
+
 #if OBJC_BOOL_IS_CHAR
 LiteralValue LiteralValueConvertible<BOOL>::asLiteralValue(BOOL value)
 {

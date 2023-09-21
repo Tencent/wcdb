@@ -64,7 +64,7 @@ class MultithreadReadWriteBenchmark: BaseMultithreadBenchmark {
             group.wait()
         }, checkCorrectness: {
             XCTAssertEqual(results?.count, config.readCount)
-            let count = try? database.getValue(on: Column.all.count(), fromTable: tableName)
+            let count = try? database.getValue(on: Column.all().count(), fromTable: tableName)
             XCTAssertEqual(Int(count?.int32Value ?? 0), config.readCount + config.batchWriteCount)
         })
     }

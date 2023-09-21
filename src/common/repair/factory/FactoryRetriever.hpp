@@ -37,6 +37,9 @@ namespace WCDB {
 
 namespace Repair {
 
+class Mechanic;
+class FullCrawler;
+
 class FactoryRetriever final : public FactoryRelated,
                                public UpgradeableErrorProne,
                                public Progress,
@@ -59,16 +62,15 @@ protected:
 
 protected:
     bool restore(const UnsafeStringView &database);
-    Optional<StringView> tryGetCiperSaltFromPath(const UnsafeStringView &database);
     const StringView databaseFileName;
 
 #pragma mark - Report
 protected:
-    void reportMechanic(const Fraction &score,
+    void reportMechanic(const Mechanic &mechanic,
                         const UnsafeStringView &path,
                         double cost,
                         const Time &material);
-    void reportFullCrawler(const Fraction &score, const UnsafeStringView &path, double cost);
+    void reportFullCrawler(const FullCrawler &fullcrawler, const UnsafeStringView &path, double cost);
     void reportSummary(double cost);
 
     void finishReportOfPerformance(Error &error, const UnsafeStringView &database, double cost);

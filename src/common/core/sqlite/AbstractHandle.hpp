@@ -169,6 +169,7 @@ public:
     bool checkpoint(CheckpointMode mode);
     void disableCheckpointWhenClosing(bool disable);
     void setWALFilePersist(int persist);
+    bool setCheckPointLock(bool enable);
 
 #pragma mark - Notification
 public:
@@ -185,9 +186,9 @@ public:
                                       const UnsafeStringView &name,
                                       const CommittedNotification &onCommitted);
 
-    typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
+    typedef HandleNotification::CheckPointNotification CheckPointNotification;
     void setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                         const CheckpointedNotification &checkpointed);
+                                         Optional<CheckPointNotification> notification);
     void unsetNotificationWhenCommitted(const UnsafeStringView &name);
 
     typedef HandleNotification::BusyNotification BusyNotification;
@@ -202,9 +203,14 @@ public:
     bool needMonitorTable();
     void setTableMonitorEnable(bool enable);
 
+    void setFullSQLTraceEnable(bool enable);
+    bool isFullSQLEnable();
+    void postSQLNotification(const UnsafeStringView &sql, const UnsafeStringView &info);
+
 private:
     HandleNotification m_notification;
     bool m_tableMonitorForbidden;
+    bool m_fullSQLTrace;
 
 #pragma mark - Error
 public:
@@ -246,8 +252,9 @@ private:
 public:
     size_t getCipherPageSize();
     void *getCipherContext();
-    bool setCipherKey(const UnsafeData &data);
+    virtual bool setCipherKey(const UnsafeData &data);
     Data getRawCipherKey(const Schema &schema = Schema::main());
+    bool hasCipher() const;
     bool setCipherPageSize(int pageSize);
     StringView getCipherSalt();
     bool setCipherSalt(const UnsafeStringView &salt);

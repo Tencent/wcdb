@@ -38,6 +38,7 @@ typedef NSData* _Nonnull (^WCTCorruptDataBlock)(int size);
 
 @property (nonatomic, readonly) NSString* walPath;
 @property (nonatomic, readonly) NSString* factoryPath;
+@property (nonatomic, readonly) NSString* incrementalMaterialPath;
 @property (nonatomic, readonly) NSString* firstMaterialPath;
 @property (nonatomic, readonly) NSString* lastMaterialPath;
 @property (nonatomic, readonly) NSString* journalPath;

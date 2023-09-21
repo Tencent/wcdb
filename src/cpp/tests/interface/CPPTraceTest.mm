@@ -35,7 +35,7 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     BOOL tested = NO;
-    self.database->traceSQL([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, const void *) {
+    self.database->traceSQL([&](long tag, const WCDB::UnsafeStringView &path, const void *, const WCDB::UnsafeStringView &sql, const WCDB::UnsafeStringView &) {
         XCTAssertEqual(tag, self.database->getTag());
         XCTAssertTrue(path.equal(self.database->getPath()));
         if (strcmp(sql.data(), statement.getDescription().data()) == 0) {
@@ -115,7 +115,7 @@
     WCDB::StatementPragma statement = WCDB::StatementPragma().pragma(WCDB::Pragma::userVersion());
 
     BOOL tested = NO;
-    WCDB::Database::globalTraceSQL([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, const void *) {
+    WCDB::Database::globalTraceSQL([&](long tag, const WCDB::UnsafeStringView &path, const void *, const WCDB::UnsafeStringView &sql, const WCDB::UnsafeStringView &) {
         if (!path.equal(self.database->getPath())) {
             return;
         }

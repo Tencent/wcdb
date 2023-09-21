@@ -230,6 +230,11 @@ void Database::traceSQL(Database::SQLNotification trace)
     }
 }
 
+void Database::setFullSQLTraceEnable(bool enable)
+{
+    m_innerDatabase->setFullSQLTraceEnable(enable);
+}
+
 const StringView& Database::MonitorInfoKeyHandleCount = WCDB::MonitorInfoKeyHandleCount;
 const StringView& Database::MonitorInfoKeySchemaUsage = WCDB::MonitorInfoKeySchemaUsage;
 const StringView& Database::MonitorInfoKeyHandleOpenTime = WCDB::MonitorInfoKeyHandleOpenTime;

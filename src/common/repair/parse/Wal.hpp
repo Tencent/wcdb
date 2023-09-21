@@ -64,10 +64,16 @@ protected:
 
 #pragma mark - Wal
 public:
+    typedef Shm::Salt Salt;
+    static bool isCheckpointIncreasedSalt(const Salt &before, const Salt &after);
+
     void setShmLegality(bool flag);
-    void setMaxAllowedFrame(int maxFrame);
+    int getNBackFill() const;
+    void setNBackFill(int nbackfill);
     int getNumberOfFrames() const;
-    const std::pair<uint32_t, uint32_t> &getSalt() const;
+    const Salt &getSalt() const;
+    void setSalt(const Salt &salt);
+    int getMaxFrame() const;
     int getPageSize() const;
 
 protected:
@@ -77,10 +83,10 @@ protected:
 
     size_t m_fileSize;
     uint32_t m_truncate;
-    int m_maxAllowedFrame;
+    int m_nbackfill;
     int m_maxFrame;
     bool m_isNativeChecksum;
-    std::pair<uint32_t, uint32_t> m_salt;
+    Salt m_salt;
     bool m_shmLegality;
     Shm m_shm;
 

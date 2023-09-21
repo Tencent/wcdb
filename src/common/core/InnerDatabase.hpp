@@ -46,8 +46,6 @@ class InnerDatabase final : private HandlePool,
                             public TransactionEvent {
     friend BaseOperation;
 #pragma mark - Initializer
-    friend BaseOperation;
-
 public:
     InnerDatabase(const UnsafeStringView &path);
     InnerDatabase() = delete;
@@ -101,9 +99,11 @@ public:
                    const std::shared_ptr<Config> &config,
                    int priority = Configs::Priority::Default);
     void removeConfig(const UnsafeStringView &name);
+    void setFullSQLTraceEnable(bool enable);
 
 private:
     Configs m_configs;
+    bool m_fullSQLTrace = false;
 
 #pragma mark - Threaded
 private:
@@ -137,6 +137,8 @@ public:
 
 #pragma mark - Repair
 public:
+    void markNeedLoadIncremetalMaterial();
+    void tryLoadIncremetalMaterial();
     typedef Repair::Factory::Filter BackupFilter;
     void filterBackup(const BackupFilter &tableShouldBeBackedup);
     bool backup(bool interruptible);
@@ -153,6 +155,7 @@ public:
 
 private:
     Repair::Factory m_factory;
+    bool m_needLoadIncremetalMaterial;
 
 #pragma mark - Migration
 public:

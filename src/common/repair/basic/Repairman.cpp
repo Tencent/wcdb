@@ -49,6 +49,16 @@ const StringView &Repairman::getPath() const
     return m_pager.getPath();
 }
 
+int64_t Repairman::getTotalPageCount() const
+{
+    return (int64_t) (1.0 / m_pageWeight.value());
+}
+
+int Repairman::getDisposedWalPageCount() const
+{
+    return m_pager.getDisposedWalPages();
+}
+
 bool Repairman::exit()
 {
     finishProgress();
@@ -192,6 +202,9 @@ void Repairman::onErrorCritical()
 #pragma mark - Evaluation
 void Repairman::markCellAsCounted(const Cell &cell)
 {
+    if (cell.getPage().isIndexPage()) {
+        return;
+    }
     int numberOfCells = cell.getPage().getNumberOfCells();
     WCTAssert(numberOfCells != 0);
     if (numberOfCells > 0) {

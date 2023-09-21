@@ -45,8 +45,10 @@ Pager::Pager(const UnsafeStringView& path)
 , m_reservedBytes(-1)
 , m_numberOfPages(0)
 , m_fileSize(0)
+, m_schemaCookie(-1)
 , m_wal(this)
 , m_walImportance(true)
+, m_skipWal(false)
 , m_cache(maxAllowedCacheMemory)
 , m_highWater(std::make_shared<ShareableHighWater>())
 {
@@ -100,6 +102,12 @@ int Pager::getReservedBytes() const
 {
     WCTAssert(isInitialized());
     return m_reservedBytes;
+}
+
+int Pager::getSchemaCookie() const
+{
+    WCTAssert(isInitialized());
+    return m_schemaCookie;
 }
 
 UnsafeData Pager::acquirePageData(int number)
@@ -190,9 +198,29 @@ void Pager::setWalImportance(bool flag)
     m_wal.setShmLegality(flag);
 }
 
-void Pager::setMaxWalFrame(int maxWalFrame)
+int Pager::getNBackFill() const
 {
-    m_wal.setMaxAllowedFrame(maxWalFrame);
+    return m_wal.getNBackFill();
+}
+
+void Pager::setNBackFill(int nbackfill)
+{
+    m_wal.setNBackFill(nbackfill);
+}
+
+const Pager::Salt& Pager::getWalSalt() const
+{
+    return m_wal.getSalt();
+}
+
+void Pager::setWalSalt(const Salt& salt)
+{
+    return m_wal.setSalt(salt);
+}
+
+int Pager::getMaxFrame() const
+{
+    return m_wal.getMaxFrame();
 }
 
 int Pager::getDisposedWalPages() const
@@ -205,14 +233,24 @@ void Pager::disposeWal()
     m_wal.dispose();
 }
 
-const std::pair<uint32_t, uint32_t>& Pager::getWalSalt() const
+void Pager::setWalSkipped()
 {
-    return m_wal.getSalt();
+    m_skipWal = true;
+}
+
+bool Pager::loadWal()
+{
+    return m_wal.initialize();
 }
 
 int Pager::getNumberOfWalFrames() const
 {
     return m_wal.getNumberOfFrames();
+}
+
+bool Pager::containPageInWal(uint32_t pageno)
+{
+    return m_wal.containsPage(pageno);
 }
 
 #pragma mark - Error
@@ -276,6 +314,12 @@ bool Pager::doInitialize()
             WCTAssert(deserialization.canAdvance(1));
             m_reservedBytes = deserialization.advance1ByteInt();
         }
+        //parse schema cookie
+        if (m_schemaCookie == -1) {
+            deserialization.seek(40);
+            WCTAssert(deserialization.canAdvance(4));
+            m_schemaCookie = deserialization.advance4BytesInt();
+        }
     }
     if (((m_pageSize - 1) & m_pageSize) != 0 || m_pageSize < 512 || m_pageSize > 65536) {
         markAsCorrupted(
@@ -291,6 +335,10 @@ bool Pager::doInitialize()
     m_fileHandle.setPageSize(m_pageSize);
 
     m_numberOfPages = (int) ((m_fileSize + m_pageSize - 1) / m_pageSize);
+
+    if (m_skipWal) {
+        return true;
+    }
 
     if (m_wal.initialize()) {
         return true;

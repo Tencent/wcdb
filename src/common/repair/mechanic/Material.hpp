@@ -24,8 +24,7 @@
 
 #pragma once
 
-#include "Cipher.hpp"
-#include "Serialization.hpp"
+#include "EncryptedSerialization.hpp"
 #include "StringView.hpp"
 #include "WCDBOptional.hpp"
 #include <list>
@@ -41,11 +40,12 @@ class Deserialization;
 
 namespace Repair {
 
-class Material final : public Serializable, public Deserializable, public CipherDelegateHolder {
+class Material final : public EncryptedSerializable,
+                       public DecryptedDeserializable,
+                       public CipherDelegateHolder {
 #pragma mark - Serializable
 public:
     bool serialize(Serialization &serialization) const override final;
-    bool encryptedSerialize(const UnsafeStringView &path, const UnsafeStringView &salt) const;
     using Serializable::serialize;
 
     ~Material() override final;
@@ -57,33 +57,36 @@ protected:
 #pragma mark - Deserializable
 public:
     bool deserialize(Deserialization &deserialization) override final;
-    bool decryptedDeserialize(const UnsafeStringView &path);
     using Deserializable::deserialize;
 
 protected:
     static Optional<Data> deserializeData(Deserialization &deserialization);
     static void markAsCorrupt(const UnsafeStringView &element);
+    void decryptFail(const UnsafeStringView &element) const override final;
+    CipherDelegate *getCipherDelegate() const override;
 
 #pragma mark - Header
 protected:
     static constexpr const uint32_t magic = 0x57434442;
-    static constexpr const uint32_t version = 0x01000000; //1.0.0.0
+    static constexpr const uint32_t version = 0x01000001; //1.0.0.1
     static constexpr const uint8_t saltBytes = 16;
     static constexpr const int headerSize = sizeof(magic) + sizeof(version); //magic + version
 
 #pragma mark - Info
 public:
+    static constexpr const uint32_t UnknownPageNo = UINT32_MAX;
+
     class Info final : public Serializable, public Deserializable {
     public:
-        static constexpr const int size = sizeof(uint32_t) * 5;
+        static constexpr const int size = sizeof(uint32_t) * 6;
         Info();
         ~Info() override final;
 
         uint32_t pageSize;
         uint32_t reservedBytes;
         std::pair<uint32_t, uint32_t> walSalt;
-        uint32_t numberOfWalFrames;
-        StringView cipherSalt; //It is not serialized or deserialized directly
+        uint32_t nBackFill;
+        uint32_t seqTableRootPage;
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;
@@ -96,15 +99,26 @@ public:
 
 #pragma mark - Content
 public:
+    typedef struct Page {
+    public:
+        uint32_t number;
+        uint32_t hash;
+        Page(uint32_t number, uint32_t hash);
+        ~Page();
+    } Page;
+    typedef std::vector<Page> VerifiedPages;
     class Content final : public Serializable, public Deserializable {
     public:
         Content();
         ~Content() override final;
 
+        StringView tableName;
         StringView sql;
         std::list<StringView> associatedSQLs;
+        uint32_t rootPage;
         int64_t sequence;
-        std::map<uint32_t, uint32_t> verifiedPagenos;
+        VerifiedPages verifiedPagenos;
+        bool checked; //It will not be saved to file
 #pragma mark - Serializable
     public:
         bool serialize(Serialization &serialization) const override final;
@@ -113,7 +127,8 @@ public:
         bool deserialize(Deserialization &deserialization) override final;
     };
 
-    StringViewMap<Content> contents;
+    std::list<Content> contentsList;
+    StringViewMap<Content *> contentsMap;
 };
 
 } //namespace Repair

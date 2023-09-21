@@ -93,10 +93,8 @@ bool FullCrawler::work()
             ++numbersOfLeafTablePages;
         }
     }
-    if (numbersOfLeafTablePages == 0) {
-        return exit(true);
-    }
-    setPageWeight(Fraction(1, numbersOfLeafTablePages));
+    // If there are only without-rowid tables in the db, numbersOfLeafTablePages will be 0
+    setPageWeight(Fraction(1, numbersOfLeafTablePages == 0 ? 1 : numbersOfLeafTablePages));
 
     if (markAsAssembling()) {
         m_masterCrawler.work(this);
@@ -124,7 +122,11 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
         return false;
     }
     markPageAsCounted(page);
-    increaseProgress(getPageWeight().value());
+    if (page.getType() == Page::Type::LeafTable) {
+        increaseProgress(getPageWeight().value());
+    }
+    m_assembleDelegate->markDuplicatedAsReplaceable(
+    m_pager.containPageInWal(page.number));
     return true;
 }
 
@@ -154,7 +156,9 @@ void FullCrawler::onErrorCritical()
 #pragma mark - MasterCrawlerDelegate
 void FullCrawler::onMasterPageCrawled(const Page &page)
 {
-    increaseProgress(getPageWeight().value());
+    if (page.getType() == Page::Type::LeafTable) {
+        increaseProgress(getPageWeight().value());
+    }
     markPageAsCounted(page);
 }
 
@@ -198,7 +202,9 @@ void FullCrawler::onSequencePageCrawled(const Page &page)
     if (isErrorCritial()) {
         return;
     }
-    increaseProgress(getPageWeight().value());
+    if (page.getType() == Page::Type::LeafTable) {
+        increaseProgress(getPageWeight().value());
+    }
     markPageAsCounted(page);
 }
 

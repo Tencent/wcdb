@@ -50,6 +50,8 @@ public:
     virtual ~Repairman() override = 0;
 
     const StringView &getPath() const;
+    int64_t getTotalPageCount() const;
+    int getDisposedWalPageCount() const;
 
 protected:
     Optional<bool> isEmptyDatabase();

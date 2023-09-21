@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/9/15.
 //
 
 /*
@@ -22,10 +22,13 @@
  * limitations under the License.
  */
 
-#import "TestCase.h"
+#import <Foundation/Foundation.h>
 
-@interface BackupTestCase : CRUDTestCase
+@interface RepairTestObjectBase : NSObject
 
-- (void)executeTest:(void (^)())operation;
+@property (nonatomic, assign) int identifier;
+@property (nonatomic, assign) double doubleValue;
+@property (nonatomic, strong) NSString* textValue;
+@property (nonatomic, strong) NSData* blobValue;
 
 @end

@@ -180,6 +180,38 @@
     }
 }
 
+- (void)testCheckpoint2
+{
+    NSString* tableName = @"testTable";
+
+    TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
+
+    TestCaseAssertTrue([self.database createTable:tableName withClass:TestCaseObject.class]);
+    __block unsigned long walFrameNum = 0;
+    for (int i = 0; i < 100; i++) {
+        TestCaseAssertTrue([[self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(tableName)].firstObject numberValue].unsignedIntValue == i);
+        TestCaseAssertTrue([self.database insertObject:object intoTable:tableName]);
+    }
+    [self.database passiveCheckpoint];
+    [self.database close:^{
+        if (walFrameNum != 0) {
+            TestCaseAssertTrue(walFrameNum == [self.database getNumberOfWalFrames].value());
+        } else {
+            walFrameNum = [self.database getNumberOfWalFrames].value();
+        }
+        TestCaseAssertTrue(walFrameNum > 0);
+        for (NSString* path in self.database.paths) {
+            if ([path hasSuffix:@"wal"]) {
+                TestCaseAssertTrue([self.fileManager fileExistsAtPath:path]);
+                TestCaseAssertTrue([self.fileManager getFileSizeIfExists:path] > 32);
+            } else if ([path hasSuffix:@"shm"]) {
+                TestCaseAssertTrue([self.fileManager fileExistsAtPath:path]);
+                TestCaseAssertTrue([self.fileManager getFileSizeIfExists:path] >= 32 * 1024);
+            }
+        }
+    }];
+}
+
 - (void)test_long_write_with_checkpoint
 {
     NSString* tableName = @"testTable";

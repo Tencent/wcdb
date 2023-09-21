@@ -29,6 +29,7 @@
 #include "SQLiteDeclaration.h"
 #include "Tag.hpp"
 #include "UniqueList.hpp"
+#include "WCDBOptional.hpp"
 #include <functional>
 #include <map>
 
@@ -49,17 +50,22 @@ private:
 
 #pragma mark - SQL
 public:
-    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const UnsafeStringView &sql, const void *handle)> SQLNotification;
+    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const void *handle, const UnsafeStringView &sql, const UnsafeStringView &info)> SQLNotification;
     void setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                       const SQLNotification &onTraced);
 
-private:
-    bool areSQLTraceNotificationsSet() const;
     void postSQLTraceNotification(const Tag &tag,
                                   const UnsafeStringView &path,
+                                  const void *handle,
                                   const UnsafeStringView &sql,
-                                  const void *handle);
+                                  const UnsafeStringView &info);
+
+    void setFullSQLTraceEnable(bool enable);
+
+private:
+    bool areSQLTraceNotificationsSet() const;
     StringViewMap<SQLNotification> m_sqlNotifications;
+    bool m_fullSQLTrace = false;
 
 #pragma mark - Performance
 public:
@@ -96,17 +102,43 @@ private:
 
 #pragma mark - Checkpoint
 public:
-    typedef std::function<void(const UnsafeStringView &path)> CheckpointedNotification;
+    typedef std::function<void(AbstractHandle *handle, uint32_t nBackFill, uint32_t mxFrame, uint32_t salt1, uint32_t salt2)> CheckpointBeginNotification;
+    typedef std::function<void(AbstractHandle *handle, uint32_t pageNo, const UnsafeData &data)> CheckpointPageNotification;
+    typedef std::function<void(AbstractHandle *handle, uint32_t nBackFill, uint32_t mxFrame, uint32_t salt1, uint32_t salt2)> CheckpointFinishNotification;
+    typedef struct CheckPointNotification {
+        CheckpointBeginNotification begin;
+        CheckpointPageNotification page;
+        CheckpointFinishNotification finish;
+    } CheckPointNotification;
     void setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                         const CheckpointedNotification &checkpointed);
+                                         Optional<CheckPointNotification> notification);
 
 private:
-    static void checkpointed(void *p, sqlite3 *handle, const char *name);
-
     bool areCheckpointNotificationsSet() const;
     void setupCheckpointNotifications();
-    void postCheckpointNotification(const UnsafeStringView &path);
-    StringViewMap<CheckpointedNotification> m_checkpointedNotifications;
+
+    static void
+    checkpointBegin(void *ctx, int nBackFill, int mxFrame, int salt1, int salt2);
+    void postCheckpointBeginNotification(AbstractHandle *handle,
+                                         uint32_t nBackFill,
+                                         uint32_t mxFrame,
+                                         uint32_t salt1,
+                                         uint32_t salt2);
+
+    static void checkpointPage(void *ctx, int pageNo, void *data, int size);
+    void postCheckpointPageNotification(AbstractHandle *handle,
+                                        uint32_t pageNo,
+                                        const UnsafeData &data);
+
+    static void
+    checkpointFinish(void *ctx, int nBackFill, int mxFrame, int salt1, int salt2);
+    void postCheckpointFinishNotification(AbstractHandle *handle,
+                                          uint32_t nBackFill,
+                                          uint32_t mxFrame,
+                                          uint32_t salt1,
+                                          uint32_t salt2);
+
+    StringViewMap<CheckPointNotification> m_checkpointedNotifications;
 
 #pragma mark - Busy
 public:

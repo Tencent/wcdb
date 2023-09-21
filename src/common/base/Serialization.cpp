@@ -257,6 +257,16 @@ const UnsafeData &Deserialization::data() const
     return m_data;
 }
 
+uint32_t Deserialization::version() const
+{
+    return m_dataVersion;
+}
+
+void Deserialization::setDataVersion(uint32_t version)
+{
+    m_dataVersion = version;
+}
+
 void Deserialization::reset(const UnsafeData &data)
 {
     m_data = data;

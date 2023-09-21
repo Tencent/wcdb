@@ -63,6 +63,7 @@ public:
     int getUsableSize() const;
     int getPageSize() const;
     int getReservedBytes() const;
+    int getSchemaCookie() const;
 
 protected:
     UnsafeData acquireHeader();
@@ -70,19 +71,32 @@ protected:
     int m_reservedBytes;
     int m_numberOfPages;
     size_t m_fileSize;
+    int m_schemaCookie;
 
 #pragma mark - Wal
 public:
     void setWalImportance(bool flag);
     int getNumberOfWalFrames() const;
-    void setMaxWalFrame(int maxWalFrame);
+
+    void setNBackFill(int nbackfill);
+    int getNBackFill() const;
+
+    typedef Wal::Salt Salt;
+    const Salt& getWalSalt() const;
+    void setWalSalt(const Salt& salt);
+
+    int getMaxFrame() const;
     int getDisposedWalPages() const;
     void disposeWal();
-    const std::pair<uint32_t, uint32_t>& getWalSalt() const;
+
+    void setWalSkipped();
+    bool loadWal();
+    bool containPageInWal(uint32_t pageno);
 
 protected:
     Wal m_wal;
     bool m_walImportance;
+    bool m_skipWal;
 
 #pragma mark - Error
 public:

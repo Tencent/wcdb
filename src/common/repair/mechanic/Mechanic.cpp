@@ -62,18 +62,13 @@ bool Mechanic::work()
     }
 
     m_pager.setWalImportance(false);
-    m_pager.setMaxWalFrame(m_material->info.numberOfWalFrames);
+    m_pager.setNBackFill(m_material->info.nBackFill);
+    m_pager.setWalSalt(m_material->info.walSalt);
     m_pager.setPageSize(m_material->info.pageSize);
     m_pager.setReservedBytes(m_material->info.reservedBytes);
 
-    if (!m_material->info.cipherSalt.empty()) {
-        WCTAssert(m_cipherDelegate != nullptr);
-        m_cipherDelegate->closeCipher();
-        if (!m_cipherDelegate->openCipherInMemory()) {
-            setCriticalError(m_cipherDelegate->getCipherError());
-            return exit(false);
-        }
-        m_cipherDelegate->setCipherSalt(m_material->info.cipherSalt);
+    WCTAssert(m_cipherDelegate != nullptr);
+    if (m_cipherDelegate->isCipherDB()) {
         m_pager.setCipherContext(m_cipherDelegate->getCipherContext());
     }
 
@@ -88,53 +83,48 @@ bool Mechanic::work()
         }
     }
 
-    if (m_pager.getNumberOfWalFrames() > 0) {
-        if (m_pager.getWalSalt() != m_material->info.walSalt) {
-            m_pager.disposeWal();
-            Error error(Error::Code::Notice, Error::Level::Notice, "Dispose WAL of non-match salt.");
-            error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
-            error.infos.insert_or_assign(ErrorStringKeyAssociatePath, m_pager.getPath());
-            error.infos.insert_or_assign("WalSalt1", m_pager.getWalSalt().first);
-            error.infos.insert_or_assign("WalSalt2", m_pager.getWalSalt().second);
-            error.infos.insert_or_assign("MaterialSalt1",
-                                         m_material->info.walSalt.first);
-            error.infos.insert_or_assign("MaterialSalt2",
-                                         m_material->info.walSalt.second);
-            Notifier::shared().notify(error);
-        }
-    }
+    m_pager.disposeWal();
 
     int numberOfPages = 0;
-    for (const auto &element : m_material->contents) {
-        numberOfPages += element.second.verifiedPagenos.size();
+    for (const auto &element : m_material->contentsMap) {
+        numberOfPages += element.second->verifiedPagenos.size();
     }
-    if (numberOfPages == 0) {
-        return exit(true);
-    }
-    setPageWeight(Fraction(1, numberOfPages + m_pager.getDisposedWalPages()));
+    // If there are only without-rowid tables in the db, numberOfPages will be 0
+    setPageWeight(Fraction(
+    1, (numberOfPages == 0 ? 1 : numberOfPages) + m_pager.getDisposedWalPages()));
 
     if (markAsAssembling()) {
-        for (const auto &contentElement : m_material->contents) {
+        for (const auto &contentElement : m_material->contentsMap) {
             if (isErrorCritial()) {
                 break;
             }
-            if (!assembleTable(contentElement.first, contentElement.second.sql)
-                || !assembleSequence(contentElement.first, contentElement.second.sequence)) {
+            if (!assembleTable(contentElement.first, contentElement.second->sql)
+                || !assembleSequence(contentElement.first,
+                                     contentElement.second->sequence)) {
                 continue;
             }
 
-            for (const auto &verifiedPagenosElement : contentElement.second.verifiedPagenos) {
-                if (isErrorCritial()) {
-                    break;
+            if (!m_assembleDelegate->isAssemblingTableWithoutRowid()) {
+                for (const auto &verifiedPagenosElement : contentElement.second->verifiedPagenos) {
+                    if (isErrorCritial()) {
+                        break;
+                    }
+                    m_checksum = verifiedPagenosElement.hash;
+                    if (!crawl(verifiedPagenosElement.number)) {
+                        tryUpgradeCrawlerError();
+                    }
                 }
-                m_checksum = verifiedPagenosElement.second;
-                if (!crawl(verifiedPagenosElement.first)) {
+            } else if (contentElement.second->rootPage > 1) {
+                if (!crawl(contentElement.second->rootPage)) {
                     tryUpgradeCrawlerError();
                 }
             }
-            assembleAssociatedSQLs(contentElement.second.associatedSQLs);
+            assembleAssociatedSQLs(contentElement.second->associatedSQLs);
         }
         markAsAssembled();
+    }
+    if (numberOfPages == 0 && !isErrorCritial() && getScore().value() == 0) {
+        Scoreable::increaseScore(1);
     }
     return exit();
 }
@@ -150,23 +140,28 @@ void Mechanic::onCellCrawled(const Cell &cell)
 
 bool Mechanic::willCrawlPage(const Page &page, int)
 {
-    increaseProgress(getPageWeight().value());
+    if (page.getType() == Page::Type::LeafTable) {
+        increaseProgress(getPageWeight().value());
+    }
     if (isErrorCritial()) {
         return false;
     }
-    if (page.getType() != Page::Type::LeafTable) {
+    if (page.getType() == Page::Type::LeafTable) {
+        if (page.getData().hash() != m_checksum) {
+            markAsCorrupted(page.number,
+                            StringView::formatted(
+                            "Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
+            return false;
+        }
+        markPageAsCounted(page);
+    } else if (page.isIndexPage()) {
+        markPageAsCounted(page);
+    } else {
         markAsCorrupted(page.number,
                         StringView::formatted(
                         "Unexpected page type: %d.", page.getType(), page.getType()));
         return false;
     }
-    if (page.getData().hash() != m_checksum) {
-        markAsCorrupted(page.number,
-                        StringView::formatted(
-                        "Mismatched hash: %u for %u.", page.getData().hash(), m_checksum));
-        return false;
-    }
-    markPageAsCounted(page);
     return true;
 }
 

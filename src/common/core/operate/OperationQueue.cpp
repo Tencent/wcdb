@@ -170,7 +170,7 @@ bool OperationQueue::Operation::operator==(const Operation& other) const
 }
 
 OperationQueue::Parameter::Parameter()
-: source(Source::Other), frames(0), numberOfFailures(0), identifier(0), numberOfFileDescriptors(0)
+: source(Source::Other), numberOfFailures(0), identifier(0), numberOfFileDescriptors(0)
 {
 }
 
@@ -331,6 +331,14 @@ void OperationQueue::doMergeFTSIndex(const UnsafeStringView& path,
 }
 
 #pragma mark - Backup
+bool OperationQueue::isAutoBackup(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    SharedLockGuard lockGuard(m_lock);
+    return m_records[path].registeredForBackup;
+}
+
 void OperationQueue::registerAsRequiredBackup(const UnsafeStringView& path)
 {
     WCTAssert(!path.empty());
@@ -349,14 +357,14 @@ void OperationQueue::registerAsNoBackupRequired(const UnsafeStringView& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncBackup(const UnsafeStringView& path)
+void OperationQueue::asyncBackup(const UnsafeStringView& path, bool incremental)
 {
     WCTAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForBackup) {
-        asyncBackup(path, OperationQueueTimeIntervalForBackup);
+        asyncBackup(path, incremental ? 0 : OperationQueueTimeIntervalForBackup);
     }
 }
 

@@ -178,6 +178,11 @@ bool Factory::removeDirectoryIfEmpty() const
     return true;
 }
 
+StringView Factory::incrementalMaterialPathForDatabase(const UnsafeStringView &database)
+{
+    return Path::addExtention(database, "-incremental.material");
+}
+
 StringView Factory::firstMaterialPathForDatabase(const UnsafeStringView &database)
 {
     return Path::addExtention(database, "-first.material");
@@ -215,6 +220,7 @@ std::list<StringView> Factory::associatedPathsForDatabase(const UnsafeStringView
         Path::addExtention(database, "-journal"),
         Path::addExtention(database, "-wal"),
         Path::addExtention(database, "-shm"),
+        incrementalMaterialPathForDatabase(database),
         firstMaterialPathForDatabase(database),
         lastMaterialPathForDatabase(database),
     };
@@ -244,8 +250,7 @@ Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
         return NullOpt;
     }
     auto &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
-    if (firstMaterialModifiedTime.empty()
-        || firstMaterialModifiedTime.seconds() == now.seconds()) {
+    if (firstMaterialModifiedTime.empty()) {
         return firstMaterialPath;
     }
 
@@ -255,12 +260,40 @@ Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
         return NullOpt;
     }
     auto &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
-    if (lastMaterialModifiedTime.empty()
-        || lastMaterialModifiedTime.seconds() == now.seconds()) {
+    if (lastMaterialModifiedTime.empty()) {
         return lastMaterialPath;
     }
 
     return firstMaterialModifiedTime > lastMaterialModifiedTime ? lastMaterialPath : firstMaterialPath;
+}
+
+Optional<StringView> Factory::latestMaterialForDatabase(const UnsafeStringView &database)
+{
+    Time now = Time::now();
+
+    StringView firstMaterialPath = Factory::firstMaterialPathForDatabase(database);
+    auto optionalFirstMaterialModifiedTime
+    = getModifiedTimeOr0IfNotExists(firstMaterialPath);
+    if (!optionalFirstMaterialModifiedTime.succeed()) {
+        return NullOpt;
+    }
+    auto &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
+    StringView lastMaterialPath = Factory::lastMaterialPathForDatabase(database);
+    auto optionalLastMaterialModifiedTime = getModifiedTimeOr0IfNotExists(lastMaterialPath);
+    if (!optionalLastMaterialModifiedTime.succeed()) {
+        return NullOpt;
+    }
+    auto &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
+    if (lastMaterialModifiedTime.empty() && firstMaterialModifiedTime.empty()) {
+        return "";
+    }
+    if (firstMaterialModifiedTime.empty()) {
+        return lastMaterialPath;
+    }
+    if (lastMaterialModifiedTime.empty()) {
+        return firstMaterialPath;
+    }
+    return firstMaterialModifiedTime < lastMaterialModifiedTime ? lastMaterialPath : firstMaterialPath;
 }
 
 Optional<std::list<StringView>>
@@ -301,7 +334,7 @@ Factory::materialsForDeserializingForDatabase(const UnsafeStringView &database)
 Optional<Time> Factory::getModifiedTimeOr0IfNotExists(const UnsafeStringView &path)
 {
     Optional<Time> modifiedTime;
-    auto exists = FileManager::fileExists(path);
+    auto exists = FileManager::fileExistsAndNotEmpty(path);
     if (exists.succeed()) {
         if (exists.value()) {
             modifiedTime = FileManager::getFileModifiedTime(path);

@@ -114,8 +114,6 @@ protected:
             OutOfMaxAllowedFileDescriptors,
 #endif
         } source;
-
-        int frames;
         int numberOfFailures;
         uint32_t identifier;
         uint32_t numberOfFileDescriptors;
@@ -170,10 +168,11 @@ protected:
 
 #pragma mark - Backup
 public:
+    bool isAutoBackup(const UnsafeStringView& path);
     void registerAsRequiredBackup(const UnsafeStringView& path);
     void registerAsNoBackupRequired(const UnsafeStringView& path);
 
-    void asyncBackup(const UnsafeStringView& path) override final;
+    void asyncBackup(const UnsafeStringView& path, bool incremental) override final;
 
 protected:
     void asyncBackup(const UnsafeStringView& path, double delay);

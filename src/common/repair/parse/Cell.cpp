@@ -36,7 +36,7 @@ namespace WCDB {
 namespace Repair {
 
 Cell::Cell(int pointer, Page *page, Pager *pager)
-: PagerRelated(pager), m_page(page), m_rowid(0), m_pointer(pointer)
+: PagerRelated(pager), m_page(page), m_leftChild(0), m_rowid(0), m_pointer(pointer)
 {
     WCTAssert(m_page != nullptr);
 }
@@ -74,15 +74,24 @@ int Cell::isSerialTypeSanity(int serialType)
     return serialType >= 0 && serialType != 10 && serialType != 11;
 }
 
+uint32_t Cell::getLeftChild() const
+{
+    WCTAssert(isInitialized());
+    WCTAssert(m_page->isInteriorPage());
+    return m_leftChild;
+}
+
 int64_t Cell::getRowID() const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->isTablePage());
     return m_rowid;
 }
 
 int Cell::getCount() const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     return (int) m_columns.size();
 }
 
@@ -90,6 +99,7 @@ Cell::Type Cell::getValueType(int index) const
 {
     WCTAssert(isInitialized());
     WCTAssert(index < m_columns.size());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     int serialType = m_columns[index].first;
     if (serialType == 0) {
         return Type::Null;
@@ -114,6 +124,7 @@ Cell::Type Cell::getValueType(int index) const
 int64_t Cell::integerValue(int index) const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     WCTAssert(index < m_columns.size());
     WCTAssert(getValueType(index) == Type::Integer);
     const auto &cell = m_columns[index];
@@ -156,6 +167,7 @@ int64_t Cell::integerValue(int index) const
 double Cell::doubleValue(int index) const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     WCTAssert(index < m_columns.size());
     WCTAssert(getValueType(index) == Type::Real);
     const auto &cell = m_columns[index];
@@ -166,6 +178,7 @@ double Cell::doubleValue(int index) const
 UnsafeStringView Cell::textValue(int index) const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     WCTAssert(index < m_columns.size());
     WCTAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
@@ -177,6 +190,7 @@ UnsafeStringView Cell::textValue(int index) const
 StringView Cell::stringValue(int index) const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     WCTAssert(index < m_columns.size());
     WCTAssert(getValueType(index) == Type::Text);
     const auto &cell = m_columns[index];
@@ -188,6 +202,7 @@ StringView Cell::stringValue(int index) const
 const UnsafeData Cell::blobValue(int index) const
 {
     WCTAssert(isInitialized());
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     WCTAssert(index < m_columns.size());
     WCTAssert(getValueType(index) == Type::BLOB);
     const auto &cell = m_columns[index];
@@ -199,35 +214,63 @@ const UnsafeData Cell::blobValue(int index) const
 #pragma mark - Initializeable
 bool Cell::doInitialize()
 {
+    WCTAssert(m_page->getType() != Page::Type::InteriorTable);
     Deserialization deserialization(m_page->getData());
-    //parse payload size
+    int offsetOfPayload = m_pointer;
     deserialization.seek(m_pointer);
-    int lengthOfPayloadSize, payloadSize;
-    std::tie(lengthOfPayloadSize, payloadSize) = deserialization.advanceVarint();
-    if (lengthOfPayloadSize == 0) {
-        markPagerAsCorrupted(m_page->number, "Unable to deserialize PayloadSize.");
-        return false;
+
+    //parse leftChild
+    if (!m_page->isLeafPage()) {
+        if (!deserialization.canAdvance(4)) {
+            markPagerAsCorrupted(m_page->number, "Unable to deserialize left child.");
+            return false;
+        }
+        m_leftChild = deserialization.advance4BytesInt();
+        offsetOfPayload += 4;
+    }
+
+    //parse payload size
+    int payloadSize = 0;
+    if (m_page->getType() != Page::Type::InteriorTable) {
+        int lengthOfPayloadSize;
+        std::tie(lengthOfPayloadSize, payloadSize) = deserialization.advanceVarint();
+        if (lengthOfPayloadSize == 0) {
+            markPagerAsCorrupted(m_page->number, "Unable to deserialize PayloadSize.");
+            return false;
+        }
+        offsetOfPayload += lengthOfPayloadSize;
     }
     //parse rowid
-    int lengthOfRowid;
-    std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
-    if (lengthOfRowid == 0) {
-        markPagerAsCorrupted(m_page->number, "Unable to deserialize Rowid.");
-        return false;
+    if (m_page->isTablePage()) {
+        int lengthOfRowid;
+        std::tie(lengthOfRowid, m_rowid) = deserialization.advanceVarint();
+        if (lengthOfRowid == 0) {
+            markPagerAsCorrupted(m_page->number, "Unable to deserialize Rowid.");
+            return false;
+        }
+        offsetOfPayload += lengthOfRowid;
+    }
+    if (m_page->getType() == Page::Type::InteriorTable) {
+        return true;
     }
     //parse local
-    int localPayloadSize
-    = m_page->getMinLocal()
-      + (payloadSize - m_page->getMinLocal()) % (m_pager->getUsableSize() - 4);
-    if (localPayloadSize > m_page->getMaxLocal()) {
-        localPayloadSize = m_page->getMinLocal();
+    int localPayloadSize = 0;
+    if (payloadSize < m_page->getMaxLocal()) {
+        localPayloadSize = payloadSize;
+    } else {
+        int k = m_page->getMinLocal()
+                + (payloadSize - m_page->getMinLocal()) % (m_pager->getUsableSize() - 4);
+        if (k <= m_page->getMaxLocal()) {
+            localPayloadSize = k;
+        } else {
+            localPayloadSize = m_page->getMinLocal();
+        }
     }
     if (!deserialization.canAdvance(localPayloadSize)) {
         markPagerAsCorrupted(m_page->number, "Unable to deserialize LocalPayloadSize.");
         return false;
     }
     //parse payload
-    int offsetOfPayload = m_pointer + lengthOfPayloadSize + lengthOfRowid;
     if (localPayloadSize < payloadSize) {
         //append overflow pages
         deserialization.seek(offsetOfPayload + localPayloadSize);

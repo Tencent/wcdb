@@ -80,12 +80,14 @@ public:
     associatedPathsForDatabase(const UnsafeStringView &database);
     static std::list<StringView> databasePathsForDatabase(const UnsafeStringView &database);
 
+    static StringView incrementalMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView firstMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView lastMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView factoryPathForDatabase(const UnsafeStringView &database);
 
     static Optional<StringView>
     materialForSerializingForDatabase(const UnsafeStringView &database);
+    static Optional<StringView> latestMaterialForDatabase(const UnsafeStringView &database);
     static Optional<std::list<StringView>>
     materialsForDeserializingForDatabase(const UnsafeStringView &database);
 

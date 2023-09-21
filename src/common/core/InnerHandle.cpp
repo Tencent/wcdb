@@ -443,42 +443,6 @@ void InnerHandle::configTransactionEvent(TransactionEvent *event)
     m_transactionEvent = event;
 }
 
-#pragma mark - Cipher
-bool InnerHandle::openPureCipherDB()
-{
-    bool succeed = false;
-    if (AbstractHandle::open()) {
-        succeed = true;
-        for (const auto &element : m_pendings) {
-            if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-                if ((succeed = element.value()->invoke(this))) {
-                    m_invokeds.insert(element.key(), element.value(), element.order());
-                }
-                break;
-            }
-        }
-        if (!succeed) {
-            close();
-        }
-    }
-    return succeed;
-}
-
-bool InnerHandle::isCipherDB() const
-{
-    for (const auto &element : m_pendings) {
-        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-            return true;
-        }
-    }
-    for (const auto &element : m_invokeds) {
-        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 ConfiguredHandle::~ConfiguredHandle() = default;
 
 } //namespace WCDB

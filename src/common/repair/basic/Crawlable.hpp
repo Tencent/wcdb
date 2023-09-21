@@ -66,6 +66,7 @@ protected:
 protected:
     bool crawl(int rootpageno);
 
+    virtual bool canCrawlPage(uint32_t pageno);
     virtual void onCellCrawled(const Cell &cell);
     //return false to skip current page
     virtual bool willCrawlPage(const Page &page, int height);
@@ -74,6 +75,7 @@ protected:
 private:
     void safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height);
     bool m_isCrawling;
+    bool m_isCrawlingIndexTable;
 };
 
 } //namespace Repair

@@ -30,7 +30,8 @@ namespace WCDB {
 
 namespace Repair {
 
-AssembleDelegate::AssembleDelegate() : m_duplicatedIgnorable(false)
+AssembleDelegate::AssembleDelegate()
+: m_duplicatedIgnorable(false), m_duplicatedReplaceable(false)
 {
 }
 
@@ -41,9 +42,19 @@ void AssembleDelegate::markDuplicatedAsIgnorable(bool ignorable)
     m_duplicatedIgnorable = ignorable;
 }
 
+void AssembleDelegate::markDuplicatedAsReplaceable(bool replaceable)
+{
+    m_duplicatedReplaceable = replaceable;
+}
+
 bool AssembleDelegate::isDuplicatedIgnorable() const
 {
     return m_duplicatedIgnorable;
+}
+
+bool AssembleDelegate::isDuplicatedReplaceable() const
+{
+    return m_duplicatedReplaceable;
 }
 
 AssembleDelegateHolder::AssembleDelegateHolder() : m_assembleDelegate(nullptr)

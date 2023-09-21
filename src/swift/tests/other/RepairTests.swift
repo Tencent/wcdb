@@ -195,7 +195,7 @@ class RepairTests: DatabaseTestCase {
         executeTest {
             XCTAssertNoThrow(try database.deposit())
             XCTAssertNoThrow(try database.corruptHeader())
-            doTestRetrieve(expecting: false)
+            doTestRetrieve(expecting: true)
             doTestObjectsRetrieved(expecting: true)
         }
     }
