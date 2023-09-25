@@ -197,6 +197,7 @@ WCDBLiteralStringDefine(ErrorTypeMergeIndex, "MergeIndex")
 #pragma mark - Moniter
 WCDBLiteralStringDefine(MonitorInfoKeyHandleCount, "HandleCount");
 WCDBLiteralStringDefine(MonitorInfoKeyHandleOpenTime, "OpenTime");
+WCDBLiteralStringDefine(MonitorInfoKeyHandleOpenCPUTime, "OpenCPUTime");
 WCDBLiteralStringDefine(MonitorInfoKeySchemaUsage, "SchemaUsage");
 WCDBLiteralStringDefine(MonitorInfoKeyTableCount, "TableCount");
 WCDBLiteralStringDefine(MonitorInfoKeyIndexCount, "IndexCount");

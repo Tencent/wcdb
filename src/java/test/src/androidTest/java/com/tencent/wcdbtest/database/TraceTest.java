@@ -217,6 +217,7 @@ public class TraceTest extends TableTestCase {
                         openHandleCount.intValue++;
                         assertEquals(infos.get(Database.OperationInfoKeyHandleCount).getLong(), 1);
                         assertTrue(infos.get(Database.OperationInfoKeyOpenTime).getLong() > 0);
+                        assertTrue(infos.get(Database.OperationInfoKeyOpenCPUTime).getLong() > 0);
                         assertTrue(infos.get(Database.OperationInfoKeySchemaUsage).getLong() > 0);
                         assertEquals(infos.get(Database.OperationInfoKeyTriggerCount).getLong(), 0);
                         tableCount.intValue = infos.get(Database.OperationInfoKeyTableCount).getLong();

@@ -60,6 +60,8 @@ typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTD
 WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyHandleCount;
 // The time in microseconds spent to open and config the current handle.
 WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime;
+// The cpu time in microseconds spent to open and config the current handle.
+WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeyHandleOpenCPUTime;
 // The memory in bytes used to store the schema in sqlite handle.
 WCDB_EXTERN NSString* const WCTDatabaseMonitorInfoKeySchemaUsage;
 // The number of tables in the current database.

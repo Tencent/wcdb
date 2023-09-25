@@ -79,6 +79,7 @@ WCDBLiteralStringImplement(ErrorTypeMergeIndex)
 
 WCDBLiteralStringImplement(MonitorInfoKeyHandleCount)
 WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenTime)
+WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenCPUTime)
 WCDBLiteralStringImplement(MonitorInfoKeySchemaUsage)
 WCDBLiteralStringImplement(MonitorInfoKeyTableCount)
 WCDBLiteralStringImplement(MonitorInfoKeyIndexCount)

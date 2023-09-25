@@ -45,6 +45,7 @@ void Core::print(const UnsafeStringView& message)
 
 NSString* const WCTDatabaseMonitorInfoKeyHandleCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleCount];
 NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleOpenTime];
+NSString* const WCTDatabaseMonitorInfoKeyHandleOpenCPUTime = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleOpenCPUTime];
 NSString* const WCTDatabaseMonitorInfoKeySchemaUsage = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeySchemaUsage];
 NSString* const WCTDatabaseMonitorInfoKeyTableCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyTableCount];
 NSString* const WCTDatabaseMonitorInfoKeyIndexCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyIndexCount];

@@ -279,6 +279,7 @@ class TracerTests: DatabaseTestCase {
                 openCount += 1
                 XCTAssertEqual(info[Database.OperationInfoKeyHandleCount]?.intValue, 1)
                 XCTAssertTrue(info[Database.OperationInfoKeyHandleOpenTime]?.intValue ?? 0 > 0)
+                XCTAssertTrue(info[Database.OperationInfoKeyHandleOpenCPUTime]?.intValue ?? 0 > 0)
                 XCTAssertTrue(info[Database.OperationInfoKeySchemaUsage]?.intValue ?? 0 > 0)
                 XCTAssertEqual(info[Database.OperationInfoKeyTriggerCount]?.intValue, 0)
                 tableCount = info[Database.OperationInfoKeyTableCount]?.intValue ?? 0

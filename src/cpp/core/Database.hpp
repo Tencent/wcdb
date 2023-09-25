@@ -308,6 +308,8 @@ public:
     static const StringView &MonitorInfoKeyHandleCount;
     // The time in microseconds spent to open and config the handle.
     static const StringView &MonitorInfoKeyHandleOpenTime;
+    // The cpu time in microseconds spent to open and config the handle.
+    static const StringView &MonitorInfoKeyHandleOpenCPUTime;
     // The memory in bytes used to store the schema in sqlite handle.
     static const StringView &MonitorInfoKeySchemaUsage;
     // Number of tables in current database.

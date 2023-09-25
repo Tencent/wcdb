@@ -240,6 +240,8 @@ void Database::setFullSQLTraceEnable(bool enable)
 const StringView& Database::MonitorInfoKeyHandleCount = WCDB::MonitorInfoKeyHandleCount;
 const StringView& Database::MonitorInfoKeySchemaUsage = WCDB::MonitorInfoKeySchemaUsage;
 const StringView& Database::MonitorInfoKeyHandleOpenTime = WCDB::MonitorInfoKeyHandleOpenTime;
+const StringView& Database::MonitorInfoKeyHandleOpenCPUTime
+= WCDB::MonitorInfoKeyHandleOpenCPUTime;
 const StringView& Database::MonitorInfoKeyTableCount = WCDB::MonitorInfoKeyTableCount;
 const StringView& Database::MonitorInfoKeyIndexCount = WCDB::MonitorInfoKeyIndexCount;
 const StringView& Database::MonitorInfoKeyTriggerCount = WCDB::MonitorInfoKeyTriggerCount;

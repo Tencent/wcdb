@@ -269,6 +269,7 @@ public class Database extends HandleORMOperation {
 
     public static String OperationInfoKeyHandleCount = "HandleCount";
     public static String OperationInfoKeyOpenTime = "OpenTime";
+    public static String OperationInfoKeyOpenCPUTime = "OpenCPUTime";
     public static String OperationInfoKeySchemaUsage = "SchemaUsage";
     public static String OperationInfoKeyTableCount = "TableCount";
     public static String OperationInfoKeyIndexCount = "IndexCount";

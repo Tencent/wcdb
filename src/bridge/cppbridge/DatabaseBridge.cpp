@@ -530,6 +530,8 @@ const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount
 = WCDB::MonitorInfoKeyHandleCount.data();
 const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime
 = WCDB::MonitorInfoKeyHandleOpenTime.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime
+= WCDB::MonitorInfoKeyHandleOpenCPUTime.data();
 const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage
 = WCDB::MonitorInfoKeySchemaUsage.data();
 const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount
