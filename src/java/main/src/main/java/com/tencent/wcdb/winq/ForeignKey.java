@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class ForeignKey extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.ForeignKeyClause;
     }
 
@@ -50,7 +50,7 @@ public class ForeignKey extends Identifier {
     }
 
     public ForeignKey column(String column) {
-        configColumns(cppObj, CPPType.String.ordinal(), null, new String[]{column});
+        configColumns(cppObj, CPPType.String, null, new String[]{column});
         return this;
     }
 
@@ -62,7 +62,7 @@ public class ForeignKey extends Identifier {
         for(int i = 0; i < columns.length; i++) {
             objects[i] = CppObject.get(columns[i]);
         }
-        configColumns(cppObj, CPPType.Column.ordinal(), objects, null);
+        configColumns(cppObj, CPPType.Column, objects, null);
         return this;
     }
 
@@ -70,7 +70,7 @@ public class ForeignKey extends Identifier {
         if(columns == null || columns.length == 0) {
             return this;
         }
-        configColumns(cppObj, CPPType.String.ordinal(), null, columns);
+        configColumns(cppObj, CPPType.String, null, columns);
         return this;
     }
 

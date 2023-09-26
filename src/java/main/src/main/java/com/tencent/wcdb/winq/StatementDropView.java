@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementDropView extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.DropViewSTMT;
     }
 
@@ -45,7 +45,7 @@ public class StatementDropView extends Statement {
     private static native void configView(long self, String viewName);
 
     public StatementDropView of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

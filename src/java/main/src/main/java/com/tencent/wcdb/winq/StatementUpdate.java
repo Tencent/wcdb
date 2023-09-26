@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementUpdate extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.UpdateSTMT;
     }
 
@@ -75,7 +75,7 @@ public class StatementUpdate extends Statement {
     private static native void configRecursive(long self);
 
     public StatementUpdate update(String tableName) {
-        configTable(cppObj, CPPType.String.ordinal(), 0, tableName);
+        configTable(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
@@ -120,7 +120,7 @@ public class StatementUpdate extends Statement {
         for(int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
-        configColumnsToBindParameters(cppObj, CPPType.Column.ordinal(), cppObjs, null);
+        configColumnsToBindParameters(cppObj, CPPType.Column, cppObjs, null);
         return this;
     }
 
@@ -128,7 +128,7 @@ public class StatementUpdate extends Statement {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
-        configColumnsToBindParameters(cppObj, CPPType.String.ordinal(), null, columnNames);
+        configColumnsToBindParameters(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
@@ -146,7 +146,7 @@ public class StatementUpdate extends Statement {
 
         MultiTypeArray array = new MultiTypeArray(values);
 
-        configColumnsToValues(cppObj, CPPType.Column.ordinal(), cppColumns, null,
+        configColumnsToValues(cppObj, CPPType.Column, cppColumns, null,
                 array.types, array.longValues, array.doubleValues, array.stringValues);
 
         return this;
@@ -159,7 +159,7 @@ public class StatementUpdate extends Statement {
 
         MultiTypeArray array = new MultiTypeArray(values);
 
-        configColumnsToValues(cppObj, CPPType.String.ordinal(), null, columnNames,
+        configColumnsToValues(cppObj, CPPType.String, null, columnNames,
                 array.types, array.longValues, array.doubleValues, array.stringValues);
 
         return this;
@@ -187,7 +187,7 @@ public class StatementUpdate extends Statement {
         for(int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
-        configColumns(cppObj, CPPType.Column.ordinal(), cppObjs, null);
+        configColumns(cppObj, CPPType.Column, cppObjs, null);
         return this;
     }
 
@@ -195,7 +195,7 @@ public class StatementUpdate extends Statement {
         if(columnName == null || columnName.length() == 0){
             return this;
         }
-        configColumns(cppObj, CPPType.String.ordinal(), null, new String[]{columnName});
+        configColumns(cppObj, CPPType.String, null, new String[]{columnName});
         return this;
     }
 
@@ -203,52 +203,52 @@ public class StatementUpdate extends Statement {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
-        configColumns(cppObj, CPPType.String.ordinal(), null, columnNames);
+        configColumns(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
     private static native void configColumns(long self, int type, long[] columns, String[] columnNames);
 
     public StatementUpdate to(boolean arg) {
-        configToValue(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
+        configToValue(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     public StatementUpdate to(byte arg) {
-        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        configToValue(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public StatementUpdate to(short arg) {
-        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        configToValue(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public StatementUpdate to(int arg) {
-        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        configToValue(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public StatementUpdate to(long arg) {
-        configToValue(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        configToValue(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public StatementUpdate to(float arg) {
-        configToValue(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        configToValue(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public StatementUpdate to(double arg) {
-        configToValue(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        configToValue(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public StatementUpdate to(String arg) {
         if(arg != null) {
-            configToValue(cppObj, CPPType.String.ordinal(), 0, 0, arg);
+            configToValue(cppObj, CPPType.String, 0, 0, arg);
         } else {
-            configToValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            configToValue(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }
@@ -287,12 +287,12 @@ public class StatementUpdate extends Statement {
     private static native void configOrders(long self, long[] orders);
 
     public StatementUpdate limit(long from, long to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, CPPType.Int, from, CPPType.Int, to);
         return this;
     }
 
     public StatementUpdate limit(long from, ExpressionConvertible to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, Identifier.getCppType(to), CppObject.get(to));
+        configLimitRange(cppObj, CPPType.Int, from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
@@ -302,14 +302,14 @@ public class StatementUpdate extends Statement {
     }
 
     public StatementUpdate limit(ExpressionConvertible from, long to) {
-        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int, to);
         return this;
     }
 
     private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
     public StatementUpdate limit(long count) {
-        configLimitCount(cppObj, CPPType.Int.ordinal(), count);
+        configLimitCount(cppObj, CPPType.Int, count);
         return this;
     }
 
@@ -321,7 +321,7 @@ public class StatementUpdate extends Statement {
     private static native void configLimitCount(long self, int type, long count);
 
     public StatementUpdate offset(long offset) {
-        configOffset(cppObj, CPPType.Int.ordinal(), offset);
+        configOffset(cppObj, CPPType.Int, offset);
         return this;
     }
 

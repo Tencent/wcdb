@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class Upsert extends Identifier{
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.UpsertClause;
     }
 
@@ -42,7 +42,7 @@ public class Upsert extends Identifier{
     }
 
     public Upsert indexedBy(String columnName) {
-        configIndexedColumn(cppObj, CPPType.String.ordinal(), null, new String[]{columnName});
+        configIndexedColumn(cppObj, CPPType.String, null, new String[]{columnName});
         return this;
     }
 
@@ -52,7 +52,7 @@ public class Upsert extends Identifier{
     }
 
     public Upsert indexedBy(String[] columnNames) {
-        configIndexedColumn(cppObj, CPPType.String.ordinal(), null, columnNames);
+        configIndexedColumn(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
@@ -94,7 +94,7 @@ public class Upsert extends Identifier{
     private static native void configDoUpdate(long self);
 
     public Upsert setColumn(String columnName) {
-        configSetColumns(cppObj, CPPType.String.ordinal(), null, new String[]{columnName});
+        configSetColumns(cppObj, CPPType.String, null, new String[]{columnName});
         return this;
     }
 
@@ -104,7 +104,7 @@ public class Upsert extends Identifier{
     }
 
     public Upsert setColumns(String[] columnNames) {
-        configSetColumns(cppObj, CPPType.String.ordinal(), null, columnNames);
+        configSetColumns(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
@@ -125,45 +125,45 @@ public class Upsert extends Identifier{
     private static native void configSetColumns(long self, int type, long[] columns, String[] columnNames);
 
     public Upsert to(boolean value) {
-        configToValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        configToValue(cppObj, CPPType.Bool, value ? 1 : 0, 0, null);
         return this;
     }
 
     public Upsert to(byte value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public Upsert to(short value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public Upsert to(int value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public Upsert to(long value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public Upsert to(float value) {
-        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        configToValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public Upsert to(double value) {
-        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        configToValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public Upsert to(String value) {
         if(value != null) {
-            configToValue(cppObj, CPPType.String.ordinal(), 0, 0, value);
+            configToValue(cppObj, CPPType.String, 0, 0, value);
         }else{
-            configToValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            configToValue(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }

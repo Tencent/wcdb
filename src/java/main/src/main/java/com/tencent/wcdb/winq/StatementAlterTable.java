@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementAlterTable extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.AlterTableSTMT;
     }
 
@@ -45,7 +45,7 @@ public class StatementAlterTable extends Statement {
     private static native void configTable(long self, String tableName);
 
     public StatementAlterTable of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
@@ -64,7 +64,7 @@ public class StatementAlterTable extends Statement {
     private static native void configRenameToTable(long self, String tableName);
 
     public StatementAlterTable renameColumn(String columnName) {
-        configRenameColumn(cppObj, CPPType.String.ordinal(), 0, columnName);
+        configRenameColumn(cppObj, CPPType.String, 0, columnName);
         return this;
     }
 
@@ -76,7 +76,7 @@ public class StatementAlterTable extends Statement {
     private static native void configRenameColumn(long self, int type, long object, String schemaName);
 
     public StatementAlterTable toColumn(String columnName) {
-        configRenameToColumn(cppObj, CPPType.String.ordinal(), 0, columnName);
+        configRenameToColumn(cppObj, CPPType.String, 0, columnName);
         return this;
     }
 

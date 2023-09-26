@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementVacuum extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.VacuumSTMT;
     }
 
@@ -38,7 +38,7 @@ public class StatementVacuum extends Statement {
     private static native long createCppObj();
 
     public StatementVacuum vacuum(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

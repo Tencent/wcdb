@@ -176,6 +176,7 @@
             openHandleCount++;
             TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleCount].intValue() == 1);
             TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleOpenTime].intValue() > 0);
+            TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyHandleOpenCPUTime].intValue() > 0);
             TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeySchemaUsage].intValue() > 0);
             TestCaseAssertTrue(info[WCDB::Database::MonitorInfoKeyTriggerCount].intValue() == 0);
             tableCount = (int) info[WCDB::Database::MonitorInfoKeyTableCount].intValue();

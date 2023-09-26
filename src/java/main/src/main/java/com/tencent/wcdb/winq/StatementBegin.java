@@ -24,20 +24,22 @@
 package com.tencent.wcdb.winq;
 
 public class StatementBegin extends Statement {
-    enum TransactionType {
-        Deferred, Immediate, Exclusive
+    class TransactionType {
+        final static int Deferred = 0;
+        final static int Immediate = 1;
+        final static int Exclusive = 2;
     }
 
     public StatementBegin() {
-        cppObj = createCppObj(TransactionType.Deferred.ordinal());
+        cppObj = createCppObj(TransactionType.Deferred);
     }
 
-    StatementBegin(TransactionType type) {
-        cppObj = createCppObj(type.ordinal());
+    StatementBegin(int type) {
+        cppObj = createCppObj(type);
     }
 
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.CommitSTMT;
     }
 

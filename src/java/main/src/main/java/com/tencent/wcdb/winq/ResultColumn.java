@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class ResultColumn extends Identifier implements ResultColumnConvertible {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.ResultColumn;
     }
 
@@ -37,7 +37,7 @@ public class ResultColumn extends Identifier implements ResultColumnConvertible 
     }
 
     public ResultColumn(String columnName) {
-        cppObj = createCppObj(CPPType.String.ordinal(), 0, columnName);
+        cppObj = createCppObj(CPPType.String, 0, columnName);
     }
 
     private static native long createCppObj(int type, long convertibleObj, String columnName);

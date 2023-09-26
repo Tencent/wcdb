@@ -27,12 +27,12 @@ import com.tencent.wcdb.base.CppObject;
 
 public class ColumnDef extends Identifier{
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.ColumnDef;
     }
 
     public ColumnDef(String columnName) {
-        cppObj = createCppObj(CPPType.String.ordinal(), 0, columnName, 0);
+        cppObj = createCppObj(CPPType.String, 0, columnName, 0);
     }
 
     public ColumnDef(Column column) {
@@ -40,7 +40,7 @@ public class ColumnDef extends Identifier{
     }
 
     public ColumnDef(String columnName, ColumnType columnType) {
-        cppObj = createCppObj(CPPType.String.ordinal(), 0, columnName, columnType.ordinal());
+        cppObj = createCppObj(CPPType.String, 0, columnName, columnType.ordinal());
     }
 
     public ColumnDef(Column column, ColumnType columnType) {

@@ -185,6 +185,7 @@
             openHandleCount++;
             TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleCount]).intValue == 1);
             TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleOpenTime]).intValue > 0);
+            TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyHandleOpenCPUTime]).intValue > 0);
             TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeySchemaUsage]).intValue > 0);
             TestCaseAssertTrue(((NSNumber*) info[WCTDatabaseMonitorInfoKeyTriggerCount]).intValue == 0);
             tableCount = ((NSNumber*) info[WCTDatabaseMonitorInfoKeyTableCount]).intValue;

@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementReindex extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.ReindexSTMT;
     }
 
@@ -59,7 +59,7 @@ public class StatementReindex extends Statement {
     private static native void configIndex(long self, String indexName);
 
     public StatementReindex of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

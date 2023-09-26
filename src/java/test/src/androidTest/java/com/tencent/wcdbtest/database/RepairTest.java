@@ -224,7 +224,7 @@ public class RepairTest extends TableTestCase {
             public void execute() throws WCDBException {
                 database.deposit();
                 corruptHeader();
-                doTestRetrieve(false);
+                doTestRetrieve(true);
                 doTestObjectsRetrieved(true);
             }
         });

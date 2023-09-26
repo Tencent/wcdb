@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class CommonTableExpression extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.CommonTableExpression;
     }
 

@@ -71,7 +71,7 @@ open class DatabaseTestCase : BaseTestCase() {
             trace.boolValue = false
             val expectedSQLs = mutableListOf(*sqls)
             val thread = Thread.currentThread()
-            database.traceSQL {_, _, _, sql ->
+            database.traceSQL {_, _, _, sql, _ ->
                 if (Thread.currentThread().id != thread.id) {
                     return@traceSQL
                 }

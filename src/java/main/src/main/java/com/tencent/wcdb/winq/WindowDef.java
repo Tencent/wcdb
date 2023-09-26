@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 public class WindowDef extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.WindowDef;
     }
 
@@ -44,7 +44,7 @@ public class WindowDef extends Identifier {
         if(columnName == null) {
             return this;
         }
-        configPartitions(cppObj, new int[]{CPPType.String.ordinal()}, null, null, new String[]{columnName});
+        configPartitions(cppObj, new int[]{CPPType.String}, null, null, new String[]{columnName});
         return this;
     }
 
@@ -59,7 +59,7 @@ public class WindowDef extends Identifier {
             return this;
         }
         int[] types = new int[columnNames.length];
-        Arrays.fill(types, CPPType.String.ordinal());
+        Arrays.fill(types, CPPType.String);
         configPartitions(cppObj, types, null, null, columnNames);
         return this;
     }

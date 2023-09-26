@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementCreateView extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.CreateViewSTMT;
     }
 
@@ -53,7 +53,7 @@ public class StatementCreateView extends Statement {
     private static native void configTemp(long self);
 
     public StatementCreateView of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
@@ -77,7 +77,7 @@ public class StatementCreateView extends Statement {
     }
 
     public StatementCreateView withColumn(String columnName) {
-        configColumns(cppObj, CPPType.String.ordinal(), null, new String[]{columnName});
+        configColumns(cppObj, CPPType.String, null, new String[]{columnName});
         return this;
     }
 
@@ -89,7 +89,7 @@ public class StatementCreateView extends Statement {
         for(int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
-        configColumns(cppObj, CPPType.Column.ordinal(), cppObjs, null);
+        configColumns(cppObj, CPPType.Column, cppObjs, null);
         return this;
     }
 
@@ -97,7 +97,7 @@ public class StatementCreateView extends Statement {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
-        configColumns(cppObj, CPPType.String.ordinal(), null, columnNames);
+        configColumns(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 

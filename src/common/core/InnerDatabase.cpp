@@ -348,18 +348,21 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     if (slot != HandleSlotAssemble && slot != HandleSlotCipher) {
         handle->setPath(path);
         bool hasOpened = handle->isOpened();
-        std::clock_t start = std::clock();
+        Time start = Time::now();
+        uint64_t cpuStart = Time::currentThreadCPUTimeInMicroseconds();
         if (!handle->open()) {
             setThreadedError(handle->getError());
             return false;
         }
         if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
-            std::clock_t openTime
-            = (std::clock_t)((std::clock() - start) / ((double) CLOCKS_PER_SEC / 1000000));
+            std::time_t openTime
+            = (Time::now().nanoseconds() - start.nanoseconds()) / 1000;
+            uint64_t openCPUTime = Time::currentThreadCPUTimeInMicroseconds() - cpuStart;
             int memoryUsed, tableCount, indexCount, triggerCount;
             if (handle->getSchemaInfo(memoryUsed, tableCount, indexCount, triggerCount)) {
                 StringViewMap<Value> info;
                 info.insert_or_assign(MonitorInfoKeyHandleOpenTime, openTime);
+                info.insert_or_assign(MonitorInfoKeyHandleOpenCPUTime, openCPUTime);
                 info.insert_or_assign(MonitorInfoKeySchemaUsage, memoryUsed);
                 info.insert_or_assign(MonitorInfoKeyTableCount, tableCount);
                 info.insert_or_assign(MonitorInfoKeyIndexCount, indexCount);

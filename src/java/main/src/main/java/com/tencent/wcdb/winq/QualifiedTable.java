@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class QualifiedTable extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.QualifiedTableName;
     }
 
@@ -38,7 +38,7 @@ public class QualifiedTable extends Identifier {
     private static native long createCppObj(String tableName);
 
     public QualifiedTable of(String schema) {
-        schema(cppObj, CPPType.String.ordinal(), 0, schema);
+        schema(cppObj, CPPType.String, 0, schema);
         return this;
     }
 

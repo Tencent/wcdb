@@ -508,6 +508,7 @@ public extension Database {
     /// The following are the keys in the infos from the callback of database operation monitoring.
     static let OperationInfoKeyHandleCount = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleCount)
     static let OperationInfoKeyHandleOpenTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenTime)
+    static let OperationInfoKeyHandleOpenCPUTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime)
     static let OperationInfoKeySchemaUsage = String(cString: WCDBDatabaseOperationTracerInfoKeySchemaUsage)
     static let OperationInfoKeyTableCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTableCount)
     static let OperationInfoKeyIndexCount = String(cString: WCDBDatabaseOperationTracerInfoKeyIndexCount)

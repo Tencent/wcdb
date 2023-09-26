@@ -129,6 +129,7 @@ void WCDBDatabaseTraceError2(CPPDatabase database,
 #ifndef __ANDROID__
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount;
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime;
+extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime;
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage;
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount;
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount;

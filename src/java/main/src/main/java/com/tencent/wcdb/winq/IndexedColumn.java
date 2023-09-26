@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class IndexedColumn extends Identifier implements IndexedColumnConvertible {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.IndexedColumn;
     }
 
@@ -36,7 +36,7 @@ public class IndexedColumn extends Identifier implements IndexedColumnConvertibl
     }
 
     public IndexedColumn(String columnName) {
-        cppObj = createCppObj(CPPType.String.ordinal(), 0, columnName);
+        cppObj = createCppObj(CPPType.String, 0, columnName);
     }
 
     private static native long createCppObj(int type, long object, String columnName);

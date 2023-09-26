@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementDelete extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.DeleteSTMT;
     }
 
@@ -75,7 +75,7 @@ public class StatementDelete extends Statement {
     private static native void configRecursive(long self);
 
     public StatementDelete deleteFrom(String tableName) {
-        configTable(cppObj, CPPType.String.ordinal(), 0, tableName);
+        configTable(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
@@ -113,12 +113,12 @@ public class StatementDelete extends Statement {
     private static native void configOrders(long self, long[] orders);
 
     public StatementDelete limit(long from, long to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, CPPType.Int, from, CPPType.Int, to);
         return this;
     }
 
     public StatementDelete limit(long from, ExpressionConvertible to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, Identifier.getCppType(to), CppObject.get(to));
+        configLimitRange(cppObj, CPPType.Int, from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
@@ -128,14 +128,14 @@ public class StatementDelete extends Statement {
     }
 
     public StatementDelete limit(ExpressionConvertible from, long to) {
-        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int, to);
         return this;
     }
 
     private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
     public StatementDelete limit(long count) {
-        configLimitCount(cppObj, CPPType.Int.ordinal(), count);
+        configLimitCount(cppObj, CPPType.Int, count);
         return this;
     }
 
@@ -147,7 +147,7 @@ public class StatementDelete extends Statement {
     private static native void configLimitCount(long self, int type, long count);
 
     public StatementDelete offset(long offset) {
-        configOffset(cppObj, CPPType.Int.ordinal(), offset);
+        configOffset(cppObj, CPPType.Int, offset);
         return this;
     }
 

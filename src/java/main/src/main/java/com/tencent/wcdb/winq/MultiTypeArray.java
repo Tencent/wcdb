@@ -27,19 +27,19 @@ import com.tencent.wcdb.base.CppObject;
 
 import java.util.Arrays;
 
-enum ObjectType {
-    Null,
-    Bool,
-    Char,
-    Byte,
-    Short,
-    Int,
-    Long,
-    Float,
-    Double,
-    String,
-    Identifier,
-    Unknown
+class ObjectType {
+    final static int Null = 0;
+    final static int Bool = 1;
+    final static int Char = 2;
+    final static int Byte = 3;
+    final static int Short = 4;
+    final static int Int = 5;
+    final static int Long = 6;
+    final static int Float = 7;
+    final static int Double = 8;
+    final static int String = 9;
+    final static int Identifier = 10;
+    final static int Unknown = 11;
 }
 
 class MultiTypeArray {
@@ -61,58 +61,58 @@ class MultiTypeArray {
 
         for(int i = 0; i < valueCount; i++) {
             Object obj = values[i];
-            ObjectType valueType = getObjectType(obj);
+            int valueType = getObjectType(obj);
             switch (valueType) {
-                case Null:
-                    types[i] = CPPType.Null.ordinal();
+                case ObjectType.Null:
+                    types[i] = CPPType.Null;
                     longIndex++;
                     break;
-                case Bool:
-                    types[i] = CPPType.Bool.ordinal();
+                case ObjectType.Bool:
+                    types[i] = CPPType.Bool;
                     longValues[longIndex] = (Boolean)obj ? 1 : 0;
                     longIndex++;
                     break;
-                case Byte:
-                    types[i] = CPPType.Int.ordinal();
+                case ObjectType.Byte:
+                    types[i] = CPPType.Int;
                     longValues[longIndex] = (Byte)obj;
                     longIndex++;
                     break;
-                case Char:
-                    types[i] = CPPType.Int.ordinal();
+                case ObjectType.Char:
+                    types[i] = CPPType.Int;
                     longValues[longIndex] = (Character)obj;
                     longIndex++;
                     break;
-                case Short:
-                    types[i] = CPPType.Int.ordinal();
+                case ObjectType.Short:
+                    types[i] = CPPType.Int;
                     longValues[longIndex] = (Short)obj;
                     longIndex++;
                     break;
-                case Int:
-                    types[i] = CPPType.Int.ordinal();
+                case ObjectType.Int:
+                    types[i] = CPPType.Int;
                     longValues[longIndex] = (Integer)obj;
                     longIndex++;
                     break;
-                case Long:
-                    types[i] = CPPType.Int.ordinal();
+                case ObjectType.Long:
+                    types[i] = CPPType.Int;
                     longValues[longIndex] = (Long) obj;
                     longIndex++;
                     break;
-                case Float:
-                    types[i] = CPPType.Double.ordinal();
+                case ObjectType.Float:
+                    types[i] = CPPType.Double;
                     doubleValues[doubleIndex] = (Float) obj;
                     doubleIndex++;
                     break;
-                case Double:
-                    types[i] = CPPType.Double.ordinal();
+                case ObjectType.Double:
+                    types[i] = CPPType.Double;
                     doubleValues[doubleIndex] = (Double) obj;
                     doubleIndex++;
                     break;
-                case String:
-                    types[i] = CPPType.String.ordinal();
+                case ObjectType.String:
+                    types[i] = CPPType.String;
                     stringValues[stringIndex] = (String) obj;
                     stringIndex++;
                     break;
-                case Identifier:
+                case ObjectType.Identifier:
                     Identifier identifier = (Identifier)obj;
                     types[i] = Identifier.getCppType(identifier);
                     longValues[longIndex] = CppObject.get(identifier);
@@ -129,7 +129,7 @@ class MultiTypeArray {
         }
     }
 
-    protected static ObjectType getObjectType(Object obj) {
+    protected static int getObjectType(Object obj) {
         if (obj == null) {
             return ObjectType.Null;
         } else if (obj instanceof Identifier) {

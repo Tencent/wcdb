@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class FrameSpec extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.FrameSpec;
     }
 
@@ -59,7 +59,7 @@ public class FrameSpec extends Identifier {
     private static native void configUnboundedPreceding(long self);
 
     public FrameSpec preceding(long offset) {
-        configPreceding(cppObj, CPPType.Int.ordinal(), offset);
+        configPreceding(cppObj, CPPType.Int, offset);
         return this;
     }
 
@@ -85,7 +85,7 @@ public class FrameSpec extends Identifier {
     private static native void configBetweenUnboundedPreceding(long self);
 
     public FrameSpec betweenPreceding(long offset) {
-        configBetweenPreceding(cppObj, CPPType.Int.ordinal(), offset);
+        configBetweenPreceding(cppObj, CPPType.Int, offset);
         return this;
     }
 
@@ -104,7 +104,7 @@ public class FrameSpec extends Identifier {
     private static native void configBetweenCurrentRow(long self);
 
     public FrameSpec betweenFollowing(long offset) {
-        configBetweenFollowing(cppObj, CPPType.Int.ordinal(), offset);
+        configBetweenFollowing(cppObj, CPPType.Int, offset);
         return this;
     }
 
@@ -123,7 +123,7 @@ public class FrameSpec extends Identifier {
     private static native void configAndCurrentRow(long self);
 
     public FrameSpec andPreceding(long offset) {
-        configAndPreceding(cppObj, CPPType.Int.ordinal(), offset);
+        configAndPreceding(cppObj, CPPType.Int, offset);
         return this;
     }
 
@@ -142,7 +142,7 @@ public class FrameSpec extends Identifier {
     private static native void configAndUnboundedFollowing(long self);
 
     public FrameSpec andFollowing(long offset) {
-        configAndFollowing(cppObj, CPPType.Int.ordinal(), offset);
+        configAndFollowing(cppObj, CPPType.Int, offset);
         return this;
     }
 

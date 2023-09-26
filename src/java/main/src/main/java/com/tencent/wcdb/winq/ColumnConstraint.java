@@ -26,7 +26,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class ColumnConstraint extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.ColumnConstraint;
     }
 
@@ -90,45 +90,45 @@ public class ColumnConstraint extends Identifier {
     private static native void configCheck(long self, long expression);
 
     public ColumnConstraint defaultTo(boolean value) {
-        defaultTo(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        defaultTo(cppObj, CPPType.Bool, value ? 1 : 0, 0, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(byte value) {
-        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        defaultTo(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(short value) {
-        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        defaultTo(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(int value) {
-        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        defaultTo(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(long value) {
-        defaultTo(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        defaultTo(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(float value) {
-        defaultTo(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        defaultTo(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(double value) {
-        defaultTo(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        defaultTo(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public ColumnConstraint defaultTo(String value) {
         if(value != null) {
-            defaultTo(cppObj, CPPType.String.ordinal(), 0, 0, value);
+            defaultTo(cppObj, CPPType.String, 0, 0, value);
         } else {
-            defaultTo(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            defaultTo(cppObj, CPPType.Null, 0, 0, null);
         }
 
         return this;

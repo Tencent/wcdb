@@ -43,6 +43,7 @@ public:
     ~Time() override final;
 
     static Time now();
+    static uint64_t currentThreadCPUTimeInMicroseconds();
 
     std::time_t seconds() const;
     std::time_t nanoseconds() const;
