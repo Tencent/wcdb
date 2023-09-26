@@ -119,6 +119,7 @@ bool Material::deserialize(Deserialization &deserialization)
     }
 
     Deserialization decoder(decompressed.value());
+    decoder.setDataVersion(deserialization.version());
     while (!decoder.ended()) {
         contentsList.emplace_back();
         Content &content = contentsList.back();

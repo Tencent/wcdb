@@ -102,6 +102,7 @@ bool IncrementalMaterial::deserialize(Deserialization &deserialization)
         markAsCorrupt("Version");
         return false;
     }
+    deserialization.setDataVersion(versionValue);
 
     //Info
     if (!info.deserialize(deserialization)) {
@@ -114,6 +115,7 @@ bool IncrementalMaterial::deserialize(Deserialization &deserialization)
     }
 
     Deserialization decoder(decompressed.value());
+    decoder.setDataVersion(deserialization.version());
     while (!decoder.ended()) {
         Page page;
         if (!page.deserialize(decoder)) {
