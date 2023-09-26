@@ -26,7 +26,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class Expression extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.Expression;
     }
 
@@ -58,7 +58,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native long createWithFunction(String func);
 
     public Expression schema(String schema) {
-        schema(cppObj, CPPType.String.ordinal(), 0, schema);
+        schema(cppObj, CPPType.String, 0, schema);
         return this;
     }
 
@@ -91,45 +91,45 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native void invokeAll(long self);
 
     public Expression argument(boolean arg) {
-        argument(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
+        argument(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     public Expression argument(byte arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression argument(short arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression argument(int arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression argument(long arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression argument(float arg) {
-        argument(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        argument(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression argument(double arg) {
-        argument(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        argument(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression argument(String arg) {
         if(arg != null) {
-            argument(cppObj, CPPType.String.ordinal(), 0, 0, arg);
+            argument(cppObj, CPPType.String, 0, 0, arg);
         }else{
-            argument(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            argument(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }
@@ -168,7 +168,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     public static Expression cast(String columnName) {
         Expression ret = new Expression();
-        ret.cppObj = cast(CPPType.String.ordinal(), 0, columnName);
+        ret.cppObj = cast(CPPType.String, 0, columnName);
         return ret;
     }
 
@@ -199,7 +199,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
             return case_();
         }
         Expression ret = new Expression();
-        ret.cppObj = caseWithExp(CPPType.String.ordinal(), 0, columnName);
+        ret.cppObj = caseWithExp(CPPType.String, 0, columnName);
         return ret;
     }
 
@@ -213,45 +213,45 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native long caseWithExp(int type, long object, String columnName);
 
     public Expression when(boolean arg) {
-        setWithWhenExp(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
+        setWithWhenExp(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     public Expression when(byte arg) {
-        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithWhenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression when(short arg) {
-        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithWhenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression when(int arg) {
-        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithWhenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression when(long arg) {
-        setWithWhenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithWhenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression when(float arg) {
-        setWithWhenExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        setWithWhenExp(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression when(double arg) {
-        setWithWhenExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        setWithWhenExp(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression when(String arg) {
         if(arg != null) {
-            setWithWhenExp(cppObj, CPPType.String.ordinal(), 0, 0, arg);
+            setWithWhenExp(cppObj, CPPType.String, 0, 0, arg);
         }else{
-            setWithWhenExp(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            setWithWhenExp(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }
@@ -264,45 +264,45 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native void setWithWhenExp(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public Expression then(boolean arg) {
-        setWithThenExp(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
+        setWithThenExp(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     public Expression then(byte arg) {
-        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithThenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression then(short arg) {
-        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithThenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression then(int arg) {
-        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithThenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression then(long arg) {
-        setWithThenExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithThenExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression then(float arg) {
-        setWithThenExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        setWithThenExp(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression then(double arg) {
-        setWithThenExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        setWithThenExp(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression then(String arg) {
         if(arg != null) {
-            setWithThenExp(cppObj, CPPType.String.ordinal(), 0, 0, arg);
+            setWithThenExp(cppObj, CPPType.String, 0, 0, arg);
         }else{
-            setWithThenExp(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            setWithThenExp(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }
@@ -316,45 +316,45 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native void setWithThenExp(long self, int type, long intValue, double doubleValue, String stringValue);
 
     public Expression else_(boolean arg) {
-        setWithElseExp(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
+        setWithElseExp(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     public Expression else_(byte arg) {
-        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithElseExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression else_(short arg) {
-        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithElseExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression else_(int arg) {
-        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithElseExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression else_(long arg) {
-        setWithElseExp(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        setWithElseExp(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public Expression else_(float arg) {
-        setWithElseExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        setWithElseExp(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression else_(double arg) {
-        setWithElseExp(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        setWithElseExp(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public Expression else_(String arg) {
         if(arg != null) {
-            setWithElseExp(cppObj, CPPType.String.ordinal(), 0, 0, arg);
+            setWithElseExp(cppObj, CPPType.String, 0, 0, arg);
         }else{
-            setWithElseExp(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            setWithElseExp(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }

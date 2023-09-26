@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementAnalyze extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.AnalyzeSTMT;
     }
 
@@ -45,7 +45,7 @@ public class StatementAnalyze extends Statement {
     private static native void configToAnalyze(long self);
 
     public StatementAnalyze schema(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

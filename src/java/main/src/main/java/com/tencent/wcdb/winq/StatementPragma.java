@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementPragma extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.PragmaSTMT;
     }
 
@@ -45,7 +45,7 @@ public class StatementPragma extends Statement {
     private static native void configPragma(long self, long pragma);
 
     public StatementPragma of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
@@ -57,45 +57,45 @@ public class StatementPragma extends Statement {
     private static native void configSchema(long self, int type, long schema, String schemaName);
 
     public StatementPragma withValue(boolean value) {
-        configWithValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        configWithValue(cppObj, CPPType.Bool, value ? 1 : 0, 0, null);
         return this;
     }
 
     public StatementPragma withValue(byte value) {
-        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configWithValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma withValue(short value) {
-        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configWithValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma withValue(int value) {
-        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configWithValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma withValue(long value) {
-        configWithValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configWithValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma withValue(float value) {
-        configWithValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        configWithValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public StatementPragma withValue(double value) {
-        configWithValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        configWithValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public StatementPragma withValue(String value) {
         if(value != null){
-            configWithValue(cppObj, CPPType.String.ordinal(), 0, 0, value);
+            configWithValue(cppObj, CPPType.String, 0, 0, value);
         } else {
-            configWithValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            configWithValue(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }
@@ -103,45 +103,45 @@ public class StatementPragma extends Statement {
     private static native void configWithValue(long self, int type, long longValue, double doubleValue, String stringValue);
 
     public StatementPragma toValue(boolean value) {
-        configToValue(cppObj, CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        configToValue(cppObj, CPPType.Bool, value ? 1 : 0, 0, null);
         return this;
     }
 
     public StatementPragma toValue(byte value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma toValue(short value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma toValue(int value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma toValue(long value) {
-        configToValue(cppObj, CPPType.Int.ordinal(), value, 0, null);
+        configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
     public StatementPragma toValue(float value) {
-        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        configToValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public StatementPragma toValue(double value) {
-        configToValue(cppObj, CPPType.Double.ordinal(), 0, value, null);
+        configToValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
     public StatementPragma toValue(String value) {
         if(value != null){
-            configToValue(cppObj, CPPType.String.ordinal(), 0, 0, value);
+            configToValue(cppObj, CPPType.String, 0, 0, value);
         } else {
-            configToValue(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            configToValue(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }

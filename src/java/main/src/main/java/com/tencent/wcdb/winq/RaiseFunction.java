@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 public class RaiseFunction extends Identifier implements ExpressionConvertible, ResultColumnConvertible{
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.RaiseFunction;
     }
 

@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 public class LiteralValue extends Identifier implements ExpressionConvertible {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.LiteralValue;
     }
 
@@ -35,38 +35,38 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
     }
 
     public LiteralValue(byte value) {
-        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+        cppObj = createCppObj(CPPType.Int, value, 0, null);
     }
 
     public LiteralValue(short value) {
-        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+        cppObj = createCppObj(CPPType.Int, value, 0, null);
     }
 
     public LiteralValue(int value) {
-        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+        cppObj = createCppObj(CPPType.Int, value, 0, null);
     }
 
     public LiteralValue(long value) {
-        cppObj = createCppObj(CPPType.Int.ordinal(), value, 0, null);
+        cppObj = createCppObj(CPPType.Int, value, 0, null);
     }
 
     public LiteralValue(float value) {
-        cppObj = createCppObj(CPPType.Double.ordinal(), 0, value, null);
+        cppObj = createCppObj(CPPType.Double, 0, value, null);
     }
 
     public LiteralValue(double value) {
-        cppObj = createCppObj(CPPType.Double.ordinal(), 0, value, null);
+        cppObj = createCppObj(CPPType.Double, 0, value, null);
     }
 
     public LiteralValue(boolean value) {
-        cppObj = createCppObj(CPPType.Bool.ordinal(), value ? 1 : 0, 0, null);
+        cppObj = createCppObj(CPPType.Bool, value ? 1 : 0, 0, null);
     }
 
     public LiteralValue(String value) {
         if(value == null) {
-            cppObj = createCppObj(CPPType.Null.ordinal(), 0, 0, null);
+            cppObj = createCppObj(CPPType.Null, 0, 0, null);
         } else {
-            cppObj = createCppObj(CPPType.String.ordinal(), 0, 0, value);
+            cppObj = createCppObj(CPPType.String, 0, 0, value);
         }
     }
 

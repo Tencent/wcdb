@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class TableOrSubquery extends Identifier implements TableOrSubqueryConvertible{
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.TableOrSubquery;
     }
 
@@ -40,14 +40,14 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     public TableOrSubquery(String tableName) {
-        cppObj = createCppObj(CPPType.String.ordinal(), 0, tableName);
+        cppObj = createCppObj(CPPType.String, 0, tableName);
     }
 
     private static native long createCppObj(int type, long object, String tableName);
 
     public TableOrSubquery(TableOrSubqueryConvertible[] tableOrSubqueries) {
         if(tableOrSubqueries == null || tableOrSubqueries.length == 0) {
-            cppObj = createCppObj(CPPType.String.ordinal(), new long[]{}, null);
+            cppObj = createCppObj(CPPType.String, new long[]{}, null);
             return;
         }
         long[] array = new long[tableOrSubqueries.length];
@@ -58,13 +58,13 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     public TableOrSubquery(String[] tables) {
-        cppObj = createCppObj(CPPType.String.ordinal(), null, tables);
+        cppObj = createCppObj(CPPType.String, null, tables);
     }
 
     private static native long createCppObj(int type, long[] tableOrSubqueries, String[] tables);
 
     public TableOrSubquery schema(String schemaName) {
-        schema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        schema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
@@ -105,45 +105,45 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     public static native long createWithFunction(String funcName);
 
     public TableOrSubquery argument(boolean arg) {
-        argument(cppObj, CPPType.Bool.ordinal(), arg ? 1 : 0, 0, null);
+        argument(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     public TableOrSubquery argument(byte arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public TableOrSubquery argument(short arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public TableOrSubquery argument(int arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public TableOrSubquery argument(long arg) {
-        argument(cppObj, CPPType.Int.ordinal(), arg, 0, null);
+        argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     public TableOrSubquery argument(float arg) {
-        argument(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        argument(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public TableOrSubquery argument(double arg) {
-        argument(cppObj, CPPType.Double.ordinal(), 0, arg, null);
+        argument(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     public TableOrSubquery argument(String arg) {
         if( arg != null ) {
-            argument(cppObj, CPPType.String.ordinal(), 0, 0, arg);
+            argument(cppObj, CPPType.String, 0, 0, arg);
         } else {
-            argument(cppObj, CPPType.Null.ordinal(), 0, 0, null);
+            argument(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
     }

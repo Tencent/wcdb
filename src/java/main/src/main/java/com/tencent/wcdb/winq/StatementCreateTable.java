@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementCreateTable extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.CreateTableSTMT;
     }
 
@@ -60,7 +60,7 @@ public class StatementCreateTable extends Statement {
     private static native void configIfNotExist(long self);
 
     public StatementCreateTable of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

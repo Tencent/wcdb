@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementDropTable extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.DropTableSTMT;
     }
 
@@ -45,7 +45,7 @@ public class StatementDropTable extends Statement {
     private static native void configTableName(long self, String tableName);
 
     public StatementDropTable of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

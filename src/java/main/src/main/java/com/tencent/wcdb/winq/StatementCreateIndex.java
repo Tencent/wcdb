@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementCreateIndex extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.CreateIndexSTMT;
     }
 
@@ -59,7 +59,7 @@ public class StatementCreateIndex extends Statement {
     private static native void configIfNotExist(long self);
 
     public StatementCreateIndex of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
@@ -102,12 +102,12 @@ public class StatementCreateIndex extends Statement {
     }
 
     public StatementCreateIndex indexedBy(String[] indexedColumnNames) {
-        configIndexedColumns(cppObj, CPPType.String.ordinal(), null, indexedColumnNames);
+        configIndexedColumns(cppObj, CPPType.String, null, indexedColumnNames);
         return this;
     }
 
     public StatementCreateIndex indexedBy(String indexedColumnName) {
-        configIndexedColumns(cppObj, CPPType.String.ordinal(), null, new String[]{indexedColumnName});
+        configIndexedColumns(cppObj, CPPType.String, null, new String[]{indexedColumnName});
         return this;
     }
 

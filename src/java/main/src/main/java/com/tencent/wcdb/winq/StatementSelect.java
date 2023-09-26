@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 public class StatementSelect extends Statement implements TableOrSubqueryConvertible {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.SelectSTMT;
     }
     public StatementSelect() {
@@ -96,7 +96,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect select(String resultColumn) {
-        configResultColumns(cppObj, new int[]{CPPType.String.ordinal()}, null, null,
+        configResultColumns(cppObj, new int[]{CPPType.String}, null, null,
                 new String[]{resultColumn});
         return this;
     }
@@ -106,7 +106,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
             return this;
         }
         int[] types = new int[resultColumns.length];
-        Arrays.fill(types, CPPType.String.ordinal());
+        Arrays.fill(types, CPPType.String);
         configResultColumns(cppObj, types, null, null, resultColumns);
         return this;
     }
@@ -124,7 +124,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         for(int i = 0; i < totalCount; i++) {
             Object obj = resultColumns[i];
             if(obj instanceof String){
-                types[i] = CPPType.String.ordinal();
+                types[i] = CPPType.String;
                 columnNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof ResultColumnConvertible) {
@@ -176,7 +176,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect from(String tableName) {
-        configTableOrSubqueries(cppObj, new int[]{CPPType.String.ordinal()}, null, null, new String[]{tableName});
+        configTableOrSubqueries(cppObj, new int[]{CPPType.String}, null, null, new String[]{tableName});
         return this;
     }
 
@@ -185,7 +185,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
             return this;
         }
         int[] types = new int[tableNames.length];
-        Arrays.fill(types, CPPType.String.ordinal());
+        Arrays.fill(types, CPPType.String);
         configTableOrSubqueries(cppObj, types, null, null, tableNames);
         return this;
     }
@@ -203,7 +203,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         for(int i = 0; i < totalCount; i++) {
             Object obj = tableOrSubqueries[i];
             if(obj instanceof String){
-                types[i] = CPPType.String.ordinal();
+                types[i] = CPPType.String;
                 tablNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof TableOrSubqueryConvertible) {
@@ -254,7 +254,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect groupBy(String columnName) {
-        configGroups(cppObj, new int[]{CPPType.String.ordinal()}, null, null, new String[]{columnName});
+        configGroups(cppObj, new int[]{CPPType.String}, null, null, new String[]{columnName});
         return this;
     }
 
@@ -263,7 +263,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
             return this;
         }
         int[] types = new int[columnNames.length];
-        Arrays.fill(types, CPPType.String.ordinal());
+        Arrays.fill(types, CPPType.String);
         configGroups(cppObj, types, null, null, columnNames);
         return this;
     }
@@ -281,7 +281,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         for(int i = 0; i < totalCount; i++) {
             Object obj = expressions[i];
             if(obj instanceof String){
-                types[i] = CPPType.String.ordinal();
+                types[i] = CPPType.String;
                 columnNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof ExpressionConvertible) {
@@ -359,12 +359,12 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private static native void configOrders(long self, long[] orders);
 
     public StatementSelect limit(long from, long to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, CPPType.Int, from, CPPType.Int, to);
         return this;
     }
 
     public StatementSelect limit(long from, ExpressionConvertible to) {
-        configLimitRange(cppObj, CPPType.Int.ordinal(), from, Identifier.getCppType(to), CppObject.get(to));
+        configLimitRange(cppObj, CPPType.Int, from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
@@ -374,14 +374,14 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
 
     public StatementSelect limit(ExpressionConvertible from, long to) {
-        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int.ordinal(), to);
+        configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int, to);
         return this;
     }
 
     private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
     public StatementSelect limit(long count) {
-        configLimitCount(cppObj, CPPType.Int.ordinal(), count);
+        configLimitCount(cppObj, CPPType.Int, count);
         return this;
     }
 
@@ -393,7 +393,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     private static native void configLimitCount(long self, int type, long count);
 
     public StatementSelect offset(long offset) {
-        configOffset(cppObj, CPPType.Int.ordinal(), offset);
+        configOffset(cppObj, CPPType.Int, offset);
         return this;
     }
 

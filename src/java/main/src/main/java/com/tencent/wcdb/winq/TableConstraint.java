@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class TableConstraint extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.TableConstraint;
     }
 
@@ -79,12 +79,12 @@ public class TableConstraint extends Identifier {
     }
 
     public TableConstraint indexedBy(String indexedColumn) {
-        configIndexedColumn(cppObj, CPPType.String.ordinal(), null, new String[]{indexedColumn});
+        configIndexedColumn(cppObj, CPPType.String, null, new String[]{indexedColumn});
         return this;
     }
 
     public TableConstraint indexedBy(String[] indexedColumns) {
-        configIndexedColumn(cppObj, CPPType.String.ordinal(), null, indexedColumns);
+        configIndexedColumn(cppObj, CPPType.String, null, indexedColumns);
         return this;
     }
 
@@ -110,7 +110,7 @@ public class TableConstraint extends Identifier {
     public TableConstraint foreignKey(String[] columns, ForeignKey foreignKey) {
         configForeignKey(
                 cppObj,
-                CPPType.String.ordinal(),
+                CPPType.String,
                 null,
                 columns,
                 CppObject.get(foreignKey));
@@ -124,7 +124,7 @@ public class TableConstraint extends Identifier {
         }
         configForeignKey(
                 cppObj,
-                CPPType.Column.ordinal(),
+                CPPType.Column,
                 cppObjs,
                 null,
                 CppObject.get(foreignKey));

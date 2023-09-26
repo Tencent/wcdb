@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementAttach extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.AttachSTMT;
     }
 
@@ -38,7 +38,7 @@ public class StatementAttach extends Statement {
     private static native long createCppObj();
 
     public StatementAttach attach(String path) {
-        configPath(cppObj, CPPType.String.ordinal(), 0, path);
+        configPath(cppObj, CPPType.String, 0, path);
         return this;
     }
 
@@ -50,7 +50,7 @@ public class StatementAttach extends Statement {
     private static native void configPath(long self, int type, long object, String path);
 
     public StatementAttach as(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
@@ -62,7 +62,7 @@ public class StatementAttach extends Statement {
     private static native void configSchema(long self, int type, long object, String path);
 
     public StatementAttach key(String key) {
-        configKey(cppObj, CPPType.String.ordinal(), 0, key);
+        configKey(cppObj, CPPType.String, 0, key);
         return this;
     }
 

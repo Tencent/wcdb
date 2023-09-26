@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementDropTrigger extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.DropTriggerSTMT;
     }
 
@@ -45,7 +45,7 @@ public class StatementDropTrigger extends Statement {
     private static native void configTrigger(long self, String triggerName);
 
     public StatementDropTrigger of(String schemaName) {
-        configSchema(cppObj, CPPType.String.ordinal(), 0, schemaName);
+        configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 

@@ -24,85 +24,87 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
-enum CPPType {
-    Invalid,
-    Null,
-    Bool,
-    Int,
-    UInt,
-    Double,
-    String,
-
-    Column,
-    Schema,
-    ColumnDef,
-    ColumnConstraint,
-    Expression,
-    LiteralValue,
-    ForeignKeyClause,
-    BindParameter,
-    RaiseFunction,
-    WindowDef,
-    Filter,
-    IndexedColumn,
-    TableConstraint,
-    CommonTableExpression,
-    QualifiedTableName,
-    OrderingTerm,
-    UpsertClause,
-    Pragma,
-    JoinClause,
-    TableOrSubquery,
-    JoinConstraint,
-    SelectCore,
-    ResultColumn,
-    FrameSpec,
-
-    AlterTableSTMT,
-    AnalyzeSTMT,
-    AttachSTMT,
-    BeginSTMT,
-    CommitSTMT,
-    RollbackSTMT,
-    SavepointSTMT,
-    ReleaseSTMT,
-    CreateIndexSTMT,
-    CreateTableSTMT,
-    CreateTriggerSTMT,
-    SelectSTMT,
-    InsertSTMT,
-    DeleteSTMT,
-    UpdateSTMT,
-    CreateViewSTMT,
-    CreateVirtualTableSTMT,
-    DetachSTMT,
-    DropIndexSTMT,
-    DropTableSTMT,
-    DropTriggerSTMT,
-    DropViewSTMT,
-    PragmaSTMT,
-    ReindexSTMT,
-    VacuumSTMT,
-    ExplainSTMT,
+class CPPType {
+    final static int Invalid = 0;
+    final static int Null = 1;
+    final static int Bool = 2;
+    final static int Int = 3;
+    final static int UInt = 4;
+    final static int Double = 5;
+    final static int String = 6;
+    
+    
+    final static int Column = 7;
+    final static int Schema = 8;
+    final static int ColumnDef = 9;
+    final static int ColumnConstraint = 10;
+    final static int Expression = 11;
+    final static int LiteralValue = 12;
+    final static int ForeignKeyClause = 13;
+    final static int BindParameter = 14;
+    final static int RaiseFunction = 15;
+    final static int WindowDef = 16;
+    final static int Filter = 17;
+    final static int IndexedColumn = 18;
+    final static int TableConstraint = 19;
+    final static int CommonTableExpression = 20;
+    final static int QualifiedTableName = 21;
+    final static int OrderingTerm = 22;
+    final static int UpsertClause = 23;
+    final static int Pragma = 24;
+    final static int JoinClause = 25;
+    final static int TableOrSubquery = 26;
+    final static int JoinConstraint = 27;
+    final static int SelectCore = 28;
+    final static int ResultColumn = 29;
+    final static int FrameSpec = 30;
+    
+    
+    final static int AlterTableSTMT = 31;
+    final static int AnalyzeSTMT = 32;
+    final static int AttachSTMT = 33;
+    final static int BeginSTMT = 34;
+    final static int CommitSTMT = 35;
+    final static int RollbackSTMT = 36;
+    final static int SavepointSTMT = 37;
+    final static int ReleaseSTMT = 38;
+    final static int CreateIndexSTMT = 39;
+    final static int CreateTableSTMT = 40;
+    final static int CreateTriggerSTMT = 41;
+    final static int SelectSTMT = 42;
+    final static int InsertSTMT = 43;
+    final static int DeleteSTMT = 44;
+    final static int UpdateSTMT = 45;
+    final static int CreateViewSTMT = 46;
+    final static int CreateVirtualTableSTMT = 47;
+    final static int DetachSTMT = 48;
+    final static int DropIndexSTMT = 49;
+    final static int DropTableSTMT = 50;
+    final static int DropTriggerSTMT = 51;
+    final static int DropViewSTMT = 52;
+    final static int PragmaSTMT = 53;
+    final static int ReindexSTMT = 54;
+    final static int VacuumSTMT = 55;
+    final static int ExplainSTMT = 56;
 }
 
 public class Identifier extends CppObject implements IdentifierConvertible {
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.Invalid;
     }
 
     protected static int getCppType(Identifier identifier) {
         if(identifier == null){
-            return CPPType.Null.ordinal();
+            return CPPType.Null;
         }
-        return identifier.getType().ordinal();
+        return identifier.getType();
     }
 
     protected static int getCppType(IdentifierConvertible identifier) {
         if(identifier == null){
-            return CPPType.Null.ordinal();
+            return CPPType.Null;
         }
-        return identifier.asIdentifier().getType().ordinal();
+        return identifier.asIdentifier().getType();
     }
 
     public Identifier asIdentifier() {

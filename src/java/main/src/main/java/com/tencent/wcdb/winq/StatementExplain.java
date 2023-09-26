@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 
 public class StatementExplain extends Statement {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.ExplainSTMT;
     }
 

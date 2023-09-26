@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 public class Schema extends Identifier {
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.Schema;
     }
 

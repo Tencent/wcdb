@@ -28,7 +28,7 @@ import com.tencent.wcdb.base.CppObject;
 public class Column extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
 
     @Override
-    protected CPPType getType() {
+    protected int getType() {
         return CPPType.Column;
     }
 
@@ -57,7 +57,7 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
     }
 
     public Column of(String schema) {
-        ofSchema(cppObj, CPPType.String.ordinal(), 0, schema);
+        ofSchema(cppObj, CPPType.String, 0, schema);
         return this;
     }
 
@@ -66,7 +66,7 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
     }
 
     protected void ofSchema(String schema) {
-        ofSchema(cppObj, CPPType.String.ordinal(), 0, schema);
+        ofSchema(cppObj, CPPType.String, 0, schema);
     }
 
     protected native void ofSchema(long column, int type, long schema, String schemaName);
