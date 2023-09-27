@@ -73,7 +73,7 @@ void OperationQueue::main()
 
 void OperationQueue::handleError(const Error& error)
 {
-    if (error.level < Error::Level::Error || !error.isCorruption() || isExiting()) {
+    if (error.level < Error::Level::Warning || !error.isCorruption() || isExiting()) {
         return;
     }
 
@@ -177,6 +177,9 @@ OperationQueue::Parameter::Parameter()
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
 {
     void* context = operationStart();
+    if (operation.type != Operation::Type::NotifyCorruption) {
+        Core::shared().setThreadedErrorIgnorable(true);
+    }
     switch (operation.type) {
     case Operation::Type::Migrate:
         doMigrate(operation.path, parameter.numberOfFailures);
@@ -197,10 +200,12 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
     case Operation::Type::MergeIndex:
         doMergeFTSIndex(operation.path, parameter.newTables, parameter.modifiedTables);
         break;
-    default:
-        WCTAssert(operation.type == Operation::Type::Backup);
+    case Operation::Type::Backup:
         doBackup(operation.path);
         break;
+    }
+    if (operation.type != Operation::Type::NotifyCorruption) {
+        Core::shared().setThreadedErrorIgnorable(false);
     }
     operationEnd(context);
 }

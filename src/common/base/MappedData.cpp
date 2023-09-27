@@ -62,7 +62,7 @@ void MappedData::unmapData(SharedData& data)
 #ifndef _WIN32
     if (munmap(data.buffer, data.size) != 0) {
         Error error;
-        error.level = Error::Level::Error;
+        error.level = Error::Level::Warning;
         error.setSystemCode(errno, Error::Code::IOError);
         error.infos.insert_or_assign("MunmapSize", data.size);
         Notifier::shared().notify(error);
@@ -71,7 +71,7 @@ void MappedData::unmapData(SharedData& data)
 #else
     if (!UnmapViewOfFile(data.buffer)) {
         Error error;
-        error.level = Error::Level::Error;
+        error.level = Error::Level::Warning;
         error.setWinSystemCode(GetLastError(), Error::Code::IOError);
         error.infos.insert_or_assign("MunmapSize", data.size);
         Notifier::shared().notify(error);

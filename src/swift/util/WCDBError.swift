@@ -121,28 +121,28 @@ public final class WCDBError: Swift.Error, CustomStringConvertible {
         case ConstraintRowID = 2579          // Code.Constraint | (10 << 8)
         case NoticeRecoverWal = 283          // Code.Notice | (1 << 8)
         case NoticeRecoverRollback = 539     // Code.Notice | (2 << 8)
-        case WarningAutoIndex = 284          // Code.Warning | (2 << 8)
-        case AuthorizationUser = 279         // Code.Authorization | (2 << 8)
-        case OKLoadPermanently = 256         // Code.OK | (2 << 8)
+        case WarningAutoIndex = 284          // Code.Warning | (1 << 8)
+        case AuthorizationUser = 279         // Code.Authorization | (1 << 8)
+        case OKLoadPermanently = 256         // Code.OK | (1 << 8)
     }
 
     public enum Level: Int, CustomStringConvertible {
         case Ignore = 1
         case Debug = 2
-        case Warning = 3
-        case Notice = 4
-        case Error = 5
-        case Fatal = 6
+        case Notice = 3
+        case Warning = 4
+        case Error = 5 // Only for the errors that will cause api to return false.
+        case Fatal = 6 // Application should abort.
         public var description: String {
             switch self {
             case .Ignore:
                 return "IGNORE"
             case .Debug:
                 return "DEBUG"
-            case .Warning:
-                return "WARNING"
             case .Notice:
                 return "NOTICE"
+            case .Warning:
+                return "WARNING"
             case .Error:
                 return "ERROR"
             case .Fatal:

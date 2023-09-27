@@ -51,20 +51,20 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
-        Core::shared().setThreadedDatabase(path);
+        Core::shared().setThreadedErrorPath(path);
         if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
             && FileManager::createFile(path)) {
             resolvePath = realpath(path.data(), nullptr);
             if (resolvePath == NULL) {
                 Error error;
-                error.level = Error::Level::Error;
+                error.level = Error::Level::Warning;
                 error.setSystemCode(errno, Error::Code::IOError);
                 error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
             }
             FileManager::removeItem(path);
         }
-        Core::shared().setThreadedDatabase(nullptr);
+        Core::shared().setThreadedErrorPath(nullptr);
     }
     if (resolvePath != nullptr) {
         UnsafeStringView newPath = UnsafeStringView(resolvePath);

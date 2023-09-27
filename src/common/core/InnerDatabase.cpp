@@ -155,7 +155,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             m_initialized = true;
             continue;
         }
-        Core::shared().setThreadedDatabase(path);
+        Core::shared().setThreadedErrorPath(path);
         if (!FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))) {
             assignWithSharedThreadedError();
             break;
@@ -178,7 +178,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             assignWithSharedThreadedError();
             break;
         }
-        Core::shared().setThreadedDatabase(nullptr);
+        Core::shared().setThreadedErrorPath(nullptr);
         m_initialized = true;
     } while (true);
     return nullptr;
@@ -671,7 +671,7 @@ bool InnerDatabase::backup(bool interruptible)
         }
     }
 
-    Core::shared().setThreadedDatabase(path);
+    Core::shared().setThreadedErrorPath(path);
 
     Repair::FactoryBackup backup = m_factory.backup();
     backup.setBackupSharedDelegate(operationBackupReadHandle);
@@ -693,7 +693,7 @@ bool InnerDatabase::backup(bool interruptible)
         operationBackupWriteHandle->markErrorAsUnignorable();
         operationBackupReadHandle->markErrorAsUnignorable();
     }
-    Core::shared().setThreadedDatabase("");
+    Core::shared().setThreadedErrorPath("");
     return succeed;
 }
 
@@ -736,7 +736,7 @@ bool InnerDatabase::deposit()
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
 
-        Core::shared().setThreadedDatabase(path);
+        Core::shared().setThreadedErrorPath(path);
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
         renewer.setBackupSharedDelegate(
@@ -749,7 +749,7 @@ bool InnerDatabase::deposit()
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
-            Core::shared().setThreadedDatabase("");
+            Core::shared().setThreadedErrorPath("");
             return;
         }
         Repair::FactoryDepositor depositor = m_factory.depositor();
@@ -761,13 +761,13 @@ bool InnerDatabase::deposit()
         // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will never lost.
         if (!renewer.work()) {
             setThreadedError(renewer.getError());
-            Core::shared().setThreadedDatabase("");
+            Core::shared().setThreadedErrorPath("");
         } else {
             result = true;
         }
         cipherHandle->close();
     });
-    Core::shared().setThreadedDatabase("");
+    Core::shared().setThreadedErrorPath("");
     return result;
 }
 
@@ -810,7 +810,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
 
-        Core::shared().setThreadedDatabase(path);
+        Core::shared().setThreadedErrorPath(path);
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
         retriever.setBackupSharedDelegate(
@@ -825,7 +825,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
             result = retriever.getScore().value();
         }
         setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
-        Core::shared().setThreadedDatabase("");
+        Core::shared().setThreadedErrorPath("");
         cipherHandle->close();
     });
     return result;

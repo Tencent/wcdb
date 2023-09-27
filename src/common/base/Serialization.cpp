@@ -246,7 +246,8 @@ Data Serialization::finalize()
 Deserialization::Deserialization() = default;
 Deserialization::~Deserialization() = default;
 
-Deserialization::Deserialization(const UnsafeData &data) : m_data(data), m_dataVersion(0)
+Deserialization::Deserialization(const UnsafeData &data)
+: m_data(data), m_dataVersion(0)
 {
     static_assert(slot_2_0 == ((0x7f << 14) | (0x7f)), "");
     static_assert(slot_4_2_0 == ((0xfU << 28) | (0x7f << 14) | (0x7f)), "");
