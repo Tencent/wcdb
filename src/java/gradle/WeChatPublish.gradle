@@ -330,13 +330,6 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
             title = null
             options {
                 memberLevel = JavadocMemberLevel.PUBLIC
-
-                def doclavaJar = project.rootProject.file('gradle/doclava-1.0.6.jar')
-                if (doclavaJar.exists()) {
-                    doclet = 'com.google.doclava.Doclava'
-                    docletpath = [doclavaJar]
-                }
-                //docletpath = project.configurations.doclava.files as List
             }
             it
         }
@@ -459,19 +452,12 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 title = null
 
                 def classpathFiles = project.files(android.getBootClasspath().join(File.pathSeparator))
-                classpathFiles += project.files(project.configurations.named("${variantName}RuntimeClasspath"))
+                classpathFiles += project.configurations.named("${variantName}RuntimeClasspath").get().fileCollection()
                 doFirst { classpath += classpathFiles }
 
                 source = variant.javaCompileProvider.get().source
                 options {
                     memberLevel = JavadocMemberLevel.PUBLIC
-
-                    def doclavaJar = project.rootProject.file('gradle/doclava-1.0.6.jar')
-                    if (doclavaJar.exists()) {
-                        doclet = 'com.google.doclava.Doclava'
-                        docletpath = [doclavaJar]
-                    }
-                    //docletpath = project.configurations.doclava.files as List
                 }
                 destinationDir = project.file("${project.buildDir}/docs/javadoc")
                 exclude '**/BuildConfig.java'

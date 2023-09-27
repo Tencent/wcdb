@@ -1,6 +1,5 @@
-plugins {
-    id 'com.android.library'
-}
+plugins { id 'com.android.library' }
+apply from: rootProject.file('gradle/WeChatPublish.gradle')
 
 android {
     namespace 'com.tencent.wcdb2'
@@ -10,7 +9,7 @@ android {
         minSdk 21
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,5 +23,5 @@ android {
 dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation project(path: ':main')
+    implementation project(':main')
 }
