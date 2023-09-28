@@ -125,24 +125,40 @@ void Core::databaseDidCreate(InnerDatabase* database)
     enableAutoCheckpoint(database, true);
 }
 
-void Core::setThreadedDatabase(const UnsafeStringView& path)
+#pragma mark - Error
+
+void Core::setThreadedErrorPath(const UnsafeStringView& path)
 {
-    m_associateDatabases.getOrCreate() = path;
+    m_errorPath.getOrCreate() = path;
+}
+
+void Core::setThreadedErrorIgnorable(bool ignorable)
+{
+    m_errorIgnorable.getOrCreate() = ignorable;
 }
 
 void Core::preprocessError(Error& error)
 {
     auto& infos = error.infos;
 
-    if (error.getPath().size() == 0 && m_associateDatabases.getOrCreate().size() > 0) {
-        error.infos.insert_or_assign(ErrorStringKeyPath, m_associateDatabases.getOrCreate());
+    const StringView& path = error.getPath();
+    const StringView& associatePath = error.getAssociatePath();
+    const StringView& threadedPath = m_errorPath.getOrCreate();
+
+    if (path.empty()) {
+        if (!threadedPath.empty()) {
+            error.infos.insert_or_assign(ErrorStringKeyPath, threadedPath);
+        } else if (!associatePath.empty()) {
+            error.infos.insert_or_assign(ErrorStringKeyPath, associatePath);
+            error.infos.erase(ErrorStringKeyAssociatePath);
+        }
     }
-    if (error.getPath().length() == 0 && error.getAssociatePath().length() > 0) {
-        error.infos.insert_or_assign(ErrorStringKeyPath, error.getAssociatePath());
+    if (error.getPath().equal(associatePath)) {
         error.infos.erase(ErrorStringKeyAssociatePath);
     }
-    if (error.getPath().compare(error.getAssociatePath()) == 0) {
-        error.infos.erase(ErrorStringKeyAssociatePath);
+
+    if (error.level == Error::Level::Error && m_errorIgnorable.getOrCreate()) {
+        error.level = Error::Level::Warning;
     }
 
     auto iter = infos.find(UnsafeStringView(ErrorStringKeyPath));

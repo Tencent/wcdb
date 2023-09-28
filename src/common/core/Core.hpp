@@ -57,13 +57,20 @@ public:
     RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
-    void setThreadedDatabase(const UnsafeStringView& path);
+
+protected:
+    void databaseDidCreate(InnerDatabase* database) override final;
+    DatabasePool m_databasePool;
+
+#pragma mark - Error
+public:
+    void setThreadedErrorPath(const UnsafeStringView& path);
+    void setThreadedErrorIgnorable(bool ignorable);
 
 protected:
     void preprocessError(Error& error);
-    void databaseDidCreate(InnerDatabase* database) override final;
-    DatabasePool m_databasePool;
-    ThreadLocal<StringView> m_associateDatabases;
+    ThreadLocal<bool> m_errorIgnorable;
+    ThreadLocal<StringView> m_errorPath;
 
 #pragma mark - Tokenizer
 public:

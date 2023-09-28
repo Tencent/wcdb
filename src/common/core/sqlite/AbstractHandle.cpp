@@ -267,7 +267,7 @@ HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const UnsafeString
 HandleStatement *AbstractHandle::getOrCreateStatement(const UnsafeStringView &sql)
 {
     if (sql.length() == 0) {
-        m_error.setCode(Error::Code::Error, "invalid statement");
+        m_error.setCode(Error::Code::Error, "Invalid statement");
         m_error.infos.erase(ErrorStringKeySQL);
         m_error.level = Error::Level::Error;
         Notifier::shared().notify(m_error);

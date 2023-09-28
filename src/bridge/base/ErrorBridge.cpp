@@ -69,11 +69,11 @@ void WCDBErrorReport(WCDBErrorLevel level, long code, const char* content, const
     case WCDBErrorLevel_Debug:
         cppLevel = WCDB::Error::Level::Debug;
         break;
-    case WCDBErrorLevel_Warming:
-        cppLevel = WCDB::Error::Level::Warning;
-        break;
     case WCDBErrorLevel_Notice:
         cppLevel = WCDB::Error::Level::Notice;
+        break;
+    case WCDBErrorLevel_Warning:
+        cppLevel = WCDB::Error::Level::Warning;
         break;
     case WCDBErrorLevel_Error:
         cppLevel = WCDB::Error::Level::Error;

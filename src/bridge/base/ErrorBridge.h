@@ -34,8 +34,8 @@ WCDBDefineCPPBridgedType(CPPError)
 enum WCDBErrorLevel {
     WCDBErrorLevel_Ignore = 1,
     WCDBErrorLevel_Debug,
-    WCDBErrorLevel_Warming,
     WCDBErrorLevel_Notice,
+    WCDBErrorLevel_Warning,
     WCDBErrorLevel_Error,
     WCDBErrorLevel_Fatal,
 };

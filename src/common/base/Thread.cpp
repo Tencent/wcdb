@@ -121,7 +121,7 @@ void Thread::setName(const UnsafeStringView& name)
     int ret = pthread_setname_np(buffer);
     if (ret != 0) {
         Error error;
-        error.level = Error::Level::Error;
+        error.level = Error::Level::Warning;
         error.setSystemCode(ret, Error::Code::Error);
         error.infos.insert_or_assign("Operation", "setThreadName");
         Notifier::shared().notify(error);

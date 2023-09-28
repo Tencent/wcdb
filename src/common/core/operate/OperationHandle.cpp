@@ -62,7 +62,7 @@ void OperationHandle::checkIntegrity()
         if (integrityMessages.size() > 0) {
             auto integrityMessage = *integrityMessages.begin();
             if (!integrityMessage.caseInsensitiveEqual("ok")) {
-                Error error(Error::Code::Corrupt, Error::Level::Error, integrityMessage);
+                Error error(Error::Code::Corrupt, Error::Level::Warning, integrityMessage);
                 error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
                 error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
                 Notifier::shared().notify(error);
@@ -83,7 +83,7 @@ void OperationHandle::checkIntegrity()
             continue;
         }
         if (Error::rc2ec((int) m_error.getExtCode()) == Error::ExtCode::CorruptVirtualTable) {
-            Error error(Error::Code::Corrupt, Error::Level::Error, m_error.getMessage());
+            Error error(Error::Code::Corrupt, Error::Level::Warning, m_error.getMessage());
             error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
             error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
             Notifier::shared().notify(error);

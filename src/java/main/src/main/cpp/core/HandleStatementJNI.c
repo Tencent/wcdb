@@ -162,7 +162,9 @@ jbyteArray WCDBJNIHandleStatementClassMethod(getBLOB, jlong self, jint index)
         return (*env)->NewByteArray(env, 0);
     }
     jbyteArray array = (*env)->NewByteArray(env, size);
-    (*env)->SetByteArrayRegion(env, array, 0, size, buffer);
+    if (array != NULL) {
+        (*env)->SetByteArrayRegion(env, array, 0, size, buffer);
+    }
     return array;
 }
 

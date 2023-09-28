@@ -39,10 +39,10 @@ WCDB_EXTERN NSErrorUserInfoKey const WCTErrorKeyExtendedCode;
 typedef NS_ENUM(NSUInteger, WCTErrorLevel) {
     WCTErrorLevelIgnore = 1,
     WCTErrorLevelDebug = 2,
-    WCTErrorLevelWarning = 3,
-    WCTErrorLevelNotice = 4,
-    WCTErrorLevelError = 5,
-    WCTErrorLevelFatal = 6,
+    WCTErrorLevelNotice = 3,
+    WCTErrorLevelWarning = 4,
+    WCTErrorLevelError = 5, // Only for the errors that will cause api to return false.
+    WCTErrorLevelFatal = 6, // Application should abort.
 };
 
 typedef NS_ENUM(NSUInteger, WCTErrorCode) {

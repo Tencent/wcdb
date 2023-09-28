@@ -375,7 +375,9 @@ void MergeFTSIndexLogic::OperationQueue::main()
 void MergeFTSIndexLogic::OperationQueue::onTimed(const StringView &path,
                                                  const OperationCallBack &callback)
 {
+    Core::shared().setThreadedErrorIgnorable(true);
     callback(path);
+    Core::shared().setThreadedErrorIgnorable(false);
 }
 
 } // namespace WCDB

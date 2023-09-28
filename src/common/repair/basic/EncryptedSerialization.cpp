@@ -91,8 +91,8 @@ Data EncryptedSerializable::encryptedSerialize() const
         = (unsigned char *) sqlite3Codec(pCodec, encryptAddr, pageNo, 6);
         WCTAssert(pData != nullptr);
         if (*pData == 0 && memcmp(pData, pData + 1, pageSize - 1) == 0) {
-            Error error(Error::Code::Error,
-                        Error::Level::Error,
+            Error error(Error::Code::Corrupt,
+                        Error::Level::Warning,
                         StringView::formatted(
                         "fail to encrypt data at page %d, total page %d", pageNo, pageCount));
             Notifier::shared().notify(error);

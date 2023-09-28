@@ -29,8 +29,8 @@ public class WCDBException extends RuntimeException {
     public enum Level{
         Ignore,
         Debug,
-        Warning,
         Notice,
+        Warning,
         Error,
         Fatal,
         Unknown;
@@ -41,9 +41,9 @@ public class WCDBException extends RuntimeException {
                 case 2:
                     return Debug;
                 case 3:
-                    return Warning;
-                case 4:
                     return Notice;
+                case 4:
+                    return Warning;
                 case 5:
                     return Error;
                 case 6:
@@ -59,10 +59,10 @@ public class WCDBException extends RuntimeException {
                     return "IGNORE";
                 case Debug:
                     return "DEBUG";
-                case Warning:
-                    return "WARNING";
                 case Notice:
                     return "NOTICE";
+                case Warning:
+                    return "WARNING";
                 case Error:
                     return "ERROR";
                 case Fatal:
@@ -249,9 +249,9 @@ public class WCDBException extends RuntimeException {
         ConstraintRowID(2579),          // Code.Constraint | (10 << 8)
         NoticeRecoverWal(283),          // Code.Notice | (1 << 8)
         NoticeRecoverRollback(539),     // Code.Notice | (2 << 8)
-        WarningAutoIndex(284),          // Code.Warning | (2 << 8)
-        AuthorizationUser(279),         // Code.Authorization | (2 << 8)
-        OKLoadPermanently(256),         // Code.OK | (2 << 8)
+        WarningAutoIndex(284),          // Code.Warning | (1 << 8)
+        AuthorizationUser(279),         // Code.Authorization | (1 << 8)
+        OKLoadPermanently(256),         // Code.OK | (1 << 8)
         Unknown(-1);
         private final int value;
 
