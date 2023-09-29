@@ -828,6 +828,10 @@
 		0D3FFA492A2F2911002DF7CD /* SysTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* SysTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D47A9772A6E333D008E9E2C /* MigrationTestObjectBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D47A9762A6E333D008E9E2C /* MigrationTestObjectBase.mm */; };
 		0D4947D0299DE22D00F9518E /* WCTBridgeProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036E50B828115B1D007365CD /* WCTBridgeProperty.mm */; };
+		0D4F0F952AC5728A0067027E /* WCTPerformanceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4F0F942AC5728A0067027E /* WCTPerformanceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D4F0F962AC5728A0067027E /* WCTPerformanceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4F0F942AC5728A0067027E /* WCTPerformanceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D4F0F982AC572B20067027E /* WCTPerformanceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F0F972AC572B20067027E /* WCTPerformanceInfo.mm */; };
+		0D4F0F992AC572B20067027E /* WCTPerformanceInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D4F0F972AC572B20067027E /* WCTPerformanceInfo.mm */; };
 		0D4FE5EF29482F4D0061C3CA /* Builtin.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D4FE5EE29482F4D0061C3CA /* Builtin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5363EA290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
 		0D5363EB290A65390026A4DC /* Master.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363E8290A65390026A4DC /* Master.cpp */; };
@@ -3668,6 +3672,9 @@
 		0D3FFA452A2F2911002DF7CD /* SysTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SysTypes.h; sourceTree = "<group>"; };
 		0D47A9752A6E332B008E9E2C /* MigrationTestObjectBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationTestObjectBase.h; sourceTree = "<group>"; };
 		0D47A9762A6E333D008E9E2C /* MigrationTestObjectBase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTestObjectBase.mm; sourceTree = "<group>"; };
+		0D4F0F942AC5728A0067027E /* WCTPerformanceInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceInfo.h; sourceTree = "<group>"; };
+		0D4F0F972AC572B20067027E /* WCTPerformanceInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTPerformanceInfo.mm; sourceTree = "<group>"; };
+		0D4F0F9A2AC576560067027E /* WCTPerformanceInfo+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTPerformanceInfo+Private.h"; sourceTree = "<group>"; };
 		0D4FE5EE29482F4D0061C3CA /* Builtin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Builtin.h; sourceTree = "<group>"; };
 		0D5363E8290A65390026A4DC /* Master.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Master.cpp; sourceTree = "<group>"; };
 		0D5363E9290A65390026A4DC /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
@@ -6709,6 +6716,9 @@
 				2386B3C21ED442FE000B72F6 /* WCTError.h */,
 				2386B3C31ED442FE000B72F6 /* WCTError.mm */,
 				2386B3C41ED442FE000B72F6 /* WCTError+Private.h */,
+				0D4F0F942AC5728A0067027E /* WCTPerformanceInfo.h */,
+				0D4F0F9A2AC576560067027E /* WCTPerformanceInfo+Private.h */,
+				0D4F0F972AC572B20067027E /* WCTPerformanceInfo.mm */,
 			);
 			path = monitor;
 			sourceTree = "<group>";
@@ -7984,6 +7994,7 @@
 				3960D89C2319258B00EF05D1 /* SyntaxExplainSTMT.hpp in Headers */,
 				23EEDCD4217DFADC006E9E73 /* StatementDropView.hpp in Headers */,
 				3960D8A02319288C00EF05D1 /* StatementExplain.hpp in Headers */,
+				0D4F0F952AC5728A0067027E /* WCTPerformanceInfo.h in Headers */,
 				23775B7820AD666900E21AB0 /* Backup.hpp in Headers */,
 				23AD52D820DB4A3C00664B62 /* MasterItem.hpp in Headers */,
 				03E3181128A21B0A00540CB1 /* Database.hpp in Headers */,
@@ -8482,6 +8493,7 @@
 				7521D962291E9ABB009642EF /* SQLite.h in Headers */,
 				7521D963291E9ABB009642EF /* SyntaxPragma.hpp in Headers */,
 				7521D964291E9ABB009642EF /* WCTBinding.h in Headers */,
+				0D4F0F962AC5728A0067027E /* WCTPerformanceInfo.h in Headers */,
 				7521D965291E9ABB009642EF /* WCTDatabase+Migration.h in Headers */,
 				7521D966291E9ABB009642EF /* WCTDatabase+Convenient.h in Headers */,
 				7521D968291E9ABB009642EF /* WCTSelect.h in Headers */,
@@ -10228,6 +10240,7 @@
 				75C17A9328D0D3DD009C342E /* TransactionInterface.swift in Sources */,
 				23EEDCFD217DFADC006E9E73 /* SyntaxForeignKeyClause.cpp in Sources */,
 				23EEDC8D217DFADC006E9E73 /* IndexedColumn.cpp in Sources */,
+				0D4F0F982AC572B20067027E /* WCTPerformanceInfo.mm in Sources */,
 				75B698D6290AD4C0006E1F8F /* BaseTokenizerUtil.cpp in Sources */,
 				23EEDC9D217DFADC006E9E73 /* RaiseFunction.cpp in Sources */,
 				75AF6AD728544C8800A7C43D /* TableOrSubqueryBridge.cpp in Sources */,
@@ -10649,6 +10662,7 @@
 				7521D701291E9ABB009642EF /* PageBasedFileHandle.cpp in Sources */,
 				7521D703291E9ABB009642EF /* Progress.cpp in Sources */,
 				7521D704291E9ABB009642EF /* Mechanic.cpp in Sources */,
+				0D4F0F992AC572B20067027E /* WCTPerformanceInfo.mm in Sources */,
 				7521D705291E9ABB009642EF /* WCTDatabase+Table.mm in Sources */,
 				7521D707291E9ABB009642EF /* SyntaxUpdateSTMT.cpp in Sources */,
 				7521D70A291E9ABB009642EF /* NSDate+WCTColumnCoding.mm in Sources */,

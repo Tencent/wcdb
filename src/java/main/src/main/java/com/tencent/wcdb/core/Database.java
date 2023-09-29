@@ -206,12 +206,33 @@ public class Database extends HandleORMOperation {
 
     private static native void setConfig(long self, String configName, Config invocation, Config unInvocation, int priority);
 
-    public interface PerformanceTracer {
-        void onTrace(long tag, String path, long handleId, String sql, double time);
+    public static class PerformanceInfo {
+        public int tablePageReadCount;
+        public int tablePageWriteCount;
+        public int indexPageReadCount;
+        public int indexPageWriteCount;
+        public int overflowPageReadCount;
+        public int overflowPageWriteCount;
+        public long costInNanoseconds;
     }
 
-    private static void onTracePerformance(PerformanceTracer tracer, long tag, String path, long handleId, String sql, double time) {
-        tracer.onTrace(tag, path, handleId, sql, time);
+    public interface PerformanceTracer {
+        void onTrace(long tag, String path, long handleId, String sql, PerformanceInfo info);
+    }
+
+    private static void onTracePerformance(PerformanceTracer tracer, long tag, String path, long handleId, String sql, long costInNanoseconds, int[] infoValues) {
+        PerformanceInfo info = null;
+        if(infoValues != null && infoValues.length == 6){
+            info = new PerformanceInfo();
+            info.tablePageReadCount = infoValues[0];
+            info.tablePageWriteCount = infoValues[1];
+            info.indexPageReadCount = infoValues[2];
+            info.indexPageWriteCount = infoValues[3];
+            info.overflowPageReadCount = infoValues[4];
+            info.overflowPageWriteCount = infoValues[5];
+            info.costInNanoseconds = costInNanoseconds;
+        }
+        tracer.onTrace(tag, path, handleId, sql, info);
     }
 
     public static native void globalTracePerformance(PerformanceTracer tracer);

@@ -173,6 +173,7 @@ public:
 
 #pragma mark - Notification
 public:
+    typedef HandleNotification::PerformanceInfo PerformanceInfo;
     typedef HandleNotification::PerformanceNotification PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);

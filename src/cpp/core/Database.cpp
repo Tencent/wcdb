@@ -198,9 +198,45 @@ void Database::traceError(ErrorNotification trace)
     Core::shared().setNotificationWhenErrorTraced(getPath(), trace);
 }
 
+static_assert(sizeof(Database::PerformanceInfo) == sizeof(InnerHandle::PerformanceInfo), "");
+static_assert(offsetof(Database::PerformanceInfo, tablePageReadCount)
+              == offsetof(InnerHandle::PerformanceInfo, tablePageReadCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, tablePageWriteCount)
+              == offsetof(InnerHandle::PerformanceInfo, tablePageWriteCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, indexPageReadCount)
+              == offsetof(InnerHandle::PerformanceInfo, indexPageReadCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, indexPageWriteCount)
+              == offsetof(InnerHandle::PerformanceInfo, indexPageWriteCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, overflowPageReadCount)
+              == offsetof(InnerHandle::PerformanceInfo, overflowPageReadCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, overflowPageWriteCount)
+              == offsetof(InnerHandle::PerformanceInfo, overflowPageWriteCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, costInNanoseconds)
+              == offsetof(InnerHandle::PerformanceInfo, costInNanoseconds),
+              "");
+
 void Database::globalTracePerformance(Database::PerformanceNotification trace)
 {
-    Core::shared().setNotificationWhenPerformanceGlobalTraced(trace);
+    if (trace != nullptr) {
+        Core::shared().setNotificationWhenPerformanceGlobalTraced(
+        [trace](long tag,
+                const UnsafeStringView& path,
+                const void* handleIdentifier,
+                const UnsafeStringView& sql,
+                const InnerHandle::PerformanceInfo& info) {
+            PerformanceInfo newInfo;
+            memcpy(&newInfo, &info, sizeof(info));
+            trace(tag, path, (uint64_t) handleIdentifier, sql, newInfo);
+        });
+    } else {
+        Core::shared().setNotificationWhenPerformanceGlobalTraced(nullptr);
+    }
 }
 
 void Database::tracePerformance(Database::PerformanceNotification trace)
@@ -208,7 +244,16 @@ void Database::tracePerformance(Database::PerformanceNotification trace)
     if (trace != nullptr) {
         m_innerDatabase->setConfig(
         PerformanceTraceConfigName,
-        std::static_pointer_cast<Config>(std::make_shared<PerformanceTraceConfig>(trace)),
+        std::static_pointer_cast<Config>(std::make_shared<PerformanceTraceConfig>(
+        [trace](long tag,
+                const UnsafeStringView& path,
+                const void* handleIdentifier,
+                const UnsafeStringView& sql,
+                const InnerHandle::PerformanceInfo& info) {
+            PerformanceInfo newInfo;
+            memcpy(&newInfo, &info, sizeof(info));
+            trace(tag, path, (uint64_t) handleIdentifier, sql, newInfo);
+        })),
         Configs::Priority::Highest);
     } else {
         m_innerDatabase->removeConfig(PerformanceTraceConfigName);

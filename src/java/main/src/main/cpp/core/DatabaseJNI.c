@@ -208,17 +208,30 @@ void WCDBJNIDatabasePerformanceTrace(jobject tracer,
                                      const char* path,
                                      unsigned long long handleId,
                                      const char* sql,
-                                     double cost)
+                                     const CPPPerformanceInfo* info)
 {
     WCDBJNITryGetEnvOr(return );
     WCDBJNITryGetDatabaseMethodId("onTracePerformance",
                                   "(" WCDBJNIDatabaseSignature "$PerformanceTracer;J" WCDBJNIStringSignature
-                                  "J" WCDBJNIStringSignature "D)V",
+                                  "J" WCDBJNIStringSignature "J[I)V",
                                   return );
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
-    (*env)->CallStaticVoidMethod(
-    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) tag, jpath, (jlong) handleId, jsql, (jdouble) cost);
+    jint size = sizeof(CPPPerformanceInfo) / sizeof(int) - 2;
+    jintArray infoValues = (*env)->NewIntArray(env, size);
+    if (infoValues != NULL) {
+        (*env)->SetIntArrayRegion(env, infoValues, 0, size, (jint*) info);
+    }
+    (*env)->CallStaticVoidMethod(env,
+                                 WCDBJNIGetDatabaseClass(),
+                                 g_methodId,
+                                 tracer,
+                                 (jlong) tag,
+                                 jpath,
+                                 (jlong) handleId,
+                                 jsql,
+                                 (jlong) info->costInNanoseconds,
+                                 infoValues);
     WCDBJNITryDetach;
 }
 
@@ -226,7 +239,7 @@ void WCDBJNIDatabaseClassMethod(globalTracePerformance, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseGlobalTracePerformance2(
+    WCDBDatabaseGlobalTracePerformance(
     tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
@@ -235,7 +248,7 @@ void WCDBJNIDatabaseClassMethod(tracePerformance, jlong self, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseTracePerformance2(
+    WCDBDatabaseTracePerformance(
     selfStruct, tracer != NULL ? WCDBJNIDatabasePerformanceTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 

@@ -50,26 +50,58 @@
 
 - (void)test_trace_performance
 {
-    TestCaseAssertTrue([self createValueTable]);
+    TestCaseAssertTrue([self createObjectTable]);
 
-    WCDB::MultiRowsValue objects = [Random.shared autoIncrementTestCaseValuesWithCount:10000];
-
-    NSMutableArray<NSString *> *expectedFootprints = [[NSMutableArray alloc] initWithObjects:
-                                                                             @"BEGIN IMMEDIATE",
-                                                                             @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
-                                                                             @"COMMIT",
-                                                                             nil];
+    std::vector<CPPTestCaseObject> objects;
+    for (int i = 0; i < 1000; i++) {
+        objects.emplace_back(0, [Random.shared stringWithLength:4096].UTF8String);
+        objects.back().isAutoIncrement = true;
+    }
+    int testCount = 0;
     self.database->tracePerformance(nullptr);
-    self.database->tracePerformance([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, double cost, const void *) {
+    self.database->tracePerformance([&](long tag, const WCDB::UnsafeStringView &path, uint64_t, const WCDB::UnsafeStringView &sql, const WCDB::Database::PerformanceInfo &info) {
         XCTAssertEqual(tag, self.database->getTag());
         XCTAssertTrue(path.equal(self.database->getPath()));
-        XCTAssertTrue(cost >= 0);
-        if (strcmp(sql.data(), expectedFootprints.firstObject.UTF8String) == 0) {
-            [expectedFootprints removeObjectAtIndex:0];
+        if (sql.hasPrefix("COMMIT")) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount > 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount > 0);
+            XCTAssertTrue(info.tablePageReadCount == 0);
+            XCTAssertTrue(info.indexPageReadCount == 0);
+            XCTAssertTrue(info.overflowPageReadCount == 0);
+            testCount++;
+        } else if (sql.hasPrefix("CREATE INDEX")) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 1);
+            XCTAssertTrue(info.indexPageWriteCount > 0);
+            XCTAssertTrue(info.overflowPageWriteCount == objects.size());
+            XCTAssertTrue(info.tablePageReadCount > 0);
+            XCTAssertTrue(info.indexPageReadCount >= 0);
+            XCTAssertTrue(info.overflowPageReadCount == objects.size());
+            testCount++;
+        } else if (sql.hasPrefix("SELECT")) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount == 0);
+            testCount++;
+            if (sql.hasSuffix("ORDER BY content")) {
+                XCTAssertTrue(info.tablePageReadCount == 0);
+                XCTAssertTrue(info.indexPageReadCount > 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.size());
+            } else {
+                XCTAssertTrue(info.tablePageReadCount > 0);
+                XCTAssertTrue(info.indexPageReadCount == 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.size());
+            }
         }
     });
-    TestCaseAssertTrue(self.database->insertRows(objects, self.columns, self.tableName.UTF8String));
-    TestCaseAssertTrue(expectedFootprints.count == 0);
+    TestCaseAssertTrue(self.table.insertObjects(objects));
+    TestCaseAssertTrue(self.database->execute(WCDB::StatementCreateIndex().createIndex("testIndex").table(self.tableName).indexed(WCDB_FIELD(CPPTestCaseObject::content))));
+    TestCaseAssertTrue(self.table.getAllObjects().value().size() == objects.size());
+    TestCaseAssertTrue(self.table.getAllObjects(WCDB::Expression(), WCDB_FIELD(CPPTestCaseObject::content)).value().size() == objects.size());
+    TestCaseAssertTrue(testCount == 4);
     self.database->tracePerformance(nil);
 }
 
@@ -132,26 +164,61 @@
 
 - (void)test_global_trace_performance
 {
-    WCDB::MultiRowsValue objects = [Random.shared autoIncrementTestCaseValuesWithCount:10000];
-
-    NSMutableArray<NSString *> *expectedFootprints = [[NSMutableArray alloc] initWithObjects:
-                                                                             @"BEGIN IMMEDIATE",
-                                                                             @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
-                                                                             @"COMMIT",
-                                                                             nil];
-    WCDB::Database::globalTracePerformance([&](long tag, const WCDB::UnsafeStringView &path, const WCDB::UnsafeStringView &sql, double cost, const void *) {
+    std::vector<CPPTestCaseObject> objects;
+    for (int i = 0; i < 1000; i++) {
+        objects.emplace_back(0, [Random.shared stringWithLength:4096].UTF8String);
+        objects.back().isAutoIncrement = true;
+    }
+    int testCount = 0;
+    bool lastSQLIsInsert = false;
+    WCDB::Database::globalTracePerformance([&](long tag, const WCDB::UnsafeStringView &path, uint64_t, const WCDB::UnsafeStringView &sql, const WCDB::Database::PerformanceInfo &info) {
         if (!path.equal(self.database->getPath())) {
             return;
         }
-        XCTAssertTrue(cost >= 0);
         XCTAssertEqual(tag, self.database->getTag());
-        if (strcmp(sql.data(), expectedFootprints.firstObject.UTF8String) == 0) {
-            [expectedFootprints removeObjectAtIndex:0];
+        XCTAssertTrue(path.equal(self.database->getPath()));
+        if (sql.hasPrefix("COMMIT") && lastSQLIsInsert) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount > 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount > 0);
+            XCTAssertTrue(info.tablePageReadCount == 0);
+            XCTAssertTrue(info.indexPageReadCount == 0);
+            XCTAssertTrue(info.overflowPageReadCount == 0);
+            testCount++;
+        } else if (sql.hasPrefix("CREATE INDEX")) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 1);
+            XCTAssertTrue(info.indexPageWriteCount > 0);
+            XCTAssertTrue(info.overflowPageWriteCount == objects.size());
+            XCTAssertTrue(info.tablePageReadCount > 0);
+            XCTAssertTrue(info.indexPageReadCount >= 0);
+            XCTAssertTrue(info.overflowPageReadCount == objects.size());
+            testCount++;
+        } else if (sql.hasPrefix("SELECT")) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount == 0);
+            testCount++;
+            if (sql.hasSuffix("ORDER BY content")) {
+                XCTAssertTrue(info.tablePageReadCount == 0);
+                XCTAssertTrue(info.indexPageReadCount > 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.size());
+            } else {
+                XCTAssertTrue(info.tablePageReadCount > 0);
+                XCTAssertTrue(info.indexPageReadCount == 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.size());
+            }
         }
+        lastSQLIsInsert = sql.hasPrefix("INSERT");
     });
-    TestCaseAssertTrue([self createValueTable]);
-    TestCaseAssertTrue(self.database->insertRows(objects, self.columns, self.tableName.UTF8String));
-    TestCaseAssertTrue(expectedFootprints.count == 0);
+    TestCaseAssertTrue([self createObjectTable]);
+    TestCaseAssertTrue(self.table.insertObjects(objects));
+    TestCaseAssertTrue(self.database->execute(WCDB::StatementCreateIndex().createIndex("testIndex").table(self.tableName).indexed(WCDB_FIELD(CPPTestCaseObject::content))));
+    TestCaseAssertTrue(self.table.getAllObjects().value().size() == objects.size());
+    TestCaseAssertTrue(self.table.getAllObjects(WCDB::Expression(), WCDB_FIELD(CPPTestCaseObject::content)).value().size() == objects.size());
+    TestCaseAssertTrue(testCount == 4);
     WCDB::Database::globalTracePerformance(nil);
 }
 

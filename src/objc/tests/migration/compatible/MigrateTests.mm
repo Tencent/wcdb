@@ -200,7 +200,7 @@
         [self.database traceError:^(WCTError *error) {
             strongify_or_return(self);
             if (error.code == WCTErrorCodeIOError
-                && error.level == WCTErrorLevelError) {
+                && error.level == WCTErrorLevelWarning) {
                 [numberOfFailures increment];
             }
         }];

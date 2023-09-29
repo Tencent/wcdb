@@ -69,7 +69,16 @@ private:
 
 #pragma mark - Performance
 public:
-    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const UnsafeStringView &sql, double cost, const void *handle)> PerformanceNotification;
+    typedef struct PerformanceInfo {
+        int tablePageReadCount;
+        int tablePageWriteCount;
+        int indexPageReadCount;
+        int indexPageWriteCount;
+        int overflowPageReadCount;
+        int overflowPageWriteCount;
+        int64_t costInNanoseconds;
+    } PerformanceInfo;
+    typedef std::function<void(const Tag &tag, const UnsafeStringView &path, const void *handle, const UnsafeStringView &sql, PerformanceInfo info)> PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
 
@@ -77,9 +86,9 @@ private:
     bool arePerformanceTraceNotificationsSet() const;
     void postPerformanceTraceNotification(const Tag &tag,
                                           const UnsafeStringView &path,
+                                          const void *handle,
                                           const UnsafeStringView &sql,
-                                          const int64_t &cost,
-                                          const void *handle);
+                                          const PerformanceInfo &info);
     StringViewMap<PerformanceNotification> m_performanceNotifications;
 
 #pragma mark - Committed

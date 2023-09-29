@@ -183,23 +183,61 @@ class TracerTests: DatabaseTestCase {
         var isAutoIncrement: Bool = false
     }
 
-    func testGlobalTracePerformanceCommit() {
+    func testGlobalTracePerformance() {
         // Give
         let tableName = TracerObject.name
         let expectedTag = self.database.tag
         let expectedPath = self.database.path
-        let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?1)"
-
+        var objects: [TestObject] = []
+        for _ in (0..<1000) {
+            let object = TestObject()
+            object.isAutoIncrement = true
+            object.variable2 = Random.string(withLength: 4096)
+            objects.append(object)
+        }
+        var testCount = 0
+        var lastSQLIsInsert = false
         // Then
-        var `catch` = false
-        Database.globalTracePerformance { (tag, path, _, sql, cost) in
+        Database.globalTracePerformance { (tag, path, _, sql, info) in
             guard path == self.database.path else {
                 return
             }
             XCTAssertEqual(tag, expectedTag)
-            if sql == expectedSQL && cost > 0 {
-                `catch` = true
+            if sql.hasPrefix("COMMIT") && lastSQLIsInsert {
+                XCTAssertTrue(info.costInNanoseconds > 0)
+                XCTAssertTrue(info.tablePageWriteCount > 0)
+                XCTAssertTrue(info.indexPageWriteCount == 0)
+                XCTAssertTrue(info.overflowPageWriteCount > 0)
+                XCTAssertTrue(info.tablePageReadCount == 0)
+                XCTAssertTrue(info.indexPageReadCount == 0)
+                XCTAssertTrue(info.overflowPageReadCount == 0)
+                testCount += 1
+            } else if sql.hasPrefix("CREATE INDEX") {
+                XCTAssertTrue(info.costInNanoseconds > 0)
+                XCTAssertTrue(info.tablePageWriteCount == 1)
+                XCTAssertTrue(info.indexPageWriteCount > 0)
+                XCTAssertTrue(info.overflowPageWriteCount == objects.count)
+                XCTAssertTrue(info.tablePageReadCount > 0)
+                XCTAssertTrue(info.indexPageReadCount >= 0)
+                XCTAssertTrue(info.overflowPageReadCount == objects.count)
+                testCount += 1
+            } else if sql.hasPrefix("SELECT") {
+                XCTAssertTrue(info.costInNanoseconds > 0)
+                XCTAssertTrue(info.tablePageWriteCount == 0)
+                XCTAssertTrue(info.indexPageWriteCount == 0)
+                XCTAssertTrue(info.overflowPageWriteCount == 0)
+                testCount += 1
+                if sql.hasSuffix("ORDER BY variable2") {
+                    XCTAssertTrue(info.tablePageReadCount == 0)
+                    XCTAssertTrue(info.indexPageReadCount > 0)
+                    XCTAssertTrue(info.overflowPageReadCount == objects.count)
+                } else {
+                    XCTAssertTrue(info.tablePageReadCount > 0)
+                    XCTAssertTrue(info.indexPageReadCount == 0)
+                    XCTAssertTrue(info.overflowPageReadCount == objects.count)
+                }
             }
+            lastSQLIsInsert = sql.hasPrefix("INSERT")
         }
 
         // Give
@@ -210,14 +248,15 @@ class TracerTests: DatabaseTestCase {
         database.tag = self.recommendTag
 
         // When
-        XCTAssertNoThrow(try database.create(table: tableName, of: TracerObject.self))
-        let template = TracerObject()
-        template.isAutoIncrement = true
-        let objects = [TracerObject](repeating: template, count: 100000)
+        XCTAssertNoThrow(try database.create(table: tableName, of: TestObject.self))
         XCTAssertNoThrow(try database.insert(objects, intoTable: tableName))
+        XCTAssertNoThrow(try database.create(index: "testIndex", with: TestObject.Properties.variable2, forTable: tableName))
+        let result1: [TestObject] = WCDBAssertNoThrowReturned(try self.database.getObjects(fromTable: tableName))
+        XCTAssertTrue(result1.count == objects.count)
+        let result2: [TestObject] = WCDBAssertNoThrowReturned(try self.database.getObjects(fromTable: tableName, orderBy: [TestObject.Properties.variable2]))
+        XCTAssertTrue(result2.count == objects.count)
         XCTAssertNoThrow(database.close())
-
-        XCTAssertTrue(`catch`)
+        XCTAssertTrue(testCount == 4)
     }
 
     func testTraceRollback() {
