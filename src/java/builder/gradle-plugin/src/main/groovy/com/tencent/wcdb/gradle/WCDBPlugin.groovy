@@ -11,13 +11,19 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.compile.JavaCompile
 
 class WCDBPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        if (!project.plugins.hasPlugin(AppPlugin) && !project.plugins.hasPlugin(LibraryPlugin)) {
-            throw new GradleException("WCDBPlugin: Android application or library plugin required.")
+        if (!project.plugins.hasPlugin(JavaPlugin) &&
+            !project.plugins.hasPlugin(AppPlugin) &&
+            !project.plugins.hasPlugin(LibraryPlugin)) {
+
+            throw new GradleException("WCDBPlugin: Java or Android application/library plugin required.")
         }
 
         project.configurations.maybeCreate("wcdbOrmClasspath")
@@ -43,7 +49,7 @@ class WCDBPlugin implements Plugin<Project> {
                 def vName = variant.name
                 def cvName = vName.capitalize()
                 def androidSourceSetNames = variant.sourceSets*.name
-                def destDir = new File(project.buildDir, "generated/source/wcdb/${vName}")
+                def destDir = new File(project.buildDir, "generated/sources/wcdb/${vName}")
 
                 def generateTask = project.tasks.register("generate${cvName}WcdbOrm", JavaCompile) {
                     androidSourceSetNames.each {
@@ -64,7 +70,31 @@ class WCDBPlugin implements Plugin<Project> {
             getNotTestVariants(android).configureEach(variantConfigure)
             android.testVariants.configureEach(variantConfigure)
         } else {
-            // TODO
+            final SourceSetContainer sourceSets = project.sourceSets
+            sourceSets.configureEach {
+                it.extensions.create('wcdbOrm', WCDBOrmSourceDirectorySet, project, it.name)
+            }
+
+            project.afterEvaluate {
+                sourceSets.configureEach {
+                    java.srcDirs(wcdbOrm.getSrcDirs().toArray())
+
+                    def ssName = SourceSet.isMain(it) ? '' : it.name.capitalize()
+                    def destDir = new File(project.buildDir, "generated/sources/wcdb/${ssName}")
+                    def generateTask = project.tasks.register("generate${ssName}WcdbOrm", JavaCompile) {
+                        WCDBOrmSourceDirectorySet origSs = wcdbOrm
+                        def ss = new DefaultSourceDirectorySet(origSs)
+                        ss.setSrcDirs(origSs.srcDirs)
+                        ss.setIncludes(['**/*.java'])
+                        source(ss)
+
+                        classpath = project.configurations.wcdbOrmClasspath
+                        options.annotationProcessorPath = project.configurations.wcdbOrmClasspath
+                        options.compilerArgs.addAll(["-proc:only", "-implicit:none"])
+                        destinationDirectory = destDir
+                    }
+                }
+            }
         }
     }
 
@@ -76,11 +106,11 @@ class WCDBPlugin implements Plugin<Project> {
         }
     }
 
-    private String myVersion = null
-    private String getPluginVersion() {
+    private static String myVersion = null
+    private static String getPluginVersion() {
         if (myVersion == null) {
             def prop = new Properties()
-            prop.load(getClass().getClassLoader().getResourceAsStream('wcdb-gradle-plugin.properties'))
+            prop.load(getClassLoader().getResourceAsStream('wcdb-gradle-plugin.properties'))
             myVersion = prop.getProperty('version')
         }
         return myVersion
