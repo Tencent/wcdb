@@ -2,7 +2,7 @@ plugins { id 'com.android.library' }
 apply from: rootProject.file('gradle/WeChatPublish.gradle')
 
 android {
-    namespace 'com.tencent.wcdb2'
+    namespace 'com.tencent.wcdb.compat'
     compileSdk 33
 
     defaultConfig {
