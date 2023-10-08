@@ -2,6 +2,7 @@ package com.tencent.wcdb.compat;
 
 import android.database.sqlite.SQLiteClosable;
 import android.database.sqlite.SQLiteDoneException;
+import android.os.CancellationSignal;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.core.Database;
@@ -24,7 +25,9 @@ public final class SQLiteStatement extends SQLiteClosable {
         }
     }
 
-    private void execute(Handle handle) {
+    private void execute(Handle handle, CancellationSignal cancellationSignal) {
+        DatabaseUtils.bindCancellationSignal(handle, cancellationSignal);
+
         PreparedStatement stmt = handle.preparedWithMainStatement(mSql);
         int i = 1;
         for (Object arg : mBindArgs) {
@@ -36,7 +39,9 @@ public final class SQLiteStatement extends SQLiteClosable {
         stmt.finalizeStatement();
     }
 
-    private Value executeForValue(Handle handle) {
+    private Value executeForValue(Handle handle, CancellationSignal cancellationSignal) {
+        DatabaseUtils.bindCancellationSignal(handle, cancellationSignal);
+
         PreparedStatement stmt = handle.preparedWithMainStatement(mSql);
         int i = 1;
         for (Object arg : mBindArgs) {
@@ -59,8 +64,12 @@ public final class SQLiteStatement extends SQLiteClosable {
      *         some reason
      */
     public void execute() {
+        execute(null);
+    }
+
+    public void execute(CancellationSignal cancellationSignal) {
         try (Handle handle = mDB.getHandle(true)) {
-            execute(handle);
+            execute(handle, cancellationSignal);
         }
     }
 
@@ -73,8 +82,12 @@ public final class SQLiteStatement extends SQLiteClosable {
      *         some reason
      */
     public int executeUpdateDelete() {
+        return executeUpdateDelete(null);
+    }
+
+    public int executeUpdateDelete(CancellationSignal cancellationSignal) {
         try (Handle handle = mDB.getHandle(true)) {
-            execute(handle);
+            execute(handle, cancellationSignal);
             return handle.getChanges();
         }
     }
@@ -89,8 +102,12 @@ public final class SQLiteStatement extends SQLiteClosable {
      *         some reason
      */
     public long executeInsert() {
+        return executeInsert(null);
+    }
+
+    public long executeInsert(CancellationSignal cancellationSignal) {
         try (Handle handle = mDB.getHandle(true)) {
-            execute(handle);
+            execute(handle, cancellationSignal);
             return handle.getLastInsertedRowId();
         }
     }
@@ -104,8 +121,12 @@ public final class SQLiteStatement extends SQLiteClosable {
      * @throws android.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public long simpleQueryForLong() {
+        return simpleQueryForLong(null);
+    }
+
+    public long simpleQueryForLong(CancellationSignal cancellationSignal) {
         try (Handle handle = mDB.getHandle(true)) {
-            return executeForValue(handle).getLong();
+            return executeForValue(handle, cancellationSignal).getLong();
         }
     }
 
@@ -118,8 +139,12 @@ public final class SQLiteStatement extends SQLiteClosable {
      * @throws android.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public String simpleQueryForString() {
+        return simpleQueryForString(null);
+    }
+
+    public String simpleQueryForString(CancellationSignal cancellationSignal) {
         try (Handle handle = mDB.getHandle(true)) {
-            return executeForValue(handle).getText();
+            return executeForValue(handle, cancellationSignal).getText();
         }
     }
 
@@ -183,6 +208,21 @@ public final class SQLiteStatement extends SQLiteClosable {
         bind(index, value);
     }
 
+    public void bindAllArgs(Object[] bindArgs) {
+        if (bindArgs == null) return;
+
+        int length = bindArgs.length;
+        if (mBindArgs.size() < length) {
+            mBindArgs.ensureCapacity(length);
+            do {
+                mBindArgs.add(null);
+            } while (mBindArgs.size() < length);
+        }
+        for (int i = 0; i < length; ++i) {
+            mBindArgs.set(i, bindArgs[i]);
+        }
+    }
+
     /**
      * Clears all existing bindings. Unset bindings are treated as NULL.
      */
@@ -203,9 +243,9 @@ public final class SQLiteStatement extends SQLiteClosable {
 
         if (mBindArgs.size() < index) {
             mBindArgs.ensureCapacity(index);
-            while (mBindArgs.size() < index) {
+            do {
                 mBindArgs.add(null);
-            }
+            } while (mBindArgs.size() < index);
         }
         mBindArgs.set(index - 1, value);
     }

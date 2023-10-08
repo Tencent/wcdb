@@ -627,26 +627,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public Cursor rawQuery(String sql, Object[] selectionArgs,
                            CancellationSignal cancellationSignal) {
-        final Handle.CancellationSignal realSignal;
-        if (cancellationSignal == null) {
-            realSignal = null;
-        } else {
-            realSignal = new Handle.CancellationSignal();
-            if (cancellationSignal.isCanceled()) {
-                realSignal.cancel();
-            }
-            cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
-                @Override
-                public void onCancel() {
-                    realSignal.cancel();
-                }
-            });
-        }
-
         try (Handle handle = mDB.getHandle(false)) {
-            if (realSignal != null) {
-                handle.attachCancellationSignal(realSignal);
-            }
+            DatabaseUtils.bindCancellationSignal(handle, cancellationSignal);
+
             PreparedStatement stmt = handle.preparedWithMainStatement(sql);
             if (selectionArgs != null) {
                 int nArgs = selectionArgs.length;
@@ -1007,8 +990,12 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @throws SQLException if the SQL string is invalid
      */
     public void execSQL(String sql, Object[] bindArgs) {
+        execSQL(sql, bindArgs, null);
+    }
+
+    public void execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
         try (SQLiteStatement stmt = new SQLiteStatement(mDB, sql, bindArgs)) {
-            stmt.execute();
+            stmt.execute(cancellationSignal);
         }
     }
 
