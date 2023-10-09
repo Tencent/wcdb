@@ -79,22 +79,29 @@ void WCDBDatabaseConfig2(CPPDatabase database,
                          int priority,
                          WCDBContextDestructor _Nonnull destructor);
 
-void WCDBDatabaseGlobalTracePerformance(SwiftClosure* _Nullable tracer);
-void WCDBDatabaseTracePerformance(CPPDatabase database, SwiftClosure* _Nullable tracer);
-
+typedef struct CPPPerformanceInfo {
+    int tablePageReadCount;
+    int tablePageWriteCount;
+    int indexPageReadCount;
+    int indexPageWriteCount;
+    int overflowPageReadCount;
+    int overflowPageWriteCount;
+    long long costInNanoseconds;
+} CPPPerformanceInfo;
 typedef void (*WCDBPerformanceTracer)(void* _Nullable context,
                                       long tag,
                                       const char* _Nonnull path,
                                       unsigned long long handleId,
                                       const char* _Nonnull sql,
-                                      double cost);
-void WCDBDatabaseGlobalTracePerformance2(WCDBPerformanceTracer _Nullable tracer,
-                                         void* _Nullable context,
-                                         WCDBContextDestructor _Nullable destructor);
-void WCDBDatabaseTracePerformance2(CPPDatabase database,
-                                   WCDBPerformanceTracer _Nullable tracer,
-                                   void* _Nullable context,
-                                   WCDBContextDestructor _Nullable destructor);
+                                      const CPPPerformanceInfo* _Nonnull info);
+
+void WCDBDatabaseGlobalTracePerformance(WCDBPerformanceTracer _Nullable tracer,
+                                        void* _Nullable context,
+                                        WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseTracePerformance(CPPDatabase database,
+                                  WCDBPerformanceTracer _Nullable tracer,
+                                  void* _Nullable context,
+                                  WCDBContextDestructor _Nullable destructor);
 
 void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer);
 void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer);

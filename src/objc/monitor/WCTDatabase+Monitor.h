@@ -24,6 +24,7 @@
 
 #import "WCTCommon.h"
 #import "WCTDatabase.h"
+#import "WCTPerformanceInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,7 +36,7 @@ typedef void (^WCTErrorTraceBlock)(WCTError*);
 /**
  Triggered when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, double /* cost */);
+typedef void (^WCTPerformanceTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, WCTPerformanceInfo* /* info */);
 
 /**
  Triggered when a SQL is executed.
@@ -96,17 +97,18 @@ WCDB_API @interface WCTDatabase(Monitor)
  @brief You can register a tracer to monitor the performance of all SQLs.
  It returns:
      1. Every SQL executed by the database.
-     2. Time consuming in seconds.
-     3. Tag of database.
-     4. Path of database.
-     5. The id of the handle executing this SQL.
+     2. Time consuming in nanoseconds.
+     3. Number of reads and writes on different types of db pages.
+     4. Tag of database.
+     5. Path of database.
+     6. The id of the handle executing this SQL.
  
  @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
  
-     [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, uint64_t handleIdentifier, NSString* sql, double cost) {
+     [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, uint64_t handleIdentifier, NSString* sql, WCTPerformanceInfo *info) {
         NSLog(@"Tag: %ld", tag);
         NSLog(@"Path: %@", path);
-        NSLog(@"The handle with id %llu took %f seconds to execute %@", handleIdentifier, cost, sql);
+        NSLog(@"The handle with id %llu took %lld nanoseconds to execute %@", handleIdentifier, info.costInNanoseconds, sql);
      }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.

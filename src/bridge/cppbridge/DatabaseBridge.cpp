@@ -33,9 +33,6 @@
 WCDBDefineNoArgumentSwiftClosureBridgedType(WCDBSwiftDatabaseCloseCallback, void)
 
 WCDBDefineMultiArgumentSwiftClosureBridgedType(
-WCDBSwiftPerformanceTracer, void, long, const char*, uint64_t, const char*, double);
-
-WCDBDefineMultiArgumentSwiftClosureBridgedType(
 WCDBSwiftSQLTracer, void, long, const char*, uint64_t, const char*, const char*)
 
 WCDBDefineOneArgumentSwiftClosureBridgedType(WCDBSwiftErrorTracer, void, CPPError)
@@ -266,75 +263,57 @@ void WCDBDatabaseConfig2(CPPDatabase database,
     priority);
 }
 
-void WCDBDatabaseGlobalTracePerformance(SwiftClosure* _Nullable tracer)
-{
-    WCDBSwiftPerformanceTracer bridgedTracer
-    = WCDBCreateSwiftBridgedClosure(WCDBSwiftPerformanceTracer, tracer);
-    WCDB::InnerHandle::PerformanceNotification callback = nullptr;
-    if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
-        callback = [bridgedTracer](const WCDB::Tag& tag,
-                                   const WCDB::UnsafeStringView& path,
-                                   const WCDB::UnsafeStringView& sql,
-                                   double cost,
-                                   const void* handle) {
-            WCDBSwiftClosureCallWithMultiArgument(
-            bridgedTracer, tag, path.data(), (uint64_t) handle, sql.data(), cost);
-        };
-    }
-    WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
-}
+static_assert(sizeof(CPPPerformanceInfo) == sizeof(WCDB::InnerHandle::PerformanceInfo), "");
+static_assert(offsetof(CPPPerformanceInfo, tablePageReadCount)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, tablePageReadCount),
+              "");
+static_assert(offsetof(CPPPerformanceInfo, tablePageWriteCount)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, tablePageWriteCount),
+              "");
+static_assert(offsetof(CPPPerformanceInfo, indexPageReadCount)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, indexPageReadCount),
+              "");
+static_assert(offsetof(CPPPerformanceInfo, indexPageWriteCount)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, indexPageWriteCount),
+              "");
+static_assert(offsetof(CPPPerformanceInfo, overflowPageReadCount)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, overflowPageReadCount),
+              "");
+static_assert(offsetof(CPPPerformanceInfo, overflowPageWriteCount)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, overflowPageWriteCount),
+              "");
+static_assert(offsetof(CPPPerformanceInfo, costInNanoseconds)
+              == offsetof(WCDB::InnerHandle::PerformanceInfo, costInNanoseconds),
+              "");
 
-void WCDBDatabaseTracePerformance(CPPDatabase database, SwiftClosure* _Nullable tracer)
-{
-    WCDBSwiftPerformanceTracer bridgedTracer
-    = WCDBCreateSwiftBridgedClosure(WCDBSwiftPerformanceTracer, tracer);
-    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    if (WCDBGetSwiftClosure(bridgedTracer) != nullptr) {
-        WCDB::InnerHandle::PerformanceNotification callback
-        = [bridgedTracer](const WCDB::Tag& tag,
-                          const WCDB::UnsafeStringView& path,
-                          const WCDB::UnsafeStringView& sql,
-                          double cost,
-                          const void* handle) {
-              WCDBSwiftClosureCallWithMultiArgument(
-              bridgedTracer, tag, path.data(), (uint64_t) handle, sql.data(), cost);
-          };
-        cppDatabase->setConfig(WCDB::PerformanceTraceConfigName,
-                               std::static_pointer_cast<WCDB::Config>(
-                               std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
-                               WCDB::Configs::Priority::Highest);
-    } else {
-        cppDatabase->removeConfig(WCDB::PerformanceTraceConfigName);
-    }
-}
-
-void WCDBDatabaseGlobalTracePerformance2(WCDBPerformanceTracer _Nullable tracer,
-                                         void* _Nullable context,
-                                         WCDBContextDestructor _Nullable destructor)
+void WCDBDatabaseGlobalTracePerformance(WCDBPerformanceTracer _Nullable tracer,
+                                        void* _Nullable context,
+                                        WCDBContextDestructor _Nullable destructor)
 {
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;
     if (tracer != nullptr) {
         WCDB::Recyclable<void*> recyclableContext(context, destructor);
-        callback = [recyclableContext, tracer](const WCDB::Tag& tag,
-                                               const WCDB::UnsafeStringView& path,
-                                               const WCDB::UnsafeStringView& sql,
-                                               double cost,
-                                               const void* handle) {
-            tracer(recyclableContext.get(),
-                   tag,
-                   path.data(),
-                   (unsigned long long) handle,
-                   sql.data(),
-                   cost);
-        };
+        callback
+        = [recyclableContext, tracer](const WCDB::Tag& tag,
+                                      const WCDB::UnsafeStringView& path,
+                                      const void* handle,
+                                      const WCDB::UnsafeStringView& sql,
+                                      const WCDB::InnerHandle::PerformanceInfo& info) {
+              tracer(recyclableContext.get(),
+                     tag,
+                     path.data(),
+                     (unsigned long long) handle,
+                     sql.data(),
+                     (const CPPPerformanceInfo*) &info);
+          };
     }
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
 }
 
-void WCDBDatabaseTracePerformance2(CPPDatabase database,
-                                   WCDBPerformanceTracer _Nullable tracer,
-                                   void* _Nullable context,
-                                   WCDBContextDestructor _Nullable destructor)
+void WCDBDatabaseTracePerformance(CPPDatabase database,
+                                  WCDBPerformanceTracer _Nullable tracer,
+                                  void* _Nullable context,
+                                  WCDBContextDestructor _Nullable destructor)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (tracer != nullptr) {
@@ -342,15 +321,15 @@ void WCDBDatabaseTracePerformance2(CPPDatabase database,
         WCDB::InnerHandle::PerformanceNotification callback
         = [recyclableContext, tracer](const WCDB::Tag& tag,
                                       const WCDB::UnsafeStringView& path,
+                                      const void* handle,
                                       const WCDB::UnsafeStringView& sql,
-                                      double cost,
-                                      const void* handle) {
+                                      const WCDB::InnerHandle::PerformanceInfo& info) {
               tracer(recyclableContext.get(),
                      tag,
                      path.data(),
                      (unsigned long long) handle,
                      sql.data(),
-                     cost);
+                     (const CPPPerformanceInfo*) &info);
           };
         cppDatabase->setConfig(WCDB::PerformanceTraceConfigName,
                                std::static_pointer_cast<WCDB::Config>(

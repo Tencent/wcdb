@@ -81,10 +81,10 @@ void HandleNotification::postTraceNotification(unsigned int flag, void *P, void 
     } break;
     case SQLITE_TRACE_PROFILE: {
         const char *sql = sqlite3_sql(stmt);
-        sqlite3_int64 *cost = (sqlite3_int64 *) X;
+        PerformanceInfo *info = (PerformanceInfo *) X;
         AbstractHandle *handle = getHandle();
         postPerformanceTraceNotification(
-        handle->getTag(), handle->getPath(), sql, *cost, getHandle());
+        handle->getTag(), handle->getPath(), getHandle(), sql, *info);
     } break;
     default:
         break;
@@ -172,13 +172,13 @@ void HandleNotification::setNotificationWhenPerformanceTraced(const UnsafeString
 
 void HandleNotification::postPerformanceTraceNotification(const Tag &tag,
                                                           const UnsafeStringView &path,
+                                                          const void *handle,
                                                           const UnsafeStringView &sql,
-                                                          const int64_t &cost,
-                                                          const void *handle)
+                                                          const PerformanceInfo &info)
 {
     WCTAssert(!m_performanceNotifications.empty());
     for (const auto &element : m_performanceNotifications) {
-        element.second(tag, path, sql, (double) cost / (int) 1E9, handle);
+        element.second(tag, path, handle, sql, info);
     }
 }
 

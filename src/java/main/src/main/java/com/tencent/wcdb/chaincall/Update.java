@@ -167,8 +167,9 @@ public class Update<T> extends ChainCall<StatementUpdate> {
     public Update<T> execute() throws WCDBException {
         assert object != null || row != null;
         TableBinding<T> binding = Field.getBinding(fields);
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             if(object != null) {
                 preparedStatement.bindObject(object, fields);
             }else if(row != null) {
@@ -176,8 +177,10 @@ public class Update<T> extends ChainCall<StatementUpdate> {
             }
             preparedStatement.step();
             updateChanges();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             invalidateHandle();
         }
         return this;

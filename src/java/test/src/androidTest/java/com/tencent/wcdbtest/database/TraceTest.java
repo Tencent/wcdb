@@ -28,10 +28,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
+import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdb.winq.Pragma;
 import com.tencent.wcdb.winq.StatementCreateIndex;
 import com.tencent.wcdb.winq.StatementPragma;
 import com.tencent.wcdb.winq.StatementSelect;
+import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.base.DBTestObject;
 import com.tencent.wcdbtest.base.RandomTool;
@@ -45,6 +47,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 @RunWith(AndroidJUnit4.class)
 public class TraceTest extends TableTestCase {
@@ -93,53 +96,128 @@ public class TraceTest extends TableTestCase {
 
     @Test
     public void testTracePerformance() throws WCDBException {
+        database.removeFiles();
         createTable();
         database.tracePerformance(null);
-        final List<String> sqls = new ArrayList<String>(){{
-            add("BEGIN IMMEDIATE");
-            add("INSERT INTO testTable(id, content) VALUES(?1, ?2)");
-            add("COMMIT");
-        }};
+        TestObject[] objects = new TestObject[1000];
+        for(int i = 0; i < 1000; i++){
+            TestObject object = new TestObject();
+            object.content = RandomTool.string(4096);
+            objects[i] = object;
+        }
+        WrappedValue testCount = new WrappedValue();
         database.tracePerformance(new Database.PerformanceTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql, double time) {
+            public void onTrace(long tag, String path, long handleId, String sql, Database.PerformanceInfo info) {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
-                assertTrue(time >= 0);
-                if(sql.equals(sqls.get(0))) {
-                    sqls.remove(0);
+                assertNotNull(info);
+                if(sql.startsWith("COMMIT")) {
+                    assertTrue(info.costInNanoseconds > 0);
+                    assertTrue(info.tablePageWriteCount > 0);
+                    assertEquals(0, info.indexPageWriteCount);
+                    assertTrue(info.overflowPageWriteCount > 0);
+                    assertEquals(0, info.tablePageReadCount);
+                    assertEquals(0, info.indexPageReadCount);
+                    assertEquals(0, info.overflowPageReadCount);
+                    testCount.intValue++;
+                } else if(sql.startsWith("CREATE INDEX")) {
+                    assertTrue(info.costInNanoseconds > 0);
+                    assertEquals(1, info.tablePageWriteCount);
+                    assertTrue(info.indexPageWriteCount > 0);
+                    assertEquals(info.overflowPageWriteCount, objects.length);
+                    assertTrue(info.tablePageReadCount > 0);
+                    assertTrue(info.indexPageReadCount >= 0);
+                    assertTrue(info.overflowPageReadCount > objects.length / 2);
+                    testCount.intValue++;
+                } else if(sql.startsWith("SELECT")) {
+                    assertTrue(info.costInNanoseconds > 0);
+                    assertEquals(0, info.tablePageWriteCount);
+                    assertEquals(0, info.indexPageWriteCount);
+                    assertEquals(0, info.overflowPageWriteCount);
+                    testCount.intValue++;
+                    if(sql.endsWith("ORDER BY content DESC")){
+                        assertEquals(0, info.tablePageReadCount);
+                        assertTrue(info.indexPageReadCount > 0);
+                        assertEquals(info.overflowPageReadCount, objects.length);
+                    }else{
+                        assertTrue(info.tablePageReadCount > 0);
+                        assertEquals(0, info.indexPageReadCount);
+                        assertEquals(info.overflowPageReadCount, objects.length);
+                    }
                 }
             }
         });
-        database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields(), tableName);
-        assertEquals(sqls.size(), 0);
+        database.insertObjects(objects, DBTestObject.allFields(), tableName);
+        database.execute(new StatementCreateIndex().createIndex("testIndex").on(tableName).indexedBy(DBTestObject.content));
+        assertEquals(database.getAllObjects(DBTestObject.allFields(), tableName).size(), objects.length);
+        assertEquals(database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc)).size(), objects.length);
+        assertEquals(testCount.intValue, 4);
         database.tracePerformance(null);
     }
 
     @Test
     public void testGlobalTracePerformance() throws WCDBException {
+        database.removeFiles();
+        TestObject[] objects = new TestObject[1000];
+        for(int i = 0; i < 1000; i++){
+            TestObject object = new TestObject();
+            object.content = RandomTool.string(4096);
+            objects[i] = object;
+        }
+        WrappedValue testCount = new WrappedValue();
+        WrappedValue lastSQLIsInsert = new WrappedValue();
         Database.globalTracePerformance(null);
-        final List<String> sqls = new ArrayList<String>(){{
-            add("BEGIN IMMEDIATE");
-            add("INSERT INTO testTable(id, content) VALUES(?1, ?2)");
-            add("COMMIT");
-        }};
         Database.globalTracePerformance(new Database.PerformanceTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql, double time) {
+            public void onTrace(long tag, String path, long handleId, String sql, Database.PerformanceInfo info) {
                 if(!database.getPath().equals(path)) {
                     return;
                 }
                 assertEquals(tag, database.getTag());
-                assertTrue(time >= 0);
-                if(sqls.size() > 0 && sql.equals(sqls.get(0))) {
-                    sqls.remove(0);
+                if(sql.startsWith("COMMIT") && lastSQLIsInsert.boolValue) {
+                    assertTrue(info.costInNanoseconds > 0);
+                    assertTrue(info.tablePageWriteCount > 0);
+                    assertEquals(0, info.indexPageWriteCount);
+                    assertTrue(info.overflowPageWriteCount > 0);
+                    assertEquals(0, info.tablePageReadCount);
+                    assertEquals(0, info.indexPageReadCount);
+                    assertEquals(0, info.overflowPageReadCount);
+                    testCount.intValue++;
+                } else if(sql.startsWith("CREATE INDEX")) {
+                    assertTrue(info.costInNanoseconds > 0);
+                    assertEquals(1, info.tablePageWriteCount);
+                    assertTrue(info.indexPageWriteCount > 0);
+                    assertEquals(info.overflowPageWriteCount, objects.length);
+                    assertTrue(info.tablePageReadCount > 0);
+                    assertTrue(info.indexPageReadCount >= 0);
+                    assertTrue(info.overflowPageReadCount > objects.length / 2);
+                    testCount.intValue++;
+                } else if(sql.startsWith("SELECT")) {
+                    assertTrue(info.costInNanoseconds > 0);
+                    assertEquals(0, info.tablePageWriteCount);
+                    assertEquals(0, info.indexPageWriteCount);
+                    assertEquals(0, info.overflowPageWriteCount);
+                    testCount.intValue++;
+                    if(sql.endsWith("ORDER BY content DESC")){
+                        assertEquals(0, info.tablePageReadCount);
+                        assertTrue(info.indexPageReadCount > 0);
+                        assertEquals(info.overflowPageReadCount, objects.length);
+                    }else{
+                        assertTrue(info.tablePageReadCount > 0);
+                        assertEquals(0, info.indexPageReadCount);
+                        assertEquals(info.overflowPageReadCount, objects.length);
+                    }
                 }
+                lastSQLIsInsert.boolValue = sql.startsWith("INSERT");
             }
         });
         createTable();
-        database.insertObjects(RandomTool.autoIncrementTestCaseObjects(10000), DBTestObject.allFields(), tableName);
-        assertEquals(sqls.size(), 0);
+        database.insertObjects(objects, DBTestObject.allFields(), tableName);
+        database.execute(new StatementCreateIndex().createIndex("testIndex").on(tableName).indexedBy(DBTestObject.content));
+        assertEquals(database.getAllObjects(DBTestObject.allFields(), tableName).size(), objects.length);
+        assertEquals(database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.content.order(Order.Desc)).size(), objects.length);
+        assertEquals(testCount.intValue, 4);
         Database.globalTracePerformance(null);
     }
 

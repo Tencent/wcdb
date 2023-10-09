@@ -348,39 +348,66 @@ public extension Database {
         return WCDBCoreSetDefaultTemporaryDirectory(directory.cString)
     }
 
-    typealias PerformanceTracer = (Tag, String, UInt64, String, Double) -> Void // Tag, Path, handleIdentifier, SQL, cost
+    struct PerformanceInfo {
+        public let tablePageReadCount: Int
+        public let tablePageWriteCount: Int
+        public let indexPageReadCount: Int
+        public let indexPageWriteCount: Int
+        public let overflowPageReadCount: Int
+        public let overflowPageWriteCount: Int
+        public let costInNanoseconds: Int64
+        init(_ cppInfo: UnsafePointer<CPPPerformanceInfo>) {
+            tablePageReadCount = Int(cppInfo.pointee.tablePageReadCount)
+            tablePageWriteCount = Int(cppInfo.pointee.tablePageWriteCount)
+            indexPageReadCount = Int(cppInfo.pointee.indexPageReadCount)
+            indexPageWriteCount = Int(cppInfo.pointee.indexPageWriteCount)
+            overflowPageReadCount = Int(cppInfo.pointee.overflowPageReadCount)
+            overflowPageWriteCount = Int(cppInfo.pointee.overflowPageWriteCount)
+            costInNanoseconds = cppInfo.pointee.costInNanoseconds
+        }
+    }
+
+    typealias PerformanceTracer = (Tag, String, UInt64, String, PerformanceInfo) -> Void // Tag, Path, handleIdentifier, SQL, Info
 
     /// You can register a tracer to monitor the performance of all SQLs.
     /// It returns
     /// 1. Every SQL executed by the database.
-    /// 2. Time consuming in seconds.
-    /// 3. Tag of database.
-    /// 4. Path of database.
-    /// 5. The id of the handle executing this SQL.
+    /// 2. Time consuming in nanoseconds.
+    /// 3. Number of reads and writes on different types of db pages.
+    /// 4. Tag of database.
+    /// 5. Path of database.
+    /// 6. The id of the handle executing this SQL.
     ///
     /// Note that:
     /// 1. You should register trace before all db operations.
     /// 2. Global tracer will be recovered by db tracer.
     ///
-    ///     Database.globalTracePerformance{ (tag, path, handleId, sql, cost) in
+    ///     Database.globalTracePerformance{ (tag, path, handleId, sql, info) in
     ///         print("Tag: \(tag)")
     ///         print("Path: \(path)")
-    ///         print("The handle with id \(handleId) took \(cost) seconds to execute \(sql)")
+    ///         print("The handle with id \(handleId) took \(info.costInNanoseconds) nanoseconds to execute \(sql)")
     ///     }
     ///
     /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global preformance trace.
+    ///
     static func globalTracePerformance(_ trace: @escaping PerformanceTracer) {
-        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
-            (tag, path, handleId, sql, cost) in
-            trace(tag, String(cString: path), handleId, String(cString: sql), cost)
+        let traceWrap = ValueWrap(trace)
+        let tracePointer = ObjectBridge.getUntypeSwiftObject(traceWrap)
+        let cppTrace: @convention(c) (UnsafeMutableRawPointer?, Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CPPPerformanceInfo>) -> Void = {
+            cppTrace, tag, path, handleId, sql, cppInfo in
+            let traceWrap: ValueWrap<PerformanceTracer>? = ObjectBridge.extractTypedSwiftObject(cppTrace)
+            guard let traceWrap = traceWrap else {
+                return
+            }
+            let info = PerformanceInfo(cppInfo)
+            traceWrap.value(tag, String(cString: path), handleId, String(cString: sql), info)
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseGlobalTracePerformance(imp)
+        WCDBDatabaseGlobalTracePerformance(cppTrace, tracePointer, ObjectBridge.objectDestructor)
     }
     static func globalTracePerformance(_ trace: Void?) {
-        WCDBDatabaseGlobalTracePerformance(nil)
+        WCDBDatabaseGlobalTracePerformance(nil, nil, nil)
     }
 
     /// You can register a reporter to monitor all errors of current database.
@@ -388,15 +415,21 @@ public extension Database {
     ///
     /// - Parameter trace: trace. Nil to disable preformance trace.
     func trace(ofPerformance trace: @escaping PerformanceTracer) {
-        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, Double) -> Void = {
-            (tag, path, handleId, sql, cost) in
-            trace(tag, String(cString: path), handleId, String(cString: sql), cost)
+        let traceWrap = ValueWrap(trace)
+        let traceWrapPointer = ObjectBridge.getUntypeSwiftObject(traceWrap)
+        let cppTrace: @convention(c) (UnsafeMutableRawPointer?, Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CPPPerformanceInfo>) -> Void = {
+            cppTrace, tag, path, handleId, sql, cppInfo in
+            let traceWrap: ValueWrap<PerformanceTracer>? = ObjectBridge.extractTypedSwiftObject(cppTrace)
+            guard let traceWrap = traceWrap else {
+                return
+            }
+            let info = PerformanceInfo(cppInfo)
+            traceWrap.value(tag, String(cString: path), handleId, String(cString: sql), info)
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseTracePerformance(database, imp)
+        WCDBDatabaseTracePerformance(database, cppTrace, traceWrapPointer, ObjectBridge.objectDestructor)
     }
     func trace(ofPerformance: Void?) {
-        WCDBDatabaseTracePerformance(database, nil)
+        WCDBDatabaseTracePerformance(database, nil, nil, nil)
     }
 
     typealias SQLTracer = (Tag, String, UInt64, String, String) -> Void // Tag, Path, handleIdentifier, SQL, info
@@ -414,7 +447,7 @@ public extension Database {
     ///         print("Tag: \(tag)")
     ///         print("Path: \(path)")
     ///         print("The handle with id \(handleId) executed \(sql)")
-    ///         print("Excution info \(info)")
+    ///         print("Execution info \(info)")
     ///     }
     ///
     /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.

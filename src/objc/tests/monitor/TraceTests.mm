@@ -52,23 +52,58 @@
 {
     TestCaseAssertTrue([self createTable]);
 
-    NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
+    NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 1000; i++) {
+        TestCaseObject* object = [TestCaseObject objectWithIdentifier:0 andContent:[Random.shared stringWithLength:self.database.pageSize]];
+        object.isAutoIncrement = YES;
+        [objects addObject:object];
+    }
+    __block int testCount = 0;
 
-    __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
-                                                                         @"BEGIN IMMEDIATE",
-                                                                         @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
-                                                                         @"COMMIT",
-                                                                         nil];
-    [self.database tracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, double cost) {
+    [self.database tracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, WCTPerformanceInfo* info) {
         XCTAssertEqual(tag, self.database.tag);
         XCTAssertTrue([path isEqualToString:self.database.path]);
-        XCTAssertTrue(cost >= 0);
-        if ([sql isEqualToString:expectedFootprints.firstObject]) {
-            [expectedFootprints removeObjectAtIndex:0];
+        XCTAssertTrue(info != nil);
+        if ([sql hasPrefix:@"COMMIT"]) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount > 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount > 0);
+            XCTAssertTrue(info.tablePageReadCount == 0);
+            XCTAssertTrue(info.indexPageReadCount == 0);
+            XCTAssertTrue(info.overflowPageReadCount == 0);
+            testCount++;
+        } else if ([sql hasPrefix:@"CREATE INDEX"]) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 1);
+            XCTAssertTrue(info.indexPageWriteCount > 0);
+            XCTAssertTrue(info.overflowPageWriteCount == objects.count);
+            XCTAssertTrue(info.tablePageReadCount > 0);
+            XCTAssertTrue(info.indexPageReadCount >= 0);
+            XCTAssertTrue(info.overflowPageReadCount == objects.count);
+            testCount++;
+        } else if ([sql hasPrefix:@"SELECT"]) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount == 0);
+            testCount++;
+            if ([sql hasSuffix:@"ORDER BY content"]) {
+                XCTAssertTrue(info.tablePageReadCount == 0);
+                XCTAssertTrue(info.indexPageReadCount > 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.count);
+            } else {
+                XCTAssertTrue(info.tablePageReadCount > 0);
+                XCTAssertTrue(info.indexPageReadCount == 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.count);
+            }
         }
     }];
     TestCaseAssertTrue([self.database insertObjects:objects intoTable:self.tableName]);
-    TestCaseAssertTrue(expectedFootprints.count == 0);
+    TestCaseAssertTrue([self.database execute:WCDB::StatementCreateIndex().createIndex("testIndex").table(self.tableName).indexed(TestCaseObject.content)]);
+    TestCaseAssertTrue([self.table getObjects].count == objects.count);
+    TestCaseAssertTrue([self.table getObjectsOrders:TestCaseObject.content].count == objects.count);
+    TestCaseAssertTrue(testCount == 4);
 
     [self.database tracePerformance:nil];
 }
@@ -139,27 +174,62 @@
 
 - (void)test_global_trace_performance
 {
-    NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:10000];
-
-    __block NSMutableArray* expectedFootprints = [[NSMutableArray alloc] initWithObjects:
-                                                                         @"BEGIN IMMEDIATE",
-                                                                         @"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)",
-                                                                         @"COMMIT",
-                                                                         nil];
-    [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, double cost) {
+    NSMutableArray<TestCaseObject*>* objects = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 1000; i++) {
+        TestCaseObject* object = [TestCaseObject objectWithIdentifier:0 andContent:[Random.shared stringWithLength:self.database.pageSize]];
+        object.isAutoIncrement = YES;
+        [objects addObject:object];
+    }
+    __block int testCount = 0;
+    __block bool lastSQLIsInsert = false;
+    [WCTDatabase globalTracePerformance:^(WCTTag tag, NSString* path, UInt64, NSString* sql, WCTPerformanceInfo* info) {
         if (![path isEqualToString:self.database.path]) {
             return;
         }
         XCTAssertEqual(tag, self.database.tag);
-        XCTAssertTrue(cost >= 0);
-        if ([sql isEqualToString:expectedFootprints.firstObject]) {
-            [expectedFootprints removeObjectAtIndex:0];
+        XCTAssertTrue(info != nil);
+        if ([sql hasPrefix:@"COMMIT"] && lastSQLIsInsert) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount > 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount > 0);
+            XCTAssertTrue(info.tablePageReadCount == 0);
+            XCTAssertTrue(info.indexPageReadCount == 0);
+            XCTAssertTrue(info.overflowPageReadCount == 0);
+            testCount++;
+        } else if ([sql hasPrefix:@"CREATE INDEX"]) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 1);
+            XCTAssertTrue(info.indexPageWriteCount > 0);
+            XCTAssertTrue(info.overflowPageWriteCount == objects.count);
+            XCTAssertTrue(info.tablePageReadCount > 0);
+            XCTAssertTrue(info.indexPageReadCount >= 0);
+            XCTAssertTrue(info.overflowPageReadCount == objects.count);
+            testCount++;
+        } else if ([sql hasPrefix:@"SELECT"]) {
+            XCTAssertTrue(info.costInNanoseconds > 0);
+            XCTAssertTrue(info.tablePageWriteCount == 0);
+            XCTAssertTrue(info.indexPageWriteCount == 0);
+            XCTAssertTrue(info.overflowPageWriteCount == 0);
+            testCount++;
+            if ([sql hasSuffix:@"ORDER BY content"]) {
+                XCTAssertTrue(info.tablePageReadCount == 0);
+                XCTAssertTrue(info.indexPageReadCount > 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.count);
+            } else {
+                XCTAssertTrue(info.tablePageReadCount > 0);
+                XCTAssertTrue(info.indexPageReadCount == 0);
+                XCTAssertTrue(info.overflowPageReadCount == objects.count);
+            }
         }
+        lastSQLIsInsert = [sql hasPrefix:@"INSERT"];
     }];
-
-    TestCaseAssertTrue([self createTable]);
+    [self createTable];
     TestCaseAssertTrue([self.database insertObjects:objects intoTable:self.tableName]);
-    TestCaseAssertTrue(expectedFootprints.count == 0);
+    TestCaseAssertTrue([self.database execute:WCDB::StatementCreateIndex().createIndex("testIndex").table(self.tableName).indexed(TestCaseObject.content)]);
+    TestCaseAssertTrue([self.table getObjects].count == objects.count);
+    TestCaseAssertTrue([self.table getObjectsOrders:TestCaseObject.content].count == objects.count);
+    TestCaseAssertTrue(testCount == 4);
 
     [WCTDatabase globalTracePerformance:nil];
 }

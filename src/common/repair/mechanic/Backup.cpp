@@ -267,8 +267,8 @@ bool Backup::incrementalBackup()
                 iter++;
             } else {
                 // Deleted table
-                iter = m_material.contentsList.erase(iter);
                 m_material.contentsMap.erase(content.tableName);
+                iter = m_material.contentsList.erase(iter);
             }
         }
     } else if (m_material.info.seqTableRootPage != 0
@@ -326,8 +326,9 @@ bool Backup::incrementalBackup()
                                          m_verifiedPagenos.begin(),
                                          m_verifiedPagenos.end());
             m_verifiedPagenos.clear();
-            contentList.insert(contentList.begin(), *iter);
-            iter = contentList.erase(iter);
+            auto preIter = iter;
+            iter++;
+            contentList.splice(contentList.begin(), contentList, preIter);
         } else {
             iter++;
         }

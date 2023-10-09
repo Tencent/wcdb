@@ -189,31 +189,42 @@ public:
      */
     void traceError(ErrorNotification trace);
 
+    typedef struct PerformanceInfo {
+        int tablePageReadCount;
+        int tablePageWriteCount;
+        int indexPageReadCount;
+        int indexPageWriteCount;
+        int overflowPageReadCount;
+        int overflowPageWriteCount;
+        int64_t costInNanoseconds;
+    } PerformanceInfo;
+
     /**
      Triggered when a transaction or a normal sql ends.
      */
-    typedef std::function<void(long tag, const UnsafeStringView &path, const UnsafeStringView &sql, double cost, const void *handleIdentifier)> PerformanceNotification;
+    typedef std::function<void(long tag, const UnsafeStringView &path, uint64_t handleIdentifier, const UnsafeStringView &sql, const PerformanceInfo &info)> PerformanceNotification;
 
     /**
      @brief You can register a tracer to monitor the performance of all SQLs.
      It returns
          1. Every SQL executed by the database.
-         2. Time consuming in seconds.
-         3. Tag of database.
-         4. Path of database.
-         5. The id of the handle executing this SQL.
+         2. Time consuming in nanoseconds.
+         3. Number of reads and writes on different types of db pages.
+         4. Tag of database.
+         5. Path of database.
+         6. The id of the handle executing this SQL.
      @note  You should register trace before all db operations. Global tracer and db tracer do not interfere with each other.
      
          WCDB::Database::globalTracePerformance([](long tag,
                                                    const WCDB::UnsafeStringView &path,
+                                                   const void *handleIdentifier
                                                    const WCDB::UnsafeStringView &sql,
-                                                   double cost,
-                                                   const void *handleIdentifier) {
+                                                   const PerformanceInfo &info) {
              printf("Tag: %ld", tag);
              printf("Path: %s", path.data());
-             printf("The handle with id %p took %f seconds to execute %s",
+             printf("The handle with id %p took %lld nanoseconds to execute %s",
                     handleIdentifier,
-                    cost,
+                    info.costInNanoseconds,
                     sql.data());
          });
      

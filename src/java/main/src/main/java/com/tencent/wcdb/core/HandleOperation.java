@@ -316,12 +316,15 @@ public abstract class HandleOperation extends CppObject {
 
     private void updateRow(Value[] row, StatementUpdate update) throws WCDBException {
         Handle handle = getHandle(true);
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(update);
+            preparedStatement = handle.preparedWithMainStatement(update);
             preparedStatement.bindRow(row);
             preparedStatement.step();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -676,14 +679,17 @@ public abstract class HandleOperation extends CppObject {
     public Value getValueFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         Value ret = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             preparedStatement.step();
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getValue(0);
             }
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -694,14 +700,17 @@ public abstract class HandleOperation extends CppObject {
     public Value getValueFromSQL(String sql) throws WCDBException {
         Handle handle = getHandle(false);
         Value ret = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            preparedStatement = handle.preparedWithMainStatement(sql);
             preparedStatement.step();
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getValue(0);
             }
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -712,14 +721,17 @@ public abstract class HandleOperation extends CppObject {
     public Value[] getOneRowFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         Value[] ret = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             preparedStatement.step();
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
             }
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -730,14 +742,17 @@ public abstract class HandleOperation extends CppObject {
     public Value[] getOneRowFromSQL(String sql) throws WCDBException {
         Handle handle = getHandle(false);
         Value[] ret = null;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            preparedStatement = handle.preparedWithMainStatement(sql);
             preparedStatement.step();
             if(!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
             }
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -748,11 +763,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<Value> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -763,11 +781,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Integer> getOneColumnIntFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<Integer> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnInt();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -778,11 +799,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Long> getOneColumnLongFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<Long> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnLong();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -793,11 +817,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Float> getOneColumnFloatFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<Float> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnFloat();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -808,11 +835,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Double> getOneColumnDoubleFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<Double> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnDouble();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -823,11 +853,14 @@ public abstract class HandleOperation extends CppObject {
     public List<String> getOneColumnStringFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<String> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnString();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -838,11 +871,14 @@ public abstract class HandleOperation extends CppObject {
     public List<byte[]> getOneColumnBLOBFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<byte[]> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnBLOB();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -853,11 +889,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Value> getOneColumnFromSQL(String sql) throws WCDBException {
         Handle handle = getHandle(false);
         List<Value> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            preparedStatement = handle.preparedWithMainStatement(sql);
             ret = preparedStatement.getOneColumn();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -868,11 +907,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
         Handle handle = getHandle(false);
         List<Value[]> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
+            preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
@@ -883,11 +925,14 @@ public abstract class HandleOperation extends CppObject {
     public List<Value[]> getAllRowsFromSQL(String sql) throws WCDBException {
         Handle handle = getHandle(false);
         List<Value[]> ret;
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = handle.preparedWithMainStatement(sql);
+            preparedStatement = handle.preparedWithMainStatement(sql);
             ret = preparedStatement.getMultiRows();
-            preparedStatement.finalizeStatement();
         } finally {
+            if(preparedStatement != null){
+                preparedStatement.finalizeStatement();
+            }
             if(autoInvalidateHandle()) {
                 handle.invalidate();
             }
