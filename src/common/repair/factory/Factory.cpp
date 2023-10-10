@@ -250,7 +250,8 @@ Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
         return NullOpt;
     }
     auto &firstMaterialModifiedTime = optionalFirstMaterialModifiedTime.value();
-    if (firstMaterialModifiedTime.empty()) {
+    if (firstMaterialModifiedTime.empty()
+        || firstMaterialModifiedTime.seconds() > now.seconds()) {
         return firstMaterialPath;
     }
 
@@ -260,7 +261,8 @@ Factory::materialForSerializingForDatabase(const UnsafeStringView &database)
         return NullOpt;
     }
     auto &lastMaterialModifiedTime = optionalLastMaterialModifiedTime.value();
-    if (lastMaterialModifiedTime.empty()) {
+    if (lastMaterialModifiedTime.empty()
+        || lastMaterialModifiedTime.seconds() > now.seconds()) {
         return lastMaterialPath;
     }
 
@@ -287,10 +289,12 @@ Optional<StringView> Factory::latestMaterialForDatabase(const UnsafeStringView &
     if (lastMaterialModifiedTime.empty() && firstMaterialModifiedTime.empty()) {
         return "";
     }
-    if (firstMaterialModifiedTime.empty()) {
+    if (firstMaterialModifiedTime.empty()
+        || firstMaterialModifiedTime.seconds() > now.seconds()) {
         return lastMaterialPath;
     }
-    if (lastMaterialModifiedTime.empty()) {
+    if (lastMaterialModifiedTime.empty()
+        || lastMaterialModifiedTime.seconds() > now.seconds()) {
         return firstMaterialPath;
     }
     return firstMaterialModifiedTime < lastMaterialModifiedTime ? lastMaterialPath : firstMaterialPath;

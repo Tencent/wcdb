@@ -58,7 +58,7 @@
 {
     for (int i = 0; i < 6; i++) {
         int config = i;
-        _needCipher = config % 2;
+        _needCipher = (BOOL) (config % 2);
         config /= 2;
         _testClass = [BackupTestCase allTestClassess][config];
         [self clearData];
@@ -83,7 +83,7 @@
     [self.database enableAutoCheckpoint:NO];
     for (int i = 0; i < 24; i++) {
         int config = i;
-        _needCipher = config % 2;
+        _needCipher = (BOOL) (config % 2);
         config /= 2;
         _incrementalBackup = config % 2;
         config /= 2;
