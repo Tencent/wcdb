@@ -12,7 +12,7 @@ project(WCDB_Android)
 
 include(../../../../../utility.cmake)
 
-set(TARGET_NAME "wcdb_android")
+set(TARGET_NAME "WCDB")
 set(WCDB_BRIDGE ON)
 set(SKIP_WCONAN ON)
 set(BUILD_SHARED_LIBS ON)
