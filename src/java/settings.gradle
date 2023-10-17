@@ -5,6 +5,7 @@ pluginManagement {
 rootProject.name = 'WCDB'
 
 include ':main'
+include ':compat'
 include ':test'
 include ':kotlin-test'
 include ':wechat-test'

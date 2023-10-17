@@ -2,7 +2,7 @@ plugins {id 'com.android.library'}
 apply from: rootProject.file('gradle/WeChatPublish.gradle')
 
 android {
-    namespace 'com.tencent.wcdb2'
+    namespace 'com.tencent.wcdb.core'
     compileSdk 33
     ndkVersion '21.4.7075529'
 

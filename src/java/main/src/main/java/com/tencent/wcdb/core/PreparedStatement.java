@@ -36,6 +36,7 @@ import java.util.List;
 
 public class PreparedStatement extends CppObject {
     boolean autoFinalize = false;
+    int columnCount = -1;
     PreparedStatement(long cppObj) {
         this.cppObj = cppObj;
     }
@@ -483,7 +484,10 @@ public class PreparedStatement extends CppObject {
     }
 
     public int getColumnCount() {
-        return getColumnCount(cppObj);
+        if (columnCount == -1) {
+            columnCount = getColumnCount(cppObj);
+        }
+        return columnCount;
     }
 
     private static native int getColumnCount(long self);

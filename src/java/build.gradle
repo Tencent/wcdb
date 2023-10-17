@@ -35,6 +35,7 @@ tasks.register('publishAllToMavenLocal') {
     dependsOn gradle.includedBuild('builder').task(':compiler:publishToMavenLocal')
     dependsOn gradle.includedBuild('builder').task(':gradle-plugin:publishToMavenLocal')
     dependsOn tasks.findByPath(':main:publishToMavenLocal')
+    dependsOn tasks.findByPath(':compat:publishToMavenLocal')
 }
 
 tasks.register('publishAll') {
@@ -43,4 +44,5 @@ tasks.register('publishAll') {
     dependsOn gradle.includedBuild('builder').task(':compiler:publish')
     dependsOn gradle.includedBuild('builder').task(':gradle-plugin:publish')
     dependsOn tasks.findByPath(':main:publish')
+    dependsOn tasks.findByPath(':compat:publish')
 }
