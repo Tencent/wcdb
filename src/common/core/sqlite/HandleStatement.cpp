@@ -389,7 +389,6 @@ bool HandleStatement::step()
 
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
-    m_stepCount++;
 
     if (m_fullTrace) {
         m_needReport = true;
@@ -401,6 +400,8 @@ bool HandleStatement::step()
             getHandle()->postTableNotification(m_newTable, m_modifiedTable);
         }
         tryReportSQL();
+    } else {
+        m_stepCount++;
     }
 
     const char *sql = nullptr;
@@ -755,7 +756,7 @@ void HandleStatement::tryReportSQL()
     }
     UnsafeStringView sql = sqlite3_sql(m_stmt);
     if (sql.hasPrefix("SELECT")) {
-        m_stream << "StepCount:" << m_stepCount;
+        m_stream << "RowCount:" << m_stepCount;
     } else if (sql.hasPrefix("INSERT")) {
         m_stream << "LastInsertedId:" << getHandle()->getLastInsertedRowID();
     } else if (sql.hasPrefix("DELETE") || sql.hasPrefix("UPDATE")) {
