@@ -59,7 +59,7 @@ open class TableTestCase : DatabaseTestCase() {
     }
 
     fun doTestObjectsAfterInsert(
-        objects: Array<Any>,
+        objects: List<Any>,
         insertCount: Int,
         sqls: Array<String>,
         operation: TestOperation
@@ -75,7 +75,7 @@ open class TableTestCase : DatabaseTestCase() {
     }
 
     fun doTestObjectsAfterOperation(
-        objects: Array<Any>,
+        objects: List<Any>,
         sql: String,
         operation: TestOperation
     ) {
@@ -83,7 +83,7 @@ open class TableTestCase : DatabaseTestCase() {
     }
 
     fun doTestObjectsAfterOperation(
-        objects: Array<Any>,
+        objects: List<Any>,
         sqls: Array<String>,
         operation: TestOperation
     ) {
@@ -95,7 +95,7 @@ open class TableTestCase : DatabaseTestCase() {
         }
         Assert.assertTrue(
             (objects.isEmpty() && allObjects.isEmpty()) ||
-                    objects.contentEquals(allObjects.toTypedArray())
+                    objects == allObjects
         )
     }
 
@@ -104,11 +104,11 @@ open class TableTestCase : DatabaseTestCase() {
         sql: String,
         operation: SelectingObjectOperation
     ) {
-        doTestObjectBySelecting(arrayOf(`object`), arrayOf(sql), operation)
+        doTestObjectBySelecting(listOf(`object`), arrayOf(sql), operation)
     }
 
     fun doTestObjectBySelecting(
-        objects: Array<TestObject>,
+        objects: List<TestObject>,
         sql: String,
         operation: SelectingObjectOperation
     ) {
@@ -116,7 +116,7 @@ open class TableTestCase : DatabaseTestCase() {
     }
 
     fun doTestObjectBySelecting(
-        objects: Array<TestObject>,
+        objects: List<TestObject>,
         sqls: Array<String>,
         operation: SelectingObjectOperation
     ) {
@@ -126,7 +126,7 @@ open class TableTestCase : DatabaseTestCase() {
         }
         Assert.assertTrue(
             (objects.isEmpty() && selecting.isEmpty()) ||
-                    objects.contentEquals(selecting.toTypedArray())
+                    objects == selecting
         )
     }
 

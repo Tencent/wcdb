@@ -31,10 +31,13 @@ import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.winq.StatementInsert;
 
+import java.util.Collection;
+import java.util.Collections;
+
 public class Insert<T> extends ChainCall<StatementInsert> {
     private boolean hasConflictAction = false;
     private Field<T>[] fields = null;
-    private T[] values = null;
+    private Collection<T> values = null;
     private long lastInsertRowId = 0;
 
     public Insert(Handle handle) {
@@ -66,22 +69,22 @@ public class Insert<T> extends ChainCall<StatementInsert> {
     }
 
     public Insert<T> value(T object) {
-        values = (T[]) new Object[]{object};
+        values = Collections.singleton(object);
         return this;
     }
 
-    public Insert<T> values(T[] objects) {
+    public Insert<T> values(Collection<T> objects) {
         values = objects;
         return this;
     }
 
     public Insert<T> execute() throws WCDBException {
-        if(values == null || values.length == 0) {
+        if(values == null || values.size() == 0) {
             return this;
         }
         assert fields != null && fields.length > 0;
         try {
-            if (values.length > 1) {
+            if (values.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(Handle handle) throws WCDBException {
@@ -124,7 +127,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
                     binding.setLastInsertRowId(object, handle.getLastInsertedRowId());
                 }
             }
-            if(values.length > 0) {
+            if(values.size() > 0) {
                 lastInsertRowId = handle.getLastInsertedRowId();
             }
         }

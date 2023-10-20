@@ -32,6 +32,7 @@ import com.tencent.wcdb.winq.Expression;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDropTable;
 
+import java.util.Collection;
 import java.util.List;
 
 public abstract class HandleORMOperation extends HandleOperation{
@@ -127,15 +128,15 @@ public abstract class HandleORMOperation extends HandleOperation{
         this.<T>prepareInsert().orIgnore().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
-    public <T> void insertObjects(T[] objects, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
-    public <T> void insertOrReplaceObjects(T[] objects, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertOrReplaceObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
-    public <T> void insertOrIgnoreObjects(T[] objects, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertOrIgnoreObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orIgnore().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 

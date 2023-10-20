@@ -61,7 +61,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
             object3.content
         )
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { database.insertObject(autoIncrementObject, DBTestObject.allFields(), tableName) }
@@ -74,7 +74,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
             object3.content
         )
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(content) VALUES(?1)"
             )
         ) {
@@ -90,7 +90,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseInsertObject() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { database.insertObject(object3, DBTestObject.allFields(), tableName) }
@@ -100,16 +100,16 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testDatabaseInsertObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3, object4), 2, arrayOf(
+            listOf(object1, object2, object3, object4), 2, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
-        ) { database.insertObjects(arrayOf(object3, object4), DBTestObject.allFields(), tableName) }
+        ) { database.insertObjects(listOf(object3, object4), DBTestObject.allFields(), tableName) }
     }
 
     @Test
     fun testDatabaseInsertOrReplaceObject() {
         doTestObjectsAfterInsert(
-            arrayOf(renewObject1, object2), 1, arrayOf(
+            listOf(renewObject1, object2), 1, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { database.insertOrReplaceObject(renewObject1, DBTestObject.allFields(), tableName) }
@@ -119,12 +119,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testDatabaseInsertOrReplaceObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(renewObject1, renewObject2), 2, arrayOf(
+            listOf(renewObject1, renewObject2), 2, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) {
             database.insertOrReplaceObjects(
-                arrayOf(renewObject1, renewObject2),
+                listOf(renewObject1, renewObject2),
                 DBTestObject.allFields(),
                 tableName
             )
@@ -134,7 +134,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseInsertOrIgnoreObject() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 1, arrayOf(
+            listOf(object1, object2), 1, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { database.insertOrIgnoreObject(renewObject1, DBTestObject.allFields(), tableName) }
@@ -144,12 +144,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testDatabaseInsertOrIgnoreObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 2, arrayOf(
+            listOf(object1, object2), 2, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) {
             database.insertOrIgnoreObjects(
-                arrayOf(renewObject1, renewObject2),
+                listOf(renewObject1, renewObject2),
                 DBTestObject.allFields(),
                 tableName
             )
@@ -159,7 +159,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseInsertObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, partialObject3), 1, arrayOf(
+            listOf(object1, object2, partialObject3), 1, arrayOf(
                 "INSERT INTO testTable(id) VALUES(?1)"
             )
         ) { database.insertObject(object3, arrayOf(DBTestObject.id), tableName) }
@@ -169,12 +169,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testDatabaseInsertObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, partialObject3, partialObject4), 2, arrayOf(
+            listOf(object1, object2, partialObject3, partialObject4), 2, arrayOf(
                 "INSERT INTO testTable(id) VALUES(?1)"
             )
         ) {
             database.insertObjects(
-                arrayOf(object3, object4),
+                listOf(object3, object4),
                 arrayOf(DBTestObject.id),
                 tableName
             )
@@ -184,7 +184,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseInsertOrReplaceObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(renewedPartialObject1, object2), 1, arrayOf(
+            listOf(renewedPartialObject1, object2), 1, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
             )
         ) { database.insertOrReplaceObject(object1, arrayOf(DBTestObject.id), tableName) }
@@ -194,12 +194,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testDatabaseInsertOrReplaceObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(renewedPartialObject1, renewedPartialObject2), 2, arrayOf(
+            listOf(renewedPartialObject1, renewedPartialObject2), 2, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
             )
         ) {
             database.insertOrReplaceObjects(
-                arrayOf(object1, object2), arrayOf(
+                listOf(object1, object2), arrayOf(
                     DBTestObject.id
                 ), tableName
             )
@@ -209,7 +209,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseInsertOrIgnoreObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 1, arrayOf(
+            listOf(object1, object2), 1, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
             )
         ) { database.insertOrIgnoreObject(object1, arrayOf(DBTestObject.id), tableName) }
@@ -219,12 +219,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testDatabaseInsertOrIgnoreObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 2, arrayOf(
+            listOf(object1, object2), 2, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
             )
         ) {
             database.insertOrIgnoreObjects(
-                arrayOf(object1, object2), arrayOf(
+                listOf(object1, object2), arrayOf(
                     DBTestObject.id
                 ), tableName
             )
@@ -237,7 +237,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
             object3.content
         )
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { table.insertObject(autoIncrementObject) }
@@ -250,7 +250,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
             object3.content
         )
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(content) VALUES(?1)"
             )
         ) { table.insertObject(autoIncrementObject, arrayOf(DBTestObject.content)) }
@@ -260,7 +260,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testTableInsertObject() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { table.insertObject(object3) }
@@ -270,16 +270,16 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testTableInsertObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3, object4), 2, arrayOf(
+            listOf(object1, object2, object3, object4), 2, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
-        ) { table.insertObjects(arrayOf(object3, object4)) }
+        ) { table.insertObjects(listOf(object3, object4)) }
     }
 
     @Test
     fun testTableInsertOrReplaceObject() {
         doTestObjectsAfterInsert(
-            arrayOf(renewObject1, object2), 1, arrayOf(
+            listOf(renewObject1, object2), 1, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { table.insertOrReplaceObject(renewObject1) }
@@ -289,16 +289,16 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testTableInsertOrReplaceObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(renewObject1, renewObject2), 2, arrayOf(
+            listOf(renewObject1, renewObject2), 2, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
             )
-        ) { table.insertOrReplaceObjects(arrayOf(renewObject1, renewObject2)) }
+        ) { table.insertOrReplaceObjects(listOf(renewObject1, renewObject2)) }
     }
 
     @Test
     fun testTableInsertOrIgnoreObject() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 1, arrayOf(
+            listOf(object1, object2), 1, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { table.insertOrIgnoreObject(renewObject1) }
@@ -308,16 +308,16 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testTableInsertOrIgnoreObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 2, arrayOf(
+            listOf(object1, object2), 2, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
             )
-        ) { table.insertOrIgnoreObjects(arrayOf(renewObject1, renewObject2)) }
+        ) { table.insertOrIgnoreObjects(listOf(renewObject1, renewObject2)) }
     }
 
     @Test
     fun testTableInsertObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, partialObject3), 1, arrayOf(
+            listOf(object1, object2, partialObject3), 1, arrayOf(
                 "INSERT INTO testTable(id) VALUES(?1)"
             )
         ) { table.insertObject(object3, arrayOf(DBTestObject.id)) }
@@ -327,16 +327,16 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testTableInsertObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, partialObject3, partialObject4), 2, arrayOf(
+            listOf(object1, object2, partialObject3, partialObject4), 2, arrayOf(
                 "INSERT INTO testTable(id) VALUES(?1)"
             )
-        ) { table.insertObjects(arrayOf(object3, object4), arrayOf(DBTestObject.id)) }
+        ) { table.insertObjects(listOf(object3, object4), arrayOf(DBTestObject.id)) }
     }
 
     @Test
     fun testTableInsertOrReplaceObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(renewedPartialObject1, object2), 1, arrayOf(
+            listOf(renewedPartialObject1, object2), 1, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
             )
         ) { table.insertOrReplaceObject(object1, arrayOf(DBTestObject.id)) }
@@ -346,12 +346,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testTableInsertOrReplaceObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(renewedPartialObject1, renewedPartialObject2), 2, arrayOf(
+            listOf(renewedPartialObject1, renewedPartialObject2), 2, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
             )
         ) {
             table.insertOrReplaceObjects(
-                arrayOf(object1, object2),
+                listOf(object1, object2),
                 arrayOf(DBTestObject.id)
             )
         }
@@ -360,7 +360,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testTableInsertOrIgnoreObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 1, arrayOf(
+            listOf(object1, object2), 1, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
             )
         ) { table.insertOrIgnoreObject(object1, arrayOf(DBTestObject.id)) }
@@ -370,12 +370,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testTableInsertOrIgnoreObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 2, arrayOf(
+            listOf(object1, object2), 2, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
             )
         ) {
             table.insertOrIgnoreObjects(
-                arrayOf(object1, object2),
+                listOf(object1, object2),
                 arrayOf(DBTestObject.id)
             )
         }
@@ -387,7 +387,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
             object3.content
         )
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { handle.insertObject(autoIncrementObject, DBTestObject.allFields(), tableName) }
@@ -400,7 +400,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
             object3.content
         )
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(content) VALUES(?1)"
             )
         ) {
@@ -416,7 +416,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleInsertObject() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3), 1, arrayOf(
+            listOf(object1, object2, object3), 1, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { handle.insertObject(object3, DBTestObject.allFields(), tableName) }
@@ -426,16 +426,16 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testHandleInsertObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, object3, object4), 2, arrayOf(
+            listOf(object1, object2, object3, object4), 2, arrayOf(
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
             )
-        ) { handle.insertObjects(arrayOf(object3, object4), DBTestObject.allFields(), tableName) }
+        ) { handle.insertObjects(listOf(object3, object4), DBTestObject.allFields(), tableName) }
     }
 
     @Test
     fun testHandleInsertOrReplaceObject() {
         doTestObjectsAfterInsert(
-            arrayOf(renewObject1, object2), 1, arrayOf(
+            listOf(renewObject1, object2), 1, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { handle.insertOrReplaceObject(renewObject1, DBTestObject.allFields(), tableName) }
@@ -445,12 +445,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testHandleInsertOrReplaceObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(renewObject1, renewObject2), 2, arrayOf(
+            listOf(renewObject1, renewObject2), 2, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) {
             handle.insertOrReplaceObjects(
-                arrayOf(renewObject1, renewObject2),
+                listOf(renewObject1, renewObject2),
                 DBTestObject.allFields(),
                 tableName
             )
@@ -460,7 +460,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleInsertOrIgnoreObject() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 1, arrayOf(
+            listOf(object1, object2), 1, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) { handle.insertOrIgnoreObject(renewObject1, DBTestObject.allFields(), tableName) }
@@ -470,12 +470,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testHandleInsertOrIgnoreObjects() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 2, arrayOf(
+            listOf(object1, object2), 2, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
             )
         ) {
             handle.insertOrIgnoreObjects(
-                arrayOf(renewObject1, renewObject2),
+                listOf(renewObject1, renewObject2),
                 DBTestObject.allFields(),
                 tableName
             )
@@ -485,7 +485,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleInsertObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, partialObject3), 1, arrayOf(
+            listOf(object1, object2, partialObject3), 1, arrayOf(
                 "INSERT INTO testTable(id) VALUES(?1)"
             )
         ) { handle.insertObject(object3, arrayOf(DBTestObject.id), tableName) }
@@ -495,12 +495,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testHandleInsertObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2, partialObject3, partialObject4), 2, arrayOf(
+            listOf(object1, object2, partialObject3, partialObject4), 2, arrayOf(
                 "INSERT INTO testTable(id) VALUES(?1)"
             )
         ) {
             handle.insertObjects(
-                arrayOf(object3, object4),
+                listOf(object3, object4),
                 arrayOf(DBTestObject.id),
                 tableName
             )
@@ -510,7 +510,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleInsertOrReplaceObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(renewedPartialObject1, object2), 1, arrayOf(
+            listOf(renewedPartialObject1, object2), 1, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
             )
         ) { handle.insertOrReplaceObject(object1, arrayOf(DBTestObject.id), tableName) }
@@ -520,12 +520,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testHandleInsertOrReplaceObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(renewedPartialObject1, renewedPartialObject2), 2, arrayOf(
+            listOf(renewedPartialObject1, renewedPartialObject2), 2, arrayOf(
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
             )
         ) {
             handle.insertOrReplaceObjects(
-                arrayOf(object1, object2), arrayOf(
+                listOf(object1, object2), arrayOf(
                     DBTestObject.id
                 ), tableName
             )
@@ -535,7 +535,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleInsertOrIgnoreObjectOnFields() {
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 1, arrayOf(
+            listOf(object1, object2), 1, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
             )
         ) { handle.insertOrIgnoreObject(object1, arrayOf(DBTestObject.id), tableName) }
@@ -545,12 +545,12 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     fun testHandleInsertOrIgnoreObjectsOnFields() {
         expectMode = Expect.SomeSQLs
         doTestObjectsAfterInsert(
-            arrayOf(object1, object2), 2, arrayOf(
+            listOf(object1, object2), 2, arrayOf(
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
             )
         ) {
             handle.insertOrIgnoreObjects(
-                arrayOf(object1, object2),
+                listOf(object1, object2),
                 arrayOf(DBTestObject.id),
                 tableName
             )

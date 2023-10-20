@@ -40,15 +40,15 @@ import java.util.List;
 public class ObjectSelectTest extends ObjectCRUDTestCase {
     TestObject partialObject1;
     TestObject partialObject2;
-    TestObject[] partialObjects;
+    List<TestObject> partialObjects;
 
     @Before
     public void setup() throws WCDBException {
         super.setup();
         partialObject1 = TestObject.createPartialObject(1);
         partialObject2 = TestObject.createPartialObject(2);
-        partialObjects = new TestObject[]{ partialObject1, partialObject2 };
-    }
+        partialObjects = Arrays.asList( partialObject1, partialObject2 );
+}
 
     @Test
     public void testDatabaseGetObject() {
@@ -132,7 +132,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseGetObjectsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -162,7 +162,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseGetObjectsOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return database.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc));
@@ -272,7 +272,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseGetObjectsOnFieldsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(partialObject2, partialObject1), "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -302,7 +302,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseGetObjectsOnFieldsOrder() {
-        doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(partialObject2, partialObject1), "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return database.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc));
@@ -412,7 +412,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableGetObjectsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return table.getAllObjects(DBTestObject.allFields(), DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -442,7 +442,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableGetObjectsOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return table.getAllObjects(DBTestObject.allFields(), DBTestObject.id.order(Order.Desc));
@@ -552,7 +552,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableGetObjectsOnFieldsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(partialObject2, partialObject1), "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return table.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -582,7 +582,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableGetObjectsOnFieldsOrder() {
-        doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(partialObject2, partialObject1), "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return table.getAllObjects(new Field[]{DBTestObject.id}, DBTestObject.id.order(Order.Desc));
@@ -692,7 +692,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableGetObjectsWithoutFieldsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return table.getAllObjects(DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -722,7 +722,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableGetObjectsWithoutFieldsOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return table.getAllObjects(DBTestObject.id.order(Order.Desc));
@@ -832,7 +832,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleGetObjectsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -862,7 +862,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleGetObjectsOrder() {
-        doTestObjectBySelecting(new TestObject[]{object2, object1}, "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(object2, object1), "SELECT id, content FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return handle.getAllObjects(DBTestObject.allFields(), tableName, DBTestObject.id.order(Order.Desc));
@@ -972,7 +972,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleGetObjectsOnFieldsWhereOrder() {
-        doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(partialObject2, partialObject1), "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc));
@@ -1002,7 +1002,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleGetObjectsOnFieldsOrder() {
-        doTestObjectBySelecting(new TestObject[]{partialObject2, partialObject1}, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
+        doTestObjectBySelecting(Arrays.asList(partialObject2, partialObject1), "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
                 return handle.getAllObjects(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc));

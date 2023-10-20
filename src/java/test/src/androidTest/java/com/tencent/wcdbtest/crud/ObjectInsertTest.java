@@ -34,6 +34,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class ObjectInsertTest extends ObjectCRUDTestCase {
     TestObject renewObject1;
     TestObject renewObject2;
@@ -63,7 +65,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseAutoIncrement() {
         final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -77,7 +79,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseAutoIncrementWithPartialInsert() {
         final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(content) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -90,7 +92,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseInsertObject() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -103,19 +105,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3, object4}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3, object4), 2, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObjects(new TestObject[]{object3, object4}, DBTestObject.allFields(), tableName);
+                database.insertObjects(Arrays.asList(object3, object4), DBTestObject.allFields(), tableName);
             }
         });
     }
 
     @Test
     public void testDatabaseInsertOrReplaceObject() {
-        doTestObjectsAfterInsert(new Object[]{renewObject1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewObject1, object2), 1, new String[]{
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -128,19 +130,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertOrReplaceObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{renewObject1, renewObject2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewObject1, renewObject2), 2, new String[]{
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
+                database.insertOrReplaceObjects(Arrays.asList(renewObject1, renewObject2), DBTestObject.allFields(), tableName);
             }
         });
     }
 
     @Test
     public void testDatabaseInsertOrIgnoreObject() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 1, new String[]{
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -153,19 +155,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertOrIgnoreObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 2, new String[]{
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
+                database.insertOrIgnoreObjects(Arrays.asList(renewObject1, renewObject2), DBTestObject.allFields(), tableName);
             }
         });
     }
 
     @Test
     public void testDatabaseInsertObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2, partialObject3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, partialObject3), 1, new String[]{
                 "INSERT INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -178,19 +180,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2, partialObject3, partialObject4}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, partialObject3, partialObject4), 2, new String[]{
                 "INSERT INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id}, tableName);
+                database.insertObjects(Arrays.asList(object3, object4), new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
 
     @Test
     public void testDatabaseInsertOrReplaceObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{renewedPartialObject1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewedPartialObject1, object2), 1, new String[]{
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -203,19 +205,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertOrReplaceObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{renewedPartialObject1, renewedPartialObject2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewedPartialObject1, renewedPartialObject2), 2, new String[]{
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
+                database.insertOrReplaceObjects(Arrays.asList(object1, object2), new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
 
     @Test
     public void testDatabaseInsertOrIgnoreObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 1, new String[]{
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -228,12 +230,12 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertOrIgnoreObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 2, new String[]{
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                database.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
+                database.insertOrIgnoreObjects(Arrays.asList(object1, object2), new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
@@ -241,7 +243,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableAutoIncrement() {
         final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -255,7 +257,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableAutoIncrementWithPartialInsert() {
         final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(content) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -268,7 +270,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableInsertObject() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -281,19 +283,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableInsertObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3, object4}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3, object4), 2, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                table.insertObjects(new TestObject[]{object3, object4});
+                table.insertObjects(Arrays.asList(object3, object4));
             }
         });
     }
 
     @Test
     public void testTableInsertOrReplaceObject() {
-        doTestObjectsAfterInsert(new Object[]{renewObject1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewObject1, object2), 1, new String[]{
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -306,19 +308,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableInsertOrReplaceObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{renewObject1, renewObject2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewObject1, renewObject2), 2, new String[]{
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                table.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2});
+                table.insertOrReplaceObjects(Arrays.asList(renewObject1, renewObject2));
             }
         });
     }
 
     @Test
     public void testTableInsertOrIgnoreObject() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 1, new String[]{
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -331,19 +333,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableInsertOrIgnoreObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 2, new String[]{
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                table.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2});
+                table.insertOrIgnoreObjects(Arrays.asList(renewObject1, renewObject2));
             }
         });
     }
 
     @Test
     public void testTableInsertObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2, partialObject3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, partialObject3), 1, new String[]{
                 "INSERT INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -356,19 +358,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableInsertObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2, partialObject3, partialObject4}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, partialObject3, partialObject4), 2, new String[]{
                 "INSERT INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                table.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id});
+                table.insertObjects(Arrays.asList(object3, object4), new Field[]{DBTestObject.id});
             }
         });
     }
 
     @Test
     public void testTableInsertOrReplaceObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{renewedPartialObject1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewedPartialObject1, object2), 1, new String[]{
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -381,19 +383,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableInsertOrReplaceObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{renewedPartialObject1, renewedPartialObject2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewedPartialObject1, renewedPartialObject2), 2, new String[]{
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                table.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id});
+                table.insertOrReplaceObjects(Arrays.asList(object1, object2), new Field[]{DBTestObject.id});
             }
         });
     }
 
     @Test
     public void testTableInsertOrIgnoreObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 1, new String[]{
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -406,12 +408,12 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testTableInsertOrIgnoreObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 2, new String[]{
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                table.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id});
+                table.insertOrIgnoreObjects(Arrays.asList(object1, object2), new Field[]{DBTestObject.id});
             }
         });
     }
@@ -419,7 +421,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleAutoIncrement() {
         final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -433,7 +435,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleAutoIncrementWithPartialInsert() {
         final TestObject autoIncrementObject = TestObject.createAutoIncrementObject(object3.content);
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(content) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -446,7 +448,7 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleInsertObject() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3), 1, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -459,19 +461,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleInsertObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2, object3, object4}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, object3, object4), 2, new String[]{
                 "INSERT INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObjects(new TestObject[]{object3, object4}, DBTestObject.allFields(), tableName);
+                handle.insertObjects(Arrays.asList(object3, object4), DBTestObject.allFields(), tableName);
             }
         });
     }
 
     @Test
     public void testHandleInsertOrReplaceObject() {
-        doTestObjectsAfterInsert(new Object[]{renewObject1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewObject1, object2), 1, new String[]{
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -484,19 +486,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleInsertOrReplaceObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{renewObject1, renewObject2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewObject1, renewObject2), 2, new String[]{
                 "INSERT OR REPLACE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrReplaceObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
+                handle.insertOrReplaceObjects(Arrays.asList(renewObject1, renewObject2), DBTestObject.allFields(), tableName);
             }
         });
     }
 
     @Test
     public void testHandleInsertOrIgnoreObject() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 1, new String[]{
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
@@ -509,19 +511,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleInsertOrIgnoreObjects() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 2, new String[]{
                 "INSERT OR IGNORE INTO testTable(id, content) VALUES(?1, ?2)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrIgnoreObjects(new TestObject[]{renewObject1, renewObject2}, DBTestObject.allFields(), tableName);
+                handle.insertOrIgnoreObjects(Arrays.asList(renewObject1, renewObject2), DBTestObject.allFields(), tableName);
             }
         });
     }
 
     @Test
     public void testHandleInsertObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2, partialObject3}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, partialObject3), 1, new String[]{
                 "INSERT INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -534,19 +536,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleInsertObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2, partialObject3, partialObject4}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2, partialObject3, partialObject4), 2, new String[]{
                 "INSERT INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertObjects(new TestObject[]{object3, object4}, new Field[]{DBTestObject.id}, tableName);
+                handle.insertObjects(Arrays.asList(object3, object4), new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
 
     @Test
     public void testHandleInsertOrReplaceObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{renewedPartialObject1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewedPartialObject1, object2), 1, new String[]{
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -559,19 +561,19 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleInsertOrReplaceObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{renewedPartialObject1, renewedPartialObject2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(renewedPartialObject1, renewedPartialObject2), 2, new String[]{
                 "INSERT OR REPLACE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrReplaceObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
+                handle.insertOrReplaceObjects(Arrays.asList(object1, object2), new Field[]{DBTestObject.id}, tableName);
             }
         });
     }
 
     @Test
     public void testHandleInsertOrIgnoreObjectOnFields() {
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 1, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 1, new String[]{
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
@@ -584,12 +586,12 @@ public class ObjectInsertTest extends ObjectCRUDTestCase {
     @Test
     public void testHandleInsertOrIgnoreObjectsOnFields() {
         expectMode = Expect.SomeSQLs;
-        doTestObjectsAfterInsert(new Object[]{object1, object2}, 2, new String[]{
+        doTestObjectsAfterInsert(Arrays.asList(object1, object2), 2, new String[]{
                 "INSERT OR IGNORE INTO testTable(id) VALUES(?1)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {
-                handle.insertOrIgnoreObjects(new TestObject[]{object1, object2}, new Field[]{DBTestObject.id}, tableName);
+                handle.insertOrIgnoreObjects(Arrays.asList(object1, object2), new Field[]{DBTestObject.id}, tableName);
             }
         });
     }

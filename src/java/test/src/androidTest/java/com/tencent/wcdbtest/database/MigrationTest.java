@@ -37,6 +37,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class MigrationTest extends BaseTestCase {
     @Test
@@ -54,7 +56,7 @@ public class MigrationTest extends BaseTestCase {
         final String sourceTableName = "sourceTable";
         sourceDatabase.createTable(sourceTableName, DBTestObject.INSTANCE);
         Table<TestObject> sourceTable = sourceDatabase.getTable(sourceTableName, DBTestObject.INSTANCE);
-        sourceTable.insertObjects(new TestObject[]{oldObject1, oldObject2, oldObject3});
+        sourceTable.insertObjects(Arrays.asList(oldObject1, oldObject2, oldObject3));
 
         Database targetDatabase = new Database(currentDirectory + File.separator + "targetDatabase.sqlite3");
         targetDatabase.setCipherKey(targetCipher);

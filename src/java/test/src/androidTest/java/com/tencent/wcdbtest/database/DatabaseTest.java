@@ -175,11 +175,11 @@ public class DatabaseTest extends TableTestCase {
     @Test
     public void testCheckPoint() throws WCDBException {
         createTable();
-        TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
+        List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(100);
         final WrappedValue walFrameNum = new WrappedValue();
         for(int i = 0; i < 100; i++) {
             assertEquals(table.getValue(Column.all().count()).getLong(), i);
-            table.insertObject(objects[i]);
+            table.insertObject(objects.get(i));
             database.passiveCheckpoint();
             database.close(new Database.CloseCallBack() {
                 @Override

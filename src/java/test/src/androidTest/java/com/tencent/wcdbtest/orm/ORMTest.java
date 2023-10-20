@@ -106,7 +106,7 @@ public class ORMTest extends DatabaseTestCase {
         AllTypeObject min = AllTypeObjectHelper.minObject();
         AllTypeObject random = AllTypeObjectHelper.randomObject();
         AllTypeObject empty = AllTypeObjectHelper.emptyObject();
-        table.insertObjects(new AllTypeObject[]{ max, min, random, empty});
+        table.insertObjects(Arrays.asList(max, min, random, empty));
 
         assertEquals(max, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type)));
         assertEquals(min, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(min.type)));

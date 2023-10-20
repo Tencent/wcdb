@@ -102,7 +102,7 @@ class ORMTest : DatabaseTestCase() {
         val min = AllTypeObject.minObject()
         val random = AllTypeObject.randomObject()
         val empty = AllTypeObject.emptyObject()
-        table.insertObjects(arrayOf(max, min, random, empty))
+        table.insertObjects(listOf(max, min, random, empty))
         Assert.assertTrue(
             max == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type))
         )
