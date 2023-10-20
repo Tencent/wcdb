@@ -71,6 +71,12 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
 
     protected native void ofSchema(long column, int type, long schema, String schemaName);
 
+    public ResultColumn as(String alias) {
+        return new ResultColumn(configAlias(cppObj, alias));
+    }
+
+    private native static long configAlias(long self, String alias);
+
     protected Column() {
     }
 

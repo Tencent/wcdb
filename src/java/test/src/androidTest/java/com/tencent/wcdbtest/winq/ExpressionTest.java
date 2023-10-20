@@ -58,6 +58,8 @@ public class ExpressionTest {
         winqEqual(Expression.cast(column).as(ColumnType.Integer),
                 "CAST(testColumn AS INTEGER)");
 
+        winqEqual(Column.rowId().add(1).as("rowidAddOne"), "rowid + 1 AS rowidAddOne");
+
         winqEqual(Expression.case_().when(column.eq(1)).then("a")
                 .when(column.eq(2)).then("b").else_("c"),
                 "CASE WHEN testColumn == 1 THEN 'a' WHEN testColumn == 2 THEN 'b' ELSE 'c' END");

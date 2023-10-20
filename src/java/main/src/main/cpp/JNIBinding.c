@@ -121,6 +121,7 @@ static const JNINativeMethod g_columnMethods[] = {
     { "copy", "(J)J", (void *) WCDBJNIColumnFuncName(copy) },
     { "inTable", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIColumnFuncName(inTable) },
     { "ofSchema", "(J" WCDBJNIObjectOrStringSignature ")V", (void *) WCDBJNIColumnFuncName(ofSchema) },
+    { "configAlias", "(J" WCDBJNIStringSignature ")J", (void *) WCDBJNIColumnFuncName(configAlias) },
     { "allColumn", "()J", (void *) WCDBJNIColumnFuncName(createAll) },
     { "rowidColumn", "()J", (void *) WCDBJNIColumnFuncName(createRowId) },
 };
@@ -154,6 +155,7 @@ static const JNINativeMethod g_expressionMethods[] = {
     { "createWithNotExistStatement", "(J)J", (void *) WCDBJNIExpressionFuncName(createWithNotExistStatement) },
     { "cast", "(" WCDBJNIObjectOrStringSignature ")J", (void *) WCDBJNIExpressionFuncName(cast) },
     { "as", "(JI)V", (void *) WCDBJNIExpressionFuncName(as) },
+    { "as", "(J" WCDBJNIStringSignature ")J", (void *) WCDBJNIExpressionFuncName(configAlias) },
     { "caseWithExp",
       "(" WCDBJNIObjectOrStringSignature ")J",
       (void *) WCDBJNIExpressionFuncName(caseWithExp) },

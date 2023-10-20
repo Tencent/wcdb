@@ -31,6 +31,9 @@ public class ResultColumn extends Identifier implements ResultColumnConvertible 
         return CPPType.ResultColumn;
     }
 
+    protected ResultColumn(long cppObj) {
+        this.cppObj = cppObj;
+    }
 
     public ResultColumn(ResultColumnConvertible resultColumnConvertible) {
         cppObj = createCppObj(Identifier.getCppType(resultColumnConvertible), CppObject.get(resultColumnConvertible), null);

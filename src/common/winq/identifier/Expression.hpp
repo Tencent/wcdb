@@ -71,6 +71,8 @@ public:
     static Expression cast(const Expression& expression);
     Expression& as(const ColumnType& columnType);
 
+    ResultColumn as(const UnsafeStringView& alias);
+
     static Expression exists(const StatementSelect& select);
     static Expression notExists(const StatementSelect& select);
 

@@ -36,6 +36,7 @@ public class ColumnTest {
     public void test() {
         winqEqual(Column.all(), "*");
         winqEqual(Column.rowId(), "rowid");
+        winqEqual(Column.rowId().as("rowidAlias"), "rowid AS rowidAlias");
         winqEqual(new Column("testColumn"), "testColumn");
         winqEqual(new Column("testColumn").table("testTable"), "testTable.testColumn");
         winqEqual(new Column("testColumn").table("testTable").of("testSchema"), "testSchema.testTable.testColumn");

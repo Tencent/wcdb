@@ -203,6 +203,15 @@
     TestCaseAssertSQLEqual(testingSQL, @"CAST(1 AS INTEGER)");
 }
 
+- (void)test_alias
+{
+    auto testingSQL = (WCDB::Column::rowid() + 1).as("rowidAddOne");
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto types = WCDB::getTypesOfSQL(testingSQL);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"rowid + 1 AS rowidAddOne");
+}
+
 - (void)test_select
 {
     auto testingSQL = WCDB::Expression(select);

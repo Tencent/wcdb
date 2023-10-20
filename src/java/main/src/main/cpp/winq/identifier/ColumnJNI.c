@@ -64,3 +64,12 @@ void WCDBJNIColumnClassMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParam
     WCDBColumnOfSchema2(columnStruct, schema_common);
     WCDBJNITryReleaseStringInCommonValue(schema);
 }
+
+jlong WCDBJNIColumnClassMethod(configAlias, jlong column, jstring alias)
+{
+    WCDBJNIBridgeStruct(CPPColumn, column);
+    WCDBJNIGetString(alias);
+    jlong ret = (jlong) WCDBColumnConfigAlias(columnStruct, aliasString).innerValue;
+    WCDBJNIReleaseString(alias);
+    return ret;
+}

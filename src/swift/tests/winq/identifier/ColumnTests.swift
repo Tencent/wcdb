@@ -32,6 +32,8 @@ class ColumnTests: BaseTestCase {
 
         WINQAssertEqual(Column.rowid(), "rowid")
 
+        WINQAssertEqual(Column.rowid().as("rowidAlias"), "rowid AS rowidAlias")
+
         WINQAssertEqual(Column(named: "testColumn"), "testColumn")
 
         WINQAssertEqual(Column(named: "testColumn").in(table: "TestTable"), "TestTable.testColumn")

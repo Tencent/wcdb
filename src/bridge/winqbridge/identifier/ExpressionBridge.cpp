@@ -30,6 +30,7 @@
 #include "LiteralValue.hpp"
 #include "ObjectBridge.hpp"
 #include "RaiseFunction.hpp"
+#include "ResultColumn.hpp"
 #include "Schema.hpp"
 #include "StatementSelect.hpp"
 #include "SyntaxForwardDeclaration.h"
@@ -227,6 +228,15 @@ void WCDBExpressionAs(CPPExpression expression, enum WCDBSyntaxColumnType type)
 {
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     cppExpression->as(WCDB::WinqBridge::changeColumnType(type));
+}
+
+CPPResultColumn
+WCDBExpressionConfigAlias(CPPExpression expression, const char* _Nullable alias)
+{
+    WCDBGetObjectOrReturnValue(
+    expression, WCDB::Expression, cppExpression, CPPResultColumn());
+    return WCDBCreateCPPBridgedObjectByCopy(
+    CPPResultColumn, cppExpression->as(WCDB::UnsafeStringView(alias)));
 }
 
 CPPExpression WCDBExpressionCaseWithExp(CPPExpression expression)

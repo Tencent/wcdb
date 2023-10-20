@@ -186,6 +186,12 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
         return this;
     }
 
+    public ResultColumn as(String alias) {
+        return new ResultColumn(as(cppObj, alias));
+    }
+
+    private static native long as(long self, String alias);
+
     private static native void as(long self, int type);
 
     public static Expression case_() {
