@@ -59,6 +59,7 @@ public:
     static Thread current();
     static bool isMain();
     static void setUIThreadId(std::thread::id threadId);
+    static uint64_t getCurrentThreadId();
     bool isCurrentThread() const;
 
     bool equal(const Thread& other) const;

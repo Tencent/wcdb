@@ -44,6 +44,7 @@ HandleStatement::HandleStatement(HandleStatement &&other)
 , m_newTable(other.m_newTable)
 , m_modifiedTable(other.m_modifiedTable)
 , m_needAutoAddColumn(other.m_needAutoAddColumn)
+, m_sql(other.m_sql)
 , m_fullTrace(other.m_fullTrace)
 , m_needReport(other.m_needReport)
 , m_stepCount(other.m_stepCount)
@@ -355,8 +356,13 @@ bool HandleStatement::prepare(const UnsafeStringView &sql)
     m_fullTrace = getHandle()->isFullSQLEnable();
     if (!result) {
         m_stmt = nullptr;
-    } else if (m_fullTrace) {
-        clearReport();
+    } else {
+        if (m_fullTrace) {
+            clearReport();
+        }
+        if (isBusyTraceEnable()) {
+            m_sql = sql;
+        }
     }
     return result;
 }
@@ -376,6 +382,10 @@ bool HandleStatement::done()
 bool HandleStatement::step()
 {
     WCTAssert(isPrepared());
+
+    if (isBusyTraceEnable()) {
+        setCurrentSQL(m_sql);
+    }
 
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
@@ -408,6 +418,8 @@ void HandleStatement::finalize()
         // no need to call APIExit since it returns old code only.
         sqlite3_finalize(m_stmt);
         m_stmt = nullptr;
+        resetCurrentSQL(m_sql);
+        m_sql.clear();
     }
 }
 

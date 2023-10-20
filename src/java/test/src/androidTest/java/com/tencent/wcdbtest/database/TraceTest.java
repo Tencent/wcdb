@@ -40,14 +40,14 @@ import com.tencent.wcdbtest.base.RandomTool;
 import com.tencent.wcdbtest.base.TableTestCase;
 
 import static org.junit.Assert.*;
+
+import android.os.Process;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
 
 @RunWith(AndroidJUnit4.class)
 public class TraceTest extends TableTestCase {
@@ -321,6 +321,35 @@ public class TraceTest extends TableTestCase {
         assertEquals(indexCount.intValue, 1);
         assertEquals(openHandleCount.intValue, 2);
         Database.globalTraceDatabaseOperation(null);
+    }
+
+    @Test
+    public void testGlobalTraceBusy() throws InterruptedException, WCDBException {
+        WrappedValue testTid = new WrappedValue();
+        Database.globalTraceBusy(new Database.BusyTracer() {
+            @Override
+            public void onTrace(long tag, String path, long tid, String sql) {
+                assertEquals(tag, database.getTag());
+                assertEquals(path, database.getPath());
+                assertEquals(sql, "INSERT INTO testTable(id, content) VALUES(?1, ?2)");
+                testTid.intValue = tid;
+            }
+        }, 0.1);
+        database.createTable(tableName, DBTestObject.INSTANCE);
+        TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100000);
+        WrappedValue dispatchTid = new WrappedValue();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dispatchTid.intValue = Process.myTid();
+                database.insertObjects(objects, DBTestObject.allFields(), tableName);
+            }
+        });
+        thread.start();
+        sleep(100);
+        database.insertObject(RandomTool.testObjectWithId(100001), DBTestObject.allFields(), tableName);
+        thread.join();
+        assertTrue(testTid.intValue != 0 && testTid.intValue == dispatchTid.intValue);
     }
 
 }

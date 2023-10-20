@@ -180,6 +180,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
         if (referencedHandle.handle != nullptr) {
             WCTAssert(m_concurrency.readSafety());
             WCTAssert(referencedHandle.reference > 0);
+            WCTAssert(referencedHandle.handle->isUsingInThread(Thread::getCurrentThreadId()));
             ++referencedHandle.reference;
             return RecyclableHandle(
             referencedHandle.handle,
@@ -241,6 +242,7 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
 
     WCTAssert(handle != nullptr);
     handle->setWriteHint(writeHint);
+    handle->setActiveThreadId(Thread::getCurrentThreadId());
 
     m_concurrency.lockShared();
     WCTAssert(referencedHandle.handle == nullptr && referencedHandle.reference == 0);
@@ -275,6 +277,7 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
             LockGuard memoryGuard(m_memory);
             m_frees[slot].push_back(handle);
             handle->setWriteHint(false);
+            handle->setActiveThreadId(0);
         }
         m_concurrency.unlockShared();
         m_counter.decreaseHandleCount(writeHint);

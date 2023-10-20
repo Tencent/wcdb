@@ -340,6 +340,27 @@ public:
      */
     static void globalTraceDatabaseOperation(DBOperationTrace trace);
 
+    typedef std::function<void(long /* tag */, const UnsafeStringView & /* path */, uint64_t /* id of the thread being waited on */, const UnsafeStringView & /* sql executing in the thread being waited on */
+                               )>
+    BusyTrace;
+
+    /**
+     @brief You can register a tracer to database busy events.
+     It returns:
+         1. Tag of database being busy.
+         2. Path of database being busy.
+         3. ID of the thread being waited on.
+         4. SQL executing in the thread being waited on.
+     @warning Since the tracer will be called back synchronously
+        when the database operation is blocked and times out,
+        you can neither directly access the busy database
+        nor perform heavy operation in the tracer.
+     @see `BusyTrace`
+     @param trace tracer.
+     @param timeOut timeout in seconds for blocking database operation
+     */
+    static void globalTraceBusy(BusyTrace trace, double timeOut);
+
 #pragma mark - File
 public:
     /**

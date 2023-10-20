@@ -58,6 +58,11 @@ final class TestObject: TestObjectBase, TableCodable {
     var variable1: Int? = 0
     var variable2: String? = ""
 
+    init(variable1: Int? = nil, variable2: String? = nil) {
+        self.variable1 = variable1
+        self.variable2 = variable2
+    }
+
     enum CodingKeys: String, CodingTableKey {
         typealias Root = TestObject
         case variable1

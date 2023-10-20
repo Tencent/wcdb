@@ -305,6 +305,11 @@ void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
     }
 }
 
+void Database::globalTraceBusy(BusyTrace trace, double timeOut)
+{
+    Core::shared().setBusyMonitor(trace, timeOut);
+}
+
 bool Database::removeFiles()
 {
     return m_innerDatabase->removeFiles();

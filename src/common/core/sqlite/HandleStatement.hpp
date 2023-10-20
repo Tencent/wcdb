@@ -114,6 +114,7 @@ private:
     StringView m_newTable;
     StringView m_modifiedTable;
     bool m_needAutoAddColumn;
+    StringView m_sql;
 
 #pragma mark - Full trace sql
 private:

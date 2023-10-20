@@ -93,6 +93,8 @@
 
 namespace WCDB {
 
+typedef Recyclable<void*> RecyclableContext;
+
 class ObjectBridge {
 public:
     template<typename T>

@@ -33,4 +33,14 @@ void WCDBCoreSetDefaultCipherConfig(int version);
 void WCDBCorePurgeAllDatabase(void);
 bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir);
 
+typedef void (*WCDBBusyTracer)(void* _Nullable context,
+                               long tag,
+                               const char* _Nonnull path,
+                               unsigned long long tid,
+                               const char* _Nonnull sql);
+void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,
+                             double timeOut,
+                             void* _Nullable context,
+                             WCDBContextDestructor _Nullable destructor);
+
 WCDB_EXTERN_C_END
