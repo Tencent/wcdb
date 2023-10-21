@@ -140,6 +140,9 @@ public class RepairTest extends TableTestCase {
                 rowId += 1;
                 assertEquals(rowId, newObject.id);
 
+                // Make sure the new backup file is newer than the existing backup file
+                sleep(100);
+
                 // 2.
                 database.backup();
                 database.deposit();
