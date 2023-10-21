@@ -83,4 +83,17 @@ public class BindParameter extends Identifier implements ExpressionConvertible {
     }
 
     private static native long[] createCppObjs(int num);
+
+    public static final BindParameter def = new BindParameter(0); //?
+    public static final BindParameter _1 = new BindParameter(1); //?1
+    public static final BindParameter _2 = new BindParameter(2); //?2
+    public static final BindParameter _3 = new BindParameter(3); //?3
+    public static final BindParameter _4 = new BindParameter(4); //?4
+    public static final BindParameter _5 = new BindParameter(5); //?5
+    public static final BindParameter _6 = new BindParameter(6); //?6
+    public static final BindParameter _7 = new BindParameter(7); //?7
+    public static final BindParameter _8 = new BindParameter(8); //?8
+    public static final BindParameter _9 = new BindParameter(9); //?9
+    public static final BindParameter _10 = new BindParameter(10); //?10
+
 }

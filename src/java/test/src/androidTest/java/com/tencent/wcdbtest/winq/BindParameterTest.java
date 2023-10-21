@@ -41,5 +41,18 @@ public class BindParameterTest {
         winqEqual(BindParameter.dollar("testName"), "$testName");
         winqEqual(BindParameter.colon("testName"), ":testName");
         winqEqual(BindParameter.bindParameters(5)[4], "?5");
+
+        winqEqual(BindParameter.def, "?");
+        winqEqual(BindParameter._1, "?1");
+        winqEqual(BindParameter._2, "?2");
+        winqEqual(BindParameter._3, "?3");
+        winqEqual(BindParameter._4, "?4");
+        winqEqual(BindParameter._5, "?5");
+        winqEqual(BindParameter._6, "?6");
+        winqEqual(BindParameter._7, "?7");
+        winqEqual(BindParameter._8, "?8");
+        winqEqual(BindParameter._9, "?9");
+        winqEqual(BindParameter._10, "?10");
+
     }
 }
