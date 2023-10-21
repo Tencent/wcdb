@@ -49,11 +49,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return this;
     }
 
-    public Update<T> set(Field<T> field) {
-        return set(new Field[]{field});
-    }
-
-    public Update<T> set(Field<T>[] fields) {
+    public Update<T> set(Field<T>... fields) {
         this.fields = fields;
         statement.setColumnsToBindParameters(fields);
         return this;
@@ -104,7 +100,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return toRow(new Value[]{new Value(value)});
     }
 
-    public Update<T> toRow(Value[] row) {
+    public Update<T> toRow(Value... row) {
         this.row = row;
         return this;
     }
@@ -119,7 +115,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         return this;
     }
 
-    public Update<T> orderBy(OrderingTerm[] orders) {
+    public Update<T> orderBy(OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }

@@ -63,7 +63,7 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    public TableConstraint indexedBy(IndexedColumnConvertible[] indexedColumns) {
+    public TableConstraint indexedBy(IndexedColumnConvertible... indexedColumns) {
         if(indexedColumns == null || indexedColumns.length == 0) {
             return this;
         }
@@ -83,7 +83,7 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    public TableConstraint indexedBy(String[] indexedColumns) {
+    public TableConstraint indexedBy(String... indexedColumns) {
         configIndexedColumn(cppObj, CPPType.String, null, indexedColumns);
         return this;
     }
@@ -107,7 +107,7 @@ public class TableConstraint extends Identifier {
 
     private static native void configCheckExpression(long self, long expression);
 
-    public TableConstraint foreignKey(String[] columns, ForeignKey foreignKey) {
+    public TableConstraint foreignKey(ForeignKey foreignKey, String... columns) {
         configForeignKey(
                 cppObj,
                 CPPType.String,
@@ -117,7 +117,7 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    public TableConstraint foreignKey(Column[] columns, ForeignKey foreignKey) {
+    public TableConstraint foreignKey(ForeignKey foreignKey, Column... columns) {
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);

@@ -62,7 +62,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         return this;
     }
 
-    public Insert<T> onFields(Field<T>[] fields) {
+    public Insert<T> onFields(Field<T>... fields) {
         this.fields = fields;
         statement.columns(fields).valuesWithBindParameters(fields.length);
         return this;

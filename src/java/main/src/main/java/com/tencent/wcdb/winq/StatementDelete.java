@@ -41,7 +41,7 @@ public class StatementDelete extends Statement {
         return with(new CommonTableExpression[]{expression});
     }
 
-    public StatementDelete with(CommonTableExpression[] expressions) {
+    public StatementDelete with(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -57,7 +57,7 @@ public class StatementDelete extends Statement {
         return withRecursive(new CommonTableExpression[]{expression});
     }
 
-    public StatementDelete withRecursive(CommonTableExpression[] expressions) {
+    public StatementDelete withRecursive(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -98,7 +98,7 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    public StatementDelete orderBy(OrderingTerm[] orders) {
+    public StatementDelete orderBy(OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }

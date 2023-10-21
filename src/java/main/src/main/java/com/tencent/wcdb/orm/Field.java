@@ -96,13 +96,13 @@ public class Field<T> extends Column {
         return null;
     }
 
-    public static <T> TableBinding<T> getBinding(Field<T>[] fields) {
+    public static <T> TableBinding<T> getBinding(Field<T>... fields) {
         assert fields != null && fields.length > 0;
         Field<T> field = fields[0];
         return getBinding(field);
     }
 
-    public static <T> Class<T> getBindClass(Field<T>[] fields) {
+    public static <T> Class<T> getBindClass(Field<T>... fields) {
         return (fields != null && fields.length > 0) ? fields[0].binding.bindingType() : null;
     }
 }

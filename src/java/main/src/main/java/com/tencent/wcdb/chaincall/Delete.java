@@ -46,12 +46,7 @@ public class Delete extends ChainCall<StatementDelete>{
         return this;
     }
 
-    public Delete orderBy(OrderingTerm order) {
-        statement.orderBy(order);
-        return this;
-    }
-
-    public Delete orderBy(OrderingTerm[] orders) {
+    public Delete orderBy(OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }
