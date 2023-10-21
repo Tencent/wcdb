@@ -85,7 +85,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     }
 
     public void dropTable(String tableName) throws WCDBException {
-        execute(new StatementDropTable().dropTable(tableName));
+        execute(new StatementDropTable().dropTable(tableName).ifExist());
     }
 
     public <T> Insert<T> prepareInsert() {
