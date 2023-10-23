@@ -208,10 +208,22 @@ public:
     bool isFullSQLEnable();
     void postSQLNotification(const UnsafeStringView &sql, const UnsafeStringView &info);
 
+    void setBusyTraceEnable(bool enable);
+    bool isBusyTraceEnable() const;
+    void setCurrentSQL(const UnsafeStringView &sql);
+    void resetCurrentSQL(const UnsafeStringView &sql);
+    StringView getCurrentSQL() const;
+    void setActiveThreadId(uint64_t tid);
+    bool isUsingInThread(uint64_t tid) const;
+
 private:
     HandleNotification m_notification;
     bool m_tableMonitorForbidden;
     bool m_fullSQLTrace;
+    mutable std::mutex m_lock;
+    bool m_busyTrace;
+    StringView m_currentSQL;
+    uint64_t m_tid;
 
 #pragma mark - Error
 public:

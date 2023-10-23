@@ -36,12 +36,12 @@ typedef void (^WCTErrorTraceBlock)(WCTError*);
 /**
  Triggered when a transaction or a normal sql ends.
  */
-typedef void (^WCTPerformanceTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, WCTPerformanceInfo* /* info */);
+typedef void (^WCTPerformanceTraceBlock)(WCTTag /* tag */, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, WCTPerformanceInfo* /* info */);
 
 /**
  Triggered when a SQL is executed.
  */
-typedef void (^WCTSQLTraceBlock)(WCTTag /*tag*/, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, NSString* /*info*/);
+typedef void (^WCTSQLTraceBlock)(WCTTag /* tag */, NSString* /* path */, uint64_t /*handleIdentifier*/, NSString* /* sql */, NSString* /*info*/);
 
 typedef NS_ENUM(NSUInteger, WCTDatabaseOperation) {
     WCTDatabaseOperation_Create = 0,
@@ -53,6 +53,15 @@ typedef NS_ENUM(NSUInteger, WCTDatabaseOperation) {
  Triggered when a specific event of database occurs.
  */
 typedef void (^WCTDatabaseOperationTraceBlock)(WCTDatabase* /* database */, WCTDatabaseOperation /* type of operation*/, NSDictionary* /* infos about current operation */);
+
+/**
+ Triggered when the database operation is blocked by other threads.
+ */
+typedef void (^WCTDatabaseBusyTraceBlock)(WCTTag /* tag */,
+                                          NSString* /* path */,
+                                          uint64_t /* id of the thread being waited on */,
+                                          NSString* /* sql executing in the thread being waited on */
+);
 
 /**
  The following are the keys in the infos from the callback of database operation monitoring.
@@ -179,6 +188,23 @@ WCDB_API @interface WCTDatabase(Monitor)
  @param trace tracer.
  */
 + (void)globalTraceDatabaseOperation:(nullable WCDB_ESCAPE WCTDatabaseOperationTraceBlock)trace;
+
+/**
+ @brief You can register a tracer to database busy events.
+ It returns:
+     1. Tag of database being busy.
+     2. Path of database being busy.
+     3. ID of the thread being waited on.
+     4. SQL executing in the thread being waited on.
+ @warning Since the tracer will be called back synchronously
+    when the database operation is blocked and times out,
+    you can neither directly access the busy database
+    nor perform heavy operation in the tracer.
+ @see `WCTDatabaseBusyTraceBlock`
+ @param trace tracer.
+ @param timeOut timeout in seconds for blocking database operation
+ */
++ (void)globalTraceBusy:(nullable WCDB_ESCAPE WCTDatabaseBusyTraceBlock)trace withTimeOut:(double)timeOut;
 
 @end
 

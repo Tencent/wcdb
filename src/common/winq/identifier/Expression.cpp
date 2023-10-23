@@ -128,6 +128,11 @@ Expression& Expression::as(const ColumnType& columnType)
     return *this;
 }
 
+ResultColumn Expression::as(const UnsafeStringView& alias)
+{
+    return ResultColumn(*this).as(alias);
+}
+
 Expression Expression::exists(const StatementSelect& select)
 {
     Expression expression;

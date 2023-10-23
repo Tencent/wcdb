@@ -44,3 +44,5 @@ jlong WCDBJNIColumnClassMethod(copy, jlong column);
 void WCDBJNIColumnClassMethod(inTable, jlong column, jstring table);
 
 void WCDBJNIColumnClassMethod(ofSchema, jlong column, WCDBJNIObjectOrStringParameter(schema));
+
+jlong WCDBJNIColumnClassMethod(configAlias, jlong column, jstring alias);

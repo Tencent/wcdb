@@ -36,6 +36,8 @@ import com.tencent.wcdb.winq.StatementInsert;
 import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdb.winq.StatementUpdate;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class HandleOperation extends CppObject {
@@ -44,30 +46,30 @@ public abstract class HandleOperation extends CppObject {
     abstract boolean autoInvalidateHandle();
 
     public void insertRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
-        insertRows(new Value[][]{row}, columns, tableName);
+        insertRows(Collections.singleton(row), columns, tableName);
     }
 
-    public void insertRows(Value[][] rows, Column[] columns, String tableName) throws WCDBException {
+    public void insertRows(Collection<Value[]> rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.None);
     }
 
     public void insertOrReplaceRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
-        insertOrReplaceRows(new Value[][]{row}, columns, tableName);
+        insertOrReplaceRows(Collections.singleton(row), columns, tableName);
     }
 
-    public void insertOrReplaceRows(Value[][] rows, Column[] columns, String tableName) throws WCDBException {
+    public void insertOrReplaceRows(Collection<Value[]> rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.Replace);
     }
 
     public void insertOrIgnoreRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
-        insertOrIgnoreRows(new Value[][]{row}, columns, tableName);
+        insertOrIgnoreRows(Collections.singleton(row), columns, tableName);
     }
 
-    public void insertOrIgnoreRows(Value[][] rows, Column[] columns, String tableName) throws WCDBException {
+    public void insertOrIgnoreRows(Collection<Value[]> rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.Ignore);
     }
 
-    private void insertRows(final Value[][] rows, Column[] columns, String tableName, ConflictAction action) throws WCDBException {
+    private void insertRows(final Collection<Value[]> rows, Column[] columns, String tableName, ConflictAction action) throws WCDBException {
         final StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
         if(action == ConflictAction.Replace) {
             insert.orReplace();
@@ -76,7 +78,7 @@ public abstract class HandleOperation extends CppObject {
         }
         Handle handle = getHandle(true);
         try {
-            if(rows.length > 1) {
+            if(rows.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(Handle handle) throws WCDBException {
@@ -94,7 +96,7 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
-    private void insertRows(Value[][] rows, StatementInsert insert, Handle handle) throws WCDBException {
+    private void insertRows(Collection<Value[]> rows, StatementInsert insert, Handle handle) throws WCDBException {
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(insert);
         for(Value[] row : rows) {
             preparedStatement.reset();

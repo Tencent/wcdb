@@ -77,7 +77,7 @@ public class StatementCreateIndex extends Statement {
 
     private static native void configTableName(long self, String tableName);
 
-    public StatementCreateIndex indexedBy(IndexedColumnConvertible[] indexedColumnConvertible) {
+    public StatementCreateIndex indexedBy(IndexedColumnConvertible... indexedColumnConvertible) {
         if(indexedColumnConvertible == null || indexedColumnConvertible.length == 0) {
             return this;
         }
@@ -101,7 +101,7 @@ public class StatementCreateIndex extends Statement {
         return this;
     }
 
-    public StatementCreateIndex indexedBy(String[] indexedColumnNames) {
+    public StatementCreateIndex indexedBy(String... indexedColumnNames) {
         configIndexedColumns(cppObj, CPPType.String, null, indexedColumnNames);
         return this;
     }

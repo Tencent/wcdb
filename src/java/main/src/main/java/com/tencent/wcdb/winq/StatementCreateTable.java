@@ -85,7 +85,7 @@ public class StatementCreateTable extends Statement {
 
     private static native void configColumn(long self, long column);
 
-    public StatementCreateTable define(ColumnDef[] columns) {
+    public StatementCreateTable define(ColumnDef... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -99,7 +99,7 @@ public class StatementCreateTable extends Statement {
 
     private static native void configColumns(long self, long[] columns);
 
-    public StatementCreateTable constraint(TableConstraint[] constraints) {
+    public StatementCreateTable constraint(TableConstraint... constraints) {
         if(constraints == null || constraints.length == 0) {
             return this;
         }

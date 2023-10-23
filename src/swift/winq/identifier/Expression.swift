@@ -122,6 +122,10 @@ public final class Expression: Identifier<CPPExpression> {
         return self
     }
 
+    public func `as`(_ alias: String) -> ResultColumn {
+        return ResultColumn(with: WCDBExpressionConfigAlias(cppObj, alias.cString))
+    }
+
     public static func `case`(_ expressionConvertible: ExpressionConvertible? = nil) -> Expression {
         if let expressionConvertible = expressionConvertible {
             let expression = expressionConvertible.asExpression()

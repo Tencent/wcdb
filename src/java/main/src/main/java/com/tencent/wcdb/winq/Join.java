@@ -189,12 +189,12 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
         return this;
     }
 
-    public Join using(String[] columns) {
+    public Join using(String... columns) {
         configUsingColumn(cppObj, CPPType.String, null, columns);
         return this;
     }
 
-    public Join using(Column[] columns) {
+    public Join using(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }

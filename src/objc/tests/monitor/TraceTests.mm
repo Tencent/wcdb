@@ -282,4 +282,31 @@
     [WCTDatabase globalTraceDatabaseOperation:nil];
 }
 
+- (void)test_global_trace_busy
+{
+    __block uint64_t testTid = 0;
+    [WCTDatabase
+    globalTraceBusy:^(WCTTag tag, NSString* path, uint64_t tid, NSString* sql) {
+        XCTAssertTrue(tag == self.database.tag);
+        XCTAssertTrue([path isEqualToString:self.database.path]);
+        XCTAssertTrue([sql isEqualToString:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"]);
+        testTid = tid;
+    }
+        withTimeOut:0.1];
+
+    XCTAssertTrue([self createTable]);
+
+    __block uint64_t dispatchTid = 0;
+    NSArray* objects = [Random.shared testCaseObjectsWithCount:100000 startingFromIdentifier:0];
+    [self.dispatch async:^{
+        pthread_threadid_np(nullptr, &dispatchTid);
+        XCTAssertTrue([self.table insertObjects:objects]);
+    }];
+    usleep(10000);
+    XCTAssertTrue([self.table insertObject:[Random.shared autoIncrementTestCaseObject]]);
+    [self.dispatch waitUntilDone];
+    XCTAssertTrue(testTid != 0 && testTid == dispatchTid);
+    [WCTDatabase globalTraceBusy:nil withTimeOut:0];
+}
+
 @end

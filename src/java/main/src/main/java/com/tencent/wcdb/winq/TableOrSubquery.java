@@ -45,7 +45,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
 
     private static native long createCppObj(int type, long object, String tableName);
 
-    public TableOrSubquery(TableOrSubqueryConvertible[] tableOrSubqueries) {
+    public TableOrSubquery(TableOrSubqueryConvertible... tableOrSubqueries) {
         if(tableOrSubqueries == null || tableOrSubqueries.length == 0) {
             cppObj = createCppObj(CPPType.String, new long[]{}, null);
             return;
@@ -57,7 +57,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
         cppObj = createCppObj(Identifier.getCppType(tableOrSubqueries[0]), array, null);
     }
 
-    public TableOrSubquery(String[] tables) {
+    public TableOrSubquery(String... tables) {
         cppObj = createCppObj(CPPType.String, null, tables);
     }
 

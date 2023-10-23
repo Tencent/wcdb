@@ -49,7 +49,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseUpdateObject() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, renewedObject2),
+            listOf(renewedObject1, renewedObject2),
             "UPDATE testTable SET content = ?1"
         ) { database.updateObject(renewObject, DBTestObject.content, tableName) }
     }
@@ -57,7 +57,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseUpdateObjectWhere() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 WHERE id == 1"
         ) {
             database.updateObject(
@@ -72,7 +72,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseUpdateObjectWhereOrderLimit() {
         doTestObjectsAfterOperation(
-            arrayOf(object1, renewedObject2),
+            listOf(object1, renewedObject2),
             "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1"
         ) {
             database.updateObject(
@@ -88,7 +88,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseUpdateObjectWhereOrderLimitOffset() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1"
         ) {
             database.updateObject(
@@ -104,7 +104,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseUpdateObjectOrderLimit() {
         doTestObjectsAfterOperation(
-            arrayOf(object1, renewedObject2),
+            listOf(object1, renewedObject2),
             "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1"
         ) {
             database.updateObject(
@@ -119,7 +119,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseUpdateObjectOrderLimitOffset() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1 OFFSET 1"
         ) {
             database.updateObject(
@@ -134,7 +134,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testTableUpdateObject() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, renewedObject2),
+            listOf(renewedObject1, renewedObject2),
             "UPDATE testTable SET content = ?1"
         ) { table.updateObject(renewObject, DBTestObject.content) }
     }
@@ -142,7 +142,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testTableUpdateObjectWhere() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 WHERE id == 1"
         ) { table.updateObject(renewObject, DBTestObject.content, DBTestObject.id.eq(1)) }
     }
@@ -150,7 +150,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testTableUpdateObjectWhereOrderLimit() {
         doTestObjectsAfterOperation(
-            arrayOf(object1, renewedObject2),
+            listOf(object1, renewedObject2),
             "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1"
         ) {
             table.updateObject(
@@ -165,7 +165,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testTableUpdateObjectWhereOrderLimitOffset() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1"
         ) {
             table.updateObject(
@@ -180,7 +180,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testTableUpdateObjectOrderLimit() {
         doTestObjectsAfterOperation(
-            arrayOf(object1, renewedObject2),
+            listOf(object1, renewedObject2),
             "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1"
         ) {
             table.updateObject(
@@ -194,7 +194,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testTableUpdateObjectOrderLimitOffset() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1 OFFSET 1"
         ) {
             table.updateObject(
@@ -208,7 +208,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleUpdateObject() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, renewedObject2),
+            listOf(renewedObject1, renewedObject2),
             "UPDATE testTable SET content = ?1"
         ) { handle.updateObject(renewObject, DBTestObject.content, tableName) }
     }
@@ -216,7 +216,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleUpdateObjectWhere() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 WHERE id == 1"
         ) {
             handle.updateObject(
@@ -231,7 +231,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleUpdateObjectWhereOrderLimit() {
         doTestObjectsAfterOperation(
-            arrayOf(object1, renewedObject2),
+            listOf(object1, renewedObject2),
             "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1"
         ) {
             handle.updateObject(
@@ -247,7 +247,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleUpdateObjectWhereOrderLimitOffset() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1"
         ) {
             handle.updateObject(
@@ -263,7 +263,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleUpdateObjectOrderLimit() {
         doTestObjectsAfterOperation(
-            arrayOf(object1, renewedObject2),
+            listOf(object1, renewedObject2),
             "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1"
         ) {
             handle.updateObject(
@@ -278,7 +278,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleUpdateObjectOrderLimitOffset() {
         doTestObjectsAfterOperation(
-            arrayOf(renewedObject1, object2),
+            listOf(renewedObject1, object2),
             "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1 OFFSET 1"
         ) {
             handle.updateObject(

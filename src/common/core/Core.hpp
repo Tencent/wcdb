@@ -151,6 +151,16 @@ protected:
     static void breakpoint() WCDB_USED WCDB_NO_INLINE;
     static void print(const UnsafeStringView& message);
 
+#pragma mark - Busy Retry
+public:
+    typedef std::function<void(const Tag&, const UnsafeStringView&, uint64_t, const UnsafeStringView)> BusyMonitor;
+    void setBusyMonitor(BusyMonitor monitor, double timeOut);
+    bool isBusyTraceEnable() const;
+
+protected:
+    std::shared_ptr<Config> m_globalBusyRetryConfig;
+    bool m_enableBusyTrace;
+
 #pragma mark - Merge FTS Index
 public:
     using TableArray = OperationQueue::TableArray;

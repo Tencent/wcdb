@@ -731,7 +731,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         In operation
      */
 
-    public Expression in(short[] operands) {
+    public Expression in(short... operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -739,7 +739,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
-    public Expression in(int[] operands){
+    public Expression in(int... operands){
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -747,11 +747,11 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
-    public Expression in(long[] operands) {
+    public Expression in(long... operands) {
         return in(operands, false);
     }
 
-    public Expression in(float[] operands) {
+    public Expression in(float... operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -759,11 +759,11 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
-    public Expression in(double[] operands) {
+    public Expression in(double... operands) {
         return in(operands, false);
     }
 
-    public Expression in(String[] operands) {
+    public Expression in(String... operands) {
         return in(operands, false);
     }
 
@@ -771,7 +771,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands.toArray(), false);
     }
 
-    public <T> Expression in(T[] operands) {
+    public <T> Expression in(T... operands) {
         return in(operands, false);
     }
 
@@ -779,7 +779,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands.toArray(), false);
     }
 
-    public Expression notIn(short[] operands) {
+    public Expression notIn(short... operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -787,7 +787,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
-    public Expression notIn(int[] operands) {
+    public Expression notIn(int... operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -795,11 +795,11 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
-    public Expression notIn(long[] operands) {
+    public Expression notIn(long... operands) {
         return in(operands, true);
     }
 
-    public Expression notIn(float[] operands) {
+    public Expression notIn(float... operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -807,11 +807,11 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
-    public Expression notIn(double[] operands) {
+    public Expression notIn(double... operands) {
         return in(operands, true);
     }
 
-    public Expression notIn(String[] operands) {
+    public Expression notIn(String... operands) {
         return in(operands, true);
     }
 
@@ -819,7 +819,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands.toArray(), true);
     }
 
-    public <T> Expression notIn(T[] operands) {
+    public <T> Expression notIn(T... operands) {
         return in(operands, true);
     }
 

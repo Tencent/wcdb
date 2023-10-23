@@ -31,7 +31,10 @@
 namespace WCDB {
 
 BusyRetryConfig::BusyRetryConfig()
-: Config(), m_identifier(StringView::formatted("Busy-%p", this))
+: Config()
+, m_identifier(StringView::formatted("Busy-%p", this))
+, m_busyMonitor(nullptr)
+, m_timeOut(0)
 {
     Global::shared().setNotificationForLockEvent(
     m_identifier,
@@ -84,6 +87,17 @@ bool BusyRetryConfig::onBusy(const UnsafeStringView& path, int numberOfTimes)
     Trying& trying = m_tryings.getOrCreate();
     WCTAssert(trying.valid());
     return getOrCreateState(trying.getPath()).wait(trying);
+}
+
+#pragma mark - Busy Moniter
+void BusyRetryConfig::setBusyMonitor(const BusyMonitor& monitor, double timeOut)
+{
+    LockGuard lockGuard(m_statesLock);
+    m_busyMonitor = monitor;
+    m_timeOut = timeOut;
+    for (auto& iter : m_states) {
+        iter.second.setBusyMonitor(monitor, timeOut);
+    }
 }
 
 #pragma mark - State
@@ -181,14 +195,17 @@ BusyRetryConfig::State& BusyRetryConfig::getOrCreateState(const UnsafeStringView
         State& state = m_states[path];
         state.m_path = path;
         stateHoder.state = &state;
+        state.setBusyMonitor(m_busyMonitor, m_timeOut);
         return state;
     }
 }
 
 BusyRetryConfig::State::State()
 : m_pagerType(PagerLockType::None)
-, m_localPagerType(PagerLockType::None)
+, m_pagerChangeTid(0)
 , m_mainThreadBusyTrying(nullptr)
+, m_busyMonitor(nullptr)
+, m_timeOut(0)
 {
 }
 
@@ -198,8 +215,7 @@ void BusyRetryConfig::State::updatePagerLock(PagerLockType type)
     if (m_pagerType != type) {
         bool notify = type < m_pagerType;
         m_pagerType = type;
-        PagerLockType& localPageType = m_localPagerType.getOrCreate();
-        localPageType = type;
+        m_pagerChangeTid = Thread::getCurrentThreadId();
         if (notify) {
             tryNotify();
         }
@@ -212,16 +228,13 @@ void BusyRetryConfig::State::updateShmLock(void* identifier, int sharedMask, int
     bool notify = false;
     if (sharedMask == 0 && exclusiveMask == 0) {
         m_shmMasks.erase(identifier);
-        m_localShmMask.getOrCreate().erase(identifier);
         notify = true;
     } else {
         State::ShmMask& mask = m_shmMasks[identifier];
         notify = sharedMask < mask.shared || exclusiveMask < mask.exclusive;
         mask.shared = sharedMask;
         mask.exclusive = exclusiveMask;
-        State::ShmMask& localMask = m_localShmMask.getOrCreate()[identifier];
-        localMask.shared = sharedMask;
-        localMask.exclusive = exclusiveMask;
+        mask.tid = Thread::getCurrentThreadId();
     }
     if (notify) {
         tryNotify();
@@ -247,11 +260,13 @@ bool BusyRetryConfig::State::shouldWait(const Expecting& expecting) const
 bool BusyRetryConfig::State::localShouldWait(const Expecting& expecting) const
 {
     bool wait = false;
-    if (!expecting.satisfied(m_localPagerType.getOrCreate())) {
+    uint64_t tid = Thread::getCurrentThreadId();
+    if (m_pagerChangeTid == tid && !expecting.satisfied(m_pagerType)) {
         wait = true;
     } else {
-        for (const auto& iter : m_localShmMask.getOrCreate()) {
-            if (!expecting.satisfied(iter.second.shared, iter.second.exclusive)) {
+        for (const auto& iter : m_shmMasks) {
+            if (iter.second.tid == tid
+                && !expecting.satisfied(iter.second.shared, iter.second.exclusive)) {
                 wait = true;
                 break;
             }
@@ -264,6 +279,8 @@ bool BusyRetryConfig::State::wait(Trying& trying)
 {
     static_assert(Exclusivity::Must < Exclusivity::NoMatter, "");
 
+    double timeOut = m_busyMonitor != nullptr && m_timeOut > 0 ? m_timeOut : BusyRetryTimeOut;
+    int timeOutTimes = 0;
     std::unique_lock<std::mutex> lockGuard(m_lock);
     while (shouldWait(trying)) {
         Thread currentThread = Thread::current();
@@ -277,7 +294,7 @@ bool BusyRetryConfig::State::wait(Trying& trying)
             m_mainThreadBusyTrying = &trying;
         }
 
-        bool notified = m_conditional.wait_for(lockGuard, BusyRetryTimeOut);
+        bool notified = m_conditional.wait_for(lockGuard, timeOut);
 
         if (exclusivity == Exclusivity::Must) {
             m_mainThreadBusyTrying = nullptr;
@@ -286,8 +303,30 @@ bool BusyRetryConfig::State::wait(Trying& trying)
         m_waitings.erase(currentThread);
 
         if (!notified) {
-            // retry anyway if timeout
-            break;
+            if (m_busyMonitor != nullptr) {
+                if (!trying.satisfied(m_pagerType)) {
+                    WCTAssert(m_pagerChangeTid != 0
+                              && m_pagerChangeTid != Thread::getCurrentThreadId());
+                    m_busyMonitor(m_path, m_pagerChangeTid);
+                    timeOutTimes++;
+                } else {
+                    for (const auto& iter : m_shmMasks) {
+                        if (!trying.satisfied(iter.second.shared, iter.second.exclusive)) {
+                            WCTAssert(iter.second.tid != 0
+                                      && iter.second.tid != Thread::getCurrentThreadId());
+                            m_busyMonitor(m_path, iter.second.tid);
+                            timeOutTimes++;
+                            break;
+                        }
+                    }
+                }
+                if (timeOut * timeOutTimes >= BusyRetryTimeOut) {
+                    break;
+                }
+            } else {
+                // retry anyway if timeout
+                break;
+            }
         }
     }
     // never timeout
@@ -310,6 +349,13 @@ bool BusyRetryConfig::State::checkHasBusyRetry()
 {
     std::unique_lock<std::mutex> lockGuard(m_lock);
     return m_waitings.size() > 0;
+}
+
+void BusyRetryConfig::State::setBusyMonitor(const BusyMonitor& monitor, double timeOut)
+{
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    m_busyMonitor = monitor;
+    m_timeOut = timeOut;
 }
 
 void BusyRetryConfig::State::tryNotify()

@@ -176,4 +176,16 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
     }
 }
 
++ (void)globalTraceBusy:(nullable WCDB_ESCAPE WCTDatabaseBusyTraceBlock)trace withTimeOut:(double)timeOut
+{
+    if (trace != nil && timeOut > 0) {
+        WCDB::Core::shared().setBusyMonitor([=](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, uint64_t tid, const WCDB::UnsafeStringView& sql) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], tid, [NSString stringWithUTF8String:sql.data()]);
+        },
+                                            timeOut);
+    } else {
+        WCDB::Core::shared().setBusyMonitor(nullptr, 0);
+    }
+}
+
 @end

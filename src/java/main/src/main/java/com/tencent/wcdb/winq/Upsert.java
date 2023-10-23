@@ -51,12 +51,12 @@ public class Upsert extends Identifier{
         return this;
     }
 
-    public Upsert indexedBy(String[] columnNames) {
+    public Upsert indexedBy(String... columnNames) {
         configIndexedColumn(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
-    public Upsert indexedBy(IndexedColumnConvertible[] indexedColumns) {
+    public Upsert indexedBy(IndexedColumnConvertible... indexedColumns) {
         if (indexedColumns == null || indexedColumns.length == 0) {
             return this;
         }
@@ -103,12 +103,12 @@ public class Upsert extends Identifier{
         return this;
     }
 
-    public Upsert setColumns(String[] columnNames) {
+    public Upsert setColumns(String... columnNames) {
         configSetColumns(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
-    public Upsert setColumns(Column[] columns) {
+    public Upsert setColumns(Column... columns) {
         if (columns == null || columns.length == 0) {
             return this;
         }

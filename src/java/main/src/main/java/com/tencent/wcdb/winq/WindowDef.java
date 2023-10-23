@@ -54,7 +54,7 @@ public class WindowDef extends Identifier {
         return this;
     }
 
-    public WindowDef partitionBy(String[] columnNames) {
+    public WindowDef partitionBy(String... columnNames) {
         if(columnNames == null || columnNames.length == 0){
             return this;
         }
@@ -64,7 +64,7 @@ public class WindowDef extends Identifier {
         return this;
     }
 
-    public WindowDef partitionBy(ExpressionConvertible[] expressions) {
+    public WindowDef partitionBy(ExpressionConvertible... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -85,7 +85,7 @@ public class WindowDef extends Identifier {
         return this;
     }
 
-    public WindowDef orderBy(OrderingTerm[] orders) {
+    public WindowDef orderBy(OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }

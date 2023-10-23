@@ -43,6 +43,8 @@ AbstractHandle::AbstractHandle()
 , m_notification(this)
 , m_tableMonitorForbidden(false)
 , m_fullSQLTrace(false)
+, m_busyTrace(false)
+, m_tid(0)
 , m_canBeSuspended(false)
 {
 }
@@ -723,6 +725,50 @@ void AbstractHandle::postSQLNotification(const UnsafeStringView &sql,
                                          const UnsafeStringView &info)
 {
     m_notification.postSQLTraceNotification(m_tag, m_path, m_handle, sql, info);
+}
+
+void AbstractHandle::setBusyTraceEnable(bool enable)
+{
+    m_busyTrace = enable;
+}
+
+bool AbstractHandle::isBusyTraceEnable() const
+{
+    return m_busyTrace;
+}
+
+void AbstractHandle::setCurrentSQL(const UnsafeStringView &sql)
+{
+    if (m_currentSQL.data() == sql.data()) {
+        return;
+    }
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    m_currentSQL = sql;
+}
+
+void AbstractHandle::resetCurrentSQL(const UnsafeStringView &sql)
+{
+    if (m_currentSQL.data() != sql.data()) {
+        return;
+    }
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    m_currentSQL.clear();
+}
+
+StringView AbstractHandle::getCurrentSQL() const
+{
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    return m_currentSQL;
+}
+
+void AbstractHandle::setActiveThreadId(uint64_t tid)
+{
+    m_tid = tid;
+}
+
+bool AbstractHandle::isUsingInThread(uint64_t tid) const
+{
+    return m_tid == tid;
 }
 
 #pragma mark - Error

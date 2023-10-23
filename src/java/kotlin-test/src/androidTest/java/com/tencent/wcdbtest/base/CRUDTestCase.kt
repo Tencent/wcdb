@@ -32,7 +32,7 @@ import org.junit.Before
 open class CRUDTestCase : TableTestCase() {
     protected lateinit var object1: TestObject
     protected lateinit var object2: TestObject
-    protected lateinit var objects: Array<TestObject>
+    protected lateinit var objects: List<TestObject>
     protected var nextId = 3
     protected var id = Column("id")
     protected var content = Column("content")
@@ -43,7 +43,7 @@ open class CRUDTestCase : TableTestCase() {
         super.setup()
         object1 = RandomTool.testObjectWithId(1)
         object2 = RandomTool.testObjectWithId(2)
-        objects = arrayOf(object1, object2)
+        objects = listOf(object1, object2)
         handle = database.handle
         table = database.getTable(tableName, DBTestObject)
     }

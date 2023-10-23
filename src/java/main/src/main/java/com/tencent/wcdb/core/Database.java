@@ -337,6 +337,16 @@ public class Database extends HandleORMOperation {
         }
     }
 
+    public interface BusyTracer {
+        void onTrace(long tag, String path, long tid, String sql);
+    }
+
+    public static native void globalTraceBusy(BusyTracer tracer, double timeOut);
+
+    private static void onBusyTrace(BusyTracer tracer, long tag, String path, long tid, String sql) {
+        tracer.onTrace(tag, path, tid, sql);
+    }
+
     private static native boolean removeFiles(long self);
 
     public void moveFile(String destination) throws WCDBException{

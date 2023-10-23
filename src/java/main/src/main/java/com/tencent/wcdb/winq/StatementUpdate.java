@@ -41,7 +41,7 @@ public class StatementUpdate extends Statement {
         return with(new CommonTableExpression[]{expression});
     }
 
-    public StatementUpdate with(CommonTableExpression[] expressions) {
+    public StatementUpdate with(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -57,7 +57,7 @@ public class StatementUpdate extends Statement {
         return withRecursive(new CommonTableExpression[]{expression});
     }
 
-    public StatementUpdate withRecursive(CommonTableExpression[] expressions) {
+    public StatementUpdate withRecursive(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -112,7 +112,7 @@ public class StatementUpdate extends Statement {
     }
     private static native void configConflictAction(long self, int action);
 
-    public StatementUpdate setColumnsToBindParameters(Column[] columns) {
+    public StatementUpdate setColumnsToBindParameters(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -124,7 +124,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    public StatementUpdate setColumnsToBindParameters(String[] columnNames) {
+    public StatementUpdate setColumnsToBindParameters(String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -179,7 +179,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    public StatementUpdate set(Column[] columns) {
+    public StatementUpdate set(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -199,7 +199,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    public StatementUpdate set(String[] columnNames) {
+    public StatementUpdate set(String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -272,7 +272,7 @@ public class StatementUpdate extends Statement {
         return this;
     }
 
-    public StatementUpdate orderBy(OrderingTerm[] orders) {
+    public StatementUpdate orderBy(OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }

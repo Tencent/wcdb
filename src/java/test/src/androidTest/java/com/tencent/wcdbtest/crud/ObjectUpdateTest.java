@@ -33,6 +33,8 @@ import com.tencent.wcdbtest.base.TestObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class ObjectUpdateTest extends ObjectCRUDTestCase {
     TestObject renewObject;
     TestObject renewedObject1;
@@ -48,7 +50,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateObject() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, renewedObject2),
                 "UPDATE testTable SET content = ?1",
                 new TestOperation() {
                     @Override
@@ -60,7 +62,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateObjectWhere() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 new TestOperation() {
                     @Override
@@ -72,7 +74,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateObjectWhereOrderLimit() {
-        doTestObjectsAfterOperation(new Object[]{object1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(object1, renewedObject2),
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1",
                 new TestOperation() {
                     @Override
@@ -88,7 +90,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateObjectWhereOrderLimitOffset() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 new TestOperation() {
                     @Override
@@ -104,7 +106,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateObjectOrderLimit() {
-        doTestObjectsAfterOperation(new Object[]{object1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(object1, renewedObject2),
                 "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1",
                 new TestOperation() {
                     @Override
@@ -119,7 +121,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateObjectOrderLimitOffset() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 new TestOperation() {
                     @Override
@@ -134,7 +136,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateObject() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, renewedObject2),
                 "UPDATE testTable SET content = ?1",
                 new TestOperation() {
                     @Override
@@ -146,7 +148,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateObjectWhere() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 new TestOperation() {
                     @Override
@@ -158,7 +160,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateObjectWhereOrderLimit() {
-        doTestObjectsAfterOperation(new Object[]{object1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(object1, renewedObject2),
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1",
                 new TestOperation() {
                     @Override
@@ -173,7 +175,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateObjectWhereOrderLimitOffset() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 new TestOperation() {
                     @Override
@@ -188,7 +190,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateObjectOrderLimit() {
-        doTestObjectsAfterOperation(new Object[]{object1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(object1, renewedObject2),
                 "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1",
                 new TestOperation() {
                     @Override
@@ -202,7 +204,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateObjectOrderLimitOffset() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 new TestOperation() {
                     @Override
@@ -216,7 +218,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateObject() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, renewedObject2),
                 "UPDATE testTable SET content = ?1",
                 new TestOperation() {
                     @Override
@@ -228,7 +230,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateObjectWhere() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 new TestOperation() {
                     @Override
@@ -240,7 +242,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateObjectWhereOrderLimit() {
-        doTestObjectsAfterOperation(new Object[]{object1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(object1, renewedObject2),
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1",
                 new TestOperation() {
                     @Override
@@ -256,7 +258,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateObjectWhereOrderLimitOffset() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 new TestOperation() {
                     @Override
@@ -272,7 +274,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateObjectOrderLimit() {
-        doTestObjectsAfterOperation(new Object[]{object1, renewedObject2},
+        doTestObjectsAfterOperation(Arrays.asList(object1, renewedObject2),
                 "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1",
                 new TestOperation() {
                     @Override
@@ -287,7 +289,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateObjectOrderLimitOffset() {
-        doTestObjectsAfterOperation(new Object[]{renewedObject1, object2},
+        doTestObjectsAfterOperation(Arrays.asList(renewedObject1, object2),
                 "UPDATE testTable SET content = ?1 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 new TestOperation() {
                     @Override

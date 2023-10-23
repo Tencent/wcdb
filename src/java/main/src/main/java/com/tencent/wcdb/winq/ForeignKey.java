@@ -54,7 +54,7 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    public ForeignKey columns(Column[] columns) {
+    public ForeignKey columns(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -66,7 +66,7 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    public ForeignKey columns(String[] columns) {
+    public ForeignKey columns(String... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }

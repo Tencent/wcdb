@@ -270,4 +270,30 @@
     WCDB::Database::globalTraceDatabaseOperation(nullptr);
 }
 
+- (void)test_global_trace_busy
+{
+    uint64_t testTid = 0;
+    WCDB::Database::globalTraceBusy([&](long tag, const WCDB::UnsafeStringView &path, uint64_t tid, const WCDB::UnsafeStringView &sql) {
+        XCTAssertTrue(tag == self.database->getTag());
+        TestCaseAssertCPPStringEqual(path.data(), self.database->getPath().data());
+        TestCaseAssertCPPStringEqual(sql.data(), "INSERT INTO testTable(identifier, content) VALUES(?1, ?2)");
+        testTid = tid;
+    },
+                                    0.1);
+
+    XCTAssertTrue([self createObjectTable]);
+    __block uint64_t dispatchTid = 0;
+    auto objects = [Random.shared testCaseObjectsWithCount:100000 startingFromIdentifier:1];
+    [self.dispatch async:^{
+        pthread_threadid_np(nullptr, &dispatchTid);
+        XCTAssertTrue(self.table.insertObjects(objects));
+    }];
+    usleep(100000);
+    XCTAssertTrue(self.table.insertObjects([Random.shared autoIncrementTestCaseObject]));
+
+    [self.dispatch waitUntilDone];
+    XCTAssertTrue(testTid != 0 && testTid == dispatchTid);
+    WCDB::Database::globalTraceBusy(nullptr, 0);
+}
+
 @end

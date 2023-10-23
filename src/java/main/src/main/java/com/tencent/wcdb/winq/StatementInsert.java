@@ -41,7 +41,7 @@ public class StatementInsert extends Statement {
         return with(new CommonTableExpression[]{expression});
     }
 
-    public StatementInsert with(CommonTableExpression[] expressions) {
+    public StatementInsert with(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -57,7 +57,7 @@ public class StatementInsert extends Statement {
         return withRecursive(new CommonTableExpression[]{expression});
     }
 
-    public StatementInsert withRecursive(CommonTableExpression[] expressions) {
+    public StatementInsert withRecursive(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -140,7 +140,7 @@ public class StatementInsert extends Statement {
         return columns(new String[]{columnName});
     }
 
-    public StatementInsert columns(Column[] columns) {
+    public StatementInsert columns(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -152,7 +152,7 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    public StatementInsert columns(String[] columnNames) {
+    public StatementInsert columns(String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -173,7 +173,7 @@ public class StatementInsert extends Statement {
         return values(new Object[]{value});
     }
 
-    public StatementInsert values(Object[] values) {
+    public StatementInsert values(Object... values) {
         if(values == null || values.length == 0) {
             return this;
         }

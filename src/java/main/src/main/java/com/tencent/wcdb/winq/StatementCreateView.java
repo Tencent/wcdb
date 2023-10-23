@@ -81,7 +81,7 @@ public class StatementCreateView extends Statement {
         return this;
     }
 
-    public StatementCreateView withColumns(Column[] columns) {
+    public StatementCreateView withColumns(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -93,7 +93,7 @@ public class StatementCreateView extends Statement {
         return this;
     }
 
-    public StatementCreateView withColumns(String[] columnNames) {
+    public StatementCreateView withColumns(String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }

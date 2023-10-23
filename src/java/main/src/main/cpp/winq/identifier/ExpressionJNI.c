@@ -103,6 +103,15 @@ void WCDBJNIExpressionClassMethod(as, jlong expression, jint type)
     WCDBExpressionAs(expressionStruct, type);
 }
 
+jlong WCDBJNIExpressionClassMethod(configAlias, jlong expression, jstring alias)
+{
+    WCDBJNIBridgeStruct(CPPExpression, expression);
+    WCDBJNIGetString(alias);
+    jlong ret = (jlong) WCDBExpressionConfigAlias(expressionStruct, aliasString).innerValue;
+    WCDBJNIReleaseString(alias);
+    return ret;
+}
+
 jlong WCDBJNIExpressionClassMethod(caseWithExp, WCDBJNIObjectOrStringParameter(expression))
 {
     if (expression_type == 0) {

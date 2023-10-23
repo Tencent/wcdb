@@ -123,7 +123,7 @@ public class StatementCreateTrigger extends Statement {
         return this;
     }
 
-    public StatementCreateTrigger ofColumns(Column[] columns) {
+    public StatementCreateTrigger ofColumns(Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -135,7 +135,7 @@ public class StatementCreateTrigger extends Statement {
         return this;
     }
 
-    public StatementCreateTrigger ofColumns(String[] columnNames) {
+    public StatementCreateTrigger ofColumns(String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
