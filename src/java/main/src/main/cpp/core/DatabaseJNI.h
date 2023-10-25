@@ -86,6 +86,7 @@ jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdat
 
 jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self);
+void WCDBJNIDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean enable);
 
 void WCDBJNIDatabaseClassMethod(addMigrationSource,
                                 jlong self,

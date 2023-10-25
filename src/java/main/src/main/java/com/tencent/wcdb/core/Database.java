@@ -467,6 +467,12 @@ public class Database extends HandleORMOperation {
         }
     }
 
+    public void setAutoCheckpointEnable(boolean enable) {
+        setAutoCheckpointEnable(cppObj, enable);
+    }
+
+    private static native void setAutoCheckpointEnable(long self, boolean enable);
+
     private static native boolean truncateCheckpoint(long self);
 
     public static class MigrationInfo {

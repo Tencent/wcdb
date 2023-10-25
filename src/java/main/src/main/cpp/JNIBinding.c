@@ -916,6 +916,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "containDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(containDepositedFiles) },
     { "passiveCheckpoint", "(J)Z", (void *) WCDBJNIDatabaseFuncName(passiveCheckpoint) },
     { "truncateCheckpoint", "(J)Z", (void *) WCDBJNIDatabaseFuncName(truncateCheckpoint) },
+    { "setAutoCheckpointEnable", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(setAutoCheckpointEnable) },
     { "addMigrationSource",
       "(J" WCDBJNIStringSignature "[B" WCDBJNIDatabaseSignature "$MigrationFilter;)V",
       (void *) WCDBJNIDatabaseFuncName(addMigrationSource) },

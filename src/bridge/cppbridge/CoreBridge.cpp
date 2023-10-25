@@ -46,3 +46,9 @@ bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir)
 {
     return WCDB::Core::shared().setDefaultTemporaryDirectory(dir);
 }
+
+void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    WCDB::Core::shared().enableAutoCheckpoint(cppDatabase, enable);
+}

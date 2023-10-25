@@ -22,6 +22,7 @@
  */
 
 #include "DatabaseJNI.h"
+#include "CoreBridge.h"
 #include "DatabaseBridge.h"
 #include <assert.h>
 
@@ -546,6 +547,12 @@ jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseTruncateCheckpoint(selfStruct);
+}
+
+void WCDBJNIDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean enable)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBCoreSetAutoCheckpointEnable(selfStruct, (bool) enable);
 }
 
 void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info, WCDBMigrationInfoSetter setter)
