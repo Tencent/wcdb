@@ -102,3 +102,4 @@ jboolean WCDBJNIDatabaseClassMethod(stepMigration, jlong self);
 void WCDBJNIDatabaseClassMethod(enableAutoMigration, jlong self, jboolean flag);
 void WCDBJNIDatabaseClassMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);
 jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self);
+jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self);

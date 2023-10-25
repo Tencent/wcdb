@@ -120,6 +120,12 @@ public class Database extends HandleORMOperation {
 
     public static native void purgeAll();
 
+    public int getNumberOfAliveHandle() {
+        return getNumberOfAliveHandle(cppObj);
+    }
+
+    private static native int getNumberOfAliveHandle(long self);
+
     WCDBException createException() {
         return WCDBException.createException(getError(cppObj));
     }

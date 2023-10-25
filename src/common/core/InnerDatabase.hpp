@@ -72,6 +72,7 @@ public:
     void close(const ClosedCallback &onClosed);
     using HandlePool::unblockade;
     using HandlePool::isBlockaded;
+    using HandlePool::numberOfAliveHandles;
 
 protected:
     Tag m_tag;
