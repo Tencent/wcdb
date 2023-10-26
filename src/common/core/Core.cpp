@@ -300,6 +300,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
 #pragma mark - Checkpoint
 void Core::enableAutoCheckpoint(InnerDatabase* database, bool enable)
 {
+    database->setAutoCheckpointEnable(enable);
     if (enable) {
         database->setConfig(
         AutoCheckpointConfigName, m_autoCheckpointConfig, Configs::Priority::Highest);

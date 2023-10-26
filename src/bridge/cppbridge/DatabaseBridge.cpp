@@ -811,7 +811,8 @@ bool WCDBDatabaseIsMigrated(CPPDatabase database)
     return cppDatabase->isMigrated();
 }
 
-short WCDBDatabaseGetAliveHandleCount(CPPDatabase database) {
+short WCDBDatabaseGetAliveHandleCount(CPPDatabase database)
+{
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, 0);
-    return (short)cppDatabase->numberOfAliveHandles();
+    return (short) cppDatabase->numberOfAliveHandles();
 }

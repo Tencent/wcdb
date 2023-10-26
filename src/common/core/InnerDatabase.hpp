@@ -101,10 +101,12 @@ public:
                    int priority = Configs::Priority::Default);
     void removeConfig(const UnsafeStringView &name);
     void setFullSQLTraceEnable(bool enable);
+    void setAutoCheckpointEnable(bool enable);
 
 private:
     Configs m_configs;
     bool m_fullSQLTrace = false;
+    bool m_autoCheckpoint;
 
 #pragma mark - Threaded
 private:

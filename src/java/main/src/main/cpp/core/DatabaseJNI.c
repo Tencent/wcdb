@@ -639,7 +639,8 @@ jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self)
     return WCDBDatabaseIsMigrated(selfStruct);
 }
 
-jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self) {
+jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self)
+{
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseGetAliveHandleCount(selfStruct);
 }
