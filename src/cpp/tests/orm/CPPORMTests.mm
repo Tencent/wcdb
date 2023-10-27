@@ -44,7 +44,7 @@
 #import "CPPVirtualTableFTS5Object.hpp"
 #import <Foundation/Foundation.h>
 
-@interface CPPORMTests : CPPTableTestCase
+@interface CPPORMTests : CPPCRUDTestCase
 
 @end
 
@@ -454,6 +454,13 @@
     TestCaseAssertTrue(autoAdded || !isSucceed);
     TestCaseAssertTrue(self.database->dropTable(self.tableName.UTF8String));
     self.database->traceError(nullptr);
+}
+
+- (void)test_redirect_field
+{
+    [self insertPresetObjects];
+    auto object = self.table.getFirstObjectWithFields(WCDB_FIELD(CPPTestCaseObject::identifier).redirect(WCDB_FIELD(CPPTestCaseObject::identifier).max()));
+    XCTAssertTrue(object.hasValue() && object.value().identifier == self.objects[1].identifier);
 }
 
 @end

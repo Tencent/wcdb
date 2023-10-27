@@ -56,6 +56,7 @@ public:
 
     Field table(const UnsafeStringView& table) const;
     Field schema(const Schema& schema) const;
+    ResultField redirect(const ResultColumn& resultColumn) const;
 
     template<class ObjectType>
     Value getValue(const ObjectType& obj) const

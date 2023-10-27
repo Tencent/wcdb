@@ -66,6 +66,11 @@ Field Field::schema(const Schema& schema) const
     return Field(m_accessor, Column(*this).schema(schema));
 }
 
+ResultField Field::redirect(const ResultColumn& resultColumn) const
+{
+    return ResultField(resultColumn, m_accessor);
+}
+
 #pragma mark - Fields
 Fields::~SyntaxList() = default;
 
