@@ -34,7 +34,11 @@
 
 namespace WCDB {
 
+class BaseTable;
+
 class WCDB_API Database final : public HandleORMOperation {
+    friend BaseTable;
+
 public:
     /**
      @brief Init a database from path.
@@ -47,6 +51,9 @@ public:
     Database(const Database &);
     Database &operator=(const Database &);
     ~Database() override final;
+
+protected:
+    Database(Recyclable<InnerDatabase *> database);
 
 private:
     Database(InnerDatabase *database);

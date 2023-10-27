@@ -863,6 +863,7 @@
 		0DE08A2429CBE79C009A7CA3 /* CrossPlatform.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */; };
 		0DE08A2629CBE79C009A7CA3 /* WCTOperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */; };
 		0DE08A2B29CBEB4E009A7CA3 /* WCTFileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */; };
+		0DE2D9A32AEB934E005420D3 /* CPPTableTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE2D9A22AEB934E005420D3 /* CPPTableTest.mm */; };
 		0DE68B362AB45C27008BD74C /* RepairTestObjectBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B352AB45C27008BD74C /* RepairTestObjectBase.mm */; };
 		0DE68B3B2AB45F6C008BD74C /* NormalRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */; };
 		0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */; };
@@ -3698,6 +3699,7 @@
 		0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTFileManager.cpp; sourceTree = "<group>"; };
 		0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CrossPlatform.c; sourceTree = "<group>"; };
 		0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTOperationQueue.cpp; sourceTree = "<group>"; };
+		0DE2D9A22AEB934E005420D3 /* CPPTableTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPTableTest.mm; sourceTree = "<group>"; };
 		0DE68B352AB45C27008BD74C /* RepairTestObjectBase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RepairTestObjectBase.mm; sourceTree = "<group>"; };
 		0DE68B372AB45C36008BD74C /* RepairTestObjectBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestObjectBase.h; sourceTree = "<group>"; };
 		0DE68B382AB45EE8008BD74C /* RepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RepairTestObject.h; sourceTree = "<group>"; };
@@ -5687,6 +5689,7 @@
 				75D4834128A79AD3004FDD3C /* CPPTraceTest.mm */,
 				753C084928A8B0110042C427 /* CPPDatabaseTest.mm */,
 				75C075332A8921C600B4A0D4 /* CPPHandleTest.mm */,
+				0DE2D9A22AEB934E005420D3 /* CPPTableTest.mm */,
 			);
 			path = interface;
 			sourceTree = "<group>";
@@ -9771,6 +9774,7 @@
 				03E5CC5628A38F0F005353D9 /* TestCaseLog.mm in Sources */,
 				751CA67728C64B7B00874A7A /* CPPAllTypesObject.mm in Sources */,
 				75535246290E63E5008376AB /* CPPFTS5Tests.mm in Sources */,
+				0DE2D9A32AEB934E005420D3 /* CPPTableTest.mm in Sources */,
 				75882C8728C7C55200F95947 /* CPPColumnConstraintAutoIncrement.cpp in Sources */,
 				75D4834928A7C42F004FDD3C /* Random+CPPTestObject.mm in Sources */,
 				032E112E28C8768C00BCACE0 /* CPPNewlyCreatedTableIndexObject.cpp in Sources */,
