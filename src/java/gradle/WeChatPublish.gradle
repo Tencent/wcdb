@@ -313,7 +313,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
     protected void emitPublicationDSL(Project project) {
 
         def sourcesJarTask = project.tasks.register('sourcesJar', Jar) {
-            classifier = 'sources'
+            archiveClassifier = 'sources'
 
             def srcDirs = []
             def sources = project.sourceSets.main
@@ -336,7 +336,7 @@ class WeChatJavaLibraryPublishExtension extends WeChatPublishExtension {
 
         def javadocJarTask = project.tasks.register('javadocJar', Jar) {
             dependsOn javadocTask
-            classifier = 'javadoc'
+            archiveClassifier = 'javadoc'
             from javadocTask.get().destinationDir
         }
         // TODO: upload javadoc to documentation site
@@ -468,13 +468,13 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
             }
 
             def javadocJarTask = project.tasks.register("javadocJar${cVariantName}", Jar) {
-                classifier = 'javadoc'
+                archiveClassifier = 'javadoc'
                 from javadocTask.get().destinationDir
                 dependsOn javadocTask
             }
 
             def sourcesJarTask = project.tasks.register("sourcesJar${cVariantName}", Jar) {
-                classifier = 'sources'
+                archiveClassifier = 'sources'
 
                 def srcDirs = []
                 variant.sourceSets.each { sources ->
@@ -493,8 +493,8 @@ class WeChatAndroidLibraryPublishExtension extends WeChatPublishExtension {
                 def externalNativeBuildTask = project.tasks.named("externalNativeBuild${cVariantName}")
 
                 nativeSymbolZipTask = project.tasks.register("nativeSymbolZip${cVariantName}", Zip) {
-                    classifier = "${variantOnlyName}Symbols"
-                    def objFolder = externalNativeBuildTask.get().objFolder.asFile.get()
+                    archiveClassifier = "${variantOnlyName}Symbols"
+                    def objFolder = externalNativeBuildTask.get().soFolder.asFile.get()
                     from(objFolder) {
                         include '*/*.so'
                         exclude 'obj'

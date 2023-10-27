@@ -13,7 +13,7 @@ import javax.inject.Inject
 /**
  * The backing class of the autogen extension added to sourceSets, e.g., sourceSets.main.autogen
  */
-class WCDBOrmSourceDirectorySet extends DefaultSourceDirectorySet {
+class WCDBOrmSourceDirectorySetG7 extends DefaultSourceDirectorySet {
 
     private static final Factory<PatternSet> sPatternSetFactory = new Factory<PatternSet>() {
         @Override
@@ -23,9 +23,9 @@ class WCDBOrmSourceDirectorySet extends DefaultSourceDirectorySet {
     }
 
     @Inject
-    WCDBOrmSourceDirectorySet(Project project, String name) {
+    WCDBOrmSourceDirectorySetG7(Project project, String name) {
         super(name, "$name WCDB ORM source", sPatternSetFactory,
-                project.services.get(TaskDependencyFactory),
+                //project.services.get(TaskDependencyFactory),
                 project.services.get(FileCollectionFactory),
                 new DefaultDirectoryFileTreeFactory(), project.services.get(ObjectFactory))
 
