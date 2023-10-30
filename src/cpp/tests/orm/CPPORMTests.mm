@@ -34,6 +34,7 @@
 #import "CPPDropIndexObject.hpp"
 #import "CPPFieldObject.h"
 #import "CPPIndexObject.hpp"
+#import "CPPInheritObject.hpp"
 #import "CPPNewFieldObject.h"
 #import "CPPNewRemapObject.hpp"
 #import "CPPNewlyCreatedTableIndexObject.hpp"
@@ -461,6 +462,45 @@
     [self insertPresetObjects];
     auto object = self.table.getFirstObjectWithFields(WCDB_FIELD(CPPTestCaseObject::identifier).redirect(WCDB_FIELD(CPPTestCaseObject::identifier).max()));
     XCTAssertTrue(object.hasValue() && object.value().identifier == self.objects[1].identifier);
+}
+
+#pragma mark - inherit
+- (void)test_inherit
+{
+    NSArray<NSString*>* expected = @[
+        @"CREATE TABLE IF NOT EXISTS testTable(value1 INTEGER PRIMARY KEY, value2 REAL, value3 INTEGER, value4 TEXT, value5 BLOB UNIQUE)",
+        @"CREATE INDEX IF NOT EXISTS testTable_value2 ON testTable(value2)",
+        @"CREATE INDEX IF NOT EXISTS testTable_value3_value4 ON testTable(value3, value4)"
+    ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPInheritObject>(self);
+                                      }];
+
+    CPPInheritObject object;
+    object.value1 = 1;
+    object.value2 = 2.0;
+    object.value3 = 3;
+    object.value4 = "abc";
+    NSData* data = Random.shared.data;
+    object.value5 = WCDB::Data((const unsigned char*) data.bytes, data.length);
+    [self doTestSQLs:@[ @"INSERT INTO testTable(value1, value2, value3, value4, value5) VALUES(?1, ?2, ?3, ?4, ?5)",
+                        @"UPDATE testTable SET value4 = ?1 WHERE value1 == 1",
+                        @"SELECT value1, value2, value3, value4, value5 FROM testTable WHERE value2 == 2 ORDER BY rowid ASC LIMIT 1",
+                        @"DELETE FROM testTable WHERE value3 == 3" ]
+         inOperation:^BOOL {
+             XCTAssertTrue(self.database->insertObjects<CPPInheritObject>(object, self.tableName.UTF8String));
+             XCTAssertTrue(self.database->updateRow("def", WCDB_FIELD(CPPInheritObject::value4), self.tableName.UTF8String, WCDB_FIELD(CPPInheritObject::value1) == 1));
+             auto ret = self.database->getFirstObject<CPPInheritObject>(self.tableName.UTF8String, WCDB_FIELD(CPPInheritObject::value2) == 2);
+             XCTAssertTrue(ret.succeed());
+             XCTAssertTrue(ret.value().value2 == 2.0 && ret.value().value3 == 3 && ret.value().value4 == "def");
+             XCTAssertTrue(memcmp((const void*) ret.value().value5.buffer(), data.bytes, data.length) == 0);
+             XCTAssertTrue(self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPInheritBase2::value3) == 3));
+             return true;
+         }];
+
+    auto count = self.database->selectValue(WCDB::Column::all().count(), self.tableName.UTF8String);
+    XCTAssertTrue(count.succeed() && count.value() == 0);
 }
 
 @end

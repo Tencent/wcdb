@@ -3128,6 +3128,8 @@
 		75D99B8128CA441E00BEC8B5 /* BaseOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75D99B8328CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
 		75D99B8428CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
+		75DF22962AEE8409006A3311 /* CPPInheritObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */; };
+		75DF22972AEE8483006A3311 /* CPPInheritObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */; };
 		75E0A5C02A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C22A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
@@ -4734,6 +4736,8 @@
 		75D567002951B80B00098DD9 /* WCTSequence+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTSequence+WCTTableCoding.h"; sourceTree = "<group>"; };
 		75D99B7F28CA441E00BEC8B5 /* BaseOperation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseOperation.hpp; sourceTree = "<group>"; };
 		75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseOperation.cpp; sourceTree = "<group>"; };
+		75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPInheritObject.cpp; sourceTree = "<group>"; };
+		75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPInheritObject.hpp; sourceTree = "<group>"; };
 		75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreConst.cpp; sourceTree = "<group>"; };
 		75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContainerBridge.cpp; sourceTree = "<group>"; };
 		75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContainerBridge.h; sourceTree = "<group>"; };
@@ -4913,6 +4917,7 @@
 		03239D6028C60E8400C8D691 /* orm */ = {
 			isa = PBXGroup;
 			children = (
+				75DF22922AEE83D8006A3311 /* inherit */,
 				75E76AE12917ADF400073CCA /* virtual_table */,
 				032E112528C86E8300BCACE0 /* rebind */,
 				032E112128C850E800BCACE0 /* index_object */,
@@ -7492,6 +7497,15 @@
 			path = common;
 			sourceTree = "<group>";
 		};
+		75DF22922AEE83D8006A3311 /* inherit */ = {
+			isa = PBXGroup;
+			children = (
+				75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */,
+				75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */,
+			);
+			path = inherit;
+			sourceTree = "<group>";
+		};
 		75E76AE12917ADF400073CCA /* virtual_table */ = {
 			isa = PBXGroup;
 			children = (
@@ -7987,6 +8001,7 @@
 				23D0C35320C149D80001BFAE /* Factory.hpp in Headers */,
 				23FEC463206B3032001E7A3B /* WCTConvenient.h in Headers */,
 				23EEDD00217DFADC006E9E73 /* SyntaxFrameSpec.hpp in Headers */,
+				75DF22962AEE8409006A3311 /* CPPInheritObject.hpp in Headers */,
 				23B35C7620BFE39500425033 /* Path.hpp in Headers */,
 				23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */,
 				75F32F1A28BA083E00A72697 /* CPPIndexMacro.h in Headers */,
@@ -9789,6 +9804,7 @@
 				032E112428C8511E00BCACE0 /* CPPIndexObject.cpp in Sources */,
 				758D9D0128BA6AF8001B3D2D /* HandleOperationTests.mm in Sources */,
 				753C084D28A8D4560042C427 /* StatementOperationTests.mm in Sources */,
+				75DF22972AEE8483006A3311 /* CPPInheritObject.cpp in Sources */,
 				03E5CC5728A38F0F005353D9 /* TestCaseResult.mm in Sources */,
 				0344BA8128C9DC7D000BC154 /* ORMUpdateTests.mm in Sources */,
 				03E5CC5928A38FFF005353D9 /* CPPBaseTestCase.mm in Sources */,
