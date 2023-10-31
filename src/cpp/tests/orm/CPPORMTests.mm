@@ -107,8 +107,9 @@
     TestCaseAssertTrue(table.insertObjects(emptyObject));
 
     CPPAllTypesObject randomObject = CPPAllTypesObject::randomObject();
-    ;
     TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPAllTypesObject::type)));
 
     CPPAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPAllTypesObject::type) == maxObject.type).value();
     TestCaseAssertTrue(selectedMaxObject == maxObject);
@@ -125,6 +126,9 @@
     TestCaseAssertTrue(table.getValueFromStatement(WCDB::StatementSelect().select(WCDB_FIELD(CPPAllTypesObject::constCharArrValue)).from(self.tableName.UTF8String)).value() == maxObject.constCharArrValue);
 
     TestCaseAssertTrue(table.getValueFromStatement(WCDB::StatementSelect().select(WCDB_FIELD(CPPAllTypesObject::constUnsignedCharArrValue)).from(self.tableName.UTF8String)).value() == maxObject.constUnsignedCharArrValue);
+
+    CPPAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
 }
 
 - (void)test_all_properties

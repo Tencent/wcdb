@@ -57,8 +57,7 @@ public:
         Data(ColumnIsBLOBType<T>::asUnderlyingType(value));
     }
 
-    template<class T, std::enable_if_t<ColumnIsNullType<T>::value, int> = 0>
-    Value(const T& value) : m_type(Type::Null)
+    Value(const std::nullptr_t& value) : m_type(Type::Null)
     {
         WCDB_UNUSED(value);
         m_intValue = 0;
