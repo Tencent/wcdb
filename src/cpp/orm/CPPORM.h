@@ -30,3 +30,4 @@
 #include "MemberPointer.hpp"
 #include "ResultField.hpp"
 #include "RunTimeAccessor.hpp"
+#include "SharedPtrAccessor.hpp"

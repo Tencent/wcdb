@@ -3001,6 +3001,7 @@
 		756A773D27F9EDDE00105B7C /* HandleStatementBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 756A773C27F9EDDE00105B7C /* HandleStatementBridge.cpp */; };
 		756A774027FAC18000105B7C /* CoreBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 756A773F27FAC17F00105B7C /* CoreBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		756A774327FAC1D900105B7C /* CoreBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 756A774227FAC1D900105B7C /* CoreBridge.cpp */; };
+		756E89032AF13FDB00A54DB2 /* CPPSharedPtrAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D435A602AF1092100FABDAF /* CPPSharedPtrAllTypesObject.mm */; };
 		757457042402D614005E3682 /* WCTPreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTPreparedStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
 		75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
@@ -3130,6 +3131,8 @@
 		75D99B8428CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
 		75DF22962AEE8409006A3311 /* CPPInheritObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */; };
 		75DF22972AEE8483006A3311 /* CPPInheritObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */; };
+		75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; };
+		75DF229B2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; };
 		75E0A5C02A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C22A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
@@ -3673,6 +3676,8 @@
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
 		0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoMergeFTSIndexConfig.cpp; sourceTree = "<group>"; };
 		0D3FFA452A2F2911002DF7CD /* SysTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SysTypes.h; sourceTree = "<group>"; };
+		0D435A602AF1092100FABDAF /* CPPSharedPtrAllTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPSharedPtrAllTypesObject.mm; sourceTree = "<group>"; };
+		0D435A622AF1093B00FABDAF /* CPPSharedPtrAllTypesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPSharedPtrAllTypesObject.h; sourceTree = "<group>"; };
 		0D47A9752A6E332B008E9E2C /* MigrationTestObjectBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MigrationTestObjectBase.h; sourceTree = "<group>"; };
 		0D47A9762A6E333D008E9E2C /* MigrationTestObjectBase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrationTestObjectBase.mm; sourceTree = "<group>"; };
 		0D4F0F942AC5728A0067027E /* WCTPerformanceInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPerformanceInfo.h; sourceTree = "<group>"; };
@@ -4738,6 +4743,7 @@
 		75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseOperation.cpp; sourceTree = "<group>"; };
 		75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPInheritObject.cpp; sourceTree = "<group>"; };
 		75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPInheritObject.hpp; sourceTree = "<group>"; };
+		75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SharedPtrAccessor.hpp; sourceTree = "<group>"; };
 		75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreConst.cpp; sourceTree = "<group>"; };
 		75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContainerBridge.cpp; sourceTree = "<group>"; };
 		75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContainerBridge.h; sourceTree = "<group>"; };
@@ -7265,6 +7271,8 @@
 			children = (
 				751CA67628C64B7B00874A7A /* CPPAllTypesObject.h */,
 				751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */,
+				0D435A622AF1093B00FABDAF /* CPPSharedPtrAllTypesObject.h */,
+				0D435A602AF1092100FABDAF /* CPPSharedPtrAllTypesObject.mm */,
 			);
 			path = alltypes;
 			sourceTree = "<group>";
@@ -7533,6 +7541,7 @@
 				03AFD33128B883E700EF5E56 /* Accessor.hpp */,
 				7537E58428B91F510077D92B /* Accessor.cpp */,
 				032E113328C88B8000BCACE0 /* RunTimeAccessor.hpp */,
+				75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */,
 				03AFD34128B8B21B00EF5E56 /* Field.hpp */,
 				03AFD34E28B8C4EB00EF5E56 /* Field.cpp */,
 				75F32F2728BA31CD00A72697 /* ResultField.hpp */,
@@ -7794,6 +7803,7 @@
 				DDADC4742949F7C20057AEDB /* Builtin.h in Headers */,
 				037C3BB32897E33600328EC8 /* SyntaxTableOrSubquery.hpp in Headers */,
 				037C3BB42897E33600328EC8 /* StatementRelease.hpp in Headers */,
+				75DF229B2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */,
 				037C3BB62897E33600328EC8 /* Notifier.hpp in Headers */,
 				037C3BB72897E33600328EC8 /* SyntaxCreateTriggerSTMT.hpp in Headers */,
 				037C3BB82897E33600328EC8 /* SyntaxIndexedColumn.hpp in Headers */,
@@ -7940,6 +7950,7 @@
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
 				23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */,
+				75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */,
 				75E50A0E29067BC800B73E62 /* MultiObject.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
@@ -9799,6 +9810,7 @@
 				75882C8428C7C4A300F95947 /* CPPColumnConstraintPrimaryDesc.cpp in Sources */,
 				752C7E4028C8E94200C9FFA6 /* ORMInsertTests.mm in Sources */,
 				75D4834228A79AD3004FDD3C /* CPPTraceTest.mm in Sources */,
+				756E89032AF13FDB00A54DB2 /* CPPSharedPtrAllTypesObject.mm in Sources */,
 				0D81CDAE2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp in Sources */,
 				75CD724F290D2449008583A3 /* CPPFTS3Object.mm in Sources */,
 				032E112428C8511E00BCACE0 /* CPPIndexObject.cpp in Sources */,

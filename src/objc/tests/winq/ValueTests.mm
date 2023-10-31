@@ -141,4 +141,82 @@
     TestCaseAssertSQLEqual(literal, @"'1.2'");
 }
 
+- (void)test_shared_ptr_interger
+{
+    WCDB::Value value(std::make_shared<int>(0));
+    TestCaseAssertTrue(value.intValue() == 0);
+    TestCaseAssertTrue((int) value == 0);
+    TestCaseAssertFalse(value);
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertFalse(value.isNull());
+
+    value = std::make_shared<int>(1);
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((int) value == 1);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"1");
+}
+
+- (void)test_shared_ptr_float
+{
+    WCDB::Value value(std::make_shared<float>(0));
+    TestCaseAssertTrue(value.floatValue() == 0);
+    TestCaseAssertTrue((double) value == 0);
+    TestCaseAssertFalse(value);
+    TestCaseAssertTrue(value.isEmpty());
+
+    value = std::make_shared<double>(1.2);
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((double) value == 1.2);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"1.2");
+}
+
+- (void)test_shared_ptr_string
+{
+    WCDB::Value value(std::make_shared<std::string>(""));
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertTrue((double) value == 0);
+    TestCaseAssertFalse(value);
+
+    value = std::make_shared<std::string>("1.2");
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"1.2");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((double) value == 1.2);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"'1.2'");
+}
+
+- (void)test_shared_ptr_blob
+{
+    NSData* nsData = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    WCDB::Value value(std::make_shared<WCDB::UnsafeData>((unsigned char*) nsData.bytes, nsData.length));
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertFalse(value);
+
+    NSData* nsData2 = [@"1.2" dataUsingEncoding:NSUTF8StringEncoding];
+    value = std::make_shared<WCDB::UnsafeData>((unsigned char*) nsData2.bytes, nsData2.length);
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"1.2");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((double) value == 1.2);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"'1.2'");
+}
+
 @end

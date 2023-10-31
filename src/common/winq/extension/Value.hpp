@@ -29,8 +29,17 @@
 
 namespace WCDB {
 
+template<class T>
+struct IsSTDSharedPtr : std::false_type {
+};
+
+template<class T>
+struct IsSTDSharedPtr<std::shared_ptr<T>> : std::true_type {
+};
+
 class WCDB_API Value {
 public:
+#pragma mark - Base Type
     template<class T, std::enable_if_t<ColumnIsIntegerType<T>::value, int> = 0>
     Value(const T& value) : m_type(Type::Integer)
     {
@@ -63,6 +72,56 @@ public:
         m_intValue = 0;
     }
 
+#pragma mark - Shared Pointer
+    template<class T, std::enable_if_t<IsSTDSharedPtr<T>::value && ColumnIsIntegerType<typename T::element_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Integer)
+    {
+        if (value != nullptr) {
+            m_intValue
+            = ColumnIsIntegerType<typename T::element_type>::asUnderlyingType(*value);
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsSTDSharedPtr<T>::value && ColumnIsFloatType<typename T::element_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Float)
+    {
+        if (value != nullptr) {
+            m_floatValue
+            = ColumnIsFloatType<typename T::element_type>::asUnderlyingType(*value);
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsSTDSharedPtr<T>::value && ColumnIsTextType<typename T::element_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Text)
+    {
+        if (value != nullptr) {
+            new ((void*) std::addressof(m_textValue)) StringView(
+            ColumnIsTextType<typename T::element_type>::asUnderlyingType(*value));
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsSTDSharedPtr<T>::value && ColumnIsBLOBType<typename T::element_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::BLOB)
+    {
+        if (value != nullptr) {
+            new ((void*) std::addressof(m_blobValue))
+            Data(ColumnIsBLOBType<typename T::element_type>::asUnderlyingType(*value));
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+#pragma mark - Basic
     Value();
     Value(const Value& other);
     Value(Value&& other);

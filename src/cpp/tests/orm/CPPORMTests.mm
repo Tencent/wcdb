@@ -39,6 +39,7 @@
 #import "CPPNewRemapObject.hpp"
 #import "CPPNewlyCreatedTableIndexObject.hpp"
 #import "CPPOldRemapObject.hpp"
+#import "CPPSharedPtrAllTypesObject.h"
 #import "CPPTableConstraintObject.hpp"
 #import "CPPTestCase.h"
 #import "CPPVirtualTableFTS4Object.hpp"
@@ -128,6 +129,46 @@
     TestCaseAssertTrue(table.getValueFromStatement(WCDB::StatementSelect().select(WCDB_FIELD(CPPAllTypesObject::constUnsignedCharArrValue)).from(self.tableName.UTF8String)).value() == maxObject.constUnsignedCharArrValue);
 
     CPPAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
+}
+
+- (void)test_all_shared_ptr_types
+{
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB)" ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPSharedPtrAllTypesObject>(self);
+                                      }];
+
+    WCDB::Table<CPPSharedPtrAllTypesObject> table = self.database->getTable<CPPSharedPtrAllTypesObject>(self.tableName.UTF8String);
+
+    CPPSharedPtrAllTypesObject maxObject = CPPSharedPtrAllTypesObject::maxObject();
+    TestCaseAssertTrue(table.insertObjects(maxObject));
+
+    CPPSharedPtrAllTypesObject minObject = CPPSharedPtrAllTypesObject::minObject();
+    TestCaseAssertTrue(table.insertObjects(minObject));
+
+    CPPSharedPtrAllTypesObject emptyObject = CPPSharedPtrAllTypesObject::emptyObject();
+    TestCaseAssertTrue(table.insertObjects(emptyObject));
+
+    CPPSharedPtrAllTypesObject randomObject = CPPSharedPtrAllTypesObject::randomObject();
+    TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPSharedPtrAllTypesObject::type)));
+
+    CPPSharedPtrAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == maxObject.type).value();
+    TestCaseAssertTrue(selectedMaxObject == maxObject);
+
+    CPPSharedPtrAllTypesObject selectedMinObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == minObject.type).value();
+    TestCaseAssertTrue(selectedMinObject == minObject);
+
+    CPPSharedPtrAllTypesObject selectedEmptyObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == emptyObject.type).value();
+    TestCaseAssertTrue(selectedEmptyObject == emptyObject);
+
+    CPPSharedPtrAllTypesObject selectedRandomObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == randomObject.type).value();
+    TestCaseAssertTrue(selectedRandomObject == randomObject);
+
+    CPPSharedPtrAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == "null").value();
     TestCaseAssertTrue(selectedNullObject == emptyObject);
 }
 
