@@ -823,6 +823,9 @@
 		0D36C0F72AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; };
 		0D36C0F82AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; };
 		0D36C0FB2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */; };
+		0D36C0FD2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */; };
+		0D36C0FE2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */; };
+		0D36C1012AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D36C1002AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
 		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
 		0D3FFA462A2F2911002DF7CD /* SysTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D3FFA452A2F2911002DF7CD /* SysTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3679,6 +3682,9 @@
 		0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = STDOptionalAccessor.hpp; sourceTree = "<group>"; };
 		0D36C0F92AF1E3A1000BC0DD /* CPPSTDOptionalAllTypesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPSTDOptionalAllTypesObject.h; sourceTree = "<group>"; };
 		0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPSTDOptionalAllTypesObject.mm; sourceTree = "<group>"; };
+		0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCDBOptionalAccessor.hpp; sourceTree = "<group>"; };
+		0D36C0FF2AF1F482000BC0DD /* CPPWCDBOptionalAllTypesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPWCDBOptionalAllTypesObject.h; sourceTree = "<group>"; };
+		0D36C1002AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPWCDBOptionalAllTypesObject.mm; sourceTree = "<group>"; };
 		0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoMergeFTSIndexConfig.hpp; sourceTree = "<group>"; };
 		0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoMergeFTSIndexConfig.cpp; sourceTree = "<group>"; };
 		0D3FFA452A2F2911002DF7CD /* SysTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SysTypes.h; sourceTree = "<group>"; };
@@ -7281,6 +7287,8 @@
 				0D435A602AF1092100FABDAF /* CPPSharedPtrAllTypesObject.mm */,
 				0D36C0F92AF1E3A1000BC0DD /* CPPSTDOptionalAllTypesObject.h */,
 				0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */,
+				0D36C0FF2AF1F482000BC0DD /* CPPWCDBOptionalAllTypesObject.h */,
+				0D36C1002AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm */,
 			);
 			path = alltypes;
 			sourceTree = "<group>";
@@ -7551,6 +7559,7 @@
 				032E113328C88B8000BCACE0 /* RunTimeAccessor.hpp */,
 				75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */,
 				0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */,
+				0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */,
 				03AFD34128B8B21B00EF5E56 /* Field.hpp */,
 				03AFD34E28B8C4EB00EF5E56 /* Field.cpp */,
 				75F32F2728BA31CD00A72697 /* ResultField.hpp */,
@@ -7624,6 +7633,7 @@
 				037C3AAA2897E33600328EC8 /* StatementDropIndex.hpp in Headers */,
 				037C3AAB2897E33600328EC8 /* Pager.hpp in Headers */,
 				037C3AAC2897E33600328EC8 /* SyntaxCreateIndexSTMT.hpp in Headers */,
+				0D36C0FE2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */,
 				037C3AAF2897E33600328EC8 /* Crawlable.hpp in Headers */,
 				037C3AB02897E33600328EC8 /* LiteralValue.hpp in Headers */,
 				037C3AB12897E33600328EC8 /* CustomConfig.hpp in Headers */,
@@ -8214,6 +8224,7 @@
 				03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */,
 				0393BEE427F715180058B295 /* HandleBridge.h in Headers */,
 				75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */,
+				0D36C0FD2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */,
 				75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */,
 				750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */,
 				032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */,
@@ -9813,6 +9824,7 @@
 				75535246290E63E5008376AB /* CPPFTS5Tests.mm in Sources */,
 				0DE2D9A32AEB934E005420D3 /* CPPTableTest.mm in Sources */,
 				75882C8728C7C55200F95947 /* CPPColumnConstraintAutoIncrement.cpp in Sources */,
+				0D36C1012AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm in Sources */,
 				75D4834928A7C42F004FDD3C /* Random+CPPTestObject.mm in Sources */,
 				032E112E28C8768C00BCACE0 /* CPPNewlyCreatedTableIndexObject.cpp in Sources */,
 				753C084A28A8B0110042C427 /* CPPDatabaseTest.mm in Sources */,

@@ -182,6 +182,55 @@ public:
     }
 #endif
 
+#pragma mark - WCDB Optional
+    template<class T, std::enable_if_t<IsWCDBOptional<T>::value && ColumnIsIntegerType<typename T::ValueType>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Integer)
+    {
+        if (value.hasValue()) {
+            m_intValue
+            = ColumnIsIntegerType<typename T::ValueType>::asUnderlyingType(value.value());
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsWCDBOptional<T>::value && ColumnIsFloatType<typename T::ValueType>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Float)
+    {
+        if (value.hasValue()) {
+            m_floatValue
+            = ColumnIsFloatType<typename T::ValueType>::asUnderlyingType(value.value());
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsWCDBOptional<T>::value && ColumnIsTextType<typename T::ValueType>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Text)
+    {
+        if (value.hasValue()) {
+            new ((void*) std::addressof(m_textValue)) StringView(
+            ColumnIsTextType<typename T::ValueType>::asUnderlyingType(value.value()));
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsWCDBOptional<T>::value && ColumnIsBLOBType<typename T::ValueType>::value, int> = 0>
+    Value(const T& value) : m_type(Type::BLOB)
+    {
+        if (value.hasValue()) {
+            new ((void*) std::addressof(m_blobValue))
+            Data(ColumnIsBLOBType<typename T::ValueType>::asUnderlyingType(value.value()));
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
 #pragma mark - Basic
     Value();
     Value(const Value& other);

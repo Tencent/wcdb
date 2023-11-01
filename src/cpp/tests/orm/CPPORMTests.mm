@@ -45,6 +45,7 @@
 #import "CPPTestCase.h"
 #import "CPPVirtualTableFTS4Object.hpp"
 #import "CPPVirtualTableFTS5Object.hpp"
+#import "CPPWCDBOptionalAllTypesObject.h"
 #import <Foundation/Foundation.h>
 
 @interface CPPORMTests : CPPCRUDTestCase
@@ -216,6 +217,46 @@
 }
 
 #endif
+
+- (void)test_all_wcdb_optional_types
+{
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB)" ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPWCDBOptionalAllTypesObject>(self);
+                                      }];
+
+    WCDB::Table<CPPWCDBOptionalAllTypesObject> table = self.database->getTable<CPPWCDBOptionalAllTypesObject>(self.tableName.UTF8String);
+
+    CPPWCDBOptionalAllTypesObject maxObject = CPPWCDBOptionalAllTypesObject::maxObject();
+    TestCaseAssertTrue(table.insertObjects(maxObject));
+
+    CPPWCDBOptionalAllTypesObject minObject = CPPWCDBOptionalAllTypesObject::minObject();
+    TestCaseAssertTrue(table.insertObjects(minObject));
+
+    CPPWCDBOptionalAllTypesObject emptyObject = CPPWCDBOptionalAllTypesObject::emptyObject();
+    TestCaseAssertTrue(table.insertObjects(emptyObject));
+
+    CPPWCDBOptionalAllTypesObject randomObject = CPPWCDBOptionalAllTypesObject::randomObject();
+    TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type)));
+
+    CPPWCDBOptionalAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == maxObject.type).value();
+    TestCaseAssertTrue(selectedMaxObject == maxObject);
+
+    CPPWCDBOptionalAllTypesObject selectedMinObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == minObject.type).value();
+    TestCaseAssertTrue(selectedMinObject == minObject);
+
+    CPPWCDBOptionalAllTypesObject selectedEmptyObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == emptyObject.type).value();
+    TestCaseAssertTrue(selectedEmptyObject == emptyObject);
+
+    CPPWCDBOptionalAllTypesObject selectedRandomObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == randomObject.type).value();
+    TestCaseAssertTrue(selectedRandomObject == randomObject);
+
+    CPPWCDBOptionalAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
+}
 
 - (void)test_all_properties
 {
