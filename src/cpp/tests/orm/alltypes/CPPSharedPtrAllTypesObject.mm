@@ -149,7 +149,7 @@ CPPSharedPtrAllTypesObject CPPSharedPtrAllTypesObject::randomObject()
 
     object.stringViewValue = SHARED_RANDOM_VALUE((WCDB::StringView) random.string.UTF8String);
     object.stdStringValue = SHARED_RANDOM_VALUE((std::string) random.string.UTF8String);
-    object.constCharpValue = SHARED_RANDOM_VALUE(object.stdStringValue->data());
+    object.constCharpValue = SHARED_RANDOM_VALUE((const char*) object.stdStringValue->data());
     object.charpValue = SHARED_RANDOM_VALUE(const_cast<char*>(object.stdStringValue->data()));
     object.unsafeStringViewValue = object.stringViewValue;
 

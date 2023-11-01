@@ -37,6 +37,16 @@ template<class T>
 struct IsSTDSharedPtr<std::shared_ptr<T>> : std::true_type {
 };
 
+#if defined(__cplusplus) && __cplusplus > 201402L
+template<class T>
+struct IsSTDOptional : std::false_type {
+};
+
+template<class T>
+struct IsSTDOptional<std::optional<T>> : std::true_type {
+};
+#endif
+
 class WCDB_API Value {
 public:
 #pragma mark - Base Type
@@ -120,6 +130,57 @@ public:
             m_intValue = 0;
         }
     }
+
+#pragma mark - STD Optional
+#if defined(__cplusplus) && __cplusplus > 201402L
+    template<class T, std::enable_if_t<IsSTDOptional<T>::value && ColumnIsIntegerType<typename T::value_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Integer)
+    {
+        if (value.has_value()) {
+            m_intValue = ColumnIsIntegerType<typename T::value_type>::asUnderlyingType(
+            value.value());
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsSTDOptional<T>::value && ColumnIsFloatType<typename T::value_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Float)
+    {
+        if (value.has_value()) {
+            m_floatValue
+            = ColumnIsFloatType<typename T::value_type>::asUnderlyingType(value.value());
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsSTDOptional<T>::value && ColumnIsTextType<typename T::value_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::Text)
+    {
+        if (value.has_value()) {
+            new ((void*) std::addressof(m_textValue)) StringView(
+            ColumnIsTextType<typename T::value_type>::asUnderlyingType(value.value()));
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+
+    template<class T, std::enable_if_t<IsSTDOptional<T>::value && ColumnIsBLOBType<typename T::value_type>::value, int> = 0>
+    Value(const T& value) : m_type(Type::BLOB)
+    {
+        if (value.has_value()) {
+            new ((void*) std::addressof(m_blobValue)) Data(
+            ColumnIsBLOBType<typename T::value_type>::asUnderlyingType(value.value()));
+        } else {
+            m_type = Type::Null;
+            m_intValue = 0;
+        }
+    }
+#endif
 
 #pragma mark - Basic
     Value();

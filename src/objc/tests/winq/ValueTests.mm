@@ -158,6 +158,9 @@
 
     WCDB::LiteralValue literal = value;
     TestCaseAssertSQLEqual(literal, @"1");
+
+    value = std::shared_ptr<int>();
+    TestCaseAssertTrue(value.isNull());
 }
 
 - (void)test_shared_ptr_float
@@ -176,6 +179,9 @@
 
     WCDB::LiteralValue literal = value;
     TestCaseAssertSQLEqual(literal, @"1.2");
+
+    value = std::shared_ptr<float>();
+    TestCaseAssertTrue(value.isNull());
 }
 
 - (void)test_shared_ptr_string
@@ -196,6 +202,9 @@
 
     WCDB::LiteralValue literal = value;
     TestCaseAssertSQLEqual(literal, @"'1.2'");
+
+    value = std::shared_ptr<WCDB::StringView>();
+    TestCaseAssertTrue(value.isNull());
 }
 
 - (void)test_shared_ptr_blob
@@ -217,6 +226,101 @@
 
     WCDB::LiteralValue literal = value;
     TestCaseAssertSQLEqual(literal, @"'1.2'");
+
+    value = std::shared_ptr<WCDB::UnsafeData>();
+    TestCaseAssertTrue(value.isNull());
 }
+
+#if defined(__cplusplus) && __cplusplus > 201402L
+- (void)test_std_optional_interger
+{
+    WCDB::Value value(std::make_optional<int>(0));
+    TestCaseAssertTrue(value.intValue() == 0);
+    TestCaseAssertTrue((int) value == 0);
+    TestCaseAssertFalse(value);
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertFalse(value.isNull());
+
+    value = std::make_optional<int>(1);
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((int) value == 1);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"1");
+
+    value = std::optional<int>();
+    TestCaseAssertTrue(value.isNull());
+}
+
+- (void)test_std_optional_float
+{
+    WCDB::Value value(std::make_optional<float>(0));
+    TestCaseAssertTrue(value.floatValue() == 0);
+    TestCaseAssertTrue((double) value == 0);
+    TestCaseAssertFalse(value);
+    TestCaseAssertTrue(value.isEmpty());
+
+    value = std::make_optional<double>(1.2);
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((double) value == 1.2);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"1.2");
+
+    value = std::optional<float>();
+    TestCaseAssertTrue(value.isNull());
+}
+
+- (void)test_std_optional_string
+{
+    WCDB::Value value(std::make_optional<std::string>(""));
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertTrue((double) value == 0);
+    TestCaseAssertFalse(value);
+
+    value = std::make_optional<std::string>("1.2");
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"1.2");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((double) value == 1.2);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"'1.2'");
+
+    value = std::optional<WCDB::StringView>();
+    TestCaseAssertTrue(value.isNull());
+}
+
+- (void)test_std_optional_blob
+{
+    NSData* nsData = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    WCDB::Value value(std::make_optional<WCDB::UnsafeData>((unsigned char*) nsData.bytes, nsData.length));
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertTrue(value.isEmpty());
+    TestCaseAssertFalse(value);
+
+    NSData* nsData2 = [@"1.2" dataUsingEncoding:NSUTF8StringEncoding];
+    value = std::make_optional<WCDB::UnsafeData>((unsigned char*) nsData2.bytes, nsData2.length);
+    TestCaseAssertStringEqual([NSString stringWithUTF8String:value.textValue().data()], @"1.2");
+    TestCaseAssertFalse(value.isNull());
+    TestCaseAssertFalse(value.isEmpty());
+    TestCaseAssertTrue((double) value == 1.2);
+    TestCaseAssertTrue(value);
+
+    WCDB::LiteralValue literal = value;
+    TestCaseAssertSQLEqual(literal, @"'1.2'");
+
+    value = std::optional<WCDB::UnsafeData>();
+    TestCaseAssertTrue(value.isNull());
+}
+#endif
 
 @end

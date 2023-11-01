@@ -39,6 +39,7 @@
 #import "CPPNewRemapObject.hpp"
 #import "CPPNewlyCreatedTableIndexObject.hpp"
 #import "CPPOldRemapObject.hpp"
+#import "CPPSTDOptionalAllTypesObject.h"
 #import "CPPSharedPtrAllTypesObject.h"
 #import "CPPTableConstraintObject.hpp"
 #import "CPPTestCase.h"
@@ -171,6 +172,50 @@
     CPPSharedPtrAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == "null").value();
     TestCaseAssertTrue(selectedNullObject == emptyObject);
 }
+
+#if defined(__cplusplus) && __cplusplus > 201402L
+
+- (void)test_all_std_optional_types
+{
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB)" ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPSTDOptionalAllTypesObject>(self);
+                                      }];
+
+    WCDB::Table<CPPSTDOptionalAllTypesObject> table = self.database->getTable<CPPSTDOptionalAllTypesObject>(self.tableName.UTF8String);
+
+    CPPSTDOptionalAllTypesObject maxObject = CPPSTDOptionalAllTypesObject::maxObject();
+    TestCaseAssertTrue(table.insertObjects(maxObject));
+
+    CPPSTDOptionalAllTypesObject minObject = CPPSTDOptionalAllTypesObject::minObject();
+    TestCaseAssertTrue(table.insertObjects(minObject));
+
+    CPPSTDOptionalAllTypesObject emptyObject = CPPSTDOptionalAllTypesObject::emptyObject();
+    TestCaseAssertTrue(table.insertObjects(emptyObject));
+
+    CPPSTDOptionalAllTypesObject randomObject = CPPSTDOptionalAllTypesObject::randomObject();
+    TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPSTDOptionalAllTypesObject::type)));
+
+    CPPSTDOptionalAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == maxObject.type).value();
+    TestCaseAssertTrue(selectedMaxObject == maxObject);
+
+    CPPSTDOptionalAllTypesObject selectedMinObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == minObject.type).value();
+    TestCaseAssertTrue(selectedMinObject == minObject);
+
+    CPPSTDOptionalAllTypesObject selectedEmptyObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == emptyObject.type).value();
+    TestCaseAssertTrue(selectedEmptyObject == emptyObject);
+
+    CPPSTDOptionalAllTypesObject selectedRandomObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == randomObject.type).value();
+    TestCaseAssertTrue(selectedRandomObject == randomObject);
+
+    CPPSTDOptionalAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
+}
+
+#endif
 
 - (void)test_all_properties
 {
