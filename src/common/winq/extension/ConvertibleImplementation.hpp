@@ -35,11 +35,10 @@ public:
     static LiteralValue asLiteralValue(const bool& t);
 };
 
-template<typename T>
-class LiteralValueConvertible<T, typename std::enable_if<ColumnIsNullType<T>::value>::type> final
-: public std::true_type {
+template<>
+class LiteralValueConvertible<std::nullptr_t> final : public std::true_type {
 public:
-    static LiteralValue asLiteralValue(const T& t)
+    static LiteralValue asLiteralValue(const std::nullptr_t& t)
     {
         WCDB_UNUSED(t)
         return nullptr;

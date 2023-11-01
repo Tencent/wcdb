@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/26.
+// Created by qiuwenchen on 2023/10/29.
 //
 
 /*
@@ -22,14 +22,25 @@
  * limitations under the License.
  */
 
-#pragma once
+#include "CPPInheritObject.hpp"
 
-#include "Binding.hpp"
-#include "FTSTokenizerUtil.hpp"
-#include "Field.hpp"
-#include "MemberPointer.hpp"
-#include "ResultField.hpp"
-#include "RunTimeAccessor.hpp"
-#include "STDOptionalAccessor.hpp"
-#include "SharedPtrAccessor.hpp"
-#include "WCDBOptionalAccessor.hpp"
+WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPInheritBase1);
+WCDB_CPP_SYNTHESIZE(value1)
+WCDB_CPP_SYNTHESIZE(value2)
+WCDB_CPP_PRIMARY(value1)
+WCDB_CPP_INDEX("_value2", value2)
+WCDB_CPP_ORM_IMPLEMENTATION_END
+
+WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPInheritBase2)
+WCDB_CPP_INHERIT_ORM(CPPInheritBase1)
+WCDB_CPP_SYNTHESIZE(value3)
+WCDB_CPP_SYNTHESIZE(value4)
+WCDB_CPP_INDEX("_value3_value4", value3)
+WCDB_CPP_INDEX("_value3_value4", value4)
+WCDB_CPP_ORM_IMPLEMENTATION_END
+
+WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPInheritObject)
+WCDB_CPP_INHERIT_ORM(CPPInheritBase2)
+WCDB_CPP_SYNTHESIZE(value5)
+WCDB_CPP_UNIQUE(value5)
+WCDB_CPP_ORM_IMPLEMENTATION_END

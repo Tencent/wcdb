@@ -23,6 +23,7 @@
  */
 
 #include "Table.hpp"
+#include "Database.hpp"
 #include "Handle.hpp"
 #include "InnerDatabase.hpp"
 #include "StatementDropIndex.hpp"
@@ -55,6 +56,11 @@ RecyclableHandle BaseTable::getHandle(bool writeHint)
 const StringView& BaseTable::getTableName() const
 {
     return m_tableName;
+}
+
+Database BaseTable::getDatabase() const
+{
+    return Database(m_databaseHolder);
 }
 
 StringView BaseTable::getIndexNameWithSuffix(const UnsafeStringView& suffix) const

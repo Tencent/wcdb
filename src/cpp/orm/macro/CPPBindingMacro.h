@@ -47,3 +47,10 @@
     });                                                                        \
     return *g_binding;                                                         \
     }
+
+#define __WCDB_CPP_INHERIT_ORM(baseClass)                                                         \
+    static_assert(std::is_base_of<baseClass, WCDBORMType>::value,                                 \
+                  "You can only inherit ORM from base class");                                    \
+    static_assert(baseClass::isObjectRelationMapped, "The base class has no ORM configuration."); \
+    WCDB::assertFirstBaseClass<baseClass, WCDBORMType>();                                         \
+    g_binding->inherit(baseClass::getObjectRelationBinding());

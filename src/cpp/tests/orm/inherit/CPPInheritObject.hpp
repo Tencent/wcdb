@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/26.
+// Created by qiuwenchen on 2023/10/29.
 //
 
 /*
@@ -22,14 +22,30 @@
  * limitations under the License.
  */
 
-#pragma once
+#if TEST_WCDB_OBJC
+#import <WCDBOBjc/WCDBCpp.h>
+#elif TEST_WCDB_CPP
+#import <WCDBCpp/WCDBCpp.h>
+#else
+#import <WCDB/WCDBCpp.h>
+#endif
 
-#include "Binding.hpp"
-#include "FTSTokenizerUtil.hpp"
-#include "Field.hpp"
-#include "MemberPointer.hpp"
-#include "ResultField.hpp"
-#include "RunTimeAccessor.hpp"
-#include "STDOptionalAccessor.hpp"
-#include "SharedPtrAccessor.hpp"
-#include "WCDBOptionalAccessor.hpp"
+class CPPInheritBase1 {
+public:
+    int value1;
+    double value2;
+    WCDB_CPP_ORM_DECLARATION(CPPInheritBase1);
+};
+
+class CPPInheritBase2 : public CPPInheritBase1 {
+public:
+    long value3;
+    std::string value4;
+    WCDB_CPP_ORM_DECLARATION(CPPInheritBase2);
+};
+
+class CPPInheritObject : public CPPInheritBase2 {
+public:
+    WCDB::Data value5;
+    WCDB_CPP_ORM_DECLARATION(CPPInheritObject);
+};

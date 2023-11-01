@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2022/8/26.
+// Created by qiuwenchen on 2023/10/27.
 //
 
 /*
@@ -22,14 +22,24 @@
  * limitations under the License.
  */
 
-#pragma once
+#import <Foundation/Foundation.h>
 
-#include "Binding.hpp"
-#include "FTSTokenizerUtil.hpp"
-#include "Field.hpp"
-#include "MemberPointer.hpp"
-#include "ResultField.hpp"
-#include "RunTimeAccessor.hpp"
-#include "STDOptionalAccessor.hpp"
-#include "SharedPtrAccessor.hpp"
-#include "WCDBOptionalAccessor.hpp"
+#import "CPPTestCase.h"
+
+@interface CPPTableTests : CPPTableTestCase
+
+@end
+
+@implementation CPPTableTests
+
+- (void)test_table_name
+{
+    TestCaseAssertCPPStringEqual(self.table.getTableName().data(), self.tableName.UTF8String);
+}
+
+- (void)test_database
+{
+    TestCaseAssertCPPStringEqual(self.table.getDatabase().getPath().data(), self.path.UTF8String);
+}
+
+@end

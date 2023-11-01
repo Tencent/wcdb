@@ -148,7 +148,7 @@ public:
 
 protected:
     virtual ~TableOperation() override = 0;
-    virtual const UnsafeStringView &getTableName() const = 0;
+    virtual const StringView &getTableName() const = 0;
 };
 
 } //namespace WCDB

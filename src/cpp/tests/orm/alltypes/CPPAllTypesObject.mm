@@ -138,7 +138,7 @@ CPPAllTypesObject CPPAllTypesObject::minObject()
 CPPAllTypesObject CPPAllTypesObject::emptyObject()
 {
     CPPAllTypesObject object;
-    object.type = "nil";
+    object.type = "empty";
     object.enumValue = EnumType::Zero;
     object.enumClassValue = EnumClassType::Zero;
     object.literalEnumValue = EnumZero;
@@ -159,8 +159,10 @@ CPPAllTypesObject CPPAllTypesObject::emptyObject()
     object.floatValue = 0;
     object.doubleValue = 0;
 
-    object.constCharpValue = "";
-    object.charpValue = (char*) "";
+    object.constCharpValue = nullptr;
+    object.charpValue = nullptr;
+    memset(object.charArrValue, 0, 100);
+    memset(object.unsignedCharArrValue, 0, 100);
     return object;
 }
 
@@ -191,9 +193,9 @@ CPPAllTypesObject CPPAllTypesObject::randomObject()
     object.doubleValue = random.double_;
 
     object.stringViewValue = random.string.UTF8String;
+    object.stdStringValue = random.string.UTF8String;
     object.constCharpValue = object.stdStringValue.data();
     object.charpValue = const_cast<char*>(object.stdStringValue.data());
-    object.stdStringValue = random.string.UTF8String;
     object.unsafeStringViewValue = object.stringViewValue;
     memcpy(object.charArrValue, [random stringWithLength:99].UTF8String, 100);
 
@@ -230,10 +232,10 @@ bool CPPAllTypesObject::operator==(const CPPAllTypesObject& other)
     if (!equal) {
         return equal;
     }
-    if (stringViewValue.compare(other.stringViewValue) != 0) {
+    if (!stringViewValue.equal(other.stringViewValue)) {
         return false;
     }
-    if (unsafeStringViewValue.compare(other.unsafeStringViewValue) != 0) {
+    if (!unsafeStringViewValue.equal(other.unsafeStringViewValue)) {
         return false;
     }
     if ((constCharpValue == nullptr && other.constCharpValue != nullptr) || (constCharpValue != nullptr && other.constCharpValue == nullptr) || (constCharpValue != nullptr && other.constCharpValue != nullptr && strcmp(constCharpValue, other.constCharpValue) != 0)) {
@@ -251,13 +253,13 @@ bool CPPAllTypesObject::operator==(const CPPAllTypesObject& other)
     if (strcmp(constCharArrValue, other.constCharArrValue) != 0) {
         return false;
     }
-    if (blobValue.size() != other.blobValue.size() || (blobValue.size() != 0 && memcmp(blobValue.data(), other.blobValue.data(), blobValue.size()) != 0)) {
+    if (blobValue != other.blobValue) {
         return false;
     }
-    if (dataValue.size() != other.dataValue.size() || (dataValue.size() != 0 && memcmp(dataValue.buffer(), other.dataValue.buffer(), dataValue.size()) != 0)) {
+    if (dataValue != other.dataValue) {
         return false;
     }
-    if (unsafeDataValue.size() != other.unsafeDataValue.size() || (unsafeDataValue.size() != 0 && memcmp(unsafeDataValue.buffer(), other.unsafeDataValue.buffer(), unsafeDataValue.size()) != 0)) {
+    if (unsafeDataValue != other.unsafeDataValue) {
         return false;
     }
     if (memcmp(constUnsignedCharArrValue, other.constUnsignedCharArrValue, 6) != 0) {

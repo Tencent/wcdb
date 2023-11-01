@@ -56,6 +56,7 @@ public:
 
     Field table(const UnsafeStringView& table) const;
     Field schema(const Schema& schema) const;
+    ResultField redirect(const ResultColumn& resultColumn) const;
 
     template<class ObjectType>
     Value getValue(const ObjectType& obj) const
@@ -65,26 +66,45 @@ public:
         case ColumnType::Integer: {
             auto intAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(m_accessor);
-            return intAccessor->getValue(obj);
+            if (!intAccessor->isNull(obj)) {
+                return intAccessor->getValue(obj);
+            } else {
+                return Value();
+            }
         } break;
         case ColumnType::Float: {
             auto floatAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(m_accessor);
-            return floatAccessor->getValue(obj);
+            if (!floatAccessor->isNull(obj)) {
+                return floatAccessor->getValue(obj);
+            } else {
+                return Value();
+            }
         } break;
         case ColumnType::Text: {
             auto textAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(m_accessor);
-            return textAccessor->getValue(obj);
+            if (!textAccessor->isNull(obj)) {
+                return textAccessor->getValue(obj);
+            } else {
+                return Value();
+            }
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor);
-            return blobAccessor->getValue(obj);
+            if (!blobAccessor->isNull(obj)) {
+                return blobAccessor->getValue(obj);
+            } else {
+                return Value();
+            }
         } break;
         case ColumnType::Null: {
             return nullptr;
         } break;
+        default:
+            assert(0);
+            break;
         }
         return nullptr;
     }

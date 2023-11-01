@@ -141,26 +141,42 @@ public:
         case ColumnType::Integer: {
             auto intAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(accessor);
-            bindInteger(intAccessor->getValue(obj), index);
+            if (!intAccessor->isNull(obj)) {
+                bindInteger(intAccessor->getValue(obj), index);
+            } else {
+                bindNull(index);
+            }
         } break;
         case ColumnType::Float: {
             auto floatAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(accessor);
-            bindDouble(floatAccessor->getValue(obj), index);
+            if (!floatAccessor->isNull(obj)) {
+                bindDouble(floatAccessor->getValue(obj), index);
+            } else {
+                bindNull(index);
+            }
         } break;
         case ColumnType::Text: {
             auto textAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(accessor);
-            bindText(textAccessor->getValue(obj), index);
+            if (!textAccessor->isNull(obj)) {
+                bindText(textAccessor->getValue(obj), index);
+            } else {
+                bindNull(index);
+            }
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(accessor);
-            bindBLOB(blobAccessor->getValue(obj), index);
+            if (!blobAccessor->isNull(obj)) {
+                bindBLOB(blobAccessor->getValue(obj), index);
+            } else {
+                bindNull(index);
+            }
         } break;
-        case ColumnType::Null: {
-            bindNull(index);
-        } break;
+        default:
+            assert(0);
+            break;
         }
     }
 
@@ -248,32 +264,47 @@ public:
         int index = 0;
         for (const ResultField& field : resultFields) {
             const BaseAccessor* accessor = field.getAccessor();
+            bool notNull = getType(index) != ColumnType::Null;
             switch (accessor->getColumnType()) {
             case ColumnType::Integer: {
                 auto intAccessor
                 = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(accessor);
-                intAccessor->setValue(obj, getInteger(index));
+                if (notNull) {
+                    intAccessor->setValue(obj, getInteger(index));
+                } else {
+                    intAccessor->setNull(obj);
+                }
             } break;
             case ColumnType::Float: {
                 auto floatAccessor
                 = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(accessor);
-                floatAccessor->setValue(obj, getDouble(index));
+                if (notNull) {
+                    floatAccessor->setValue(obj, getDouble(index));
+                } else {
+                    floatAccessor->setNull(obj);
+                }
             } break;
             case ColumnType::Text: {
                 auto textAccessor
                 = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(accessor);
-                textAccessor->setValue(obj, getText(index));
+                if (notNull) {
+                    textAccessor->setValue(obj, getText(index));
+                } else {
+                    textAccessor->setNull(obj);
+                }
             } break;
             case ColumnType::BLOB: {
                 auto blobAccessor
                 = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(accessor);
-                blobAccessor->setValue(obj, getBLOB(index));
+                if (notNull) {
+                    blobAccessor->setValue(obj, getBLOB(index));
+                } else {
+                    blobAccessor->setNull(obj);
+                }
             } break;
-            case ColumnType::Null: {
-                auto nullAccessor
-                = static_cast<const Accessor<ObjectType, ColumnType::Null>*>(accessor);
-                nullAccessor->setValue(obj, nullptr);
-            } break;
+            default:
+                assert(0);
+                break;
             }
             index++;
         }

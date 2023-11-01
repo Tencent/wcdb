@@ -34,7 +34,11 @@
 
 namespace WCDB {
 
+class BaseTable;
+
 class WCDB_API Database final : public HandleORMOperation {
+    friend BaseTable;
+
 public:
     /**
      @brief Init a database from path.
@@ -47,6 +51,9 @@ public:
     Database(const Database &);
     Database &operator=(const Database &);
     ~Database() override final;
+
+protected:
+    Database(Recyclable<InnerDatabase *> database);
 
 private:
     Database(InnerDatabase *database);
@@ -117,9 +124,8 @@ public:
                 4. unblokade, which unblocks all other opreations.
             You can simply call close: to do all steps above or call these separately.
             Since this function will wait until all sqlite db handles return, it may lead to deadlock in some bad practice. The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
-                1. You should not keep WCDB objects, including `WCDB::Handle`, `WCDB::PreparedStatement`, `WCDB::Insert`, `WCDB::Delete`, `WCDB::Update`, `WCDB::Select`, `WCDB::MultiSelect`. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
+                1. You should not keep WCDB objects, including `WCDB::Handle`, `WCDB::PreparedStatement`, `WCDB::Insert`, `WCDB::Delete`, `WCDB::Update`, `WCDB::Select`, `WCDB::MultiSelect`. These objects should not be kept. You should get them, use them, then release them right away.
                 2. WCDB objects may not be out of its' scope.
-                3. Further more, those WCDB objects may be kept by NSAutoReleasePool, which is done by ARC automatically. So you should make sure that all WCDB objects in NSAutoReleasePool is drained.
                 The best practice is to call close: in sub-thread and display a loading animation in main thread.
 
      @param onClosed Trigger on database closed.
