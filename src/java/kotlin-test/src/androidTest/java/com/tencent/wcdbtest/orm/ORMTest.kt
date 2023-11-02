@@ -338,7 +338,7 @@ class ORMTest : DatabaseTestCase() {
                 columnDefs.add(ColumnDef(field, ColumnType.Integer))
             }
         }
-        createTable.define(columnDefs.toTypedArray())
+        createTable.define(*columnDefs.toTypedArray())
         database.execute(createTable)
         val added = WrappedValue()
         database.traceException(ExceptionTracer { exception ->
@@ -365,7 +365,7 @@ class ORMTest : DatabaseTestCase() {
     @Throws(WCDBException::class)
     fun testPrimaryEnableAutoIncrementForExistingTable() {
         database.createTable(tableName, DBPrimaryNotAutoIncrementObject)
-        val obj1 = PrimaryNotAutoIncrementObject();
+        val obj1 = PrimaryNotAutoIncrementObject()
         obj1.id = 1
         database.insertObject(obj1, DBPrimaryNotAutoIncrementObject.allFields(), tableName)
 

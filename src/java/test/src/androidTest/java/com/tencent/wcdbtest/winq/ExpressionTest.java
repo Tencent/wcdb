@@ -24,6 +24,8 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.winq.*;
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
@@ -238,7 +240,9 @@ public class ExpressionTest {
         shortList.add((short) 3);
         winqEqual(column.in(shortList), "testColumn IN(1, 2, 3)");
 
+        winqEqual(column.in(1, 2, 3), "testColumn IN(1, 2, 3)");
         winqEqual(column.in(new int[]{1, 2, 3}), "testColumn IN(1, 2, 3)");
+        winqEqual(column.in(new Value(1), new Value(2), new Value(3)), "testColumn IN(1, 2, 3)");
         Set<Integer> intSet = new HashSet<Integer>();
         intSet.add(1);
         intSet.add(2);
@@ -264,7 +268,9 @@ public class ExpressionTest {
         longList.add(3L);
         winqEqual(column.in(longList), "testColumn IN(1, 2, 3)");
 
+        winqEqual(column.in(1.1f, 2.1f, 3.1f), "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
         winqEqual(column.in(new float[]{1.1f, 2.1f, 3.1f}), "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
+        winqEqual(column.in(new Value(1.1f), new Value(2.1f), new Value(3.1f)), "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
         Set<Float> floatSet = new HashSet<Float>();
         floatSet.add(1.1f);
         floatSet.add(2.1f);
@@ -277,7 +283,9 @@ public class ExpressionTest {
         floatList.add(3.1f);
         winqEqual(column.in(floatList), "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
 
+        winqEqual(column.in(1.1, 2.1, 3.1), "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
         winqEqual(column.in(new double[]{1.1, 2.1, 3.1}), "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
+        winqEqual(column.in(new Value(1.1), new Value(2.1), new Value(3.1)), "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
         Set<Double> doubleSet = new HashSet<Double>();
         doubleSet.add(1.1);
         doubleSet.add(2.1);
@@ -290,7 +298,9 @@ public class ExpressionTest {
         doubleList.add(3.1);
         winqEqual(column.in(doubleList), "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
 
+        winqEqual(column.in("abc", "def", "ghi"), "testColumn IN('abc', 'def', 'ghi')");
         winqEqual(column.in(new String[]{"abc", "def", "ghi"}), "testColumn IN('abc', 'def', 'ghi')");
+        winqEqual(column.in(new Value("abc"), new Value("def"), new Value("ghi")), "testColumn IN('abc', 'def', 'ghi')");
         Set<String> stringSet = new HashSet<String>();
         stringSet.add("abc");
         stringSet.add("def");
@@ -324,7 +334,9 @@ public class ExpressionTest {
         shortList.add((short) 3);
         winqEqual(column.notIn(shortList), "testColumn NOT IN(1, 2, 3)");
 
+        winqEqual(column.notIn(1, 2, 3), "testColumn NOT IN(1, 2, 3)");
         winqEqual(column.notIn(new int[]{1, 2, 3}), "testColumn NOT IN(1, 2, 3)");
+        winqEqual(column.notIn(new Value(1), new Value(2), new Value(3)), "testColumn NOT IN(1, 2, 3)");
         Set<Integer> intSet = new HashSet<Integer>();
         intSet.add(1);
         intSet.add(2);
@@ -350,7 +362,9 @@ public class ExpressionTest {
         longList.add(3L);
         winqEqual(column.notIn(longList), "testColumn NOT IN(1, 2, 3)");
 
+        winqEqual(column.notIn(1.1f, 2.1f, 3.1f), "testColumn NOT IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
         winqEqual(column.notIn(new float[]{1.1f, 2.1f, 3.1f}), "testColumn NOT IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
+        winqEqual(column.notIn(new Value(1.1f), new Value(2.1f), new Value(3.1f)), "testColumn NOT IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
         Set<Float> floatSet = new HashSet<Float>();
         floatSet.add(1.1f);
         floatSet.add(2.1f);
@@ -363,7 +377,9 @@ public class ExpressionTest {
         floatList.add(3.1f);
         winqEqual(column.notIn(floatList), "testColumn NOT IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)");
 
+        winqEqual(column.notIn(1.1, 2.1, 3.1), "testColumn NOT IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
         winqEqual(column.notIn(new double[]{1.1, 2.1, 3.1}), "testColumn NOT IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
+        winqEqual(column.notIn(new Value(1.1), new Value(2.1), new Value(3.1)), "testColumn NOT IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
         Set<Double> doubleSet = new HashSet<Double>();
         doubleSet.add(1.1);
         doubleSet.add(2.1);
@@ -376,7 +392,9 @@ public class ExpressionTest {
         doubleList.add(3.1);
         winqEqual(column.notIn(doubleList), "testColumn NOT IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)");
 
+        winqEqual(column.notIn("abc", "def", "ghi"), "testColumn NOT IN('abc', 'def', 'ghi')");
         winqEqual(column.notIn(new String[]{"abc", "def", "ghi"}), "testColumn NOT IN('abc', 'def', 'ghi')");
+        winqEqual(column.notIn(new Value("abc"), new Value("def"), new Value("ghi")), "testColumn NOT IN('abc', 'def', 'ghi')");
         Set<String> stringSet = new HashSet<String>();
         stringSet.add("abc");
         stringSet.add("def");
