@@ -23,6 +23,7 @@
 
 package com.tencent.wcdbtest.orm
 
+import com.tencent.wcdb.base.Value
 import com.tencent.wcdb.base.WCDBException
 import com.tencent.wcdb.core.Database.ExceptionTracer
 import com.tencent.wcdb.orm.Field
@@ -114,6 +115,10 @@ class ORMTest : DatabaseTestCase() {
         )
         Assert.assertTrue(
             random == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(random.type))
+        )
+        table.insertRow(arrayOf(Value("null")), arrayOf(DBAllTypeObject.type))
+        Assert.assertTrue(
+            empty == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq("null"))
         )
     }
 

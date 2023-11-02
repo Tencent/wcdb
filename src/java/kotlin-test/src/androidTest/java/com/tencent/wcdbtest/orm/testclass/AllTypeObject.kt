@@ -76,77 +76,35 @@ class AllTypeObject {
     var bytes2: ByteArray? = null
 
     override fun equals(other: Any?): Boolean {
-        if (other == null) {
-            return false
-        }
-        if (other !is AllTypeObject) {
-            return super.equals(other)
-        }
-        return aBoolean == other.aBoolean &&
-                getIntegerValue(aBoolean2) == getIntegerValue(other.aBoolean2) &&
-                aShort == other.aShort &&
-                getIntegerValue(aShort2) == getIntegerValue(other.aShort2) &&
-                anInt == other.anInt &&
-                getIntegerValue(integer) == getIntegerValue(other.integer) &&
-                aLong == other.aLong &&
-                getIntegerValue(aLong2) == getIntegerValue(other.aLong2) &&
-                aFloat == other.aFloat &&
-                getDoubleValue(aFloat2) == getDoubleValue(other.aFloat2) &&
-                aDouble == other.aDouble &&
-                getDoubleValue(aDouble2) == getDoubleValue(other.aDouble2) &&
-                stringCompare(string, other.string) &&
-                getNotNullBuffer(bytes).contentEquals(getNotNullBuffer(other.bytes)) &&
-                getNotNullBuffer(bytes2).contentEquals(getNotNullBuffer(other.bytes2))
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AllTypeObject
+
+        if (aBoolean != other.aBoolean) return false
+        if (aBoolean2 != other.aBoolean2) return false
+        if (aByte != other.aByte) return false
+        if (aByte2 != other.aByte2) return false
+        if (aShort != other.aShort) return false
+        if (aShort2 != other.aShort2) return false
+        if (anInt != other.anInt) return false
+        if (integer != other.integer) return false
+        if (aLong != other.aLong) return false
+        if (aLong2 != other.aLong2) return false
+        if (aFloat != other.aFloat) return false
+        if (aFloat2 != other.aFloat2) return false
+        if (aDouble != other.aDouble) return false
+        if (aDouble2 != other.aDouble2) return false
+        if (string != other.string) return false
+        if (!bytes.contentEquals(other.bytes)) return false
+        if (bytes2 != null) {
+            if (other.bytes2 == null) return false
+            if (!bytes2.contentEquals(other.bytes2)) return false
+        } else if (other.bytes2 != null) return false
+
+        return true
     }
 
-    fun getNotNullBuffer(byteArray: ByteArray?): ByteArray {
-        if(byteArray == null) {
-            return byteArrayOf()
-        }
-        return byteArray
-    }
-
-    private fun getIntegerValue(`object`: Any?): Long {
-        if (`object` == null) {
-            return 0
-        }
-        return if (`object` is Boolean) {
-            if (`object`) 1 else 0
-        } else if (`object` is Char) {
-            `object`.toLong()
-        } else if (`object` is Byte) {
-            `object`.toLong()
-        } else if (`object` is Short) {
-            `object`.toLong()
-        } else if (`object` is Int) {
-            `object`.toLong()
-        } else {
-            `object` as Long
-        }
-    }
-
-    private fun getDoubleValue(`object`: Any?): Double {
-        if (`object` == null) {
-            return 0.0
-        }
-        return if (`object` is Float) {
-            `object`.toDouble()
-        } else {
-            `object` as Double
-        }
-    }
-
-    private fun stringCompare(obj1: String?, obj2: String?): Boolean {
-        if (obj1 === obj2) {
-            return true
-        }
-        if (obj1 == null && obj2!!.isEmpty()) {
-            return true
-        }
-        return if (obj2 == null && obj1!!.isEmpty()) {
-            true
-        } else obj1 == obj2
-    }
 
     companion object {
         fun maxObject(): AllTypeObject {

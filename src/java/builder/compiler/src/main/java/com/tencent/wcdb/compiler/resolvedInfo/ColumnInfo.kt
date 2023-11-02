@@ -25,6 +25,7 @@ package com.tencent.wcdb.compiler.resolvedInfo
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
+import com.google.devtools.ksp.symbol.Nullability
 import com.tencent.wcdb.WCDBDefault
 import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBIndex
@@ -33,6 +34,7 @@ import javax.lang.model.element.Element
 data class ColumnInfo(
     var propertyName: String = "",
     var propertyType: String = "",
+    var nullable: Boolean = false,
     var columnName: String = "",
     var isPrimary: Boolean = false,
     var isAutoIncrement: Boolean = false,
@@ -53,6 +55,7 @@ data class ColumnInfo(
             val resolvedInfo = ColumnInfo()
             resolvedInfo.propertyName = propertyDeclaration.simpleName.asString()
             resolvedInfo.propertyType = propertyDeclaration.type.resolve().declaration.qualifiedName!!.asString()
+            resolvedInfo.nullable = propertyDeclaration.type.resolve().nullability == Nullability.NULLABLE
             for(argument in fieldAnnotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
