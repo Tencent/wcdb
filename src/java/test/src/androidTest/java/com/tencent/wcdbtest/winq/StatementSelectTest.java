@@ -45,27 +45,27 @@ public class StatementSelectTest {
         winqEqual(new StatementSelect().select(new Column[]{column1, column2}).distinct().from(table1),
                 "SELECT DISTINCT column1, column2 FROM table1");
 
-        winqEqual(new StatementSelect().select(new Object[]{"column1", column2}).distinct().from(table1),
+        winqEqual(new StatementSelect().select("column1", column2).distinct().from(table1),
                 "SELECT DISTINCT column1, column2 FROM table1");
 
-        winqEqual(new StatementSelect().select(new String[]{"column1", "column2"}).distinct().from(table1),
+        winqEqual(new StatementSelect().select("column1", "column2").distinct().from(table1),
                 "SELECT DISTINCT column1, column2 FROM table1");
 
-        winqEqual(new StatementSelect().select(column1).from(new String[]{table1, table2}),
+        winqEqual(new StatementSelect().select(column1).from(table1, table2),
                 "SELECT column1 FROM table1, table2");
 
         winqEqual(new StatementSelect().select(column1).from(new TableOrSubqueryConvertible[]{
                 new TableOrSubquery(table1), new TableOrSubquery(table2)}),
                 "SELECT column1 FROM table1, table2");
 
-        winqEqual(new StatementSelect().select(column1).from(new Object[]{table1, new TableOrSubquery(table2)}),
+        winqEqual(new StatementSelect().select(column1).from(table1, new TableOrSubquery(table2)),
                 "SELECT column1 FROM table1, table2");
 
         winqEqual(new StatementSelect().select(column1).from(table1).where(column1.gt(1)),
                 "SELECT column1 FROM table1 WHERE column1 > 1");
 
         winqEqual(new StatementSelect().select(column1).from(table1)
-                .orderBy(new OrderingTerm[]{column1.order(Order.Asc), column2.order(Order.Desc)}),
+                .orderBy(column1.order(Order.Asc), column2.order(Order.Desc)),
                 "SELECT column1 FROM table1 ORDER BY column1 ASC, column2 DESC");
 
         winqEqual(new StatementSelect().select(column1).from(table1).limit(1),

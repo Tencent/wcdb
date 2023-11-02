@@ -49,7 +49,7 @@ public class StatementCreateTriggerTest {
         String table = "testTable";
         Expression condition = column1.eq(1);
         StatementUpdate update = new StatementUpdate().update(table).set(column1).to(2);
-        StatementInsert insert = new StatementInsert().insertInto(table).values(new Object[]{1});
+        StatementInsert insert = new StatementInsert().insertInto(table).values(1);
         StatementSelect select = new StatementSelect().select(column1);
         StatementDelete delete = new StatementDelete().deleteFrom(table);
 
@@ -104,12 +104,12 @@ public class StatementCreateTriggerTest {
                         "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
-                        .before().update().ofColumns(new Column[]{column1, column2}).onTable(table).execute(update),
+                        .before().update().ofColumns(column1, column2).onTable(table).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1, column2 ON testTable " +
                         "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
-                        .before().update().ofColumns(new String[]{"column1", "column2"}).onTable(table).execute(update),
+                        .before().update().ofColumns("column1", "column2").onTable(table).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1, column2 ON testTable " +
                         "BEGIN UPDATE testTable SET column1 = 2; END");
 

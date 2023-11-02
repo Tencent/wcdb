@@ -109,10 +109,10 @@ public class JoinTest {
         winqEqual(new Join(select1()).join(select2()).on(new Column("column1").eq(new Column("column2"))),
                 select1Sql() + " JOIN " + select2Sql() + " ON column1 == column2");
 
-        winqEqual(new Join("testTable1").join("testTable2").using(new Column[]{new Column("column1"), new Column("column2")}),
+        winqEqual(new Join("testTable1").join("testTable2").using(new Column("column1"), new Column("column2")),
                 "testTable1 JOIN testTable2 USING(column1, column2)");
 
-        winqEqual(new Join(select1()).join(select2()).using(new Column[]{new Column("column1"), new Column("column2")}),
+        winqEqual(new Join(select1()).join(select2()).using(new Column("column1"), new Column("column2")),
                 select1Sql() + " JOIN " + select2Sql() + " USING(column1, column2)");
     }
 

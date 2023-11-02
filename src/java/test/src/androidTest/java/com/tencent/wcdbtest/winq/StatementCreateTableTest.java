@@ -44,25 +44,24 @@ public class StatementCreateTableTest {
         TableConstraint constraint2 = new TableConstraint("constraint2").unique().indexedBy(column2);
 
         String table1 = "table1";
-        String table2 = "table2";
 
-        winqEqual(new StatementCreateTable().createTable(table1).define(new ColumnDef[]{def1, def2}),
+        winqEqual(new StatementCreateTable().createTable(table1).define(def1, def2),
                 "CREATE TABLE table1(column1 INTEGER, column2 TEXT)");
 
-        winqEqual(new StatementCreateTable().createTempTable(table1).define(new ColumnDef[]{def1, def2}),
+        winqEqual(new StatementCreateTable().createTempTable(table1).define(def1, def2),
                 "CREATE TEMP TABLE table1(column1 INTEGER, column2 TEXT)");
 
-        winqEqual(new StatementCreateTable().createTable(table1).define(new ColumnDef[]{def1, def2}).withoutRowid(),
+        winqEqual(new StatementCreateTable().createTable(table1).define(def1, def2).withoutRowid(),
                 "CREATE TABLE table1(column1 INTEGER, column2 TEXT) WITHOUT ROWID");
 
-        winqEqual(new StatementCreateTable().createTable(table1).of("testSchema").define(new ColumnDef[]{def1, def2}),
+        winqEqual(new StatementCreateTable().createTable(table1).of("testSchema").define(def1, def2),
                 "CREATE TABLE testSchema.table1(column1 INTEGER, column2 TEXT)");
 
-        winqEqual(new StatementCreateTable().createTable(table1).ifNotExist().define(new ColumnDef[]{def1, def2}),
+        winqEqual(new StatementCreateTable().createTable(table1).ifNotExist().define(def1, def2),
                 "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT)");
 
-        winqEqual(new StatementCreateTable().createTable(table1).define(new ColumnDef[]{def1, def2})
-                .constraint(new TableConstraint[]{constraint1, constraint2}),
+        winqEqual(new StatementCreateTable().createTable(table1).define(def1, def2)
+                .constraint(constraint1, constraint2),
                 "CREATE TABLE table1(column1 INTEGER, column2 TEXT, " +
                         "CONSTRAINT constraint1 PRIMARY KEY(column1), " +
                         "CONSTRAINT constraint2 UNIQUE(column2))");
