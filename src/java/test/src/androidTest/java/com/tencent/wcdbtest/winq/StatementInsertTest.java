@@ -24,6 +24,8 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.winq.*;
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
@@ -38,15 +40,19 @@ public class StatementInsertTest {
         Column column2 = new Column("column2");
 
         winqEqual(new StatementInsert().insertInto("testTable")
-                        .values(new Object[]{1, "value"}),
+                        .values(1, "value"),
                 "INSERT INTO testTable VALUES(1, 'value')");
 
         winqEqual(new StatementInsert().insertInto("testTable")
-                        .values(new Object[]{null, true, 'a', 1, 1L, 1.1f, 1.1, "value", new BindParameter(1)}),
+                        .values(null, true, 'a', 1, 1L, 1.1f, 1.1, "value", BindParameter._1),
                 "INSERT INTO testTable VALUES(NULL, TRUE, 97, 1, 1, 1.1000000238418579, 1.1000000000000001, 'value', ?1)");
 
         winqEqual(new StatementInsert().insertInto("testTable")
-                .of(new Schema("testSchema")).values(new Object[]{1, "value"}),
+                        .values(new Value(), new Value(1), new Value(1.1), new Value("value")),
+                "INSERT INTO testTable VALUES(NULL, 1, 1.1000000000000001, 'value')");
+
+        winqEqual(new StatementInsert().insertInto("testTable")
+                .of(new Schema("testSchema")).values(1, "value"),
                 "INSERT INTO testSchema.testTable VALUES(1, 'value')");
 
         winqEqual(new StatementInsert().insertInto("testTable").of("testSchema")
@@ -54,11 +60,11 @@ public class StatementInsertTest {
                 "INSERT INTO testSchema.testTable AS newTable VALUES(?1, ?2)");
 
         winqEqual(new StatementInsert().insertInto("testTable")
-                        .columns(new Column[]{column1, column2}).values(new Object[]{1, 1.1f}),
+                        .columns(column1, column2).values(1, 1.1f),
                 "INSERT INTO testTable(column1, column2) VALUES(1, 1.1000000238418579)");
 
         winqEqual(new StatementInsert().insertInto("testTable").orReplace()
-                        .values(new Object[]{1, new BindParameter(1)}),
+                        .values(1, new BindParameter(1)),
                 "INSERT OR REPLACE INTO testTable VALUES(1, ?1)");
 
         CommonTableExpression cte = new CommonTableExpression("tempTable")

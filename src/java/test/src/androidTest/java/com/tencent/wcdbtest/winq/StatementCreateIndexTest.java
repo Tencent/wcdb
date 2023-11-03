@@ -54,7 +54,7 @@ public class StatementCreateIndexTest {
                 "CREATE INDEX IF NOT EXISTS index1 ON table1(newColumn)");
 
         winqEqual(new StatementCreateIndex().createIndex(indexName).on(tableName)
-                .indexedBy(new String[]{"column1", "column2"}).where(new Column("column1").ge(1)),
+                .indexedBy("column1", "column2").where(new Column("column1").ge(1)),
                 "CREATE INDEX index1 ON table1(column1, column2) WHERE column1 >= 1");
     }
 }

@@ -26,6 +26,7 @@ package com.tencent.wcdbtest.orm.testclass;
 import com.tencent.wcdb.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @WCDBTableCoding
 public class AllTypeObject {
@@ -74,78 +75,25 @@ public class AllTypeObject {
     byte[] bytes;
 
     @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof AllTypeObject)) {
-            return super.equals(obj);
-        }
-        AllTypeObject other = (AllTypeObject) obj;
-        return aBoolean == other.aBoolean &&
-                getIntegerValue(aBoolean2) == getIntegerValue(other.aBoolean2) &&
-                aShort == other.aShort &&
-                getIntegerValue(aShort2) == getIntegerValue(other.aShort2) &&
-                anInt == other.anInt &&
-                getIntegerValue(integer) == getIntegerValue(other.integer) &&
-                aLong == other.aLong &&
-                getIntegerValue(aLong2) == getIntegerValue(other.aLong2) &&
-                aFloat == other.aFloat &&
-                getDoubleValue(aFloat2) == getDoubleValue(other.aFloat2) &&
-                aDouble == other.aDouble &&
-                getDoubleValue(aDouble2) == getDoubleValue(other.aDouble2) &&
-                stringCompare(string, other.string) &&
-                blobCompare(bytes, other.bytes);
-    }
-
-    long getIntegerValue(Object object) {
-        if(object == null) {
-            return 0;
-        }
-        if (object instanceof Boolean) {
-            return (Boolean)object ? 1: 0;
-        } else if (object instanceof Byte) {
-            return (Byte) object;
-        } else if (object instanceof Short) {
-            return (Short) object;
-        } else if (object instanceof Integer) {
-            return (Integer) object;
-        } else {
-            return (Long) object;
-        }
-    }
-
-    double getDoubleValue(Object object) {
-        if(object == null) {
-            return 0;
-        }
-        if(object instanceof Float) {
-            return (Float) object;
-        } else {
-            return (Double) object;
-        }
-    }
-
-    boolean stringCompare(String obj1, String obj2) {
-        if(obj1 == obj2) {
-            return true;
-        }
-        if(obj1 == null && obj2.length() == 0) {
-            return true;
-        }
-        if(obj2 == null && obj1.length() == 0) {
-            return true;
-        }
-        return obj1.equals(obj2);
-    }
-
-    boolean blobCompare(byte[] obj1, byte[] obj2) {
-        if(obj1 == obj2) {
-            return true;
-        }
-        if(obj1 == null && obj2.length == 0) {
-            return true;
-        }
-        if(obj2 == null && obj1.length == 0) {
-            return true;
-        }
-        return Arrays.equals(obj1, obj2);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AllTypeObject that = (AllTypeObject) o;
+        return aBoolean == that.aBoolean &&
+                aByte == that.aByte &&
+                aShort == that.aShort &&
+                anInt == that.anInt &&
+                aLong == that.aLong &&
+                Float.compare(that.aFloat, aFloat) == 0 &&
+                Double.compare(that.aDouble, aDouble) == 0 &&
+                Objects.equals(aBoolean2, that.aBoolean2) &&
+                Objects.equals(aByte2, that.aByte2) &&
+                Objects.equals(aShort2, that.aShort2) &&
+                Objects.equals(integer, that.integer) &&
+                Objects.equals(aLong2, that.aLong2) &&
+                Objects.equals(aFloat2, that.aFloat2) &&
+                Objects.equals(aDouble2, that.aDouble2) &&
+                Objects.equals(string, that.string) &&
+                Arrays.equals(bytes, that.bytes);
     }
 }

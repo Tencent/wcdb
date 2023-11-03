@@ -27,8 +27,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import com.tencent.wcdb.winq.Column;
-import com.tencent.wcdb.winq.Expression;
-import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.FrameSpec;
 import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdb.winq.WindowDef;
@@ -43,19 +41,17 @@ public class WindowDefTest {
         winqEqual(new WindowDef(), "");
         winqEqual(new WindowDef().partitionBy("column1"),
                 "(PARTITION BY column1)");
-        winqEqual(new WindowDef().partitionBy(new String[]{"column1", "column2"}),
+        winqEqual(new WindowDef().partitionBy("column1", "column2"),
                 "(PARTITION BY column1, column2)");
         winqEqual(new WindowDef().partitionBy(new Column("column1").add(1)),
                 "(PARTITION BY column1 + 1)");
-        winqEqual(new WindowDef().partitionBy(new ExpressionConvertible[]{
-                new Column("column1").add(1), new Column("column2")}),
+        winqEqual(new WindowDef().partitionBy(new Column("column1").add(1), new Column("column2")),
                 "(PARTITION BY column1 + 1, column2)");
         winqEqual(new WindowDef().orderBy(new Column("column1").order(Order.Asc)),
                 "(ORDER BY column1 ASC)");
         winqEqual(new WindowDef().frameSpec(new FrameSpec().range().unboundedPreceding()),
                 "(RANGE UNBOUNDED PRECEDING)");
-        winqEqual(new WindowDef().partitionBy(new ExpressionConvertible[]{
-                new Column("column1").add(1), new Column("column2")})
+        winqEqual(new WindowDef().partitionBy(new Column("column1").add(1), new Column("column2"))
                         .orderBy(new Column("column1").order(Order.Asc))
                         .frameSpec(new FrameSpec().range().unboundedPreceding()),
                 "(PARTITION BY column1 + 1, column2 ORDER BY column1 ASC RANGE UNBOUNDED PRECEDING)");

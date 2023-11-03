@@ -24,6 +24,8 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.winq.*;
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
@@ -49,14 +51,16 @@ public class StatementUpdateTest {
                 "UPDATE testTable SET column1 = NULL");
         winqEqual(new StatementUpdate().update("testTable").orReplace().set(column1).to(1).set(column2).to("abc"),
                 "UPDATE OR REPLACE testTable SET column1 = 1, column2 = 'abc'");
-        winqEqual(new StatementUpdate().update("testTable").setColumnsToBindParameters(new Column[]{column1, column2}),
+        winqEqual(new StatementUpdate().update("testTable").setColumnsToBindParameters(column1, column2),
                 "UPDATE testTable SET column1 = ?1, column2 = ?2");
         winqEqual(new StatementUpdate().update("testTable").setColumnsToValues(new Column[]{column1, column2}, new Object[]{1, "abc"}),
+                "UPDATE testTable SET column1 = 1, column2 = 'abc'");
+        winqEqual(new StatementUpdate().update("testTable").setColumnsToValues(new Column[]{column1, column2}, new Value[]{new Value(1), new Value("abc")}),
                 "UPDATE testTable SET column1 = 1, column2 = 'abc'");
         winqEqual(new StatementUpdate().update("testTable").set(column1).to(1).where(column1.gt(1)),
                 "UPDATE testTable SET column1 = 1 WHERE column1 > 1");
         winqEqual(new StatementUpdate().update("testTable").set(column1).to(1)
-                .orderBy(new OrderingTerm[]{column1.order(Order.Asc), column2.order(Order.Desc)}),
+                .orderBy(column1.order(Order.Asc), column2.order(Order.Desc)),
                 "UPDATE testTable SET column1 = 1 ORDER BY column1 ASC, column2 DESC");
         winqEqual(new StatementUpdate().update("testTable").set(column1).to(1).limit(1),
                 "UPDATE testTable SET column1 = 1 LIMIT 1");

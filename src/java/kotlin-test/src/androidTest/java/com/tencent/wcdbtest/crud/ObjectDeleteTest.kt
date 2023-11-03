@@ -77,7 +77,7 @@ class ObjectDeleteTest : ObjectCRUDTestCase() {
         doTestSQL("DELETE FROM testTable WHERE id IN(1, 3) ORDER BY content DESC LIMIT 1") {
             database.deleteObjects(
                 tableName,
-                DBTestObject.id.`in`(intArrayOf(1, 3)),
+                DBTestObject.id.`in`(1, 3),
                 DBTestObject.content.order(Order.Desc),
                 1
             )
@@ -90,7 +90,7 @@ class ObjectDeleteTest : ObjectCRUDTestCase() {
         doTestSQL("DELETE FROM testTable WHERE id IN(1, 2) ORDER BY content DESC LIMIT 1 OFFSET 1") {
             database.deleteObjects(
                 tableName,
-                DBTestObject.id.`in`(intArrayOf(1, 2)),
+                DBTestObject.id.`in`(1, 2),
                 DBTestObject.content.order(Order.Desc),
                 1,
                 1
@@ -138,7 +138,7 @@ class ObjectDeleteTest : ObjectCRUDTestCase() {
     fun testTableDeleteWhereOrderLimit() {
         doTestSQL("DELETE FROM testTable WHERE id IN(1, 3) ORDER BY content DESC LIMIT 1") {
             table.deleteObjects(
-                DBTestObject.id.`in`(intArrayOf(1, 3)),
+                DBTestObject.id.`in`(1, 3),
                 DBTestObject.content.order(Order.Desc),
                 1
             )
@@ -150,7 +150,7 @@ class ObjectDeleteTest : ObjectCRUDTestCase() {
     fun testTableDeleteWhereOrderLimitOffset() {
         doTestSQL("DELETE FROM testTable WHERE id IN(1, 2) ORDER BY content DESC LIMIT 1 OFFSET 1") {
             table.deleteObjects(
-                DBTestObject.id.`in`(intArrayOf(1, 2)),
+                DBTestObject.id.`in`(1, 2),
                 DBTestObject.content.order(Order.Desc),
                 1,
                 1
@@ -206,7 +206,7 @@ class ObjectDeleteTest : ObjectCRUDTestCase() {
         doTestSQL("DELETE FROM testTable WHERE id IN(1, 3) ORDER BY content DESC LIMIT 1") {
             handle.deleteObjects(
                 tableName,
-                DBTestObject.id.`in`(intArrayOf(1, 3)),
+                DBTestObject.id.`in`(1, 3),
                 DBTestObject.content.order(Order.Desc),
                 1
             )
@@ -219,7 +219,7 @@ class ObjectDeleteTest : ObjectCRUDTestCase() {
         doTestSQL("DELETE FROM testTable WHERE id IN(1, 2) ORDER BY content DESC LIMIT 1 OFFSET 1") {
             handle.deleteObjects(
                 tableName,
-                DBTestObject.id.`in`(intArrayOf(1, 2)),
+                DBTestObject.id.`in`(1, 2),
                 DBTestObject.content.order(Order.Desc),
                 1,
                 1

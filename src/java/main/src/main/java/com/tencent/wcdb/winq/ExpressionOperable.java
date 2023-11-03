@@ -23,6 +23,7 @@
 package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
+import com.tencent.wcdb.base.Value;
 
 import java.util.List;
 import java.util.Set;
@@ -739,7 +740,23 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
+    public Expression in(Short[] operands) {
+        long[] values = new long[operands.length];
+        for(int i = 0; i < operands.length; i++) {
+            values[i] = operands[i];
+        }
+        return in(values, false);
+    }
+
     public Expression in(int... operands){
+        long[] values = new long[operands.length];
+        for(int i = 0; i < operands.length; i++) {
+            values[i] = operands[i];
+        }
+        return in(values, false);
+    }
+
+    public Expression in(Integer[] operands){
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -751,7 +768,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands, false);
     }
 
+    public Expression in(Long[] operands) {
+        return in(operands, false);
+    }
+
     public Expression in(float... operands) {
+        double[] values = new double[operands.length];
+        for(int i = 0; i < operands.length; i++) {
+            values[i] = operands[i];
+        }
+        return in(values, false);
+    }
+
+    public Expression in(Float[] operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -763,7 +792,15 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands, false);
     }
 
+    public Expression in(Double[] operands) {
+        return in(operands, false);
+    }
+
     public Expression in(String... operands) {
+        return in(operands, false);
+    }
+
+    public Expression in(Value... operands) {
         return in(operands, false);
     }
 
@@ -771,15 +808,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands.toArray(), false);
     }
 
-    public <T> Expression in(T... operands) {
-        return in(operands, false);
-    }
-
     public <T> Expression in(List<T> operands) {
         return in(operands.toArray(), false);
     }
 
     public Expression notIn(short... operands) {
+        long[] values = new long[operands.length];
+        for(int i = 0; i < operands.length; i++) {
+            values[i] = operands[i];
+        }
+        return in(values, true);
+    }
+
+    public Expression notIn(Short[] operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -795,7 +836,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
+    public Expression notIn(Integer[] operands) {
+        long[] values = new long[operands.length];
+        for(int i = 0; i < operands.length; i++) {
+            values[i] = operands[i];
+        }
+        return in(values, true);
+    }
+
     public Expression notIn(long... operands) {
+        return in(operands, true);
+    }
+
+    public Expression notIn(Long[] operands) {
         return in(operands, true);
     }
 
@@ -807,7 +860,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
+    public Expression notIn(Float[] operands) {
+        double[] values = new double[operands.length];
+        for(int i = 0; i < operands.length; i++) {
+            values[i] = operands[i];
+        }
+        return in(values, true);
+    }
+
     public Expression notIn(double... operands) {
+        return in(operands, true);
+    }
+
+    public Expression notIn(Double[] operands) {
         return in(operands, true);
     }
 
@@ -815,12 +880,12 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(operands, true);
     }
 
-    public <T> Expression notIn(Set<T> operands) {
-        return in(operands.toArray(), true);
+    public Expression notIn(Value... operands) {
+        return in(operands, true);
     }
 
-    public <T> Expression notIn(T... operands) {
-        return in(operands, true);
+    public <T> Expression notIn(Set<T> operands) {
+        return in(operands.toArray(), true);
     }
 
     public <T> Expression notIn(List<T> operands) {
@@ -1231,6 +1296,36 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 cppObjs[i] = CppObject.get((Identifier) operands[i]);
             }
             return in(Identifier.getCppType((Identifier) operands[0]), cppObjs, isNot);
+        } else if (dataType == ObjectType.Value) {
+            switch (((Value) operands[0]).getType()) {
+                case Integer:
+                    long[] intArray = new long[operands.length];
+                    for(int i = 0; i < operands.length; i++) {
+                        intArray[i] = ((Value) operands[i]).getLong();
+                    }
+                    return in(intArray, isNot);
+                case Float:
+                    double[] doubleArray = new double[operands.length];
+                    for(int i = 0; i < operands.length; i++) {
+                        doubleArray[i] = ((Value) operands[i]).getDouble();
+                    }
+                    return in(doubleArray, isNot);
+                case Text:
+                    String[] textArray = new String[operands.length];
+                    for(int i = 0; i < operands.length; i++) {
+                        textArray[i] = ((Value) operands[i]).getText();
+                    }
+                    return in(textArray, isNot);
+            }
+            if(operands instanceof String[]) {
+                return in((String[])operands, isNot);
+            }else {
+                String[] stringArray = new String[operands.length];
+                for(int i = 0; i < stringArray.length; i++) {
+                    stringArray[i] = (String) operands[i];
+                }
+                return in(stringArray, isNot);
+            }
         } else if (dataType == ObjectType.String) {
             if(operands instanceof String[]) {
                 return in((String[])operands, isNot);
@@ -1241,7 +1336,6 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 }
                 return in(stringArray, isNot);
             }
-
         } else if (dataType < ObjectType.Float) {
             long[] values = new long[operands.length];
             for(int i = 0; i < operands.length; i++) {

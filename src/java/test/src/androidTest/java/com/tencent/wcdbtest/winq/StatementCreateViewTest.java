@@ -37,7 +37,7 @@ public class StatementCreateViewTest {
     public void test() {
         Column column1 = new Column("column1");
         Column column2 = new Column("column2");
-        StatementSelect select = new StatementSelect().select(new ResultColumnConvertible[]{column1, column2}).from("testTable");
+        StatementSelect select = new StatementSelect().select(column1, column2).from("testTable");
         String view = "testView";
 
         winqEqual(new StatementCreateView().createView("testView").withColumns(new Column[]{column1, column2}).as(select),

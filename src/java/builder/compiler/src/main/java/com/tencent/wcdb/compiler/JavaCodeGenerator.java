@@ -248,8 +248,15 @@ public class JavaCodeGenerator {
             assert info != null;
 
             builder.append(TAB + TAB + TAB + TAB + "case ").append(index).append(":\n");
-            builder.append(TAB + TAB + TAB + TAB + TAB + "newOne.").append(columnInfo.getPropertyName())
-                    .append(" = ").append(info.fieldSetter).append("(index);\n");
+            if(info.nullable){
+                builder.append(TAB + TAB + TAB + TAB + TAB + "if (preparedStatement.getColumnType(index) != ColumnType.Null) {\n");
+                builder.append(TAB + TAB + TAB + TAB + TAB + TAB + "newOne.").append(columnInfo.getPropertyName())
+                        .append(" = ").append(info.fieldSetter).append("(index);\n");
+                builder.append(TAB + TAB + TAB + TAB + TAB + "}\n");
+            } else {
+                builder.append(TAB + TAB + TAB + TAB + TAB + "newOne.").append(columnInfo.getPropertyName())
+                        .append(" = ").append(info.fieldSetter).append("(index);\n");
+            }
             builder.append(TAB + TAB + TAB + TAB + TAB + "break;\n");
 
             index++;
@@ -278,8 +285,19 @@ public class JavaCodeGenerator {
             assert info != null;
 
             builder.append(TAB + TAB + TAB + "case ").append(index).append(":\n");
-            builder.append(TAB + TAB + TAB + TAB + "preparedStatement.").append(info.fieldGetter)
-                    .append("(object.").append(field).append(", index);\n");
+            if (info.nullable) {
+                builder.append(TAB + TAB + TAB + TAB + "if ( object.").append(field)
+                        .append(" != null ) {\n");
+                builder.append(TAB + TAB + TAB + TAB + TAB + "preparedStatement.").append(info.fieldGetter)
+                        .append("(object.").append(field).append(", index);\n");
+                builder.append(TAB + TAB + TAB + TAB + "} else {\n");
+                builder.append(TAB + TAB + TAB + TAB + TAB + "preparedStatement.bindNull(index);\n");
+                builder.append(TAB + TAB + TAB + TAB + "}\n");
+            } else {
+                builder.append(TAB + TAB + TAB + TAB + "preparedStatement.").append(info.fieldGetter)
+                        .append("(object.").append(field).append(", index);\n");
+            }
+
             builder.append(TAB + TAB + TAB + TAB + "break;\n");
 
             index++;
