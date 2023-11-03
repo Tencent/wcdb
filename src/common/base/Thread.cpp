@@ -33,6 +33,9 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#ifdef __linux__
+#include <sys/syscall.h>
+#endif
 #endif
 
 namespace WCDB {
@@ -119,6 +122,8 @@ uint64_t Thread::getCurrentThreadId()
     return tid;
 #elif _WIN32
     return (uint64_t) GetCurrentThreadId();
+#elif __linux__
+    return (uint64_t) syscall(SYS_gettid);
 #else
     return (uint64_t)::gettid();
 #endif
