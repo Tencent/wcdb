@@ -24,6 +24,7 @@
 
 #include "UnsafeData.hpp"
 #include "Assertion.hpp"
+#include <string.h>
 #include <zlib.h>
 
 namespace WCDB {
