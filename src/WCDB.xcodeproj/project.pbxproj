@@ -820,11 +820,11 @@
 		0D1297CB2A4D81CB006052AE /* AndroidDBTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297CA2A4D81CB006052AE /* AndroidDBTest.mm */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
-		0D36C0F72AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; };
-		0D36C0F82AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; };
+		0D36C0F72AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D36C0F82AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D36C0FB2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */; };
-		0D36C0FD2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */; };
-		0D36C0FE2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */; };
+		0D36C0FD2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D36C0FE2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0FC2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D36C1012AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D36C1002AF1F492000BC0DD /* CPPWCDBOptionalAllTypesObject.mm */; };
 		0D3AE53825416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D3AE53725416D99007B9D0E /* AutoMergeFTSIndexConfig.hpp */; };
 		0D3AE54025416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3AE53F25416DB4007B9D0E /* AutoMergeFTSIndexConfig.cpp */; };
@@ -3137,7 +3137,7 @@
 		75D99B8428CA46A400BEC8B5 /* BaseOperation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D99B8228CA46A400BEC8B5 /* BaseOperation.cpp */; };
 		75DF22962AEE8409006A3311 /* CPPInheritObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */; };
 		75DF22972AEE8483006A3311 /* CPPInheritObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */; };
-		75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; };
+		75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75DF229B2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; };
 		75E0A5C02A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
