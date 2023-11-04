@@ -53,6 +53,7 @@
 #include "StatementCreateTableJNI.h"
 #include "StatementCreateTriggerJNI.h"
 #include "StatementCreateViewJNI.h"
+#include "StatementCreateVirtualTableJNI.h"
 #include "StatementCreateindexJNI.h"
 #include "StatementDeleteJNI.h"
 #include "StatementDetachJNI.h"
@@ -455,6 +456,23 @@ static const JNINativeMethod g_statementCreateTableMethods[] = {
     { "configColumns", "(J[J)V", (void *) WCDBJNIStatementCreateTableFuncName(configColumns) },
     { "configConstraints", "(J[J)V", (void *) WCDBJNIStatementCreateTableFuncName(configConstraints) },
     { "configWithoutRowid", "(J)V", (void *) WCDBJNIStatementCreateTableFuncName(configWithoutRowid) },
+};
+
+static const JNINativeMethod g_statementCreateVirtualTableMethods[] = {
+    { "createCppObj", "()J", (void *) WCDBJNIStatementCreateVirtualTableFuncName(createCppObj) },
+    { "configTable",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementCreateVirtualTableFuncName(configTable) },
+    { "configIfNotExist", "(J)V", (void *) WCDBJNIStatementCreateVirtualTableFuncName(configIfNotExist) },
+    { "configSchema",
+      "(J" WCDBJNIObjectOrStringSignature ")V",
+      (void *) WCDBJNIStatementCreateVirtualTableFuncName(configSchema) },
+    { "configModule",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementCreateVirtualTableFuncName(configModule) },
+    { "configArguments",
+      "(J[" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIStatementCreateVirtualTableFuncName(configArguments) },
 };
 
 static const JNINativeMethod g_statementDeleteMethods[] = {
@@ -903,6 +921,10 @@ static const JNINativeMethod g_databaseMethods[]
     { "removeFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(removeFiles) },
     { "moveFile", "(J" WCDBJNIStringSignature ")Z", (void *) WCDBJNIDatabaseFuncName(moveFile) },
     { "getFileSize", "(J)J", (void *) WCDBJNIDatabaseFuncName(getFileSize) },
+    { "addTokenizer", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIDatabaseFuncName(addTokenizer) },
+    { "addAuxiliaryFunction",
+      "(J" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIDatabaseFuncName(addAuxiliaryFunction) },
     { "setNotificationWhenCorrupted",
       "(J" WCDBJNIDatabaseSignature "$CorruptionNotification;)V",
       (void *) WCDBJNIDatabaseFuncName(setNotificationWhenCorrupted) },
@@ -966,6 +988,8 @@ static const JNIBinding g_bindingInfo[] = {
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCommit", g_statementCommitMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateIndex", g_statementCreateIndexMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateTable", g_statementCreateTableMethods),
+    WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateVirtualTable",
+                    g_statementCreateVirtualTableMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateTrigger", g_statementCreateTriggerMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementCreateView", g_statementCreateViewMethods),
     WCDBJNIRegister("com/tencent/wcdb/winq/StatementDelete", g_statementDeleteMethods),

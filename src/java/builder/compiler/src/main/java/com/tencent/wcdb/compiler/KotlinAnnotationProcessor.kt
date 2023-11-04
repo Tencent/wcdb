@@ -31,7 +31,8 @@ import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBIndex
 import com.tencent.wcdb.WCDBTableCoding
 import com.tencent.wcdb.compiler.resolvedInfo.ColumnInfo
-import com.tencent.wcdb.compiler.resolvedInfo.TableConstraintInfo
+import com.tencent.wcdb.compiler.resolvedInfo.FTSModuleInfo
+import com.tencent.wcdb.compiler.resolvedInfo.TableConfigInfo
 import kotlin.reflect.KClass
 
 const val OPTION_VERBOSE = "verbose"
@@ -46,7 +47,7 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
     private var verbose = false
     private var isKotlin = false
     private var primaryKeyCount = 0;
-    private var tableConstraintInfo: TableConstraintInfo? = null
+    private var tableConstraintInfo: TableConfigInfo? = null
     private val allPropertyInfo = mutableListOf<ColumnInfo>()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
@@ -71,12 +72,12 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             return
         }
 
-        tableConstraintInfo = TableConstraintInfo.resolve(
+        tableConstraintInfo = TableConfigInfo.resolve(
             getAnnotation(classDeclaration, WCDBTableCoding::class),
             environment.logger
         )
         if (tableConstraintInfo == null) {
-            environment.logger.error("Failed to resolve @WCDBTableCoding in ${classDeclaration.qualifiedName!!.asString()}!")
+            environment.logger.error("Failed to resolve @WCDBTableCoding in ${classDeclaration.qualifiedName!!.asString()}!", classDeclaration)
             return
         }
         isKotlin = classDeclaration.containingFile!!.fileName.endsWith(".kt")
@@ -138,6 +139,30 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
         if (modifiers.contains(Modifier.ABSTRACT)) {
             environment.logger.error(
                 "The class with annotation @WCDBTableCoding can not be abstract",
+                classDeclaration
+            )
+            return false
+        }
+        return true
+    }
+
+    private fun checkFTSModule(classDeclaration: KSClassDeclaration, ftsModuleInfo: FTSModuleInfo?): Boolean {
+        if (ftsModuleInfo == null) {
+            return true
+        }
+        if (ftsModuleInfo.ftsVersion.isEmpty()) {
+            if(ftsModuleInfo.tokenizer.isNotEmpty() ||  ftsModuleInfo.tokenizerParameters.isNotEmpty()) {
+                environment.logger.error(
+                    "You need to config fts version in @FTSModule",
+                    classDeclaration
+                )
+                return false
+            }
+            return true
+        }
+        if (ftsModuleInfo.tokenizer.isEmpty()) {
+            environment.logger.error(
+                "You need to config a tokenizer in @FTSModule",
                 classDeclaration
             )
             return false

@@ -26,7 +26,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,7 +50,7 @@ import com.tencent.wcdb.compiler.resolvedInfo.ColumnInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiIndexesInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiPrimaryInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiUniqueInfo;
-import com.tencent.wcdb.compiler.resolvedInfo.TableConstraintInfo;
+import com.tencent.wcdb.compiler.resolvedInfo.TableConfigInfo;
 
 @SupportedOptions(value = {"verbose"})
 public class JavaAnnotationProcessor extends AbstractProcessor {
@@ -67,7 +66,7 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
     private boolean verbose = true;
     private int primaryKeyCount = 0;
 
-    private TableConstraintInfo tableConstraintInfo;
+    private TableConfigInfo tableConstraintInfo;
     private ArrayList<ColumnInfo> allFieldInfo;
 
     @Override
@@ -122,7 +121,10 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                 primaryKeyCount = 0;
                 WCDBTableCoding config = element.getAnnotation(WCDBTableCoding.class);
                 assert config != null;
-                tableConstraintInfo = TableConstraintInfo.Companion.resolve(config);
+                if(!checkFTSModule(element, config.ftsModule())){
+                    return false;
+                }
+                tableConstraintInfo = TableConfigInfo.Companion.resolve(config);
                 allFieldInfo = new ArrayList<>();
 
                 verboseLog("WCDB Processing: " + element);
@@ -186,6 +188,23 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
         if(modifiers.contains(Modifier.ABSTRACT)) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "The class with annotation @WCDBTableCoding can not be abstract", element);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkFTSModule(Element element, FTSModule ftsModule) {
+        if(ftsModule.version() == FTSVersion.NONE) {
+            if(!ftsModule.tokenizer().isEmpty() || ftsModule.tokenizerParameters().length > 0) {
+                msg.printMessage(Diagnostic.Kind.ERROR,
+                        "You need to config fts version in @FTSModule", element);
+                return false;
+            }
+            return true;
+        }
+        if(ftsModule.tokenizer().isEmpty()) {
+            msg.printMessage(Diagnostic.Kind.ERROR,
+                    "You need to config a tokenizer in @FTSModule", element);
             return false;
         }
         return true;

@@ -75,6 +75,9 @@ jboolean WCDBJNIDatabaseClassMethod(moveFile, jlong self, jstring destination);
 
 jlong WCDBJNIDatabaseClassMethod(getFileSize, jlong self);
 
+void WCDBJNIDatabaseClassMethod(addTokenizer, jlong self, jstring tokenizer);
+void WCDBJNIDatabaseClassMethod(addAuxiliaryFunction, jlong self, jstring auxiliaryFunction);
+
 void WCDBJNIDatabaseClassMethod(setNotificationWhenCorrupted, jlong self, jobject notification);
 jboolean WCDBJNIDatabaseClassMethod(checkIfCorrupted, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(checkIfIsAlreadyCorrupted, jlong self);

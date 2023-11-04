@@ -24,6 +24,7 @@
 #include "DatabaseJNI.h"
 #include "CoreBridge.h"
 #include "DatabaseBridge.h"
+#include "FTSBridge.h"
 #include <assert.h>
 
 #define WCDBJNITryGetDatabaseMethodId(name, signature, action)                        \
@@ -443,6 +444,22 @@ jlong WCDBJNIDatabaseClassMethod(getFileSize, jlong self)
     WCDBJNIBridgeStruct(CPPDatabase, self);
     OptionalUInt64 size = WCDBDatabaseGetFileSize(selfStruct);
     return size.hasValue ? size.value : -1;
+}
+
+void WCDBJNIDatabaseClassMethod(addTokenizer, jlong self, jstring tokenizer)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNIGetString(tokenizer);
+    WCDBDatabaseAddTokenizer(selfStruct, tokenizerString);
+    WCDBJNIReleaseString(tokenizer);
+}
+
+void WCDBJNIDatabaseClassMethod(addAuxiliaryFunction, jlong self, jstring auxiliaryFunction)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNIGetString(auxiliaryFunction);
+    WCDBDatabaseAddAuxiliaryFunction(selfStruct, auxiliaryFunctionString);
+    WCDBJNIReleaseString(auxiliaryFunction);
 }
 
 void WCDBJNIDatabaseCorrupted(jobject notification, CPPDatabase database)

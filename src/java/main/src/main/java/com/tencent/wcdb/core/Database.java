@@ -137,6 +137,32 @@ public class Database extends HandleORMOperation {
 
     static native long getHandle(long self, boolean writeHint);
 
+    public void removeFiles() throws WCDBException {
+        if(!removeFiles(cppObj)) {
+            throw createException();
+        }
+    }
+
+    private static native boolean removeFiles(long self);
+
+    public void moveFile(String destination) throws WCDBException{
+        if(!moveFile(cppObj, destination)) {
+            throw createException();
+        }
+    }
+
+    private static native boolean moveFile(long self, String destination);
+
+    public long getFileSize() throws WCDBException {
+        long ret = getFileSize(cppObj);
+        if(ret < 0) {
+            throw  createException();
+        }
+        return ret;
+    }
+
+    private static native long getFileSize(long self);
+
     public enum CipherVersion {
         defaultVersion, version1, version2, version3, version4
     }
@@ -331,12 +357,6 @@ public class Database extends HandleORMOperation {
 
     public static native void globalTraceDatabaseOperation(OperationTracer tracer);
 
-    public void removeFiles() throws WCDBException {
-        if(!removeFiles(cppObj)) {
-            throw createException();
-        }
-    }
-
     public interface BusyTracer {
         void onTrace(long tag, String path, long tid, String sql);
     }
@@ -347,25 +367,17 @@ public class Database extends HandleORMOperation {
         tracer.onTrace(tag, path, tid, sql);
     }
 
-    private static native boolean removeFiles(long self);
-
-    public void moveFile(String destination) throws WCDBException{
-        if(!moveFile(cppObj, destination)) {
-            throw createException();
-        }
+    public void addTokenizer(String tokenizer) {
+        addTokenizer(cppObj, tokenizer);
     }
 
-    private static native boolean moveFile(long self, String destination);
+    private static native void addTokenizer(long self, String tokenizer);
 
-    public long getFileSize() throws WCDBException {
-        long ret = getFileSize(cppObj);
-        if(ret < 0) {
-            throw  createException();
-        }
-        return ret;
+    public void addAuxiliaryFunction(String auxiliaryFunction) {
+        addAuxiliaryFunction(cppObj, auxiliaryFunction);
     }
 
-    private static native long getFileSize(long self);
+    private static native void addAuxiliaryFunction(long self, String auxiliaryFunction);
 
     public interface CorruptionNotification {
         void onCorrupted(Database database);

@@ -27,18 +27,19 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotation
 import com.tencent.wcdb.WCDBTableCoding
 
-data class TableConstraintInfo(
+data class TableConfigInfo(
     var multiIndexes: MutableList<MultiIndexesInfo> = mutableListOf(),
     var multiPrimaries: MutableList<MultiPrimaryInfo> = mutableListOf(),
     var multiUnique: MutableList<MultiUniqueInfo> = mutableListOf(),
+    var ftsModule: FTSModuleInfo? = null,
     var isWithoutRowId: Boolean = false
 ) {
     companion object {
-        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): TableConstraintInfo? {
+        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): TableConfigInfo? {
             if(annotation == null) {
                 return null
             }
-            val resolvedAnnotation = TableConstraintInfo()
+            val resolvedAnnotation = TableConfigInfo()
             for(argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 val annotationList = mutableListOf<KSAnnotation>()
@@ -79,6 +80,10 @@ data class TableConstraintInfo(
                     "isWithoutRowId" -> {
                         resolvedAnnotation.isWithoutRowId = value as Boolean
                     }
+                    "ftsModule" -> {
+                        val ftsModuleAnnotation = value as KSAnnotation
+                        resolvedAnnotation.ftsModule = FTSModuleInfo.resolve(ftsModuleAnnotation, logger)
+                    }
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in WCDBTableCoding")
                         return null
@@ -88,8 +93,8 @@ data class TableConstraintInfo(
             return resolvedAnnotation
         }
 
-        fun resolve(tableCoding: WCDBTableCoding): TableConstraintInfo {
-            val resolvedAnnotation = TableConstraintInfo()
+        fun resolve(tableCoding: WCDBTableCoding): TableConfigInfo {
+            val resolvedAnnotation = TableConfigInfo()
             resolvedAnnotation.isWithoutRowId = tableCoding.isWithoutRowId
             for(multiIndexes in tableCoding.multiIndexes) {
                 resolvedAnnotation.multiIndexes.add(MultiIndexesInfo.resolve(multiIndexes))
@@ -100,6 +105,7 @@ data class TableConstraintInfo(
             for(multiUnique in tableCoding.multiUnique) {
                 resolvedAnnotation.multiUnique.add(MultiUniqueInfo.resolve(multiUnique))
             }
+            resolvedAnnotation.ftsModule = FTSModuleInfo.resolve(tableCoding.ftsModule)
             return resolvedAnnotation
         }
     }

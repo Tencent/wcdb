@@ -24,7 +24,7 @@
 package com.tencent.wcdb.compiler
 
 import com.tencent.wcdb.compiler.resolvedInfo.ColumnInfo
-import com.tencent.wcdb.compiler.resolvedInfo.TableConstraintInfo
+import com.tencent.wcdb.compiler.resolvedInfo.TableConfigInfo
 
 private const val TAB = "\t"
 
@@ -32,7 +32,7 @@ class KotlinCodeGenerator {
     lateinit var packageName: String
     lateinit var className: String
     lateinit var ormClassName: String
-    lateinit var tableConstraintInfo: TableConstraintInfo
+    lateinit var tableConstraintInfo: TableConfigInfo
     lateinit var allColumnInfo: List<ColumnInfo>
     private lateinit var builder: StringBuilder
 
@@ -115,6 +115,9 @@ class KotlinCodeGenerator {
             if (columnInfo.isNotNull) {
                 builder.append(constraintPrefix).append(".notNull()\n$TAB$TAB)\n")
             }
+            if (columnInfo.isNotIndexed) {
+                builder.append(constraintPrefix).append(".unIndex()\n$TAB$TAB)\n")
+            }
             builder.append("$TAB${TAB}baseBinding.addColumnDef(${propertyName}Def)\n")
 
             if (columnInfo.enableAutoIncrementForExistingTable) {
@@ -169,6 +172,20 @@ class KotlinCodeGenerator {
         if (tableConstraintInfo.isWithoutRowId) {
             builder.append("$TAB${TAB}baseBinding.configWithoutRowId()")
         }
+
+        val ftsModuleInfo = tableConstraintInfo.ftsModule
+        if (ftsModuleInfo == null || ftsModuleInfo.ftsVersion.isEmpty()) {
+            return
+        }
+
+        builder.append("$TAB${TAB}baseBinding.configVirtualModule(\"${ftsModuleInfo.ftsVersion}\")\n")
+
+        val tokenizer = java.lang.StringBuilder("tokenize = ")
+        tokenizer.append(ftsModuleInfo.tokenizer)
+        for (para in ftsModuleInfo.tokenizerParameters) {
+            tokenizer.append(" ").append(para)
+        }
+        builder.append("$TAB${TAB}baseBinding.configVirtualModuleArgument(\"$tokenizer\")\n")
     }
 
     private fun generateBindingType() {

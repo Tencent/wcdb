@@ -43,8 +43,6 @@ import java.util.List;
 public class TableOperation {
     String tableName = null;
     Database database = null;
-    TableOperation(){
-    }
 
     public String getTableName() {
         return tableName;

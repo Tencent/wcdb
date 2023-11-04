@@ -36,4 +36,5 @@ public @interface WCDBField {
     boolean enableAutoIncrementForExistingTable() default false;
     boolean isUnique() default false;
     boolean isNotNull() default false;
+    boolean isNotIndexed() default false;
 }

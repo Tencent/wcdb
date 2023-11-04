@@ -26,6 +26,7 @@ package com.tencent.wcdbtest.orm
 import com.tencent.wcdb.base.Value
 import com.tencent.wcdb.base.WCDBException
 import com.tencent.wcdb.core.Database.ExceptionTracer
+import com.tencent.wcdb.fts.BuiltinTokenizer
 import com.tencent.wcdb.orm.Field
 import com.tencent.wcdb.winq.ColumnDef
 import com.tencent.wcdb.winq.ColumnType
@@ -225,6 +226,32 @@ class ORMTest : DatabaseTestCase() {
                 "CREATE UNIQUE INDEX IF NOT EXISTS specifiedNameIndex ON testTable(uniqueIndex)"
             )
         ) { database.createTable(tableName, DBDataIndexObject) }
+    }
+
+    @Test
+    @Throws(WCDBException::class)
+    fun testFTS3() {
+        doTestSQLs(
+            arrayOf(
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts3(tokenize = wcdb_one_or_binary need_symbol, id INTEGER, content TEXT, notindexed=id)"
+            )
+        ) {
+            database.addTokenizer(BuiltinTokenizer.OneOrBinary)
+            database.createVirtualTable(tableName, DBFTS3TestObject)
+        }
+    }
+
+    @Test
+    @Throws(WCDBException::class)
+    fun testFTS5() {
+        doTestSQLs(
+            arrayOf(
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', id UNINDEXED, content)"
+            )
+        ) {
+            database.addTokenizer(BuiltinTokenizer.Verbatim)
+            database.createVirtualTable(tableName, DBFTS5TestObject)
+        }
     }
 
     @Test

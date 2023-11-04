@@ -42,6 +42,7 @@ data class ColumnInfo(
     var defaultValue: DefaultValueInfo? = null,
     var isUnique: Boolean = false,
     var isNotNull: Boolean = false,
+    var isNotIndexed: Boolean = false,
     var hasIndex: Boolean = false,
     var indexName: String = "",
     var indexIsUnique: Boolean = false,
@@ -65,6 +66,7 @@ data class ColumnInfo(
                     "enableAutoIncrementForExistingTable" -> resolvedInfo.enableAutoIncrementForExistingTable = value as Boolean
                     "isUnique" -> resolvedInfo.isUnique = value as Boolean
                     "isNotNull" -> resolvedInfo.isNotNull = value as Boolean
+                    "isNotIndexed" -> resolvedInfo.isNotIndexed = value as Boolean
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in WCDBField")
                         return null
@@ -102,6 +104,7 @@ data class ColumnInfo(
             resolvedInfo.enableAutoIncrementForExistingTable = fieldAnnotation.enableAutoIncrementForExistingTable
             resolvedInfo.isUnique = fieldAnnotation.isUnique
             resolvedInfo.isNotNull = fieldAnnotation.isNotNull
+            resolvedInfo.isNotIndexed = fieldAnnotation.isNotIndexed
             if(indexAnnotation != null) {
                 resolvedInfo.hasIndex = true
                 resolvedInfo.indexName = indexAnnotation.name
