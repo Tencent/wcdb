@@ -3160,6 +3160,7 @@
 		75E76AE029176FA600073CCA /* TokenizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E76ADF29176FA600073CCA /* TokenizerTests.swift */; };
 		75E76AE42917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE22917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp */; };
 		75E76AE72917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */; };
+		75EABA6C2ADAE14600AAD3C9 /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; };
 		75EB1965287F068200AA62F7 /* StatementDropTriggerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */; };
 		75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75EB1968287F078E00AA62F7 /* StatementDropTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */; };
@@ -3360,6 +3361,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
 			remoteInfo = Host;
+		};
+		75EABA0C2ADA4F2600AAD3C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 75EAB79C2ADA376000AAD3C9;
+			remoteInfo = zstd;
+		};
+		75EABA6D2ADAEAE300AAD3C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 75EAB79B2ADA376000AAD3C9;
+			remoteInfo = zstd;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -4770,6 +4785,7 @@
 		75E76AE32917AE2A00073CCA /* CPPVirtualTableFTS4Object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPVirtualTableFTS4Object.hpp; sourceTree = "<group>"; };
 		75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPVirtualTableFTS5Object.cpp; sourceTree = "<group>"; };
 		75E76AE62917B07E00073CCA /* CPPVirtualTableFTS5Object.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPVirtualTableFTS5Object.hpp; sourceTree = "<group>"; };
+		75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = zstd.xcodeproj; sourceTree = "<group>"; };
 		75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementDropTriggerBridge.cpp; sourceTree = "<group>"; };
 		75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementDropTriggerBridge.h; sourceTree = "<group>"; };
 		75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementDropTrigger.swift; sourceTree = "<group>"; };
@@ -4903,6 +4919,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75EABA6C2ADAE14600AAD3C9 /* zstd.framework in Frameworks */,
 				398B475E239E22F4008CF7C5 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6784,6 +6801,7 @@
 		23B5F75A1E1111C100E58396 = {
 			isa = PBXGroup;
 			children = (
+				75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */,
 				23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */,
 				0DAE11D328DC6CC6003FB63A /* WCDB.h */,
 				03E1620527F1AA1B00D2C926 /* common */,
@@ -7539,6 +7557,14 @@
 				75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */,
 			);
 			path = virtual_table;
+			sourceTree = "<group>";
+		};
+		75EABA092ADA4F2600AAD3C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		75F3140F2AAC07C9007FFDFB /* cipher */ = {
@@ -9186,6 +9212,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				75EABA6E2ADAEAE300AAD3C9 /* PBXTargetDependency */,
 				398B46AC239E22F4008CF7C5 /* PBXTargetDependency */,
 				398B46AE239E22F4008CF7C5 /* PBXTargetDependency */,
 			);
@@ -9286,6 +9313,10 @@
 					ProductGroup = 2321243920172865008146EF /* Products */;
 					ProjectRef = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
 				},
+				{
+					ProductGroup = 75EABA092ADA4F2600AAD3C9 /* Products */;
+					ProjectRef = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -9310,6 +9341,13 @@
 			fileType = wrapper.framework;
 			path = sqlcipher.framework;
 			remoteRef = 23F5BE0520887FD4000CCD37 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = zstd.framework;
+			remoteRef = 75EABA0C2ADA4F2600AAD3C9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -11443,6 +11481,11 @@
 			isa = PBXTargetDependency;
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
 			targetProxy = 7575F7AE280679C7006259E2 /* PBXContainerItemProxy */;
+		};
+		75EABA6E2ADAEAE300AAD3C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = zstd;
+			targetProxy = 75EABA6D2ADAEAE300AAD3C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
