@@ -199,6 +199,54 @@ WCDB_DEFAULT(imageStatus, 0)
 
 @end
 
+@implementation DBMessageBlob
+
+WCDB_IMPLEMENTATION(DBMessageBlob)
+WCDB_SYNTHESIZE_COLUMN(version, WCDB_STRINGIFY(MSG_COL_VERSION))
+WCDB_SYNTHESIZE_COLUMN(msgLocalId, WCDB_STRINGIFY(MSG_COL_MES_LOCAL_ID))
+WCDB_SYNTHESIZE_COLUMN(msgServerId, WCDB_STRINGIFY(MSG_COL_MES_SVR_ID))
+WCDB_SYNTHESIZE_COLUMN(createTime, WCDB_STRINGIFY(MSG_COL_CREATE_TIME))
+WCDB_SYNTHESIZE_COLUMN(message, WCDB_STRINGIFY(MSG_COL_MESSAGE))
+WCDB_SYNTHESIZE_COLUMN(status, WCDB_STRINGIFY(MSG_COL_STATUS))
+WCDB_SYNTHESIZE_COLUMN(imageStatus, WCDB_STRINGIFY(MSG_COL_IMG_STATUS))
+WCDB_SYNTHESIZE_COLUMN(type, WCDB_STRINGIFY(MSG_COL_TYPE))
+WCDB_SYNTHESIZE_COLUMN(des, WCDB_STRINGIFY(MSG_COL_DES))
+
+- (instancetype)initFromDBMessage:(DBMessage*)msg
+{
+    if (self = [super init]) {
+        _version = msg.version;
+        _msgLocalId = msg.msgLocalId;
+        _msgServerId = msg.msgServerId;
+        _createTime = msg.createTime;
+        _status = msg.status;
+        _imageStatus = msg.imageStatus;
+        _type = msg.type;
+        _des = msg.des;
+    }
+    return self;
+}
+
+WCDB_PRIMARY_AUTO_INCREMENT(msgLocalId)
+@synthesize lastInsertedRowID;
+WCDB_INDEX("_Index", msgServerId)
+WCDB_INDEX("_Index2", createTime)
+WCDB_INDEX("_Index3", status)
+
+WCDB_INDEX_FOR_NEWLY_CREATED_TABLE_ONLY("_index6")
+WCDB_INDEX("_index6", status)
+WCDB_INDEX("_index6", des)
+WCDB_INDEX("_index6", type)
+WCDB_INDEX("_index6", imageStatus)
+
+WCDB_DEFAULT(version, CHAT_VERSION)
+WCDB_DEFAULT(msgServerId, 0)
+WCDB_DEFAULT(createTime, 0)
+WCDB_DEFAULT(status, 0)
+WCDB_DEFAULT(imageStatus, 0)
+
+@end
+
 #pragma mark - DBMessageExt
 
 #define MSG_EXT_COL_MES_LOCAL_ID MesLocalID
@@ -242,6 +290,57 @@ WCDB_SYNTHESIZE(MSG_EXT_COL_STRRES1)
 WCDB_SYNTHESIZE(MSG_EXT_COL_STRRES2)
 WCDB_SYNTHESIZE(MSG_EXT_COL_STRRES3)
 WCDB_SYNTHESIZE(MSG_EXT_COL_INTRES1)
+
+WCDB_PRIMARY(msgLocalId)
+WCDB_INDEX("_Index", msgIdentify)
+
+WCDB_DEFAULT(MSG_EXT_COL_MES_FLAG, 0)
+WCDB_DEFAULT(MSG_EXT_COL_INTRES2, 0)
+WCDB_DEFAULT(MSG_EXT_COL_INTRES3, 0)
+WCDB_DEFAULT(MSG_EXT_COL_INTRES1, 0)
+
+@end
+
+@interface DBMessageExtBlob ()
+
+@property (nonatomic, assign) UInt32 MSG_EXT_COL_INTRES1;
+@property (nonatomic, assign) UInt32 MSG_EXT_COL_INTRES2;
+@property (nonatomic, assign) UInt32 MSG_EXT_COL_INTRES3;
+@property (nonatomic, retain) NSString* MSG_EXT_COL_STRRES1;
+@property (nonatomic, retain) NSString* MSG_EXT_COL_STRRES2;
+@property (nonatomic, retain) NSString* MSG_EXT_COL_STRRES3;
+
+WCDB_PROPERTY(MSG_EXT_COL_INTRES1)
+WCDB_PROPERTY(MSG_EXT_COL_INTRES2)
+WCDB_PROPERTY(MSG_EXT_COL_INTRES3)
+WCDB_PROPERTY(MSG_EXT_COL_STRRES1)
+WCDB_PROPERTY(MSG_EXT_COL_STRRES2)
+WCDB_PROPERTY(MSG_EXT_COL_STRRES3)
+@end
+
+@implementation DBMessageExtBlob
+
+WCDB_IMPLEMENTATION(DBMessageExtBlob)
+WCDB_SYNTHESIZE_COLUMN(msgLocalId, WCDB_STRINGIFY(MSG_EXT_COL_MES_LOCAL_ID))
+WCDB_SYNTHESIZE(MSG_EXT_COL_MES_FLAG)
+WCDB_SYNTHESIZE(MSG_EXT_COL_INTRES2)
+WCDB_SYNTHESIZE(MSG_EXT_COL_INTRES3)
+WCDB_SYNTHESIZE_COLUMN(msgSource, WCDB_STRINGIFY(MSG_EXT_COL_MSG_SOURCE))
+WCDB_SYNTHESIZE_COLUMN(msgIdentify, WCDB_STRINGIFY(MSG_EXT_COL_MSG_IDENTIFY))
+WCDB_SYNTHESIZE(MSG_EXT_COL_STRRES1)
+WCDB_SYNTHESIZE(MSG_EXT_COL_STRRES2)
+WCDB_SYNTHESIZE(MSG_EXT_COL_STRRES3)
+WCDB_SYNTHESIZE(MSG_EXT_COL_INTRES1)
+
+- (instancetype)initFromDBMessageExt:(DBMessageExt*)msg
+{
+    if (self = [super init]) {
+        _msgLocalId = msg.msgLocalId;
+        _msgIdentify = msg.msgIdentify;
+        _msgFlag = msg.msgFlag;
+    }
+    return self;
+}
 
 WCDB_PRIMARY(msgLocalId)
 WCDB_INDEX("_Index", msgIdentify)

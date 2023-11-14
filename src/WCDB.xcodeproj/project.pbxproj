@@ -874,6 +874,7 @@
 		0DE68B3B2AB45F6C008BD74C /* NormalRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */; };
 		0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */; };
 		0DE68B412AB466F1008BD74C /* WithoutRowidRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */; };
+		0DE84ACA2B030F5B00522A4E /* ZSTDBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */; };
 		0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
@@ -3743,6 +3744,7 @@
 		0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoIncrementRepairTestObject.mm; sourceTree = "<group>"; };
 		0DE68B3F2AB466E5008BD74C /* WithoutRowidRepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WithoutRowidRepairTestObject.h; sourceTree = "<group>"; };
 		0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WithoutRowidRepairTestObject.mm; sourceTree = "<group>"; };
+		0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZSTDBenchmark.mm; sourceTree = "<group>"; };
 		0DF1089529C05559004ED764 /* StatementSelectInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementSelectInterface.swift; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
@@ -7401,6 +7403,7 @@
 		75835E3124FBD4F800FA82AA /* MMDB */ = {
 			isa = PBXGroup;
 			children = (
+				0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */,
 				398B479C239E246D008CF7C5 /* MMDBMainData.h */,
 				398B479D239E246D008CF7C5 /* MMDBMainData.mm */,
 				398B47A6239E2E89008CF7C5 /* Random+MMDBMainData.h */,
@@ -10670,6 +10673,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DE84ACA2B030F5B00522A4E /* ZSTDBenchmark.mm in Sources */,
 				398B46BC239E22F4008CF7C5 /* Dispatch.mm in Sources */,
 				75835E6F24FBF18700FA82AA /* FTSTests.mm in Sources */,
 				398B46DE239E22F4008CF7C5 /* ObjectsBasedFactory.mm in Sources */,

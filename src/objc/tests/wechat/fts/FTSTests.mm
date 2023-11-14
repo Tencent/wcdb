@@ -276,7 +276,7 @@
     int tkId = [self getTokenizerIdWithNeedBinary:NO needPinyin:NO needSymbol:YES];
     testCase = [self genTestCaseConfigDataType:FTSDataType_Contact tableCount:1 tokenizerId:tkId quality:10000 optimizeLevel:2 querylevel:2 queryTimes:10 queryType:5 needMultiThread:NO];
     [testCases addObject:testCase];
-    [self.database traceSQL:^(NSString*, uint64_t, NSString* sql, NSString*) {
+    [self.database traceSQL:^(WCTTag, NSString*, uint64_t, NSString* sql, NSString*) {
         NSLog(@"execute: %@", sql);
     }];
 
