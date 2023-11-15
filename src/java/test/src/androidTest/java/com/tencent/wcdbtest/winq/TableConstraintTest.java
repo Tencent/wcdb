@@ -49,13 +49,13 @@ public class TableConstraintTest {
 
         String columnName1 = "column1";
         String columnName2 = "column2";
-        winqEqual(new TableConstraint().primaryKey().indexedBy(new String[]{columnName1, columnName2}),
+        winqEqual(new TableConstraint().primaryKey().indexedBy(columnName1, columnName2),
                 "PRIMARY KEY(column1, column2)");
         winqEqual(new TableConstraint("testConstraint").primaryKey().indexedBy(new String[]{columnName1, columnName2}),
                 "CONSTRAINT testConstraint PRIMARY KEY(column1, column2)");
-        winqEqual(new TableConstraint().unique().indexedBy(new String[]{columnName1, columnName2}),
+        winqEqual(new TableConstraint().unique().indexedBy(columnName1, columnName2),
                 "UNIQUE(column1, column2)");
-        winqEqual(new TableConstraint().unique().indexedBy(new String[]{columnName1, columnName2}).onConflict(ConflictAction.Fail),
+        winqEqual(new TableConstraint().unique().indexedBy(columnName1, columnName2).onConflict(ConflictAction.Fail),
                 "UNIQUE(column1, column2) ON CONFLICT FAIL");
     }
 }

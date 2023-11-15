@@ -31,10 +31,22 @@
 
 namespace WCDB {
 
+template<typename Base, typename Derive>
+void assertFirstBaseClass()
+{
+    int offsetOfBase = (char*) (Base*) (Derive*) 0x1000 - (char*) (Derive*) 0x1000;
+    // Base must be the first base class of Derive
+    assert(offsetOfBase == 0);
+}
+
 class WCDB_API Binding final : public BaseBinding {
 public:
     Binding();
     ~Binding() override final;
+
+#pragma mark - Inherit
+public:
+    void inherit(const Binding& binding);
 
 #pragma mark - Field
 public:

@@ -31,13 +31,16 @@ import com.tencent.wcdb.winq.Column;
 import org.junit.After;
 import org.junit.Before;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CRUDTestCase extends TableTestCase {
     protected TestObject object1;
     protected TestObject object2;
-    protected TestObject[] objects;
+    protected List<TestObject> objects;
     protected Value[] row1;
     protected Value[] row2;
-    protected Value[][] rows;
+    protected List<Value[]> rows;
     protected int nextId = 3;
     protected Column id = new Column("id");
     protected Column content = new Column("content");
@@ -48,10 +51,10 @@ public class CRUDTestCase extends TableTestCase {
         super.setup();
         object1 = RandomTool.testObjectWithId(1);
         object2 = RandomTool.testObjectWithId(2);
-        objects = new TestObject[]{object1, object2};
+        objects = Arrays.asList(object1, object2);
         row1 = RandomTool.testRowWithId(1);
         row2 = RandomTool.testRowWithId(2);
-        rows = new Value[][]{row1, row2};
+        rows = Arrays.asList(row1, row2);
         handle = database.getHandle();
         table = database.getTable(tableName, DBTestObject.INSTANCE);
     }

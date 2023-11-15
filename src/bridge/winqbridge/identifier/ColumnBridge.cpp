@@ -26,6 +26,7 @@
 #include "Column.hpp"
 #include "Expression.hpp"
 #include "ObjectBridge.hpp"
+#include "ResultColumn.hpp"
 #include "Schema.hpp"
 #include "WinqBridge.hpp"
 
@@ -82,6 +83,13 @@ void WCDBColumnOfSchema2(CPPColumn column, CPPCommonValue schema)
 {
     WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn);
     cppColumn->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
+CPPResultColumn WCDBColumnConfigAlias(CPPColumn column, const char* _Nullable alias)
+{
+    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPResultColumn());
+    return WCDBCreateCPPBridgedObjectByCopy(
+    CPPResultColumn, cppColumn->as(WCDB::UnsafeStringView(alias)));
 }
 
 CPPExpression WCDBColumnAsExpressionOperand(CPPColumn column)

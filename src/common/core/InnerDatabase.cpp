@@ -283,6 +283,23 @@ Optional<bool> InnerDatabase::tableExists(const UnsafeStringView &table)
     return exists;
 }
 
+StringView InnerDatabase::getRunningSQLInThread(uint64_t tid) const
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    SharedLockGuard memoryGuard(m_memory);
+    for (const auto &handles : m_handles) {
+        for (const auto &handle : handles) {
+            if (handle->isUsingInThread(tid)) {
+                StringView sql = handle->getCurrentSQL();
+                if (!sql.empty()) {
+                    return sql;
+                }
+            }
+        }
+    }
+    return StringView();
+}
+
 std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type)
 {
     WCTAssert(m_concurrency.readSafety());
@@ -337,6 +354,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 
     handle->setType(type);
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
+    handle->setBusyTraceEnable(Core::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
     if (slot == HandleSlotCheckPoint || !m_autoCheckpoint) {
         handle->enableWriteMainDB(true);

@@ -39,7 +39,7 @@ import org.junit.Test;
 import java.util.List;
 
 public class RepairTest extends TableTestCase {
-    TestObject[] preInsertObjects = RandomTool.autoIncrementTestCaseObjects(2);
+    List<TestObject> preInsertObjects = RandomTool.autoIncrementTestCaseObjects(2);
 
     void executeTest(TestOperation operation) {
         database.setCipherKey(null);
@@ -140,6 +140,9 @@ public class RepairTest extends TableTestCase {
                 rowId += 1;
                 assertEquals(rowId, newObject.id);
 
+                // Make sure the new backup file is newer than the existing backup file
+                sleep(100);
+
                 // 2.
                 database.backup();
                 database.deposit();
@@ -184,7 +187,7 @@ public class RepairTest extends TableTestCase {
         }
         if( success ) {
             assertNotNull(objects);
-            assertArrayEquals(objects.toArray(), preInsertObjects);
+            assertEquals(objects, preInsertObjects);
         } else {
             assertTrue(objects == null || objects.size() == 0);
         }

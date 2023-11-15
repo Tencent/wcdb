@@ -25,6 +25,8 @@ package com.tencent.wcdbtest.base;
 
 import com.tencent.wcdb.base.Value;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RandomTool {
@@ -55,10 +57,10 @@ public class RandomTool {
         return bytes;
     }
 
-    public static TestObject[] autoIncrementTestCaseObjects(int count) {
-        TestObject[] objects = new TestObject[count];
+    public static List<TestObject> autoIncrementTestCaseObjects(int count) {
+        ArrayList<TestObject> objects = new ArrayList<>();
         for(int i = 0; i < count; i++) {
-            objects[i] = TestObject.createAutoIncrementObject(string());
+            objects.add(TestObject.createAutoIncrementObject(string()));
         }
         return objects;
     }

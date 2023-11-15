@@ -238,7 +238,7 @@ void WCDBDatabaseConfig2(CPPDatabase database,
         cppDatabase->removeConfig(name);
         return;
     }
-    WCDB::Recyclable<void*> recyclableInvocationContext(invocationContext, destructor);
+    WCDB::RecyclableContext recyclableInvocationContext(invocationContext, destructor);
 
     WCDB::CustomConfig::Invocation cppInvocation
     = [invocation, recyclableInvocationContext](WCDB::InnerHandle* handle) -> bool {
@@ -249,7 +249,7 @@ void WCDBDatabaseConfig2(CPPDatabase database,
     WCDB::CustomConfig::Invocation cppUninvocation = nullptr;
     if (unInvocation != nullptr) {
         assert(unInvocationContext != nullptr);
-        WCDB::Recyclable<void*> recyclableUnInvocationContext(unInvocationContext, destructor);
+        WCDB::RecyclableContext recyclableUnInvocationContext(unInvocationContext, destructor);
         cppUninvocation
         = [unInvocation, recyclableUnInvocationContext](WCDB::InnerHandle* handle) -> bool {
             return unInvocation(recyclableUnInvocationContext.get(),
@@ -292,7 +292,7 @@ void WCDBDatabaseGlobalTracePerformance(WCDBPerformanceTracer _Nullable tracer,
 {
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         callback
         = [recyclableContext, tracer](const WCDB::Tag& tag,
                                       const WCDB::UnsafeStringView& path,
@@ -317,7 +317,7 @@ void WCDBDatabaseTracePerformance(CPPDatabase database,
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         WCDB::InnerHandle::PerformanceNotification callback
         = [recyclableContext, tracer](const WCDB::Tag& tag,
                                       const WCDB::UnsafeStringView& path,
@@ -388,7 +388,7 @@ void WCDBDatabaseGlobalTraceSQL2(WCDBSQLTracer _Nullable tracer,
 {
     WCDB::InnerHandle::SQLNotification callback = nullptr;
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         callback = [recyclableContext, tracer](const WCDB::Tag& tag,
                                                const WCDB::UnsafeStringView& path,
                                                const void* handle,
@@ -412,7 +412,7 @@ void WCDBDatabaseTraceSQL2(CPPDatabase database,
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         WCDB::InnerHandle::SQLNotification callback
         = [recyclableContext, tracer](const WCDB::Tag& tag,
                                       const WCDB::UnsafeStringView& path,
@@ -477,7 +477,7 @@ void WCDBDatabaseGlobalTraceError2(WCDBErrorTracer _Nullable tracer,
                                    WCDBContextDestructor _Nullable destructor)
 {
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         WCDB::Core::shared().setNotificationWhenErrorTraced(
         [recyclableContext, tracer](const WCDB::Error& error) {
             tracer(recyclableContext.get(), WCDBCreateUnmanagedCPPObject(CPPError, &error));
@@ -494,7 +494,7 @@ void WCDBDatabaseTraceError2(CPPDatabase database,
 {
     const char* path = WCDBDatabaseGetPath(database);
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         WCDB::Core::shared().setNotificationWhenErrorTraced(
         path, [recyclableContext, tracer](const WCDB::Error& error) {
             tracer(recyclableContext.get(), WCDBCreateUnmanagedCPPObject(CPPError, &error));
@@ -526,7 +526,7 @@ void WCDBDatabaseGlobalTraceOperation(WCDBOperationTracer _Nullable tracer,
                                       WCDBContextDestructor _Nullable destructor)
 {
     if (tracer != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         WCDB::DBOperationNotifier::shared().setNotification(
         [=](WCDB::InnerDatabase* database,
             WCDB::DBOperationNotifier::Operation operation,
@@ -587,7 +587,7 @@ void WCDBDatabaseSetNotificationWhenCorrupted2(CPPDatabase database,
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::Core::CorruptedNotification cppNotification = nullptr;
     if (notification != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         cppNotification = [notification, recyclableContext](WCDB::InnerDatabase* cppDatabase) {
             notification(recyclableContext.get(),
                          WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase));
@@ -644,7 +644,7 @@ void WCDBDatabaseFilterBackup2(CPPDatabase database,
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::BackupFilter cppFilter = nullptr;
     if (filter != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         cppFilter
         = [filter, recyclableContext](const WCDB::UnsafeStringView& tableName) -> bool {
             return filter(recyclableContext.get(), tableName.data());
@@ -693,7 +693,7 @@ double WCDBDatabaseRetrieve2(CPPDatabase database,
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
     WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
     if (monitor != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         callback = [monitor, recyclableContext](double percentage, double increment) {
             monitor(recyclableContext.get(), percentage, increment);
         };
@@ -733,7 +733,7 @@ void WCDBDatabaseAddMigration(CPPDatabase database,
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::TableFilter cppFilter = nullptr;
     if (filter != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         cppFilter = [recyclableContext, filter](WCDB::MigrationUserInfo& info) {
             filter(recyclableContext.get(),
                    info.getTable().data(),
@@ -788,7 +788,7 @@ void WCDBDatabaseSetNotificationWhenMigrated2(CPPDatabase database,
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::InnerDatabase::MigratedCallback callback = nullptr;
     if (notification != nullptr) {
-        WCDB::Recyclable<void*> recyclableContext(context, destructor);
+        WCDB::RecyclableContext recyclableContext(context, destructor);
         callback = [notification, recyclableContext](
                    WCDB::InnerDatabase* cppDatabase, const WCDB::MigrationBaseInfo* baseInfo) {
             CPPDatabase database = WCDBCreateUnmanagedCPPObject(CPPDatabase, cppDatabase);

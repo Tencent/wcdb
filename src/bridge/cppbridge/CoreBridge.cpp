@@ -52,3 +52,21 @@ void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable)
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
     WCDB::Core::shared().enableAutoCheckpoint(cppDatabase, enable);
 }
+
+void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,
+                             double timeOut,
+                             void* _Nullable context,
+                             WCDBContextDestructor _Nullable destructor)
+{
+    WCDB::Core::BusyMonitor callback = nullptr;
+    if (tracer != nullptr) {
+        WCDB::RecyclableContext recyclableContent(context, destructor);
+        callback = [tracer, recyclableContent](const WCDB::Tag& tag,
+                                               const WCDB::UnsafeStringView& path,
+                                               uint64_t tid,
+                                               const WCDB::UnsafeStringView& sql) {
+            tracer(recyclableContent.get(), tag, path.data(), tid, sql.data());
+        };
+    }
+    WCDB::Core::shared().setBusyMonitor(callback, timeOut);
+}

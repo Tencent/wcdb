@@ -598,6 +598,45 @@ public extension Database {
     static func globalTraceDatabaseOperation(_ trace: Void?) {
         WCDBDatabaseGlobalTraceOperation(nil, nil, nil)
     }
+
+    // Triggered when the database operation is blocked by other threads.
+    typealias BusyTracer = (Tag /* tag */,
+                            String /* path */,
+                            UInt64 /* id of the thread being waited on */,
+                            String /* sql executing in the thread being waited on */
+    ) -> Void
+
+    /// You can register a tracer to database busy events.
+    /// It returns:
+    /// 1. Tag of database being busy.
+    /// 2. Path of database being busy.
+    /// 3. ID of the thread being waited on.
+    /// 4. SQL executing in the thread being waited on.
+    ///
+    /// Note that the tracer will be called back synchronously
+    /// when the database operation is blocked and times out,
+    /// so you can neither directly access the busy database
+    /// nor perform heavy operation in the tracer.
+    ///
+    /// - Parameter trace: tracer. Nil to disable busy trace.
+    /// - Parameter timeOut: timeout in seconds for blocking database operation.
+    static func globalTraceBusy(_ trace: @escaping BusyTracer, timeOut: Double) {
+        let callback: @convention(c) (UnsafeMutableRawPointer?, Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>) -> Void = {
+            cppTrace, tag, path, tid, sql in
+            let traceWrap: ValueWrap<BusyTracer>? = ObjectBridge.extractTypedSwiftObject(cppTrace)
+            guard let traceWrap = traceWrap else {
+                return
+            }
+            traceWrap.value(tag, String(cString: path), tid, String(cString: sql))
+        }
+        let traceWrap = ValueWrap(trace)
+        let traceWrapPointer = ObjectBridge.getUntypeSwiftObject(traceWrap)
+        WCDBCoreGlobalTraceBusy(callback, timeOut, traceWrapPointer, ObjectBridge.objectDestructor)
+    }
+
+    static func globalTraceBusy(_ trace: Void?, timeOut: Double) {
+        WCDBCoreGlobalTraceBusy(nil, 0, nil, nil)
+    }
 }
 
 // File

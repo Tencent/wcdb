@@ -34,17 +34,21 @@
 #import "CPPDropIndexObject.hpp"
 #import "CPPFieldObject.h"
 #import "CPPIndexObject.hpp"
+#import "CPPInheritObject.hpp"
 #import "CPPNewFieldObject.h"
 #import "CPPNewRemapObject.hpp"
 #import "CPPNewlyCreatedTableIndexObject.hpp"
 #import "CPPOldRemapObject.hpp"
+#import "CPPSTDOptionalAllTypesObject.h"
+#import "CPPSharedPtrAllTypesObject.h"
 #import "CPPTableConstraintObject.hpp"
 #import "CPPTestCase.h"
 #import "CPPVirtualTableFTS4Object.hpp"
 #import "CPPVirtualTableFTS5Object.hpp"
+#import "CPPWCDBOptionalAllTypesObject.h"
 #import <Foundation/Foundation.h>
 
-@interface CPPORMTests : CPPTableTestCase
+@interface CPPORMTests : CPPCRUDTestCase
 
 @end
 
@@ -106,8 +110,9 @@
     TestCaseAssertTrue(table.insertObjects(emptyObject));
 
     CPPAllTypesObject randomObject = CPPAllTypesObject::randomObject();
-    ;
     TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPAllTypesObject::type)));
 
     CPPAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPAllTypesObject::type) == maxObject.type).value();
     TestCaseAssertTrue(selectedMaxObject == maxObject);
@@ -124,6 +129,133 @@
     TestCaseAssertTrue(table.getValueFromStatement(WCDB::StatementSelect().select(WCDB_FIELD(CPPAllTypesObject::constCharArrValue)).from(self.tableName.UTF8String)).value() == maxObject.constCharArrValue);
 
     TestCaseAssertTrue(table.getValueFromStatement(WCDB::StatementSelect().select(WCDB_FIELD(CPPAllTypesObject::constUnsignedCharArrValue)).from(self.tableName.UTF8String)).value() == maxObject.constUnsignedCharArrValue);
+
+    CPPAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
+}
+
+- (void)test_all_shared_ptr_types
+{
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB)" ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPSharedPtrAllTypesObject>(self);
+                                      }];
+
+    WCDB::Table<CPPSharedPtrAllTypesObject> table = self.database->getTable<CPPSharedPtrAllTypesObject>(self.tableName.UTF8String);
+
+    CPPSharedPtrAllTypesObject maxObject = CPPSharedPtrAllTypesObject::maxObject();
+    TestCaseAssertTrue(table.insertObjects(maxObject));
+
+    CPPSharedPtrAllTypesObject minObject = CPPSharedPtrAllTypesObject::minObject();
+    TestCaseAssertTrue(table.insertObjects(minObject));
+
+    CPPSharedPtrAllTypesObject emptyObject = CPPSharedPtrAllTypesObject::emptyObject();
+    TestCaseAssertTrue(table.insertObjects(emptyObject));
+
+    CPPSharedPtrAllTypesObject randomObject = CPPSharedPtrAllTypesObject::randomObject();
+    TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPSharedPtrAllTypesObject::type)));
+
+    CPPSharedPtrAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == maxObject.type).value();
+    TestCaseAssertTrue(selectedMaxObject == maxObject);
+
+    CPPSharedPtrAllTypesObject selectedMinObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == minObject.type).value();
+    TestCaseAssertTrue(selectedMinObject == minObject);
+
+    CPPSharedPtrAllTypesObject selectedEmptyObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == emptyObject.type).value();
+    TestCaseAssertTrue(selectedEmptyObject == emptyObject);
+
+    CPPSharedPtrAllTypesObject selectedRandomObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == randomObject.type).value();
+    TestCaseAssertTrue(selectedRandomObject == randomObject);
+
+    CPPSharedPtrAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPSharedPtrAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
+}
+
+#if defined(__cplusplus) && __cplusplus > 201402L
+
+- (void)test_all_std_optional_types
+{
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB)" ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPSTDOptionalAllTypesObject>(self);
+                                      }];
+
+    WCDB::Table<CPPSTDOptionalAllTypesObject> table = self.database->getTable<CPPSTDOptionalAllTypesObject>(self.tableName.UTF8String);
+
+    CPPSTDOptionalAllTypesObject maxObject = CPPSTDOptionalAllTypesObject::maxObject();
+    TestCaseAssertTrue(table.insertObjects(maxObject));
+
+    CPPSTDOptionalAllTypesObject minObject = CPPSTDOptionalAllTypesObject::minObject();
+    TestCaseAssertTrue(table.insertObjects(minObject));
+
+    CPPSTDOptionalAllTypesObject emptyObject = CPPSTDOptionalAllTypesObject::emptyObject();
+    TestCaseAssertTrue(table.insertObjects(emptyObject));
+
+    CPPSTDOptionalAllTypesObject randomObject = CPPSTDOptionalAllTypesObject::randomObject();
+    TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPSTDOptionalAllTypesObject::type)));
+
+    CPPSTDOptionalAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == maxObject.type).value();
+    TestCaseAssertTrue(selectedMaxObject == maxObject);
+
+    CPPSTDOptionalAllTypesObject selectedMinObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == minObject.type).value();
+    TestCaseAssertTrue(selectedMinObject == minObject);
+
+    CPPSTDOptionalAllTypesObject selectedEmptyObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == emptyObject.type).value();
+    TestCaseAssertTrue(selectedEmptyObject == emptyObject);
+
+    CPPSTDOptionalAllTypesObject selectedRandomObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == randomObject.type).value();
+    TestCaseAssertTrue(selectedRandomObject == randomObject);
+
+    CPPSTDOptionalAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPSTDOptionalAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
+}
+
+#endif
+
+- (void)test_all_wcdb_optional_types
+{
+    NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT, trueOrFalseValue INTEGER, charValue INTEGER, unsignedCharValue INTEGER, shortValue INTEGER, unsignedShortValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, floatValue REAL, doubleValue REAL, constCharpValue TEXT, charpValue TEXT, stdStringValue TEXT, unsafeStringViewValue TEXT, stringViewValue TEXT, blobValue BLOB, unsafeDataValue BLOB, dataValue BLOB)" ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPWCDBOptionalAllTypesObject>(self);
+                                      }];
+
+    WCDB::Table<CPPWCDBOptionalAllTypesObject> table = self.database->getTable<CPPWCDBOptionalAllTypesObject>(self.tableName.UTF8String);
+
+    CPPWCDBOptionalAllTypesObject maxObject = CPPWCDBOptionalAllTypesObject::maxObject();
+    TestCaseAssertTrue(table.insertObjects(maxObject));
+
+    CPPWCDBOptionalAllTypesObject minObject = CPPWCDBOptionalAllTypesObject::minObject();
+    TestCaseAssertTrue(table.insertObjects(minObject));
+
+    CPPWCDBOptionalAllTypesObject emptyObject = CPPWCDBOptionalAllTypesObject::emptyObject();
+    TestCaseAssertTrue(table.insertObjects(emptyObject));
+
+    CPPWCDBOptionalAllTypesObject randomObject = CPPWCDBOptionalAllTypesObject::randomObject();
+    TestCaseAssertTrue(table.insertObjects(randomObject));
+
+    XCTAssertTrue(table.insertRows({ "null" }, WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type)));
+
+    CPPWCDBOptionalAllTypesObject selectedMaxObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == maxObject.type).value();
+    TestCaseAssertTrue(selectedMaxObject == maxObject);
+
+    CPPWCDBOptionalAllTypesObject selectedMinObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == minObject.type).value();
+    TestCaseAssertTrue(selectedMinObject == minObject);
+
+    CPPWCDBOptionalAllTypesObject selectedEmptyObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == emptyObject.type).value();
+    TestCaseAssertTrue(selectedEmptyObject == emptyObject);
+
+    CPPWCDBOptionalAllTypesObject selectedRandomObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == randomObject.type).value();
+    TestCaseAssertTrue(selectedRandomObject == randomObject);
+
+    CPPWCDBOptionalAllTypesObject selectedNullObject = table.getFirstObject(WCDB_FIELD(CPPWCDBOptionalAllTypesObject::type) == "null").value();
+    TestCaseAssertTrue(selectedNullObject == emptyObject);
 }
 
 - (void)test_all_properties
@@ -454,6 +586,52 @@
     TestCaseAssertTrue(autoAdded || !isSucceed);
     TestCaseAssertTrue(self.database->dropTable(self.tableName.UTF8String));
     self.database->traceError(nullptr);
+}
+
+- (void)test_redirect_field
+{
+    [self insertPresetObjects];
+    auto object = self.table.getFirstObjectWithFields(WCDB_FIELD(CPPTestCaseObject::identifier).redirect(WCDB_FIELD(CPPTestCaseObject::identifier).max()));
+    XCTAssertTrue(object.hasValue() && object.value().identifier == self.objects[1].identifier);
+}
+
+#pragma mark - inherit
+- (void)test_inherit
+{
+    NSArray<NSString*>* expected = @[
+        @"CREATE TABLE IF NOT EXISTS testTable(value1 INTEGER PRIMARY KEY, value2 REAL, value3 INTEGER, value4 TEXT, value5 BLOB UNIQUE)",
+        @"CREATE INDEX IF NOT EXISTS testTable_value2 ON testTable(value2)",
+        @"CREATE INDEX IF NOT EXISTS testTable_value3_value4 ON testTable(value3, value4)"
+    ];
+    [self doTestCreateTableAndIndexSQLsAsExpected:expected
+                                      inOperation:^BOOL {
+                                          return CPPTestTableCreate<CPPInheritObject>(self);
+                                      }];
+
+    CPPInheritObject object;
+    object.value1 = 1;
+    object.value2 = 2.0;
+    object.value3 = 3;
+    object.value4 = "abc";
+    NSData* data = Random.shared.data;
+    object.value5 = WCDB::Data((const unsigned char*) data.bytes, data.length);
+    [self doTestSQLs:@[ @"INSERT INTO testTable(value1, value2, value3, value4, value5) VALUES(?1, ?2, ?3, ?4, ?5)",
+                        @"UPDATE testTable SET value4 = ?1 WHERE value1 == 1",
+                        @"SELECT value1, value2, value3, value4, value5 FROM testTable WHERE value2 == 2 ORDER BY rowid ASC LIMIT 1",
+                        @"DELETE FROM testTable WHERE value3 == 3" ]
+         inOperation:^BOOL {
+             XCTAssertTrue(self.database->insertObjects<CPPInheritObject>(object, self.tableName.UTF8String));
+             XCTAssertTrue(self.database->updateRow("def", WCDB_FIELD(CPPInheritObject::value4), self.tableName.UTF8String, WCDB_FIELD(CPPInheritObject::value1) == 1));
+             auto ret = self.database->getFirstObject<CPPInheritObject>(self.tableName.UTF8String, WCDB_FIELD(CPPInheritObject::value2) == 2);
+             XCTAssertTrue(ret.succeed());
+             XCTAssertTrue(ret.value().value2 == 2.0 && ret.value().value3 == 3 && ret.value().value4 == "def");
+             XCTAssertTrue(memcmp((const void*) ret.value().value5.buffer(), data.bytes, data.length) == 0);
+             XCTAssertTrue(self.database->deleteObjects(self.tableName.UTF8String, WCDB_FIELD(CPPInheritBase2::value3) == 3));
+             return true;
+         }];
+
+    auto count = self.database->selectValue(WCDB::Column::all().count(), self.tableName.UTF8String);
+    XCTAssertTrue(count.succeed() && count.value() == 0);
 }
 
 @end

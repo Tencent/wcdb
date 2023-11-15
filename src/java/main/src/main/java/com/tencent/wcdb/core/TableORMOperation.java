@@ -32,6 +32,7 @@ import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Expression;
 import com.tencent.wcdb.winq.OrderingTerm;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TableORMOperation<T> extends TableOperation {
@@ -101,27 +102,27 @@ public class TableORMOperation<T> extends TableOperation {
         prepareInsert().orIgnore().value(object).onFields(fields).execute();
     }
 
-    public void insertObjects(T[] objects) throws WCDBException {
+    public void insertObjects(Collection<T> objects) throws WCDBException {
         prepareInsert().values(objects).onFields(binding.allBindingFields()).execute();
     }
 
-    public void insertObjects(T[] objects, Field<T>[] fields) throws WCDBException {
+    public void insertObjects(Collection<T> objects, Field<T>[] fields) throws WCDBException {
         prepareInsert().values(objects).onFields(fields).execute();
     }
 
-    public void insertOrReplaceObjects(T[] objects) throws WCDBException {
+    public void insertOrReplaceObjects(Collection<T> objects) throws WCDBException {
         prepareInsert().orReplace().values(objects).onFields(binding.allBindingFields()).execute();
     }
 
-    public void insertOrReplaceObjects(T[] objects, Field<T>[] fields) throws WCDBException {
+    public void insertOrReplaceObjects(Collection<T> objects, Field<T>[] fields) throws WCDBException {
         prepareInsert().orReplace().values(objects).onFields(fields).execute();
     }
 
-    public void insertOrIgnoreObjects(T[] objects) throws WCDBException {
+    public void insertOrIgnoreObjects(Collection<T> objects) throws WCDBException {
         prepareInsert().orIgnore().values(objects).onFields(binding.allBindingFields()).execute();
     }
 
-    public void insertOrIgnoreObjects(T[] objects, Field<T>[] fields) throws WCDBException {
+    public void insertOrIgnoreObjects(Collection<T> objects, Field<T>[] fields) throws WCDBException {
         prepareInsert().orIgnore().values(objects).onFields(fields).execute();
     }
 

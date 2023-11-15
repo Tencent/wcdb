@@ -401,6 +401,28 @@ void WCDBJNIDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo)
                                (StringViewMapEnumerator) WCDBJNIDatabaseEnumerateInfoCallback);
 }
 
+void WCDBJNIDatabaseBusyTrace(jobject tracer, long tag, const char* path, jlong tid, const char* sql)
+{
+    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetDatabaseMethodId("onBusyTrace",
+                                  "(" WCDBJNIDatabaseSignature "$BusyTracer;J" WCDBJNIStringSignature
+                                  "J" WCDBJNIStringSignature ")V",
+                                  return );
+    WCDBJNICreateJavaString(path);
+    WCDBJNICreateJavaString(sql);
+    (*env)->CallStaticVoidMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) tag, jpath, (jlong) tid, jsql);
+    WCDBJNITryDetach;
+}
+
+void WCDBJNIDatabaseClassMethod(globalTraceDatabaseBusy, jobject tracer, jdouble timeOut)
+{
+    WCDBJNITryGetVM;
+    WCDBJNICreateGlobalRel(tracer);
+    WCDBCoreGlobalTraceBusy(
+    (tracer != NULL ? (WCDBBusyTracer) WCDBJNIDatabaseBusyTrace : NULL), timeOut, tracer, WCDBJNIDestructContext);
+}
+
 jboolean WCDBJNIDatabaseClassMethod(removeFiles, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);

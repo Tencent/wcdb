@@ -56,6 +56,6 @@ public class ForeignKeyTest {
 
     ForeignKey genForeignKey() {
         return new ForeignKey().references("testForeignKeyTable")
-                .columns(new Column[]{new Column("column1"), new Column("column2")});
+                .columns(new Column("column1"), new Column("column2"));
     }
 }

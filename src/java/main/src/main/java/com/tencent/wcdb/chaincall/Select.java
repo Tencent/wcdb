@@ -42,11 +42,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
         statement = new StatementSelect();
     }
 
-    public Select<T> select(Field<T> field) {
-        return select(new Field[]{field});
-    }
-
-    public Select<T> select(Field<T>[] fields) {
+    public Select<T> select(Field<T>... fields) {
         this.fields = fields;
         statement.select(fields);
         return this;
@@ -62,7 +58,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
         return this;
     }
 
-    public Select<T> orderBy(OrderingTerm[] orders) {
+    public Select<T> orderBy(OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }

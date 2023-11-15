@@ -10,13 +10,17 @@ import org.gradle.api.DomainObjectSet
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.util.GradleVersion
 
 class WCDBPlugin implements Plugin<Project> {
+    private static final boolean isG8 = GradleVersion.current().baseVersion >= GradleVersion.version("8.0")
+
     @Override
     void apply(Project project) {
         if (!project.plugins.hasPlugin(JavaPlugin) &&
@@ -35,7 +39,11 @@ class WCDBPlugin implements Plugin<Project> {
 
         if (android != null) {
             android.sourceSets.configureEach {
-                it.extensions.create('wcdbOrm', WCDBOrmSourceDirectorySet, it.name)
+                if (isG8) {
+                    it.extensions.create(SourceDirectorySet, 'wcdbOrm', WCDBOrmSourceDirectorySet, it.name)
+                } else {
+                    it.extensions.create(SourceDirectorySet, 'wcdbOrm', WCDBOrmSourceDirectorySetG7, it.name)
+                }
             }
 
             project.afterEvaluate {
@@ -53,7 +61,7 @@ class WCDBPlugin implements Plugin<Project> {
 
                 def generateTask = project.tasks.register("generate${cvName}WcdbOrm", JavaCompile) {
                     androidSourceSetNames.each {
-                        WCDBOrmSourceDirectorySet origSs = android.sourceSets.getByName(it).wcdbOrm
+                        SourceDirectorySet origSs = android.sourceSets.getByName(it).wcdbOrm
                         def ss = new DefaultSourceDirectorySet(origSs)
                         ss.setSrcDirs(origSs.srcDirs)
                         ss.setIncludes(['**/*.java'])
@@ -72,7 +80,11 @@ class WCDBPlugin implements Plugin<Project> {
         } else {
             final SourceSetContainer sourceSets = project.sourceSets
             sourceSets.configureEach {
-                it.extensions.create('wcdbOrm', WCDBOrmSourceDirectorySet, project, it.name)
+                if (isG8) {
+                    it.extensions.create(SourceDirectorySet, 'wcdbOrm', WCDBOrmSourceDirectorySet, project, it.name)
+                } else {
+                    it.extensions.create(SourceDirectorySet, 'wcdbOrm', WCDBOrmSourceDirectorySetG7, project, it.name)
+                }
             }
 
             project.afterEvaluate {
@@ -82,7 +94,7 @@ class WCDBPlugin implements Plugin<Project> {
                     def ssName = SourceSet.isMain(it) ? '' : it.name.capitalize()
                     def destDir = new File(project.buildDir, "generated/sources/wcdb/${ssName}")
                     def generateTask = project.tasks.register("generate${ssName}WcdbOrm", JavaCompile) {
-                        WCDBOrmSourceDirectorySet origSs = wcdbOrm
+                        SourceDirectorySet origSs = wcdbOrm
                         def ss = new DefaultSourceDirectorySet(origSs)
                         ss.setSrcDirs(origSs.srcDirs)
                         ss.setIncludes(['**/*.java'])

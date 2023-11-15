@@ -32,6 +32,7 @@ import com.tencent.wcdb.winq.StatementCreateTable;
 
 import org.junit.Assert;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class TableTestCase extends DatabaseTestCase {
         database.dropTable(tableName);
     }
 
-    public void doTestObjectsAfterInsert(Object[] objects, int insertCount, String[] sqls, TestOperation operation) {
+    public void doTestObjectsAfterInsert(List objects, int insertCount, String[] sqls, TestOperation operation) {
         if(insertCount > 1) {
             List<String> list = new ArrayList<String>(Arrays.asList(sqls));
             list.add(0, "BEGIN IMMEDIATE");
@@ -81,11 +82,11 @@ public class TableTestCase extends DatabaseTestCase {
         doTestObjectsAfterOperation(objects, sqls, operation);
     }
 
-    public void doTestObjectsAfterOperation(Object[] objects, String sql, TestOperation operation) {
+    public void doTestObjectsAfterOperation(List objects, String sql, TestOperation operation) {
         doTestObjectsAfterOperation(objects, new String[]{sql}, operation);
     }
 
-    public void doTestObjectsAfterOperation(Object[] objects, String[] sqls, TestOperation operation) {
+    public void doTestObjectsAfterOperation(List objects, String[] sqls, TestOperation operation) {
         doTestSQLs(sqls, operation);
         List<TestObject> allObjects;
         try {
@@ -93,9 +94,8 @@ public class TableTestCase extends DatabaseTestCase {
         } catch (WCDBException e) {
             throw new RuntimeException(e);
         }
-        Assert.assertTrue(((objects == null || objects.length == 0) &&
-                (allObjects == null || allObjects.size() == 0)) ||
-                Arrays.equals(objects, allObjects.toArray()));
+        Assert.assertTrue(((objects == null || objects.size() == 0) &&
+                (allObjects == null || allObjects.size() == 0)) || objects.equals(allObjects));
     }
 
     public interface SelectingObjectOperation {
@@ -103,14 +103,14 @@ public class TableTestCase extends DatabaseTestCase {
     }
 
     public void doTestObjectBySelecting(TestObject object, String sql, SelectingObjectOperation operation) {
-        doTestObjectBySelecting(new TestObject[]{object}, new String[]{sql}, operation);
+        doTestObjectBySelecting(Collections.singletonList(object), new String[]{sql}, operation);
     }
 
-    public void doTestObjectBySelecting(TestObject[] objects, String sql, SelectingObjectOperation operation) {
+    public void doTestObjectBySelecting(List<TestObject> objects, String sql, SelectingObjectOperation operation) {
         doTestObjectBySelecting(objects, new String[]{sql}, operation);
     }
 
-    public void doTestObjectBySelecting(TestObject[] objects, String[] sqls, final SelectingObjectOperation operation) {
+    public void doTestObjectBySelecting(List<TestObject> objects, String[] sqls, final SelectingObjectOperation operation) {
         final List<TestObject> selecting = new ArrayList<TestObject>();
         doTestSQLs(sqls, new TestOperation() {
             @Override
@@ -118,9 +118,8 @@ public class TableTestCase extends DatabaseTestCase {
                 selecting.addAll(operation.execute());
             }
         });
-        Assert.assertTrue(((objects == null || objects.length == 0) &&
-                selecting.size() == 0) ||
-                Arrays.equals(objects, selecting.toArray()));
+        Assert.assertTrue(((objects == null || objects.size() == 0) &&
+                selecting.size() == 0) || objects.equals(selecting));
     }
 
     public List<TestObject> getAllObjects() throws WCDBException {

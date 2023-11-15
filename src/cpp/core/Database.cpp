@@ -101,6 +101,11 @@ Database& Database::operator=(const Database&) = default;
 
 Database::~Database() = default;
 
+Database::Database(Recyclable<InnerDatabase*> database)
+: m_databaseHolder(database), m_innerDatabase(database.get())
+{
+}
+
 Database::Database(InnerDatabase* database) : m_innerDatabase(database)
 {
     m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
@@ -303,6 +308,11 @@ void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
     } else {
         DBOperationNotifier::shared().setNotification(nullptr);
     }
+}
+
+void Database::globalTraceBusy(BusyTrace trace, double timeOut)
+{
+    Core::shared().setBusyMonitor(trace, timeOut);
 }
 
 bool Database::removeFiles()

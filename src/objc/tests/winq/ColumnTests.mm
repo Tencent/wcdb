@@ -82,6 +82,15 @@
     TestCaseAssertSQLEqual(WCDB::Column::rowid(), @"rowid");
 }
 
+- (void)test_alias
+{
+    auto testingSQL = WCDB::Column::rowid().as("rowidAlias");
+
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"rowid AS rowidAlias");
+}
+
 - (void)test_rowid_order
 {
     TestCaseAssertSQLEqual(WCDB::Column::rowid().asOrder(WCDB::Order::ASC), @"rowid ASC");

@@ -55,6 +55,8 @@ public:                                                                        \
 
 #define WCDB_CPP_ORM_IMPLEMENTATION_END __WCDB_CPP_ORM_IMPLEMENTATION_END
 
+#define WCDB_CPP_INHERIT_ORM(baseClass) __WCDB_CPP_INHERIT_ORM(baseClass)
+
 #define WCDB_CPP_SYNTHESIZE(fieldName)                                         \
     __WCDB_CPP_SYNTHESIZE_IMP(fieldName, WCDB_STRINGIFY(fieldName))
 

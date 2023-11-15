@@ -24,6 +24,7 @@
 
 #include "UnsafeData.hpp"
 #include "Assertion.hpp"
+#include <string.h>
 #include <zlib.h>
 
 namespace WCDB {
@@ -70,6 +71,22 @@ UnsafeData &UnsafeData::operator=(UnsafeData &&other)
     other.m_buffer = nullptr;
     other.m_size = 0;
     return *this;
+}
+
+bool UnsafeData::operator==(const UnsafeData &other) const
+{
+    if (m_size != other.size()) {
+        return false;
+    }
+    if (m_size > 0 && memcmp(m_buffer, other.m_buffer, m_size) != 0) {
+        return false;
+    }
+    return true;
+}
+
+bool UnsafeData::operator!=(const UnsafeData &other) const
+{
+    return !operator==(other);
 }
 
 UnsafeData::UnsafeData(unsigned char *buffer, size_t size, const SharedBuffer &sharedBuffer)

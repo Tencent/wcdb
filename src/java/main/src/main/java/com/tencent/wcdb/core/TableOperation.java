@@ -36,6 +36,8 @@ import com.tencent.wcdb.winq.StatementInsert;
 import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdb.winq.StatementUpdate;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class TableOperation {
@@ -53,30 +55,30 @@ public class TableOperation {
     }
 
     public void insertRow(Value[] row, Column[] columns) throws WCDBException {
-        insertRows(new Value[][]{row}, columns);
+        insertRows(Collections.singleton(row), columns);
     }
 
-    public void insertRows(Value[][] rows, Column[] columns) throws WCDBException {
+    public void insertRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.None);
     }
 
     public void insertOrReplaceRow(Value[] row, Column[] columns) throws WCDBException {
-        insertOrReplaceRows(new Value[][]{row}, columns);
+        insertOrReplaceRows(Collections.singleton(row), columns);
     }
 
-    public void insertOrReplaceRows(Value[][] rows, Column[] columns) throws WCDBException {
+    public void insertOrReplaceRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.Replace);
     }
 
     public void insertOrIgnoreRow(Value[] row, Column[] columns) throws WCDBException {
-        insertOrIgnoreRows(new Value[][]{row}, columns);
+        insertOrIgnoreRows(Collections.singleton(row), columns);
     }
 
-    public void insertOrIgnoreRows(Value[][] rows, Column[] columns) throws WCDBException {
+    public void insertOrIgnoreRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.Ignore);
     }
 
-    private void insertRows(final Value[][] rows, Column[] columns, ConflictAction action) throws WCDBException {
+    private void insertRows(final Collection<Value[]> rows, Column[] columns, ConflictAction action) throws WCDBException {
         final StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
         if(action == ConflictAction.Replace) {
             insert.orReplace();
@@ -85,7 +87,7 @@ public class TableOperation {
         }
         Handle handle = database.getHandle(true);
         try {
-            if(rows.length > 1) {
+            if(rows.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(Handle handle) throws WCDBException {
@@ -101,7 +103,7 @@ public class TableOperation {
         }
     }
 
-    private void insertRows(Value[][] rows, StatementInsert insert, Handle handle) throws WCDBException {
+    private void insertRows(Collection<Value[]> rows, StatementInsert insert, Handle handle) throws WCDBException {
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(insert);
         for(Value[] row : rows) {
             preparedStatement.reset();

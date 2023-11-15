@@ -54,6 +54,18 @@ public final class BindParameter: Identifier<CPPBindParameter> {
         }
         return bindParameters
     }
+
+    public static let def: BindParameter = BindParameter(0) // ?
+    public static let _1: BindParameter = BindParameter(1)  // ?1
+    public static let _2: BindParameter = BindParameter(2)  // ?2
+    public static let _3: BindParameter = BindParameter(3)  // ?3
+    public static let _4: BindParameter = BindParameter(4)  // ?4
+    public static let _5: BindParameter = BindParameter(5)  // ?5
+    public static let _6: BindParameter = BindParameter(6)  // ?6
+    public static let _7: BindParameter = BindParameter(7)  // ?7
+    public static let _8: BindParameter = BindParameter(8)  // ?8
+    public static let _9: BindParameter = BindParameter(9)  // ?9
+    public static let _10: BindParameter = BindParameter(10)// ?10
 }
 
 extension BindParameter: ExpressionConvertible {

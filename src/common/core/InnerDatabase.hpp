@@ -85,6 +85,7 @@ public:
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
     Optional<bool> tableExists(const UnsafeStringView &table);
+    StringView getRunningSQLInThread(uint64_t tid) const;
 
 protected:
     std::shared_ptr<InnerHandle> generateSlotedHandle(HandleType type) override final;

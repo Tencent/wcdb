@@ -41,7 +41,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return with(new CommonTableExpression[]{expression});
     }
 
-    public StatementSelect with(CommonTableExpression[] expressions) {
+    public StatementSelect with(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -57,7 +57,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return withRecursive(new CommonTableExpression[]{expression});
     }
 
-    public StatementSelect withRecursive(CommonTableExpression[] expressions) {
+    public StatementSelect withRecursive(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -80,7 +80,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect select(ResultColumnConvertible[] resultColumns) {
+    public StatementSelect select(ResultColumnConvertible... resultColumns) {
         if(resultColumns == null || resultColumns.length == 0) {
             return this;
         }
@@ -101,7 +101,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect select(String[] resultColumns) {
+    public StatementSelect select(String... resultColumns) {
         if(resultColumns == null || resultColumns.length == 0) {
             return this;
         }
@@ -111,7 +111,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect select(Object[] resultColumns) {
+    public StatementSelect select(Object... resultColumns) {
         if(resultColumns == null || resultColumns.length == 0) {
             return this;
         }
@@ -180,7 +180,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect from(String[] tableNames) {
+    public StatementSelect from(String... tableNames) {
         if(tableNames == null || tableNames.length == 0) {
             return this;
         }
@@ -190,7 +190,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect from(Object[] tableOrSubqueries) {
+    public StatementSelect from(Object... tableOrSubqueries) {
         if(tableOrSubqueries == null || tableOrSubqueries.length == 0) {
             return this;
         }
@@ -238,7 +238,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect groupBy(ExpressionConvertible[] expressions) {
+    public StatementSelect groupBy(ExpressionConvertible... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -258,7 +258,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect groupBy(String[] columnNames) {
+    public StatementSelect groupBy(String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -268,7 +268,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect groupBy(Object[] expressions) {
+    public StatementSelect groupBy(Object... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -344,7 +344,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect orderBy(OrderingTerm[] orders) {
+    public StatementSelect orderBy(OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }

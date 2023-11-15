@@ -31,8 +31,6 @@ WCDB_EXTERN_C_BEGIN
 
 WCDBDefineCPPBridgedType(CPPDatabase)
 
-typedef void (*WCDBContextDestructor)(void* _Nonnull context);
-
 CPPError WCDBDatabaseGetError(CPPDatabase database);
 long WCDBDatabaseGetTag(const CPPDatabase database);
 void WCDBDatabaseSetTag(CPPDatabase database, long tag);

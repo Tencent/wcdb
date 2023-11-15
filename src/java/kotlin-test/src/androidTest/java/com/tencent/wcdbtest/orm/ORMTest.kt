@@ -23,6 +23,7 @@
 
 package com.tencent.wcdbtest.orm
 
+import com.tencent.wcdb.base.Value
 import com.tencent.wcdb.base.WCDBException
 import com.tencent.wcdb.core.Database.ExceptionTracer
 import com.tencent.wcdb.orm.Field
@@ -102,7 +103,7 @@ class ORMTest : DatabaseTestCase() {
         val min = AllTypeObject.minObject()
         val random = AllTypeObject.randomObject()
         val empty = AllTypeObject.emptyObject()
-        table.insertObjects(arrayOf(max, min, random, empty))
+        table.insertObjects(listOf(max, min, random, empty))
         Assert.assertTrue(
             max == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type))
         )
@@ -114,6 +115,10 @@ class ORMTest : DatabaseTestCase() {
         )
         Assert.assertTrue(
             random == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(random.type))
+        )
+        table.insertRow(arrayOf(Value("null")), arrayOf(DBAllTypeObject.type))
+        Assert.assertTrue(
+            empty == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq("null"))
         )
     }
 
@@ -333,7 +338,7 @@ class ORMTest : DatabaseTestCase() {
                 columnDefs.add(ColumnDef(field, ColumnType.Integer))
             }
         }
-        createTable.define(columnDefs.toTypedArray())
+        createTable.define(*columnDefs.toTypedArray())
         database.execute(createTable)
         val added = WrappedValue()
         database.traceException(ExceptionTracer { exception ->
@@ -360,7 +365,7 @@ class ORMTest : DatabaseTestCase() {
     @Throws(WCDBException::class)
     fun testPrimaryEnableAutoIncrementForExistingTable() {
         database.createTable(tableName, DBPrimaryNotAutoIncrementObject)
-        val obj1 = PrimaryNotAutoIncrementObject();
+        val obj1 = PrimaryNotAutoIncrementObject()
         obj1.id = 1
         database.insertObject(obj1, DBPrimaryNotAutoIncrementObject.allFields(), tableName)
 

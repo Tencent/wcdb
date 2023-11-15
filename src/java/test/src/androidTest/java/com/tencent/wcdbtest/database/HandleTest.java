@@ -49,7 +49,7 @@ public class HandleTest extends TableTestCase {
     @Test
     public void testCancellationSignal() throws WCDBException, InterruptedException {
         createTable();
-        TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(10000);
+        List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(10000);
         database.insertObjects(objects, DBTestObject.allFields(), tableName);
 
         WrappedValue hasTestInterrupt = new WrappedValue();
@@ -103,7 +103,7 @@ public class HandleTest extends TableTestCase {
                     try {
                         switch (finalI % 8) {
                             case 0: {
-                                TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
+                                List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(100);
                                 table.insertObjects(objects);
                             }break;
                             case 1: {
@@ -125,7 +125,7 @@ public class HandleTest extends TableTestCase {
                                 });
                             }break;
                             case 4: {
-                                TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
+                                List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(100);
                                 database.insertObjects(objects, DBTestObject.allFields(), tableName);
                             }break;
                             case 5: {
@@ -180,7 +180,7 @@ public class HandleTest extends TableTestCase {
             }
         });
         createTable();
-        TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(64000);
+        List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(64000);
         table.insertObjects(objects);
         Thread[] threads = new Thread[640];
         for(int i = 0; i < threads.length; i++) {
@@ -260,7 +260,7 @@ public class HandleTest extends TableTestCase {
             }
         });
         createTable();
-        TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(32000);
+        List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(32000);
         table.insertObjects(objects);
         Thread[] threads = new Thread[320];
         for(int i = 0; i < threads.length; i++) {
@@ -270,7 +270,7 @@ public class HandleTest extends TableTestCase {
                 public void run() {
                     try {
                         if(finalI % 8 == 0) {
-                            TestObject[] objects = RandomTool.autoIncrementTestCaseObjects(100);
+                            List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(100);
                             table.insertObjects(objects);
                         }else{
                             List<TestObject> objects = table.getAllObjects(DBTestObject.id.order(Order.Desc), 100, finalI * 100);

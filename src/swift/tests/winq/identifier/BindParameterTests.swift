@@ -41,5 +41,17 @@ class BindParameterTests: BaseTestCase {
         WINQAssertEqual(BindParameter.dollar(named: "testName"), "$testName")
 
         WINQAssertEqual(BindParameter.colon(named: "testName"), ":testName")
+
+        WINQAssertEqual(BindParameter.def, "?")
+        WINQAssertEqual(BindParameter._1, "?1")
+        WINQAssertEqual(BindParameter._2, "?2")
+        WINQAssertEqual(BindParameter._3, "?3")
+        WINQAssertEqual(BindParameter._4, "?4")
+        WINQAssertEqual(BindParameter._5, "?5")
+        WINQAssertEqual(BindParameter._6, "?6")
+        WINQAssertEqual(BindParameter._7, "?7")
+        WINQAssertEqual(BindParameter._8, "?8")
+        WINQAssertEqual(BindParameter._9, "?9")
+        WINQAssertEqual(BindParameter._10, "?10")
     }
 }

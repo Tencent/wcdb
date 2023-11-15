@@ -45,6 +45,9 @@ protected:
     bool APIExit(int rc, const char *sql);
     void cacheCurrentTransactionError();
     void resumeCacheTransactionError();
+    bool isBusyTraceEnable() const;
+    void setCurrentSQL(const UnsafeStringView &sql);
+    void resetCurrentSQL(const UnsafeStringView &sql);
 
 private:
     AbstractHandle *m_handle;

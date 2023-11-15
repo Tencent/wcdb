@@ -99,7 +99,7 @@ public class StatementOperationTest extends ValueCRUDTestCase {
     @Test
     public void testGetChanges() throws WCDBException {
         handle.execute(new StatementDelete().deleteFrom(tableName));
-        assertEquals(handle.getChanges(), rows.length);
+        assertEquals(handle.getChanges(), rows.size());
     }
 
     @Test

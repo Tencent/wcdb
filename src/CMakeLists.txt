@@ -219,6 +219,9 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
     ${WCDB_SRC_DIR}/cpp/*/PreparedStatement.hpp
     ${WCDB_SRC_DIR}/cpp/*/ResultField.hpp
     ${WCDB_SRC_DIR}/cpp/*/RunTimeAccessor.hpp
+    ${WCDB_SRC_DIR}/cpp/*/STDOptionalAccessor.hpp
+    ${WCDB_SRC_DIR}/cpp/*/WCDBOptionalAccessor.hpp
+    ${WCDB_SRC_DIR}/cpp/*/SharedPtrAccessor.hpp
     ${WCDB_SRC_DIR}/cpp/*/Select.hpp
     ${WCDB_SRC_DIR}/cpp/*/Sequence.hpp
     ${WCDB_SRC_DIR}/cpp/*/StatementOperation.hpp

@@ -22,10 +22,12 @@
  */
 package com.tencent.wcdbtest.orm;
 
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Table;
 import com.tencent.wcdb.orm.Field;
+import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.ColumnDef;
 import com.tencent.wcdb.winq.ColumnType;
 import com.tencent.wcdb.winq.Order;
@@ -106,13 +108,15 @@ public class ORMTest extends DatabaseTestCase {
         AllTypeObject min = AllTypeObjectHelper.minObject();
         AllTypeObject random = AllTypeObjectHelper.randomObject();
         AllTypeObject empty = AllTypeObjectHelper.emptyObject();
-        table.insertObjects(new AllTypeObject[]{ max, min, random, empty});
+        table.insertObjects(Arrays.asList(max, min, random, empty));
 
         assertEquals(max, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type)));
         assertEquals(min, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(min.type)));
         assertEquals(empty, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(empty.type)));
         assertEquals(random, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(random.type)));
 
+        table.insertRow(new Value[]{new Value("null")}, new Column[]{DBAllTypeObject.type});
+        assertEquals(empty, table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq("null")));
     }
 
     @Test

@@ -54,6 +54,8 @@ void WCDBJNIExpressionClassMethod(distinct, jlong expression);
 jlong WCDBJNIExpressionClassMethod(cast, WCDBJNIObjectOrStringParameter(expression));
 void WCDBJNIExpressionClassMethod(as, jlong expression, jint type);
 
+jlong WCDBJNIExpressionClassMethod(configAlias, jlong expression, jstring alias);
+
 jlong WCDBJNIExpressionClassMethod(caseWithExp, WCDBJNIObjectOrStringParameter(expression));
 void WCDBJNIExpressionClassMethod(setWithWhenExp,
                                   jlong expression,

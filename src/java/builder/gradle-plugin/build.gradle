@@ -31,7 +31,7 @@ processResources {
 dependencies {
     implementation "com.tencent.wcdb:compiler:${project.getFullVersion()}"
     compileOnly gradleApi()
-    compileOnly 'com.android.tools.build:gradle:7.4.2'
+    compileOnly 'com.android.tools.build:gradle:8.1.2'
 }
 
 configurations.all {

@@ -44,6 +44,7 @@ HandleStatement::HandleStatement(HandleStatement &&other)
 , m_newTable(other.m_newTable)
 , m_modifiedTable(other.m_modifiedTable)
 , m_needAutoAddColumn(other.m_needAutoAddColumn)
+, m_sql(other.m_sql)
 , m_fullTrace(other.m_fullTrace)
 , m_needReport(other.m_needReport)
 , m_stepCount(other.m_stepCount)
@@ -355,8 +356,13 @@ bool HandleStatement::prepare(const UnsafeStringView &sql)
     m_fullTrace = getHandle()->isFullSQLEnable();
     if (!result) {
         m_stmt = nullptr;
-    } else if (m_fullTrace) {
-        clearReport();
+    } else {
+        if (m_fullTrace) {
+            clearReport();
+        }
+        if (isBusyTraceEnable()) {
+            m_sql = sql;
+        }
     }
     return result;
 }
@@ -377,9 +383,12 @@ bool HandleStatement::step()
 {
     WCTAssert(isPrepared());
 
+    if (isBusyTraceEnable()) {
+        setCurrentSQL(m_sql);
+    }
+
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
-    m_stepCount++;
 
     if (m_fullTrace) {
         m_needReport = true;
@@ -391,6 +400,8 @@ bool HandleStatement::step()
             getHandle()->postTableNotification(m_newTable, m_modifiedTable);
         }
         tryReportSQL();
+    } else {
+        m_stepCount++;
     }
 
     const char *sql = nullptr;
@@ -408,6 +419,8 @@ void HandleStatement::finalize()
         // no need to call APIExit since it returns old code only.
         sqlite3_finalize(m_stmt);
         m_stmt = nullptr;
+        resetCurrentSQL(m_sql);
+        m_sql.clear();
     }
 }
 
@@ -743,7 +756,7 @@ void HandleStatement::tryReportSQL()
     }
     UnsafeStringView sql = sqlite3_sql(m_stmt);
     if (sql.hasPrefix("SELECT")) {
-        m_stream << "StepCount:" << m_stepCount;
+        m_stream << "RowCount:" << m_stepCount;
     } else if (sql.hasPrefix("INSERT")) {
         m_stream << "LastInsertedId:" << getHandle()->getLastInsertedRowID();
     } else if (sql.hasPrefix("DELETE") || sql.hasPrefix("UPDATE")) {

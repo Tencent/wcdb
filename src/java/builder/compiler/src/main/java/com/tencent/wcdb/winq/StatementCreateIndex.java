@@ -31,9 +31,9 @@ public class StatementCreateIndex {
     public StatementCreateIndex of(String schemaName) { throw new UnsatisfiedLinkError(); }
     public StatementCreateIndex of(Schema schema) { throw new UnsatisfiedLinkError(); }
     public StatementCreateIndex on(String tableName) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex indexedBy(IndexedColumnConvertible[] indexedColumnConvertible) { throw new UnsatisfiedLinkError(); }
+    public StatementCreateIndex indexedBy(IndexedColumnConvertible... indexedColumnConvertible) { throw new UnsatisfiedLinkError(); }
     public StatementCreateIndex indexedBy(IndexedColumnConvertible indexedColumnConvertible) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex indexedBy(String[] indexedColumnNames) { throw new UnsatisfiedLinkError(); }
+    public StatementCreateIndex indexedBy(String... indexedColumnNames) { throw new UnsatisfiedLinkError(); }
     public StatementCreateIndex indexedBy(String indexedColumnName) { throw new UnsatisfiedLinkError(); }
 //    public StatementCreateIndex where(Expression condition) { throw new UnsatisfiedLinkError(); }
 }

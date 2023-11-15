@@ -28,6 +28,15 @@
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
 #include <cstring>
+#if _WIN32
+#define NOMINMAX
+#include <windows.h>
+#else
+#include <unistd.h>
+#ifdef __linux__
+#include <sys/syscall.h>
+#endif
+#endif
 
 namespace WCDB {
 
@@ -103,6 +112,21 @@ std::thread::id Thread::m_uiThreadId;
 void Thread::setUIThreadId(std::thread::id threadId)
 {
     m_uiThreadId = threadId;
+}
+
+uint64_t Thread::getCurrentThreadId()
+{
+#ifdef __APPLE__
+    uint64_t tid = 0;
+    pthread_threadid_np(nullptr, &tid);
+    return tid;
+#elif _WIN32
+    return (uint64_t) GetCurrentThreadId();
+#elif __linux__
+    return (uint64_t) syscall(SYS_gettid);
+#else
+    return (uint64_t)::gettid();
+#endif
 }
 
 #pragma mark - Name

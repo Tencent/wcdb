@@ -58,7 +58,9 @@ bool BindParameter::describle(std::ostream& stream) const
     stream << switcher;
     switch (switcher) {
     case Switch::QuestionSign:
-        stream << n;
+        if (n > 0) {
+            stream << n;
+        }
         break;
     case Switch::ColonSign:
     case Switch::AtSign:

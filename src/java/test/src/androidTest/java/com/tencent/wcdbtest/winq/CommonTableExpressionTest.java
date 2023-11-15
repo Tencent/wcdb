@@ -47,7 +47,7 @@ public class CommonTableExpressionTest {
         winqEqual(new CommonTableExpression("testTable")
                         .column(new Column("columnA"))
                         .column(new Column("columnB"))
-                        .as(new StatementSelect().select(new String[]{"columnC", "columnD"})),
+                        .as(new StatementSelect().select("columnC", "columnD")),
                 "testTable(columnA, columnB) AS(SELECT columnC, columnD)");
     }
 }

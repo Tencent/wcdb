@@ -49,6 +49,10 @@ public final class Column: Identifier<CPPColumn> {
         return self
     }
 
+    public func `as`(_ alias: String) -> ResultColumn {
+        return ResultColumn(with: WCDBColumnConfigAlias(cppObj, alias.cString))
+    }
+
     @discardableResult
     public func of(schema schemaConvertible: SchemaConvertible) -> Column {
         let schema = schemaConvertible.asSchema()

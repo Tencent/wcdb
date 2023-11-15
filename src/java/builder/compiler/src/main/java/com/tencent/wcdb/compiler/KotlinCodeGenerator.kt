@@ -146,25 +146,25 @@ class KotlinCodeGenerator {
                 indexName = columns.joinToString( "_", "_", "_index")
                 isFullName = false
             }
-            builder.append("$TAB${TAB}baseBinding.addIndex(\"$indexName\", $isFullName, StatementCreateIndex().ifNotExist().indexedBy(arrayOf(\n$TAB$TAB$TAB")
+            builder.append("$TAB${TAB}baseBinding.addIndex(\"$indexName\", $isFullName, StatementCreateIndex().ifNotExist().indexedBy(\n$TAB$TAB$TAB")
             for (column in columns) {
                 builder.append(column).append(", ")
             }
-            builder.append("\n$TAB$TAB)))\n")
+            builder.append("\n$TAB$TAB))\n")
         }
         for ((columns) in tableConstraintInfo.multiPrimaries) {
-            builder.append("$TAB${TAB}baseBinding.addTableConstraint(TableConstraint().primaryKey().indexedBy(arrayOf(\n$TAB$TAB$TAB")
+            builder.append("$TAB${TAB}baseBinding.addTableConstraint(TableConstraint().primaryKey().indexedBy(\n$TAB$TAB$TAB")
             for (column in columns) {
                 builder.append(column).append(", ")
             }
-            builder.append("\n$TAB$TAB)))\n")
+            builder.append("\n$TAB$TAB))\n")
         }
         for ((columns) in tableConstraintInfo.multiUnique) {
-            builder.append("$TAB${TAB}baseBinding.addTableConstraint(TableConstraint().unique().indexedBy(arrayOf(\n$TAB$TAB$TAB")
+            builder.append("$TAB${TAB}baseBinding.addTableConstraint(TableConstraint().unique().indexedBy(\n$TAB$TAB$TAB")
             for (column in columns) {
                 builder.append(column).append(", ")
             }
-            builder.append("\n$TAB$TAB)))\n")
+            builder.append("\n$TAB$TAB))\n")
         }
         if (tableConstraintInfo.isWithoutRowId) {
             builder.append("$TAB${TAB}baseBinding.configWithoutRowId()")
@@ -200,9 +200,17 @@ class KotlinCodeGenerator {
         builder.append("$TAB${TAB}for (field in fields) {\n")
         builder.append("$TAB$TAB${TAB}when (field.fieldId) {\n")
         var index = 1
-        for ((propertyName, propertyType) in allColumnInfo) {
+        for ((propertyName, propertyType, nullable) in allColumnInfo) {
             val info = AllKotlinPropertyORMInfo[propertyType]!!
-            builder.append("$TAB$TAB$TAB$TAB${index} -> newOne.$propertyName = preparedStatement.${info.setter}\n")
+            if (nullable) {
+                builder.append("$TAB$TAB$TAB$TAB${index} -> {\n")
+                builder.append("$TAB$TAB$TAB$TAB${TAB}if ( preparedStatement.getColumnType(index) != ColumnType.Null) {\n")
+                builder.append("$TAB$TAB$TAB$TAB$TAB${TAB}newOne.$propertyName = preparedStatement.${info.setter}\n")
+                builder.append("$TAB$TAB$TAB$TAB${TAB}}\n")
+                builder.append("$TAB$TAB$TAB${TAB}}\n")
+            } else {
+                builder.append("$TAB$TAB$TAB$TAB${index} -> newOne.$propertyName = preparedStatement.${info.setter}\n")
+            }
             index++
         }
         builder.append("$TAB$TAB$TAB${TAB}else -> assert(false) {\n")
@@ -224,9 +232,19 @@ class KotlinCodeGenerator {
         builder.append("$TAB) {\n")
         builder.append("$TAB${TAB}when (field.fieldId) {\n")
         var index = 1
-        for ((propertyName, propertyType) in allColumnInfo) {
+        for ((propertyName, propertyType, nullable) in allColumnInfo) {
             val info = AllKotlinPropertyORMInfo[propertyType]!!
-            builder.append("$TAB$TAB$TAB${index} -> preparedStatement.${info.getter}(`object`.$propertyName, index)\n")
+            if (nullable) {
+                builder.append("$TAB$TAB$TAB${index} -> {\n")
+                builder.append("$TAB$TAB$TAB${TAB}if (`object`.$propertyName != null) {\n")
+                builder.append("$TAB$TAB$TAB$TAB${TAB}preparedStatement.${info.getter}(`object`.$propertyName, index)\n")
+                builder.append("$TAB$TAB$TAB${TAB}} else {\n")
+                builder.append("$TAB$TAB$TAB$TAB${TAB}preparedStatement.bindNull(index)\n")
+                builder.append("$TAB$TAB$TAB${TAB}}\n")
+                builder.append("$TAB$TAB${TAB}}\n")
+            } else {
+                builder.append("$TAB$TAB$TAB${index} -> preparedStatement.${info.getter}(`object`.$propertyName, index)\n")
+            }
             index++
         }
         builder.append("$TAB$TAB${TAB}else -> assert(false) {\n")
@@ -254,7 +272,6 @@ class KotlinCodeGenerator {
 
         builder.append("${TAB}override fun setLastInsertRowId(`object`: $className, lastInsertRowId: Long) {\n")
         if (autoIncrementColumn != null) {
-            val info = AllKotlinPropertyORMInfo[autoIncrementColumn.propertyType]!!
             var convert = ""
             when (autoIncrementColumn.propertyType) {
                 Char::class.qualifiedName!! -> convert = ".toInt().toChar()"

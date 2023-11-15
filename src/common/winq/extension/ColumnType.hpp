@@ -99,12 +99,6 @@ struct ColumnTypeInfo<ColumnType::BLOB> {
 };
 
 #pragma mark - ColumnIsType
-//NULL
-template<typename T, typename Enable = void>
-struct ColumnIsNullType : public std::false_type {
-public:
-    static ColumnTypeInfo<ColumnType::Null>::UnderlyingType asUnderlyingType(const T &);
-};
 //Float
 template<typename T, typename Enable = void>
 struct ColumnIsFloatType : public std::false_type {
@@ -135,11 +129,6 @@ public:
 template<typename T, typename Enable = void>
 struct ColumnInfo {
 };
-//NULL
-template<typename T>
-struct ColumnInfo<T, typename std::enable_if<ColumnIsNullType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Null> {
-};
 //Float
 template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
@@ -162,14 +151,6 @@ struct ColumnInfo<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
 };
 
 #pragma mark - Builtin Type
-//NULL
-template<>
-struct WCDB_API ColumnIsNullType<std::nullptr_t> : public std::true_type {
-public:
-    static ColumnTypeInfo<ColumnType::Null>::UnderlyingType
-    asUnderlyingType(const std::nullptr_t &);
-};
-
 //Float
 template<typename T>
 struct ColumnIsFloatType<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
@@ -199,8 +180,9 @@ struct WCDB_API ColumnIsTextType<const char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const char *text);
-    static const char *
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(const char *&target,
+                        const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<>
@@ -208,8 +190,9 @@ struct WCDB_API ColumnIsTextType<char *> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const char *text);
-    static char *
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(char *&target,
+                        const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<int size>
@@ -220,6 +203,10 @@ public:
     asUnderlyingType(const ValueType &text)
     {
         return text;
+    }
+    static void setToUnderlyingType(const ValueType &,
+                                    const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &)
+    {
     }
 };
 
@@ -232,6 +219,15 @@ public:
     {
         return text;
     }
+    static void
+    setToUnderlyingType(ValueType &target,
+                        const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
+    {
+        memcpy(target, t.data(), std::min(t.size(), (size_t) size));
+        if (t.size() < size) {
+            target[t.size()] = '\0';
+        }
+    }
 };
 
 template<>
@@ -239,8 +235,9 @@ struct WCDB_API ColumnIsTextType<std::string> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const std::string &text);
-    static std::string
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(std::string &target,
+                        const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<>
@@ -248,8 +245,9 @@ struct WCDB_API ColumnIsTextType<UnsafeStringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const UnsafeStringView &text);
-    static UnsafeStringView
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(UnsafeStringView &target,
+                        const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 template<>
@@ -257,8 +255,9 @@ struct WCDB_API ColumnIsTextType<StringView> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType
     asUnderlyingType(const UnsafeStringView &text);
-    static StringView
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(StringView &target,
+                        const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
 //BLOB
@@ -267,8 +266,9 @@ struct WCDB_API ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const std::vector<unsigned char> &blob);
-    static std::vector<unsigned char>
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(std::vector<unsigned char> &target,
+                        const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
 };
 
 template<>
@@ -276,8 +276,9 @@ struct WCDB_API ColumnIsBLOBType<UnsafeData> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const UnsafeData &blob);
-    static UnsafeData
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(UnsafeData &target,
+                        const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
 };
 
 template<>
@@ -285,8 +286,9 @@ struct WCDB_API ColumnIsBLOBType<Data> : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
     asUnderlyingType(const UnsafeData &blob);
-    static Data
-    fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
+    static void
+    setToUnderlyingType(Data &target,
+                        const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t);
 };
 
 template<int size>
@@ -298,6 +300,11 @@ public:
     {
         return UnsafeData(data, size);
     }
+
+    static void setToUnderlyingType(const ValueType &,
+                                    const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &)
+    {
+    }
 };
 
 template<int size>
@@ -308,6 +315,15 @@ public:
     asUnderlyingType(const ValueType &data)
     {
         return UnsafeData((unsigned char *) data, size);
+    }
+    static void
+    setToUnderlyingType(ValueType &target,
+                        const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
+    {
+        memcpy(target, t.buffer(), std::min(t.size(), (size_t) size));
+        if (size > t.size()) {
+            memset(target + t.size(), 0, size - t.size());
+        }
     }
 };
 

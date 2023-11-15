@@ -34,7 +34,7 @@ import org.junit.Test
 class ObjectSelectTest : ObjectCRUDTestCase() {
     private lateinit var partialObject1: TestObject
     private lateinit var partialObject2: TestObject
-    private lateinit var partialObjects: Array<TestObject>
+    private lateinit var partialObjects: List<TestObject>
 
     @Before
     @Throws(WCDBException::class)
@@ -42,7 +42,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
         super.setup()
         partialObject1 = TestObject.createPartialObject(1)
         partialObject2 = TestObject.createPartialObject(2)
-        partialObjects = arrayOf(partialObject1, partialObject2)
+        partialObjects = listOf(partialObject1, partialObject2)
     }
 
     @Test
@@ -148,7 +148,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseGetObjectsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             database.getAllObjects(
@@ -196,7 +196,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseGetObjectsOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable ORDER BY id DESC"
         ) {
             database.getAllObjects(
@@ -347,7 +347,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseGetObjectsOnFieldsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(partialObject2, partialObject1),
+            listOf(partialObject2, partialObject1),
             "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             database.getAllObjects(
@@ -389,7 +389,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testDatabaseGetObjectsOnFieldsOrder() {
         doTestObjectBySelecting(
-            arrayOf(partialObject2, partialObject1),
+            listOf(partialObject2, partialObject1),
             "SELECT id FROM testTable ORDER BY id DESC"
         ) {
             database.getAllObjects(
@@ -529,7 +529,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testTableGetObjectsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             table.getAllObjects(
@@ -572,7 +572,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testTableGetObjectsOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable ORDER BY id DESC"
         ) {
             table.getAllObjects(
@@ -723,7 +723,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testTableGetObjectsOnFieldsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(partialObject2, partialObject1),
+            listOf(partialObject2, partialObject1),
             "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             table.getAllObjects(
@@ -765,7 +765,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testTableGetObjectsOnFieldsOrder() {
         doTestObjectBySelecting(
-            arrayOf(partialObject2, partialObject1),
+            listOf(partialObject2, partialObject1),
             "SELECT id FROM testTable ORDER BY id DESC"
         ) {
             table.getAllObjects(
@@ -893,7 +893,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testTableGetObjectsWithoutFieldsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             table.getAllObjects(
@@ -929,7 +929,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testTableGetObjectsWithoutFieldsOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable ORDER BY id DESC"
         ) {
             table.getAllObjects(
@@ -1065,7 +1065,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleGetObjectsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             handle.getAllObjects(
@@ -1113,7 +1113,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleGetObjectsOrder() {
         doTestObjectBySelecting(
-            arrayOf(object2, object1),
+            listOf(object2, object1),
             "SELECT id, content FROM testTable ORDER BY id DESC"
         ) {
             handle.getAllObjects(
@@ -1264,7 +1264,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleGetObjectsOnFieldsWhereOrder() {
         doTestObjectBySelecting(
-            arrayOf(partialObject2, partialObject1),
+            listOf(partialObject2, partialObject1),
             "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC"
         ) {
             handle.getAllObjects(
@@ -1306,7 +1306,7 @@ class ObjectSelectTest : ObjectCRUDTestCase() {
     @Test
     fun testHandleGetObjectsOnFieldsOrder() {
         doTestObjectBySelecting(
-            arrayOf(partialObject2, partialObject1),
+            listOf(partialObject2, partialObject1),
             "SELECT id FROM testTable ORDER BY id DESC"
         ) {
             handle.getAllObjects(

@@ -28,13 +28,6 @@
 namespace WCDB {
 
 #pragma mark - Builtin Type
-//NULL
-ColumnTypeInfo<ColumnType::Null>::UnderlyingType
-ColumnIsNullType<std::nullptr_t>::asUnderlyingType(const std::nullptr_t &)
-{
-    return nullptr;
-}
-
 //Text
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
 ColumnIsTextType<const char *>::asUnderlyingType(const char *text)
@@ -42,13 +35,13 @@ ColumnIsTextType<const char *>::asUnderlyingType(const char *text)
     return UnsafeStringView(text);
 }
 
-const char *ColumnIsTextType<const char *>::fromUnderlyingType(
-const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
+void ColumnIsTextType<const char *>::setToUnderlyingType(
+const char *&target, const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
 {
     int64_t length = t.length() + 1;
     char *text = new char[length];
     memcpy(text, t.data(), length * sizeof(char));
-    return text;
+    target = text;
 };
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -57,13 +50,13 @@ ColumnIsTextType<char *>::asUnderlyingType(const char *text)
     return UnsafeStringView(text);
 }
 
-char *
-ColumnIsTextType<char *>::fromUnderlyingType(const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
+void ColumnIsTextType<char *>::setToUnderlyingType(
+char *&target, const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
 {
     int64_t length = t.length() + 1;
     char *text = new char[length];
     memcpy(text, t.data(), length * sizeof(char));
-    return text;
+    target = text;
 };
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -72,10 +65,10 @@ ColumnIsTextType<std::string>::asUnderlyingType(const std::string &text)
     return UnsafeStringView(text.c_str(), text.length());
 }
 
-std::string ColumnIsTextType<std::string>::fromUnderlyingType(
-const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
+void ColumnIsTextType<std::string>::setToUnderlyingType(
+std::string &target, const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
 {
-    return std::string(t.data());
+    target = t;
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -84,10 +77,10 @@ ColumnIsTextType<UnsafeStringView>::asUnderlyingType(const UnsafeStringView &tex
     return text;
 }
 
-UnsafeStringView ColumnIsTextType<UnsafeStringView>::fromUnderlyingType(
-const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
+void ColumnIsTextType<UnsafeStringView>::setToUnderlyingType(
+UnsafeStringView &target, const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
 {
-    return StringView(t);
+    target = StringView(t);
 }
 
 ColumnTypeInfo<ColumnType::Text>::UnderlyingType
@@ -96,10 +89,10 @@ ColumnIsTextType<StringView>::asUnderlyingType(const UnsafeStringView &text)
     return text;
 }
 
-StringView ColumnIsTextType<StringView>::fromUnderlyingType(
-const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
+void ColumnIsTextType<StringView>::setToUnderlyingType(
+StringView &target, const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t)
 {
-    return StringView(t);
+    target = t;
 }
 
 //BLOB
@@ -109,12 +102,11 @@ ColumnIsBLOBType<std::vector<unsigned char>>::asUnderlyingType(const std::vector
     return UnsafeData::immutable(blob.data(), blob.size());
 }
 
-std::vector<unsigned char> ColumnIsBLOBType<std::vector<unsigned char>>::fromUnderlyingType(
-const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
+void ColumnIsBLOBType<std::vector<unsigned char>>::setToUnderlyingType(
+std::vector<unsigned char> &target, const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
 {
-    std::vector<unsigned char> data;
-    data.assign(t.buffer(), t.buffer() + t.size());
-    return data;
+    target.resize(t.size());
+    memcpy(target.data(), t.buffer(), t.size());
 }
 
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
@@ -123,10 +115,10 @@ ColumnIsBLOBType<UnsafeData>::asUnderlyingType(const UnsafeData &blob)
     return blob;
 }
 
-UnsafeData ColumnIsBLOBType<UnsafeData>::fromUnderlyingType(
-const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
+void ColumnIsBLOBType<UnsafeData>::setToUnderlyingType(
+UnsafeData &target, const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
 {
-    return Data(t);
+    target = Data(t);
 }
 
 ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType
@@ -135,9 +127,10 @@ ColumnIsBLOBType<Data>::asUnderlyingType(const UnsafeData &blob)
     return blob;
 }
 
-Data ColumnIsBLOBType<Data>::fromUnderlyingType(const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
+void ColumnIsBLOBType<Data>::setToUnderlyingType(
+Data &target, const ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType &t)
 {
-    return t;
+    target = t;
 }
 
 } //namespace WCDB

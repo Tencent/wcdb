@@ -53,6 +53,8 @@ typedef struct CPPObject {
 } CPPObject;
 void WCDBReleaseCPPObject(CPPObject* _Nonnull obj);
 
+typedef void (*WCDBContextDestructor)(void* _Nonnull context);
+
 #define WCDBDefineSwiftObjectBridgedType(typename)                             \
     typedef struct typename                                                    \
     {                                                                          \

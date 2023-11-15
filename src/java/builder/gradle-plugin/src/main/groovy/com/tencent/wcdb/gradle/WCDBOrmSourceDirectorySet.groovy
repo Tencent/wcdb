@@ -4,6 +4,7 @@ import org.gradle.api.Project
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.internal.file.FileCollectionFactory
 import org.gradle.api.internal.file.collections.DefaultDirectoryFileTreeFactory
+import org.gradle.api.internal.tasks.TaskDependencyFactory
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.util.PatternSet
 import org.gradle.internal.Factory
@@ -22,17 +23,10 @@ class WCDBOrmSourceDirectorySet extends DefaultSourceDirectorySet {
     }
 
     @Inject
-    WCDBOrmSourceDirectorySet(String name, FileCollectionFactory fileCollectionFactory, ObjectFactory objectFactory) {
-        super(name, "$name WCDB ORM source", sPatternSetFactory, fileCollectionFactory,
-                new DefaultDirectoryFileTreeFactory(), objectFactory)
-
-        srcDir("src/${name}/wcdbOrm")
-        include('**/*.java')
-        include('**/*.kt')
-    }
-
     WCDBOrmSourceDirectorySet(Project project, String name) {
-        super(name, "$name WCDB ORM source", sPatternSetFactory, project.services.get(FileCollectionFactory),
+        super(name, "$name WCDB ORM source", sPatternSetFactory,
+                project.services.get(TaskDependencyFactory),
+                project.services.get(FileCollectionFactory),
                 new DefaultDirectoryFileTreeFactory(), project.services.get(ObjectFactory))
 
         srcDir("src/${name}/wcdbOrm")

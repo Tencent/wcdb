@@ -58,6 +58,9 @@ CPPExpression WCDBExpressionCast(CPPExpression expression);
 CPPExpression WCDBExpressionCast2(CPPCommonValue expression);
 void WCDBExpressionAs(CPPExpression expression, enum WCDBSyntaxColumnType type);
 
+CPPResultColumn
+WCDBExpressionConfigAlias(CPPExpression expression, const char* _Nullable alias);
+
 CPPExpression WCDBExpressionCaseWithExp(CPPExpression expression);
 CPPExpression WCDBExpressionCaseWithExp2(CPPCommonValue expression);
 CPPExpression WCDBExpressionCase(void);

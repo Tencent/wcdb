@@ -200,7 +200,7 @@
         XCTAssertTrue(components.count > 0);
         NSArray* subComponents = [[components objectAtIndex:components.count - 1] componentsSeparatedByString:@":"];
         XCTAssertEqual(subComponents.count, 2);
-        XCTAssertTrue([subComponents[0] isEqualToString:@"StepCount"]);
+        XCTAssertTrue([subComponents[0] isEqualToString:@"RowCount"]);
         XCTAssertTrue([subComponents[1] intValue] >= 0);
     } else if ([sql hasPrefix:@"DELETE"] || [sql hasPrefix:@"UPDATE"]) {
         XCTAssertTrue(components.count > 0);

@@ -60,13 +60,16 @@ Core::Core()
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
+// Busy Retry
+, m_globalBusyRetryConfig(std::make_shared<BusyRetryConfig>())
+, m_enableBusyTrace(false)
 //Merge
 , m_AutoMergeFTSConfig(std::make_shared<AutoMergeFTSIndexConfig>(m_operationQueue))
 // Config
 , m_configs({
   { StringView(GlobalSQLTraceConfigName), m_globalSQLTraceConfig, Configs::Priority::Highest },
   { StringView(GlobalPerformanceTraceConfigName), m_globalPerformanceTraceConfig, Configs::Priority::Highest },
-  { StringView(BusyRetryConfigName), std::make_shared<BusyRetryConfig>(), Configs::Priority::Highest },
+  { StringView(BusyRetryConfigName), m_globalBusyRetryConfig, Configs::Priority::Highest },
   { StringView(BasicConfigName), std::make_shared<BasicConfig>(), Configs::Priority::Higher },
   })
 {
@@ -443,6 +446,32 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
     } else {
         Notifier::shared().unsetNotification(notifierKey);
     }
+}
+
+void Core::setBusyMonitor(BusyMonitor monitor, double timeOut)
+{
+    if (monitor != nullptr && timeOut > 0) {
+        m_enableBusyTrace = true;
+        static_cast<BusyRetryConfig*>(m_globalBusyRetryConfig.get())
+        ->setBusyMonitor(
+        [=](const UnsafeStringView& path, uint64_t tid) {
+            if (m_errorIgnorable.getOrCreate()) {
+                return;
+            }
+            auto database = getOrCreateDatabase(path);
+            StringView sql = database->getRunningSQLInThread(tid);
+            monitor(database->getTag(), path, tid, sql);
+        },
+        timeOut);
+    } else {
+        m_enableBusyTrace = false;
+        static_cast<BusyRetryConfig*>(m_globalBusyRetryConfig.get())->setBusyMonitor(nullptr, 0);
+    }
+}
+
+bool Core::isBusyTraceEnable() const
+{
+    return m_enableBusyTrace;
 }
 
 #pragma mark - Integrity

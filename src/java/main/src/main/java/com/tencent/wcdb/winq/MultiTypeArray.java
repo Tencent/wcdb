@@ -24,6 +24,7 @@
 package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
+import com.tencent.wcdb.base.Value;
 
 import java.util.Arrays;
 
@@ -39,7 +40,9 @@ class ObjectType {
     final static int Double = 8;
     final static int String = 9;
     final static int Identifier = 10;
-    final static int Unknown = 11;
+
+    final static int Value = 11;
+    final static int Unknown = 12;
 }
 
 class MultiTypeArray {
@@ -118,6 +121,30 @@ class MultiTypeArray {
                     longValues[longIndex] = CppObject.get(identifier);
                     longIndex++;
                     break;
+                case ObjectType.Value:
+                    Value valueObj = (Value) obj;
+                    switch (valueObj.getType()) {
+                        case Null:
+                            types[i] = CPPType.Null;
+                            longIndex++;
+                            break;
+                        case Integer:
+                            types[i] = CPPType.Int;
+                            longValues[longIndex] = valueObj.getLong();
+                            longIndex++;
+                            break;
+                        case Float:
+                            types[i] = CPPType.Double;
+                            doubleValues[doubleIndex] = valueObj.getDouble();
+                            doubleIndex++;
+                            break;
+                        case Text:
+                            types[i] = CPPType.String;
+                            stringValues[stringIndex] = valueObj.getText();
+                            stringIndex++;
+                            break;
+                    }
+                    break;
             }
         }
         if(stringValues.length * 0.75 > stringIndex) {
@@ -154,6 +181,8 @@ class MultiTypeArray {
             return ObjectType.Char;
         } else if (cls == Byte.class) {
             return ObjectType.Byte;
+        } else if (cls == Value.class) {
+            return ObjectType.Value;
         }
         return ObjectType.Unknown;
     }

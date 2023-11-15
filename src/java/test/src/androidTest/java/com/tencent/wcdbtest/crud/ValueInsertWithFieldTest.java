@@ -33,6 +33,9 @@ import com.tencent.wcdbtest.base.RandomTool;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
     @Test
     public void testDatabaseInsertRow() {
@@ -75,7 +78,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseInsertRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId), RandomTool.testRowWithId(nextId + 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId), RandomTool.testRowWithId(nextId + 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -93,7 +96,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseInsertOrReplaceRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -111,7 +114,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseInsertOrIgnoreRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -168,7 +171,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableInsertRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId), RandomTool.testRowWithId(nextId + 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId), RandomTool.testRowWithId(nextId + 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -186,7 +189,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableInsertOrReplaceRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -204,7 +207,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableInsertOrIgnoreRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -261,7 +264,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleInsertRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId), RandomTool.testRowWithId(nextId + 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId), RandomTool.testRowWithId(nextId + 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -279,7 +282,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleInsertOrReplaceRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
@@ -297,7 +300,7 @@ public class ValueInsertWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleInsertOrIgnoreRows() {
-        final Value[][] rows = new Value[][]{RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1)};
+        final List<Value[]> rows = Arrays.asList(RandomTool.testRowWithId(nextId-2), RandomTool.testRowWithId(nextId - 1));
         expectMode = Expect.SomeSQLs;
         doTestSQLs(new String[]{
                         "BEGIN IMMEDIATE",
