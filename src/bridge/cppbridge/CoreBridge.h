@@ -32,6 +32,7 @@ CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path);
 void WCDBCoreSetDefaultCipherConfig(int version);
 void WCDBCorePurgeAllDatabase(void);
 bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir);
+void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable);
 
 typedef void (*WCDBBusyTracer)(void* _Nullable context,
                                long tag,

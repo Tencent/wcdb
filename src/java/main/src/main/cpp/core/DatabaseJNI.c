@@ -571,6 +571,12 @@ jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self)
     return WCDBDatabaseTruncateCheckpoint(selfStruct);
 }
 
+void WCDBJNIDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean enable)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBCoreSetAutoCheckpointEnable(selfStruct, (bool) enable);
+}
+
 void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info, WCDBMigrationInfoSetter setter)
 {
     WCDBJNITryGetEnvOr(return );
@@ -653,4 +659,10 @@ jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseIsMigrated(selfStruct);
+}
+
+jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseGetAliveHandleCount(selfStruct);
 }

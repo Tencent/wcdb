@@ -52,6 +52,7 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_closing(0)
 , m_tag(Tag::invalid())
 , m_fullSQLTrace(false)
+, m_autoCheckpoint(true)
 , m_factory(path)
 , m_needLoadIncremetalMaterial(false)
 , m_migration(this)
@@ -210,6 +211,11 @@ void InnerDatabase::setFullSQLTraceEnable(bool enable)
     m_fullSQLTrace = enable;
 }
 
+void InnerDatabase::setAutoCheckpointEnable(bool enable)
+{
+    m_autoCheckpoint = enable;
+}
+
 #pragma mark - Handle
 RecyclableHandle InnerDatabase::getHandle(bool writeHint)
 {
@@ -315,10 +321,9 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
     case HandleSlotOperation:
         handle = std::make_shared<OperationHandle>();
         break;
-    case HandleSlotCheckPoint: {
+    case HandleSlotCheckPoint:
         handle = std::make_shared<OperationHandle>();
-        handle->enableWriteMainDB(true);
-    } break;
+        break;
     default:
         WCTAssert(slot == HandleSlotNormal);
         handle = std::make_shared<ConfiguredHandle>();
@@ -351,6 +356,9 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
     handle->setBusyTraceEnable(Core::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
+    if (slot == HandleSlotCheckPoint || !m_autoCheckpoint) {
+        handle->enableWriteMainDB(true);
+    }
 
     Configs configs;
     {

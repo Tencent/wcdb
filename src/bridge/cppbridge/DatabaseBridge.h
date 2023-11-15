@@ -221,5 +221,6 @@ void WCDBDatabaseSetNotificationWhenMigrated2(CPPDatabase database,
                                               WCDBContextDestructor _Nullable destructor);
 
 bool WCDBDatabaseIsMigrated(CPPDatabase database);
+short WCDBDatabaseGetAliveHandleCount(CPPDatabase database);
 
 WCDB_EXTERN_C_END

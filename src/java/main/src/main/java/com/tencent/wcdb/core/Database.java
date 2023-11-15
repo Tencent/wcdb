@@ -120,6 +120,12 @@ public class Database extends HandleORMOperation {
 
     public static native void purgeAll();
 
+    public int getNumberOfAliveHandle() {
+        return getNumberOfAliveHandle(cppObj);
+    }
+
+    private static native int getNumberOfAliveHandle(long self);
+
     WCDBException createException() {
         return WCDBException.createException(getError(cppObj));
     }
@@ -476,6 +482,12 @@ public class Database extends HandleORMOperation {
             throw createException();
         }
     }
+
+    public void setAutoCheckpointEnable(boolean enable) {
+        setAutoCheckpointEnable(cppObj, enable);
+    }
+
+    private static native void setAutoCheckpointEnable(long self, boolean enable);
 
     private static native boolean truncateCheckpoint(long self);
 

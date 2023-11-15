@@ -88,6 +88,7 @@ jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdat
 
 jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self);
+void WCDBJNIDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean enable);
 
 void WCDBJNIDatabaseClassMethod(addMigrationSource,
                                 jlong self,
@@ -103,3 +104,4 @@ jboolean WCDBJNIDatabaseClassMethod(stepMigration, jlong self);
 void WCDBJNIDatabaseClassMethod(enableAutoMigration, jlong self, jboolean flag);
 void WCDBJNIDatabaseClassMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);
 jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self);
+jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self);

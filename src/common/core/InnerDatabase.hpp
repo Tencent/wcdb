@@ -72,6 +72,7 @@ public:
     void close(const ClosedCallback &onClosed);
     using HandlePool::unblockade;
     using HandlePool::isBlockaded;
+    using HandlePool::numberOfAliveHandles;
 
 protected:
     Tag m_tag;
@@ -101,10 +102,12 @@ public:
                    int priority = Configs::Priority::Default);
     void removeConfig(const UnsafeStringView &name);
     void setFullSQLTraceEnable(bool enable);
+    void setAutoCheckpointEnable(bool enable);
 
 private:
     Configs m_configs;
     bool m_fullSQLTrace = false;
+    bool m_autoCheckpoint;
 
 #pragma mark - Threaded
 private:
