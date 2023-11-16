@@ -94,6 +94,7 @@ bool AssembleHandle::markAsAssembled()
     if (isInTransaction()) {
         succeed = commitOrRollbackTransaction() && succeed;
     }
+    checkpoint(AbstractHandle::CheckpointMode::Passive);
     // TODO: check integrity after assembled?
     close();
     return succeed;
@@ -105,6 +106,7 @@ bool AssembleHandle::markAsMilestone()
         if (!commitOrRollbackTransaction()) {
             return false;
         }
+        checkpoint(AbstractHandle::CheckpointMode::Passive);
     }
     return beginTransaction();
 }
