@@ -22,17 +22,16 @@
  * limitations under the License.
  */
 
-#if TEST_WCDB_OBJC
-#import <WCDBOBjc/WCDBCpp.h>
-#elif TEST_WCDB_CPP
-#import <WCDBCpp/WCDBCpp.h>
-#else
-#import <WCDB/WCDBCpp.h>
-#endif
+#include "CPPAllTypesObject.h"
 
 class CPPSharedPtrAllTypesObject {
 public:
     WCDB::StringView type;
+
+    // Enum
+    std::shared_ptr<EnumType> enumValue;
+    std::shared_ptr<EnumClassType> enumClassValue;
+    std::shared_ptr<LiteralEnum> literalEnumValue;
 
     // Bool
     std::shared_ptr<bool> trueOrFalseValue;

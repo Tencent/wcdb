@@ -31,6 +31,10 @@ WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPSharedPtrAllTypesObject)
 
 WCDB_CPP_SYNTHESIZE(type)
 
+WCDB_CPP_SYNTHESIZE(enumValue)
+WCDB_CPP_SYNTHESIZE(enumClassValue)
+WCDB_CPP_SYNTHESIZE(literalEnumValue)
+
 WCDB_CPP_SYNTHESIZE(trueOrFalseValue)
 
 WCDB_CPP_SYNTHESIZE(charValue)
@@ -63,6 +67,11 @@ CPPSharedPtrAllTypesObject CPPSharedPtrAllTypesObject::maxObject()
 {
     CPPSharedPtrAllTypesObject object;
     object.type = "max";
+
+    object.enumValue = std::make_shared<EnumType>(EnumType::Max);
+    object.enumClassValue = std::make_shared<EnumClassType>(EnumClassType::Max);
+    object.literalEnumValue = std::make_shared<LiteralEnum>(LiteralEnum::EnumMax);
+
 #define ASSIGN_WITH_TYPED_MAX_VALUE(field, type) \
     object.field = std::make_shared<typename type::element_type>(std::numeric_limits<typename type::element_type>::max())
 #define ASSIGN_WITH_MAX_VALUE(field) \
@@ -91,6 +100,10 @@ CPPSharedPtrAllTypesObject CPPSharedPtrAllTypesObject::minObject()
 {
     CPPSharedPtrAllTypesObject object;
     object.type = "min";
+
+    object.enumValue = std::make_shared<EnumType>(EnumType::Min);
+    object.enumClassValue = std::make_shared<EnumClassType>(EnumClassType::Min);
+    object.literalEnumValue = std::make_shared<LiteralEnum>(LiteralEnum::EnumMin);
 
 #define ASSIGN_WITH_TYPED_MIN_VALUE(field, type) \
     object.field = std::make_shared<typename type::element_type>(std::numeric_limits<typename type::element_type>::min())
@@ -126,6 +139,10 @@ CPPSharedPtrAllTypesObject CPPSharedPtrAllTypesObject::randomObject()
 {
     CPPSharedPtrAllTypesObject object;
     object.type = "random";
+
+    object.enumValue = std::make_shared<EnumType>(EnumType::Zero);
+    object.enumClassValue = std::make_shared<EnumClassType>(EnumClassType::Zero);
+    object.literalEnumValue = std::make_shared<LiteralEnum>(LiteralEnum::EnumZero);
 
     Random* random = [Random shared];
 
@@ -174,6 +191,9 @@ bool CPPSharedPtrAllTypesObject::operator==(const CPPSharedPtrAllTypesObject& ot
     if (value != other.value && *value != *other.value) {                                               \
         return false;                                                                                   \
     }
+    CheckLiteralEquelOrReturn(enumValue);
+    CheckLiteralEquelOrReturn(enumClassValue);
+    CheckLiteralEquelOrReturn(literalEnumValue);
     CheckLiteralEquelOrReturn(trueOrFalseValue);
     CheckLiteralEquelOrReturn(charValue);
     CheckLiteralEquelOrReturn(unsignedCharValue);
@@ -230,6 +250,9 @@ bool CPPSharedPtrAllTypesObject::operator==(const CPPSharedPtrAllTypesObject& ot
 void CPPSharedPtrAllTypesObject::copyFrom(const CPPSharedPtrAllTypesObject& other)
 {
     type = other.type;
+    enumValue = other.enumValue;
+    enumClassValue = other.enumClassValue;
+    literalEnumValue = other.literalEnumValue;
     trueOrFalseValue = other.trueOrFalseValue;
     charValue = other.charValue;
     unsignedCharValue = other.unsignedCharValue;

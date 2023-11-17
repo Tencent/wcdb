@@ -81,10 +81,12 @@ public:
 };
 
 template<class ORMType, typename FieldType>
-class RuntimeAccessor<ORMType,
-                      FieldType,
-                      typename std::enable_if<IsSTDOptional<FieldType>::value && !ColumnIsBLOBType<typename FieldType::value_type>::value
-                                              && !ColumnIsTextType<typename FieldType::value_type>::value>::type>
+class RuntimeAccessor<
+ORMType,
+FieldType,
+typename std::enable_if<IsSTDOptional<FieldType>::value && !ColumnIsBLOBType<typename FieldType::value_type>::value
+                        && !ColumnIsTextType<typename FieldType::value_type>::value
+                        && !std::is_enum<typename FieldType::value_type>::value>::type>
 final : public RuntimeNullAccessor<ORMType, FieldType> {
 private:
     using Super = RuntimeNullAccessor<ORMType, FieldType>;
@@ -101,6 +103,33 @@ public:
     {
         instance.*Super::m_memberPointer
         = std::make_optional<typename FieldType::value_type>(value);
+    }
+};
+
+template<class ORMType, typename FieldType>
+class RuntimeAccessor<
+ORMType,
+FieldType,
+typename std::enable_if<IsSTDOptional<FieldType>::value && !ColumnIsBLOBType<typename FieldType::value_type>::value
+                        && !ColumnIsTextType<typename FieldType::value_type>::value
+                        && std::is_enum<typename FieldType::value_type>::value>::type>
+final : public RuntimeNullAccessor<ORMType, FieldType> {
+private:
+    using Super = RuntimeNullAccessor<ORMType, FieldType>;
+    using UnderlyingType = typename Super::UnderlyingType;
+
+public:
+    RuntimeAccessor(FieldType ORMType::*memberPointer)
+    : RuntimeNullAccessor<ORMType, FieldType>(memberPointer)
+    {
+    }
+    ~RuntimeAccessor() override final = default;
+
+    void setValue(ORMType &instance, const UnderlyingType &value) const override final
+    {
+        instance.*Super::m_memberPointer
+        = std::make_optional<typename FieldType::value_type>(
+        (typename FieldType::value_type) value);
     }
 };
 
