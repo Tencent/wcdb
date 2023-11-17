@@ -26,12 +26,14 @@ import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Table;
+import com.tencent.wcdb.fts.BuiltinTokenizer;
 import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.ColumnDef;
 import com.tencent.wcdb.winq.ColumnType;
 import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdb.winq.StatementCreateTable;
+import com.tencent.wcdbtest.base.DBTestObject;
 import com.tencent.wcdbtest.base.DatabaseTestCase;
 import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.orm.testclass.*;
@@ -390,5 +392,31 @@ public class ORMTest extends DatabaseTestCase {
         PrimaryEnableAutoIncrementObject obj2 = new PrimaryEnableAutoIncrementObject();
         database.insertObject(obj2, DBPrimaryEnableAutoIncrementObject.allFields(), tableName);
         assertEquals(obj2.id, 2);
+    }
+
+    @Test
+    public void testFTS3Object() {
+        doTestSQLs(new String[]{
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts3(tokenize = wcdb_one_or_binary need_symbol, id INTEGER, content TEXT, notindexed=id)"
+        }, new TestOperation() {
+            @Override
+            public void execute() throws WCDBException {
+                database.addTokenizer(BuiltinTokenizer.OneOrBinary);
+                database.createVirtualTable(tableName, DBFTS3TestObject.INSTANCE);
+            }
+        });
+    }
+
+    @Test
+    public void testFTS5Object() {
+        doTestSQLs(new String[]{
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', id UNINDEXED, content)"
+        }, new TestOperation() {
+            @Override
+            public void execute() throws WCDBException {
+                database.addTokenizer(BuiltinTokenizer.Verbatim);
+                database.createVirtualTable(tableName, DBFTS5TestObject.INSTANCE);
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/3/30.
+// Created by chenqiuwen on 2023/11/3.
 //
 
 /*
@@ -20,21 +20,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.tencent.wcdb;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Inherited
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE)
-public @interface WCDBTableCoding {
-    MultiIndexes[] multiIndexes() default {};
-    MultiPrimary[] multiPrimaries() default {};
-    MultiUnique[] multiUnique() default {};
-    boolean isWithoutRowId() default false;
-    FTSModule ftsModule() default @FTSModule();
+public enum FTSVersion {
+    NONE, FTS3, FTS4, FTS5
 }

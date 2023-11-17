@@ -33,6 +33,8 @@ void WCDBStatementCreateVirtualTableConfigTable(CPPStatementCreateVirtualTable c
                                                 const char* _Nullable name);
 void WCDBStatementCreateVirtualTableConfigSchema(CPPStatementCreateVirtualTable createTable,
                                                  CPPSchema schema);
+void WCDBStatementCreateVirtualTableConfigSchema2(CPPStatementCreateVirtualTable createTable,
+                                                  CPPCommonValue schema);
 void WCDBStatementCreateVirtualTableConfigIfNotExist(CPPStatementCreateVirtualTable createTable);
 void WCDBStatementCreateVirtualTableConfigModule(CPPStatementCreateVirtualTable createTable,
                                                  const char* _Nullable module);

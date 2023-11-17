@@ -24,17 +24,18 @@
 package com.tencent.wcdb.compiler;
 
 import com.tencent.wcdb.compiler.resolvedInfo.ColumnInfo;
+import com.tencent.wcdb.compiler.resolvedInfo.FTSModuleInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiIndexesInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiPrimaryInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiUniqueInfo;
-import com.tencent.wcdb.compiler.resolvedInfo.TableConstraintInfo;
+import com.tencent.wcdb.compiler.resolvedInfo.TableConfigInfo;
 
 import java.util.List;
 public class JavaCodeGenerator {
     public String packageName;
     public String className;
     public String ormClassName;
-    public TableConstraintInfo tableConstraintInfo;
+    public TableConfigInfo tableConstraintInfo;
     public List<ColumnInfo> allColumnInfo;
 
     private StringBuilder builder;
@@ -138,6 +139,10 @@ public class JavaCodeGenerator {
                 builder.append(constraintPrefix).append(".notNull()").append(");\n");
             }
 
+            if(columnInfo.isNotIndexed()) {
+                builder.append(constraintPrefix).append(".unIndex()").append(");\n");
+            }
+
             builder.append(TAB + TAB + "baseBinding.addColumnDef(").append(propertyName).append("Def);\n");
 
             if(columnInfo.getEnableAutoIncrementForExistingTable()) {
@@ -201,6 +206,20 @@ public class JavaCodeGenerator {
         if(tableConstraintInfo.isWithoutRowId()) {
             builder.append(TAB + TAB + "baseBinding.configWithoutRowId();\n");
         }
+
+        FTSModuleInfo ftsModuleInfo = tableConstraintInfo.getFtsModule();
+        if(ftsModuleInfo == null || ftsModuleInfo.getFtsVersion().isEmpty()) {
+            return;
+        }
+
+        builder.append(TAB + TAB + "baseBinding.configVirtualModule(\"").append(ftsModuleInfo.getFtsVersion()).append("\");\n");
+
+        StringBuilder tokenizer = new StringBuilder("tokenize = ");
+        tokenizer.append(ftsModuleInfo.getTokenizer());
+        for(String para : ftsModuleInfo.getTokenizerParameters()) {
+            tokenizer.append(" ").append(para);
+        }
+        builder.append(TAB + TAB + "baseBinding.configVirtualModuleArgument(\"").append(tokenizer).append("\");\n");
     }
 
     private void generateBindingType() {
