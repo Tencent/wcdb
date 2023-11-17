@@ -33,6 +33,10 @@ WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPSTDOptionalAllTypesObject)
 
 WCDB_CPP_SYNTHESIZE(type)
 
+WCDB_CPP_SYNTHESIZE(enumValue)
+WCDB_CPP_SYNTHESIZE(enumClassValue)
+WCDB_CPP_SYNTHESIZE(literalEnumValue)
+
 WCDB_CPP_SYNTHESIZE(trueOrFalseValue)
 
 WCDB_CPP_SYNTHESIZE(charValue)
@@ -65,6 +69,11 @@ CPPSTDOptionalAllTypesObject CPPSTDOptionalAllTypesObject::maxObject()
 {
     CPPSTDOptionalAllTypesObject object;
     object.type = "max";
+
+    object.enumValue = std::make_optional<EnumType>(EnumType::Max);
+    object.enumClassValue = std::make_optional<EnumClassType>(EnumClassType::Max);
+    object.literalEnumValue = std::make_optional<LiteralEnum>(LiteralEnum::EnumMax);
+
 #define ASSIGN_WITH_TYPED_MAX_VALUE(field, type) \
     object.field = std::make_optional<typename type::value_type>(std::numeric_limits<typename type::value_type>::max())
 #define ASSIGN_WITH_MAX_VALUE(field) \
@@ -93,6 +102,10 @@ CPPSTDOptionalAllTypesObject CPPSTDOptionalAllTypesObject::minObject()
 {
     CPPSTDOptionalAllTypesObject object;
     object.type = "min";
+
+    object.enumValue = std::make_optional<EnumType>(EnumType::Min);
+    object.enumClassValue = std::make_optional<EnumClassType>(EnumClassType::Min);
+    object.literalEnumValue = std::make_optional<LiteralEnum>(LiteralEnum::EnumMin);
 
 #define ASSIGN_WITH_TYPED_MIN_VALUE(field, type) \
     object.field = std::make_optional<typename type::value_type>(std::numeric_limits<typename type::value_type>::min())
@@ -128,6 +141,10 @@ CPPSTDOptionalAllTypesObject CPPSTDOptionalAllTypesObject::randomObject()
 {
     CPPSTDOptionalAllTypesObject object;
     object.type = "random";
+
+    object.enumValue = std::make_optional<EnumType>(EnumType::Zero);
+    object.enumClassValue = std::make_optional<EnumClassType>(EnumClassType::Zero);
+    object.literalEnumValue = std::make_optional<LiteralEnum>(LiteralEnum::EnumZero);
 
     Random* random = [Random shared];
 
@@ -169,7 +186,10 @@ CPPSTDOptionalAllTypesObject CPPSTDOptionalAllTypesObject::randomObject()
 
 bool CPPSTDOptionalAllTypesObject::operator==(const CPPSTDOptionalAllTypesObject& other)
 {
-    bool equal = trueOrFalseValue == other.trueOrFalseValue
+    bool equal = enumValue == other.enumValue
+                 && enumClassValue == other.enumClassValue
+                 && literalEnumValue == other.literalEnumValue
+                 && trueOrFalseValue == other.trueOrFalseValue
                  && charValue == other.charValue
                  && unsignedCharValue == other.unsignedCharValue
                  && shortValue == other.shortValue
@@ -210,6 +230,9 @@ bool CPPSTDOptionalAllTypesObject::operator==(const CPPSTDOptionalAllTypesObject
 void CPPSTDOptionalAllTypesObject::copyFrom(const CPPSTDOptionalAllTypesObject& other)
 {
     type = other.type;
+    enumValue = other.enumValue;
+    enumClassValue = other.enumClassValue;
+    literalEnumValue = other.literalEnumValue;
     trueOrFalseValue = other.trueOrFalseValue;
     charValue = other.charValue;
     unsignedCharValue = other.unsignedCharValue;

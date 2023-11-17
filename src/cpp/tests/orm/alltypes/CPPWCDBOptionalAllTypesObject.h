@@ -22,17 +22,16 @@
  * limitations under the License.
  */
 
-#if TEST_WCDB_OBJC
-#import <WCDBOBjc/WCDBCpp.h>
-#elif TEST_WCDB_CPP
-#import <WCDBCpp/WCDBCpp.h>
-#else
-#import <WCDB/WCDBCpp.h>
-#endif
+#include "CPPAllTypesObject.h"
 
 class CPPWCDBOptionalAllTypesObject {
 public:
     WCDB::StringView type;
+
+    // Enum
+    WCDB::Optional<EnumType> enumValue;
+    WCDB::Optional<EnumClassType> enumClassValue;
+    WCDB::Optional<LiteralEnum> literalEnumValue;
 
     // Bool
     WCDB::Optional<bool> trueOrFalseValue;

@@ -83,7 +83,8 @@ class RuntimeAccessor<
 ORMType,
 FieldType,
 typename std::enable_if<IsSTDSharedPtr<FieldType>::value && !ColumnIsBLOBType<typename FieldType::element_type>::value
-                        && !ColumnIsTextType<typename FieldType::element_type>::value>::type>
+                        && !ColumnIsTextType<typename FieldType::element_type>::value
+                        && !std::is_enum<typename FieldType::element_type>::value>::type>
 final : public RuntimeNullAccessor<ORMType, FieldType> {
 private:
     using Super = RuntimeNullAccessor<ORMType, FieldType>;
@@ -100,6 +101,33 @@ public:
     {
         instance.*Super::m_memberPointer
         = std::make_shared<typename FieldType::element_type>(value);
+    }
+};
+
+template<class ORMType, typename FieldType>
+class RuntimeAccessor<
+ORMType,
+FieldType,
+typename std::enable_if<IsSTDSharedPtr<FieldType>::value && !ColumnIsBLOBType<typename FieldType::element_type>::value
+                        && !ColumnIsTextType<typename FieldType::element_type>::value
+                        && std::is_enum<typename FieldType::element_type>::value>::type>
+final : public RuntimeNullAccessor<ORMType, FieldType> {
+private:
+    using Super = RuntimeNullAccessor<ORMType, FieldType>;
+    using UnderlyingType = typename Super::UnderlyingType;
+
+public:
+    RuntimeAccessor(FieldType ORMType::*memberPointer)
+    : RuntimeNullAccessor<ORMType, FieldType>(memberPointer)
+    {
+    }
+    ~RuntimeAccessor() override final = default;
+
+    void setValue(ORMType &instance, const UnderlyingType &value) const override final
+    {
+        instance.*Super::m_memberPointer
+        = std::make_shared<typename FieldType::element_type>(
+        (typename FieldType::element_type) value);
     }
 };
 

@@ -31,6 +31,10 @@ WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(CPPWCDBOptionalAllTypesObject)
 
 WCDB_CPP_SYNTHESIZE(type)
 
+WCDB_CPP_SYNTHESIZE(enumValue)
+WCDB_CPP_SYNTHESIZE(enumClassValue)
+WCDB_CPP_SYNTHESIZE(literalEnumValue)
+
 WCDB_CPP_SYNTHESIZE(trueOrFalseValue)
 
 WCDB_CPP_SYNTHESIZE(charValue)
@@ -63,6 +67,11 @@ CPPWCDBOptionalAllTypesObject CPPWCDBOptionalAllTypesObject::maxObject()
 {
     CPPWCDBOptionalAllTypesObject object;
     object.type = "max";
+
+    object.enumValue = EnumType::Max;
+    object.enumClassValue = EnumClassType::Max;
+    object.literalEnumValue = LiteralEnum::EnumMax;
+
 #define ASSIGN_WITH_TYPED_MAX_VALUE(field, type) \
     object.field = WCDB::Optional<typename type::ValueType>(std::numeric_limits<typename type::ValueType>::max())
 #define ASSIGN_WITH_MAX_VALUE(field) \
@@ -91,6 +100,10 @@ CPPWCDBOptionalAllTypesObject CPPWCDBOptionalAllTypesObject::minObject()
 {
     CPPWCDBOptionalAllTypesObject object;
     object.type = "min";
+
+    object.enumValue = EnumType::Min;
+    object.enumClassValue = EnumClassType::Min;
+    object.literalEnumValue = LiteralEnum::EnumMin;
 
 #define ASSIGN_WITH_TYPED_MIN_VALUE(field, type) \
     object.field = WCDB::Optional<typename type::ValueType>(std::numeric_limits<typename type::ValueType>::min())
@@ -126,6 +139,10 @@ CPPWCDBOptionalAllTypesObject CPPWCDBOptionalAllTypesObject::randomObject()
 {
     CPPWCDBOptionalAllTypesObject object;
     object.type = "random";
+
+    object.enumValue = EnumType::Zero;
+    object.enumClassValue = EnumClassType::Zero;
+    object.literalEnumValue = LiteralEnum::EnumZero;
 
     Random* random = [Random shared];
 
@@ -167,7 +184,10 @@ CPPWCDBOptionalAllTypesObject CPPWCDBOptionalAllTypesObject::randomObject()
 
 bool CPPWCDBOptionalAllTypesObject::operator==(const CPPWCDBOptionalAllTypesObject& other)
 {
-    bool equal = trueOrFalseValue == other.trueOrFalseValue
+    bool equal = enumValue == other.enumValue
+                 && enumClassValue == other.enumClassValue
+                 && literalEnumValue == other.literalEnumValue
+                 && trueOrFalseValue == other.trueOrFalseValue
                  && charValue == other.charValue
                  && unsignedCharValue == other.unsignedCharValue
                  && shortValue == other.shortValue
@@ -208,6 +228,9 @@ bool CPPWCDBOptionalAllTypesObject::operator==(const CPPWCDBOptionalAllTypesObje
 void CPPWCDBOptionalAllTypesObject::copyFrom(const CPPWCDBOptionalAllTypesObject& other)
 {
     type = other.type;
+    enumValue = other.enumValue;
+    enumClassValue = other.enumClassValue;
+    literalEnumValue = other.literalEnumValue;
     trueOrFalseValue = other.trueOrFalseValue;
     charValue = other.charValue;
     unsignedCharValue = other.unsignedCharValue;

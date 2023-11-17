@@ -79,10 +79,12 @@ public:
 };
 
 template<class ORMType, typename FieldType>
-class RuntimeAccessor<ORMType,
-                      FieldType,
-                      typename std::enable_if<IsWCDBOptional<FieldType>::value && !ColumnIsBLOBType<typename FieldType::ValueType>::value
-                                              && !ColumnIsTextType<typename FieldType::ValueType>::value>::type>
+class RuntimeAccessor<
+ORMType,
+FieldType,
+typename std::enable_if<IsWCDBOptional<FieldType>::value && !ColumnIsBLOBType<typename FieldType::ValueType>::value
+                        && !ColumnIsTextType<typename FieldType::ValueType>::value
+                        && !std::is_enum<typename FieldType::ValueType>::value>::type>
 final : public RuntimeNullAccessor<ORMType, FieldType> {
 private:
     using Super = RuntimeNullAccessor<ORMType, FieldType>;
@@ -98,6 +100,32 @@ public:
     void setValue(ORMType &instance, const UnderlyingType &value) const override final
     {
         instance.*Super::m_memberPointer = Optional<typename FieldType::ValueType>(value);
+    }
+};
+
+template<class ORMType, typename FieldType>
+class RuntimeAccessor<
+ORMType,
+FieldType,
+typename std::enable_if<IsWCDBOptional<FieldType>::value && !ColumnIsBLOBType<typename FieldType::ValueType>::value
+                        && !ColumnIsTextType<typename FieldType::ValueType>::value
+                        && std::is_enum<typename FieldType::ValueType>::value>::type>
+final : public RuntimeNullAccessor<ORMType, FieldType> {
+private:
+    using Super = RuntimeNullAccessor<ORMType, FieldType>;
+    using UnderlyingType = typename Super::UnderlyingType;
+
+public:
+    RuntimeAccessor(FieldType ORMType::*memberPointer)
+    : RuntimeNullAccessor<ORMType, FieldType>(memberPointer)
+    {
+    }
+    ~RuntimeAccessor() override final = default;
+
+    void setValue(ORMType &instance, const UnderlyingType &value) const override final
+    {
+        instance.*Super::m_memberPointer
+        = Optional<typename FieldType::ValueType>((typename FieldType::ValueType) value);
     }
 };
 
