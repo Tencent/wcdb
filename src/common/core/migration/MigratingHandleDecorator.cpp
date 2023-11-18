@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/23
+// Created by qiuwenchen on 2023/11/15.
 //
 
 /*
@@ -22,30 +22,35 @@
  * limitations under the License.
  */
 
-#include "MigratingHandle.hpp"
-#include "Assertion.hpp"
-#include "MigrationInfo.hpp"
-#include "StringView.hpp"
+#include "MigratingHandleDecorator.hpp"
+#include "MigratingStatementDecorator.hpp"
 
 namespace WCDB {
 
-#pragma mark - Initialize
-MigratingHandle::MigratingHandle(Migration& migration)
-: InnerHandle(), Migration::Binder(migration), m_createdNewViewInTransaction(false)
+#pragma mark - Basic
+
+MigratingHandleDecorator::MigratingHandleDecorator(Migration& migration)
+: HandleDecorator(), Migration::Binder(migration), m_createdNewViewInTransaction(false)
 {
-    Super::returnStatement(m_mainStatement);
-    m_mainStatement = getStatement();
 }
 
-MigratingHandle::~MigratingHandle()
+MigratingHandleDecorator::~MigratingHandleDecorator() = default;
+
+void MigratingHandleDecorator::decorate(Decorative* handle)
 {
-    returnStatement(m_mainStatement);
-    m_mainStatement = nullptr;
+    Super::decorate(handle);
+    WCDBSwizzleDecorativeFunction(handle, MigratingHandleDecorator, getColumns);
+    WCDBSwizzleDecorativeFunction(handle, MigratingHandleDecorator, addColumn);
+    WCDBSwizzleDecorativeFunction(handle, MigratingHandleDecorator, commitTransaction);
+    WCDBSwizzleDecorativeFunction(handle, MigratingHandleDecorator, rollbackTransaction);
+    WCDBSwizzleDecorativeFunction(handle, MigratingHandleDecorator, getStatement);
+    WCDBSwizzleDecorativeFunction(handle, MigratingHandleDecorator, finalizeStatements);
 }
 
 #pragma mark - Meta
 
-Optional<const MigrationInfo*> MigratingHandle::getBindingInfo(const UnsafeStringView& table)
+Optional<const MigrationInfo*>
+MigratingHandleDecorator::getBindingInfo(const UnsafeStringView& table)
 {
     const MigrationInfo* boundInfo = getBoundInfo(table);
     if (boundInfo != nullptr) {
@@ -68,7 +73,7 @@ Optional<const MigrationInfo*> MigratingHandle::getBindingInfo(const UnsafeStrin
 }
 
 Optional<std::set<StringView>>
-MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
+MigratingHandleDecorator::getColumns(const Schema& schema, const UnsafeStringView& table)
 {
     auto ret = Super::getColumns(schema, table);
     if (!ret.succeed()) {
@@ -101,9 +106,9 @@ MigratingHandle::getColumns(const Schema& schema, const UnsafeStringView& table)
     return ret;
 }
 
-bool MigratingHandle::addColumn(const Schema& schema,
-                                const UnsafeStringView& table,
-                                const ColumnDef& column)
+bool MigratingHandleDecorator::addColumn(const Schema& schema,
+                                         const UnsafeStringView& table,
+                                         const ColumnDef& column)
 {
     if (!Super::addColumn(schema, table, column)) {
         return false;
@@ -125,7 +130,8 @@ bool MigratingHandle::addColumn(const Schema& schema,
     info.value()->getSchemaForSourceDatabase(), info.value()->getSourceTable(), column);
 }
 
-bool MigratingHandle::rebindUnionView(const UnsafeStringView& table, const Columns& columns)
+bool MigratingHandleDecorator::rebindUnionView(const UnsafeStringView& table,
+                                               const Columns& columns)
 {
     auto info = getBindingInfo(table);
     if (!info.succeed()) {
@@ -135,7 +141,7 @@ bool MigratingHandle::rebindUnionView(const UnsafeStringView& table, const Colum
         return true;
     }
 
-    return runTransactionIfNotInTransaction([&](InnerHandle* handle) {
+    return getHandle()->runTransactionIfNotInTransaction([&](InnerHandle* handle) {
         HandleStatement handleStatement = HandleStatement(handle);
         bool succeed = handleStatement.prepare(MigrationInfo::getStatementForDroppingUnionedView(
                        info.value()->getUnionedView()))
@@ -152,8 +158,8 @@ bool MigratingHandle::rebindUnionView(const UnsafeStringView& table, const Colum
     });
 }
 
-bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
-                                       const UnsafeStringView& sourceTable)
+bool MigratingHandleDecorator::checkSourceTable(const UnsafeStringView& table,
+                                                const UnsafeStringView& sourceTable)
 {
     auto info = getBindingInfo(table);
     if (!info.succeed()) {
@@ -165,11 +171,11 @@ bool MigratingHandle::checkSourceTable(const UnsafeStringView& table,
     return info.value()->getSourceTable().compare(sourceTable) == 0;
 }
 
-bool MigratingHandle::attachDatabase(const MigrationBaseInfo* attachInfo)
+bool MigratingHandleDecorator::attachDatabase(const MigrationBaseInfo* attachInfo)
 {
     const StatementAttach& attach = attachInfo->getStatementForAttachingSchema();
     const Data& cipher = attachInfo->getSourceCipher();
-    HandleStatement handleStatement(this);
+    HandleStatement handleStatement(getHandle());
     bool succeed = handleStatement.prepare(attach);
     if (succeed) {
         if (!cipher.empty()) {
@@ -180,18 +186,18 @@ bool MigratingHandle::attachDatabase(const MigrationBaseInfo* attachInfo)
     }
     if (succeed && attachInfo->needRawSourceCipher()) {
         attachInfo->setRawSourceCipher(
-        getRawCipherKey(attachInfo->getSchemaForSourceDatabase()));
+        getHandle()->getRawCipherKey(attachInfo->getSchemaForSourceDatabase()));
     }
     return succeed;
 }
 
 #pragma mark - Info Initializer
-bool MigratingHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
+bool MigratingHandleDecorator::attachSourceDatabase(const MigrationUserInfo& userInfo)
 {
     const Schema& schema = userInfo.getSchemaForSourceDatabase();
     if (!schema.syntax().isMain()) {
-        auto optionalAttacheds
-        = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+        auto optionalAttacheds = getHandle()->getValues(
+        MigrationInfo::getStatementForSelectingDatabaseList(), 1);
         if (!optionalAttacheds.succeed()) {
             return false;
         }
@@ -205,18 +211,18 @@ bool MigratingHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
     return true;
 }
 
-InnerHandle* MigratingHandle::getCurrentHandle()
+InnerHandle* MigratingHandleDecorator::getCurrentHandle()
 {
-    return this;
+    return getHandle();
 }
 
-const StringView& MigratingHandle::getDatabasePath() const
+const StringView& MigratingHandleDecorator::getDatabasePath() const
 {
-    return getPath();
+    return getHandle()->getPath();
 }
 
 #pragma mark - Binder
-bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& migratings)
+bool MigratingHandleDecorator::rebindViews(const StringViewMap<const MigrationInfo*>& migratings)
 {
     StringViewMap<const MigrationInfo*> views2MigratingInfos;
     for (const auto& iter : migratings) {
@@ -226,13 +232,13 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
     }
 
     // get existing unioned views
-    auto exists = tableExists(Schema::temp(), Syntax::masterTable);
+    auto exists = getHandle()->tableExists(Schema::temp(), Syntax::masterTable);
     if (!exists.succeed()) {
         return false;
     }
     if (exists.value()) {
-        auto existingViews
-        = getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
+        auto existingViews = getHandle()->getValues(
+        MigrationInfo::getStatementForSelectingUnionedView(), 0);
         if (!existingViews.succeed()) {
             return false;
         }
@@ -245,7 +251,7 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
                 views2MigratingInfos.erase(iter);
             } else {
                 // it is no longer needed
-                if (!executeStatement(
+                if (!getHandle()->executeStatement(
                     MigrationInfo::getStatementForDroppingUnionedView(existingView))) {
                     return false;
                 }
@@ -256,18 +262,18 @@ bool MigratingHandle::rebindViews(const StringViewMap<const MigrationInfo*>& mig
     bool hasNewView = false;
     // create all needed views
     for (const auto& iter : views2MigratingInfos) {
-        if (!executeStatement(iter.second->getStatementForCreatingUnionedView())) {
+        if (!getHandle()->executeStatement(iter.second->getStatementForCreatingUnionedView())) {
             return false;
         }
         hasNewView = true;
     }
-    if (hasNewView && isInTransaction()) {
+    if (hasNewView && getHandle()->isInTransaction()) {
         m_createdNewViewInTransaction = true;
     }
     return true;
 }
 
-bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& migratings)
+bool MigratingHandleDecorator::rebindSchemas(const StringViewMap<const MigrationInfo*>& migratings)
 {
     StringViewMap<const MigrationInfo*> schemas2MigratingInfos;
     for (const auto& iter : migratings) {
@@ -279,8 +285,8 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
         }
     }
 
-    auto existingSchemas
-    = getValues(MigrationInfo::getStatementForSelectingDatabaseList(), 1);
+    auto existingSchemas = getHandle()->getValues(
+    MigrationInfo::getStatementForSelectingDatabaseList(), 1);
     if (!existingSchemas.succeed()) {
         return false;
     }
@@ -292,9 +298,9 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
                 // it is already attached
                 schemas2MigratingInfos.erase(iter);
             } else {
-                if (!isInTransaction()) {
+                if (!getHandle()->isInTransaction()) {
                     // it is not longer needed
-                    if (!executeStatement(
+                    if (!getHandle()->executeStatement(
                         MigrationInfo::getStatementForDetachingSchema(existingSchema))) {
                         return false;
                     }
@@ -316,16 +322,16 @@ bool MigratingHandle::rebindSchemas(const StringViewMap<const MigrationInfo*>& m
     return true;
 }
 
-bool MigratingHandle::commitTransaction()
+bool MigratingHandleDecorator::commitTransaction()
 {
     bool ret = Super::commitTransaction();
-    if (ret && !isInTransaction()) {
+    if (ret && !getHandle()->isInTransaction()) {
         m_createdNewViewInTransaction = false;
     }
     return ret;
 }
 
-void MigratingHandle::rollbackTransaction()
+void MigratingHandleDecorator::rollbackTransaction()
 {
     Super::rollbackTransaction();
     if (m_createdNewViewInTransaction) {
@@ -334,86 +340,43 @@ void MigratingHandle::rollbackTransaction()
     }
 }
 
-bool MigratingHandle::bindInfos(const StringViewMap<const MigrationInfo*>& migratings)
+bool MigratingHandleDecorator::bindInfos(const StringViewMap<const MigrationInfo*>& migratings)
 {
     return rebindViews(migratings) && rebindSchemas(migratings);
 }
 
-bool MigratingHandle::trySynchronousTransactionAfterAttached()
+bool MigratingHandleDecorator::trySynchronousTransactionAfterAttached()
 {
     bool succeed = true;
-    if (isInTransaction()) {
-        markErrorAsIgnorable(Error::Code::Error);
+    if (getHandle()->isInTransaction()) {
+        getHandle()->markErrorAsIgnorable(Error::Code::Error);
         static const StatementBegin* s_synchronousTransaction
         = new StatementBegin(StatementBegin().beginImmediate());
-        succeed = executeStatement(*s_synchronousTransaction);
+        succeed = getHandle()->executeStatement(*s_synchronousTransaction);
         WCTAssert(!succeed);
-        if (!succeed && getError().isIgnorable()) {
+        if (!succeed && getHandle()->getError().isIgnorable()) {
             succeed = true;
         }
-        markErrorAsUnignorable();
+        getHandle()->markErrorAsUnignorable();
     }
     return succeed;
 }
 
 #pragma mark - Statement
-void MigratingHandle::finalize()
+DecorativeHandleStatement* MigratingHandleDecorator::getStatement()
 {
-    Super::finalize();
-    for (auto iter = m_migratingHandleStatements.begin();
-         iter != m_migratingHandleStatements.end();
-         ++iter) {
-        if (iter->isPrepared()) {
-            return;
-        }
+    DecorativeHandleStatement* statement = Super::getStatement();
+    if (!statement->containDecorator(DecoratorMigratingHandleStatement)) {
+        statement->tryAddDecorator<MigratingStatementDecorator>(
+        DecoratorMigratingHandleStatement, this);
     }
+    return statement;
+}
+
+void MigratingHandleDecorator::finalizeStatements()
+{
+    Super::finalizeStatements();
     stopReferenced();
-}
-
-HandleStatement* MigratingHandle::getStatement()
-{
-    m_migratingHandleStatements.push_back(MigratingHandleStatement(this));
-    m_migratingHandleStatements.back().enableAutoAddColumn();
-    return &m_migratingHandleStatements.back();
-}
-
-void MigratingHandle::returnStatement(HandleStatement* handleStatement)
-{
-    if (handleStatement != nullptr) {
-        for (auto iter = m_migratingHandleStatements.begin();
-             iter != m_migratingHandleStatements.end();
-             ++iter) {
-            if (&(*iter) == handleStatement) {
-                m_migratingHandleStatements.erase(iter);
-                return;
-            }
-        }
-        WCTAssert(false);
-    }
-}
-
-void MigratingHandle::finalizeStatements()
-{
-    for (auto& handleStatement : m_migratingHandleStatements) {
-        handleStatement.finalize();
-    }
-    stopReferenced();
-}
-
-void MigratingHandle::returnAllPreparedStatement()
-{
-    Super::returnAllPreparedStatement();
-    if (!m_mainStatement->isPrepared()) {
-        stopReferenced();
-    }
-}
-
-void MigratingHandle::resetAllStatements()
-{
-    for (auto& handleStatement : m_migratingHandleStatements) {
-        if (!handleStatement.isPrepared()) continue;
-        handleStatement.reset();
-    }
 }
 
 } //namespace WCDB

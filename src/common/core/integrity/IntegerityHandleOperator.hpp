@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/06/06
+// Created by qiuwenchen on 2023/11/17.
 //
 
 /*
@@ -22,23 +22,14 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "BackupRelatedHandle.hpp"
-#include "CoreConst.h"
+#include "HandleOperator.hpp"
 
 namespace WCDB {
 
-class OperationHandle final : public Repair::BackupRelatedHandle {
+class IntegerityHandleOperator : public HandleOperator {
 public:
-    OperationHandle();
-    ~OperationHandle() override final;
-
-protected:
-    void doSuspend(bool suspend) override final;
-
-#pragma mark - Integrity
-public:
+    IntegerityHandleOperator(InnerHandle* handle);
+    ~IntegerityHandleOperator();
     void checkIntegrity();
 
 protected:
@@ -46,4 +37,4 @@ protected:
     StatementSelect m_statementForGetFTSTable;
 };
 
-} // namespace WCDB
+} //namespace WCDB

@@ -77,6 +77,7 @@ protected:
     Tag m_tag;
 
     void didDrain() override final;
+    bool checkShouldInterruptWhenClosing(const UnsafeStringView &sourceType);
 
 #pragma mark - Handle
 public:

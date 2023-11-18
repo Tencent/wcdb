@@ -73,8 +73,7 @@ WCDBLiteralStringImplement(ErrorSourceAssertion)
 WCDBLiteralStringImplement(ErrorSourceNative) WCDBLiteralStringImplement(ErrorSourceSwift)
 
 WCDBLiteralStringImplement(ErrorTypeMigrate) WCDBLiteralStringImplement(ErrorTypeCheckpoint)
-WCDBLiteralStringImplement(ErrorTypeIntegrity)
-WCDBLiteralStringImplement(ErrorTypeBackup) WCDBLiteralStringImplement(ErrorTypeAssemble)
+WCDBLiteralStringImplement(ErrorTypeIntegrity) WCDBLiteralStringImplement(ErrorTypeBackup)
 WCDBLiteralStringImplement(ErrorTypeMergeIndex)
 
 WCDBLiteralStringImplement(MonitorInfoKeyHandleCount)
@@ -85,4 +84,11 @@ WCDBLiteralStringImplement(MonitorInfoKeyTableCount)
 WCDBLiteralStringImplement(MonitorInfoKeyIndexCount)
 WCDBLiteralStringImplement(MonitorInfoKeyTriggerCount)
 
-};
+WCDBLiteralStringImplement(DecoratorMigratingHandleStatement);
+WCDBLiteralStringImplement(DecoratorMigratingHandle);
+
+WCDBLiteralStringImplement(OperatorMigrate);
+WCDBLiteralStringImplement(OperatorBackup);
+WCDBLiteralStringImplement(OperatorCheckIntegrity);
+
+}; // namespace WCDB

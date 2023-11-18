@@ -29,7 +29,6 @@
 #include "FileManager.hpp"
 #include "InnerHandle.hpp"
 #include "Notifier.hpp"
-#include "OperationHandle.hpp"
 #include "StringView.hpp"
 
 namespace WCDB {

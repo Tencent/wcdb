@@ -131,12 +131,10 @@
 		037C394E2897E33600328EC8 /* JoinConstraint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB94217DFADC006E9E73 /* JoinConstraint.cpp */; };
 		037C39522897E33600328EC8 /* AutoMigrateConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23301BF32298FE9A00A8AB5A /* AutoMigrateConfig.cpp */; };
 		037C39532897E33600328EC8 /* TableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBAC217DFADC006E9E73 /* TableOrSubquery.cpp */; };
-		037C39542897E33600328EC8 /* AssembleHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssembleHandle.cpp */; };
 		037C39552897E33600328EC8 /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		037C39562897E33600328EC8 /* SyntaxBeginSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC37217DFADC006E9E73 /* SyntaxBeginSTMT.cpp */; };
 		037C39572897E33600328EC8 /* SyntaxCommonTableExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBFC217DFADC006E9E73 /* SyntaxCommonTableExpression.cpp */; };
 		037C39592897E33600328EC8 /* StatementDropTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBD3217DFADC006E9E73 /* StatementDropTable.cpp */; };
-		037C395B2897E33600328EC8 /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
 		037C395C2897E33600328EC8 /* SyntaxExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC00217DFADC006E9E73 /* SyntaxExpression.cpp */; };
 		037C395D2897E33600328EC8 /* StatementCreateVirtualTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBCB217DFADC006E9E73 /* StatementCreateVirtualTable.cpp */; };
 		037C395E2897E33600328EC8 /* SyntaxCommonConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */; };
@@ -190,7 +188,6 @@
 		037C39CC2897E33600328EC8 /* SyntaxAlterTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC31217DFADC006E9E73 /* SyntaxAlterTableSTMT.cpp */; };
 		037C39CD2897E33600328EC8 /* SyntaxCreateVirtualTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC43217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.cpp */; };
 		037C39CE2897E33600328EC8 /* SyntaxAttachSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC35217DFADC006E9E73 /* SyntaxAttachSTMT.cpp */; };
-		037C39CF2897E33600328EC8 /* MigratingHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigratingHandle.cpp */; };
 		037C39D02897E33600328EC8 /* SyntaxJoinClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC0E217DFADC006E9E73 /* SyntaxJoinClause.cpp */; };
 		037C39D32897E33600328EC8 /* SyntaxDropTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC4B217DFADC006E9E73 /* SyntaxDropTableSTMT.cpp */; };
 		037C39D52897E33600328EC8 /* SyntaxExplainSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3960D8992319258B00EF05D1 /* SyntaxExplainSTMT.cpp */; };
@@ -248,7 +245,6 @@
 		037C3A3A2897E33600328EC8 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Material.cpp */; };
 		037C3A3B2897E33600328EC8 /* ForeignKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB8A217DFADC006E9E73 /* ForeignKey.cpp */; };
 		037C3A3D2897E33600328EC8 /* Crawlable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5020AD666900E21AB0 /* Crawlable.cpp */; };
-		037C3A3E2897E33600328EC8 /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
 		037C3A402897E33600328EC8 /* AggregateFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB68217DFADC006E9E73 /* AggregateFunction.cpp */; };
 		037C3A412897E33600328EC8 /* SQLiteBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559820DD17B100031A93 /* SQLiteBase.cpp */; };
 		037C3A422897E33600328EC8 /* Join.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB92217DFADC006E9E73 /* Join.cpp */; };
@@ -277,7 +273,6 @@
 		037C3A772897E33600328EC8 /* Lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23F0FEB3215F5E9A008399FB /* Lock.cpp */; };
 		037C3A7A2897E33600328EC8 /* SyntaxSelectCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC24217DFADC006E9E73 /* SyntaxSelectCore.cpp */; };
 		037C3A7D2897E33600328EC8 /* StatementRelease.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBDF217DFADC006E9E73 /* StatementRelease.cpp */; };
-		037C3A7E2897E33600328EC8 /* MigrateHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A4703A21BE0940005B9C09 /* MigrateHandle.cpp */; };
 		037C3A812897E33600328EC8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		037C3A822897E33600328EC8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		037C3A832897E33600328EC8 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
@@ -305,7 +300,6 @@
 		037C3AA52897E33600328EC8 /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92D21057CA700707AFC /* Recyclable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3AA62897E33600328EC8 /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; };
 		037C3AA72897E33600328EC8 /* Cell.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4620AD666900E21AB0 /* Cell.hpp */; };
-		037C3AA82897E33600328EC8 /* MigrateHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A4703B21BE0940005B9C09 /* MigrateHandle.hpp */; };
 		037C3AA92897E33600328EC8 /* BasicConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */; };
 		037C3AAA2897E33600328EC8 /* StatementDropIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD2217DFADC006E9E73 /* StatementDropIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3AAB2897E33600328EC8 /* Pager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4A20AD666900E21AB0 /* Pager.hpp */; };
@@ -414,7 +408,6 @@
 		037C3B4C2897E33600328EC8 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		037C3B4D2897E33600328EC8 /* SyntaxAnalyzeSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC34217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3B4E2897E33600328EC8 /* SyntaxColumnConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBF9217DFADC006E9E73 /* SyntaxColumnConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3B512897E33600328EC8 /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
 		037C3B552897E33600328EC8 /* SyntaxReindexSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC56217DFADC006E9E73 /* SyntaxReindexSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3B562897E33600328EC8 /* SyntaxCommonTableExpression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBFD217DFADC006E9E73 /* SyntaxCommonTableExpression.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3B572897E33600328EC8 /* UpgradeableErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52F120DBAC4C00664B62 /* UpgradeableErrorProne.hpp */; };
@@ -456,11 +449,9 @@
 		037C3B9C2897E33600328EC8 /* SyntaxJoinClause.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC0F217DFADC006E9E73 /* SyntaxJoinClause.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3B9F2897E33600328EC8 /* CoreFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB70217DFADC006E9E73 /* CoreFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3BA32897E33600328EC8 /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
-		037C3BA52897E33600328EC8 /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
 		037C3BA72897E33600328EC8 /* Thread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 390E1C5B2296414C00C24598 /* Thread.hpp */; };
 		037C3BA92897E33600328EC8 /* FileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2308F84C20E32A51001CD9C3 /* FileHandle.hpp */; };
 		037C3BAA2897E33600328EC8 /* StatementDelete.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBCE217DFADC006E9E73 /* StatementDelete.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3BAB2897E33600328EC8 /* AssembleHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B098021BE50D2005AD534 /* AssembleHandle.hpp */; };
 		037C3BAC2897E33600328EC8 /* OperationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3934DAEA229B6659008A6AEC /* OperationQueue.hpp */; };
 		037C3BAE2897E33600328EC8 /* WindowDef.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBB1217DFADC006E9E73 /* WindowDef.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3BB32897E33600328EC8 /* SyntaxTableOrSubquery.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC29217DFADC006E9E73 /* SyntaxTableOrSubquery.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -513,7 +504,6 @@
 		037C3C022897E33600328EC8 /* FactoryBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C38C20C17CAE0001BFAE /* FactoryBackup.hpp */; };
 		037C3C042897E33600328EC8 /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
 		037C3C052897E33600328EC8 /* SyntaxRollbackSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5A217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3C062897E33600328EC8 /* MigratingHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */; };
 		0381A67B2817A36300E64463 /* SelectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03331021281681200094CFCF /* SelectTests.swift */; };
 		0393BEDC27F6ED860058B295 /* ErrorBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 0393BEDB27F6ED860058B295 /* ErrorBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0393BEE127F6EDAC0058B295 /* ErrorBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0393BEDF27F6EDAC0058B295 /* ErrorBridge.cpp */; };
@@ -818,8 +808,36 @@
 		0D1297C62A4D7AA1006052AE /* VideoInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297C52A4D7AA1006052AE /* VideoInfo.mm */; };
 		0D1297C92A4D7AE9006052AE /* AppAttach.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297C82A4D7AE9006052AE /* AppAttach.mm */; };
 		0D1297CB2A4D81CB006052AE /* AndroidDBTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D1297CA2A4D81CB006052AE /* AndroidDBTest.mm */; };
+		0D19BA0B2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA092B0702250028F92B /* AssembleHandleOperator.cpp */; };
+		0D19BA0C2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA092B0702250028F92B /* AssembleHandleOperator.cpp */; };
+		0D19BA0D2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA092B0702250028F92B /* AssembleHandleOperator.cpp */; };
+		0D19BA0E2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA092B0702250028F92B /* AssembleHandleOperator.cpp */; };
+		0D19BA0F2B0702250028F92B /* AssembleHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA0A2B0702250028F92B /* AssembleHandleOperator.hpp */; };
+		0D19BA102B0702250028F92B /* AssembleHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA0A2B0702250028F92B /* AssembleHandleOperator.hpp */; };
+		0D19BA112B0702250028F92B /* AssembleHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA0A2B0702250028F92B /* AssembleHandleOperator.hpp */; };
+		0D19BA122B0702250028F92B /* AssembleHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA0A2B0702250028F92B /* AssembleHandleOperator.hpp */; };
+		0D19BA1F2B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA1D2B07481B0028F92B /* IntegerityHandleOperator.cpp */; };
+		0D19BA202B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA1D2B07481B0028F92B /* IntegerityHandleOperator.cpp */; };
+		0D19BA212B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA1D2B07481B0028F92B /* IntegerityHandleOperator.cpp */; };
+		0D19BA222B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D19BA1D2B07481B0028F92B /* IntegerityHandleOperator.cpp */; };
+		0D19BA232B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
+		0D19BA242B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
+		0D19BA252B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
+		0D19BA262B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
+		0D32815F2B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
+		0D3281602B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
+		0D3281612B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
+		0D3281622B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
+		0D3281632B04A8E60027B973 /* DecorativeHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */; };
+		0D3281642B04A8E60027B973 /* DecorativeHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */; };
+		0D3281652B04A8E60027B973 /* DecorativeHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */; };
+		0D3281662B04A8E60027B973 /* DecorativeHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */; };
+		0D3281682B04AC7A0027B973 /* FunctionContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */; };
+		0D3281692B04AC7A0027B973 /* FunctionContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */; };
+		0D32816A2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */; };
+		0D32816B2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */; };
 		0D36C0F72AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; };
 		0D36C0F82AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; };
 		0D36C0FB2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */; };
@@ -865,6 +883,14 @@
 		0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
 		0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
 		0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
+		0DD8D1172B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
+		0DD8D1182B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
+		0DD8D1192B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
+		0DD8D11A2B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
+		0DD8D11B2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */; };
+		0DD8D11C2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */; };
+		0DD8D11D2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */; };
+		0DD8D11E2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */; };
 		0DE08A2029CBE79C009A7CA3 /* CrossPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DE08A1B29CBE79C009A7CA3 /* CrossPlatform.h */; };
 		0DE08A2429CBE79C009A7CA3 /* CrossPlatform.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */; };
 		0DE08A2629CBE79C009A7CA3 /* WCTOperationQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE08A1E29CBE79C009A7CA3 /* WCTOperationQueue.cpp */; };
@@ -875,6 +901,18 @@
 		0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */; };
 		0DE68B412AB466F1008BD74C /* WithoutRowidRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */; };
 		0DE84ACA2B030F5B00522A4E /* ZSTDBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */; };
+		0DE84AD22B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
+		0DE84AD32B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
+		0DE84AD42B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
+		0DE84AD52B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
+		0DE84C7D2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84C7B2B03886800522A4E /* DecorativeHandleStatement.cpp */; };
+		0DE84C7E2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84C7B2B03886800522A4E /* DecorativeHandleStatement.cpp */; };
+		0DE84C7F2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84C7B2B03886800522A4E /* DecorativeHandleStatement.cpp */; };
+		0DE84C802B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84C7B2B03886800522A4E /* DecorativeHandleStatement.cpp */; };
+		0DE84C812B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84C7C2B03886800522A4E /* DecorativeHandleStatement.hpp */; };
+		0DE84C822B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84C7C2B03886800522A4E /* DecorativeHandleStatement.hpp */; };
+		0DE84C832B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84C7C2B03886800522A4E /* DecorativeHandleStatement.hpp */; };
+		0DE84C842B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84C7C2B03886800522A4E /* DecorativeHandleStatement.hpp */; };
 		0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		0DF1089729C05559004ED764 /* StatementSelectInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1089529C05559004ED764 /* StatementSelectInterface.swift */; };
 		2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2304B42622156CD700901953 /* TokenizerModule.cpp */; };
@@ -913,8 +951,6 @@
 		233A25D3219933DB00054EC4 /* WCTBuiltin.h in Headers */ = {isa = PBXBuildFile; fileRef = 233A25D2219933D800054EC4 /* WCTBuiltin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233A8530215E7CFE00BB8D4F /* Console.cpp */; };
 		233A8534215E7CFE00BB8D4F /* Console.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233A8531215E7CFE00BB8D4F /* Console.hpp */; };
-		233B098121BE50D2005AD534 /* AssembleHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssembleHandle.cpp */; };
-		233B098221BE50D2005AD534 /* AssembleHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B098021BE50D2005AD534 /* AssembleHandle.hpp */; };
 		23408F0F211897AA0071E5A7 /* Shm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23408F0D211897AA0071E5A7 /* Shm.cpp */; };
 		23408F11211897AA0071E5A7 /* Shm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23408F0E211897AA0071E5A7 /* Shm.hpp */; };
 		234591F6204433E200DC7D34 /* Core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 234591F5204432E400DC7D34 /* Core.hpp */; };
@@ -1209,12 +1245,8 @@
 		2396EB0E21801BD60079066C /* WCTResultColumn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2396EB0C21801BD60079066C /* WCTResultColumn.mm */; };
 		239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 239776CE202AF2E2000A681C /* TimedQueue.hpp */; };
 		239776FE202AF2E3000A681C /* Macro.h in Headers */ = {isa = PBXBuildFile; fileRef = 239776D0202AF2E2000A681C /* Macro.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		23A09D7D2146204400F62EE8 /* MigratingHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigratingHandle.cpp */; };
-		23A09D7F2146204400F62EE8 /* MigratingHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */; };
 		23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23A3CFB6205FB1A800692F94 /* WCTHandle+Convenient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */; };
-		23A4703C21BE0940005B9C09 /* MigrateHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A4703A21BE0940005B9C09 /* MigrateHandle.cpp */; };
-		23A4703D21BE0940005B9C09 /* MigrateHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A4703B21BE0940005B9C09 /* MigrateHandle.hpp */; };
 		23A64D09214A458A00ED28BB /* MigrationInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D07214A458A00ED28BB /* MigrationInfo.cpp */; };
 		23A64D0B214A458A00ED28BB /* MigrationInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A64D08214A458A00ED28BB /* MigrationInfo.hpp */; };
 		23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A64D0D214A4A7000ED28BB /* Migration.cpp */; };
@@ -1605,8 +1637,6 @@
 		39B524DE2304F9A2001DF52D /* InnerHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39B524DC2304F9A2001DF52D /* InnerHandle.cpp */; };
 		39C70CC72313E20F002D773C /* Assemble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39C70CC52313E20E002D773C /* Assemble.cpp */; };
 		39C70CC82313E20F002D773C /* Assemble.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39C70CC62313E20F002D773C /* Assemble.hpp */; };
-		39D3C74822A8B8C600C93DC0 /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
-		39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
 		750080D92920DCFF009C0F38 /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
 		750080DA2920DD1B009C0F38 /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		750080E22920E4A1009C0F38 /* WCTFTSTokenizerUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */; };
@@ -1708,12 +1738,10 @@
 		7521D745291E9ABB009642EF /* WCTRuntimeObjCAccessor.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2349F6821EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.mm */; };
 		7521D747291E9ABB009642EF /* AutoMigrateConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23301BF32298FE9A00A8AB5A /* AutoMigrateConfig.cpp */; };
 		7521D748291E9ABB009642EF /* TableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBAC217DFADC006E9E73 /* TableOrSubquery.cpp */; };
-		7521D749291E9ABB009642EF /* AssembleHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssembleHandle.cpp */; };
 		7521D74A291E9ABB009642EF /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		7521D74B291E9ABB009642EF /* SyntaxBeginSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC37217DFADC006E9E73 /* SyntaxBeginSTMT.cpp */; };
 		7521D74C291E9ABB009642EF /* SyntaxCommonTableExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBFC217DFADC006E9E73 /* SyntaxCommonTableExpression.cpp */; };
 		7521D74E291E9ABB009642EF /* StatementDropTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBD3217DFADC006E9E73 /* StatementDropTable.cpp */; };
-		7521D750291E9ABB009642EF /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
 		7521D751291E9ABB009642EF /* SyntaxExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC00217DFADC006E9E73 /* SyntaxExpression.cpp */; };
 		7521D752291E9ABB009642EF /* StatementCreateVirtualTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBCB217DFADC006E9E73 /* StatementCreateVirtualTable.cpp */; };
 		7521D753291E9ABB009642EF /* SyntaxCommonConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */; };
@@ -1787,7 +1815,6 @@
 		7521D7CC291E9ABB009642EF /* SyntaxAlterTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC31217DFADC006E9E73 /* SyntaxAlterTableSTMT.cpp */; };
 		7521D7CD291E9ABB009642EF /* SyntaxCreateVirtualTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC43217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.cpp */; };
 		7521D7CE291E9ABB009642EF /* SyntaxAttachSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC35217DFADC006E9E73 /* SyntaxAttachSTMT.cpp */; };
-		7521D7CF291E9ABB009642EF /* MigratingHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigratingHandle.cpp */; };
 		7521D7D0291E9ABB009642EF /* SyntaxJoinClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC0E217DFADC006E9E73 /* SyntaxJoinClause.cpp */; };
 		7521D7D1291E9ABB009642EF /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		7521D7D2291E9ABB009642EF /* SyntaxDropTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC4B217DFADC006E9E73 /* SyntaxDropTableSTMT.cpp */; };
@@ -1862,7 +1889,6 @@
 		7521D83F291E9ABB009642EF /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Material.cpp */; };
 		7521D840291E9ABB009642EF /* ForeignKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB8A217DFADC006E9E73 /* ForeignKey.cpp */; };
 		7521D841291E9ABB009642EF /* Crawlable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5020AD666900E21AB0 /* Crawlable.cpp */; };
-		7521D842291E9ABB009642EF /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
 		7521D843291E9ABB009642EF /* AggregateFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB68217DFADC006E9E73 /* AggregateFunction.cpp */; };
 		7521D845291E9ABB009642EF /* SQLiteBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559820DD17B100031A93 /* SQLiteBase.cpp */; };
 		7521D846291E9ABB009642EF /* Join.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB92217DFADC006E9E73 /* Join.cpp */; };
@@ -1902,7 +1928,6 @@
 		7521D885291E9ABB009642EF /* SyntaxSelectCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC24217DFADC006E9E73 /* SyntaxSelectCore.cpp */; };
 		7521D888291E9ABB009642EF /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E5CC6C28A3BDF3005353D9 /* Value.cpp */; };
 		7521D889291E9ABB009642EF /* StatementRelease.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBDF217DFADC006E9E73 /* StatementRelease.cpp */; };
-		7521D88B291E9ABB009642EF /* MigrateHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A4703A21BE0940005B9C09 /* MigrateHandle.cpp */; };
 		7521D88E291E9ABB009642EF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		7521D88F291E9ABB009642EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
 		7521D890291E9ABB009642EF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 23C43BCC2087435800AB186D /* libz.tbd */; };
@@ -1936,7 +1961,6 @@
 		7521D8B3291E9ABB009642EF /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92D21057CA700707AFC /* Recyclable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8B4291E9ABB009642EF /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; };
 		7521D8B5291E9ABB009642EF /* Cell.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4620AD666900E21AB0 /* Cell.hpp */; };
-		7521D8B6291E9ABB009642EF /* MigrateHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A4703B21BE0940005B9C09 /* MigrateHandle.hpp */; };
 		7521D8B7291E9ABB009642EF /* BasicConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */; };
 		7521D8B8291E9ABB009642EF /* StatementDropIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD2217DFADC006E9E73 /* StatementDropIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8B9291E9ABB009642EF /* Pager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4A20AD666900E21AB0 /* Pager.hpp */; };
@@ -2076,7 +2100,6 @@
 		7521D953291E9ABB009642EF /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		7521D954291E9ABB009642EF /* SyntaxAnalyzeSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC34217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D955291E9ABB009642EF /* SyntaxColumnConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBF9217DFADC006E9E73 /* SyntaxColumnConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521D957291E9ABB009642EF /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
 		7521D958291E9ABB009642EF /* WCTVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 23790A7E219315DE0098797F /* WCTVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D959291E9ABB009642EF /* WCTError+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2386B3C41ED442FE000B72F6 /* WCTError+Private.h */; };
 		7521D95A291E9ABB009642EF /* SyntaxReindexSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC56217DFADC006E9E73 /* SyntaxReindexSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2148,14 +2171,12 @@
 		7521D9E1291E9ABB009642EF /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		7521D9E2291E9ABB009642EF /* FTSConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 754014C2290BEDA600EA8D33 /* FTSConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D9E3291E9ABB009642EF /* WCTChainCall+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 23776CA5218C41E600E985DC /* WCTChainCall+Private.h */; };
-		7521D9E4291E9ABB009642EF /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
 		7521D9E6291E9ABB009642EF /* WCTProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F6901EA0D6680021EFA7 /* WCTProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D9E7291E9ABB009642EF /* Thread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 390E1C5B2296414C00C24598 /* Thread.hpp */; };
 		7521D9E8291E9ABB009642EF /* WCTCppAccessor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F67C1EA0D6680021EFA7 /* WCTCppAccessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D9E9291E9ABB009642EF /* BaseBinding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7537E5D028B939240077D92B /* BaseBinding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D9EA291E9ABB009642EF /* FileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2308F84C20E32A51001CD9C3 /* FileHandle.hpp */; };
 		7521D9EC291E9ABB009642EF /* StatementDelete.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBCE217DFADC006E9E73 /* StatementDelete.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521D9ED291E9ABB009642EF /* AssembleHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B098021BE50D2005AD534 /* AssembleHandle.hpp */; };
 		7521D9EF291E9ABB009642EF /* OperationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3934DAEA229B6659008A6AEC /* OperationQueue.hpp */; };
 		7521D9F0291E9ABB009642EF /* WindowDef.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBB1217DFADC006E9E73 /* WindowDef.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D9F1291E9ABB009642EF /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2232,7 +2253,6 @@
 		7521DA3D291E9ABB009642EF /* FactoryBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C38C20C17CAE0001BFAE /* FactoryBackup.hpp */; };
 		7521DA3E291E9ABB009642EF /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
 		7521DA3F291E9ABB009642EF /* SyntaxRollbackSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5A217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DA41291E9ABB009642EF /* MigratingHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */; };
 		7521DA58291EA349009642EF /* SQL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBA8217DFADC006E9E73 /* SQL.cpp */; };
 		7521DA59291EA349009642EF /* HighWater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E7EB1B2123D58D0056B5D8 /* HighWater.cpp */; };
 		7521DA5A291EA349009642EF /* ConvertibleImplementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB6D217DFADC006E9E73 /* ConvertibleImplementation.cpp */; };
@@ -2347,14 +2367,12 @@
 		7521DADC291EA349009642EF /* StatementCreateIndexBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03DCB5F0286C480900CBC75D /* StatementCreateIndexBridge.cpp */; };
 		7521DADD291EA349009642EF /* AutoMigrateConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23301BF32298FE9A00A8AB5A /* AutoMigrateConfig.cpp */; };
 		7521DADE291EA349009642EF /* TableOrSubquery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBAC217DFADC006E9E73 /* TableOrSubquery.cpp */; };
-		7521DADF291EA349009642EF /* AssembleHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 233B097F21BE50D2005AD534 /* AssembleHandle.cpp */; };
 		7521DAE0291EA349009642EF /* WalRelated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23593B7B20D3ADF80058B416 /* WalRelated.cpp */; };
 		7521DAE1291EA349009642EF /* SyntaxBeginSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC37217DFADC006E9E73 /* SyntaxBeginSTMT.cpp */; };
 		7521DAE2291EA349009642EF /* SyntaxCommonTableExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBFC217DFADC006E9E73 /* SyntaxCommonTableExpression.cpp */; };
 		7521DAE3291EA349009642EF /* StatementCreateVirtualTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659C27F42D6500D2C926 /* StatementCreateVirtualTable.swift */; };
 		7521DAE4291EA349009642EF /* StatementDropTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBD3217DFADC006E9E73 /* StatementDropTable.cpp */; };
 		7521DAE5291EA349009642EF /* Insert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165CD27F42D6500D2C926 /* Insert.swift */; };
-		7521DAE6291EA349009642EF /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
 		7521DAE7291EA349009642EF /* SyntaxExpression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC00217DFADC006E9E73 /* SyntaxExpression.cpp */; };
 		7521DAE8291EA349009642EF /* StatementCreateVirtualTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBCB217DFADC006E9E73 /* StatementCreateVirtualTable.cpp */; };
 		7521DAE9291EA349009642EF /* SyntaxCommonConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23545BA12224EAA40091C981 /* SyntaxCommonConst.cpp */; };
@@ -2455,7 +2473,6 @@
 		7521DB62291EA349009642EF /* SyntaxAlterTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC31217DFADC006E9E73 /* SyntaxAlterTableSTMT.cpp */; };
 		7521DB63291EA349009642EF /* SyntaxCreateVirtualTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC43217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.cpp */; };
 		7521DB64291EA349009642EF /* SyntaxAttachSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC35217DFADC006E9E73 /* SyntaxAttachSTMT.cpp */; };
-		7521DB65291EA349009642EF /* MigratingHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A09D692146204300F62EE8 /* MigratingHandle.cpp */; };
 		7521DB66291EA349009642EF /* SyntaxJoinClause.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC0E217DFADC006E9E73 /* SyntaxJoinClause.cpp */; };
 		7521DB68291EA349009642EF /* SyntaxDropTableSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC4B217DFADC006E9E73 /* SyntaxDropTableSTMT.cpp */; };
 		7521DB6A291EA349009642EF /* StatementSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1659927F42D6500D2C926 /* StatementSelect.swift */; };
@@ -2547,7 +2564,6 @@
 		7521DBD5291EA349009642EF /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B4020AD666900E21AB0 /* Material.cpp */; };
 		7521DBD6291EA349009642EF /* ForeignKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB8A217DFADC006E9E73 /* ForeignKey.cpp */; };
 		7521DBD7291EA349009642EF /* Crawlable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23775B5020AD666900E21AB0 /* Crawlable.cpp */; };
-		7521DBD8291EA349009642EF /* OperationHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */; };
 		7521DBD9291EA349009642EF /* AggregateFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB68217DFADC006E9E73 /* AggregateFunction.cpp */; };
 		7521DBDA291EA349009642EF /* MultiPrimaryConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C44099291CE7E200D74EB7 /* MultiPrimaryConfig.swift */; };
 		7521DBDB291EA349009642EF /* SQLiteBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C7559820DD17B100031A93 /* SQLiteBase.cpp */; };
@@ -2604,7 +2620,6 @@
 		7521DC1D291EA349009642EF /* StatementSavepoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165A527F42D6500D2C926 /* StatementSavepoint.swift */; };
 		7521DC1E291EA349009642EF /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03E5CC6C28A3BDF3005353D9 /* Value.cpp */; };
 		7521DC1F291EA349009642EF /* StatementRelease.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBDF217DFADC006E9E73 /* StatementRelease.cpp */; };
-		7521DC21291EA349009642EF /* MigrateHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A4703A21BE0940005B9C09 /* MigrateHandle.cpp */; };
 		7521DC22291EA349009642EF /* StatementDropTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03F54826287D93A7007BCA3E /* StatementDropTableBridge.cpp */; };
 		7521DC24291EA349009642EF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0FD7C215F1C92008399FB /* Security.framework */; };
 		7521DC25291EA349009642EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239E8A922160A81600BCB308 /* Foundation.framework */; };
@@ -2635,7 +2650,6 @@
 		7521DC49291EA349009642EF /* Recyclable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D92D21057CA700707AFC /* Recyclable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC4A291EA349009642EF /* CoreConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 237C900621D45E6700EE6E44 /* CoreConst.h */; };
 		7521DC4B291EA349009642EF /* Cell.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4620AD666900E21AB0 /* Cell.hpp */; };
-		7521DC4C291EA349009642EF /* MigrateHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A4703B21BE0940005B9C09 /* MigrateHandle.hpp */; };
 		7521DC4D291EA349009642EF /* BasicConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FA520A055BD00CCE3CD /* BasicConfig.hpp */; };
 		7521DC4E291EA349009642EF /* StatementDropIndex.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD2217DFADC006E9E73 /* StatementDropIndex.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC4F291EA349009642EF /* Pager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B4A20AD666900E21AB0 /* Pager.hpp */; };
@@ -2746,7 +2760,6 @@
 		7521DCE9291EA349009642EF /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		7521DCEA291EA349009642EF /* SyntaxAnalyzeSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC34217DFADC006E9E73 /* SyntaxAnalyzeSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DCEB291EA349009642EF /* SyntaxColumnConstraint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBF9217DFADC006E9E73 /* SyntaxColumnConstraint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DCED291EA349009642EF /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
 		7521DCF0291EA349009642EF /* SyntaxReindexSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC56217DFADC006E9E73 /* SyntaxReindexSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DCF1291EA349009642EF /* SyntaxCommonTableExpression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBFD217DFADC006E9E73 /* SyntaxCommonTableExpression.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DCF2291EA349009642EF /* UpgradeableErrorProne.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23AD52F120DBAC4C00664B62 /* UpgradeableErrorProne.hpp */; };
@@ -2848,12 +2861,10 @@
 		7521DD76291EA349009642EF /* CoreFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB70217DFADC006E9E73 /* CoreFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DD77291EA349009642EF /* Frame.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23567CF920CA3889005F1C35 /* Frame.hpp */; };
 		7521DD78291EA349009642EF /* FTSConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 754014C2290BEDA600EA8D33 /* FTSConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DD7A291EA349009642EF /* OperationHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */; };
 		7521DD7D291EA349009642EF /* Thread.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 390E1C5B2296414C00C24598 /* Thread.hpp */; };
 		7521DD7F291EA349009642EF /* BaseBinding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7537E5D028B939240077D92B /* BaseBinding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DD80291EA349009642EF /* FileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2308F84C20E32A51001CD9C3 /* FileHandle.hpp */; };
 		7521DD82291EA349009642EF /* StatementDelete.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBCE217DFADC006E9E73 /* StatementDelete.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DD83291EA349009642EF /* AssembleHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 233B098021BE50D2005AD534 /* AssembleHandle.hpp */; };
 		7521DD85291EA349009642EF /* OperationQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3934DAEA229B6659008A6AEC /* OperationQueue.hpp */; };
 		7521DD86291EA349009642EF /* WindowDef.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBB1217DFADC006E9E73 /* WindowDef.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DD88291EA349009642EF /* ObjectBridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03E167B927F46E2E00D2C926 /* ObjectBridge.hpp */; };
@@ -2909,7 +2920,6 @@
 		7521DDD3291EA349009642EF /* FactoryBackup.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C38C20C17CAE0001BFAE /* FactoryBackup.hpp */; };
 		7521DDD4291EA349009642EF /* CipherConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FAB20A055C300CCE3CD /* CipherConfig.hpp */; };
 		7521DDD5291EA349009642EF /* SyntaxRollbackSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC5A217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DDD7291EA349009642EF /* MigratingHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */; };
 		7521DDDF291EA729009642EF /* StatementOperation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03321E8628A503F3000AFD6D /* StatementOperation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DDE229208EB6009642EF /* WCTAPIBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DDE529209B8D009642EF /* ChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7521DDE429209B8D009642EF /* ChainCall+WCTTableCoding.swift */; };
@@ -2953,12 +2963,6 @@
 		7529C7702ABC4D6600518293 /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
 		7529C7712ABC4D6A00518293 /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
 		7529C7722ABC4D6D00518293 /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
-		7529C7732ABC4D8300518293 /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
-		7529C7742ABC4D8400518293 /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
-		7529C7752ABC4D8500518293 /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
-		7529C7762ABC4D8C00518293 /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
-		7529C7772ABC4D8D00518293 /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
-		7529C7782ABC4D8E00518293 /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
 		7529C7792ABC4D9900518293 /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
 		7529C77A2ABC4D9900518293 /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
 		7529C77B2ABC4D9A00518293 /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
@@ -2968,6 +2972,27 @@
 		752CF3F9293A490F009ED8FB /* BindingBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752CF3F6293A490F009ED8FB /* BindingBridge.cpp */; };
 		752CF3FA293A490F009ED8FB /* BindingBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752CF3F7293A490F009ED8FB /* BindingBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		752CF3FB293A490F009ED8FB /* BindingBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752CF3F7293A490F009ED8FB /* BindingBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7533CB4F2B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB4D2B050FA300C8B47D /* MigratingHandleDecorator.cpp */; };
+		7533CB502B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB4D2B050FA300C8B47D /* MigratingHandleDecorator.cpp */; };
+		7533CB512B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB4D2B050FA300C8B47D /* MigratingHandleDecorator.cpp */; };
+		7533CB522B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB4D2B050FA300C8B47D /* MigratingHandleDecorator.cpp */; };
+		7533CB532B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB4E2B050FA300C8B47D /* MigratingHandleDecorator.hpp */; };
+		7533CB542B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB4E2B050FA300C8B47D /* MigratingHandleDecorator.hpp */; };
+		7533CB552B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB4E2B050FA300C8B47D /* MigratingHandleDecorator.hpp */; };
+		7533CB562B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB4E2B050FA300C8B47D /* MigratingHandleDecorator.hpp */; };
+		7533CB592B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB572B050FB200C8B47D /* MigratingStatementDecorator.cpp */; };
+		7533CB5A2B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB572B050FB200C8B47D /* MigratingStatementDecorator.cpp */; };
+		7533CB5B2B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB572B050FB200C8B47D /* MigratingStatementDecorator.cpp */; };
+		7533CB5C2B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7533CB572B050FB200C8B47D /* MigratingStatementDecorator.cpp */; };
+		7533CB5D2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB582B050FB200C8B47D /* MigratingStatementDecorator.hpp */; };
+		7533CB5E2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB582B050FB200C8B47D /* MigratingStatementDecorator.hpp */; };
+		7533CB5F2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB582B050FB200C8B47D /* MigratingStatementDecorator.hpp */; };
+		7533CB602B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB582B050FB200C8B47D /* MigratingStatementDecorator.hpp */; };
+		7533CB612B0516A600C8B47D /* MemberPointer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03AFD33928B8A6BD00EF5E56 /* MemberPointer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7533CB682B051C4F00C8B47D /* ClassDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB632B051C4F00C8B47D /* ClassDecorator.hpp */; };
+		7533CB692B051C4F00C8B47D /* ClassDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB632B051C4F00C8B47D /* ClassDecorator.hpp */; };
+		7533CB6A2B051C4F00C8B47D /* ClassDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB632B051C4F00C8B47D /* ClassDecorator.hpp */; };
+		7533CB6B2B051C4F00C8B47D /* ClassDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7533CB632B051C4F00C8B47D /* ClassDecorator.hpp */; };
 		753473602935C1E400911FCA /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7534735F2935C1E400911FCA /* DatabaseTestCase.swift */; };
 		753473612935C1E400911FCA /* DatabaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7534735F2935C1E400911FCA /* DatabaseTestCase.swift */; };
 		753636DC28BBC3820025C2C4 /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753636DA28BBC3820025C2C4 /* Table.cpp */; };
@@ -2986,6 +3011,22 @@
 		75401478290BE51400EA8D33 /* PinyinTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB62738C8F800C4DC1B /* PinyinTokenizer.cpp */; };
 		754014C3290BEDA600EA8D33 /* FTSConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 754014C2290BEDA600EA8D33 /* FTSConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		754014C4290BEDA600EA8D33 /* FTSConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 754014C2290BEDA600EA8D33 /* FTSConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		754359462B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
+		754359472B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
+		754359482B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
+		754359492B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
+		7543594A2B066DBD00CDF232 /* HandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754359452B066DBD00CDF232 /* HandleOperator.hpp */; };
+		7543594B2B066DBD00CDF232 /* HandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754359452B066DBD00CDF232 /* HandleOperator.hpp */; };
+		7543594C2B066DBD00CDF232 /* HandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754359452B066DBD00CDF232 /* HandleOperator.hpp */; };
+		7543594D2B066DBD00CDF232 /* HandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754359452B066DBD00CDF232 /* HandleOperator.hpp */; };
+		754359502B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */; };
+		754359512B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */; };
+		754359522B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */; };
+		754359532B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */; };
+		754359542B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543594F2B0671DE00CDF232 /* BackupHandleOperator.hpp */; };
+		754359552B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543594F2B0671DE00CDF232 /* BackupHandleOperator.hpp */; };
+		754359562B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543594F2B0671DE00CDF232 /* BackupHandleOperator.hpp */; };
+		754359572B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543594F2B0671DE00CDF232 /* BackupHandleOperator.hpp */; };
 		7543DD83271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7543DD86271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */; };
 		7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3010,8 +3051,6 @@
 		756A774327FAC1D900105B7C /* CoreBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 756A774227FAC1D900105B7C /* CoreBridge.cpp */; };
 		756E89032AF13FDB00A54DB2 /* CPPSharedPtrAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D435A602AF1092100FABDAF /* CPPSharedPtrAllTypesObject.mm */; };
 		757457042402D614005E3682 /* WCTPreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTPreparedStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */; };
-		75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */; };
 		757821E1286DF5EB0092F858 /* StatementCreateTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 757821DF286DF5EB0092F858 /* StatementCreateTableBridge.cpp */; };
 		757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 757821E0286DF5EB0092F858 /* StatementCreateTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75835E6624FBD7F300FA82AA /* FTSData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75835E6524FBD7F300FA82AA /* FTSData.mm */; };
@@ -3196,8 +3235,6 @@
 		75F1A3072871DE9A008503A2 /* StatementCreateVirtualTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F1A3052871DE9A008503A2 /* StatementCreateVirtualTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75F1A30A2871E764008503A2 /* StatementDeleteBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F1A3082871E764008503A2 /* StatementDeleteBridge.cpp */; };
 		75F1A30B2871E764008503A2 /* StatementDeleteBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F1A3092871E764008503A2 /* StatementDeleteBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		75F314062AAB6305007FFDFB /* BackupRelatedHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */; };
-		75F314072AAB6305007FFDFB /* BackupRelatedHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */; };
 		75F3140D2AAC067B007FFDFB /* CipherHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */; };
 		75F3140E2AAC067B007FFDFB /* CipherHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */; };
 		75F32F0928B9CE8E00A72697 /* CPPORMMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 75F32F0828B9CE8E00A72697 /* CPPORMMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3693,8 +3730,15 @@
 		0D1297C82A4D7AE9006052AE /* AppAttach.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppAttach.mm; sourceTree = "<group>"; };
 		0D1297CA2A4D81CB006052AE /* AndroidDBTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AndroidDBTest.mm; sourceTree = "<group>"; };
 		0D1297CC2A4D81E9006052AE /* AndroidDBTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AndroidDBTest.h; sourceTree = "<group>"; };
+		0D19BA092B0702250028F92B /* AssembleHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssembleHandleOperator.cpp; sourceTree = "<group>"; };
+		0D19BA0A2B0702250028F92B /* AssembleHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssembleHandleOperator.hpp; sourceTree = "<group>"; };
+		0D19BA1D2B07481B0028F92B /* IntegerityHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IntegerityHandleOperator.cpp; sourceTree = "<group>"; };
+		0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IntegerityHandleOperator.hpp; sourceTree = "<group>"; };
 		0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MergeFTSIndexLogic.hpp; sourceTree = "<group>"; };
 		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
+		0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DecorativeHandle.cpp; sourceTree = "<group>"; };
+		0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DecorativeHandle.hpp; sourceTree = "<group>"; };
+		0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionContainer.cpp; sourceTree = "<group>"; };
 		0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = STDOptionalAccessor.hpp; sourceTree = "<group>"; };
 		0D36C0F92AF1E3A1000BC0DD /* CPPSTDOptionalAllTypesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPSTDOptionalAllTypesObject.h; sourceTree = "<group>"; };
 		0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPSTDOptionalAllTypesObject.mm; sourceTree = "<group>"; };
@@ -3730,6 +3774,8 @@
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
 		0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBOperationNotifier.cpp; sourceTree = "<group>"; };
 		0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBOperationNotifier.hpp; sourceTree = "<group>"; };
+		0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrateHandleOperator.cpp; sourceTree = "<group>"; };
+		0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrateHandleOperator.hpp; sourceTree = "<group>"; };
 		0DE08A1B29CBE79C009A7CA3 /* CrossPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossPlatform.h; sourceTree = "<group>"; };
 		0DE08A1C29CBE79C009A7CA3 /* WCTFileManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCTFileManager.cpp; sourceTree = "<group>"; };
 		0DE08A1D29CBE79C009A7CA3 /* CrossPlatform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CrossPlatform.c; sourceTree = "<group>"; };
@@ -3745,6 +3791,9 @@
 		0DE68B3F2AB466E5008BD74C /* WithoutRowidRepairTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WithoutRowidRepairTestObject.h; sourceTree = "<group>"; };
 		0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WithoutRowidRepairTestObject.mm; sourceTree = "<group>"; };
 		0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZSTDBenchmark.mm; sourceTree = "<group>"; };
+		0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FunctionContainer.hpp; sourceTree = "<group>"; };
+		0DE84C7B2B03886800522A4E /* DecorativeHandleStatement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DecorativeHandleStatement.cpp; sourceTree = "<group>"; };
+		0DE84C7C2B03886800522A4E /* DecorativeHandleStatement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DecorativeHandleStatement.hpp; sourceTree = "<group>"; };
 		0DF1089529C05559004ED764 /* StatementSelectInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatementSelectInterface.swift; sourceTree = "<group>"; };
 		2304B42622156CD700901953 /* TokenizerModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TokenizerModule.cpp; sourceTree = "<group>"; };
 		2304B42722156CD700901953 /* TokenizerModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TokenizerModule.hpp; sourceTree = "<group>"; };
@@ -3782,8 +3831,6 @@
 		233A25D2219933D800054EC4 /* WCTBuiltin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTBuiltin.h; sourceTree = "<group>"; };
 		233A8530215E7CFE00BB8D4F /* Console.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
 		233A8531215E7CFE00BB8D4F /* Console.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Console.hpp; sourceTree = "<group>"; };
-		233B097F21BE50D2005AD534 /* AssembleHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssembleHandle.cpp; sourceTree = "<group>"; };
-		233B098021BE50D2005AD534 /* AssembleHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssembleHandle.hpp; sourceTree = "<group>"; };
 		23408F0D211897AA0071E5A7 /* Shm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shm.cpp; sourceTree = "<group>"; };
 		23408F0E211897AA0071E5A7 /* Shm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shm.hpp; sourceTree = "<group>"; };
 		234591F5204432E400DC7D34 /* Core.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Core.hpp; sourceTree = "<group>"; };
@@ -4148,12 +4195,8 @@
 		239776D0202AF2E2000A681C /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		239E8A702160A5B100BCB308 /* Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Host.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		239E8A922160A81600BCB308 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		23A09D692146204300F62EE8 /* MigratingHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingHandle.cpp; sourceTree = "<group>"; };
-		23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigratingHandle.hpp; sourceTree = "<group>"; };
 		23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTHandle+Convenient.h"; sourceTree = "<group>"; };
 		23A3CFB4205FB1A800692F94 /* WCTHandle+Convenient.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTHandle+Convenient.mm"; sourceTree = "<group>"; };
-		23A4703A21BE0940005B9C09 /* MigrateHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrateHandle.cpp; sourceTree = "<group>"; };
-		23A4703B21BE0940005B9C09 /* MigrateHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrateHandle.hpp; sourceTree = "<group>"; };
 		23A64D07214A458A00ED28BB /* MigrationInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrationInfo.cpp; sourceTree = "<group>"; };
 		23A64D08214A458A00ED28BB /* MigrationInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrationInfo.hpp; sourceTree = "<group>"; };
 		23A64D0D214A4A7000ED28BB /* Migration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Migration.cpp; sourceTree = "<group>"; };
@@ -4562,8 +4605,6 @@
 		39B524DC2304F9A2001DF52D /* InnerHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InnerHandle.cpp; sourceTree = "<group>"; };
 		39C70CC52313E20E002D773C /* Assemble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assemble.cpp; sourceTree = "<group>"; };
 		39C70CC62313E20F002D773C /* Assemble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assemble.hpp; sourceTree = "<group>"; };
-		39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OperationHandle.cpp; sourceTree = "<group>"; };
-		39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OperationHandle.hpp; sourceTree = "<group>"; };
 		7500829229223463009C0F38 /* WCTBridgeMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTBridgeMacro.h; sourceTree = "<group>"; };
 		75067CBD293F8192005DA25B /* AutoAddColumnObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoAddColumnObject.mm; sourceTree = "<group>"; };
 		75067CBF293F819B005DA25B /* AutoAddColumnObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoAddColumnObject.h; sourceTree = "<group>"; };
@@ -4631,6 +4672,11 @@
 		752C7E3F28C8E94200C9FFA6 /* ORMInsertTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ORMInsertTests.mm; sourceTree = "<group>"; };
 		752CF3F6293A490F009ED8FB /* BindingBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BindingBridge.cpp; sourceTree = "<group>"; };
 		752CF3F7293A490F009ED8FB /* BindingBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BindingBridge.h; sourceTree = "<group>"; };
+		7533CB4D2B050FA300C8B47D /* MigratingHandleDecorator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingHandleDecorator.cpp; sourceTree = "<group>"; };
+		7533CB4E2B050FA300C8B47D /* MigratingHandleDecorator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigratingHandleDecorator.hpp; sourceTree = "<group>"; };
+		7533CB572B050FB200C8B47D /* MigratingStatementDecorator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingStatementDecorator.cpp; sourceTree = "<group>"; };
+		7533CB582B050FB200C8B47D /* MigratingStatementDecorator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigratingStatementDecorator.hpp; sourceTree = "<group>"; };
+		7533CB632B051C4F00C8B47D /* ClassDecorator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClassDecorator.hpp; sourceTree = "<group>"; };
 		7534735F2935C1E400911FCA /* DatabaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseTestCase.swift; sourceTree = "<group>"; };
 		753636DA28BBC3820025C2C4 /* Table.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Table.cpp; sourceTree = "<group>"; };
 		753636DB28BBC3820025C2C4 /* Table.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Table.hpp; sourceTree = "<group>"; };
@@ -4642,6 +4688,10 @@
 		753C084E28A8D5EB0042C427 /* CPPCRUDTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPCRUDTestCase.h; sourceTree = "<group>"; };
 		753C084F28A8D5F70042C427 /* CPPCRUDTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPCRUDTestCase.mm; sourceTree = "<group>"; };
 		754014C2290BEDA600EA8D33 /* FTSConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTSConst.h; sourceTree = "<group>"; };
+		754359442B066DBD00CDF232 /* HandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleOperator.cpp; sourceTree = "<group>"; };
+		754359452B066DBD00CDF232 /* HandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleOperator.hpp; sourceTree = "<group>"; };
+		7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupHandleOperator.cpp; sourceTree = "<group>"; };
+		7543594F2B0671DE00CDF232 /* BackupHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupHandleOperator.hpp; sourceTree = "<group>"; };
 		7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FTS5AuxiliaryFunctionTemplate.hpp; sourceTree = "<group>"; };
 		7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionModule.cpp; sourceTree = "<group>"; };
 		7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionModule.hpp; sourceTree = "<group>"; };
@@ -4663,8 +4713,6 @@
 		756A773F27FAC17F00105B7C /* CoreBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreBridge.h; sourceTree = "<group>"; };
 		756A774227FAC1D900105B7C /* CoreBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreBridge.cpp; sourceTree = "<group>"; };
 		757457032402D614005E3682 /* WCTPreparedStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPreparedStatement.h; sourceTree = "<group>"; };
-		75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MigratingHandleStatement.hpp; sourceTree = "<group>"; };
-		75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MigratingHandleStatement.cpp; sourceTree = "<group>"; };
 		757821DF286DF5EB0092F858 /* StatementCreateTableBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementCreateTableBridge.cpp; sourceTree = "<group>"; };
 		757821E0286DF5EB0092F858 /* StatementCreateTableBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementCreateTableBridge.h; sourceTree = "<group>"; };
 		75835E6424FBD73000FA82AA /* FTSData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTSData.h; sourceTree = "<group>"; };
@@ -4810,8 +4858,6 @@
 		75F1A3052871DE9A008503A2 /* StatementCreateVirtualTableBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementCreateVirtualTableBridge.h; sourceTree = "<group>"; };
 		75F1A3082871E764008503A2 /* StatementDeleteBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementDeleteBridge.cpp; sourceTree = "<group>"; };
 		75F1A3092871E764008503A2 /* StatementDeleteBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementDeleteBridge.h; sourceTree = "<group>"; };
-		75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupRelatedHandle.cpp; sourceTree = "<group>"; };
-		75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BackupRelatedHandle.hpp; sourceTree = "<group>"; };
 		75F3140B2AAC067B007FFDFB /* CipherHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CipherHandle.cpp; sourceTree = "<group>"; };
 		75F3140C2AAC067B007FFDFB /* CipherHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CipherHandle.hpp; sourceTree = "<group>"; };
 		75F32F0828B9CE8E00A72697 /* CPPORMMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPORMMacro.h; sourceTree = "<group>"; };
@@ -5753,6 +5799,15 @@
 			path = AndroidDB;
 			sourceTree = "<group>";
 		};
+		0D19BA1C2B0747E80028F92B /* integrity */ = {
+			isa = PBXGroup;
+			children = (
+				0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */,
+				0D19BA1D2B07481B0028F92B /* IntegerityHandleOperator.cpp */,
+			);
+			path = integrity;
+			sourceTree = "<group>";
+		};
 		0D47A9742A6E27CF008E9E2C /* compatible */ = {
 			isa = PBXGroup;
 			children = (
@@ -5822,8 +5877,8 @@
 		233B097A21BE50C0005AD534 /* assemble */ = {
 			isa = PBXGroup;
 			children = (
-				233B097F21BE50D2005AD534 /* AssembleHandle.cpp */,
-				233B098021BE50D2005AD534 /* AssembleHandle.hpp */,
+				0D19BA092B0702250028F92B /* AssembleHandleOperator.cpp */,
+				0D19BA0A2B0702250028F92B /* AssembleHandleOperator.hpp */,
 			);
 			path = assemble;
 			sourceTree = "<group>";
@@ -5870,6 +5925,7 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				0D19BA1C2B0747E80028F92B /* integrity */,
 				75F3140F2AAC07C9007FFDFB /* cipher */,
 				235FBE92229145FC005C7723 /* sqlite */,
 				233B097A21BE50C0005AD534 /* assemble */,
@@ -6547,6 +6603,12 @@
 				235FBE9422914E0D005C7723 /* Global.hpp */,
 				75ADC5622A8D1C2D00D0AC47 /* TableAttribute.cpp */,
 				75ADC5632A8D1C2D00D0AC47 /* TableAttribute.hpp */,
+				0DE84C7C2B03886800522A4E /* DecorativeHandleStatement.hpp */,
+				0DE84C7B2B03886800522A4E /* DecorativeHandleStatement.cpp */,
+				0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */,
+				0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */,
+				754359442B066DBD00CDF232 /* HandleOperator.cpp */,
+				754359452B066DBD00CDF232 /* HandleOperator.hpp */,
 			);
 			path = sqlite;
 			sourceTree = "<group>";
@@ -6641,6 +6703,10 @@
 				233A8531215E7CFE00BB8D4F /* Console.hpp */,
 				0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */,
 				0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */,
+				03AFD33928B8A6BD00EF5E56 /* MemberPointer.hpp */,
+				0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */,
+				0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */,
+				7533CB632B051C4F00C8B47D /* ClassDecorator.hpp */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -6676,8 +6742,8 @@
 		23775B3D20AD666900E21AB0 /* mechanic */ = {
 			isa = PBXGroup;
 			children = (
-				75F314042AAB6305007FFDFB /* BackupRelatedHandle.cpp */,
-				75F314052AAB6305007FFDFB /* BackupRelatedHandle.hpp */,
+				7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */,
+				7543594F2B0671DE00CDF232 /* BackupHandleOperator.hpp */,
 				23775B3E20AD666900E21AB0 /* Backup.cpp */,
 				23775B3F20AD666900E21AB0 /* Backup.hpp */,
 				23775B4020AD666900E21AB0 /* Material.cpp */,
@@ -6771,18 +6837,18 @@
 		23A09D632146204300F62EE8 /* migration */ = {
 			isa = PBXGroup;
 			children = (
-				75751ED72412AD11006CBFFD /* MigratingHandleStatement.cpp */,
-				75751ED62412AD10006CBFFD /* MigratingHandleStatement.hpp */,
-				23A09D692146204300F62EE8 /* MigratingHandle.cpp */,
-				23A09D6A2146204300F62EE8 /* MigratingHandle.hpp */,
 				23A64D07214A458A00ED28BB /* MigrationInfo.cpp */,
 				23A64D08214A458A00ED28BB /* MigrationInfo.hpp */,
 				23A64D0D214A4A7000ED28BB /* Migration.cpp */,
 				23A64D0E214A4A7000ED28BB /* Migration.hpp */,
-				23A4703A21BE0940005B9C09 /* MigrateHandle.cpp */,
-				23A4703B21BE0940005B9C09 /* MigrateHandle.hpp */,
 				23301BF32298FE9A00A8AB5A /* AutoMigrateConfig.cpp */,
 				23301BF42298FE9A00A8AB5A /* AutoMigrateConfig.hpp */,
+				7533CB4D2B050FA300C8B47D /* MigratingHandleDecorator.cpp */,
+				7533CB4E2B050FA300C8B47D /* MigratingHandleDecorator.hpp */,
+				7533CB572B050FB200C8B47D /* MigratingStatementDecorator.cpp */,
+				7533CB582B050FB200C8B47D /* MigratingStatementDecorator.hpp */,
+				0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */,
+				0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -6792,8 +6858,6 @@
 			children = (
 				3934DAE9229B6659008A6AEC /* OperationQueue.cpp */,
 				3934DAEA229B6659008A6AEC /* OperationQueue.hpp */,
-				39D3C74622A8B8C600C93DC0 /* OperationHandle.cpp */,
-				39D3C74722A8B8C600C93DC0 /* OperationHandle.hpp */,
 				75294DAE29C75058005E7FC0 /* OperationQueueForMemory.hpp */,
 				75294DAD29C75058005E7FC0 /* OperationQueueForMemory.cpp */,
 			);
@@ -7582,7 +7646,6 @@
 		75F32F0628B9CC2300A72697 /* binding */ = {
 			isa = PBXGroup;
 			children = (
-				03AFD33928B8A6BD00EF5E56 /* MemberPointer.hpp */,
 				03AFD33128B883E700EF5E56 /* Accessor.hpp */,
 				7537E58428B91F510077D92B /* Accessor.cpp */,
 				032E113328C88B8000BCACE0 /* RunTimeAccessor.hpp */,
@@ -7633,6 +7696,7 @@
 				75D99B8028CA441E00BEC8B5 /* BaseOperation.hpp in Headers */,
 				7537E5D328B939240077D92B /* BaseBinding.hpp in Headers */,
 				037C3A872897E33600328EC8 /* AutoBackupConfig.hpp in Headers */,
+				0D19BA252B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */,
 				037C3A882897E33600328EC8 /* WINQ.h in Headers */,
 				7521DDDF291EA729009642EF /* StatementOperation.hpp in Headers */,
 				037C3A8A2897E33600328EC8 /* UnsafeData.hpp in Headers */,
@@ -7657,7 +7721,7 @@
 				7529C77A2ABC4D9900518293 /* CipherHandle.hpp in Headers */,
 				037C3AA62897E33600328EC8 /* CoreConst.h in Headers */,
 				037C3AA72897E33600328EC8 /* Cell.hpp in Headers */,
-				037C3AA82897E33600328EC8 /* MigrateHandle.hpp in Headers */,
+				0DD8D11D2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */,
 				037C3AA92897E33600328EC8 /* BasicConfig.hpp in Headers */,
 				037C3AAA2897E33600328EC8 /* StatementDropIndex.hpp in Headers */,
 				037C3AAB2897E33600328EC8 /* Pager.hpp in Headers */,
@@ -7672,6 +7736,7 @@
 				037C3AB82897E33600328EC8 /* StatementDropTrigger.hpp in Headers */,
 				037C3AB92897E33600328EC8 /* FTSFunction.hpp in Headers */,
 				037C3ABF2897E33600328EC8 /* WalRelated.hpp in Headers */,
+				0D19BA112B0702250028F92B /* AssembleHandleOperator.hpp in Headers */,
 				037C3AC02897E33600328EC8 /* FactoryRelated.hpp in Headers */,
 				037C3AC12897E33600328EC8 /* SyntaxSelectSTMT.hpp in Headers */,
 				037C3AC32897E33600328EC8 /* PerformanceTraceConfig.hpp in Headers */,
@@ -7682,6 +7747,7 @@
 				037C3AC72897E33600328EC8 /* BusyRetryConfig.hpp in Headers */,
 				037C3AC82897E33600328EC8 /* Progress.hpp in Headers */,
 				037C3AC92897E33600328EC8 /* SyntaxForeignKeyClause.hpp in Headers */,
+				754359562B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */,
 				037C3ACA2897E33600328EC8 /* SyntaxAssertion.hpp in Headers */,
 				037C3ACB2897E33600328EC8 /* SyntaxSelectCore.hpp in Headers */,
 				037C3ACC2897E33600328EC8 /* SyntaxTableConstraint.hpp in Headers */,
@@ -7705,6 +7771,7 @@
 				037C3AE32897E33600328EC8 /* StatementCreateIndex.hpp in Headers */,
 				037C3AE72897E33600328EC8 /* StringView.hpp in Headers */,
 				037C3AE82897E33600328EC8 /* RepairKit.h in Headers */,
+				0D3281652B04A8E60027B973 /* DecorativeHandle.hpp in Headers */,
 				03E5CC7028A3BDF3005353D9 /* Value.hpp in Headers */,
 				037C3AEA2897E33600328EC8 /* OrderingTerm.hpp in Headers */,
 				037C3AEB2897E33600328EC8 /* SyntaxUpsertClause.hpp in Headers */,
@@ -7760,6 +7827,7 @@
 				037C3B282897E33600328EC8 /* Page.hpp in Headers */,
 				037C3B2A2897E33600328EC8 /* SyntaxFilter.hpp in Headers */,
 				0D3FFA482A2F2911002DF7CD /* SysTypes.h in Headers */,
+				7533CB6A2B051C4F00C8B47D /* ClassDecorator.hpp in Headers */,
 				037C3B2B2897E33600328EC8 /* StatementRollback.hpp in Headers */,
 				037C3B2D2897E33600328EC8 /* StatementAlterTable.hpp in Headers */,
 				037C3B2E2897E33600328EC8 /* StatementPragma.hpp in Headers */,
@@ -7789,7 +7857,6 @@
 				037C3B4C2897E33600328EC8 /* MergeFTSIndexLogic.hpp in Headers */,
 				037C3B4D2897E33600328EC8 /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				037C3B4E2897E33600328EC8 /* SyntaxColumnConstraint.hpp in Headers */,
-				037C3B512897E33600328EC8 /* MigratingHandleStatement.hpp in Headers */,
 				037C3B552897E33600328EC8 /* SyntaxReindexSTMT.hpp in Headers */,
 				037C3B562897E33600328EC8 /* SyntaxCommonTableExpression.hpp in Headers */,
 				037330C2289A909A0030C113 /* Database.hpp in Headers */,
@@ -7805,6 +7872,7 @@
 				037C3B672897E33600328EC8 /* HandlePool.hpp in Headers */,
 				037C3B682897E33600328EC8 /* StatementInsert.hpp in Headers */,
 				037C3B6A2897E33600328EC8 /* FactoryDepositor.hpp in Headers */,
+				7533CB552B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */,
 				037C3B6C2897E33600328EC8 /* FrameSpec.hpp in Headers */,
 				037C3B6D2897E33600328EC8 /* TokenizerConfig.hpp in Headers */,
 				037C3B6E2897E33600328EC8 /* SyntaxCreateViewSTMT.hpp in Headers */,
@@ -7814,6 +7882,7 @@
 				037C3B792897E33600328EC8 /* SyntaxDeleteSTMT.hpp in Headers */,
 				037C3B7C2897E33600328EC8 /* StatementSavepoint.hpp in Headers */,
 				030C987C28D068B0008636DF /* TransactionGuard.hpp in Headers */,
+				7533CB5F2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
 				037C3B7D2897E33600328EC8 /* AuxiliaryFunctionModules.hpp in Headers */,
 				037C3B7E2897E33600328EC8 /* FullCrawler.hpp in Headers */,
 				75CB08D12A88B9A300429364 /* HandleCounter.hpp in Headers */,
@@ -7840,12 +7909,10 @@
 				75E50A2F2907921600B73E62 /* MultiSelect.hpp in Headers */,
 				037C3B9F2897E33600328EC8 /* CoreFunction.hpp in Headers */,
 				037C3BA32897E33600328EC8 /* Frame.hpp in Headers */,
-				037C3BA52897E33600328EC8 /* OperationHandle.hpp in Headers */,
 				75B698D7290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */,
 				037C3BA72897E33600328EC8 /* Thread.hpp in Headers */,
 				037C3BA92897E33600328EC8 /* FileHandle.hpp in Headers */,
 				037C3BAA2897E33600328EC8 /* StatementDelete.hpp in Headers */,
-				037C3BAB2897E33600328EC8 /* AssembleHandle.hpp in Headers */,
 				037C3BAC2897E33600328EC8 /* OperationQueue.hpp in Headers */,
 				037C3BAE2897E33600328EC8 /* WindowDef.hpp in Headers */,
 				DDADC4742949F7C20057AEDB /* Builtin.h in Headers */,
@@ -7873,7 +7940,6 @@
 				03AFD34928B8B88300EF5E56 /* CPPORM.h in Headers */,
 				037C3BCB2897E33600328EC8 /* FTSError.hpp in Headers */,
 				037C3BCC2897E33600328EC8 /* Mechanic.hpp in Headers */,
-				7529C7742ABC4D8400518293 /* BackupRelatedHandle.hpp in Headers */,
 				037C3BCF2897E33600328EC8 /* SyntaxJoinConstraint.hpp in Headers */,
 				037C3BD02897E33600328EC8 /* ErrorProne.hpp in Headers */,
 				037C3BD52897E33600328EC8 /* StatementCommit.hpp in Headers */,
@@ -7896,11 +7962,13 @@
 				037C3BE62897E33600328EC8 /* TableOrSubquery.hpp in Headers */,
 				03321E8F28A514F5000AFD6D /* HandleOperation.hpp in Headers */,
 				037C3BE82897E33600328EC8 /* Statement.hpp in Headers */,
+				7543594C2B066DBD00CDF232 /* HandleOperator.hpp in Headers */,
 				037C3BE92897E33600328EC8 /* ThreadLocal.hpp in Headers */,
 				03AFD33A28B8A6BD00EF5E56 /* MemberPointer.hpp in Headers */,
 				037C3BEA2897E33600328EC8 /* Schema.hpp in Headers */,
 				037C3BED2897E33600328EC8 /* SyntaxDropIndexSTMT.hpp in Headers */,
 				75F32F1928BA083E00A72697 /* CPPIndexMacro.h in Headers */,
+				0DE84AD42B03295400522A4E /* FunctionContainer.hpp in Headers */,
 				037C3BEE2897E33600328EC8 /* Assemble.hpp in Headers */,
 				037C3BF02897E33600328EC8 /* SyntaxBindParameter.hpp in Headers */,
 				037C3BF12897E33600328EC8 /* Lock.hpp in Headers */,
@@ -7916,11 +7984,11 @@
 				037C3BFF2897E33600328EC8 /* FactoryRenewer.hpp in Headers */,
 				03AFD33428B883E700EF5E56 /* Accessor.hpp in Headers */,
 				037C3C002897E33600328EC8 /* StatementAnalyze.hpp in Headers */,
+				0DE84C832B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */,
 				037C3C022897E33600328EC8 /* FactoryBackup.hpp in Headers */,
 				03733111289A94F10030C113 /* Handle.hpp in Headers */,
 				037C3C042897E33600328EC8 /* CipherConfig.hpp in Headers */,
 				037C3C052897E33600328EC8 /* SyntaxRollbackSTMT.hpp in Headers */,
-				037C3C062897E33600328EC8 /* MigratingHandle.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7943,6 +8011,8 @@
 				2316D92F21057CA700707AFC /* MappedData.hpp in Headers */,
 				23EEDD32217DFADC006E9E73 /* SyntaxCommitSTMT.hpp in Headers */,
 				03AFD34728B8B57600EF5E56 /* Binding.hpp in Headers */,
+				7533CB682B051C4F00C8B47D /* ClassDecorator.hpp in Headers */,
+				7533CB532B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */,
 				23EEDD5D217DFADC006E9E73 /* Syntax.h in Headers */,
 				23EEDD2E217DFADC006E9E73 /* SyntaxAttachSTMT.hpp in Headers */,
 				23EEDC80217DFADC006E9E73 /* CommonTableExpression.hpp in Headers */,
@@ -7962,7 +8032,6 @@
 				2316D93121057CA700707AFC /* Recyclable.hpp in Headers */,
 				237C900721D45E6700EE6E44 /* CoreConst.h in Headers */,
 				23775B8420AD666900E21AB0 /* Cell.hpp in Headers */,
-				23A4703D21BE0940005B9C09 /* MigrateHandle.hpp in Headers */,
 				23F70FA820A055BE00CCE3CD /* BasicConfig.hpp in Headers */,
 				23EEDCCE217DFADC006E9E73 /* StatementDropIndex.hpp in Headers */,
 				23775B8C20AD666900E21AB0 /* Pager.hpp in Headers */,
@@ -7999,6 +8068,7 @@
 				23A6D4C120BFD7F9004F2DAA /* Progress.hpp in Headers */,
 				23EEDCFE217DFADC006E9E73 /* SyntaxForeignKeyClause.hpp in Headers */,
 				23545B992224E8270091C981 /* SyntaxAssertion.hpp in Headers */,
+				7533CB5D2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
 				75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */,
 				75E50A0E29067BC800B73E62 /* MultiObject.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
@@ -8014,8 +8084,10 @@
 				23DF0A0B2190275B00F0B2B6 /* WCTDatabase.h in Headers */,
 				23775B6020AD666900E21AB0 /* Assertion.hpp in Headers */,
 				23906AB9215E500100C2B717 /* WCTDatabase+Monitor.h in Headers */,
+				7543594A2B066DBD00CDF232 /* HandleOperator.hpp in Headers */,
 				23EEDC86217DFADC006E9E73 /* Filter.hpp in Headers */,
 				23EEDD48217DFADC006E9E73 /* SyntaxDropViewSTMT.hpp in Headers */,
+				0DD8D11B2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */,
 				2376CB1D20DA5D3B00A68DB5 /* Scoreable.hpp in Headers */,
 				39411A4122437E7B00A388F5 /* CaseInsensitiveList.hpp in Headers */,
 				03AFD33B28B8A6BD00EF5E56 /* MemberPointer.hpp in Headers */,
@@ -8037,6 +8109,8 @@
 				23408F11211897AA0071E5A7 /* Shm.hpp in Headers */,
 				23EEDCCC217DFADC006E9E73 /* StatementDetach.hpp in Headers */,
 				7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */,
+				754359542B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */,
+				0DE84AD22B03295400522A4E /* FunctionContainer.hpp in Headers */,
 				7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */,
 				23EEDD30217DFADC006E9E73 /* SyntaxBeginSTMT.hpp in Headers */,
 				23EEDD58217DFADC006E9E73 /* SyntaxUpdateSTMT.hpp in Headers */,
@@ -8117,12 +8191,14 @@
 				75E0A5D82A7FE2A200D4FE9A /* ContainerBridge.h in Headers */,
 				2349F7651EA0D6680021EFA7 /* WCTTableCoding.h in Headers */,
 				03AFD33528B883E700EF5E56 /* Accessor.hpp in Headers */,
+				0DE84C812B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */,
 				2349F7231EA0D6680021EFA7 /* WCTInsert.h in Headers */,
 				23EEDC92217DFADC006E9E73 /* JoinConstraint.hpp in Headers */,
 				23EEDD50217DFADC006E9E73 /* SyntaxReleaseSTMT.hpp in Headers */,
 				2308F85520E32A51001CD9C3 /* Serialization.hpp in Headers */,
 				2349F76D1EA0D6680021EFA7 /* WCTIndexMacro.h in Headers */,
 				39A3341922B0DD9F008EA5D5 /* WCTFoundation.h in Headers */,
+				0D19BA232B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */,
 				23EEDCF0217DFADC006E9E73 /* SyntaxColumn.hpp in Headers */,
 				2349F6FF1EA0D6680021EFA7 /* InnerDatabase.hpp in Headers */,
 				75D567012951B90E00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */,
@@ -8133,7 +8209,6 @@
 				23EEDCF2217DFADC006E9E73 /* SyntaxColumnConstraint.hpp in Headers */,
 				7521D39528BD1187009C33D0 /* ChainCall.hpp in Headers */,
 				7500829329223463009C0F38 /* WCTBridgeMacro.h in Headers */,
-				75751ED82412AD11006CBFFD /* MigratingHandleStatement.hpp in Headers */,
 				23790A80219315E50098797F /* WCTVirtualTableMacro.h in Headers */,
 				2386B3C71ED442FE000B72F6 /* WCTError+Private.h in Headers */,
 				23EEDD4E217DFADC006E9E73 /* SyntaxReindexSTMT.hpp in Headers */,
@@ -8145,6 +8220,7 @@
 				03F428EC28BF686F005CE249 /* Update.hpp in Headers */,
 				23B4DC802111B39200954D71 /* Tag.hpp in Headers */,
 				23AB898E215BA81300554DF1 /* SQLite.h in Headers */,
+				0D3281632B04A8E60027B973 /* DecorativeHandle.hpp in Headers */,
 				23EEDD12217DFADC006E9E73 /* SyntaxPragma.hpp in Headers */,
 				2349F75D1EA0D6680021EFA7 /* WCTBinding.h in Headers */,
 				236BACE221BF9F6400C8B4D9 /* WCTDatabase+Migration.h in Headers */,
@@ -8175,7 +8251,6 @@
 				75E50A302907921600B73E62 /* MultiSelect.hpp in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
 				7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */,
-				75F314072AAB6305007FFDFB /* BackupRelatedHandle.hpp in Headers */,
 				75F32F1028B9F90900A72697 /* FTSTokenizerUtil.hpp in Headers */,
 				75F32F1728BA066400A72697 /* CPPBindingMacro.h in Headers */,
 				23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
@@ -8255,6 +8330,7 @@
 				75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */,
 				0D36C0FD2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */,
 				75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */,
+				0D19BA0F2B0702250028F92B /* AssembleHandleOperator.hpp in Headers */,
 				750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */,
 				032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */,
 				75F4DE342883E43C00760DC3 /* StatementExplainBridge.h in Headers */,
@@ -8277,7 +8353,6 @@
 				23567CFC20CA3889005F1C35 /* Frame.hpp in Headers */,
 				754014C4290BEDA600EA8D33 /* FTSConst.h in Headers */,
 				23776CA7218C41E600E985DC /* WCTChainCall+Private.h in Headers */,
-				39D3C74A22A8B8C600C93DC0 /* OperationHandle.hpp in Headers */,
 				758D9D0728BA7F06001B3D2D /* CPPColumnConstraintMacro.h in Headers */,
 				2349F7681EA0D6680021EFA7 /* WCTProperty.h in Headers */,
 				390E1C5E2296414C00C24598 /* Thread.hpp in Headers */,
@@ -8287,7 +8362,6 @@
 				75EF250E2AA42DD90009C99F /* EncryptedSerialization.hpp in Headers */,
 				03AFD34A28B8B88300EF5E56 /* CPPORM.h in Headers */,
 				23EEDCCA217DFADC006E9E73 /* StatementDelete.hpp in Headers */,
-				233B098221BE50D2005AD534 /* AssembleHandle.hpp in Headers */,
 				03D077F128C1F072009A3B18 /* TableOperation.hpp in Headers */,
 				3934DAED229B6659008A6AEC /* OperationQueue.hpp in Headers */,
 				23EEDCAE217DFADC006E9E73 /* WindowDef.hpp in Headers */,
@@ -8375,7 +8449,6 @@
 				23F70FAE20A055C300CCE3CD /* CipherConfig.hpp in Headers */,
 				23EEDD52217DFADC006E9E73 /* SyntaxRollbackSTMT.hpp in Headers */,
 				0DAE11D428DC6CC6003FB63A /* WCDB.h in Headers */,
-				23A09D7F2146204400F62EE8 /* MigratingHandle.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8399,7 +8472,6 @@
 				7521D8A5291E9ABB009642EF /* CommonTableExpression.hpp in Headers */,
 				7521D8A6291E9ABB009642EF /* ValueArray.hpp in Headers */,
 				7521D8A7291E9ABB009642EF /* WCTTable+Table.h in Headers */,
-				7529C7732ABC4D8300518293 /* BackupRelatedHandle.hpp in Headers */,
 				7521D8A8291E9ABB009642EF /* Console.hpp in Headers */,
 				7521D8A9291E9ABB009642EF /* NSObject+WCTColumnCoding.h in Headers */,
 				7521D8AA291E9ABB009642EF /* WCTDatabase+Test.h in Headers */,
@@ -8413,7 +8485,6 @@
 				7521D8B3291E9ABB009642EF /* Recyclable.hpp in Headers */,
 				7521D8B4291E9ABB009642EF /* CoreConst.h in Headers */,
 				7521D8B5291E9ABB009642EF /* Cell.hpp in Headers */,
-				7521D8B6291E9ABB009642EF /* MigrateHandle.hpp in Headers */,
 				7521D8B7291E9ABB009642EF /* BasicConfig.hpp in Headers */,
 				7521D8B8291E9ABB009642EF /* StatementDropIndex.hpp in Headers */,
 				7521D8B9291E9ABB009642EF /* Pager.hpp in Headers */,
@@ -8435,8 +8506,10 @@
 				7521D8CB291E9ABB009642EF /* FactoryRelated.hpp in Headers */,
 				7521D8CC291E9ABB009642EF /* SyntaxSelectSTMT.hpp in Headers */,
 				7521D8CD291E9ABB009642EF /* WCTPreparedStatement+Private.h in Headers */,
+				0D19BA242B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */,
 				75D566FC2951B7DE00098DD9 /* WCTSequence.h in Headers */,
 				7521D8CE291E9ABB009642EF /* PerformanceTraceConfig.hpp in Headers */,
+				7543594B2B066DBD00CDF232 /* HandleOperator.hpp in Headers */,
 				7521D8CF291E9ABB009642EF /* ColumnMeta.hpp in Headers */,
 				7521D8D0291E9ABB009642EF /* WCTHandle+Table.h in Headers */,
 				7521D8D1291E9ABB009642EF /* Macro.h in Headers */,
@@ -8462,6 +8535,7 @@
 				7521D8E8291E9ABB009642EF /* Scoreable.hpp in Headers */,
 				7521D8E9291E9ABB009642EF /* CaseInsensitiveList.hpp in Headers */,
 				7521D8EB291E9ABB009642EF /* SyntaxForwardDeclaration.h in Headers */,
+				754359552B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */,
 				7521D8EC291E9ABB009642EF /* WCTDatabase+Config.h in Headers */,
 				0D8084222A861E8500C81BBF /* WCTCancellationSignal.h in Headers */,
 				7521D8ED291E9ABB009642EF /* WCTDatabase+Repair.h in Headers */,
@@ -8487,6 +8561,7 @@
 				7521D903291E9ABB009642EF /* HandleRelated.hpp in Headers */,
 				7521D904291E9ABB009642EF /* SyntaxOrderingTerm.hpp in Headers */,
 				7521D906291E9ABB009642EF /* WCTValue.h in Headers */,
+				7533CB5E2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
 				7521D907291E9ABB009642EF /* WCTDatabase+Private.h in Headers */,
 				7521D909291E9ABB009642EF /* WCTHandle.h in Headers */,
 				7521D90A291E9ABB009642EF /* SyntaxAlterTableSTMT.hpp in Headers */,
@@ -8538,10 +8613,12 @@
 				7521D93C291E9ABB009642EF /* StatementReindex.hpp in Headers */,
 				7521D93D291E9ABB009642EF /* SyntaxList.hpp in Headers */,
 				7521D93E291E9ABB009642EF /* WCTTableConstraintMacro.h in Headers */,
+				7533CB542B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */,
 				7521D940291E9ABB009642EF /* ColumnConstraint.hpp in Headers */,
 				7521D941291E9ABB009642EF /* SQLiteDeclaration.h in Headers */,
 				7521D942291E9ABB009642EF /* SyntaxEnum.hpp in Headers */,
 				7521D943291E9ABB009642EF /* DBOperationNotifier.hpp in Headers */,
+				0DE84C822B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */,
 				7521D944291E9ABB009642EF /* StatementCreateView.hpp in Headers */,
 				7521D945291E9ABB009642EF /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				7521D946291E9ABB009642EF /* Shadow.hpp in Headers */,
@@ -8558,7 +8635,6 @@
 				7521D953291E9ABB009642EF /* MergeFTSIndexLogic.hpp in Headers */,
 				7521D954291E9ABB009642EF /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				7521D955291E9ABB009642EF /* SyntaxColumnConstraint.hpp in Headers */,
-				7521D957291E9ABB009642EF /* MigratingHandleStatement.hpp in Headers */,
 				7521D958291E9ABB009642EF /* WCTVirtualTableMacro.h in Headers */,
 				7521D959291E9ABB009642EF /* WCTError+Private.h in Headers */,
 				7521D95A291E9ABB009642EF /* SyntaxReindexSTMT.hpp in Headers */,
@@ -8598,6 +8674,8 @@
 				7521D97B291E9ABB009642EF /* SyntaxDeleteSTMT.hpp in Headers */,
 				7521D97C291E9ABB009642EF /* WCTMigrationInfo+Private.h in Headers */,
 				7521D97E291E9ABB009642EF /* StatementSavepoint.hpp in Headers */,
+				0DE84AD32B03295400522A4E /* FunctionContainer.hpp in Headers */,
+				0D3281642B04A8E60027B973 /* DecorativeHandle.hpp in Headers */,
 				7521D97F291E9ABB009642EF /* AuxiliaryFunctionModules.hpp in Headers */,
 				7521D982291E9ABB009642EF /* FullCrawler.hpp in Headers */,
 				7521D983291E9ABB009642EF /* WCTDatabase+Table.h in Headers */,
@@ -8636,14 +8714,12 @@
 				7521D9E1291E9ABB009642EF /* Frame.hpp in Headers */,
 				7521D9E2291E9ABB009642EF /* FTSConst.h in Headers */,
 				7521D9E3291E9ABB009642EF /* WCTChainCall+Private.h in Headers */,
-				7521D9E4291E9ABB009642EF /* OperationHandle.hpp in Headers */,
 				7521D9E6291E9ABB009642EF /* WCTProperty.h in Headers */,
 				7521D9E7291E9ABB009642EF /* Thread.hpp in Headers */,
 				7521D9E8291E9ABB009642EF /* WCTCppAccessor.h in Headers */,
 				7521D9E9291E9ABB009642EF /* BaseBinding.hpp in Headers */,
 				7521D9EA291E9ABB009642EF /* FileHandle.hpp in Headers */,
 				7521D9EC291E9ABB009642EF /* StatementDelete.hpp in Headers */,
-				7521D9ED291E9ABB009642EF /* AssembleHandle.hpp in Headers */,
 				7521D9EF291E9ABB009642EF /* OperationQueue.hpp in Headers */,
 				7521D9F0291E9ABB009642EF /* WindowDef.hpp in Headers */,
 				7521D9F1291E9ABB009642EF /* WCTDatabase+FTS.h in Headers */,
@@ -8672,8 +8748,10 @@
 				7521DA09291E9ABB009642EF /* Range.hpp in Headers */,
 				7521DA0A291E9ABB009642EF /* SyntaxResultColumn.hpp in Headers */,
 				7521DA0B291E9ABB009642EF /* FTSError.hpp in Headers */,
+				7533CB692B051C4F00C8B47D /* ClassDecorator.hpp in Headers */,
 				7521DA0C291E9ABB009642EF /* Mechanic.hpp in Headers */,
 				7521DA0D291E9ABB009642EF /* WCTMaster+WCTTableCoding.h in Headers */,
+				7533CB612B0516A600C8B47D /* MemberPointer.hpp in Headers */,
 				7521DA0F291E9ABB009642EF /* WCTPreparedStatement.h in Headers */,
 				7521DA11291E9ABB009642EF /* SyntaxJoinConstraint.hpp in Headers */,
 				7521DA12291E9ABB009642EF /* ErrorProne.hpp in Headers */,
@@ -8682,6 +8760,7 @@
 				7521DA15291E9ABB009642EF /* SyntaxColumnDef.hpp in Headers */,
 				7521DA16291E9ABB009642EF /* LRUCache.hpp in Headers */,
 				7521DA17291E9ABB009642EF /* WCTHandle+Private.h in Headers */,
+				0D19BA102B0702250028F92B /* AssembleHandleOperator.hpp in Headers */,
 				7521DA18291E9ABB009642EF /* StatementVacuum.hpp in Headers */,
 				7521DA19291E9ABB009642EF /* Column.hpp in Headers */,
 				7521DA1A291E9ABB009642EF /* NSNull+WCTColumnCoding.h in Headers */,
@@ -8722,8 +8801,8 @@
 				7521DA3C291E9ABB009642EF /* StatementAnalyze.hpp in Headers */,
 				7521DA3D291E9ABB009642EF /* FactoryBackup.hpp in Headers */,
 				7521DA3E291E9ABB009642EF /* CipherConfig.hpp in Headers */,
+				0DD8D11C2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */,
 				7521DA3F291E9ABB009642EF /* SyntaxRollbackSTMT.hpp in Headers */,
-				7521DA41291E9ABB009642EF /* MigratingHandle.hpp in Headers */,
 				7529C7792ABC4D9900518293 /* CipherHandle.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8733,6 +8812,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7521DC29291EA349009642EF /* AsyncQueue.hpp in Headers */,
+				7533CB602B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
 				7521DC2A291EA349009642EF /* AutoBackupConfig.hpp in Headers */,
 				7521DC2B291EA349009642EF /* WINQ.h in Headers */,
 				7521DC2C291EA349009642EF /* UnsafeData.hpp in Headers */,
@@ -8744,6 +8824,7 @@
 				7521DC37291EA349009642EF /* SyntaxCommitSTMT.hpp in Headers */,
 				7521DC39291EA349009642EF /* Syntax.h in Headers */,
 				7521DC3A291EA349009642EF /* SyntaxAttachSTMT.hpp in Headers */,
+				0DE84AD52B03295400522A4E /* FunctionContainer.hpp in Headers */,
 				7521DC3B291EA349009642EF /* CommonTableExpression.hpp in Headers */,
 				7521DC3C291EA349009642EF /* ValueArray.hpp in Headers */,
 				7521DC3E291EA349009642EF /* Console.hpp in Headers */,
@@ -8760,7 +8841,6 @@
 				75C6E41B29A124B4002579A5 /* WCDBOptional.hpp in Headers */,
 				7521DC4A291EA349009642EF /* CoreConst.h in Headers */,
 				7521DC4B291EA349009642EF /* Cell.hpp in Headers */,
-				7521DC4C291EA349009642EF /* MigrateHandle.hpp in Headers */,
 				7521DC4D291EA349009642EF /* BasicConfig.hpp in Headers */,
 				750080F42920F4E9009C0F38 /* WCTFoundation.h in Headers */,
 				7521DC4E291EA349009642EF /* StatementDropIndex.hpp in Headers */,
@@ -8776,6 +8856,7 @@
 				7521DC5E291EA349009642EF /* FTSFunction.hpp in Headers */,
 				7521DC60291EA349009642EF /* WalRelated.hpp in Headers */,
 				7521DC61291EA349009642EF /* FactoryRelated.hpp in Headers */,
+				0D3281662B04A8E60027B973 /* DecorativeHandle.hpp in Headers */,
 				7521DC62291EA349009642EF /* SyntaxSelectSTMT.hpp in Headers */,
 				7521DC64291EA349009642EF /* PerformanceTraceConfig.hpp in Headers */,
 				7521DC65291EA349009642EF /* ColumnMeta.hpp in Headers */,
@@ -8795,6 +8876,7 @@
 				7521DC76291EA349009642EF /* PageBasedFileHandle.hpp in Headers */,
 				7521DC77291EA349009642EF /* SQLTraceConfig.hpp in Headers */,
 				7521DC78291EA349009642EF /* Data.hpp in Headers */,
+				7533CB6B2B051C4F00C8B47D /* ClassDecorator.hpp in Headers */,
 				7521DC7A291EA349009642EF /* Assertion.hpp in Headers */,
 				7521DC7C291EA349009642EF /* Filter.hpp in Headers */,
 				7521DC7D291EA349009642EF /* SyntaxDropViewSTMT.hpp in Headers */,
@@ -8875,7 +8957,6 @@
 				7521DCE9291EA349009642EF /* MergeFTSIndexLogic.hpp in Headers */,
 				7521DCEA291EA349009642EF /* SyntaxAnalyzeSTMT.hpp in Headers */,
 				7521DCEB291EA349009642EF /* SyntaxColumnConstraint.hpp in Headers */,
-				7521DCED291EA349009642EF /* MigratingHandleStatement.hpp in Headers */,
 				7521DCF0291EA349009642EF /* SyntaxReindexSTMT.hpp in Headers */,
 				7521DCF1291EA349009642EF /* SyntaxCommonTableExpression.hpp in Headers */,
 				75EF25112AA42DD90009C99F /* EncryptedSerialization.hpp in Headers */,
@@ -8906,6 +8987,7 @@
 				7521DD22291EA349009642EF /* Wal.hpp in Headers */,
 				7521DD23291EA349009642EF /* SyntaxSavepointSTMT.hpp in Headers */,
 				7521DD24291EA349009642EF /* AutoMigrateConfig.hpp in Headers */,
+				0DE84C842B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */,
 				7521DD26291EA349009642EF /* UniqueList.hpp in Headers */,
 				7521DD27291EA349009642EF /* HandleStatement.hpp in Headers */,
 				75A60AB629345A38009C1B3C /* Cipher.hpp in Headers */,
@@ -8916,6 +8998,7 @@
 				7521DD2F291EA349009642EF /* RaiseFunction.hpp in Headers */,
 				7521DD30291EA349009642EF /* InnerHandle.hpp in Headers */,
 				7521DD32291EA349009642EF /* Global.hpp in Headers */,
+				754359572B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */,
 				7521DD33291EA349009642EF /* StatementBegin.hpp in Headers */,
 				7521DD34291EA349009642EF /* SyntaxQualifiedTableName.hpp in Headers */,
 				7521DD36291EA349009642EF /* SyntaxJoinClause.hpp in Headers */,
@@ -8937,6 +9020,7 @@
 				7521DD47291EA349009642EF /* StatementCommitBridge.h in Headers */,
 				7521DD48291EA349009642EF /* QualifiedTableBridge.h in Headers */,
 				7521DD49291EA349009642EF /* HandleStatementBridge.h in Headers */,
+				7543594D2B066DBD00CDF232 /* HandleOperator.hpp in Headers */,
 				75EF25072AA33FEB0009C99F /* IncrementalMaterial.hpp in Headers */,
 				7521DD4B291EA349009642EF /* TableConstraintBridge.h in Headers */,
 				7521DD4C291EA349009642EF /* StatementPragmaBridge.h in Headers */,
@@ -8947,6 +9031,7 @@
 				7521DD51291EA349009642EF /* StatementDropIndexBridge.h in Headers */,
 				7521DD52291EA349009642EF /* StatementVacuumBridge.h in Headers */,
 				7521DD54291EA349009642EF /* WinqBridge.h in Headers */,
+				0D19BA122B0702250028F92B /* AssembleHandleOperator.hpp in Headers */,
 				7521DD55291EA349009642EF /* StatementDropViewBridge.h in Headers */,
 				7521DD56291EA349009642EF /* StatementSelectBridge.h in Headers */,
 				7529C77B2ABC4D9A00518293 /* CipherHandle.hpp in Headers */,
@@ -8954,6 +9039,7 @@
 				7521DD58291EA349009642EF /* StatementDropTriggerBridge.h in Headers */,
 				7521DD59291EA349009642EF /* ErrorBridge.h in Headers */,
 				7521DD5A291EA349009642EF /* ColumnDefBridge.h in Headers */,
+				0D19BA262B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */,
 				7521DD5B291EA349009642EF /* StatementReleaseBridge.h in Headers */,
 				7521DD5D291EA349009642EF /* StatementCreateViewBridge.h in Headers */,
 				7521DD5E291EA349009642EF /* ColumnBridge.h in Headers */,
@@ -8981,17 +9067,17 @@
 				7521DD76291EA349009642EF /* CoreFunction.hpp in Headers */,
 				7521DD77291EA349009642EF /* Frame.hpp in Headers */,
 				7521DD78291EA349009642EF /* FTSConst.h in Headers */,
-				7521DD7A291EA349009642EF /* OperationHandle.hpp in Headers */,
+				7533CB562B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */,
 				7521DD7D291EA349009642EF /* Thread.hpp in Headers */,
 				7521DD7F291EA349009642EF /* BaseBinding.hpp in Headers */,
 				7521DD80291EA349009642EF /* FileHandle.hpp in Headers */,
 				7521DD82291EA349009642EF /* StatementDelete.hpp in Headers */,
-				7521DD83291EA349009642EF /* AssembleHandle.hpp in Headers */,
 				7521DD85291EA349009642EF /* OperationQueue.hpp in Headers */,
 				7521DD86291EA349009642EF /* WindowDef.hpp in Headers */,
 				7521DD88291EA349009642EF /* ObjectBridge.hpp in Headers */,
 				7521DD8A291EA349009642EF /* SyntaxTableOrSubquery.hpp in Headers */,
 				7521DD8B291EA349009642EF /* StatementRelease.hpp in Headers */,
+				0DD8D11E2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */,
 				7521DD8D291EA349009642EF /* Notifier.hpp in Headers */,
 				7521DD8E291EA349009642EF /* SyntaxCreateTriggerSTMT.hpp in Headers */,
 				7521DD8F291EA349009642EF /* TransactionGuard.hpp in Headers */,
@@ -9037,7 +9123,6 @@
 				7521DDCB291EA349009642EF /* SyntaxVacuumSTMT.hpp in Headers */,
 				7521DDCC291EA349009642EF /* Material.hpp in Headers */,
 				7521DDCD291EA349009642EF /* SyntaxInsertSTMT.hpp in Headers */,
-				7529C7752ABC4D8500518293 /* BackupRelatedHandle.hpp in Headers */,
 				7521DDCE291EA349009642EF /* AggregateFunction.hpp in Headers */,
 				7521DDE229208EB6009642EF /* WCTAPIBridge.h in Headers */,
 				7521DDD1291EA349009642EF /* FactoryRenewer.hpp in Headers */,
@@ -9045,7 +9130,6 @@
 				7521DDD3291EA349009642EF /* FactoryBackup.hpp in Headers */,
 				7521DDD4291EA349009642EF /* CipherConfig.hpp in Headers */,
 				7521DDD5291EA349009642EF /* SyntaxRollbackSTMT.hpp in Headers */,
-				7521DDD7291EA349009642EF /* MigratingHandle.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9553,6 +9637,7 @@
 				037C38E12897E33600328EC8 /* SyntaxPragma.cpp in Sources */,
 				037C38E32897E33600328EC8 /* Factory.cpp in Sources */,
 				037C38E62897E33600328EC8 /* Statement.cpp in Sources */,
+				7533CB512B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */,
 				037C38E72897E33600328EC8 /* FactoryBackup.cpp in Sources */,
 				7547A3CD290D28A200AFA132 /* OneOrBinaryTokenizer.cpp in Sources */,
 				037C38E92897E33600328EC8 /* CustomConfig.cpp in Sources */,
@@ -9608,7 +9693,9 @@
 				037C392F2897E33600328EC8 /* AuxiliaryFunctionModule.cpp in Sources */,
 				03E5CC6E28A3BDF3005353D9 /* Value.cpp in Sources */,
 				037C39322897E33600328EC8 /* StatementAlterTable.cpp in Sources */,
+				0D3281612B04A8E60027B973 /* DecorativeHandle.cpp in Sources */,
 				037C39332897E33600328EC8 /* CipherConfig.cpp in Sources */,
+				0D19BA0D2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */,
 				037C39342897E33600328EC8 /* FactoryRelated.cpp in Sources */,
 				037C39352897E33600328EC8 /* Global.cpp in Sources */,
 				037C39392897E33600328EC8 /* SyntaxDropTriggerSTMT.cpp in Sources */,
@@ -9620,12 +9707,10 @@
 				037C394E2897E33600328EC8 /* JoinConstraint.cpp in Sources */,
 				037C39522897E33600328EC8 /* AutoMigrateConfig.cpp in Sources */,
 				037C39532897E33600328EC8 /* TableOrSubquery.cpp in Sources */,
-				037C39542897E33600328EC8 /* AssembleHandle.cpp in Sources */,
 				037C39552897E33600328EC8 /* WalRelated.cpp in Sources */,
 				037C39562897E33600328EC8 /* SyntaxBeginSTMT.cpp in Sources */,
 				037C39572897E33600328EC8 /* SyntaxCommonTableExpression.cpp in Sources */,
 				037C39592897E33600328EC8 /* StatementDropTable.cpp in Sources */,
-				037C395B2897E33600328EC8 /* MigratingHandleStatement.cpp in Sources */,
 				037C395C2897E33600328EC8 /* SyntaxExpression.cpp in Sources */,
 				75CB08CD2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				037C395D2897E33600328EC8 /* StatementCreateVirtualTable.cpp in Sources */,
@@ -9649,10 +9734,13 @@
 				0D8084252A861E9500C81BBF /* WCTCancellationSignal.mm in Sources */,
 				037C39812897E33600328EC8 /* StatementRollback.cpp in Sources */,
 				037C39822897E33600328EC8 /* Exiting.cpp in Sources */,
+				0D32816A2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */,
 				037C39852897E33600328EC8 /* Migration.cpp in Sources */,
 				037C39862897E33600328EC8 /* Configs.cpp in Sources */,
 				037C39872897E33600328EC8 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
 				037C398A2897E33600328EC8 /* Column.cpp in Sources */,
+				754359482B066DBD00CDF232 /* HandleOperator.cpp in Sources */,
+				0D19BA212B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */,
 				037C398E2897E33600328EC8 /* StatementSelect.cpp in Sources */,
 				037C39952897E33600328EC8 /* SyntaxReindexSTMT.cpp in Sources */,
 				037C39982897E33600328EC8 /* SyntaxCreateViewSTMT.cpp in Sources */,
@@ -9661,6 +9749,7 @@
 				75E50A0B29067BC800B73E62 /* MultiObject.cpp in Sources */,
 				0DC98FD228E46049007F3796 /* DBOperationNotifier.cpp in Sources */,
 				037C399D2897E33600328EC8 /* SyntaxRaiseFunction.cpp in Sources */,
+				0DE84C7F2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */,
 				037C399E2897E33600328EC8 /* FrameSpec.cpp in Sources */,
 				03AFD34C28B8BB7600EF5E56 /* Binding.cpp in Sources */,
 				037C39A12897E33600328EC8 /* HandlePool.cpp in Sources */,
@@ -9669,6 +9758,7 @@
 				037C39AB2897E33600328EC8 /* SyntaxColumnDef.cpp in Sources */,
 				75C6E41929A0C2F0002579A5 /* WCDBOptional.cpp in Sources */,
 				037C39AD2897E33600328EC8 /* WindowDef.cpp in Sources */,
+				0DD8D1192B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */,
 				037C39AE2897E33600328EC8 /* FileManager.cpp in Sources */,
 				037C39AF2897E33600328EC8 /* SyntaxColumn.cpp in Sources */,
 				75EF250C2AA42DD90009C99F /* EncryptedSerialization.cpp in Sources */,
@@ -9689,7 +9779,6 @@
 				037C39CC2897E33600328EC8 /* SyntaxAlterTableSTMT.cpp in Sources */,
 				037C39CD2897E33600328EC8 /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
 				037C39CE2897E33600328EC8 /* SyntaxAttachSTMT.cpp in Sources */,
-				037C39CF2897E33600328EC8 /* MigratingHandle.cpp in Sources */,
 				037C39D02897E33600328EC8 /* SyntaxJoinClause.cpp in Sources */,
 				037C39D32897E33600328EC8 /* SyntaxDropTableSTMT.cpp in Sources */,
 				037C39D52897E33600328EC8 /* SyntaxExplainSTMT.cpp in Sources */,
@@ -9718,6 +9807,7 @@
 				037C3A052897E33600328EC8 /* StatementInsert.cpp in Sources */,
 				037C3A062897E33600328EC8 /* SubstringMatchInfo.cpp in Sources */,
 				037C3A092897E33600328EC8 /* Assemble.cpp in Sources */,
+				7533CB5B2B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */,
 				037C3A0A2897E33600328EC8 /* Cell.cpp in Sources */,
 				037C3A0C2897E33600328EC8 /* AuxiliaryFunctionConfig.cpp in Sources */,
 				037C3A112897E33600328EC8 /* Frame.cpp in Sources */,
@@ -9728,7 +9818,6 @@
 				037C3A162897E33600328EC8 /* PerformanceTraceConfig.cpp in Sources */,
 				0D5363EA290A65390026A4DC /* Master.cpp in Sources */,
 				037C3A172897E33600328EC8 /* StatementCommit.cpp in Sources */,
-				7529C7772ABC4D8D00518293 /* BackupRelatedHandle.cpp in Sources */,
 				037C3A1A2897E33600328EC8 /* AutoCheckpointConfig.cpp in Sources */,
 				037C3A1D2897E33600328EC8 /* Filter.cpp in Sources */,
 				037C3A1E2897E33600328EC8 /* Thread.cpp in Sources */,
@@ -9756,7 +9845,6 @@
 				037C3A3B2897E33600328EC8 /* ForeignKey.cpp in Sources */,
 				0DE08A2B29CBEB4E009A7CA3 /* WCTFileManager.cpp in Sources */,
 				037C3A3D2897E33600328EC8 /* Crawlable.cpp in Sources */,
-				037C3A3E2897E33600328EC8 /* OperationHandle.cpp in Sources */,
 				037C3A402897E33600328EC8 /* AggregateFunction.cpp in Sources */,
 				037C3A412897E33600328EC8 /* SQLiteBase.cpp in Sources */,
 				037C3A422897E33600328EC8 /* Join.cpp in Sources */,
@@ -9764,6 +9852,7 @@
 				037C3A452897E33600328EC8 /* FTSError.cpp in Sources */,
 				037C3A462897E33600328EC8 /* SyntaxDropIndexSTMT.cpp in Sources */,
 				037C3A482897E33600328EC8 /* HandleRelated.cpp in Sources */,
+				754359522B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */,
 				037C3A492897E33600328EC8 /* SyntaxIdentifier.cpp in Sources */,
 				037C3A4A2897E33600328EC8 /* SyntaxBindParameter.cpp in Sources */,
 				03321E8728A503F3000AFD6D /* StatementOperation.cpp in Sources */,
@@ -9790,7 +9879,6 @@
 				037C3A772897E33600328EC8 /* Lock.cpp in Sources */,
 				037C3A7A2897E33600328EC8 /* SyntaxSelectCore.cpp in Sources */,
 				037C3A7D2897E33600328EC8 /* StatementRelease.cpp in Sources */,
-				037C3A7E2897E33600328EC8 /* MigrateHandle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10320,14 +10408,12 @@
 				03DCB5F2286C480900CBC75D /* StatementCreateIndexBridge.cpp in Sources */,
 				23301BF52298FE9A00A8AB5A /* AutoMigrateConfig.cpp in Sources */,
 				23EEDCA9217DFADC006E9E73 /* TableOrSubquery.cpp in Sources */,
-				233B098121BE50D2005AD534 /* AssembleHandle.cpp in Sources */,
 				23593B7D20D3ADF80058B416 /* WalRelated.cpp in Sources */,
 				23EEDD2F217DFADC006E9E73 /* SyntaxBeginSTMT.cpp in Sources */,
 				23EEDCF5217DFADC006E9E73 /* SyntaxCommonTableExpression.cpp in Sources */,
 				03E1660627F42D6500D2C926 /* StatementCreateVirtualTable.swift in Sources */,
 				23EEDCCF217DFADC006E9E73 /* StatementDropTable.cpp in Sources */,
 				03E1663427F42D6600D2C926 /* Insert.swift in Sources */,
-				75751ED92412AD11006CBFFD /* MigratingHandleStatement.cpp in Sources */,
 				23EEDCF9217DFADC006E9E73 /* SyntaxExpression.cpp in Sources */,
 				23EEDCC7217DFADC006E9E73 /* StatementCreateVirtualTable.cpp in Sources */,
 				23545BA22224EAA40091C981 /* SyntaxCommonConst.cpp in Sources */,
@@ -10360,6 +10446,7 @@
 				03BFC5D72853538400673AE4 /* IndexedColumnBridge.cpp in Sources */,
 				236BACE721BF9FC900C8B4D9 /* WCTMigrationInfo.mm in Sources */,
 				2304B42E22156E1500901953 /* TokenizerModules.cpp in Sources */,
+				0DD8D1172B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */,
 				03E1663327F42D6600D2C926 /* MultiSelect.swift in Sources */,
 				03E1661127F42D6500D2C926 /* StatementUpdate.swift in Sources */,
 				23D0C35520C149D80001BFAE /* FactoryDepositor.cpp in Sources */,
@@ -10367,6 +10454,7 @@
 				23A3CFB6205FB1A800692F94 /* WCTHandle+Convenient.mm in Sources */,
 				75CD026F28CF8F5F0071B6C3 /* SelectInterface.swift in Sources */,
 				75EB1968287F078E00AA62F7 /* StatementDropTrigger.swift in Sources */,
+				7533CB4F2B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */,
 				75A46C0928432A5D00B58207 /* SyntaxConst.swift in Sources */,
 				23F70FBE20A055D400CCE3CD /* TokenizerConfig.cpp in Sources */,
 				23D0C35D20C149D80001BFAE /* FactoryRetriever.cpp in Sources */,
@@ -10374,11 +10462,13 @@
 				0DF1089629C05559004ED764 /* StatementSelectInterface.swift in Sources */,
 				03DCB5EE286C3D8E00CBC75D /* StatementAttachBridge.cpp in Sources */,
 				23EEDCDD217DFADC006E9E73 /* StatementRollback.cpp in Sources */,
+				0D19BA1F2B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */,
 				7521DDF82920A623009642EF /* Database+WCTTableCoding.swift in Sources */,
 				231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */,
 				03A57F1C2840B5DC00D2A4C3 /* BindParameterBridge.cpp in Sources */,
 				2370B12921914ED500D3227C /* NSNull+WCTColumnCoding.mm in Sources */,
 				23A64D0F214A4A7000ED28BB /* Migration.cpp in Sources */,
+				754359502B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */,
 				3962FFCF23051F71008934D4 /* Configs.cpp in Sources */,
 				75E50A0C29067BC800B73E62 /* MultiObject.cpp in Sources */,
 				23EEDD37217DFADC006E9E73 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
@@ -10457,7 +10547,6 @@
 				23EEDD29217DFADC006E9E73 /* SyntaxAlterTableSTMT.cpp in Sources */,
 				23EEDD3B217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
 				23EEDD2D217DFADC006E9E73 /* SyntaxAttachSTMT.cpp in Sources */,
-				23A09D7D2146204400F62EE8 /* MigratingHandle.cpp in Sources */,
 				23EEDD07217DFADC006E9E73 /* SyntaxJoinClause.cpp in Sources */,
 				232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */,
 				23EEDD43217DFADC006E9E73 /* SyntaxDropTableSTMT.cpp in Sources */,
@@ -10465,6 +10554,8 @@
 				7521DDEE29209DCE009642EF /* Update+WCTTableCoding.swift in Sources */,
 				03E1660327F42D6500D2C926 /* StatementSelect.swift in Sources */,
 				3960D89B2319258B00EF05D1 /* SyntaxExplainSTMT.cpp in Sources */,
+				0D32815F2B04A8E60027B973 /* DecorativeHandle.cpp in Sources */,
+				0D19BA0B2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */,
 				03D3A2A928A6643E0064D4D4 /* PreparedStatement.cpp in Sources */,
 				03E1661C27F42D6500D2C926 /* StatementVacuum.swift in Sources */,
 				03E3181228A23CBC00540CB1 /* Handle.cpp in Sources */,
@@ -10512,7 +10603,7 @@
 				75F4DE4B288405DD00760DC3 /* StatementSavepointBridge.cpp in Sources */,
 				03E1662527F42D6500D2C926 /* Handle.swift in Sources */,
 				233A8532215E7CFE00BB8D4F /* Console.cpp in Sources */,
-				75F314062AAB6305007FFDFB /* BackupRelatedHandle.cpp in Sources */,
+				0DE84C7D2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */,
 				75CB08CB2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				03E1660C27F42D6500D2C926 /* IndexedColumn.swift in Sources */,
 				23EEDCAB217DFADC006E9E73 /* Upsert.cpp in Sources */,
@@ -10557,6 +10648,7 @@
 				03E822882844B8CD0072CA57 /* StatementSelectBridge.cpp in Sources */,
 				23EEDD13217DFADC006E9E73 /* SyntaxQualifiedTableName.cpp in Sources */,
 				7521DDF229209F45009642EF /* StatementInterface+WCTTableCoding.swift in Sources */,
+				754359462B066DBD00CDF232 /* HandleOperator.cpp in Sources */,
 				23EEDD1B217DFADC006E9E73 /* SyntaxSchema.cpp in Sources */,
 				2349F7691EA0D6680021EFA7 /* WCTProperty.mm in Sources */,
 				03E1664627F42D6600D2C926 /* Database.swift in Sources */,
@@ -10575,10 +10667,10 @@
 				23EEDCBB217DFADC006E9E73 /* StatementBegin.cpp in Sources */,
 				2316D93721058B5500707AFC /* WCTFileManager.mm in Sources */,
 				23A64D09214A458A00ED28BB /* MigrationInfo.cpp in Sources */,
+				0D3281682B04AC7A0027B973 /* FunctionContainer.cpp in Sources */,
 				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
 				23EEDC87217DFADC006E9E73 /* ForeignKey.cpp in Sources */,
 				23775B9620AD666900E21AB0 /* Crawlable.cpp in Sources */,
-				39D3C74822A8B8C600C93DC0 /* OperationHandle.cpp in Sources */,
 				23EEDC66217DFADC006E9E73 /* AggregateFunction.cpp in Sources */,
 				75C4409A291CE7E200D74EB7 /* MultiPrimaryConfig.swift in Sources */,
 				23C7559A20DD17B100031A93 /* SQLiteBase.cpp in Sources */,
@@ -10635,6 +10727,7 @@
 				03E1662727F42D6500D2C926 /* CodableType.swift in Sources */,
 				2349F7211EA0D6680021EFA7 /* WCTDelete.mm in Sources */,
 				237A8D5F21EDBB2E003AF5BB /* BusyRetryConfig.cpp in Sources */,
+				7533CB592B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */,
 				03E1663C27F42D6600D2C926 /* Property.swift in Sources */,
 				03E5CC5A28A39B19005353D9 /* Database.cpp in Sources */,
 				23EEDD55217DFADC006E9E73 /* SyntaxSelectSTMT.cpp in Sources */,
@@ -10656,7 +10749,6 @@
 				03E5CC6F28A3BDF3005353D9 /* Value.cpp in Sources */,
 				23EEDCDB217DFADC006E9E73 /* StatementRelease.cpp in Sources */,
 				0D5363EB290A65390026A4DC /* Master.cpp in Sources */,
-				23A4703C21BE0940005B9C09 /* MigrateHandle.cpp in Sources */,
 				03F54828287D93A7007BCA3E /* StatementDropTableBridge.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10717,6 +10809,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7521D6C2291E9ABB009642EF /* SQL.cpp in Sources */,
+				0D3281602B04A8E60027B973 /* DecorativeHandle.cpp in Sources */,
 				7521D6C3291E9ABB009642EF /* HighWater.cpp in Sources */,
 				7521D6C4291E9ABB009642EF /* ConvertibleImplementation.cpp in Sources */,
 				7521D6C5291E9ABB009642EF /* Scoreable.cpp in Sources */,
@@ -10734,6 +10827,7 @@
 				7521D6D8291E9ABB009642EF /* CustomConfig.cpp in Sources */,
 				7521D6D9291E9ABB009642EF /* StatementDropView.cpp in Sources */,
 				7521D6DA291E9ABB009642EF /* Config.cpp in Sources */,
+				0DD8D1182B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */,
 				7521D6DB291E9ABB009642EF /* WCTDatabase.mm in Sources */,
 				7521D6DC291E9ABB009642EF /* WCTOperationQueue.mm in Sources */,
 				7521D6DD291E9ABB009642EF /* Tag.cpp in Sources */,
@@ -10761,6 +10855,7 @@
 				7521D703291E9ABB009642EF /* Progress.cpp in Sources */,
 				7521D704291E9ABB009642EF /* Mechanic.cpp in Sources */,
 				0D4F0F992AC572B20067027E /* WCTPerformanceInfo.mm in Sources */,
+				7533CB5A2B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */,
 				7521D705291E9ABB009642EF /* WCTDatabase+Table.mm in Sources */,
 				7521D707291E9ABB009642EF /* SyntaxUpdateSTMT.cpp in Sources */,
 				7521D70A291E9ABB009642EF /* NSDate+WCTColumnCoding.mm in Sources */,
@@ -10798,12 +10893,10 @@
 				75EF25012AA33FEB0009C99F /* IncrementalMaterial.cpp in Sources */,
 				7521D747291E9ABB009642EF /* AutoMigrateConfig.cpp in Sources */,
 				7521D748291E9ABB009642EF /* TableOrSubquery.cpp in Sources */,
-				7521D749291E9ABB009642EF /* AssembleHandle.cpp in Sources */,
 				7521D74A291E9ABB009642EF /* WalRelated.cpp in Sources */,
 				7521D74B291E9ABB009642EF /* SyntaxBeginSTMT.cpp in Sources */,
 				7521D74C291E9ABB009642EF /* SyntaxCommonTableExpression.cpp in Sources */,
 				7521D74E291E9ABB009642EF /* StatementDropTable.cpp in Sources */,
-				7521D750291E9ABB009642EF /* MigratingHandleStatement.cpp in Sources */,
 				7521D751291E9ABB009642EF /* SyntaxExpression.cpp in Sources */,
 				7521D752291E9ABB009642EF /* StatementCreateVirtualTable.cpp in Sources */,
 				7521D753291E9ABB009642EF /* SyntaxCommonConst.cpp in Sources */,
@@ -10831,6 +10924,7 @@
 				7521D778291E9ABB009642EF /* FactoryRetriever.cpp in Sources */,
 				7521D779291E9ABB009642EF /* WCTPreparedStatement.mm in Sources */,
 				7521D77B291E9ABB009642EF /* StatementRollback.cpp in Sources */,
+				0DE84C7E2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */,
 				7521D77C291E9ABB009642EF /* Exiting.cpp in Sources */,
 				7521D77E291E9ABB009642EF /* NSNull+WCTColumnCoding.mm in Sources */,
 				7521D77F291E9ABB009642EF /* Migration.cpp in Sources */,
@@ -10843,6 +10937,7 @@
 				7521D78E291E9ABB009642EF /* WCTMaster.mm in Sources */,
 				7521D78F291E9ABB009642EF /* SyntaxReindexSTMT.cpp in Sources */,
 				7521D793291E9ABB009642EF /* SyntaxCreateViewSTMT.cpp in Sources */,
+				754359472B066DBD00CDF232 /* HandleOperator.cpp in Sources */,
 				7521D794291E9ABB009642EF /* BindParameter.cpp in Sources */,
 				75C6E41829A0C2F0002579A5 /* WCDBOptional.cpp in Sources */,
 				7521D795291E9ABB009642EF /* AutoBackupConfig.cpp in Sources */,
@@ -10852,7 +10947,6 @@
 				7521D79D291E9ABB009642EF /* HandlePool.cpp in Sources */,
 				7521D79F291E9ABB009642EF /* SyntaxWindowDef.cpp in Sources */,
 				7521D7A0291E9ABB009642EF /* WCTValue.mm in Sources */,
-				7529C7762ABC4D8C00518293 /* BackupRelatedHandle.cpp in Sources */,
 				7521D7A1291E9ABB009642EF /* WCTDatabase+File.mm in Sources */,
 				7521D7A3291E9ABB009642EF /* WCTDatabase+Monitor.mm in Sources */,
 				7521D7A4291E9ABB009642EF /* PagerRelated.cpp in Sources */,
@@ -10864,6 +10958,7 @@
 				7521D7AF291E9ABB009642EF /* StatementDelete.cpp in Sources */,
 				7521D7B0291E9ABB009642EF /* ErrorProne.cpp in Sources */,
 				75D566FF2951B7EA00098DD9 /* WCTSequence.mm in Sources */,
+				0D19BA0C2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */,
 				7521D7B1291E9ABB009642EF /* WCTMultiSelect.mm in Sources */,
 				7521D7B2291E9ABB009642EF /* SyntaxInsertSTMT.cpp in Sources */,
 				7521D7B5291E9ABB009642EF /* Shm.cpp in Sources */,
@@ -10882,11 +10977,12 @@
 				7521D7CC291E9ABB009642EF /* SyntaxAlterTableSTMT.cpp in Sources */,
 				7521D7CD291E9ABB009642EF /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
 				7521D7CE291E9ABB009642EF /* SyntaxAttachSTMT.cpp in Sources */,
-				7521D7CF291E9ABB009642EF /* MigratingHandle.cpp in Sources */,
 				7521D7D0291E9ABB009642EF /* SyntaxJoinClause.cpp in Sources */,
 				7521D7D1291E9ABB009642EF /* WCTDatabase+FTS.mm in Sources */,
 				7521D7D2291E9ABB009642EF /* SyntaxDropTableSTMT.cpp in Sources */,
 				7521D7D5291E9ABB009642EF /* SyntaxExplainSTMT.cpp in Sources */,
+				0D19BA202B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */,
+				754359512B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */,
 				7521D7D9291E9ABB009642EF /* NSData+WCTColumnCoding.mm in Sources */,
 				7521D7DA291E9ABB009642EF /* SyntaxLiteralValue.cpp in Sources */,
 				7521D7DC291E9ABB009642EF /* StringView.cpp in Sources */,
@@ -10935,6 +11031,7 @@
 				7521D81D291E9ABB009642EF /* AutoCheckpointConfig.cpp in Sources */,
 				75A60AB029345A38009C1B3C /* Cipher.cpp in Sources */,
 				7521D820291E9ABB009642EF /* Filter.cpp in Sources */,
+				7533CB502B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */,
 				7521D821291E9ABB009642EF /* Thread.cpp in Sources */,
 				7521D822291E9ABB009642EF /* OperationQueue.cpp in Sources */,
 				7521D823291E9ABB009642EF /* AutoMergeFTSIndexConfig.cpp in Sources */,
@@ -10960,12 +11057,12 @@
 				7521D83F291E9ABB009642EF /* Material.cpp in Sources */,
 				7521D840291E9ABB009642EF /* ForeignKey.cpp in Sources */,
 				7521D841291E9ABB009642EF /* Crawlable.cpp in Sources */,
-				7521D842291E9ABB009642EF /* OperationHandle.cpp in Sources */,
 				7521D843291E9ABB009642EF /* AggregateFunction.cpp in Sources */,
 				7521D845291E9ABB009642EF /* SQLiteBase.cpp in Sources */,
 				7521D846291E9ABB009642EF /* Join.cpp in Sources */,
 				7521D847291E9ABB009642EF /* SyntaxCreateTableSTMT.cpp in Sources */,
 				7521D84A291E9ABB009642EF /* FTSError.cpp in Sources */,
+				0D3281692B04AC7A0027B973 /* FunctionContainer.cpp in Sources */,
 				7521D84B291E9ABB009642EF /* SyntaxDropIndexSTMT.cpp in Sources */,
 				7521D84D291E9ABB009642EF /* HandleRelated.cpp in Sources */,
 				7521D84E291E9ABB009642EF /* SyntaxIdentifier.cpp in Sources */,
@@ -11000,7 +11097,6 @@
 				7521D885291E9ABB009642EF /* SyntaxSelectCore.cpp in Sources */,
 				7521D888291E9ABB009642EF /* Value.cpp in Sources */,
 				7521D889291E9ABB009642EF /* StatementRelease.cpp in Sources */,
-				7521D88B291E9ABB009642EF /* MigrateHandle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11023,6 +11119,8 @@
 				7521DA64291EA349009642EF /* SQLTraceConfig.cpp in Sources */,
 				7521DA66291EA349009642EF /* SyntaxPragma.cpp in Sources */,
 				7521DA67291EA349009642EF /* ResultColumn.swift in Sources */,
+				754359492B066DBD00CDF232 /* HandleOperator.cpp in Sources */,
+				0D3281622B04A8E60027B973 /* DecorativeHandle.cpp in Sources */,
 				7521DA68291EA349009642EF /* Factory.cpp in Sources */,
 				7521DA6B291EA349009642EF /* Statement.cpp in Sources */,
 				7521DA6C291EA349009642EF /* FactoryBackup.cpp in Sources */,
@@ -11055,6 +11153,7 @@
 				7521DA89291EA349009642EF /* StatementReleaseBridge.cpp in Sources */,
 				7521DA8A291EA349009642EF /* StatementDropView.swift in Sources */,
 				7521DA8B291EA349009642EF /* TableDecoder.swift in Sources */,
+				0D19BA222B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */,
 				7521DA8C291EA349009642EF /* TableEncoder.swift in Sources */,
 				7521DA8D291EA349009642EF /* StatementDropTrigger.cpp in Sources */,
 				7521DA8E291EA349009642EF /* ExpressionOperable.cpp in Sources */,
@@ -11087,6 +11186,7 @@
 				7521DAAE291EA349009642EF /* StatementRollbackBridge.cpp in Sources */,
 				7521DAAF291EA349009642EF /* FullCrawler.cpp in Sources */,
 				7521DAB0291EA349009642EF /* SyntaxVacuumSTMT.cpp in Sources */,
+				0D32816B2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */,
 				7521DAB1291EA349009642EF /* ForeignKey.swift in Sources */,
 				7521DAB2291EA349009642EF /* TableCRUDInterface.swift in Sources */,
 				7521DAB3291EA349009642EF /* StatementCreateTable.cpp in Sources */,
@@ -11128,7 +11228,6 @@
 				750080DA2920DD1B009C0F38 /* WCTOperationQueue.mm in Sources */,
 				7521DADD291EA349009642EF /* AutoMigrateConfig.cpp in Sources */,
 				7521DADE291EA349009642EF /* TableOrSubquery.cpp in Sources */,
-				7521DADF291EA349009642EF /* AssembleHandle.cpp in Sources */,
 				7521DAE0291EA349009642EF /* WalRelated.cpp in Sources */,
 				7521DAE1291EA349009642EF /* SyntaxBeginSTMT.cpp in Sources */,
 				7521DAE2291EA349009642EF /* SyntaxCommonTableExpression.cpp in Sources */,
@@ -11136,7 +11235,6 @@
 				7521DAE4291EA349009642EF /* StatementDropTable.cpp in Sources */,
 				75ADC5672A8D1C2D00D0AC47 /* TableAttribute.cpp in Sources */,
 				7521DAE5291EA349009642EF /* Insert.swift in Sources */,
-				7521DAE6291EA349009642EF /* MigratingHandleStatement.cpp in Sources */,
 				7521DAE7291EA349009642EF /* SyntaxExpression.cpp in Sources */,
 				7521DAE8291EA349009642EF /* StatementCreateVirtualTable.cpp in Sources */,
 				7521DAE9291EA349009642EF /* SyntaxCommonConst.cpp in Sources */,
@@ -11149,6 +11247,7 @@
 				7521DAF0291EA349009642EF /* BaseTokenizerUtil.cpp in Sources */,
 				7521DAF1291EA349009642EF /* RaiseFunction.cpp in Sources */,
 				7521DAF2291EA349009642EF /* TableOrSubqueryBridge.cpp in Sources */,
+				0DE84C802B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */,
 				7521DAF4291EA349009642EF /* ColumnConstraint.cpp in Sources */,
 				7521DAF7291EA349009642EF /* Table.swift in Sources */,
 				7521DAF8291EA349009642EF /* Range.cpp in Sources */,
@@ -11187,8 +11286,10 @@
 				7521DB20291EA349009642EF /* StatementCreateTable.swift in Sources */,
 				7521DB21291EA349009642EF /* OneOrBinaryTokenizer.cpp in Sources */,
 				7521DB22291EA349009642EF /* Pragma.swift in Sources */,
+				0D19BA0E2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */,
 				7521DB23291EA349009642EF /* QualifiedTable.swift in Sources */,
 				7521DB25291EA349009642EF /* SyntaxReindexSTMT.cpp in Sources */,
+				0DD8D11A2B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */,
 				7521DB26291EA349009642EF /* StatementDetachBridge.cpp in Sources */,
 				7521DB28291EA349009642EF /* ColumnBridge.cpp in Sources */,
 				7521DB29291EA349009642EF /* SyntaxCreateViewSTMT.cpp in Sources */,
@@ -11199,6 +11300,7 @@
 				7521DB2F291EA349009642EF /* SyntaxRaiseFunction.cpp in Sources */,
 				7521DB30291EA349009642EF /* FrameSpec.cpp in Sources */,
 				7521DB31291EA349009642EF /* FrameSpec.swift in Sources */,
+				7533CB5C2B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */,
 				750080F32920F3D5009C0F38 /* WCTFoundation.mm in Sources */,
 				7521DB32291EA349009642EF /* Recyclable.swift in Sources */,
 				7521DB33291EA349009642EF /* HandlePool.cpp in Sources */,
@@ -11231,6 +11333,7 @@
 				7500828C29222A93009C0F38 /* WCTAPIBridge.mm in Sources */,
 				7521DB57291EA349009642EF /* StatementVacuumBridge.cpp in Sources */,
 				7521DB58291EA349009642EF /* Select.swift in Sources */,
+				754359532B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */,
 				7521DB59291EA349009642EF /* SyntaxCreateIndexSTMT.cpp in Sources */,
 				75EF250D2AA42DD90009C99F /* EncryptedSerialization.cpp in Sources */,
 				7521DB5A291EA349009642EF /* HandleStatementBridge.cpp in Sources */,
@@ -11241,7 +11344,6 @@
 				7521DB62291EA349009642EF /* SyntaxAlterTableSTMT.cpp in Sources */,
 				7521DB63291EA349009642EF /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
 				7521DB64291EA349009642EF /* SyntaxAttachSTMT.cpp in Sources */,
-				7521DB65291EA349009642EF /* MigratingHandle.cpp in Sources */,
 				7521DB66291EA349009642EF /* SyntaxJoinClause.cpp in Sources */,
 				7521DB68291EA349009642EF /* SyntaxDropTableSTMT.cpp in Sources */,
 				7521DB6A291EA349009642EF /* StatementSelect.swift in Sources */,
@@ -11323,7 +11425,6 @@
 				7521DBC2291EA349009642EF /* SyntaxQualifiedTableName.cpp in Sources */,
 				7521DBC3291EA349009642EF /* SyntaxSchema.cpp in Sources */,
 				7521DBC5291EA349009642EF /* Database.swift in Sources */,
-				7529C7782ABC4D8E00518293 /* BackupRelatedHandle.cpp in Sources */,
 				7521DBC6291EA349009642EF /* TableConfiguration.swift in Sources */,
 				7521DBC7291EA349009642EF /* Convertible.swift in Sources */,
 				7521DBCA291EA349009642EF /* Schema.swift in Sources */,
@@ -11338,7 +11439,6 @@
 				7521DBD5291EA349009642EF /* Material.cpp in Sources */,
 				7521DBD6291EA349009642EF /* ForeignKey.cpp in Sources */,
 				7521DBD7291EA349009642EF /* Crawlable.cpp in Sources */,
-				7521DBD8291EA349009642EF /* OperationHandle.cpp in Sources */,
 				7521DBD9291EA349009642EF /* AggregateFunction.cpp in Sources */,
 				7521DBDA291EA349009642EF /* MultiPrimaryConfig.swift in Sources */,
 				7521DBDB291EA349009642EF /* SQLiteBase.cpp in Sources */,
@@ -11379,6 +11479,7 @@
 				7521DC00291EA349009642EF /* SyntaxReleaseSTMT.cpp in Sources */,
 				7521DC02291EA349009642EF /* CoreBridge.cpp in Sources */,
 				7521DC03291EA349009642EF /* Schema.cpp in Sources */,
+				7533CB522B050FA300C8B47D /* MigratingHandleDecorator.cpp in Sources */,
 				7521DC04291EA349009642EF /* MasterCrawler.cpp in Sources */,
 				7521DC05291EA349009642EF /* StatementReindex.cpp in Sources */,
 				75C6E41A29A0C2F0002579A5 /* WCDBOptional.cpp in Sources */,
@@ -11398,7 +11499,6 @@
 				7521DC1D291EA349009642EF /* StatementSavepoint.swift in Sources */,
 				7521DC1E291EA349009642EF /* Value.cpp in Sources */,
 				7521DC1F291EA349009642EF /* StatementRelease.cpp in Sources */,
-				7521DC21291EA349009642EF /* MigrateHandle.cpp in Sources */,
 				7521DC22291EA349009642EF /* StatementDropTableBridge.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

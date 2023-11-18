@@ -99,43 +99,36 @@ static constexpr const int HandlePoolMaxAllowedNumberOfWriters = 4;
 
 enum HandleSlot : unsigned char {
     HandleSlotNormal = 0,
-    HandleSlotMigrating,
-    HandleSlotMigrate,
-    HandleSlotCheckPoint,
-    HandleSlotOperation,
+    HandleSlotAutoTask,
     HandleSlotAssemble,
     HandleSlotCipher,
     HandleSlotCount,
 };
 enum HandleCategory : unsigned char {
     HandleCategoryNormal = 0,
-    HandleCategoryMigrating,
     HandleCategoryMigrate,
     HandleCategoryBackupRead,
     HandleCategoryBackupWrite,
-    HandleCategoryBackupCipher,
+    HandleCategoryCipher,
     HandleCategoryCheckpoint,
     HandleCategoryIntegrity,
-    HandleCategoryAssemble,
-    HandleCategoryAssembleCipher,
     HandleCategoryMergeIndex,
     HandleCategoryCount,
 };
 
 enum class HandleType : unsigned int {
     Normal = (HandleCategoryNormal << 8) | HandleSlotNormal,
-    Migrating = (HandleCategoryMigrating << 8) | HandleSlotMigrating,
-    Migrate = (HandleCategoryMigrate << 8) | HandleSlotMigrate,
-    BackupCipher = (HandleCategoryBackupCipher << 8) | HandleSlotCipher,
-    BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotOperation,
-    BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotOperation,
-    Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotCheckPoint,
-    Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
-    Assemble = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
-    AssembleCipher = (HandleCategoryAssembleCipher << 8) | HandleSlotCipher,
+    Migrate = (HandleCategoryMigrate << 8) | HandleSlotAutoTask,
+    BackupCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
+    BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAutoTask,
+    BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAutoTask,
+    Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotAutoTask,
+    IntegrityCheck = (HandleCategoryIntegrity << 8) | HandleSlotAutoTask,
+    Assemble = (HandleCategoryNormal << 8) | HandleSlotAssemble,
+    AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
-    MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotOperation,
+    MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotAutoTask,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)
 {
@@ -147,8 +140,7 @@ static constexpr HandleCategory categoryOfHandleType(HandleType type)
 }
 static constexpr bool handleShouldWaitWhenFull(HandleType type)
 {
-    HandleSlot slot = slotOfHandleType(type);
-    return slot == HandleSlotNormal || slot == HandleSlotMigrating;
+    return type == HandleType::Normal;
 }
 
 #pragma mark - Backup
@@ -191,7 +183,6 @@ WCDBLiteralStringDefine(ErrorTypeMigrate, "Migrate");
 WCDBLiteralStringDefine(ErrorTypeCheckpoint, "Checkpoint");
 WCDBLiteralStringDefine(ErrorTypeIntegrity, "Integrity");
 WCDBLiteralStringDefine(ErrorTypeBackup, "Backup")
-WCDBLiteralStringDefine(ErrorTypeAssemble, "Assemble");
 WCDBLiteralStringDefine(ErrorTypeMergeIndex, "MergeIndex")
 
 #pragma mark - Moniter
@@ -202,6 +193,15 @@ WCDBLiteralStringDefine(MonitorInfoKeySchemaUsage, "SchemaUsage");
 WCDBLiteralStringDefine(MonitorInfoKeyTableCount, "TableCount");
 WCDBLiteralStringDefine(MonitorInfoKeyIndexCount, "IndexCount");
 WCDBLiteralStringDefine(MonitorInfoKeyTriggerCount, "TriggerCount");
+
+#pragma mark - Decorator
+WCDBLiteralStringDefine(DecoratorMigratingHandleStatement, "MigratingHandleStatement");
+WCDBLiteralStringDefine(DecoratorMigratingHandle, "MigratingHandle");
+
+#pragma mark - HandleOperator
+WCDBLiteralStringDefine(OperatorMigrate, "Migrate");
+WCDBLiteralStringDefine(OperatorBackup, "Backup");
+WCDBLiteralStringDefine(OperatorCheckIntegrity, "CheckIntegrity");
 
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;

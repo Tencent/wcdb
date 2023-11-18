@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/23
+// Created by qiuwenchen on 2023/11/15.
 //
 
 /*
@@ -22,30 +22,29 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "InnerHandle.hpp"
-#include "MigratingHandleStatement.hpp"
+#include "DecorativeHandle.hpp"
 #include "Migration.hpp"
 
 namespace WCDB {
 
 class MigrationInfo;
 
-class MigratingHandle final : public InnerHandle, public Migration::Binder {
+class MigratingHandleDecorator : public HandleDecorator, public Migration::Binder {
 private:
-    using Super = InnerHandle;
+    using Super = HandleDecorator;
 #pragma mark - Initialize
 public:
-    MigratingHandle(Migration &migration);
-    ~MigratingHandle() override final;
+    MigratingHandleDecorator(Migration &migration);
+    ~MigratingHandleDecorator() override final;
+
+    void decorate(Decorative *handle) override final;
 
 #pragma mark - Meta
-    virtual Optional<std::set<StringView>>
+    Optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table) override final;
-    virtual bool addColumn(const Schema &schema,
-                           const UnsafeStringView &table,
-                           const ColumnDef &column) override final;
+    bool addColumn(const Schema &schema,
+                   const UnsafeStringView &table,
+                   const ColumnDef &column) override final;
     bool rebindUnionView(const UnsafeStringView &table, const Columns &columns);
     bool checkSourceTable(const UnsafeStringView &table, const UnsafeStringView &sourceTable);
     bool attachDatabase(const MigrationBaseInfo *attachInfo);
@@ -74,17 +73,8 @@ protected:
 
 #pragma mark - Statement
 public:
-    virtual HandleStatement *getStatement() override final;
-    virtual void returnStatement(HandleStatement *handleStatement) override final;
-    void finalize() override final;
-    void resetAllStatements() override final;
-    void returnAllPreparedStatement() override final;
-
-protected:
-    virtual void finalizeStatements() override final;
-
-private:
-    std::list<MigratingHandleStatement> m_migratingHandleStatements;
+    DecorativeHandleStatement *getStatement() override final;
+    void finalizeStatements() override final;
 };
 
-} //namespace WCDB
+} // namespace WCDB

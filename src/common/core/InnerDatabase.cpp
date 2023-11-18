@@ -31,14 +31,18 @@
 #include "StringView.hpp"
 #include "WCDBError.hpp"
 
-#include "AssembleHandle.hpp"
+#include "AssembleHandleOperator.hpp"
+#include "BackupHandleOperator.hpp"
+#include "IntegerityHandleOperator.hpp"
+#include "MigrateHandleOperator.hpp"
+
+#include "MigratingHandleDecorator.hpp"
+
 #include "BusyRetryConfig.hpp"
 #include "CipherHandle.hpp"
 #include "Core.hpp"
 #include "DBOperationNotifier.hpp"
-#include "MigrateHandle.hpp"
-#include "MigratingHandle.hpp"
-#include "OperationHandle.hpp"
+#include "DecorativeHandle.hpp"
 #include "SQLite.h"
 
 #include <ctime>
@@ -99,6 +103,19 @@ void InnerDatabase::didDrain()
     m_initialized = false;
 }
 
+bool InnerDatabase::checkShouldInterruptWhenClosing(const UnsafeStringView &sourceType)
+{
+    if (m_closing != 0) {
+        Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing.");
+        error.infos.insert_or_assign(ErrorStringKeyPath, path);
+        error.infos.insert_or_assign(ErrorStringKeyType, sourceType);
+        Notifier::shared().notify(error);
+        setThreadedError(std::move(error));
+        return true;
+    }
+    return false;
+}
+
 void InnerDatabase::close(const ClosedCallback &onClosed)
 {
     if (m_isInMemory) {
@@ -117,10 +134,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
         SharedLockGuard concurrencyGuard(m_concurrency);
         SharedLockGuard memoryGuard(m_memory);
         // suspend auto checkpoint/backup/integrity check/migrate/merge fts5 index
-        for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotOperation)) {
-            handle->suspend(true);
-        }
-        for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotMigrate)) {
+        for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotAutoTask)) {
             handle->suspend(true);
         }
     }
@@ -213,8 +227,7 @@ void InnerDatabase::setFullSQLTraceEnable(bool enable)
 #pragma mark - Handle
 RecyclableHandle InnerDatabase::getHandle(bool writeHint)
 {
-    HandleType type
-    = m_migration.shouldMigrate() ? HandleType::Migrating : HandleType::Normal;
+    HandleType type = HandleType::Normal;
     if (m_isInMemory) {
         InitializedGuard initializedGuard = initialize();
         if (m_sharedInMemoryHandle == nullptr) {
@@ -300,27 +313,15 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
     HandleSlot slot = slotOfHandleType(type);
     std::shared_ptr<InnerHandle> handle;
     switch (slot) {
-    case HandleSlotMigrating:
-        handle = std::make_shared<MigratingHandle>(m_migration);
-        break;
-    case HandleSlotMigrate:
-        handle = std::make_shared<MigrateHandle>();
+    case HandleSlotNormal:
+    case HandleSlotAutoTask:
+        handle = std::make_shared<DecorativeHandle>();
         break;
     case HandleSlotCipher:
         handle = std::make_shared<CipherHandle>();
         break;
-    case HandleSlotAssemble:
-        handle = std::make_shared<AssembleHandle>();
-        break;
-    case HandleSlotOperation:
-        handle = std::make_shared<OperationHandle>();
-        break;
-    case HandleSlotCheckPoint: {
-        handle = std::make_shared<OperationHandle>();
-        handle->enableWriteMainDB(true);
-    } break;
     default:
-        WCTAssert(slot == HandleSlotNormal);
+        WCTAssert(slot == HandleSlotAssemble);
         handle = std::make_shared<ConfiguredHandle>();
         break;
     }
@@ -329,8 +330,6 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
         setThreadedError(Error(Error::Code::NoMemory, Error::Level::Error));
         return nullptr;
     }
-
-    handle->setTag(getTag());
 
     if (!setupHandle(type, handle.get())) {
         return nullptr;
@@ -347,10 +346,26 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 {
     WCTAssert(handle != nullptr);
 
+    handle->setTag(getTag());
     handle->setType(type);
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
     handle->setBusyTraceEnable(Core::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
+    handle->enableWriteMainDB(slot == HandleSlotAutoTask || slot == HandleSlotAssemble);
+    handle->markAsCanBeSuspended(false);
+    handle->markErrorAsUnignorable(99); //Clear all ignorable code
+
+    // Decoration
+    if (slot == HandleSlotNormal) {
+        WCTAssert(dynamic_cast<DecorativeHandle *>(handle) != nullptr);
+        DecorativeHandle *decorativeHandle = static_cast<DecorativeHandle *>(handle);
+        if (m_migration.shouldMigrate()) {
+            decorativeHandle->tryAddDecorator<MigratingHandleDecorator>(
+            DecoratorMigratingHandle, m_migration);
+        } else {
+            decorativeHandle->clearDecorators();
+        }
+    }
 
     Configs configs;
     {
@@ -372,7 +387,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
             setThreadedError(handle->getError());
             return false;
         }
-        if (!hasOpened && (slot == HandleSlotNormal || slot == HandleSlotMigrating)) {
+        if (!hasOpened && slot == HandleSlotNormal) {
             std::time_t openTime
             = (Time::now().nanoseconds() - start.nanoseconds()) / 1000;
             uint64_t openCPUTime = Time::currentThreadCPUTimeInMicroseconds() - cpuStart;
@@ -392,6 +407,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
             }
         }
     } else if (slot == HandleSlotCipher) {
+        WCTAssert(dynamic_cast<CipherHandle *>(handle) != nullptr);
         CipherHandle *cipherHandle = static_cast<CipherHandle *>(handle);
         if (!cipherHandle->openCipherInMemory()) {
             setThreadedError(cipherHandle->getCipherError());
@@ -607,6 +623,7 @@ void InnerDatabase::tryLoadIncremetalMaterial()
     if (handle == nullptr) {
         return;
     }
+    WCTAssert(dynamic_cast<CipherHandle *>(handle.get()) != nullptr);
     CipherHandle *cipherHandle = static_cast<CipherHandle *>(handle.get());
     bool useMaterial = false;
     if (cipherHandle->isCipherDB()) {
@@ -653,16 +670,13 @@ bool InnerDatabase::backup(bool interruptible)
         return false; // mark as succeed if it's not an auto initialize action.
     }
 
+    WCTRemedialAssert(
+    !isInTransaction(), "Backup can't be run in transaction.", return false;);
+
     RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {
         return false;
     }
-    OperationHandle *operationBackupReadHandle
-    = static_cast<OperationHandle *>(backupReadHandle.get());
-
-    WCTRemedialAssert(
-    !isInTransaction(), "Backup can't be run in transaction.", return false;);
-
     RecyclableHandle backupWriteHandle = flowOut(HandleType::BackupWrite);
     if (backupWriteHandle == nullptr) {
         return false;
@@ -672,26 +686,14 @@ bool InnerDatabase::backup(bool interruptible)
     if (backupCipherHandle == nullptr) {
         return false;
     }
-    CipherHandle *operationBackupCipherHandle
-    = static_cast<CipherHandle *>(backupCipherHandle.get());
     WCTAssert(backupReadHandle.get() != backupCipherHandle.get());
-
     WCTAssert(backupReadHandle.get() != backupWriteHandle.get());
     WCTAssert(backupWriteHandle.get() != backupCipherHandle.get());
 
-    OperationHandle *operationBackupWriteHandle
-    = static_cast<OperationHandle *>(backupWriteHandle.get());
     if (interruptible) {
-        operationBackupReadHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-        operationBackupWriteHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-        operationBackupReadHandle->markAsCanBeSuspended(true);
-        operationBackupWriteHandle->markAsCanBeSuspended(true);
-        if (m_closing != 0) {
-            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing.");
-            error.infos.insert_or_assign(ErrorStringKeyPath, path);
-            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
-            Notifier::shared().notify(error);
-            setThreadedError(std::move(error));
+        backupReadHandle->markAsCanBeSuspended(true);
+        backupWriteHandle->markAsCanBeSuspended(true);
+        if (checkShouldInterruptWhenClosing(ErrorTypeBackup)) {
             return false;
         }
     }
@@ -699,10 +701,17 @@ bool InnerDatabase::backup(bool interruptible)
     Core::shared().setThreadedErrorPath(path);
 
     Repair::FactoryBackup backup = m_factory.backup();
-    backup.setBackupSharedDelegate(operationBackupReadHandle);
-    backup.setBackupExclusiveDelegate(
-    static_cast<OperationHandle *>(backupWriteHandle.get()));
-    backup.setCipherDelegate(operationBackupCipherHandle);
+    Repair::BackupHandleOperator &backupReadOperator
+    = backupReadHandle.getDecorative()->getOrCreateOperator<Repair::BackupHandleOperator>(
+    OperatorBackup);
+    backup.setBackupSharedDelegate(&backupReadOperator);
+
+    Repair::BackupHandleOperator &backupWriteOperator
+    = backupWriteHandle.getDecorative()->getOrCreateOperator<Repair::BackupHandleOperator>(
+    OperatorBackup);
+    backup.setBackupExclusiveDelegate(&backupWriteOperator);
+    WCTAssert(dynamic_cast<CipherHandle *>(backupCipherHandle.get()) != nullptr);
+    backup.setCipherDelegate(static_cast<CipherHandle *>(backupCipherHandle.get()));
 
     bool succeed = backup.work(getPath(), interruptible);
     if (!succeed) {
@@ -711,12 +720,6 @@ bool InnerDatabase::backup(bool interruptible)
         } else {
             setThreadedError(backup.getError());
         }
-    }
-    if (interruptible) {
-        operationBackupWriteHandle->markAsCanBeSuspended(false);
-        operationBackupReadHandle->markAsCanBeSuspended(false);
-        operationBackupWriteHandle->markErrorAsUnignorable();
-        operationBackupReadHandle->markErrorAsUnignorable();
     }
     Core::shared().setThreadedErrorPath("");
     return succeed;
@@ -764,12 +767,13 @@ bool InnerDatabase::deposit()
         Core::shared().setThreadedErrorPath(path);
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
-        renewer.setBackupSharedDelegate(
-        static_cast<AssembleHandle *>(backupReadHandle.get()));
-        renewer.setBackupExclusiveDelegate(
-        static_cast<AssembleHandle *>(backupWriteHandle.get()));
-        renewer.setAssembleDelegate(
-        static_cast<AssembleHandle *>(assemblerHandle.get()));
+        Repair::BackupHandleOperator backupReadOperator(backupReadHandle.get());
+        renewer.setBackupSharedDelegate(&backupReadOperator);
+        Repair::BackupHandleOperator backupWriteOperator(backupWriteHandle.get());
+        renewer.setBackupExclusiveDelegate(&backupWriteOperator);
+        AssembleHandleOperator assembleOperator(assemblerHandle.get());
+        renewer.setAssembleDelegate(&assembleOperator);
+        WCTAssert(dynamic_cast<CipherHandle *>(cipherHandle.get()) != nullptr);
         renewer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
@@ -838,12 +842,13 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         Core::shared().setThreadedErrorPath(path);
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
-        retriever.setBackupSharedDelegate(
-        static_cast<AssembleHandle *>(backupReadHandle.get()));
-        retriever.setBackupExclusiveDelegate(
-        static_cast<AssembleHandle *>(backupWriteHandle.get()));
-        retriever.setAssembleDelegate(
-        static_cast<AssembleHandle *>(assemblerHandle.get()));
+        Repair::BackupHandleOperator backupReadOperator(backupReadHandle.get());
+        retriever.setBackupSharedDelegate(&backupReadOperator);
+        Repair::BackupHandleOperator backupWriteOperator(backupWriteHandle.get());
+        retriever.setBackupExclusiveDelegate(&backupWriteOperator);
+        AssembleHandleOperator assembleOperator(assemblerHandle.get());
+        retriever.setAssembleDelegate(&assembleOperator);
+        WCTAssert(dynamic_cast<CipherHandle *>(cipherHandle.get()) != nullptr);
         retriever.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
         retriever.setProgressCallback(onProgressUpdated);
         if (retriever.work()) {
@@ -895,28 +900,17 @@ void InnerDatabase::checkIntegrity(bool interruptible)
     if (!initializedGuard.valid()) {
         return; // mark as succeed if it's not an auto initialize action.
     }
-    RecyclableHandle handle = flowOut(HandleType::Integrity);
+    RecyclableHandle handle = flowOut(HandleType::IntegrityCheck);
     if (handle != nullptr) {
-        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-        OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
+        IntegerityHandleOperator &integerityOperator
+        = handle.getDecorative()->getOrCreateOperator<IntegerityHandleOperator>(OperatorCheckIntegrity);
         if (interruptible) {
-            if (m_closing != 0) {
-                Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
-                error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
-                Notifier::shared().notify(error);
-                setThreadedError(std::move(error));
+            if (checkShouldInterruptWhenClosing(ErrorTypeIntegrity)) {
                 return;
             }
-
-            operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            operationHandle->markAsCanBeSuspended(true);
+            handle->markAsCanBeSuspended(true);
         }
-        operationHandle->checkIntegrity();
-        if (interruptible) {
-            operationHandle->markAsCanBeSuspended(false);
-            operationHandle->markErrorAsUnignorable();
-        }
+        integerityOperator.checkIntegrity();
     }
 }
 
@@ -934,30 +928,19 @@ Optional<bool> InnerDatabase::stepMigration(bool interruptible)
     Optional<bool> done;
     RecyclableHandle handle = flowOut(HandleType::Migrate);
     if (handle != nullptr) {
-        WCTAssert(dynamic_cast<MigrateHandle *>(handle.get()) != nullptr);
-        MigrateHandle *migrateHandle = static_cast<MigrateHandle *>(handle.get());
-
+        MigrateHandleOperator &migrateOperator
+        = handle.getDecorative()->getOrCreateOperator<MigrateHandleOperator>(OperatorMigrate);
         if (interruptible) {
-            if (m_closing != 0) {
-                Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
-                error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
-                Notifier::shared().notify(error);
-                setThreadedError(std::move(error));
+            if (checkShouldInterruptWhenClosing(ErrorTypeMigrate)) {
                 return false;
             }
-            migrateHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            migrateHandle->markAsCanBeSuspended(true);
+            handle->markAsCanBeSuspended(true);
         }
-        migrateHandle->markErrorAsIgnorable(Error::Code::Busy);
-        done = m_migration.step(*migrateHandle);
+        handle->markErrorAsIgnorable(Error::Code::Busy);
+
+        done = m_migration.step(migrateOperator);
         if (!done.succeed() && handle->getError().isIgnorable()) {
             done = false;
-        }
-        migrateHandle->markErrorAsUnignorable();
-        if (interruptible) {
-            migrateHandle->markAsCanBeSuspended(false);
-            migrateHandle->markErrorAsUnignorable();
         }
     }
     return done;
@@ -1009,33 +992,17 @@ bool InnerDatabase::checkpoint(bool interruptible, CheckPointMode mode)
     bool succeed = false;
     RecyclableHandle handle = flowOut(HandleType::Checkpoint);
     if (handle != nullptr) {
-        if (m_closing != 0 && interruptible) {
-            Error error(Error::Code::Interrupt, Error::Level::Ignore, "Interrupt due to it's closing");
-            error.infos.insert_or_assign(ErrorStringKeyPath, path);
-            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
-            Notifier::shared().notify(error);
-            setThreadedError(std::move(error));
-            return false;
+        if (interruptible) {
+            if (checkShouldInterruptWhenClosing(ErrorTypeCheckpoint)) {
+                return false;
+            }
+            handle->markAsCanBeSuspended(true);
         }
-
         tryLoadIncremetalMaterial();
-
-        WCTAssert(dynamic_cast<OperationHandle *>(handle.get()) != nullptr);
-        OperationHandle *operationHandle = static_cast<OperationHandle *>(handle.get());
-
-        if (interruptible) {
-            operationHandle->markErrorAsIgnorable(Error::Code::Interrupt);
-            operationHandle->markAsCanBeSuspended(true);
-        }
-        operationHandle->markErrorAsIgnorable(Error::Code::Busy);
-        succeed = operationHandle->checkpoint(mode);
-        if (!succeed && operationHandle->getError().isIgnorable()) {
+        handle->markErrorAsIgnorable(Error::Code::Busy);
+        succeed = handle->checkpoint(mode);
+        if (!succeed && handle->getError().isIgnorable()) {
             succeed = true;
-        }
-        operationHandle->markErrorAsUnignorable();
-        if (interruptible) {
-            operationHandle->markAsCanBeSuspended(false);
-            operationHandle->markErrorAsUnignorable();
         }
     }
     return succeed;
@@ -1049,14 +1016,7 @@ Optional<bool> InnerDatabase::mergeFTSIndex(TableArray newTables, TableArray mod
     if (!initializedGuard.valid()) {
         return false; // mark as succeed if it's not an auto initialize action.
     }
-    if (m_closing != 0) {
-        Error error(Error::Code::Interrupt,
-                    Error::Level::Ignore,
-                    "Interrupt merge fts index due to it's closing.");
-        error.infos.insert_or_assign(ErrorStringKeyPath, path);
-        error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
-        Notifier::shared().notify(error);
-        setThreadedError(std::move(error));
+    if (checkShouldInterruptWhenClosing(ErrorTypeMergeIndex)) {
         return false;
     }
     return m_mergeLogic.triggerMerge(newTables, modifiedTables);
@@ -1068,14 +1028,7 @@ void InnerDatabase::proccessMerge()
     if (!initializedGuard.valid()) {
         return; // mark as succeed if it's not an auto initialize action.
     }
-    if (m_closing != 0) {
-        Error error(Error::Code::Interrupt,
-                    Error::Level::Ignore,
-                    "Interrupt merge fts index due to it's closing.");
-        error.infos.insert_or_assign(ErrorStringKeyPath, path);
-        error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
-        Notifier::shared().notify(error);
-        setThreadedError(std::move(error));
+    if (checkShouldInterruptWhenClosing(ErrorTypeMergeIndex)) {
         return;
     }
     return m_mergeLogic.proccessMerge();

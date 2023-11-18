@@ -1,5 +1,5 @@
 //
-// Created by 陈秋文 on 2023/9/8.
+// Created by 陈秋文 on 2023/11/16.
 //
 
 /*
@@ -24,35 +24,21 @@
 
 #pragma once
 
-#include "Backup.hpp"
 #include "InnerHandle.hpp"
 
 namespace WCDB {
 
-namespace Repair {
-
-class BackupRelatedHandle : public InnerHandle,
-                            public BackupSharedDelegate,
-                            public BackupExclusiveDelegate {
+class HandleOperator {
 public:
-    BackupRelatedHandle();
-    ~BackupRelatedHandle() override;
+    HandleOperator(InnerHandle *handle);
+    HandleOperator(HandleOperator &&other);
+    HandleOperator(const HandleOperator &other) = delete;
+    virtual ~HandleOperator();
 
-#pragma mark - Backup
-public:
-    void setBackupPath(const UnsafeStringView &path) override final;
-    const StringView &getBackupPath() const override final;
-    const Error &getBackupError() const override final;
+    InnerHandle *getHandle() const;
 
-    bool acquireBackupSharedLock() override final;
-    bool releaseBackupSharedLock() override final;
-
-    bool acquireBackupExclusiveLock() override final;
-    bool releaseBackupExclusiveLock() override final;
-
-    void finishBackup() override final;
+private:
+    InnerHandle *m_handle;
 };
-
-} // namespace Repair
 
 } // namespace WCDB

@@ -61,9 +61,7 @@ public:
 
     virtual bool acquireBackupExclusiveLock() = 0;
     virtual bool releaseBackupExclusiveLock() = 0;
-
-    void suspendBackup(bool suspend);
-    bool backupSuspended() const;
+    virtual bool backupSuspended() const = 0;
 
 private:
     std::atomic<bool> m_suspend;

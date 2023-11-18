@@ -27,8 +27,9 @@
 #include "Assertion.hpp"
 #include "BaseBinding.hpp"
 #include "Core.hpp"
+#include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
-#include "MigratingHandle.hpp"
+#include "MigratingHandleDecorator.hpp"
 #include "MigrationInfo.hpp"
 #include "SQLite.h"
 #include "WINQ.h"
@@ -79,7 +80,7 @@ bool HandleStatement::prepare(const Statement &statement)
     if (m_needAutoAddColumn) {
         cacheCurrentTransactionError();
     }
-    if (prepare(sql)) {
+    if (prepareSQL(sql)) {
         return true;
     }
 
@@ -125,7 +126,7 @@ bool HandleStatement::prepare(const Statement &statement)
     }
 
     resumeCacheTransactionError();
-    return prepare(sql);
+    return prepareSQL(sql);
 }
 
 void HandleStatement::analysisStatement(const Statement &statement)
@@ -313,11 +314,14 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
 
         if (!tableSpecified) {
             if (tableName.length() > 0 && tableName.compare(curTableName) != 0) {
-                MigratingHandle *migratingHandle
-                = dynamic_cast<MigratingHandle *>(getHandle());
-                if (migratingHandle != nullptr) {
-                    if (!migratingHandle->checkSourceTable(tableName, curTableName)
-                        && !migratingHandle->checkSourceTable(curTableName, tableName)) {
+                DecorativeHandle *decorativeHandle
+                = dynamic_cast<DecorativeHandle *>(getHandle());
+                if (decorativeHandle != nullptr
+                    && decorativeHandle->containDecorator(DecoratorMigratingHandle)) {
+                    MigratingHandleDecorator *migratingDecorator
+                    = decorativeHandle->getDecorator<MigratingHandleDecorator>(DecoratorMigratingHandle);
+                    if (!migratingDecorator->checkSourceTable(tableName, curTableName)
+                        && !migratingDecorator->checkSourceTable(curTableName, tableName)) {
                         invalidStatement = true;
                     }
                 } else {
@@ -345,7 +349,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
     return *binding != nullptr && findTable && !invalidStatement;
 }
 
-bool HandleStatement::prepare(const UnsafeStringView &sql)
+bool HandleStatement::prepareSQL(const UnsafeStringView &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     WCTAssert(sql.length() > 0);

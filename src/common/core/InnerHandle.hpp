@@ -32,23 +32,26 @@
 namespace WCDB {
 
 class Handle;
+class HandleDecorator;
 
 HandleStatement *GetMainHandleStatement(InnerHandle *handle);
 
 class InnerHandle : public AbstractHandle {
     friend Handle;
     friend HandleStatement *GetMainHandleStatement(InnerHandle *handle);
+    friend HandleDecorator;
 #pragma mark - Initialize
 public:
     InnerHandle();
     virtual ~InnerHandle() override = 0;
 
     void setType(HandleType type);
+    HandleType getType() const;
     bool getWriteHint();
     void setWriteHint(bool hint);
-    void setErrorType(const UnsafeStringView &type);
 
 private:
+    HandleType m_type;
     bool m_writeHint;
 
 #pragma mark - Config
@@ -108,12 +111,12 @@ public:
     const UnsafeStringView getColumnName(int index);
     const UnsafeStringView getColumnTableName(int index);
 
-    ColumnType getType(int index);
+    ColumnType getColumnType(int index);
     bool isStatementReadonly();
     int getNumberOfColumns();
 
 protected:
-    HandleStatement *m_mainStatement;
+    DecorativeHandleStatement *m_mainStatement;
 
 #pragma mark - Transaction
 public:
@@ -129,8 +132,6 @@ public:
     bool runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 
     void configTransactionEvent(TransactionEvent *event);
-
-protected:
     bool commitTransaction() override;
 
 private:

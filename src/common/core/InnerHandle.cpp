@@ -31,7 +31,10 @@
 namespace WCDB {
 
 InnerHandle::InnerHandle()
-: m_writeHint(false), m_mainStatement(nullptr), m_transactionEvent(nullptr)
+: m_type(HandleType::Normal)
+, m_writeHint(false)
+, m_mainStatement(nullptr)
+, m_transactionEvent(nullptr)
 {
     m_mainStatement = getStatement();
 }
@@ -55,19 +58,22 @@ void InnerHandle::setType(HandleType type)
     case HandleType::Checkpoint:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
         break;
-    case HandleType::Integrity:
+    case HandleType::IntegrityCheck:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
         break;
-    case HandleType::Assemble:
-    case HandleType::AssembleBackupRead:
-    case HandleType::AssembleBackupWrite:
-    case HandleType::AssembleCipher:
-        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeAssemble);
+    case HandleType::MergeIndex:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMergeIndex);
         break;
     default:
         m_error.infos.erase(ErrorStringKeyType);
         break;
     }
+    m_type = type;
+}
+
+HandleType InnerHandle::getType() const
+{
+    return m_type;
 }
 
 bool InnerHandle::getWriteHint()
@@ -78,15 +84,6 @@ bool InnerHandle::getWriteHint()
 void InnerHandle::setWriteHint(bool hint)
 {
     m_writeHint = hint;
-}
-
-void InnerHandle::setErrorType(const UnsafeStringView &type)
-{
-    if (!type.empty()) {
-        m_error.infos.insert_or_assign(ErrorStringKeyType, type);
-    } else {
-        m_error.infos.erase(ErrorStringKeyType);
-    }
 }
 
 #pragma mark - Config
@@ -199,7 +196,7 @@ bool InnerHandle::prepare(const Statement &statement)
 
 bool InnerHandle::prepare(const UnsafeStringView &sql)
 {
-    return m_mainStatement->prepare(sql);
+    return m_mainStatement->prepareSQL(sql);
 }
 
 bool InnerHandle::isPrepared()
@@ -242,7 +239,7 @@ const UnsafeStringView InnerHandle::getColumnTableName(int index)
     return m_mainStatement->getColumnTableName(index);
 }
 
-ColumnType InnerHandle::getType(int index)
+ColumnType InnerHandle::getColumnType(int index)
 {
     return m_mainStatement->getType(index);
 }

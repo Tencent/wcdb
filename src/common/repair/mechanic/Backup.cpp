@@ -49,16 +49,6 @@ BackupExclusiveDelegate::BackupExclusiveDelegate() : m_suspend(false)
 
 BackupExclusiveDelegate::~BackupExclusiveDelegate() = default;
 
-void BackupExclusiveDelegate::suspendBackup(bool suspend)
-{
-    m_suspend = suspend;
-}
-
-bool BackupExclusiveDelegate::backupSuspended() const
-{
-    return m_suspend;
-}
-
 BackupDelegateHolder::BackupDelegateHolder() = default;
 
 BackupDelegateHolder::~BackupDelegateHolder() = default;

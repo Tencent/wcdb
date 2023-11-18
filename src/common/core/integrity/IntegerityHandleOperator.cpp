@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/06/06
+// Created by qiuwenchen on 2023/11/17.
 //
 
 /*
@@ -22,17 +22,15 @@
  * limitations under the License.
  */
 
-#include "OperationHandle.hpp"
+#include "IntegerityHandleOperator.hpp"
 #include "Assertion.hpp"
 #include "CoreConst.h"
-#include "InnerHandle.hpp"
 #include "Notifier.hpp"
-#include "RepairKit.h"
 
 namespace WCDB {
 
-OperationHandle::OperationHandle()
-: BackupRelatedHandle()
+IntegerityHandleOperator::IntegerityHandleOperator(InnerHandle* handle)
+: HandleOperator(handle)
 , m_statementForIntegrityCheck(
   StatementPragma().pragma(Pragma::integrityCheck()).schema(Schema::main()).with(1))
 , m_statementForGetFTSTable(
@@ -43,27 +41,22 @@ OperationHandle::OperationHandle()
 {
 }
 
-OperationHandle::~OperationHandle() = default;
-
-void OperationHandle::doSuspend(bool suspend)
-{
-    AbstractHandle::doSuspend(suspend);
-    BackupExclusiveDelegate::suspendBackup(suspend);
-}
+IntegerityHandleOperator::~IntegerityHandleOperator() = default;
 
 #pragma mark - Integrity
-void OperationHandle::checkIntegrity()
+void IntegerityHandleOperator::checkIntegrity()
 {
-    auto optionalIntegrityMessages = getValues(m_statementForIntegrityCheck, 0);
+    InnerHandle* handle = getHandle();
+    auto optionalIntegrityMessages = handle->getValues(m_statementForIntegrityCheck, 0);
     bool needCheckFTS = true;
     if (optionalIntegrityMessages.succeed()) {
-        auto &integrityMessages = optionalIntegrityMessages.value();
+        auto& integrityMessages = optionalIntegrityMessages.value();
         WCTAssert(integrityMessages.size() == 1);
         if (integrityMessages.size() > 0) {
             auto integrityMessage = *integrityMessages.begin();
             if (!integrityMessage.caseInsensitiveEqual("ok")) {
                 Error error(Error::Code::Corrupt, Error::Level::Warning, integrityMessage);
-                error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+                error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
                 error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
                 Notifier::shared().notify(error);
                 needCheckFTS = false;
@@ -73,18 +66,21 @@ void OperationHandle::checkIntegrity()
     if (!needCheckFTS) {
         return;
     }
-    Optional<std::set<StringView>> ftsTableSet = getValues(m_statementForGetFTSTable, 0);
+    Optional<std::set<StringView>> ftsTableSet
+    = handle->getValues(m_statementForGetFTSTable, 0);
     if (!ftsTableSet.succeed()) {
         return;
     }
-    for (const StringView &ftsTable : ftsTableSet.value()) {
-        if (executeStatement(
+    for (const StringView& ftsTable : ftsTableSet.value()) {
+        if (handle->executeStatement(
             StatementInsert().insertIntoTable(ftsTable).column(Column(ftsTable)).value("integrity-check"))) {
             continue;
         }
-        if (Error::rc2ec((int) m_error.getExtCode()) == Error::ExtCode::CorruptVirtualTable) {
-            Error error(Error::Code::Corrupt, Error::Level::Warning, m_error.getMessage());
-            error.infos.insert_or_assign(ErrorStringKeyPath, getPath());
+        const Error& handleError = handle->getError();
+        if (Error::rc2ec((int) handleError.getExtCode()) == Error::ExtCode::CorruptVirtualTable) {
+            Error error(
+            Error::Code::Corrupt, Error::Level::Warning, handleError.getMessage());
+            error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
             error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
             Notifier::shared().notify(error);
             break;
@@ -92,4 +88,4 @@ void OperationHandle::checkIntegrity()
     }
 }
 
-} // namespace WCDB
+} //namespace WCDB

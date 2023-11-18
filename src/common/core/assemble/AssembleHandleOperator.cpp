@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/08/27
+// Created by qiuwenchen on 2023/11/17.
 //
 
 /*
@@ -22,19 +22,18 @@
  * limitations under the License.
  */
 
-#include "AssembleHandle.hpp"
-#include "CoreConst.h"
+#include "AssembleHandleOperator.hpp"
 
 namespace WCDB {
 
-AssembleHandle::AssembleHandle()
-: BackupRelatedHandle()
+AssembleHandleOperator::AssembleHandleOperator(InnerHandle *handle)
+: HandleOperator(handle)
 , Repair::AssembleDelegate()
 , m_statementForDisableJounral(StatementPragma().pragma(Pragma::journalMode()).to("OFF"))
 , m_statementForEnableMMap(StatementPragma().pragma(Pragma::mmapSize()).to(2147418112))
 , m_integerPrimary(-1)
 , m_withoutRowid(false)
-, m_cellStatement(getStatement())
+, m_cellStatement(handle->getStatement())
 , m_statementForUpdateSequence(StatementUpdate()
                                .update("sqlite_sequence")
                                .set(Column("seq"))
@@ -47,96 +46,101 @@ AssembleHandle::AssembleHandle()
 {
 }
 
-AssembleHandle::~AssembleHandle()
+AssembleHandleOperator::~AssembleHandleOperator()
 {
-    returnStatement(m_cellStatement);
+    getHandle()->returnStatement(m_cellStatement);
 }
 
 #pragma mark - Assemble
-void AssembleHandle::setAssemblePath(const UnsafeStringView &path)
+void AssembleHandleOperator::setAssemblePath(const UnsafeStringView &path)
 {
-    InnerHandle::setPath(path);
+    getHandle()->setPath(path);
 }
 
-const StringView &AssembleHandle::getAssemblePath() const
+const StringView &AssembleHandleOperator::getAssemblePath() const
 {
-    return InnerHandle::getPath();
+    return getHandle()->getPath();
 }
 
-const Error &AssembleHandle::getAssembleError() const
+const Error &AssembleHandleOperator::getAssembleError() const
 {
-    return InnerHandle::getError();
+    return getHandle()->getError();
 }
 
-void AssembleHandle::finishAssemble()
+void AssembleHandleOperator::finishAssemble()
 {
-    InnerHandle::close();
+    getHandle()->close();
 }
 
-bool AssembleHandle::markAsAssembling()
+bool AssembleHandleOperator::markAsAssembling()
 {
-    bool succeed = open();
+    InnerHandle *handle = getHandle();
+    bool succeed = handle->open();
     if (succeed) {
-        if (!execute(m_statementForDisableJounral)
-            || !execute(m_statementForEnableMMap) || !markSequenceAsAssembling()) {
-            close();
+        if (!handle->execute(m_statementForDisableJounral)
+            || !handle->execute(m_statementForEnableMMap) || !markSequenceAsAssembling()) {
+            handle->close();
             succeed = false;
         }
     }
     return succeed;
 }
 
-bool AssembleHandle::markAsAssembled()
+bool AssembleHandleOperator::markAsAssembled()
 {
     m_table.clear();
     m_cellStatement->finalize();
+    InnerHandle *handle = getHandle();
     bool succeed = markSequenceAsAssembled();
-    if (isInTransaction()) {
-        succeed = commitOrRollbackTransaction() && succeed;
+    if (handle->isInTransaction()) {
+        succeed = handle->commitOrRollbackTransaction() && succeed;
     }
-    checkpoint(AbstractHandle::CheckpointMode::Passive);
+    handle->checkpoint(AbstractHandle::CheckpointMode::Passive);
     // TODO: check integrity after assembled?
-    close();
+    handle->close();
     return succeed;
 }
 
-bool AssembleHandle::markAsMilestone()
+bool AssembleHandleOperator::markAsMilestone()
 {
-    if (isInTransaction()) {
-        if (!commitOrRollbackTransaction()) {
+    InnerHandle *handle = getHandle();
+    if (handle->isInTransaction()) {
+        if (!handle->commitOrRollbackTransaction()) {
             return false;
         }
-        checkpoint(AbstractHandle::CheckpointMode::Passive);
+        handle->checkpoint(AbstractHandle::CheckpointMode::Passive);
     }
-    return beginTransaction();
+    return handle->beginTransaction();
 }
 
-bool AssembleHandle::assembleSQL(const UnsafeStringView &sql)
+bool AssembleHandleOperator::assembleSQL(const UnsafeStringView &sql)
 {
-    markErrorAsIgnorable(Error::Code::Error);
-    bool succeed = executeSQL(sql);
-    if (!succeed && getError().code() == Error::Code::Error) {
+    InnerHandle *handle = getHandle();
+    handle->markErrorAsIgnorable(Error::Code::Error);
+    bool succeed = handle->executeSQL(sql);
+    if (!succeed && handle->getError().code() == Error::Code::Error) {
         succeed = true;
     }
-    markErrorAsUnignorable();
+    handle->markErrorAsUnignorable();
     return succeed;
 }
 
 #pragma mark - Assemble - Table
-bool AssembleHandle::assembleTable(const UnsafeStringView &tableName,
-                                   const UnsafeStringView &sql)
+bool AssembleHandleOperator::assembleTable(const UnsafeStringView &tableName,
+                                           const UnsafeStringView &sql)
 {
     m_cellStatement->finalize();
     m_table.clear();
-    markErrorAsIgnorable(Error::Code::Error);
-    bool succeed = executeSQL(sql);
-    if (!succeed && getError().code() == Error::Code::Error) {
+    InnerHandle *handle = getHandle();
+    handle->markErrorAsIgnorable(Error::Code::Error);
+    bool succeed = handle->executeSQL(sql);
+    if (!succeed && handle->getError().code() == Error::Code::Error) {
         succeed = true;
     }
-    markErrorAsUnignorable();
+    handle->markErrorAsUnignorable();
     if (succeed) {
         m_table = tableName;
-        auto attribute = getTableAttribute(Schema::main(), tableName);
+        auto attribute = handle->getTableAttribute(Schema::main(), tableName);
         if (attribute.hasValue()) {
             m_withoutRowid = attribute->withoutRowid;
         }
@@ -144,12 +148,12 @@ bool AssembleHandle::assembleTable(const UnsafeStringView &tableName,
     return succeed;
 }
 
-bool AssembleHandle::isAssemblingTableWithoutRowid() const
+bool AssembleHandleOperator::isAssemblingTableWithoutRowid() const
 {
     return m_withoutRowid;
 }
 
-bool AssembleHandle::assembleCell(const Repair::Cell &cell)
+bool AssembleHandleOperator::assembleCell(const Repair::Cell &cell)
 {
     WCTAssert(!m_table.empty());
     if (!lazyPrepareCell()) {
@@ -190,7 +194,7 @@ bool AssembleHandle::assembleCell(const Repair::Cell &cell)
     return succeed;
 }
 
-void AssembleHandle::markDuplicatedAsReplaceable(bool replaceable)
+void AssembleHandleOperator::markDuplicatedAsReplaceable(bool replaceable)
 {
     if (isDuplicatedReplaceable() != replaceable && m_cellStatement->isPrepared()) {
         m_cellStatement->finalize();
@@ -198,13 +202,13 @@ void AssembleHandle::markDuplicatedAsReplaceable(bool replaceable)
     AssembleDelegate::markDuplicatedAsReplaceable(replaceable);
 }
 
-bool AssembleHandle::lazyPrepareCell()
+bool AssembleHandleOperator::lazyPrepareCell()
 {
     if (m_cellStatement->isPrepared()) {
         return true;
     }
 
-    auto optionalMetas = getTableMeta(Schema(), m_table);
+    auto optionalMetas = getHandle()->getTableMeta(Schema(), m_table);
     if (!optionalMetas.succeed()) {
         return false;
     }
@@ -230,7 +234,7 @@ bool AssembleHandle::lazyPrepareCell()
 }
 
 #pragma mark - Assemble - Sequence
-bool AssembleHandle::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
+bool AssembleHandleOperator::assembleSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     if (sequence == 0) {
         return true;
@@ -248,35 +252,37 @@ bool AssembleHandle::assembleSequence(const UnsafeStringView &tableName, int64_t
 }
 
 Optional<bool>
-AssembleHandle::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
+AssembleHandleOperator::updateSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
     Optional<bool> worked;
-    if (prepare(m_statementForUpdateSequence)) {
-        bindInteger(sequence, 1);
-        bindText(tableName, 2);
-        if (step()) {
-            worked = getChanges() > 0;
+    InnerHandle *handle = getHandle();
+    if (handle->prepare(m_statementForUpdateSequence)) {
+        handle->bindInteger(sequence, 1);
+        handle->bindText(tableName, 2);
+        if (handle->step()) {
+            worked = handle->getChanges() > 0;
         }
-        finalize();
+        handle->finalize();
     }
     return worked;
 }
 
-bool AssembleHandle::insertSequence(const UnsafeStringView &tableName, int64_t sequence)
+bool AssembleHandleOperator::insertSequence(const UnsafeStringView &tableName, int64_t sequence)
 {
+    InnerHandle *handle = getHandle();
     bool succeed = false;
-    if (prepare(m_statementForInsertSequence)) {
-        bindText(tableName, 1);
-        bindInteger(sequence, 2);
-        succeed = step();
-        finalize();
+    if (handle->prepare(m_statementForInsertSequence)) {
+        handle->bindText(tableName, 1);
+        handle->bindInteger(sequence, 2);
+        succeed = handle->step();
+        handle->finalize();
     }
     return succeed;
 }
 
-bool AssembleHandle::markSequenceAsAssembling()
+bool AssembleHandleOperator::markSequenceAsAssembling()
 {
-    return executeStatement(
+    return getHandle()->executeStatement(
     StatementCreateTable()
     .createTable(s_dummySequence)
     .ifNotExists()
@@ -284,9 +290,10 @@ bool AssembleHandle::markSequenceAsAssembling()
             .constraint(ColumnConstraint().primaryKey().autoIncrement())));
 }
 
-bool AssembleHandle::markSequenceAsAssembled()
+bool AssembleHandleOperator::markSequenceAsAssembled()
 {
-    return executeStatement(StatementDropTable().dropTable(s_dummySequence).ifExists());
+    return getHandle()->executeStatement(
+    StatementDropTable().dropTable(s_dummySequence).ifExists());
 }
 
 } // namespace WCDB

@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/23
+// Created by qiuwenchen on 2023/11/17.
 //
 
 /*
@@ -22,11 +22,10 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "InnerHandle.hpp"
+#include "HandleOperator.hpp"
 #include "Migration.hpp"
 #include <array>
+#include <set>
 
 namespace WCDB {
 
@@ -34,10 +33,10 @@ namespace WCDB {
 // However, it's very wasteful for those resources(CPU, IO...) when the step is too small.
 // So stepper will try to migrate one by one until the count of dirty pages(to be written) is changed.
 // In addition, stepper can/will be interrupted when database is not idled.
-class MigrateHandle final : public InnerHandle, public Migration::Stepper {
+class MigrateHandleOperator final : public HandleOperator, public Migration::Stepper {
 public:
-    MigrateHandle();
-    ~MigrateHandle() override final;
+    MigrateHandleOperator(InnerHandle* handle);
+    ~MigrateHandleOperator() override final;
 
 #pragma mark - Schema
 protected:

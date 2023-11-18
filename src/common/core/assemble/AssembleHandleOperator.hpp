@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/08/27
+// Created by qiuwenchen on 2023/11/17.
 //
 
 /*
@@ -22,18 +22,16 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "BackupRelatedHandle.hpp"
-#include "InnerHandle.hpp"
+#include "Assemble.hpp"
+#include "HandleOperator.hpp"
 #include "RepairKit.h"
 
 namespace WCDB {
 
-class AssembleHandle final : public Repair::BackupRelatedHandle, public Repair::AssembleDelegate {
+class AssembleHandleOperator : public HandleOperator, public Repair::AssembleDelegate {
 public:
-    AssembleHandle();
-    ~AssembleHandle() override final;
+    AssembleHandleOperator(InnerHandle *handle);
+    ~AssembleHandleOperator() override;
 
 #pragma mark - Assemble
 public:
@@ -84,4 +82,4 @@ protected:
     StatementInsert m_statementForInsertSequence;
 };
 
-} // namespace WCDB
+} //namespace WCDB

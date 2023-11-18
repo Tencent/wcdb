@@ -24,6 +24,7 @@
 
 #include "RecyclableHandle.hpp"
 #include "Assertion.hpp"
+#include "DecorativeHandle.hpp"
 
 namespace WCDB {
 
@@ -51,6 +52,11 @@ RecyclableHandle &RecyclableHandle::operator=(const std::nullptr_t &)
     return *this;
 }
 
+InnerHandle *RecyclableHandle::operator->() const
+{
+    return m_handle;
+}
+
 RecyclableHandle &RecyclableHandle::operator=(const RecyclableHandle &other)
 {
     Super::operator=(other);
@@ -61,6 +67,12 @@ RecyclableHandle &RecyclableHandle::operator=(const RecyclableHandle &other)
 InnerHandle *RecyclableHandle::get() const
 {
     return m_handle;
+}
+
+DecorativeHandle *RecyclableHandle::getDecorative() const
+{
+    WCTAssert(dynamic_cast<DecorativeHandle *>(m_handle) != nullptr);
+    return static_cast<DecorativeHandle *>(m_handle);
 }
 
 } //namespace WCDB

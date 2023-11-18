@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/23
+// Created by qiuwenchen on 2023/11/17.
 //
 
 /*
@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include "MigrateHandle.hpp"
+#include "MigrateHandleOperator.hpp"
 #include "Assertion.hpp"
 #include "CoreConst.h"
 #include "Time.hpp"
@@ -30,25 +30,26 @@
 
 namespace WCDB {
 
-MigrateHandle::MigrateHandle()
-: m_migratingInfo(nullptr)
-, m_migrateStatement(getStatement())
-, m_removeMigratedStatement(getStatement())
+MigrateHandleOperator::MigrateHandleOperator(InnerHandle* handle)
+: HandleOperator(handle)
+, m_migratingInfo(nullptr)
+, m_migrateStatement(handle->getStatement())
+, m_removeMigratedStatement(handle->getStatement())
 , m_samplePointing(0)
 {
 }
 
-MigrateHandle::~MigrateHandle()
+MigrateHandleOperator::~MigrateHandleOperator()
 {
     finalizeMigrationStatement();
-    returnStatement(m_migrateStatement);
-    returnStatement(m_removeMigratedStatement);
+    getHandle()->returnStatement(m_migrateStatement);
+    getHandle()->returnStatement(m_removeMigratedStatement);
 }
 
-bool MigrateHandle::reAttach(const MigrationBaseInfo* info)
+bool MigrateHandleOperator::reAttach(const MigrationBaseInfo* info)
 {
-    WCTAssert(!isInTransaction());
-    WCTAssert(!isPrepared());
+    WCTAssert(!getHandle()->isInTransaction());
+    WCTAssert(!getHandle()->isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isTargetingSameSchema(
@@ -60,15 +61,15 @@ bool MigrateHandle::reAttach(const MigrationBaseInfo* info)
     return succeed;
 }
 
-bool MigrateHandle::attach(const MigrationBaseInfo* info)
+bool MigrateHandleOperator::attach(const MigrationBaseInfo* info)
 {
-    WCTAssert(!isInTransaction());
-    WCTAssert(!isPrepared());
+    WCTAssert(!getHandle()->isInTransaction());
+    WCTAssert(!getHandle()->isPrepared());
     WCTAssert(m_attached.syntax().isMain());
 
     const StatementAttach& attach = info->getStatementForAttachingSchema();
     const Data& cipher = info->getSourceCipher();
-    HandleStatement handleStatement(this);
+    HandleStatement handleStatement(getHandle());
     bool succeed = handleStatement.prepare(attach);
     if (succeed) {
         if (!cipher.empty()) {
@@ -79,21 +80,22 @@ bool MigrateHandle::attach(const MigrationBaseInfo* info)
     }
     if (succeed) {
         if (info->needRawSourceCipher()) {
-            info->setRawSourceCipher(getRawCipherKey(info->getSchemaForSourceDatabase()));
+            info->setRawSourceCipher(
+            getHandle()->getRawCipherKey(info->getSchemaForSourceDatabase()));
         }
         m_attached = info->getSchemaForSourceDatabase();
     }
     return succeed;
 }
 
-bool MigrateHandle::detach()
+bool MigrateHandleOperator::detach()
 {
-    WCTAssert(!isInTransaction());
-    WCTAssert(!isPrepared());
+    WCTAssert(!getHandle()->isInTransaction());
+    WCTAssert(!getHandle()->isPrepared());
 
     bool succeed = true;
     if (!m_attached.syntax().isMain()) {
-        succeed = execute(WCDB::StatementDetach().detach(m_attached));
+        succeed = getHandle()->execute(WCDB::StatementDetach().detach(m_attached));
         if (succeed) {
             m_attached = Schema::main();
         }
@@ -102,45 +104,46 @@ bool MigrateHandle::detach()
 }
 
 #pragma mark - Stepper
-Optional<std::set<StringView>> MigrateHandle::getAllTables()
+Optional<std::set<StringView>> MigrateHandleOperator::getAllTables()
 {
     Column name("name");
     Column type("type");
     StringView pattern
     = StringView::formatted("%s%%", Syntax::builtinTablePrefix.data());
-    return getValues(StatementSelect()
-                     .select(name)
-                     .from(TableOrSubquery::master())
-                     .where(type == "table" && name.notLike(pattern)),
-                     0);
+    return getHandle()->getValues(StatementSelect()
+                                  .select(name)
+                                  .from(TableOrSubquery::master())
+                                  .where(type == "table" && name.notLike(pattern)),
+                                  0);
 }
 
-bool MigrateHandle::dropSourceTable(const MigrationInfo* info)
+bool MigrateHandleOperator::dropSourceTable(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
     if (!reAttach(info)) {
         return false;
     }
     m_migratingInfo = info;
-    if (!prepare(m_migratingInfo->getStatementForSelectingAnyRowFromSourceTable())) {
+    InnerHandle* handle = getHandle();
+    if (!handle->prepare(m_migratingInfo->getStatementForSelectingAnyRowFromSourceTable())) {
         return false;
     }
-    if (!step()) {
-        finalize();
+    if (!handle->step()) {
+        handle->finalize();
         return false;
     }
-    bool hasContent = !done();
-    finalize();
+    bool hasContent = !handle->done();
+    handle->finalize();
     if (!hasContent) {
-        return execute(m_migratingInfo->getStatementForDroppingSourceTable());
+        return handle->execute(m_migratingInfo->getStatementForDroppingSourceTable());
     }
     return true;
 }
 
-Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
+Optional<bool> MigrateHandleOperator::migrateRows(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
-    auto exists = tableExists(info->getTable());
+    auto exists = getHandle()->tableExists(info->getTable());
     if (!exists.succeed()) {
         return NullOpt;
     }
@@ -170,8 +173,8 @@ Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
     double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
     SteadyClock beforeTransaction = SteadyClock::now();
     Optional<bool> migrated;
-    if (runTransaction([&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](
-                       InnerHandle*) -> bool {
+    if (getHandle()->runTransaction(
+        [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](InnerHandle*) -> bool {
             double cost = 0;
             do {
                 migrated = migrateRow();
@@ -192,15 +195,15 @@ Optional<bool> MigrateHandle::migrateRows(const MigrationInfo* info)
     return NullOpt;
 }
 
-Optional<bool> MigrateHandle::migrateRow()
+Optional<bool> MigrateHandleOperator::migrateRow()
 {
     WCTAssert(m_migrateStatement->isPrepared() && m_removeMigratedStatement->isPrepared());
-    WCTAssert(isInTransaction());
+    WCTAssert(getHandle()->isInTransaction());
     Optional<bool> migrated;
     m_migrateStatement->reset();
     m_removeMigratedStatement->reset();
     if (m_migrateStatement->step()) {
-        if (getChanges() != 0) {
+        if (getHandle()->getChanges() != 0) {
             if (m_removeMigratedStatement->step()) {
                 migrated = false;
             }
@@ -211,19 +214,20 @@ Optional<bool> MigrateHandle::migrateRow()
     return migrated;
 }
 
-void MigrateHandle::finalizeMigrationStatement()
+void MigrateHandleOperator::finalizeMigrationStatement()
 {
     m_migrateStatement->finalize();
     m_removeMigratedStatement->finalize();
 }
 
 #pragma mark - Sample
-MigrateHandle::Sample::Sample()
+MigrateHandleOperator::Sample::Sample()
 : timeIntervalWithinTransaction(0), timeIntervalWholeTransaction(0)
 {
 }
 
-void MigrateHandle::addSample(double timeIntervalWithinTransaction, double timeIntervalForWholeTransaction)
+void MigrateHandleOperator::addSample(double timeIntervalWithinTransaction,
+                                      double timeIntervalForWholeTransaction)
 {
     WCTAssert(timeIntervalWithinTransaction > 0);
     WCTAssert(timeIntervalForWholeTransaction > 0);
@@ -239,7 +243,7 @@ void MigrateHandle::addSample(double timeIntervalWithinTransaction, double timeI
     }
 }
 
-double MigrateHandle::calculateTimeIntervalWithinTransaction() const
+double MigrateHandleOperator::calculateTimeIntervalWithinTransaction() const
 {
     double totalTimeIntervalWithinTransaction = 0;
     double totalTimeIntervalWholeTransaction = 0;
@@ -260,19 +264,19 @@ double MigrateHandle::calculateTimeIntervalWithinTransaction() const
 }
 
 #pragma mark - Info Initializer
-bool MigrateHandle::attachSourceDatabase(const MigrationUserInfo& userInfo)
+bool MigrateHandleOperator::attachSourceDatabase(const MigrationUserInfo& userInfo)
 {
     return reAttach(&userInfo);
 }
 
-InnerHandle* MigrateHandle::getCurrentHandle()
+InnerHandle* MigrateHandleOperator::getCurrentHandle()
 {
-    return this;
+    return getHandle();
 }
 
-const StringView& MigrateHandle::getDatabasePath() const
+const StringView& MigrateHandleOperator::getDatabasePath() const
 {
-    return getPath();
+    return getHandle()->getPath();
 }
 
-} // namespace WCDB
+} //namespace WCDB

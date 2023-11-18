@@ -25,9 +25,9 @@
 #pragma once
 
 #include "ColumnMeta.hpp"
+#include "DecorativeHandleStatement.hpp"
 #include "ErrorProne.hpp"
 #include "HandleNotification.hpp"
-#include "HandleStatement.hpp"
 #include "StringView.hpp"
 #include "TableAttribute.hpp"
 #include "Tag.hpp"
@@ -87,26 +87,26 @@ public:
     void setTag(Tag tag);
     Tag getTag();
 
-protected:
-    bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
+    bool executeSQL(const UnsafeStringView &sql);
+
+protected:
     int m_customOpenFlag;
     Tag m_tag;
 
 #pragma mark - Statement
 public:
-    virtual HandleStatement *getStatement();
+    virtual DecorativeHandleStatement *getStatement();
     virtual void returnStatement(HandleStatement *handleStatement);
     virtual void resetAllStatements();
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
     HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
-    virtual void returnAllPreparedStatement();
 
 private:
     HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);
-    std::list<HandleStatement> m_handleStatements;
-    StringViewMap<HandleStatement *> m_preparedStatements;
+    std::list<DecorativeHandleStatement> m_handleStatements;
+    StringViewMap<DecorativeHandleStatement *> m_preparedStatements;
 
 #pragma mark - Meta
 public:
@@ -120,7 +120,6 @@ public:
 
     virtual Optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table);
-    Optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
 
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
@@ -245,6 +244,8 @@ private:
 public:
     void suspend(bool suspend);                     // thread-safe
     void markAsCanBeSuspended(bool canBeSuspended); // thread-safe, default to false
+    bool isSuspended() const;
+
 protected:
     virtual void doSuspend(bool suspend);
 

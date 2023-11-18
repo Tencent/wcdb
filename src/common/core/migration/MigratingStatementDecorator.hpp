@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2020/3/6.
+// Created by 陈秋文 on 2023/11/15.
 //
 
 /*
@@ -22,70 +22,47 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "HandleStatement.hpp"
+#include "DecorativeHandleStatement.hpp"
+#include "Migration.hpp"
 #include <list>
 
 namespace WCDB {
 
-class MigratingHandle;
-class MigrationInfo;
+class MigratingStatementDecorator final : public HandleStatementDecorator {
+#pragma mark - Basic
+public:
+    MigratingStatementDecorator(Migration::Binder *binder);
+    MigratingStatementDecorator(MigratingStatementDecorator &&other);
+    ~MigratingStatementDecorator() override final;
 
-class MigratingHandleStatement final : public HandleStatement {
-    friend class MigratingHandle;
+    MigratingStatementDecorator() = delete;
+    MigratingStatementDecorator(const MigratingStatementDecorator &) = delete;
+    MigratingStatementDecorator &operator=(const MigratingStatementDecorator &) = delete;
+
+    void decorate(Decorative *handleStatement) override final;
+
+protected:
+    using Super = HandleStatementDecorator;
 
 private:
-    using Super = HandleStatement;
+    Migration::Binder *m_migrationBinder;
 
-public:
-    MigratingHandleStatement() = delete;
-    MigratingHandleStatement(const MigratingHandleStatement &) = delete;
-    MigratingHandleStatement &operator=(const MigratingHandleStatement &) = delete;
-    MigratingHandleStatement(MigratingHandleStatement &&other);
-    ~MigratingHandleStatement() override final;
-
-#pragma mark - Migration
+#pragma mark - Decorated functions
 public:
     bool prepare(const Statement &statement) override final;
-    using Super::isPrepared;
     void finalize() override final;
-
-    using Super::done;
     bool step() override final;
     void reset() override final;
 
-    void bindInteger(const Integer &value, int index = 1) override final;
-    void bindDouble(const Float &value, int index = 1) override final;
-    void bindText(const Text &value, int index = 1) override final;
-    void bindText16(const char16_t *value, size_t valueLength, int index = 1) override final;
-    void bindBLOB(const BLOB &value, int index = 1) override final;
+    void bindInteger(const Integer &value, int index) override final;
+    void bindDouble(const Float &value, int index) override final;
+    void bindText(const Text &value, int index) override final;
+    void bindText16(const char16_t *value, size_t valueLength, int index) override final;
+    void bindBLOB(const BLOB &value, int index) override final;
     void bindNull(int index) override final;
     void bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *)) override final;
 
-    using Super::bindValue;
-    using Super::bindRow;
-
-    using Super::getInteger;
-    using Super::getDouble;
-    using Super::getText;
-    using Super::getText16;
-    using Super::getText16Length;
-    using Super::getBLOB;
-
-    using Super::getValue;
-    using Super::getOneColumn;
-    using Super::getOneRow;
-    using Super::getAllRows;
-
-    using Super::getType;
-    using Super::getOriginColumnName;
-    using Super::getColumnName;
-    using Super::getColumnTableName;
-
-    using Super::isReadOnly;
-    using Super::getNumberOfColumns;
-
+#pragma mark - Migration
 protected:
     bool realStep();
     Optional<std::list<Statement>> process(const Statement &statement);
@@ -96,9 +73,6 @@ protected:
     using StatementType = Syntax::Identifier::Type;
     StatementType m_currentStatementType;
     std::list<HandleStatement> m_additionalStatements;
-
-protected:
-    MigratingHandleStatement(MigratingHandle *handle);
 
 #pragma mark - Insert
 protected:
@@ -115,4 +89,4 @@ protected:
     bool stepUpdateOrDelete();
 };
 
-} //namespace WCDB
+} // namespace WCDB
