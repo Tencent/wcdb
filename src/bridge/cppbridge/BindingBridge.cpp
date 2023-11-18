@@ -140,5 +140,6 @@ void WCDBBindingConfigWithoutRowId(CPPBinding binding)
 const void* _Nullable WCDBBindingGetBaseBinding(CPPBinding binding)
 {
     WCDBGetObjectOrReturnValue(binding, WCDB::BridgedBinding, cppBinding, nullptr);
-    return dynamic_cast<const WCDB::BaseBinding*>(cppBinding);
+    WCTAssert(dynamic_cast<const WCDB::BaseBinding*>(cppBinding) != nullptr);
+    return static_cast<const WCDB::BaseBinding*>(cppBinding);
 }

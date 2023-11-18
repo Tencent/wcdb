@@ -158,8 +158,9 @@ bool InnerHandle::configure()
         }
         m_pendings = m_invokeds;
         if (cipherConfig != nullptr) {
+            WCTAssert(dynamic_cast<CipherConfig *>(cipherConfig.get()) != nullptr);
             CipherConfig *convertedConfig
-            = dynamic_cast<CipherConfig *>(cipherConfig.get());
+            = static_cast<CipherConfig *>(cipherConfig.get());
             if (convertedConfig != nullptr) {
                 convertedConfig->trySaveRawKey(this);
             }

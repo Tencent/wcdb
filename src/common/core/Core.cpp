@@ -334,9 +334,9 @@ void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
     if (!m_operationQueue->isAutoBackup(path)) {
         return;
     }
+    WCTAssert(dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get()) != nullptr);
     AutoBackupConfig* backupConfig
-    = dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
-    WCTAssert(backupConfig != nullptr);
+    = static_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
     if (backupConfig != nullptr) {
         backupConfig->tryRegisterIncrementalMaterial(path, material);
     }
@@ -344,9 +344,9 @@ void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
 
 SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView& path)
 {
+    WCTAssert(dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get()) != nullptr);
     AutoBackupConfig* backupConfig
-    = dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
-    WCTAssert(backupConfig != nullptr);
+    = static_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
     if (backupConfig != nullptr) {
         return backupConfig->tryGetIncrementalMaterial(path);
     }
