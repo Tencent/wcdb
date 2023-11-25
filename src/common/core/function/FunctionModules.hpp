@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2021/10/17.
+// Created by 陈秋文 on 2023/11/25.
 //
 
 /*
@@ -24,21 +24,39 @@
 
 #pragma once
 
-#include "AuxiliaryFunctionModule.hpp"
+#include "Assertion.hpp"
 #include "Lock.hpp"
 #include "StringView.hpp"
+#include "WCDBError.hpp"
 #include <list>
 
 namespace WCDB {
 
-class AuxiliaryFunctionModules final {
+template<typename FunctionModule>
+class FunctionModules final {
 public:
-    void add(const UnsafeStringView& name, const FTS5AuxiliaryFunctionModule& module);
-    const FTS5AuxiliaryFunctionModule* get(const UnsafeStringView& name) const;
+    void add(const UnsafeStringView& name, const FunctionModule& module)
+    {
+        WCTRemedialAssert(!name.empty(), "Name of module can't be null.", return;);
+        LockGuard lockGuard(m_lock);
+        WCTRemedialAssert(
+        m_modules.find(name) == m_modules.end(), "Module already exists.", return;);
+        m_modules.emplace(name, module).first;
+    }
+
+    const FunctionModule* get(const UnsafeStringView& name) const
+    {
+        SharedLockGuard lockGuard(m_lock);
+        const FunctionModule* module = nullptr;
+        const auto iter = m_modules.find(name);
+        if (iter != m_modules.end()) {
+            module = &(iter->second);
+        }
+        return module;
+    }
 
 protected:
-    StringViewMap<const FTS5AuxiliaryFunctionModule> m_modules;
-    StringViewMap<const FTS5AuxiliaryFunctionModule*> m_pointers;
+    StringViewMap<const FunctionModule> m_modules;
     mutable SharedLock m_lock;
 };
 

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -181,7 +181,6 @@
 		037C39B92897E33600328EC8 /* InnerDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2349F61B1EA0D6680021EFA7 /* InnerDatabase.cpp */; };
 		037C39BA2897E33600328EC8 /* Pragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB9C217DFADC006E9E73 /* Pragma.cpp */; };
 		037C39BB2897E33600328EC8 /* UpgradeableErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F020DBAC4C00664B62 /* UpgradeableErrorProne.cpp */; };
-		037C39BF2897E33600328EC8 /* AuxiliaryFunctionModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */; };
 		037C39C02897E33600328EC8 /* SharedThreadedErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7220CA91FF005F1C35 /* SharedThreadedErrorProne.cpp */; };
 		037C39C12897E33600328EC8 /* LiteralValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB96217DFADC006E9E73 /* LiteralValue.cpp */; };
 		037C39C52897E33600328EC8 /* SyntaxCreateIndexSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC3B217DFADC006E9E73 /* SyntaxCreateIndexSTMT.cpp */; };
@@ -428,7 +427,6 @@
 		037C3B742897E33600328EC8 /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB6B217DFADC006E9E73 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3B792897E33600328EC8 /* SyntaxDeleteSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC46217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3B7C2897E33600328EC8 /* StatementSavepoint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBE4217DFADC006E9E73 /* StatementSavepoint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3B7D2897E33600328EC8 /* AuxiliaryFunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */; };
 		037C3B7E2897E33600328EC8 /* FullCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* FullCrawler.hpp */; };
 		037C3B802897E33600328EC8 /* SQLiteAssembler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C30D20C125420001BFAE /* SQLiteAssembler.hpp */; };
 		037C3B842897E33600328EC8 /* StatementAttach.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBBE217DFADC006E9E73 /* StatementAttach.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1805,7 +1803,6 @@
 		7521D7B7291E9ABB009642EF /* Pragma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB9C217DFADC006E9E73 /* Pragma.cpp */; };
 		7521D7B8291E9ABB009642EF /* UpgradeableErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F020DBAC4C00664B62 /* UpgradeableErrorProne.cpp */; };
 		7521D7BA291E9ABB009642EF /* WCTDatabase+Version.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */; };
-		7521D7BC291E9ABB009642EF /* AuxiliaryFunctionModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */; };
 		7521D7BD291E9ABB009642EF /* SharedThreadedErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7220CA91FF005F1C35 /* SharedThreadedErrorProne.cpp */; };
 		7521D7BE291E9ABB009642EF /* LiteralValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB96217DFADC006E9E73 /* LiteralValue.cpp */; };
 		7521D7C3291E9ABB009642EF /* SyntaxCreateIndexSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC3B217DFADC006E9E73 /* SyntaxCreateIndexSTMT.cpp */; };
@@ -2134,7 +2131,6 @@
 		7521D97B291E9ABB009642EF /* SyntaxDeleteSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC46217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D97C291E9ABB009642EF /* WCTMigrationInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 2395582421C143BB000C85E1 /* WCTMigrationInfo+Private.h */; };
 		7521D97E291E9ABB009642EF /* StatementSavepoint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBE4217DFADC006E9E73 /* StatementSavepoint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521D97F291E9ABB009642EF /* AuxiliaryFunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */; };
 		7521D982291E9ABB009642EF /* FullCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* FullCrawler.hpp */; };
 		7521D983291E9ABB009642EF /* WCTDatabase+Table.h in Headers */ = {isa = PBXBuildFile; fileRef = 2349F69A1EA0D6680021EFA7 /* WCTDatabase+Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D984291E9ABB009642EF /* SQLiteAssembler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C30D20C125420001BFAE /* SQLiteAssembler.hpp */; };
@@ -2457,7 +2453,6 @@
 		7521DB4E291EA349009642EF /* UpgradeableErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23AD52F020DBAC4C00664B62 /* UpgradeableErrorProne.cpp */; };
 		7521DB4F291EA349009642EF /* StatementAlterTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165AF27F42D6500D2C926 /* StatementAlterTable.swift */; };
 		7521DB51291EA349009642EF /* ExpressionOperatableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 039BD4342846113D00C58BE2 /* ExpressionOperatableBridge.cpp */; };
-		7521DB52291EA349009642EF /* AuxiliaryFunctionModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */; };
 		7521DB53291EA349009642EF /* SharedThreadedErrorProne.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23567D7220CA91FF005F1C35 /* SharedThreadedErrorProne.cpp */; };
 		7521DB54291EA349009642EF /* LiteralValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDB96217DFADC006E9E73 /* LiteralValue.cpp */; };
 		7521DB55291EA349009642EF /* Declare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165C227F42D6500D2C926 /* Declare.swift */; };
@@ -2780,7 +2775,6 @@
 		7521DD0E291EA349009642EF /* ColumnType.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB6B217DFADC006E9E73 /* ColumnType.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DD11291EA349009642EF /* SyntaxDeleteSTMT.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDC46217DFADC006E9E73 /* SyntaxDeleteSTMT.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DD14291EA349009642EF /* StatementSavepoint.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBE4217DFADC006E9E73 /* StatementSavepoint.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DD15291EA349009642EF /* AuxiliaryFunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */; };
 		7521DD18291EA349009642EF /* FullCrawler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23775B3720AD666900E21AB0 /* FullCrawler.hpp */; };
 		7521DD1A291EA349009642EF /* SQLiteAssembler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23D0C30D20C125420001BFAE /* SQLiteAssembler.hpp */; };
 		7521DD1D291EA349009642EF /* PinyinTokenizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 03450DB72738C8F800C4DC1B /* PinyinTokenizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -3011,6 +3005,30 @@
 		75401478290BE51400EA8D33 /* PinyinTokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03450DB62738C8F800C4DC1B /* PinyinTokenizer.cpp */; };
 		754014C3290BEDA600EA8D33 /* FTSConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 754014C2290BEDA600EA8D33 /* FTSConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		754014C4290BEDA600EA8D33 /* FTSConst.h in Headers */ = {isa = PBXBuildFile; fileRef = 754014C2290BEDA600EA8D33 /* FTSConst.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		754211DC2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211DA2B11FE9200A2FF4D /* ScalarFunctionModule.cpp */; };
+		754211DD2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211DA2B11FE9200A2FF4D /* ScalarFunctionModule.cpp */; };
+		754211DE2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211DA2B11FE9200A2FF4D /* ScalarFunctionModule.cpp */; };
+		754211DF2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211DA2B11FE9200A2FF4D /* ScalarFunctionModule.cpp */; };
+		754211E02B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211DB2B11FE9200A2FF4D /* ScalarFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754211E12B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211DB2B11FE9200A2FF4D /* ScalarFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754211E22B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211DB2B11FE9200A2FF4D /* ScalarFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754211E32B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211DB2B11FE9200A2FF4D /* ScalarFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754211EE2B12331900A2FF4D /* FunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211E92B12331900A2FF4D /* FunctionModules.hpp */; };
+		754211EF2B12331900A2FF4D /* FunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211E92B12331900A2FF4D /* FunctionModules.hpp */; };
+		754211F02B12331900A2FF4D /* FunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211E92B12331900A2FF4D /* FunctionModules.hpp */; };
+		754211F12B12331900A2FF4D /* FunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211E92B12331900A2FF4D /* FunctionModules.hpp */; };
+		754211F52B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */; };
+		754211F62B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */; };
+		754211F72B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */; };
+		754211F82B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */; };
+		754211F92B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */; };
+		754211FA2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */; };
+		754211FB2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */; };
+		754211FC2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */; };
+		754212032B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754212042B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754212052B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754212062B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		754359462B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
 		754359472B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
 		754359482B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
@@ -3030,8 +3048,6 @@
 		7543DD83271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7543DD86271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */; };
 		7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7543DD8A271C343000B533B4 /* AuxiliaryFunctionModules.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */; };
-		7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */; };
 		7543DD8E271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */; };
 		7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */; };
 		7543DD92271C601F00B533B4 /* SubstringMatchInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */; };
@@ -4688,6 +4704,12 @@
 		753C084E28A8D5EB0042C427 /* CPPCRUDTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPCRUDTestCase.h; sourceTree = "<group>"; };
 		753C084F28A8D5F70042C427 /* CPPCRUDTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPCRUDTestCase.mm; sourceTree = "<group>"; };
 		754014C2290BEDA600EA8D33 /* FTSConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTSConst.h; sourceTree = "<group>"; };
+		754211DA2B11FE9200A2FF4D /* ScalarFunctionModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScalarFunctionModule.cpp; sourceTree = "<group>"; };
+		754211DB2B11FE9200A2FF4D /* ScalarFunctionModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScalarFunctionModule.hpp; sourceTree = "<group>"; };
+		754211E92B12331900A2FF4D /* FunctionModules.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FunctionModules.hpp; sourceTree = "<group>"; };
+		754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScalarFunctionConfig.cpp; sourceTree = "<group>"; };
+		754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScalarFunctionConfig.hpp; sourceTree = "<group>"; };
+		754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScalarFunctionTemplate.hpp; sourceTree = "<group>"; };
 		754359442B066DBD00CDF232 /* HandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleOperator.cpp; sourceTree = "<group>"; };
 		754359452B066DBD00CDF232 /* HandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleOperator.hpp; sourceTree = "<group>"; };
 		7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupHandleOperator.cpp; sourceTree = "<group>"; };
@@ -4695,8 +4717,6 @@
 		7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FTS5AuxiliaryFunctionTemplate.hpp; sourceTree = "<group>"; };
 		7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionModule.cpp; sourceTree = "<group>"; };
 		7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionModule.hpp; sourceTree = "<group>"; };
-		7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionModules.cpp; sourceTree = "<group>"; };
-		7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionModules.hpp; sourceTree = "<group>"; };
 		7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AuxiliaryFunctionConfig.cpp; sourceTree = "<group>"; };
 		7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AuxiliaryFunctionConfig.hpp; sourceTree = "<group>"; };
 		7543DD90271C601F00B533B4 /* SubstringMatchInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubstringMatchInfo.cpp; sourceTree = "<group>"; };
@@ -5925,6 +5945,7 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				754211D92B11FCDE00A2FF4D /* function */,
 				0D19BA1C2B0747E80028F92B /* integrity */,
 				75F3140F2AAC07C9007FFDFB /* cipher */,
 				235FBE92229145FC005C7723 /* sqlite */,
@@ -7454,6 +7475,27 @@
 			path = operation;
 			sourceTree = "<group>";
 		};
+		754211D92B11FCDE00A2FF4D /* function */ = {
+			isa = PBXGroup;
+			children = (
+				754211F22B12352A00A2FF4D /* scalar */,
+				754211E92B12331900A2FF4D /* FunctionModules.hpp */,
+			);
+			path = function;
+			sourceTree = "<group>";
+		};
+		754211F22B12352A00A2FF4D /* scalar */ = {
+			isa = PBXGroup;
+			children = (
+				754211DA2B11FE9200A2FF4D /* ScalarFunctionModule.cpp */,
+				754211DB2B11FE9200A2FF4D /* ScalarFunctionModule.hpp */,
+				754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */,
+				754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */,
+				754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */,
+			);
+			path = scalar;
+			sourceTree = "<group>";
+		};
 		757457022402D571005E3682 /* statement */ = {
 			isa = PBXGroup;
 			children = (
@@ -7525,8 +7567,6 @@
 				7543DD82271C2F3B00B533B4 /* FTS5AuxiliaryFunctionTemplate.hpp */,
 				7543DD85271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp */,
 				7543DD84271C2FD000B533B4 /* AuxiliaryFunctionModule.cpp */,
-				7543DD89271C343000B533B4 /* AuxiliaryFunctionModules.hpp */,
-				7543DD88271C343000B533B4 /* AuxiliaryFunctionModules.cpp */,
 				7543DD8D271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp */,
 				7543DD8C271C360E00B533B4 /* AuxiliaryFunctionConfig.cpp */,
 				7543DD91271C601F00B533B4 /* SubstringMatchInfo.hpp */,
@@ -7766,6 +7806,7 @@
 				037C3ADD2897E33600328EC8 /* Scoreable.hpp in Headers */,
 				037C3ADE2897E33600328EC8 /* CaseInsensitiveList.hpp in Headers */,
 				037C3ADF2897E33600328EC8 /* SyntaxForwardDeclaration.h in Headers */,
+				754211FB2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */,
 				037C3AE22897E33600328EC8 /* MigrationInfo.hpp in Headers */,
 				03AFD34228B8B21B00EF5E56 /* Field.hpp in Headers */,
 				037C3AE32897E33600328EC8 /* StatementCreateIndex.hpp in Headers */,
@@ -7840,6 +7881,7 @@
 				037C3B332897E33600328EC8 /* StatementReindex.hpp in Headers */,
 				037C3B342897E33600328EC8 /* SyntaxList.hpp in Headers */,
 				037C3B372897E33600328EC8 /* ColumnConstraint.hpp in Headers */,
+				754212052B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */,
 				75F32F1328BA039D00A72697 /* CPPFieldMacro.h in Headers */,
 				753636DE28BBC3820025C2C4 /* Table.hpp in Headers */,
 				037C3B392897E33600328EC8 /* SQLiteDeclaration.h in Headers */,
@@ -7883,7 +7925,6 @@
 				037C3B7C2897E33600328EC8 /* StatementSavepoint.hpp in Headers */,
 				030C987C28D068B0008636DF /* TransactionGuard.hpp in Headers */,
 				7533CB5F2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
-				037C3B7D2897E33600328EC8 /* AuxiliaryFunctionModules.hpp in Headers */,
 				037C3B7E2897E33600328EC8 /* FullCrawler.hpp in Headers */,
 				75CB08D12A88B9A300429364 /* HandleCounter.hpp in Headers */,
 				037C3B802897E33600328EC8 /* SQLiteAssembler.hpp in Headers */,
@@ -7916,6 +7957,7 @@
 				037C3BAC2897E33600328EC8 /* OperationQueue.hpp in Headers */,
 				037C3BAE2897E33600328EC8 /* WindowDef.hpp in Headers */,
 				DDADC4742949F7C20057AEDB /* Builtin.h in Headers */,
+				754211E22B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				037C3BB32897E33600328EC8 /* SyntaxTableOrSubquery.hpp in Headers */,
 				037C3BB42897E33600328EC8 /* StatementRelease.hpp in Headers */,
 				75DF229B2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */,
@@ -7934,6 +7976,7 @@
 				0D36C0F82AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */,
 				037C3BC22897E33600328EC8 /* AuxiliaryFunctionModule.hpp in Headers */,
 				037C3BC42897E33600328EC8 /* Configs.hpp in Headers */,
+				754211F02B12331900A2FF4D /* FunctionModules.hpp in Headers */,
 				037C3BC82897E33600328EC8 /* SharedThreadedErrorProne.hpp in Headers */,
 				037C3BC92897E33600328EC8 /* Range.hpp in Headers */,
 				037C3BCA2897E33600328EC8 /* SyntaxResultColumn.hpp in Headers */,
@@ -8004,6 +8047,7 @@
 				23DF0A0E219029DB00F0B2B6 /* WCTDeclaration.h in Headers */,
 				234591F6204433E200DC7D34 /* Core.hpp in Headers */,
 				03D077F728C1F951009A3B18 /* HandleORMOperation.hpp in Headers */,
+				754211E02B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */,
 				75F32F0A28B9CE8E00A72697 /* CPPORMMacro.h in Headers */,
 				23EEDC9A217DFADC006E9E73 /* Pragma.hpp in Headers */,
@@ -8179,6 +8223,7 @@
 				0D5363F3290A75F20026A4DC /* Sequence.hpp in Headers */,
 				23EEDCDA217DFADC006E9E73 /* StatementReindex.hpp in Headers */,
 				23EEDC74217DFADC006E9E73 /* SyntaxList.hpp in Headers */,
+				754211EE2B12331900A2FF4D /* FunctionModules.hpp in Headers */,
 				75ADC5682A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */,
 				2349F76C1EA0D6680021EFA7 /* WCTTableConstraintMacro.h in Headers */,
 				23EEDC7C217DFADC006E9E73 /* ColumnConstraint.hpp in Headers */,
@@ -8250,10 +8295,10 @@
 				2395582621C143BB000C85E1 /* WCTMigrationInfo+Private.h in Headers */,
 				75E50A302907921600B73E62 /* MultiSelect.hpp in Headers */,
 				23EEDCE0217DFADC006E9E73 /* StatementSavepoint.hpp in Headers */,
-				7543DD8B271C343000B533B4 /* AuxiliaryFunctionModules.hpp in Headers */,
 				75F32F1028B9F90900A72697 /* FTSTokenizerUtil.hpp in Headers */,
 				75F32F1728BA066400A72697 /* CPPBindingMacro.h in Headers */,
 				23775B6C20AD666900E21AB0 /* FullCrawler.hpp in Headers */,
+				754212032B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */,
 				2349F7701EA0D6680021EFA7 /* WCTDatabase+Table.h in Headers */,
 				23D0C31020C125420001BFAE /* SQLiteAssembler.hpp in Headers */,
 				2349F72F1EA0D6680021EFA7 /* WCTSelectable.h in Headers */,
@@ -8407,6 +8452,7 @@
 				234DBCF72064DD0C000E31E8 /* WCTHandle+Private.h in Headers */,
 				0D8084212A861E8500C81BBF /* WCTCancellationSignal.h in Headers */,
 				23EEDCE6217DFADC006E9E73 /* StatementVacuum.hpp in Headers */,
+				754211F92B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */,
 				23EEDC7A217DFADC006E9E73 /* Column.hpp in Headers */,
 				2370B12A21914ED500D3227C /* NSNull+WCTColumnCoding.h in Headers */,
 				239776FA202AF2E3000A681C /* TimedQueue.hpp in Headers */,
@@ -8495,6 +8541,7 @@
 				7521D8BD291E9ABB009642EF /* LiteralValue.hpp in Headers */,
 				7521D8BF291E9ABB009642EF /* CustomConfig.hpp in Headers */,
 				7521D8C0291E9ABB009642EF /* StatementCreateTable.hpp in Headers */,
+				754212042B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */,
 				7521D8C1291E9ABB009642EF /* ForeignKey.hpp in Headers */,
 				7521D8C2291E9ABB009642EF /* WCTTryDisposeGuard.h in Headers */,
 				7521D8C3291E9ABB009642EF /* Version.h in Headers */,
@@ -8528,6 +8575,7 @@
 				7521D8E1291E9ABB009642EF /* SQLTraceConfig.hpp in Headers */,
 				7521D8E2291E9ABB009642EF /* Data.hpp in Headers */,
 				7521D8E3291E9ABB009642EF /* WCTDatabase.h in Headers */,
+				754211EF2B12331900A2FF4D /* FunctionModules.hpp in Headers */,
 				7521D8E4291E9ABB009642EF /* Assertion.hpp in Headers */,
 				7521D8E5291E9ABB009642EF /* WCTDatabase+Monitor.h in Headers */,
 				7521D8E6291E9ABB009642EF /* Filter.hpp in Headers */,
@@ -8546,10 +8594,12 @@
 				7521D8F4291E9ABB009642EF /* StringView.hpp in Headers */,
 				7521D8F5291E9ABB009642EF /* RepairKit.h in Headers */,
 				7521D8F6291E9ABB009642EF /* WCTTable.h in Headers */,
+				754211FA2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */,
 				7521D8F7291E9ABB009642EF /* OrderingTerm.hpp in Headers */,
 				7521D8F8291E9ABB009642EF /* SyntaxUpsertClause.hpp in Headers */,
 				7521D8F9291E9ABB009642EF /* Shm.hpp in Headers */,
 				7521D8FA291E9ABB009642EF /* StatementDetach.hpp in Headers */,
+				754211E12B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				7521D8FC291E9ABB009642EF /* SubstringMatchInfo.hpp in Headers */,
 				7521D8FD291E9ABB009642EF /* SyntaxBeginSTMT.hpp in Headers */,
 				7521D8FE291E9ABB009642EF /* SyntaxUpdateSTMT.hpp in Headers */,
@@ -8676,7 +8726,6 @@
 				7521D97E291E9ABB009642EF /* StatementSavepoint.hpp in Headers */,
 				0DE84AD32B03295400522A4E /* FunctionContainer.hpp in Headers */,
 				0D3281642B04A8E60027B973 /* DecorativeHandle.hpp in Headers */,
-				7521D97F291E9ABB009642EF /* AuxiliaryFunctionModules.hpp in Headers */,
 				7521D982291E9ABB009642EF /* FullCrawler.hpp in Headers */,
 				7521D983291E9ABB009642EF /* WCTDatabase+Table.h in Headers */,
 				7521D984291E9ABB009642EF /* SQLiteAssembler.hpp in Headers */,
@@ -8837,6 +8886,7 @@
 				7521DC46291EA349009642EF /* Convertible.hpp in Headers */,
 				7521DC47291EA349009642EF /* Initializeable.hpp in Headers */,
 				7521DC48291EA349009642EF /* WinqBridge.hpp in Headers */,
+				754212062B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */,
 				7521DC49291EA349009642EF /* Recyclable.hpp in Headers */,
 				75C6E41B29A124B4002579A5 /* WCDBOptional.hpp in Headers */,
 				7521DC4A291EA349009642EF /* CoreConst.h in Headers */,
@@ -8890,6 +8940,7 @@
 				7521DC8D291EA349009642EF /* OrderingTerm.hpp in Headers */,
 				7521DC8E291EA349009642EF /* SyntaxUpsertClause.hpp in Headers */,
 				7521DC8F291EA349009642EF /* Shm.hpp in Headers */,
+				754211FC2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */,
 				7521DC90291EA349009642EF /* StatementDetach.hpp in Headers */,
 				7521DC92291EA349009642EF /* SubstringMatchInfo.hpp in Headers */,
 				7521DC93291EA349009642EF /* SyntaxBeginSTMT.hpp in Headers */,
@@ -8949,6 +9000,7 @@
 				7521DCDB291EA349009642EF /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				7521DCDC291EA349009642EF /* Shadow.hpp in Headers */,
 				7521DCE0291EA349009642EF /* JoinConstraint.hpp in Headers */,
+				754211F12B12331900A2FF4D /* FunctionModules.hpp in Headers */,
 				7521DCE1291EA349009642EF /* SyntaxReleaseSTMT.hpp in Headers */,
 				7521DCE2291EA349009642EF /* Serialization.hpp in Headers */,
 				75ADC56B2A8D1C2D00D0AC47 /* TableAttribute.hpp in Headers */,
@@ -8978,7 +9030,6 @@
 				7521DD0E291EA349009642EF /* ColumnType.hpp in Headers */,
 				7521DD11291EA349009642EF /* SyntaxDeleteSTMT.hpp in Headers */,
 				7521DD14291EA349009642EF /* StatementSavepoint.hpp in Headers */,
-				7521DD15291EA349009642EF /* AuxiliaryFunctionModules.hpp in Headers */,
 				7521DD18291EA349009642EF /* FullCrawler.hpp in Headers */,
 				7521DD1A291EA349009642EF /* SQLiteAssembler.hpp in Headers */,
 				7521DD1D291EA349009642EF /* PinyinTokenizer.hpp in Headers */,
@@ -9031,6 +9082,7 @@
 				7521DD51291EA349009642EF /* StatementDropIndexBridge.h in Headers */,
 				7521DD52291EA349009642EF /* StatementVacuumBridge.h in Headers */,
 				7521DD54291EA349009642EF /* WinqBridge.h in Headers */,
+				754211E32B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				0D19BA122B0702250028F92B /* AssembleHandleOperator.hpp in Headers */,
 				7521DD55291EA349009642EF /* StatementDropViewBridge.h in Headers */,
 				7521DD56291EA349009642EF /* StatementSelectBridge.h in Headers */,
@@ -9753,6 +9805,7 @@
 				037C399E2897E33600328EC8 /* FrameSpec.cpp in Sources */,
 				03AFD34C28B8BB7600EF5E56 /* Binding.cpp in Sources */,
 				037C39A12897E33600328EC8 /* HandlePool.cpp in Sources */,
+				754211DE2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */,
 				037C39A32897E33600328EC8 /* SyntaxWindowDef.cpp in Sources */,
 				037C39A72897E33600328EC8 /* PagerRelated.cpp in Sources */,
 				037C39AB2897E33600328EC8 /* SyntaxColumnDef.cpp in Sources */,
@@ -9772,7 +9825,6 @@
 				037C39B92897E33600328EC8 /* InnerDatabase.cpp in Sources */,
 				037C39BA2897E33600328EC8 /* Pragma.cpp in Sources */,
 				037C39BB2897E33600328EC8 /* UpgradeableErrorProne.cpp in Sources */,
-				037C39BF2897E33600328EC8 /* AuxiliaryFunctionModules.cpp in Sources */,
 				037C39C02897E33600328EC8 /* SharedThreadedErrorProne.cpp in Sources */,
 				037C39C12897E33600328EC8 /* LiteralValue.cpp in Sources */,
 				037C39C52897E33600328EC8 /* SyntaxCreateIndexSTMT.cpp in Sources */,
@@ -9800,6 +9852,7 @@
 				037C39F72897E33600328EC8 /* SyntaxIndexedColumn.cpp in Sources */,
 				037C39F92897E33600328EC8 /* Pager.cpp in Sources */,
 				037C39FF2897E33600328EC8 /* Console.cpp in Sources */,
+				754211F72B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */,
 				037C3A012897E33600328EC8 /* Upsert.cpp in Sources */,
 				037C3A022897E33600328EC8 /* MasterItem.cpp in Sources */,
 				037C3A032897E33600328EC8 /* StatementDropIndex.cpp in Sources */,
@@ -10383,6 +10436,7 @@
 				7525C1532920AB1900FD34C7 /* SelectInterface+WCTTableCoding.swift in Sources */,
 				75AF6AF12855C8BF00A7C43D /* UpsertBridge.cpp in Sources */,
 				23B4DCE12112B03C00954D71 /* AsyncQueue.cpp in Sources */,
+				754211DC2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */,
 				23EEDD23217DFADC006E9E73 /* SyntaxUpsertClause.cpp in Sources */,
 				39690195233B2235006EEFD4 /* WCTTable+Table.mm in Sources */,
 				75A46C0F2843B3BC00B58207 /* OrderingTermBridge.cpp in Sources */,
@@ -10528,7 +10582,6 @@
 				03E1661927F42D6500D2C926 /* StatementAlterTable.swift in Sources */,
 				23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */,
 				039BD4362846113D00C58BE2 /* ExpressionOperatableBridge.cpp in Sources */,
-				7543DD8A271C343000B533B4 /* AuxiliaryFunctionModules.cpp in Sources */,
 				23567D7520CA9200005F1C35 /* SharedThreadedErrorProne.cpp in Sources */,
 				23EEDC93217DFADC006E9E73 /* LiteralValue.cpp in Sources */,
 				03E1662927F42D6600D2C926 /* Declare.swift in Sources */,
@@ -10559,6 +10612,7 @@
 				03D3A2A928A6643E0064D4D4 /* PreparedStatement.cpp in Sources */,
 				03E1661C27F42D6500D2C926 /* StatementVacuum.swift in Sources */,
 				03E3181228A23CBC00540CB1 /* Handle.cpp in Sources */,
+				754211F52B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */,
 				2370B12521914ED500D3227C /* NSData+WCTColumnCoding.mm in Sources */,
 				23EEDD0B217DFADC006E9E73 /* SyntaxLiteralValue.cpp in Sources */,
 				03EE3DAE28816DA800C8F0B3 /* StatementUpdateBridge.cpp in Sources */,
@@ -10917,6 +10971,7 @@
 				7521D76A291E9ABB009642EF /* StatementCreateTrigger.cpp in Sources */,
 				7521D76B291E9ABB009642EF /* DatabasePool.cpp in Sources */,
 				7521D76D291E9ABB009642EF /* WCTMigrationInfo.mm in Sources */,
+				754211F62B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */,
 				7521D76E291E9ABB009642EF /* TokenizerModules.cpp in Sources */,
 				7521D771291E9ABB009642EF /* FactoryDepositor.cpp in Sources */,
 				7521D773291E9ABB009642EF /* WCTHandle+Convenient.mm in Sources */,
@@ -10964,9 +11019,9 @@
 				7521D7B5291E9ABB009642EF /* Shm.cpp in Sources */,
 				7521D7B6291E9ABB009642EF /* InnerDatabase.cpp in Sources */,
 				7521D7B7291E9ABB009642EF /* Pragma.cpp in Sources */,
+				754211DD2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */,
 				7521D7B8291E9ABB009642EF /* UpgradeableErrorProne.cpp in Sources */,
 				7521D7BA291E9ABB009642EF /* WCTDatabase+Version.mm in Sources */,
-				7521D7BC291E9ABB009642EF /* AuxiliaryFunctionModules.cpp in Sources */,
 				7521D7BD291E9ABB009642EF /* SharedThreadedErrorProne.cpp in Sources */,
 				7521D7BE291E9ABB009642EF /* LiteralValue.cpp in Sources */,
 				7521D7C3291E9ABB009642EF /* SyntaxCreateIndexSTMT.cpp in Sources */,
@@ -11165,6 +11220,7 @@
 				7521DA95291EA349009642EF /* SyntaxResultColumn.cpp in Sources */,
 				7521DA96291EA349009642EF /* Initializeable.cpp in Sources */,
 				7521DA97291EA349009642EF /* PageBasedFileHandle.cpp in Sources */,
+				754211DF2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */,
 				75CB08CE2A88B9A300429364 /* HandleCounter.cpp in Sources */,
 				7521DA98291EA349009642EF /* OrderingTerm.swift in Sources */,
 				7521DA99291EA349009642EF /* Progress.cpp in Sources */,
@@ -11308,6 +11364,7 @@
 				7521DB3A291EA349009642EF /* PagerRelated.cpp in Sources */,
 				7521DB3B291EA349009642EF /* Statement.swift in Sources */,
 				7521DB3D291EA349009642EF /* WindowDef.swift in Sources */,
+				754211F82B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */,
 				7521DB3E291EA349009642EF /* ExpressionBridge.cpp in Sources */,
 				7521DB3F291EA349009642EF /* SyntaxColumnDef.cpp in Sources */,
 				7521DB40291EA349009642EF /* Upsert.swift in Sources */,
@@ -11325,7 +11382,6 @@
 				7521DB4E291EA349009642EF /* UpgradeableErrorProne.cpp in Sources */,
 				7521DB4F291EA349009642EF /* StatementAlterTable.swift in Sources */,
 				7521DB51291EA349009642EF /* ExpressionOperatableBridge.cpp in Sources */,
-				7521DB52291EA349009642EF /* AuxiliaryFunctionModules.cpp in Sources */,
 				7521DB53291EA349009642EF /* SharedThreadedErrorProne.cpp in Sources */,
 				7521DB54291EA349009642EF /* LiteralValue.cpp in Sources */,
 				7521DB55291EA349009642EF /* Declare.swift in Sources */,
@@ -11646,7 +11702,11 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -11658,7 +11718,11 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

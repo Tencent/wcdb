@@ -39,6 +39,8 @@
 
 namespace WCDB {
 
+class ScalarFunctionConfig;
+
 class AbstractHandle : public ErrorProne {
 #pragma mark - Initialize
 public:
@@ -49,6 +51,7 @@ public:
     virtual ~AbstractHandle() override = 0;
 
 private:
+    friend class ScalarFunctionConfig;
     friend class HandleRelated;
     sqlite3 *getRawHandle();
     sqlite3 *m_handle;

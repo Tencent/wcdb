@@ -173,6 +173,23 @@ void Core::preprocessError(Error& error)
     }
 }
 
+#pragma mark - ScalarFunction
+void Core::registerScalarFunction(const UnsafeStringView& name,
+                                  const ScalarFunctionModule& module)
+{
+    m_scalarFunctionModules->add(name, module);
+}
+
+bool Core::scalarFunctionExists(const UnsafeStringView& name) const
+{
+    return m_scalarFunctionModules->get(name) != nullptr;
+}
+
+std::shared_ptr<Config> Core::scalarFunctionConfig(const UnsafeStringView& scalarFunctionName)
+{
+    return std::make_shared<ScalarFunctionConfig>(scalarFunctionName, m_scalarFunctionModules);
+}
+
 #pragma mark - Tokenizer
 void Core::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
 {

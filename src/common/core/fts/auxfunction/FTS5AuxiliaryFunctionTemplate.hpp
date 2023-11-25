@@ -34,30 +34,31 @@ public:
     static_assert(std::is_base_of<AbstractFTS5AuxiliaryFunctionObject, AuxiliaryFunctionObject>::value,
                   "");
 
-    static FTS5AuxiliaryFunctionModule specializeWithContext(void *pCtx)
+    static FTS5AuxiliaryFunctionModule specializeWithContext(void *userContext)
     {
-        return FTS5AuxiliaryFunctionModule(run, pCtx);
+        return FTS5AuxiliaryFunctionModule(run, userContext);
     }
 
     static void run(const FTS5AuxiliaryFunctionAPIPointer *pApi,
                     FTS5AuxiliaryFunctionContext *pFts,
-                    FTS5SQLiteContext *pCtx,
+                    SQLiteContext *pCtx,
                     int nVal,
-                    FTS5AuxiliaryFunctionValue **apVal)
+                    SQLiteValue **apVal)
     {
-        FTS5AuxiliaryFunctionAPI *apiObj = new FTS5AuxiliaryFunctionAPI(pApi, pCtx, pFts);
-        AbstractFTS5AuxiliaryFunctionObject *funcObject = apiObj->getOrCreateFunctionObject(
-        [nVal, apVal, apiObj](void *userData) {
+        FTS5AuxiliaryFunctionAPI apiObj
+        = FTS5AuxiliaryFunctionAPI(pApi, pFts, pCtx, apVal, nVal);
+        AbstractFTS5AuxiliaryFunctionObject *funcObject = apiObj.getOrCreateFunctionObject(
+        [&apiObj](void *userData) {
             AbstractFTS5AuxiliaryFunctionObject *funcObject
             = static_cast<AbstractFTS5AuxiliaryFunctionObject *>(
-            new AuxiliaryFunctionObject(nVal, apVal, userData, apiObj));
+            new AuxiliaryFunctionObject(userData, apiObj));
             return funcObject;
         },
         deleteAuxData);
+
         if (funcObject != nullptr) {
             funcObject->process(apiObj);
         }
-        delete apiObj;
     }
 
     static void deleteAuxData(void *auxObject)

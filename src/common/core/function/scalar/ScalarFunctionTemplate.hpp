@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2021/10/17.
+// Created by 陈秋文 on 2023/11/25.
 //
 
 /*
@@ -22,30 +22,27 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "AuxiliaryFunctionModule.hpp"
-#include "Config.hpp"
-#include "FunctionModules.hpp"
-#include "WINQ.h"
+#include "ScalarFunctionModule.hpp"
 
 namespace WCDB {
 
-typedef FunctionModules<FTS5AuxiliaryFunctionModule> AuxiliaryFunctionModules;
-
-class AuxiliaryFunctionConfig final : public Config {
+template<typename ScalarFunctionObject>
+class ScalarFunctionTemplate {
 public:
-    AuxiliaryFunctionConfig(const UnsafeStringView& name,
-                            const std::shared_ptr<AuxiliaryFunctionModules>& modules);
-    ~AuxiliaryFunctionConfig() override final;
+    static_assert(std::is_base_of<AbstractScalarFunctionObject, ScalarFunctionObject>::value, "");
 
-    StringView name;
+    static ScalarFunctionModule
+    specialize(int parameterNum, bool deterministic = true, void* userContext = nullptr)
+    {
+        return ScalarFunctionModule(run, parameterNum, deterministic, userContext);
+    }
 
-    bool invoke(InnerHandle* handle) override final;
-
-protected:
-    std::shared_ptr<AuxiliaryFunctionModules> m_modules;
-    StatementSelect m_Statement;
+    static void run(SQLiteContext* pCtx, int nVal, SQLiteValue** apVal)
+    {
+        ScalarFunctionAPI apiObj = ScalarFunctionAPI(pCtx, apVal, nVal);
+        ScalarFunctionObject functionObject(apiObj.getUserData(), apiObj);
+        functionObject.process(apiObj);
+    }
 };
 
-} //namespace WCDB
+} // namespace WCDB

@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2021/10/17.
+// Created by qiuwenchen on 2023/11/25.
 //
 
 /*
@@ -22,30 +22,27 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include "AuxiliaryFunctionModule.hpp"
 #include "Config.hpp"
 #include "FunctionModules.hpp"
+#include "ScalarFunctionModule.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
 
-typedef FunctionModules<FTS5AuxiliaryFunctionModule> AuxiliaryFunctionModules;
+typedef FunctionModules<ScalarFunctionModule> ScalarFunctionModules;
 
-class AuxiliaryFunctionConfig final : public Config {
+class ScalarFunctionConfig final : public Config {
 public:
-    AuxiliaryFunctionConfig(const UnsafeStringView& name,
-                            const std::shared_ptr<AuxiliaryFunctionModules>& modules);
-    ~AuxiliaryFunctionConfig() override final;
+    ScalarFunctionConfig(const UnsafeStringView& name,
+                         const std::shared_ptr<ScalarFunctionModules>& modules);
+    ~ScalarFunctionConfig() override final;
 
     StringView name;
 
     bool invoke(InnerHandle* handle) override final;
 
 protected:
-    std::shared_ptr<AuxiliaryFunctionModules> m_modules;
-    StatementSelect m_Statement;
+    std::shared_ptr<ScalarFunctionModules> m_modules;
 };
 
 } //namespace WCDB

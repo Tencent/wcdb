@@ -416,7 +416,7 @@
     [self doTestValue:@"1,2;串联;子串2;6;"
                andSQL:@"SELECT substring_match_info(testTable, 0, ';,') FROM testTable WHERE content MATCH '子串2'"
           bySelecting:^WCTValue * {
-              return [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Expression::function(WCTAuxiliaryFunction_SubstringMatchInfo).invoke().arguments({ WCDB::Column(self.tableName), 0, ";," })).from(self.tableName).where(FTS5SymbolObject.content.match(@"子串2"))];
+              return [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::FTSFunction::substringMatchInfo(WCDB::Column(self.tableName), 0, ";,")).from(self.tableName).where(FTS5SymbolObject.content.match(@"子串2"))];
           }];
 }
 

@@ -31,12 +31,9 @@ namespace WCDB {
 
 class WCDB_API SubstringMatchInfo : public AbstractFTS5AuxiliaryFunctionObject {
 public:
-    SubstringMatchInfo(int nVal,
-                       FTS5AuxiliaryFunctionValue **apVal,
-                       void *context,
-                       FTS5AuxiliaryFunctionAPI *apiObj);
+    SubstringMatchInfo(void *userContext, FTS5AuxiliaryFunctionAPI &apiObj);
     ~SubstringMatchInfo();
-    void process(FTS5AuxiliaryFunctionAPI *apiObj) override final;
+    void process(FTS5AuxiliaryFunctionAPI &apiObj) override final;
     static int
     tokenCallback(void *pContext, int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff);
     int internalTokenCallback(int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff);

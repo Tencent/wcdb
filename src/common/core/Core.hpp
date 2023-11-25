@@ -33,7 +33,8 @@
 
 #include "DatabasePool.hpp"
 
-#include "AuxiliaryFunctionModules.hpp"
+#include "AuxiliaryFunctionConfig.hpp"
+#include "ScalarFunctionConfig.hpp"
 #include "TokenizerModules.hpp"
 
 #include "Notifier.hpp"
@@ -71,6 +72,16 @@ protected:
     void preprocessError(Error& error);
     ThreadLocal<bool> m_errorIgnorable;
     ThreadLocal<StringView> m_errorPath;
+
+#pragma mark - ScalarFunction
+public:
+    void registerScalarFunction(const UnsafeStringView& name,
+                                const ScalarFunctionModule& module);
+    std::shared_ptr<Config> scalarFunctionConfig(const UnsafeStringView& ScalarFunctionName);
+    bool scalarFunctionExists(const UnsafeStringView& name) const;
+
+protected:
+    std::shared_ptr<ScalarFunctionModules> m_scalarFunctionModules;
 
 #pragma mark - Tokenizer
 public:
