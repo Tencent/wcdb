@@ -3138,7 +3138,7 @@
 		75DF22962AEE8409006A3311 /* CPPInheritObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22942AEE8409006A3311 /* CPPInheritObject.hpp */; };
 		75DF22972AEE8483006A3311 /* CPPInheritObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75DF22932AEE8409006A3311 /* CPPInheritObject.cpp */; };
 		75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		75DF229B2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; };
+		75DF229B2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75DF22992AEFF995006A3311 /* SharedPtrAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		75E0A5C02A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C12A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
 		75E0A5C22A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */; };
