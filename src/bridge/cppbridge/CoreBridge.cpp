@@ -53,6 +53,16 @@ void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable)
     WCDB::Core::shared().enableAutoCheckpoint(cppDatabase, enable);
 }
 
+void WCDBCoreSetAutoCheckpointMinFrames(int frames)
+{
+    WCDB::Core::shared().setCheckPointMinFrames(frames);
+}
+
+void WCDBCoreSetSoftHeapLimit(long long limit)
+{
+    WCDB::Core::shared().setSoftHeapLimit(limit);
+}
+
 void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,
                              double timeOut,
                              void* _Nullable context,

@@ -25,6 +25,7 @@
 #pragma once
 
 #include "Config.hpp"
+#include "Lock.hpp"
 #include "Statement.hpp"
 
 namespace WCDB {
@@ -43,14 +44,18 @@ public:
 
     bool invoke(InnerHandle *handle) override final;
     bool uninvoke(InnerHandle *handle) override final;
+    void setMinFrames(int frame);
 
 protected:
     const StringView m_identifier;
     bool onCommitted(const UnsafeStringView &path, int pages);
     void log(int rc, const char *message);
 
+    int m_minFrames;
     std::shared_ptr<AutoCheckpointOperator> m_operator;
     Statement m_disableAutoCheckpoint;
+    StringViewMap<int> m_frames;
+    mutable SharedLock m_lock;
 };
 
 } //namespace WCDB
