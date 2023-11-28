@@ -119,6 +119,11 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
+void Core::releaseSQLiteMemory(int bytes)
+{
+    sqlite3_release_memory(bytes);
+}
+
 void Core::setSoftHeapLimit(int64_t limit)
 {
     sqlite3_soft_heap_limit64(limit);

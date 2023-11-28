@@ -57,6 +57,7 @@ public:
     RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
+    void releaseSQLiteMemory(int bytes);
     void setSoftHeapLimit(int64_t limit);
 
 protected:

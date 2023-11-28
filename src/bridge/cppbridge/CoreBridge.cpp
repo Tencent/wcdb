@@ -58,6 +58,11 @@ void WCDBCoreSetAutoCheckpointMinFrames(int frames)
     WCDB::Core::shared().setCheckPointMinFrames(frames);
 }
 
+void WCDBCoreReleaseSQLiteMemory(int bytes)
+{
+    WCDB::Core::shared().releaseSQLiteMemory(bytes);
+}
+
 void WCDBCoreSetSoftHeapLimit(long long limit)
 {
     WCDB::Core::shared().setSoftHeapLimit(limit);

@@ -887,6 +887,7 @@ static const JNINativeMethod g_databaseMethods[]
     { "isBlockaded", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isBlockaded) },
     { "purge", "(J)V", (void *) WCDBJNIDatabaseFuncName(purge) },
     { "purgeAll", "()V", (void *) WCDBJNICoreFuncName(purgeAllDatabase) },
+    { "releaseSQLiteMemory", "(I)V", (void *) WCDBJNICoreFuncName(releaseSQLiteMemory) },
     { "setSoftHeapLimit", "(J)V", (void *) WCDBJNICoreFuncName(setSoftHeapLimit) },
     { "getHandle", "(JZ)J", (void *) WCDBJNIDatabaseFuncName(getHandle) },
     { "setCipherKey", "(J[BII)V", (void *) WCDBJNIDatabaseFuncName(configCipher) },

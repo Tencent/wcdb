@@ -34,6 +34,7 @@ void WCDBCorePurgeAllDatabase(void);
 bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir);
 void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable);
 void WCDBCoreSetAutoCheckpointMinFrames(int frames);
+void WCDBCoreReleaseSQLiteMemory(int bytes);
 void WCDBCoreSetSoftHeapLimit(long long limit);
 
 typedef void (*WCDBBusyTracer)(void* _Nullable context,
