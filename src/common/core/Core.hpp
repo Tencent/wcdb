@@ -57,6 +57,8 @@ public:
     RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
+    void releaseSQLiteMemory(int bytes);
+    void setSoftHeapLimit(int64_t limit);
 
 protected:
     void databaseDidCreate(InnerDatabase* database) override final;
@@ -111,6 +113,7 @@ protected:
 #pragma mark - Checkpoint
 public:
     void enableAutoCheckpoint(InnerDatabase* database, bool enable);
+    void setCheckPointMinFrames(int frames);
 
 private:
     std::shared_ptr<Config> m_autoCheckpointConfig;

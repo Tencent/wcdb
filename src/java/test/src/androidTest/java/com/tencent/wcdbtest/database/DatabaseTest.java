@@ -203,6 +203,21 @@ public class DatabaseTest extends TableTestCase {
     }
 
     @Test
+    public void testCheckPointWithLimit() throws WCDBException {
+        createTable();
+        List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(101);
+        Database.setAutoCheckpointMinFrames(100);
+        for(int i = 0; i < 100; i++) {
+            assertEquals(table.getValue(Column.all().count()).getLong(), i);
+            table.insertObject(objects.get(i));
+        }
+        int preFrame = getNumberOfWalFrames();
+        sleep(11000);
+        table.insertObject(objects.get(100));
+        assertEquals(preFrame, getNumberOfWalFrames());
+    }
+
+    @Test
     public void testOpenFail() {
         File folder = new File(currentDirectory);
         assertTrue(folder.mkdirs());

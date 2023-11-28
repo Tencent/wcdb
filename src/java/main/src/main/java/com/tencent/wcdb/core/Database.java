@@ -126,6 +126,10 @@ public class Database extends HandleORMOperation {
 
     private static native int getNumberOfAliveHandle(long self);
 
+    public static native void releaseSQLiteMemory(int bytes);
+
+    public static native void setSoftHeapLimit(long limit);
+
     WCDBException createException() {
         return WCDBException.createException(getError(cppObj));
     }
@@ -508,6 +512,8 @@ public class Database extends HandleORMOperation {
         public String sourceTable;
         public Expression filterCondition;
     }
+
+    public static native void setAutoCheckpointMinFrames(int frames);
 
     public interface MigrationFilter {
         void filterMigrate(MigrationInfo info);

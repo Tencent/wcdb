@@ -37,6 +37,7 @@ AutoCheckpointOperator::~AutoCheckpointOperator() = default;
 AutoCheckpointConfig::AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator>& operator_)
 : Config()
 , m_identifier(StringView::formatted("Checkpoint-%p", this))
+, m_minFrames(0)
 , m_operator(operator_)
 , m_disableAutoCheckpoint(StatementPragma().pragma(Pragma::walAutocheckpoint()).to(0))
 {
@@ -71,10 +72,37 @@ bool AutoCheckpointConfig::uninvoke(InnerHandle* handle)
     return true;
 }
 
+void AutoCheckpointConfig::setMinFrames(int frame)
+{
+    m_minFrames = frame;
+}
+
 bool AutoCheckpointConfig::onCommitted(const UnsafeStringView& path, int frames)
 {
-    WCDB_UNUSED(frames);
-    if (frames > 0) {
+    bool needCheckpoint = frames > 0;
+    if (m_minFrames > 0) {
+        int* curFrames = nullptr;
+        {
+            SharedLockGuard guard(m_lock);
+            auto iter = m_frames.find(path);
+            if (iter != m_frames.end()) {
+                curFrames = &(iter->second);
+            }
+        }
+        if (curFrames == nullptr) {
+            LockGuard guard(m_lock);
+            m_frames.insert_or_assign(path, 0);
+            curFrames = &(m_frames.at(path));
+        }
+        if (frames + *curFrames > m_minFrames) {
+            needCheckpoint = true;
+            *curFrames = 0;
+        } else {
+            needCheckpoint = false;
+            *curFrames = *curFrames + frames;
+        }
+    }
+    if (needCheckpoint) {
         m_operator->asyncCheckpoint(path);
     }
     return true;

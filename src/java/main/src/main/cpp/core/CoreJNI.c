@@ -41,3 +41,18 @@ void WCDBJNICoreClassMethodWithNoArg(purgeAllDatabase)
 {
     WCDBCorePurgeAllDatabase();
 }
+
+void WCDBJNICoreClassMethod(releaseSQLiteMemory, jint bytes)
+{
+    WCDBCoreReleaseSQLiteMemory(bytes);
+}
+
+void WCDBJNICoreClassMethod(setSoftHeapLimit, jlong limit)
+{
+    WCDBCoreSetSoftHeapLimit((int64_t) limit);
+}
+
+void WCDBJNICoreClassMethod(setAutoCheckpointMinFrames, jint frames)
+{
+    WCDBCoreSetAutoCheckpointMinFrames(frames);
+}

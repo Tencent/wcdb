@@ -37,3 +37,6 @@
 jlong WCDBJNICoreClassMethod(createDatabase, jstring path);
 void WCDBJNICoreClassMethod(setDefaultCipherConfig, jint version);
 void WCDBJNICoreClassMethodWithNoArg(purgeAllDatabase);
+void WCDBJNICoreClassMethod(releaseSQLiteMemory, jint bytes);
+void WCDBJNICoreClassMethod(setSoftHeapLimit, jlong limit);
+void WCDBJNICoreClassMethod(setAutoCheckpointMinFrames, jint frames);

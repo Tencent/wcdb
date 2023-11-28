@@ -119,6 +119,16 @@ void Core::purgeDatabasePool()
     m_databasePool.purge();
 }
 
+void Core::releaseSQLiteMemory(int bytes)
+{
+    sqlite3_release_memory(bytes);
+}
+
+void Core::setSoftHeapLimit(int64_t limit)
+{
+    sqlite3_soft_heap_limit64(limit);
+}
+
 void Core::databaseDidCreate(InnerDatabase* database)
 {
     WCTAssert(database != nullptr);
@@ -311,6 +321,16 @@ void Core::enableAutoCheckpoint(InnerDatabase* database, bool enable)
     } else {
         database->removeConfig(AutoCheckpointConfigName);
         m_operationQueue->registerAsNoCheckpointRequired(database->getPath());
+    }
+}
+
+void Core::setCheckPointMinFrames(int frames)
+{
+    AutoCheckpointConfig* checkpointConfig
+    = dynamic_cast<AutoCheckpointConfig*>(m_autoCheckpointConfig.get());
+    WCTAssert(checkpointConfig != nullptr);
+    if (checkpointConfig != nullptr) {
+        checkpointConfig->setMinFrames(frames);
     }
 }
 
