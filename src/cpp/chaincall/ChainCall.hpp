@@ -45,13 +45,13 @@ public:
      @see   `Database::traceError()`
      @return WCDB::Error
      */
-    const Error &getError();
+    const Error &getError() const;
 
     /**
      @brief Get the number of changed rows in the most recent call.
      It should be called after executing successfully.
      */
-    int getChanges();
+    int getChanges() const;
 
 protected:
     bool checkHandle(bool writeHint);
