@@ -512,6 +512,7 @@ void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
         if (master.type.caseInsensitiveEqual("table")
             && master.name.caseInsensitiveEqual(master.tableName)) {
             content.sql = master.sql;
+            content.associatedSQLs.clear();
             content.rootPage = master.rootpage;
             content.checked = true;
             if (m_incrementalMaterial != nullptr) {
