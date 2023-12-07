@@ -37,7 +37,7 @@ public:
 
     Schema schema;
     Pragma pragma;
-    enum class WCDB_API Switch : signed char {
+    enum class Switch : signed char {
         NotSet = 0,
         To,
         With,

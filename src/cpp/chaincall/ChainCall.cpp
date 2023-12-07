@@ -51,9 +51,14 @@ BaseChainCall& BaseChainCall::operator=(const BaseChainCall& other)
 
 BaseChainCall::~BaseChainCall() = default;
 
-const Error& BaseChainCall::getError()
+const Error& BaseChainCall::getError() const
 {
     return m_handle->getError();
+}
+
+int BaseChainCall::getChanges() const
+{
+    return m_changes;
 }
 
 bool BaseChainCall::checkHandle(bool writeHint)

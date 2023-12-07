@@ -71,10 +71,6 @@ public:
 
 private:
     static constexpr int maxLengthOfAllowedThreadName();
-
-#pragma mark - Error
-private:
-    static void setThreadedError();
 };
 
 } // namespace WCDB

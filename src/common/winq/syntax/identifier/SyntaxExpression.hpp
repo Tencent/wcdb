@@ -36,7 +36,7 @@ namespace WCDB {
 
 namespace Syntax {
 
-class WCDB_API SelectSTMT;
+class SelectSTMT;
 
 class WCDB_API ExpressionUnionMember {
 public:
@@ -74,7 +74,7 @@ public:
     const StringView& function() const;
 
 protected:
-    enum class WCDB_API Member : signed char {
+    enum class Member : signed char {
         Invalid = 0,
         literalValue,
         bindParameter,
@@ -145,7 +145,7 @@ public:
                                 Window,
                                 Select, );
 
-    enum class WCDB_API UnaryOperator : signed char {
+    enum class UnaryOperator : signed char {
         Negative = 1,
         Positive,
         Tilde,
@@ -153,7 +153,7 @@ public:
         Null,
     } unaryOperator;
 
-    enum class WCDB_API BinaryOperator : signed char {
+    enum class BinaryOperator : signed char {
         Concatenate = 1,
         Multiply,
         Divide,
@@ -190,7 +190,7 @@ public:
     bool hasCase = false;
     bool hasElse = false;
 
-    enum class WCDB_API SwitchIn : signed char {
+    enum class SwitchIn : signed char {
         Empty = 1,
         Select,
         Expressions,
