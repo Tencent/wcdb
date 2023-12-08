@@ -40,6 +40,8 @@ android:
         <<: *android_build_config 
         api_level: 19
     ammdev:
+      options:
+        auto_synthesis_aar: false
       dependencies:
         <<: *default_dependencies
       dependency_options: &default_dependency_options

@@ -4,7 +4,7 @@ apply from: rootProject.file('gradle/WeChatPublish.gradle')
 android {
     namespace 'com.tencent.wcdb.core'
     compileSdk 33
-    ndkVersion '21.4.7075529'
+    //ndkVersion '21.4.7075529'
 
     defaultConfig {
         minSdk 21
@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags ''
+                arguments "-DANDROID_STL=c++_shared"
             }
         }
     }
