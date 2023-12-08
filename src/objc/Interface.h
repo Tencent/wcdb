@@ -32,6 +32,7 @@
 #import "WCTSelect.h"
 #import "WCTUpdate.h"
 
+#import "WCTDatabase+Compression.h"
 #import "WCTDatabase+Config.h"
 #import "WCTDatabase+FTS.h"
 #import "WCTDatabase+File.h"

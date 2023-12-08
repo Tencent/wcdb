@@ -38,6 +38,9 @@ static constexpr double OperationQueueTimeIntervalForRetringAfterFailure = 5.0;
 #pragma mark - Operation Queue - Migration
 static constexpr const double OperationQueueTimeIntervalForMigration = 2.0;
 static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
+#pragma mark - Operation Queue - Compression
+static constexpr const double OperationQueueTimeIntervalForCompression = 2.0;
+static constexpr const int OperationQueueTolerableFailuresForCompression = 5;
 #pragma mark - Operation Queue - Purge
 static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 30.0;
 static constexpr const double OperationQueueRateForTooManyFileDescriptors = 0.7;
@@ -59,6 +62,8 @@ WCDBLiteralStringDefine(AutoCheckpointConfigName, "com.Tencent.WCDB.Config.AutoC
 WCDBLiteralStringDefine(AutoBackupConfigName, "com.Tencent.WCDB.Config.AutoBackup");
 #pragma mark - Config - Auto Migrate
 WCDBLiteralStringDefine(AutoMigrateConfigName, "com.Tencent.WCDB.Config.AutoMigrate");
+#pragma mark - Config - Auto Compress
+WCDBLiteralStringDefine(AutoCompressConfigName, "com.Tencent.WCDB.Config.AutoCompress");
 #pragma mark - Config - Auto Merge
 WCDBLiteralStringDefine(AutoMergeFTSIndexConfigName, "com.Tencent.WCDB.Config.AutoMergeFTSIndex");
 WCDBLiteralStringDefine(AutoMergeFTSIndexQueueName, "WCDB.MergeIndex");
@@ -85,6 +90,8 @@ WCDBLiteralStringDefine(PerformanceTraceConfigName, "com.Tencent.WCDB.Config.Per
 WCDBLiteralStringDefine(SQLTraceConfigName, "com.Tencent.WCDB.Config.SQLTrace");
 #pragma mark - Config - Tokenize
 WCDBLiteralStringDefine(TokenizeConfigPrefix, "com.Tencent.WCDB.Config.Tokenize.");
+#pragma mark - Config - ScalarFunction
+WCDBLiteralStringDefine(ScalarFunctionConfigPrefix, "com.Tencent.WCDB.Config.ScalarFunction.");
 #pragma mark - Config - AuxiliaryFunction
 WCDBLiteralStringDefine(AuxiliaryFunctionConfigPrefix,
                         "com.Tencent.WCDB.Config.AuxiliaryFunction.");
@@ -99,43 +106,39 @@ static constexpr const int HandlePoolMaxAllowedNumberOfWriters = 4;
 
 enum HandleSlot : unsigned char {
     HandleSlotNormal = 0,
-    HandleSlotMigrating,
-    HandleSlotMigrate,
-    HandleSlotCheckPoint,
-    HandleSlotOperation,
+    HandleSlotAutoTask,
     HandleSlotAssemble,
     HandleSlotCipher,
     HandleSlotCount,
 };
+
 enum HandleCategory : unsigned char {
     HandleCategoryNormal = 0,
-    HandleCategoryMigrating,
     HandleCategoryMigrate,
+    HandleCategoryCompress,
     HandleCategoryBackupRead,
     HandleCategoryBackupWrite,
-    HandleCategoryBackupCipher,
+    HandleCategoryCipher,
     HandleCategoryCheckpoint,
     HandleCategoryIntegrity,
-    HandleCategoryAssemble,
-    HandleCategoryAssembleCipher,
     HandleCategoryMergeIndex,
     HandleCategoryCount,
 };
 
 enum class HandleType : unsigned int {
     Normal = (HandleCategoryNormal << 8) | HandleSlotNormal,
-    Migrating = (HandleCategoryMigrating << 8) | HandleSlotMigrating,
-    Migrate = (HandleCategoryMigrate << 8) | HandleSlotMigrate,
-    BackupCipher = (HandleCategoryBackupCipher << 8) | HandleSlotCipher,
-    BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotOperation,
-    BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotOperation,
-    Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotCheckPoint,
-    Integrity = (HandleCategoryIntegrity << 8) | HandleSlotOperation,
-    Assemble = (HandleCategoryAssemble << 8) | HandleSlotAssemble,
-    AssembleCipher = (HandleCategoryAssembleCipher << 8) | HandleSlotCipher,
+    Migrate = (HandleCategoryMigrate << 8) | HandleSlotAutoTask,
+    Compress = (HandleCategoryCompress << 8) | HandleSlotAutoTask,
+    BackupCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
+    BackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAutoTask,
+    BackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAutoTask,
+    Checkpoint = (HandleCategoryCheckpoint << 8) | HandleSlotAutoTask,
+    IntegrityCheck = (HandleCategoryIntegrity << 8) | HandleSlotAutoTask,
+    Assemble = (HandleCategoryNormal << 8) | HandleSlotAssemble,
+    AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
-    MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotOperation,
+    MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotAutoTask,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)
 {
@@ -147,8 +150,7 @@ static constexpr HandleCategory categoryOfHandleType(HandleType type)
 }
 static constexpr bool handleShouldWaitWhenFull(HandleType type)
 {
-    HandleSlot slot = slotOfHandleType(type);
-    return slot == HandleSlotNormal || slot == HandleSlotMigrating;
+    return type == HandleType::Normal;
 }
 
 #pragma mark - Backup
@@ -159,6 +161,10 @@ static constexpr const int BackupMaxAllowIncrementalPageCount = 1000000;
 #pragma mark - Migrate
 static constexpr const double MigrateMaxExpectingDuration = 0.01;
 static constexpr const double MigrateMaxInitializeDuration = 0.005;
+
+#pragma mark - Compression
+static constexpr const int CompressionBatchCount = 100;
+static constexpr const int CompressionUpdateRecordBatchCount = 1000;
 
 WCDBLiteralStringDefine(ErrorStringKeyType, "Type");
 WCDBLiteralStringDefine(ErrorStringKeySource, "Source")
@@ -188,10 +194,10 @@ WCDBLiteralStringDefine(ErrorSourceSwift, "Swift");
 
 #pragma mark - Error - Type
 WCDBLiteralStringDefine(ErrorTypeMigrate, "Migrate");
+WCDBLiteralStringDefine(ErrorTypeCompress, "Compress");
 WCDBLiteralStringDefine(ErrorTypeCheckpoint, "Checkpoint");
 WCDBLiteralStringDefine(ErrorTypeIntegrity, "Integrity");
 WCDBLiteralStringDefine(ErrorTypeBackup, "Backup")
-WCDBLiteralStringDefine(ErrorTypeAssemble, "Assemble");
 WCDBLiteralStringDefine(ErrorTypeMergeIndex, "MergeIndex")
 
 #pragma mark - Moniter
@@ -202,6 +208,18 @@ WCDBLiteralStringDefine(MonitorInfoKeySchemaUsage, "SchemaUsage");
 WCDBLiteralStringDefine(MonitorInfoKeyTableCount, "TableCount");
 WCDBLiteralStringDefine(MonitorInfoKeyIndexCount, "IndexCount");
 WCDBLiteralStringDefine(MonitorInfoKeyTriggerCount, "TriggerCount");
+
+#pragma mark - Decorator
+WCDBLiteralStringDefine(DecoratorMigratingHandleStatement, "MigratingHandleStatement");
+WCDBLiteralStringDefine(DecoratorMigratingHandle, "MigratingHandle");
+WCDBLiteralStringDefine(DecoratorCompressingHandleStatement, "CompressingHandleStatement");
+WCDBLiteralStringDefine(DecoratorCompressingHandle, "CompressingHandle");
+
+#pragma mark - HandleOperator
+WCDBLiteralStringDefine(OperatorMigrate, "Migrate");
+WCDBLiteralStringDefine(OperatorCompress, "Compress");
+WCDBLiteralStringDefine(OperatorBackup, "Backup");
+WCDBLiteralStringDefine(OperatorCheckIntegrity, "CheckIntegrity");
 
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;

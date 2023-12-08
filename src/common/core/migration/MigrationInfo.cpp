@@ -144,7 +144,10 @@ void MigrationBaseInfo::setSource(const UnsafeStringView& table)
 
 void MigrationBaseInfo::setFilter(Expression filterCondition)
 {
-    filterCondition.iterate([this](Syntax::Identifier& identifier, bool&) {
+    filterCondition.iterate([this](Syntax::Identifier& identifier, bool isBegin, bool&) {
+        if (!isBegin) {
+            return;
+        }
         switch (identifier.getType()) {
         case Syntax::Identifier::Type::TableOrSubquery: {
             // main.table -> temp.unionedView
@@ -409,6 +412,7 @@ const StatementDelete& MigrationInfo::getStatementForDeletingMigratedOneRow() co
 void MigrationInfo::generateStatementsForInsertMigrating(const Statement& sourceStatement,
                                                          std::list<Statement>& statements,
                                                          int& primaryKeyIndex,
+                                                         int rowidBindIndex,
                                                          Optional<int64_t>& assignedPrimaryKey) const
 {
     WCTAssert(sourceStatement.syntax().getType() == Syntax::Identifier::Type::InsertSTMT);
@@ -434,13 +438,13 @@ void MigrationInfo::generateStatementsForInsertMigrating(const Statement& source
     }
     WCTAssert(insertSyntax.expressionsValues.size() == 1);
     auto& values = *insertSyntax.expressionsValues.begin();
-    Expression rowid = BindParameter(indexOfRowIdOrPrimaryKey);
+    Expression rowid = BindParameter(rowidBindIndex);
     values.insert(values.end(), rowid);
 
     WCTAssert(columns.size() == values.size());
 
     if (m_integerPrimaryKey.empty()) {
-        statements.push_back(m_statementForSelectingMaxID);
+        statements.insert(--statements.end(), m_statementForSelectingMaxID);
         return;
     }
 
@@ -474,12 +478,13 @@ void MigrationInfo::generateStatementsForInsertMigrating(const Statement& source
     }
 
     if (!assignedPrimaryKey.hasValue()) {
-        statements.push_back(m_statementForSelectingMaxID);
+        statements.insert(--statements.end(), m_statementForSelectingMaxID);
     }
 }
 
 void MigrationInfo::generateStatementsForUpdateMigrating(const Statement& sourceStatement,
-                                                         std::list<Statement>& statements) const
+                                                         std::list<Statement>& statements,
+                                                         int rowidBindIndex) const
 {
     WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::UpdateSTMT);
     statements.push_back(StatementSelect().from(
@@ -491,6 +496,9 @@ void MigrationInfo::generateStatementsForUpdateMigrating(const Statement& source
     Syntax::UpdateSTMT& updateSyntax = update.syntax();
     Syntax::SelectSTMT& selectSyntax = select.syntax();
     Syntax::SelectCore& coreSyntax = selectSyntax.select.getOrCreate();
+
+    selectSyntax.commonTableExpressions = updateSyntax.commonTableExpressions;
+    updateSyntax.commonTableExpressions.clear();
 
     coreSyntax.condition = updateSyntax.condition;
     updateSyntax.condition.getOrCreate().__is_valid = Syntax::Identifier::invalid;
@@ -505,10 +513,10 @@ void MigrationInfo::generateStatementsForUpdateMigrating(const Statement& source
 
     if (m_integerPrimaryKey.empty()) {
         select.select(Column::rowid());
-        update.where(Column::rowid() == BindParameter(indexOfRowIdOrPrimaryKey));
+        update.where(Column::rowid() == BindParameter(rowidBindIndex));
     } else {
         select.select(Column(m_integerPrimaryKey));
-        update.where(Column(m_integerPrimaryKey) == BindParameter(indexOfRowIdOrPrimaryKey));
+        update.where(Column(m_integerPrimaryKey) == BindParameter(rowidBindIndex));
     }
 
     statements.push_back(update);
@@ -518,7 +526,8 @@ void MigrationInfo::generateStatementsForUpdateMigrating(const Statement& source
 }
 
 void MigrationInfo::generateStatementsForDeleteMigrating(const Statement& sourceStatement,
-                                                         std::list<Statement>& statements) const
+                                                         std::list<Statement>& statements,
+                                                         int rowidBindIndex) const
 {
     WCTAssert(sourceStatement.getType() == Syntax::Identifier::Type::DeleteSTMT);
     statements.push_back(StatementSelect().from(
@@ -530,6 +539,9 @@ void MigrationInfo::generateStatementsForDeleteMigrating(const Statement& source
     Syntax::DeleteSTMT& deleteSyntax = delete_.syntax();
     Syntax::SelectSTMT& selectSyntax = select.syntax();
     Syntax::SelectCore& coreSyntax = selectSyntax.select.getOrCreate();
+
+    selectSyntax.commonTableExpressions = deleteSyntax.commonTableExpressions;
+    deleteSyntax.commonTableExpressions.clear();
 
     coreSyntax.condition = deleteSyntax.condition;
     deleteSyntax.condition.getOrCreate().__is_valid = Syntax::Identifier::invalid;
@@ -544,10 +556,10 @@ void MigrationInfo::generateStatementsForDeleteMigrating(const Statement& source
 
     if (m_integerPrimaryKey.empty()) {
         select.select(Column::rowid());
-        delete_.where(Column::rowid() == BindParameter(indexOfRowIdOrPrimaryKey));
+        delete_.where(Column::rowid() == BindParameter(rowidBindIndex));
     } else {
         select.select(Column(m_integerPrimaryKey));
-        delete_.where(Column(m_integerPrimaryKey) == BindParameter(indexOfRowIdOrPrimaryKey));
+        delete_.where(Column(m_integerPrimaryKey) == BindParameter(rowidBindIndex));
     }
 
     statements.push_back(delete_);

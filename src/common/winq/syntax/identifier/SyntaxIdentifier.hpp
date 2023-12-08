@@ -110,14 +110,15 @@ public:
 
 #pragma mark - Iterable
 public:
-    typedef std::function<void(Identifier&, bool& stop)> Iterator;
-    typedef std::function<void(const Identifier&, bool& stop)> ConstIterator;
+    typedef std::function<void(Identifier&, bool isBegin, bool& stop)> Iterator;
+    typedef std::function<void(const Identifier&, bool isBegin, bool& stop)> ConstIterator;
 
     void iterate(const Iterator& iterator);
     void iterate(const ConstIterator& iterator) const;
+    virtual void iterate(const Iterator& iterator, bool& stop);
 
 protected:
-    virtual void iterate(const Iterator& iterator, bool& stop);
+    void iterate(const Iterator& iterator, bool isBegin, bool& stop);
     static void
     recursiveIterate(Identifier& identifier, const Iterator& iterator, bool& stop);
 

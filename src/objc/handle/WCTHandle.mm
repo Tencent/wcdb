@@ -403,7 +403,7 @@
 - (NSNumber *)extractNumberAtIndex:(int)index
 {
     WCTHandleAssert(return nil;);
-    switch (_handle->getType(index)) {
+    switch (_handle->getColumnType(index)) {
     case WCDB::ColumnType::Integer:
         return [NSNumber numberWithLongLong:_handle->getInteger(index)];
     default:
@@ -438,7 +438,7 @@
 - (WCTColumnType)extractTypeAtIndex:(int)index
 {
     WCTHandleAssert(return WCTColumnTypeNull;);
-    return (WCTColumnType) _handle->getType(index);
+    return (WCTColumnType) _handle->getColumnType(index);
 }
 
 - (int)extractNumberOfColumns
@@ -548,7 +548,7 @@
     case WCTAccessorObjC: {
         WCTObjCAccessor *objcAccessor = (WCTObjCAccessor *) accessor.get();
         id value = nil;
-        if (_handle->getType(index) != WCDB::ColumnType::Null) {
+        if (_handle->getColumnType(index) != WCDB::ColumnType::Null) {
             switch (accessor->getColumnType()) {
             case WCDB::ColumnType::Integer:
                 value = [NSNumber numberWithLongLong:_handle->getInteger(index)];

@@ -82,7 +82,7 @@ bool UpsertClause::describle(std::ostream& stream) const
 
 void UpsertClause::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     if (!indexedColumns.empty()) {
         listIterate(indexedColumns, iterator, stop);
         if (condition != nullptr && condition.get()->isValid()) {
@@ -103,6 +103,7 @@ void UpsertClause::iterate(const Iterator& iterator, bool& stop)
             recursiveIterate(*updateCondition.get(), iterator, stop);
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

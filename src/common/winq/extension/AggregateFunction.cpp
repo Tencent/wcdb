@@ -28,43 +28,51 @@ namespace WCDB {
 
 Expression AggregateFunction::avg(const Expression& expression)
 {
-    return Expression::function("avg").invoke().arguments(expression);
+    static const char* funcName = "avg";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression AggregateFunction::count(const Expression& expression)
 {
-    return Expression::function("count").invoke().arguments(expression);
+    static const char* funcName = "count";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression AggregateFunction::groupConcat(const Expression& expression)
 {
-    return Expression::function("group_concat").invoke().arguments(expression);
+    static const char* funcName = "group_concat";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression
 AggregateFunction::groupConcat(const Expression& expression, const Expression& seperator)
 {
-    return Expression::function("group_concat").invoke().arguments({ expression, seperator });
+    static const char* funcName = "group_concat";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression, seperator });
 }
 
 Expression AggregateFunction::max(const Expression& expression)
 {
-    return Expression::function("max").invoke().arguments(expression);
+    static const char* funcName = "max";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression AggregateFunction::min(const Expression& expression)
 {
-    return Expression::function("min").invoke().arguments(expression);
+    static const char* funcName = "min";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression AggregateFunction::sum(const Expression& expression)
 {
-    return Expression::function("sum").invoke().arguments(expression);
+    static const char* funcName = "sum";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression AggregateFunction::total(const Expression& expression)
 {
-    return Expression::function("total").invoke().arguments(expression);
+    static const char* funcName = "total";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 AggregateFunctionOperable::~AggregateFunctionOperable() = default;

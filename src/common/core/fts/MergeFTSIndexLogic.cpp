@@ -122,21 +122,14 @@ Optional<bool> MergeFTSIndexLogic::triggerMerge(TableArray newTables, TableArray
                       return NullOpt;);
 
     InnerHandle *handle = recyclableHandle.get();
-    handle->markErrorAsIgnorable(Error::Code::Interrupt);
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
-    handle->setErrorType(ErrorTypeMergeIndex);
     handle->setTableMonitorEnable(false);
 
     Optional<bool> done = triggerMerge(*handle, newTables, modifiedTables);
     if (!done.succeed() && handle->getError().isIgnorable()) {
         done = false;
     }
-
-    handle->setErrorType(UnsafeStringView());
-    handle->markErrorAsUnignorable();
-    handle->markAsCanBeSuspended(false);
-    handle->markErrorAsUnignorable();
     handle->setTableMonitorEnable(true);
     return done;
 }
@@ -193,10 +186,8 @@ void MergeFTSIndexLogic::proccessMerge()
                       return;);
 
     InnerHandle *handle = recyclableHandle.get();
-    handle->markErrorAsIgnorable(Error::Code::Interrupt);
     handle->markAsCanBeSuspended(true);
     handle->markErrorAsIgnorable(Error::Code::Busy);
-    handle->setErrorType(ErrorTypeMergeIndex);
     handle->setTableMonitorEnable(false);
 
     while (!table.empty()) {
@@ -215,10 +206,6 @@ void MergeFTSIndexLogic::proccessMerge()
             break;
         }
     }
-    handle->setErrorType(UnsafeStringView());
-    handle->markErrorAsUnignorable();
-    handle->markAsCanBeSuspended(false);
-    handle->markErrorAsUnignorable();
     handle->setTableMonitorEnable(true);
 }
 

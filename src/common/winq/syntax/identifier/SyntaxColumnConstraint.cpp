@@ -89,7 +89,7 @@ bool ColumnConstraint::describle(std::ostream& stream) const
 
 void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::PrimaryKey:
     case Switch::NotNull:
@@ -107,6 +107,7 @@ void ColumnConstraint::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(foreignKeyClause.getOrCreate(), iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 #pragma mark - Utility

@@ -28,6 +28,8 @@
 
 namespace WCDB {
 
+class TableOrSubquery;
+
 class WCDB_API StatementSelect final : public SpecifiedSyntax<Syntax::SelectSTMT, Statement> {
 public:
     using SpecifiedSyntax<Syntax::SelectSTMT, Statement>::SpecifiedSyntax;
@@ -49,6 +51,8 @@ public:
 
     StatementSelect& window(const UnsafeStringView& window);
     StatementSelect& as(const WindowDef& windowDef);
+
+    TableOrSubquery as(const UnsafeStringView& alias);
 
     StatementSelect& value(const Expression& expression);
     StatementSelect& values(const Expressions& expressions);

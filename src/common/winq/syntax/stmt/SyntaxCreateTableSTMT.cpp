@@ -71,7 +71,7 @@ bool CreateTableSTMT::describle(std::ostream& stream) const
 
 void CreateTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
     switch (switcher) {
     case Switch::ColumnDefs:
@@ -82,6 +82,7 @@ void CreateTableSTMT::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(select.getOrCreate(), iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

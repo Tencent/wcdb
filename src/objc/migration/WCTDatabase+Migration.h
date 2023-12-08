@@ -28,7 +28,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `WCTMigrationUserInfo` to nil.
+ Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data,
+ mainly including creating a new table, reading and writing a table, and starting to migrate a new table.
+ If the current table does not need to migrate data, you need to set the sourceTable in `WCTMigrationUserInfo` to nil.
  */
 typedef void (^WCTMigrationFilterBlock)(WCTMigrationUserInfo*);
 

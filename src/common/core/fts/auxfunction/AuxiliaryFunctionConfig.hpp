@@ -24,12 +24,14 @@
 
 #pragma once
 
+#include "AuxiliaryFunctionModule.hpp"
 #include "Config.hpp"
+#include "FunctionModules.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
 
-class AuxiliaryFunctionModules;
+typedef FunctionModules<FTS5AuxiliaryFunctionModule> AuxiliaryFunctionModules;
 
 class AuxiliaryFunctionConfig final : public Config {
 public:

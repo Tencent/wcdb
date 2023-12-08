@@ -47,7 +47,7 @@ bool WCDBHandleCheckValid(CPPHandle handle)
 
 WCDB::HandleStatement* WCDB::GetMainHandleStatement(WCDB::InnerHandle* handle)
 {
-    return handle->m_mainStatement;
+    return static_cast<WCDB::HandleStatement*>(handle->m_mainStatement);
 }
 
 CPPHandleStatement WCDBHandleGetMainStatement(CPPHandle handle)

@@ -28,6 +28,8 @@
 
 namespace WCDB {
 
+class TableOrSubquery;
+
 class WCDB_API Join final : public SpecifiedSyntax<Syntax::JoinClause, SQL> {
 public:
     using SpecifiedSyntax<Syntax::JoinClause, SQL>::SpecifiedSyntax;
@@ -51,6 +53,8 @@ public:
     Join& on(const Expression& expression);
     Join& usingColumn(const Column& column);
     Join& usingColumns(const Columns& columns);
+
+    TableOrSubquery as(const UnsafeStringView& alias);
 
 private:
     Join& constraint(const JoinConstraint& constraint);

@@ -131,4 +131,9 @@ Join& Join::join(const Syntax::JoinOperator& joinOperator, const TableOrSubquery
     return *this;
 }
 
+TableOrSubquery Join::as(const UnsafeStringView& alias)
+{
+    return TableOrSubquery(*this).as(alias);
+}
+
 } // namespace WCDB

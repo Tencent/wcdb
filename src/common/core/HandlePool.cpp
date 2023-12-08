@@ -272,7 +272,7 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
         WCTRemedialAssert(
         !handle->isPrepared(), "Statement is not finalized.", handle->finalize(););
         handle->detachCancellationSignal();
-        handle->returnAllPreparedStatement();
+        handle->finalizeStatements();
         {
             LockGuard memoryGuard(m_memory);
             m_frees[slot].push_back(handle);

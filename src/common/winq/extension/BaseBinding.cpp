@@ -24,8 +24,10 @@
 
 #include "BaseBinding.hpp"
 #include "Assertion.hpp"
+#include "CompressionConst.hpp"
+#include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
-#include "MigratingHandle.hpp"
+#include "MigratingHandleDecorator.hpp"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
 #include <algorithm>
@@ -229,7 +231,7 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
             return false;
         }
         if (exists.value()) {
-            auto optionalColumnNames = handle->getColumns(tableName);
+            auto optionalColumnNames = handle->getColumns(Schema::main(), tableName);
             if (!optionalColumnNames.succeed()) {
                 return false;
             }
@@ -248,6 +250,9 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
                 }
             }
             for (const auto &columnName : columnNames) {
+                if (columnName.hasPrefix(CompressionColumnTypePrefix)) {
+                    continue;
+                }
                 Error error(Error::Code::Mismatch, Error::Level::Notice, "Skip column");
                 error.infos.insert_or_assign("Table", StringView(tableName));
                 error.infos.insert_or_assign("Column", StringView(columnName));
@@ -386,13 +391,16 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
             return false;
         }
     }
-    MigratingHandle *migratingHandle = dynamic_cast<MigratingHandle *>(handle);
-    if (migratingHandle != nullptr) {
+    DecorativeHandle *decorativeHandle = dynamic_cast<DecorativeHandle *>(handle);
+    if (decorativeHandle != nullptr
+        && decorativeHandle->containDecorator(DecoratorMigratingHandle)) {
+        MigratingHandleDecorator *decorator
+        = decorativeHandle->getDecorator<MigratingHandleDecorator>(DecoratorMigratingHandle);
         Columns columns;
         for (const auto &columnDef : columnDefs) {
             columns.push_back(columnDef.second.syntax().column.getOrCreate().name);
         }
-        return migratingHandle->rebindUnionView(tableName, columns);
+        return decorator->rebindUnionView(tableName, columns);
     }
     return true;
 }

@@ -64,12 +64,13 @@ bool CreateIndexSTMT::describle(std::ostream& stream) const
 
 void CreateIndexSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
     listIterate(indexedColumns, iterator, stop);
     if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
         recursiveIterate(condition.value(), iterator, stop);
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

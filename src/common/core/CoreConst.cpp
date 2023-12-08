@@ -26,63 +26,82 @@
 
 namespace WCDB {
 
-WCDBLiteralStringImplement(OperationQueueName)
+WCDBLiteralStringImplement(OperationQueueName);
 
-WCDBLiteralStringImplement(AutoCheckpointConfigName)
+WCDBLiteralStringImplement(AutoCheckpointConfigName);
 
-WCDBLiteralStringImplement(AutoBackupConfigName)
+WCDBLiteralStringImplement(AutoBackupConfigName);
 
-WCDBLiteralStringImplement(AutoMigrateConfigName)
+WCDBLiteralStringImplement(AutoMigrateConfigName);
 
-WCDBLiteralStringImplement(AutoMergeFTSIndexConfigName)
+WCDBLiteralStringImplement(AutoCompressConfigName);
 
-WCDBLiteralStringImplement(AutoMergeFTSIndexQueueName)
+WCDBLiteralStringImplement(AutoMergeFTSIndexConfigName);
 
-WCDBLiteralStringImplement(BasicConfigName)
+WCDBLiteralStringImplement(AutoMergeFTSIndexQueueName);
 
-WCDBLiteralStringImplement(BusyRetryConfigName)
+WCDBLiteralStringImplement(BasicConfigName);
 
-WCDBLiteralStringImplement(CipherConfigName)
+WCDBLiteralStringImplement(BusyRetryConfigName);
 
-WCDBLiteralStringImplement(GlobalSQLTraceConfigName)
+WCDBLiteralStringImplement(CipherConfigName);
 
-WCDBLiteralStringImplement(GlobalPerformanceTraceConfigName)
+WCDBLiteralStringImplement(GlobalSQLTraceConfigName);
 
-WCDBLiteralStringImplement(PerformanceTraceConfigName)
+WCDBLiteralStringImplement(GlobalPerformanceTraceConfigName);
 
-WCDBLiteralStringImplement(SQLTraceConfigName)
+WCDBLiteralStringImplement(PerformanceTraceConfigName);
 
-WCDBLiteralStringImplement(TokenizeConfigPrefix)
+WCDBLiteralStringImplement(SQLTraceConfigName);
 
-WCDBLiteralStringImplement(AuxiliaryFunctionConfigPrefix)
+WCDBLiteralStringImplement(TokenizeConfigPrefix);
 
-WCDBLiteralStringImplement(NotifierPreprocessorName)
+WCDBLiteralStringImplement(AuxiliaryFunctionConfigPrefix);
 
-WCDBLiteralStringImplement(NotifierLoggerName)
+WCDBLiteralStringImplement(ScalarFunctionConfigPrefix);
 
-WCDBLiteralStringImplement(ErrorStringKeyType)
-WCDBLiteralStringImplement(ErrorStringKeySource)
-WCDBLiteralStringImplement(ErrorStringKeyPath)
-WCDBLiteralStringImplement(ErrorStringKeyAssociatePath)
-WCDBLiteralStringImplement(ErrorStringKeySQL) WCDBLiteralStringImplement(ErrorIntKeyTag)
-WCDBLiteralStringImplement(ErrorIntKeyExtCode)
+WCDBLiteralStringImplement(NotifierPreprocessorName);
 
-WCDBLiteralStringImplement(ErrorSourceSQLite)
-WCDBLiteralStringImplement(ErrorSourceRepair) WCDBLiteralStringImplement(ErrorSourceSystem)
-WCDBLiteralStringImplement(ErrorSourceAssertion)
-WCDBLiteralStringImplement(ErrorSourceNative) WCDBLiteralStringImplement(ErrorSourceSwift)
+WCDBLiteralStringImplement(NotifierLoggerName);
 
-WCDBLiteralStringImplement(ErrorTypeMigrate) WCDBLiteralStringImplement(ErrorTypeCheckpoint)
-WCDBLiteralStringImplement(ErrorTypeIntegrity)
-WCDBLiteralStringImplement(ErrorTypeBackup) WCDBLiteralStringImplement(ErrorTypeAssemble)
-WCDBLiteralStringImplement(ErrorTypeMergeIndex)
+WCDBLiteralStringImplement(ErrorStringKeyType);
+WCDBLiteralStringImplement(ErrorStringKeySource);
+WCDBLiteralStringImplement(ErrorStringKeyPath);
+WCDBLiteralStringImplement(ErrorStringKeyAssociatePath);
+WCDBLiteralStringImplement(ErrorStringKeySQL);
+WCDBLiteralStringImplement(ErrorIntKeyTag);
+WCDBLiteralStringImplement(ErrorIntKeyExtCode);
 
-WCDBLiteralStringImplement(MonitorInfoKeyHandleCount)
-WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenTime)
-WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenCPUTime)
-WCDBLiteralStringImplement(MonitorInfoKeySchemaUsage)
-WCDBLiteralStringImplement(MonitorInfoKeyTableCount)
-WCDBLiteralStringImplement(MonitorInfoKeyIndexCount)
-WCDBLiteralStringImplement(MonitorInfoKeyTriggerCount)
+WCDBLiteralStringImplement(ErrorSourceSQLite);
+WCDBLiteralStringImplement(ErrorSourceRepair);
+WCDBLiteralStringImplement(ErrorSourceSystem);
+WCDBLiteralStringImplement(ErrorSourceAssertion);
+WCDBLiteralStringImplement(ErrorSourceNative);
+WCDBLiteralStringImplement(ErrorSourceSwift);
 
-};
+WCDBLiteralStringImplement(ErrorTypeMigrate);
+WCDBLiteralStringImplement(ErrorTypeCompress);
+WCDBLiteralStringImplement(ErrorTypeCheckpoint);
+WCDBLiteralStringImplement(ErrorTypeIntegrity);
+WCDBLiteralStringImplement(ErrorTypeBackup);
+WCDBLiteralStringImplement(ErrorTypeMergeIndex);
+
+WCDBLiteralStringImplement(MonitorInfoKeyHandleCount);
+WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenTime);
+WCDBLiteralStringImplement(MonitorInfoKeyHandleOpenCPUTime);
+WCDBLiteralStringImplement(MonitorInfoKeySchemaUsage);
+WCDBLiteralStringImplement(MonitorInfoKeyTableCount);
+WCDBLiteralStringImplement(MonitorInfoKeyIndexCount);
+WCDBLiteralStringImplement(MonitorInfoKeyTriggerCount);
+
+WCDBLiteralStringImplement(DecoratorMigratingHandleStatement);
+WCDBLiteralStringImplement(DecoratorMigratingHandle);
+WCDBLiteralStringImplement(DecoratorCompressingHandleStatement);
+WCDBLiteralStringImplement(DecoratorCompressingHandle);
+
+WCDBLiteralStringImplement(OperatorMigrate);
+WCDBLiteralStringImplement(OperatorCompress);
+WCDBLiteralStringImplement(OperatorBackup);
+WCDBLiteralStringImplement(OperatorCheckIntegrity);
+
+}; // namespace WCDB

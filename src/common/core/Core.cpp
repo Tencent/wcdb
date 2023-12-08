@@ -25,6 +25,8 @@
 #include "Core.h"
 #include "AutoMigrateConfig.hpp"
 #include "BusyRetryConfig.hpp"
+#include "CompressionConst.hpp"
+#include "DecompressFunction.hpp"
 #include "FTS5AuxiliaryFunctionTemplate.hpp"
 #include "FTSConst.h"
 #include "FileManager.hpp"
@@ -33,6 +35,7 @@
 #include "OneOrBinaryTokenizer.hpp"
 #include "PinyinTokenizer.hpp"
 #include "SQLite.h"
+#include "ScalarFunctionTemplate.hpp"
 #include "StringView.hpp"
 #include "SubstringMatchInfo.hpp"
 
@@ -48,6 +51,7 @@ Core& Core::shared()
 Core::Core()
 // Database
 : m_databasePool(this)
+, m_scalarFunctionModules(std::make_shared<ScalarFunctionModules>())
 , m_tokenizerModules(std::make_shared<TokenizerModules>())
 , m_auxiliaryFunctionModules(std::make_shared<AuxiliaryFunctionModules>())
 , m_operationQueue(std::make_shared<OperationQueue>(OperationQueueName, this))
@@ -57,6 +61,8 @@ Core::Core()
 , m_autoBackupConfig(std::make_shared<AutoBackupConfig>(m_operationQueue))
 // Migration
 , m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(m_operationQueue))
+// Compression
+, m_autoCompressConfig(std::make_shared<AutoCompressConfig>(m_operationQueue))
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
@@ -100,6 +106,8 @@ Core::Core()
     registerAuxiliaryFunction(
     BuiltinAuxiliaryFunction::SubstringMatchInfo,
     FTS5AuxiliaryFunctionTemplate<SubstringMatchInfo>::specializeWithContext(nullptr));
+    registerScalarFunction(DecompressFunctionName,
+                           ScalarFunctionTemplate<DecompressFunction>::specialize(2));
 }
 
 Core::~Core()
@@ -183,6 +191,23 @@ void Core::preprocessError(Error& error)
     }
 }
 
+#pragma mark - ScalarFunction
+void Core::registerScalarFunction(const UnsafeStringView& name,
+                                  const ScalarFunctionModule& module)
+{
+    m_scalarFunctionModules->add(name, module);
+}
+
+bool Core::scalarFunctionExists(const UnsafeStringView& name) const
+{
+    return m_scalarFunctionModules->get(name) != nullptr;
+}
+
+std::shared_ptr<Config> Core::scalarFunctionConfig(const UnsafeStringView& scalarFunctionName)
+{
+    return std::make_shared<ScalarFunctionConfig>(scalarFunctionName, m_scalarFunctionModules);
+}
+
 #pragma mark - Tokenizer
 void Core::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
 {
@@ -225,6 +250,16 @@ Optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
     Optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
         done = database->stepMigration(true);
+    }
+    return done;
+}
+
+Optional<bool> Core::compressionShouldBeOperated(const UnsafeStringView& path)
+{
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
+    Optional<bool> done = false; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        done = database->stepCompression(true);
     }
     return done;
 }
@@ -355,9 +390,9 @@ void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
     if (!m_operationQueue->isAutoBackup(path)) {
         return;
     }
+    WCTAssert(dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get()) != nullptr);
     AutoBackupConfig* backupConfig
-    = dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
-    WCTAssert(backupConfig != nullptr);
+    = static_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
     if (backupConfig != nullptr) {
         backupConfig->tryRegisterIncrementalMaterial(path, material);
     }
@@ -365,9 +400,9 @@ void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
 
 SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView& path)
 {
+    WCTAssert(dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get()) != nullptr);
     AutoBackupConfig* backupConfig
-    = dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
-    WCTAssert(backupConfig != nullptr);
+    = static_cast<AutoBackupConfig*>(m_autoBackupConfig.get());
     if (backupConfig != nullptr) {
         return backupConfig->tryGetIncrementalMaterial(path);
     }
@@ -375,7 +410,7 @@ SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView
 }
 
 #pragma mark - Migration
-void Core::enableAutoMigration(InnerDatabase* database, bool enable)
+void Core::enableAutoMigrate(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -386,6 +421,21 @@ void Core::enableAutoMigration(InnerDatabase* database, bool enable)
     } else {
         database->removeConfig(AutoMigrateConfigName);
         m_operationQueue->registerAsNoMigrationRequired(database->getPath());
+    }
+}
+
+#pragma mark - Compression
+void Core::enableAutoCompress(InnerDatabase* database, bool enable)
+{
+    WCTAssert(database != nullptr);
+    if (enable) {
+        database->setConfig(
+        AutoCompressConfigName, m_autoCompressConfig, WCDB::Configs::Priority::Highest);
+        m_operationQueue->registerAsRequiredCompression(database->getPath());
+        m_operationQueue->asyncCompress(database->getPath());
+    } else {
+        database->removeConfig(AutoCompressConfigName);
+        m_operationQueue->registerAsNoCompressionRequired(database->getPath());
     }
 }
 

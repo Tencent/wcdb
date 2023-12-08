@@ -53,7 +53,7 @@ bool WCDBHandleStatementPrepareSQL(CPPHandleStatement handleStatement, const cha
 {
     WCDBGetObjectOrReturnValue(
     handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
-    return cppHandleStatement->prepare(WCDB::UnsafeStringView(sql));
+    return cppHandleStatement->prepareSQL(WCDB::UnsafeStringView(sql));
 }
 
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement)

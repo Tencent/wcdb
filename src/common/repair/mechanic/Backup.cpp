@@ -49,16 +49,6 @@ BackupExclusiveDelegate::BackupExclusiveDelegate() : m_suspend(false)
 
 BackupExclusiveDelegate::~BackupExclusiveDelegate() = default;
 
-void BackupExclusiveDelegate::suspendBackup(bool suspend)
-{
-    m_suspend = suspend;
-}
-
-bool BackupExclusiveDelegate::backupSuspended() const
-{
-    return m_suspend;
-}
-
 BackupDelegateHolder::BackupDelegateHolder() = default;
 
 BackupDelegateHolder::~BackupDelegateHolder() = default;
@@ -522,6 +512,7 @@ void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
         if (master.type.caseInsensitiveEqual("table")
             && master.name.caseInsensitiveEqual(master.tableName)) {
             content.sql = master.sql;
+            content.associatedSQLs.clear();
             content.rootPage = master.rootpage;
             content.checked = true;
             if (m_incrementalMaterial != nullptr) {
