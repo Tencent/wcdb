@@ -108,13 +108,16 @@ Optional<std::set<StringView>> MigrateHandleOperator::getAllTables()
 {
     Column name("name");
     Column type("type");
-    StringView pattern
+    StringView sqlitePattern
     = StringView::formatted("%s%%", Syntax::builtinTablePrefix.data());
-    return getHandle()->getValues(StatementSelect()
-                                  .select(name)
-                                  .from(TableOrSubquery::master())
-                                  .where(type == "table" && name.notLike(pattern)),
-                                  0);
+    StringView wcdbPattern
+    = StringView::formatted("%s%%", Syntax::builtinWCDBTablePrefix.data());
+    return getHandle()->getValues(
+    StatementSelect()
+    .select(name)
+    .from(TableOrSubquery::master())
+    .where(type == "table" && name.notLike(sqlitePattern) && name.notLike(wcdbPattern)),
+    0);
 }
 
 bool MigrateHandleOperator::dropSourceTable(const MigrationInfo* info)
@@ -200,8 +203,6 @@ Optional<bool> MigrateHandleOperator::migrateRow()
     WCTAssert(m_migrateStatement->isPrepared() && m_removeMigratedStatement->isPrepared());
     WCTAssert(getHandle()->isInTransaction());
     Optional<bool> migrated;
-    m_migrateStatement->reset();
-    m_removeMigratedStatement->reset();
     if (m_migrateStatement->step()) {
         if (getHandle()->getChanges() != 0) {
             if (m_removeMigratedStatement->step()) {
@@ -211,6 +212,8 @@ Optional<bool> MigrateHandleOperator::migrateRow()
             migrated = true;
         }
     }
+    m_migrateStatement->reset();
+    m_removeMigratedStatement->reset();
     return migrated;
 }
 
@@ -269,7 +272,7 @@ bool MigrateHandleOperator::attachSourceDatabase(const MigrationUserInfo& userIn
     return reAttach(&userInfo);
 }
 
-InnerHandle* MigrateHandleOperator::getCurrentHandle()
+InnerHandle* MigrateHandleOperator::getCurrentHandle() const
 {
     return getHandle();
 }

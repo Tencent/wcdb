@@ -79,6 +79,9 @@ public:
     static UnsafeStringView
     createFromUTF16(const char16_t* utf16Str, size_t length, char* buffer);
 
+protected:
+    static size_t changeToUTF8(const char16_t* utf16Str, size_t length, char* buffer);
+
 #pragma mark - UnsafeStringView - Comparison
 public:
     int caseInsensitiveCompare(const UnsafeStringView& other) const;
@@ -161,13 +164,17 @@ public:
     static StringView formatted(const char* format, ...);
     static StringView hexString(const UnsafeData& data);
     static StringView makeConstant(const char* string);
-    static StringView createConstant(const char* string);
+    static StringView createConstant(const char* string, size_t length = 0);
 #ifdef _WIN32
     static StringView createFromWString(const wchar_t* string);
 #endif
 
 protected:
     void assignString(const char* content, size_t length);
+
+#pragma mark - UTF16
+public:
+    static StringView createFromUTF16(const char16_t* utf16Str, size_t length);
 };
 
 struct WCDB_API StringViewComparator {

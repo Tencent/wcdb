@@ -49,4 +49,5 @@
 
 #include "AuxiliaryFunctionModule.hpp"
 
+#include "CompressionInfo.hpp"
 #include "MigrationInfo.hpp"

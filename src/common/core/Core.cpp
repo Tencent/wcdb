@@ -25,6 +25,8 @@
 #include "Core.h"
 #include "AutoMigrateConfig.hpp"
 #include "BusyRetryConfig.hpp"
+#include "CompressionConst.hpp"
+#include "DecompressFunction.hpp"
 #include "FTS5AuxiliaryFunctionTemplate.hpp"
 #include "FTSConst.h"
 #include "FileManager.hpp"
@@ -33,6 +35,7 @@
 #include "OneOrBinaryTokenizer.hpp"
 #include "PinyinTokenizer.hpp"
 #include "SQLite.h"
+#include "ScalarFunctionTemplate.hpp"
 #include "StringView.hpp"
 #include "SubstringMatchInfo.hpp"
 
@@ -48,6 +51,7 @@ Core& Core::shared()
 Core::Core()
 // Database
 : m_databasePool(this)
+, m_scalarFunctionModules(std::make_shared<ScalarFunctionModules>())
 , m_tokenizerModules(std::make_shared<TokenizerModules>())
 , m_auxiliaryFunctionModules(std::make_shared<AuxiliaryFunctionModules>())
 , m_operationQueue(std::make_shared<OperationQueue>(OperationQueueName, this))
@@ -57,6 +61,8 @@ Core::Core()
 , m_autoBackupConfig(std::make_shared<AutoBackupConfig>(m_operationQueue))
 // Migration
 , m_autoMigrateConfig(std::make_shared<AutoMigrateConfig>(m_operationQueue))
+// Compression
+, m_autoCompressConfig(std::make_shared<AutoCompressConfig>(m_operationQueue))
 // Trace
 , m_globalSQLTraceConfig(std::make_shared<ShareableSQLTraceConfig>())
 , m_globalPerformanceTraceConfig(std::make_shared<ShareablePerformanceTraceConfig>())
@@ -100,6 +106,8 @@ Core::Core()
     registerAuxiliaryFunction(
     BuiltinAuxiliaryFunction::SubstringMatchInfo,
     FTS5AuxiliaryFunctionTemplate<SubstringMatchInfo>::specializeWithContext(nullptr));
+    registerScalarFunction(DecompressFunctionName,
+                           ScalarFunctionTemplate<DecompressFunction>::specialize(2));
 }
 
 Core::~Core()
@@ -232,6 +240,16 @@ Optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
     Optional<bool> done = false; // mark as no error if database is not referenced.
     if (database != nullptr) {
         done = database->stepMigration(true);
+    }
+    return done;
+}
+
+Optional<bool> Core::compressionShouldBeOperated(const UnsafeStringView& path)
+{
+    RecyclableDatabase database = m_databasePool.getOrCreate(path);
+    Optional<bool> done = false; // mark as no error if database is not referenced.
+    if (database != nullptr) {
+        done = database->stepCompression(true);
     }
     return done;
 }
@@ -371,7 +389,7 @@ SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView
 }
 
 #pragma mark - Migration
-void Core::enableAutoMigration(InnerDatabase* database, bool enable)
+void Core::enableAutoMigrate(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -382,6 +400,21 @@ void Core::enableAutoMigration(InnerDatabase* database, bool enable)
     } else {
         database->removeConfig(AutoMigrateConfigName);
         m_operationQueue->registerAsNoMigrationRequired(database->getPath());
+    }
+}
+
+#pragma mark - Compression
+void Core::enableAutoCompress(InnerDatabase* database, bool enable)
+{
+    WCTAssert(database != nullptr);
+    if (enable) {
+        database->setConfig(
+        AutoCompressConfigName, m_autoCompressConfig, WCDB::Configs::Priority::Highest);
+        m_operationQueue->registerAsRequiredCompression(database->getPath());
+        m_operationQueue->asyncCompress(database->getPath());
+    } else {
+        database->removeConfig(AutoCompressConfigName);
+        m_operationQueue->registerAsNoCompressionRequired(database->getPath());
     }
 }
 

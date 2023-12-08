@@ -59,7 +59,7 @@ bool IndexedColumn::describle(std::ostream& stream) const
 
 void IndexedColumn::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::Column:
         recursiveIterate(column.getOrCreate(), iterator, stop);
@@ -67,6 +67,7 @@ void IndexedColumn::iterate(const Iterator& iterator, bool& stop)
     case Switch::Expression:
         recursiveIterate(expression.getOrCreate(), iterator, stop);
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

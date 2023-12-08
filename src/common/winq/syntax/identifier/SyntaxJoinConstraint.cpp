@@ -54,12 +54,13 @@ bool JoinConstraint::describle(std::ostream& stream) const
 
 void JoinConstraint::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     if (!columns.empty()) {
         listIterate(columns, iterator, stop);
     } else {
         recursiveIterate(expression.getOrCreate(), iterator, stop);
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

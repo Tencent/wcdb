@@ -76,13 +76,14 @@ protected:
 
 #pragma mark - Insert
 protected:
-    bool stepInsert(const int64_t &rowid);
+    bool stepInsert();
     void clearMigrateStatus();
 
 private:
     const MigrationInfo *m_migratingInfo;
     Optional<int64_t> m_assignedPrimaryKey;
     int m_primaryKeyIndex;
+    int m_rowidBindIndex;
 
 #pragma mark - Update/Delete
 protected:

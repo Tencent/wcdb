@@ -113,10 +113,10 @@
         if ([self.targetClass isAutoIncrement]) {
             [sqls addObject:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"];
         } else if ([self.targetClass hasIntegerPrimaryKey]) {
-            [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
         } else {
             [sqls addObject:@"SELECT max(rowid) + 1 FROM main.testTable"];
-            [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
         }
         [sqls addObject:@"COMMIT"];
 
@@ -151,10 +151,10 @@
         if ([self.targetClass isAutoIncrement]) {
             [sqls addObject:@"INSERT INTO main.testTable(identifier, content) VALUES(?1, ?2)"];
         } else if ([self.targetClass hasIntegerPrimaryKey]) {
-            [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
         } else {
             [sqls addObject:@"SELECT max(rowid) + 1 FROM main.testTable"];
-            [sqls addObject:[NSString stringWithFormat:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:@"INSERT INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
         }
         [sqls addObject:@"COMMIT"];
 
@@ -190,10 +190,10 @@
                                       if ([self.targetClass isAutoIncrement]) {
                                           [sqls addObject:@"INSERT OR REPLACE INTO main.testTable(identifier, content) VALUES(?1, ?2)"];
                                       } else if ([self.targetClass hasIntegerPrimaryKey]) {
-                                          [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+                                          [sqls addObject:@"INSERT OR REPLACE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
                                       } else {
                                           [sqls addObject:@"SELECT max(rowid) + 1 FROM main.testTable"];
-                                          [sqls addObject:[NSString stringWithFormat:@"INSERT OR REPLACE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+                                          [sqls addObject:@"INSERT OR REPLACE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
                                       }
                                       [sqls addObject:@"COMMIT"];
 
@@ -228,10 +228,10 @@
                                           if ([self.targetClass isAutoIncrement]) {
                                               [sqls addObject:@"INSERT OR IGNORE INTO main.testTable(identifier, content) VALUES(?1, ?2)"];
                                           } else if ([self.targetClass hasIntegerPrimaryKey]) {
-                                              [sqls addObject:[NSString stringWithFormat:@"INSERT OR IGNORE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+                                              [sqls addObject:@"INSERT OR IGNORE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
                                           } else {
                                               [sqls addObject:@"SELECT max(rowid) + 1 FROM main.testTable"];
-                                              [sqls addObject:[NSString stringWithFormat:@"INSERT OR IGNORE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?%d)", SQLITE_MAX_VARIABLE_NUMBER]];
+                                              [sqls addObject:@"INSERT OR IGNORE INTO main.testTable(identifier, content, rowid) VALUES(?1, ?2, ?3)"];
                                           }
                                       }
                                       [sqls addObject:@"COMMIT"];
@@ -274,12 +274,12 @@
         int minId = expectedObjects.firstObject.identifier;
         if ([self.targetClass hasIntegerPrimaryKey]) {
             [sqls addObject:[NSString stringWithFormat:@"SELECT identifier FROM temp.wcdb_union_testTable WHERE identifier > %d ORDER BY identifier ASC LIMIT 1 OFFSET 1", minId]];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE identifier == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM main.testTable WHERE identifier == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE identifier == ?1", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"DELETE FROM main.testTable WHERE identifier == ?1"];
         } else {
             [sqls addObject:[NSString stringWithFormat:@"SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > %d ORDER BY identifier ASC LIMIT 1 OFFSET 1", minId]];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM main.testTable WHERE rowid == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?1", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"DELETE FROM main.testTable WHERE rowid == ?1"];
         }
         [sqls addObject:@"COMMIT"];
 
@@ -309,12 +309,12 @@
         int minId = expectedObjects.firstObject.identifier;
         if ([self.targetClass hasIntegerPrimaryKey]) {
             [sqls addObject:[NSString stringWithFormat:@"SELECT identifier FROM temp.wcdb_union_testTable WHERE identifier > %d ORDER BY identifier ASC LIMIT 1 OFFSET 1", minId]];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE identifier == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE main.testTable SET content = ?1 WHERE identifier == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE identifier == ?2", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"UPDATE main.testTable SET content = ?1 WHERE identifier == ?2"];
         } else {
             [sqls addObject:[NSString stringWithFormat:@"SELECT rowid FROM temp.wcdb_union_testTable WHERE identifier > %d ORDER BY identifier ASC LIMIT 1 OFFSET 1", minId]];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE rowid == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE main.testTable SET content = ?1 WHERE rowid == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE rowid == ?2", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"UPDATE main.testTable SET content = ?1 WHERE rowid == ?2"];
         }
         [sqls addObject:@"COMMIT"];
 
@@ -389,12 +389,12 @@
         [sqls addObject:@"BEGIN IMMEDIATE"];
         if ([self.targetClass hasIntegerPrimaryKey]) {
             [sqls addObject:@"SELECT identifier FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable)"];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE identifier == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE main.testTable SET content = ?1 WHERE identifier == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE identifier == ?2", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"UPDATE main.testTable SET content = ?1 WHERE identifier == ?2"];
         } else {
             [sqls addObject:@"SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable)"];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE rowid == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"UPDATE main.testTable SET content = ?1 WHERE rowid == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"UPDATE %@%@ SET content = ?1 WHERE rowid == ?2", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"UPDATE main.testTable SET content = ?1 WHERE rowid == ?2"];
         }
         [sqls addObject:@"COMMIT"];
 
@@ -420,12 +420,12 @@
         [sqls addObject:@"BEGIN IMMEDIATE"];
         if ([self.targetClass hasIntegerPrimaryKey]) {
             [sqls addObject:@"SELECT identifier FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable)"];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE identifier == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM main.testTable WHERE identifier == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE identifier == ?1", self.schemaName, self.sourceTableName]];
+            [sqls addObject:@"DELETE FROM main.testTable WHERE identifier == ?1"];
         } else {
             [sqls addObject:@"SELECT rowid FROM temp.wcdb_union_testTable WHERE temp.wcdb_union_testTable.identifier IN(SELECT max(identifier) FROM temp.wcdb_union_testTable)"];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?%d", self.schemaName, self.sourceTableName, SQLITE_MAX_VARIABLE_NUMBER]];
-            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM main.testTable WHERE rowid == ?%d", SQLITE_MAX_VARIABLE_NUMBER]];
+            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM %@%@ WHERE rowid == ?1", self.schemaName, self.sourceTableName]];
+            [sqls addObject:[NSString stringWithFormat:@"DELETE FROM main.testTable WHERE rowid == ?1"]];
         }
         [sqls addObject:@"COMMIT"];
 

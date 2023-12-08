@@ -52,6 +52,11 @@ const BaseBinding* Column::getTableBinding() const
     return nullptr;
 }
 
+CompressionColumnInfo* Column::getCompressionInfo() const
+{
+    return m_compressionInfo;
+}
+
 bool Column::describle(std::ostream& stream) const
 {
     if (!table.empty()) {
@@ -70,10 +75,11 @@ bool Column::describle(std::ostream& stream) const
 
 void Column::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     if (!table.empty()) {
         recursiveIterate(schema, iterator, stop);
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

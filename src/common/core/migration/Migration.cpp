@@ -24,6 +24,7 @@
 
 #include "Migration.hpp"
 #include "Assertion.hpp"
+#include "CompressionConst.hpp"
 #include "HandleStatement.hpp"
 #include "InnerHandle.hpp"
 #include "Notifier.hpp"
@@ -88,12 +89,11 @@ std::set<StringView> Migration::getPathsOfSourceDatabases() const
     return paths;
 }
 
-Migration::InfoInitializer::~InfoInitializer() = default;
-
 bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
     // do not migrate sqlite builtin table
-    if (table.hasPrefix(Syntax::builtinTablePrefix)) {
+    if (table.hasPrefix(Syntax::builtinTablePrefix)
+        || table.hasPrefix(Syntax::builtinWCDBTablePrefix)) {
         markAsNoNeedToMigrate(table);
         return true;
     }
@@ -259,12 +259,15 @@ Optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& tab
 }
 
 #pragma mark - InfoInitializer
+Migration::InfoInitializer::~InfoInitializer() = default;
+
 Optional<bool>
 Migration::InfoInitializer::checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo)
 {
     const Schema& schema = userInfo.getSchemaForSourceDatabase();
     const StringView& tableName = userInfo.getSourceTable();
     InnerHandle* handle = getCurrentHandle();
+    WCTAssert(handle != nullptr);
     Optional<bool> optionalExists = handle->tableExists(schema, tableName);
     if (!optionalExists.hasValue() || !optionalExists.value()) {
         return optionalExists;
@@ -277,7 +280,7 @@ Migration::InfoInitializer::checkSourceTableExistsAndHasRowid(const MigrationUse
         StringView msg = StringView::formatted(
         "Does not support migrating data from the table without rowid: %s",
         tableName.data());
-        handle->notifyError((int) Error::Code::Error, nullptr, msg.data());
+        handle->notifyError(Error::Code::Error, nullptr, msg);
         return NullOpt;
     }
     return optionalExists;
@@ -291,6 +294,7 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
 {
     const StringView& tableName = userInfo.getTable();
     InnerHandle* handle = getCurrentHandle();
+    WCTAssert(handle != nullptr);
     auto optionalExists = handle->tableExists(Schema::main(), tableName);
     if (!optionalExists.hasValue()) {
         return false;
@@ -305,6 +309,9 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
     }
     auto& metas = optionalMetas.value();
     for (const auto& meta : metas) {
+        if (meta.name.hasPrefix(CompressionColumnTypePrefix)) {
+            continue;
+        }
         columns.emplace(meta.name);
     }
     auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
@@ -315,7 +322,7 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
         StringView msg = StringView::formatted(
         "Does not support migrating data to the table without rowid: %s",
         tableName.data());
-        handle->notifyError((int) Error::Code::Error, nullptr, msg.data());
+        handle->notifyError(Error::Code::Error, nullptr, msg);
         return false;
     }
     autoincrement = tableConfig.value().autoincrement;
@@ -639,7 +646,8 @@ Optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
     std::set<StringView>& tables = optionalTables.value();
     tables.insert(m_hints.begin(), m_hints.end());
     for (const auto& table : tables) {
-        WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix));
+        WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix)
+                  && !table.hasPrefix(Syntax::builtinWCDBTablePrefix));
         if (!initInfo(stepper, table)) {
             return NullOpt;
         }

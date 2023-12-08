@@ -77,6 +77,7 @@ void FunctionContainerBase::clearFunctionSlot()
         m_funcDeconstructors[i](m_functionSlots + i);
     }
     free(m_functionSlots);
+    m_functionSlots = nullptr;
 }
 
 } // namespace WCDB

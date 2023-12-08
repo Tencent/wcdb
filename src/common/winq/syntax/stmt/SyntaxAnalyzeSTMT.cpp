@@ -59,7 +59,7 @@ bool AnalyzeSTMT::describle(std::ostream& stream) const
 
 void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::SchemaOrTableOrIndex:
         recursiveIterate(schema, iterator, stop);
@@ -68,6 +68,7 @@ void AnalyzeSTMT::iterate(const Iterator& iterator, bool& stop)
         WCTAssert(switcher == Switch::All);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

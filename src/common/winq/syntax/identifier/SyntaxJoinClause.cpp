@@ -72,7 +72,7 @@ bool JoinClause::describle(std::ostream& stream) const
 
 void JoinClause::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     auto tableOrSubquery = tableOrSubqueries.begin();
     tableOrSubquery->iterate(iterator, stop);
     if (++tableOrSubquery != tableOrSubqueries.end()) {
@@ -93,6 +93,7 @@ void JoinClause::iterate(const Iterator& iterator, bool& stop)
             ++joinConstraint;
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

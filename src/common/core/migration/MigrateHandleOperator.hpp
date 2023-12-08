@@ -81,7 +81,7 @@ private:
 #pragma mark - Info Initializer
 protected:
     bool attachSourceDatabase(const MigrationUserInfo& userInfo) override final;
-    InnerHandle* getCurrentHandle() override final;
+    InnerHandle* getCurrentHandle() const override final;
     const StringView& getDatabasePath() const override final;
 };
 

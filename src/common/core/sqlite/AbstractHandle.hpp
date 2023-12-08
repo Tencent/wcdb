@@ -99,7 +99,8 @@ protected:
 
 #pragma mark - Statement
 public:
-    virtual DecorativeHandleStatement *getStatement();
+    virtual DecorativeHandleStatement *
+    getStatement(const UnsafeStringView &skipDecorator = UnsafeStringView());
     virtual void returnStatement(HandleStatement *handleStatement);
     virtual void resetAllStatements();
     virtual void finalizeStatements();
@@ -229,7 +230,12 @@ private:
 
 #pragma mark - Error
 public:
-    void notifyError(int rc, const char *sql, const char *msg = nullptr);
+    void notifyError(Error::Code rc,
+                     const UnsafeStringView &sql,
+                     const UnsafeStringView &msg = UnsafeStringView());
+    void notifyError(int rc,
+                     const UnsafeStringView &sql,
+                     const UnsafeStringView &msg = UnsafeStringView());
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);

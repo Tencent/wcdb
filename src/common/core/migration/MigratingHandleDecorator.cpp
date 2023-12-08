@@ -23,6 +23,7 @@
  */
 
 #include "MigratingHandleDecorator.hpp"
+#include "CompressionConst.hpp"
 #include "MigratingStatementDecorator.hpp"
 
 namespace WCDB {
@@ -114,7 +115,8 @@ bool MigratingHandleDecorator::addColumn(const Schema& schema,
         return false;
     }
 
-    if (!schema.syntax().isMain()) {
+    if (!schema.syntax().isMain()
+        || column.syntax().column.value().name.hasPrefix(CompressionColumnTypePrefix)) {
         return true;
     }
 
@@ -211,7 +213,7 @@ bool MigratingHandleDecorator::attachSourceDatabase(const MigrationUserInfo& use
     return true;
 }
 
-InnerHandle* MigratingHandleDecorator::getCurrentHandle()
+InnerHandle* MigratingHandleDecorator::getCurrentHandle() const
 {
     return getHandle();
 }
@@ -225,6 +227,7 @@ const StringView& MigratingHandleDecorator::getDatabasePath() const
 bool MigratingHandleDecorator::rebindViews(const StringViewMap<const MigrationInfo*>& migratings)
 {
     StringViewMap<const MigrationInfo*> views2MigratingInfos;
+    InnerHandle* handle = getHandle();
     for (const auto& iter : migratings) {
         const MigrationInfo* info = iter.second;
         WCTAssert(info != nullptr);
@@ -232,13 +235,13 @@ bool MigratingHandleDecorator::rebindViews(const StringViewMap<const MigrationIn
     }
 
     // get existing unioned views
-    auto exists = getHandle()->tableExists(Schema::temp(), Syntax::masterTable);
+    auto exists = handle->tableExists(Schema::temp(), Syntax::masterTable);
     if (!exists.succeed()) {
         return false;
     }
     if (exists.value()) {
-        auto existingViews = getHandle()->getValues(
-        MigrationInfo::getStatementForSelectingUnionedView(), 0);
+        auto existingViews
+        = handle->getValues(MigrationInfo::getStatementForSelectingUnionedView(), 0);
         if (!existingViews.succeed()) {
             return false;
         }
@@ -251,7 +254,7 @@ bool MigratingHandleDecorator::rebindViews(const StringViewMap<const MigrationIn
                 views2MigratingInfos.erase(iter);
             } else {
                 // it is no longer needed
-                if (!getHandle()->executeStatement(
+                if (!handle->executeStatement(
                     MigrationInfo::getStatementForDroppingUnionedView(existingView))) {
                     return false;
                 }
@@ -262,12 +265,17 @@ bool MigratingHandleDecorator::rebindViews(const StringViewMap<const MigrationIn
     bool hasNewView = false;
     // create all needed views
     for (const auto& iter : views2MigratingInfos) {
-        if (!getHandle()->executeStatement(iter.second->getStatementForCreatingUnionedView())) {
+        HandleStatement* statement = handle->getStatement(DecoratorMigratingHandleStatement);
+        bool ret = statement->prepare(iter.second->getStatementForCreatingUnionedView());
+        ret = ret && statement->step();
+        statement->finalize();
+        handle->returnStatement(statement);
+        if (!ret) {
             return false;
         }
         hasNewView = true;
     }
-    if (hasNewView && getHandle()->isInTransaction()) {
+    if (hasNewView && handle->isInTransaction()) {
         m_createdNewViewInTransaction = true;
     }
     return true;
@@ -363,10 +371,12 @@ bool MigratingHandleDecorator::trySynchronousTransactionAfterAttached()
 }
 
 #pragma mark - Statement
-DecorativeHandleStatement* MigratingHandleDecorator::getStatement()
+DecorativeHandleStatement*
+MigratingHandleDecorator::getStatement(const UnsafeStringView& skipDecorator)
 {
-    DecorativeHandleStatement* statement = Super::getStatement();
-    if (!statement->containDecorator(DecoratorMigratingHandleStatement)) {
+    DecorativeHandleStatement* statement = Super::getStatement(skipDecorator);
+    if (!statement->containDecorator(DecoratorMigratingHandleStatement)
+        && !skipDecorator.equal(DecoratorMigratingHandleStatement)) {
         statement->tryAddDecorator<MigratingStatementDecorator>(
         DecoratorMigratingHandleStatement, this);
     }

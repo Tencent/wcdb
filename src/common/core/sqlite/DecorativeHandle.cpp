@@ -55,9 +55,9 @@ void HandleDecorator::rollbackTransaction()
     WCDBCallDecoratedFunction(InnerHandle, rollbackTransaction);
 }
 
-DecorativeHandleStatement *HandleDecorator::getStatement()
+DecorativeHandleStatement *HandleDecorator::getStatement(const UnsafeStringView &skipDecorator)
 {
-    return WCDBCallDecoratedFunction(InnerHandle, getStatement);
+    return WCDBCallDecoratedFunction(InnerHandle, getStatement, skipDecorator);
 }
 
 void HandleDecorator::finalizeStatements()
@@ -107,9 +107,9 @@ void DecorativeHandle::rollbackTransaction()
     WCDBCallDecorativeFunction(InnerHandle, rollbackTransaction);
 }
 
-DecorativeHandleStatement *DecorativeHandle::getStatement()
+DecorativeHandleStatement *DecorativeHandle::getStatement(const UnsafeStringView &skipDecorator)
 {
-    return WCDBCallDecorativeFunction(InnerHandle, getStatement);
+    return WCDBCallDecorativeFunction(InnerHandle, getStatement, skipDecorator);
 }
 
 void DecorativeHandle::finalizeStatements()

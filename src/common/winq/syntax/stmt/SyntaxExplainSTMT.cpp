@@ -54,8 +54,9 @@ bool ExplainSTMT::describle(std::ostream& stream) const
 
 void ExplainSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(*stmt.get(), iterator, stop);
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

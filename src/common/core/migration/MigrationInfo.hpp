@@ -179,8 +179,6 @@ protected:
 
 #pragma mark - Compatible
 public:
-    static const int indexOfRowIdOrPrimaryKey = SQLITE_MAX_VARIABLE_NUMBER;
-
     /*
      Firstly,
      
@@ -210,6 +208,7 @@ public:
     void generateStatementsForInsertMigrating(const Statement& sourceStatement,
                                               std::list<Statement>& statements,
                                               int& primaryKeyIndex,
+                                              int rowidBindIndex,
                                               Optional<int64_t>& assignedPrimaryKey) const;
 
     /*
@@ -220,7 +219,8 @@ public:
      For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
     void generateStatementsForUpdateMigrating(const Statement& sourceStatement,
-                                              std::list<Statement>& statements) const;
+                                              std::list<Statement>& statements,
+                                              int rowidBindIndex) const;
 
     /*
      SELECT [rowid/primary key] FROM temp.[unionedView] WHERE ... ORDER BY ... LIMIT ... OFFSET ...
@@ -230,7 +230,8 @@ public:
      For the tables with integer primary key, it uses primary key. For the other tables, it uses rowid.
      */
     void generateStatementsForDeleteMigrating(const Statement& sourceStatement,
-                                              std::list<Statement>& statements) const;
+                                              std::list<Statement>& statements,
+                                              int rowidBindIndex) const;
 
     StatementDelete getStatementForDeletingFromTable(const Statement& sourceStatement) const;
 

@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#include "CompressionConst.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
@@ -300,6 +301,11 @@ Expression CoreFunction::zeroBLOB(const Expression& expression)
 {
     static const char* funcName = "zeroblob";
     return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
+}
+
+Expression CoreFunction::decompress(const Expression& value, const Expression& compressionType)
+{
+    return Expression::function(DecompressFunctionName).invoke().arguments({ value, compressionType });
 }
 
 CoreFunctionOperable::~CoreFunctionOperable() = default;

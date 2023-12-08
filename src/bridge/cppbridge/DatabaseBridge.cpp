@@ -731,7 +731,7 @@ void WCDBDatabaseAddMigration(CPPDatabase database,
                               WCDBContextDestructor _Nullable destructor)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::InnerDatabase::TableFilter cppFilter = nullptr;
+    WCDB::InnerDatabase::MigrationTableFilter cppFilter = nullptr;
     if (filter != nullptr) {
         WCDB::RecyclableContext recyclableContext(context, destructor);
         cppFilter = [recyclableContext, filter](WCDB::MigrationUserInfo& info) {
@@ -754,7 +754,7 @@ bool WCDBDatabaseStepMigration(CPPDatabase database)
 void WCDBDatabaseEnableAutoMigration(CPPDatabase database, bool flag)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::Core::shared().enableAutoMigration(cppDatabase, flag);
+    WCDB::Core::shared().enableAutoMigrate(cppDatabase, flag);
 }
 
 void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database, SwiftClosure* _Nullable onMigrated)

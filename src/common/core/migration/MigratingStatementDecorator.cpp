@@ -39,6 +39,7 @@ MigratingStatementDecorator::MigratingStatementDecorator(Migration::Binder* bind
 , m_currentStatementType(StatementType::Invalid)
 , m_migratingInfo(nullptr)
 , m_primaryKeyIndex(0)
+, m_rowidBindIndex(0)
 {
 }
 
@@ -51,6 +52,7 @@ MigratingStatementDecorator::MigratingStatementDecorator(MigratingStatementDecor
 , m_migratingInfo(other.m_migratingInfo)
 , m_assignedPrimaryKey(std::move(other.m_assignedPrimaryKey))
 , m_primaryKeyIndex(other.m_primaryKeyIndex)
+, m_rowidBindIndex(other.m_rowidBindIndex)
 {
     other.m_migrationBinder = nullptr;
     other.m_processing = false;
@@ -59,6 +61,7 @@ MigratingStatementDecorator::MigratingStatementDecorator(MigratingStatementDecor
     other.m_migratingInfo = nullptr;
     other.m_assignedPrimaryKey = NullOpt;
     other.m_primaryKeyIndex = 0;
+    other.m_rowidBindIndex = 0;
 }
 
 MigratingStatementDecorator::~MigratingStatementDecorator() = default;
@@ -91,11 +94,12 @@ MigratingStatementDecorator::process(const Statement& originStatement)
 
         // It's dangerous to use origin statement after tampering since all the tokens are not fit.
         Statement falledBackStatement = originStatement;
-        // Clear sql cache in statement
-        falledBackStatement.syntax();
         // fallback
         falledBackStatement.iterate([&succeed, this, &originStatement](
-                                    Syntax::Identifier& identifier, bool& stop) {
+                                    Syntax::Identifier& identifier, bool isBegin, bool& stop) {
+            if (!isBegin) {
+                return;
+            }
             switch (identifier.getType()) {
             case Syntax::Identifier::Type::TableOrSubquery: {
                 // main.table -> temp.unionedView
@@ -152,8 +156,8 @@ MigratingStatementDecorator::process(const Statement& originStatement)
                 Syntax::BindParameter& bindParameter = (Syntax::BindParameter&) identifier;
                 if (bindParameter.switcher != Syntax::BindParameter::Switch::QuestionSign) {
                     getHandle()->notifyError(
-                    (int) Error::Code::Error,
-                    originStatement.getDescription().data(),
+                    Error::Code::Error,
+                    originStatement.getDescription(),
                     "Only numeric bind parameters are allowed to used in the migrating database");
                     succeed = false;
                 } else if (bindParameter.n <= 0) {
@@ -162,6 +166,8 @@ MigratingStatementDecorator::process(const Statement& originStatement)
                     originStatement.getDescription().data(),
                     "The indexes of bind parameters must be assigned in the migrating database");
                     succeed = false;
+                } else {
+                    m_rowidBindIndex = std::max(m_rowidBindIndex, bindParameter.n);
                 }
             } break;
             default:
@@ -175,6 +181,7 @@ MigratingStatementDecorator::process(const Statement& originStatement)
         if (!succeed) {
             break;
         }
+        m_rowidBindIndex++;
 
         switch (originStatement.getType()) {
         case Syntax::Identifier::Type::InsertSTMT: {
@@ -182,24 +189,24 @@ MigratingStatementDecorator::process(const Statement& originStatement)
             = static_cast<const Syntax::InsertSTMT&>(originStatement.syntax());
             const Syntax::InsertSTMT& falledBackSTMT
             = static_cast<const Syntax::InsertSTMT&>(falledBackStatement.syntax());
-            WCTRemedialAssert(!migratedInsertSTMT.columns.empty(),
-                              "Insert statement that does not explicitly indicate columns is not supported while using migration feature.",
-                              succeed = false;
-                              break;);
-            WCTRemedialAssert(!migratedInsertSTMT.isMultiWrite(),
-                              "Insert statement that contains multiple values is not supported while using migration feature.",
-                              succeed = false;
-                              break;);
             if (migratedInsertSTMT.isTargetingSameTable(falledBackSTMT)) {
                 statements.push_back(falledBackStatement);
             } else {
+                WCTRemedialAssert(!migratedInsertSTMT.columns.empty(),
+                                  "Insert statement that does not explicitly indicate columns is not supported while using migration feature.",
+                                  succeed = false;
+                                  break;);
+                WCTRemedialAssert(!migratedInsertSTMT.isMultiWrite(),
+                                  "Insert statement that contains multiple values is not supported while using migration feature.",
+                                  succeed = false;
+                                  break;);
                 clearMigrateStatus();
                 const MigrationInfo* info
                 = m_migrationBinder->getBoundInfo(migratedInsertSTMT.table);
                 WCTAssert(info != nullptr);
                 m_migratingInfo = info;
                 info->generateStatementsForInsertMigrating(
-                falledBackStatement, statements, m_primaryKeyIndex, m_assignedPrimaryKey);
+                falledBackStatement, statements, m_primaryKeyIndex, m_rowidBindIndex, m_assignedPrimaryKey);
                 sqlite3_revertCommitOrder(getHandleStatement()->getRawHandle());
             }
         } break;
@@ -216,7 +223,8 @@ MigratingStatementDecorator::process(const Statement& originStatement)
                 const MigrationInfo* info
                 = m_migrationBinder->getBoundInfo(migratedTableName);
                 WCTAssert(info != nullptr);
-                info->generateStatementsForUpdateMigrating(falledBackStatement, statements);
+                info->generateStatementsForUpdateMigrating(
+                falledBackStatement, statements, m_rowidBindIndex);
             }
         } break;
         case Syntax::Identifier::Type::DeleteSTMT: {
@@ -232,7 +240,8 @@ MigratingStatementDecorator::process(const Statement& originStatement)
                 const MigrationInfo* info
                 = m_migrationBinder->getBoundInfo(migratedTableName);
                 WCTAssert(info != nullptr);
-                info->generateStatementsForDeleteMigrating(falledBackStatement, statements);
+                info->generateStatementsForDeleteMigrating(
+                falledBackStatement, statements, m_rowidBindIndex);
             }
         } break;
         case Syntax::Identifier::Type::DropTableSTMT: {
@@ -316,6 +325,9 @@ bool MigratingStatementDecorator::tryFallbackToSourceTable(Syntax::Schema& schem
 #pragma mark - Override
 bool MigratingStatementDecorator::prepare(const Statement& statement)
 {
+    WCTRemedialAssert(!getHandleStatement()->isPrepared(),
+                      "Last statement is not finalized.",
+                      finalize(););
     WCTAssert(!m_processing);
     auto optionalStatements = process(statement);
     if (!optionalStatements.succeed()) {
@@ -324,13 +336,14 @@ bool MigratingStatementDecorator::prepare(const Statement& statement)
     auto& statements = optionalStatements.value();
     WCTAssert(!statements.empty());
     WCTAssert(m_additionalStatements.empty());
-    auto iter = statements.begin();
-    if (!Super::prepare(*iter)) {
+    // The last statement must be targeted at the main scheme
+    if (!Super::prepare(statements.back())) {
         return false;
     }
-    for (iter++; iter != statements.end(); iter++) {
+    statements.pop_back();
+    for (const auto& stmt : statements) {
         m_additionalStatements.emplace_back(getHandle());
-        if (!m_additionalStatements.back().prepare(*iter)) {
+        if (!m_additionalStatements.back().prepare(stmt)) {
             getHandleStatement()->finalize();
             return false;
         }
@@ -346,6 +359,7 @@ void MigratingStatementDecorator::finalize()
     }
     m_additionalStatements.clear();
     m_currentStatementType = StatementType::Invalid;
+    m_rowidBindIndex = 0;
     clearMigrateStatus();
 }
 
@@ -362,14 +376,11 @@ bool MigratingStatementDecorator::step()
 
 bool MigratingStatementDecorator::realStep()
 {
-    if (!Super::step()) {
-        return false;
-    }
     if (m_additionalStatements.empty()) {
-        return true;
+        return Super::step();
     }
     if (m_currentStatementType == StatementType::InsertSTMT) {
-        return stepInsert(getHandle()->getLastInsertedRowID());
+        return stepInsert();
     } else if (m_currentStatementType == StatementType::DeleteSTMT
                || m_currentStatementType == StatementType::UpdateSTMT) {
         return stepUpdateOrDelete();
@@ -379,13 +390,13 @@ bool MigratingStatementDecorator::realStep()
                 return false;
             }
         }
+        return Super::step();
     }
-    return true;
 }
 
 void MigratingStatementDecorator::reset()
 {
-    WCDBCallDecoratedFunction(HandleStatement, reset);
+    Super::reset();
     for (auto& handleStatement : m_additionalStatements) {
         handleStatement.reset();
     }
@@ -396,16 +407,14 @@ void MigratingStatementDecorator::reset()
 
 void MigratingStatementDecorator::bindInteger(const Integer& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindInteger(value, index);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindInteger(value, index);
         }
+    }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindInteger(value, index);
     }
     if (m_currentStatementType == StatementType::InsertSTMT
         && m_primaryKeyIndex > 0 && index == m_primaryKeyIndex) {
@@ -415,76 +424,66 @@ void MigratingStatementDecorator::bindInteger(const Integer& value, int index)
 
 void MigratingStatementDecorator::bindDouble(const Float& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindDouble(value, index);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindDouble(value, index);
         }
     }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindDouble(value, index);
+    }
 }
 
 void MigratingStatementDecorator::bindText(const Text& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindText(value, index);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindText(value, index);
         }
     }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindText(value, index);
+    }
 }
 
 void MigratingStatementDecorator::bindText16(const char16_t* value, size_t valueLength, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindText16(value, valueLength, index);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindText16(value, valueLength, index);
         }
     }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindText16(value, valueLength, index);
+    }
 }
 
 void MigratingStatementDecorator::bindBLOB(const BLOB& value, int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindBLOB(value, index);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindBLOB(value, index);
         }
     }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindBLOB(value, index);
+    }
 }
 
 void MigratingStatementDecorator::bindNull(int index)
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindNull(index);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindNull(index);
         }
+    }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindNull(index);
     }
     if (m_currentStatementType == StatementType::InsertSTMT
         && m_primaryKeyIndex > 0 && index == m_primaryKeyIndex) {
@@ -497,30 +496,34 @@ void MigratingStatementDecorator::bindPointer(void* ptr,
                                               const Text& type,
                                               void (*destructor)(void*))
 {
-    WCTRemedialAssert(index != MigrationInfo::indexOfRowIdOrPrimaryKey,
-                      "Binding index is out of range",
-                      return;);
-    if (getHandleStatement()->getBindParameterCount() >= index) {
-        Super::bindPointer(ptr, index, type, destructor);
-    }
+    WCTRemedialAssert(index != m_rowidBindIndex, "Binding index is out of range", return;);
     for (auto& handleStatement : m_additionalStatements) {
         if (handleStatement.getBindParameterCount() >= index) {
             handleStatement.bindPointer(ptr, index, type, destructor);
         }
     }
+    if (getHandleStatement()->getBindParameterCount() >= index) {
+        Super::bindPointer(ptr, index, type, destructor);
+    }
 }
 
 #pragma mark - Insert
-bool MigratingStatementDecorator::stepInsert(const int64_t& rowid)
+bool MigratingStatementDecorator::stepInsert()
 {
+    // Insert to source table
+    auto iter = m_additionalStatements.begin();
+    if (!iter->step()) {
+        return false;
+    }
     // The content inserting to source table is ignored.
     if (getHandle()->getChanges() == 0) {
         return true;
     }
+    iter++;
+    int64_t rowid = getHandle()->getLastInsertedRowID();
     WCTAssert(m_additionalStatements.size() >= 2);
 
     // Remove from source table
-    auto iter = m_additionalStatements.begin();
     iter->bindInteger(rowid, 1);
     if (!iter->step()) {
         return false;
@@ -528,14 +531,11 @@ bool MigratingStatementDecorator::stepInsert(const int64_t& rowid)
     iter++;
 
     // Insert to target table
-    HandleStatement& migrateStatement = *iter;
-
     WCTAssert(m_migratingInfo != nullptr);
     if (m_migratingInfo->isAutoIncrement()) {
-        return migrateStatement.step();
+        return Super::step();
     }
 
-    iter++;
     int64_t maxId = 1;
 
     if (!m_migratingInfo->getIntegerPrimaryKey().empty()) {
@@ -560,8 +560,8 @@ bool MigratingStatementDecorator::stepInsert(const int64_t& rowid)
             maxId = std::max(maxId, iter->getInteger());
         }
     }
-    migrateStatement.bindInteger(maxId, MigrationInfo::indexOfRowIdOrPrimaryKey);
-    if (!migrateStatement.step()) {
+    Super::bindInteger(maxId, m_rowidBindIndex);
+    if (!Super::step()) {
         if (getHandle()->getError().code() == Error::Code::Constraint) {
             Error error = Error(
             Error::Code::Warning,
@@ -586,20 +586,25 @@ bool MigratingStatementDecorator::stepUpdateOrDelete()
 {
     WCTAssert(m_additionalStatements.size() == 2);
     auto iter = m_additionalStatements.begin();
-    HandleStatement& sourceStatement = *iter;
+    HandleStatement& selectStatement = *iter;
+    if (!selectStatement.step()) {
+        return false;
+    }
     iter++;
-    HandleStatement& targetStatement = *iter;
-    while (!getHandleStatement()->done()) {
-        int64_t rowid = getHandleStatement()->getInteger();
-        sourceStatement.bindInteger(rowid, MigrationInfo::indexOfRowIdOrPrimaryKey);
+    HandleStatement& sourceStatement = *iter;
+    while (!selectStatement.done()) {
+        int64_t rowid = selectStatement.getInteger();
+        sourceStatement.reset();
+        sourceStatement.bindInteger(rowid, m_rowidBindIndex);
         if (!sourceStatement.step()) {
             return false;
         }
-        targetStatement.bindInteger(rowid, MigrationInfo::indexOfRowIdOrPrimaryKey);
-        if (!targetStatement.step()) {
+        Super::reset();
+        Super::bindInteger(rowid, m_rowidBindIndex);
+        if (!Super::step()) {
             return false;
         }
-        if (!Super::step()) {
+        if (!selectStatement.step()) {
             return false;
         }
     }

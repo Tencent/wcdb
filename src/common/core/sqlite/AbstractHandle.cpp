@@ -216,7 +216,7 @@ bool AbstractHandle::isInTransaction()
 }
 
 #pragma mark - Statement
-DecorativeHandleStatement *AbstractHandle::getStatement()
+DecorativeHandleStatement *AbstractHandle::getStatement(const UnsafeStringView &)
 {
     m_handleStatements.push_back(DecorativeHandleStatement(this));
     m_handleStatements.back().enableAutoAddColumn();
@@ -791,15 +791,20 @@ bool AbstractHandle::APIExit(int rc, const char *sql)
     return result;
 }
 
-void AbstractHandle::notifyError(int rc, const char *sql, const char *msg)
+void AbstractHandle::notifyError(Error::Code rc, const UnsafeStringView &sql, const UnsafeStringView &msg)
+{
+    notifyError((int) rc, sql, msg);
+}
+
+void AbstractHandle::notifyError(int rc, const UnsafeStringView &sql, const UnsafeStringView &msg)
 {
     WCTAssert(Error::isError(rc));
     if (Error::rc2c(rc) != Error::Code::Misuse
-        && sqlite3_errcode(m_handle) == rc && msg == nullptr) {
+        && sqlite3_errcode(m_handle) == rc && msg.empty()) {
         m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error
-        m_error.setSQLiteCode(rc);
+        m_error.setSQLiteCode(rc, msg);
     }
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
@@ -810,7 +815,7 @@ void AbstractHandle::notifyError(int rc, const char *sql, const char *msg)
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    if (sql != nullptr) {
+    if (!sql.empty()) {
         m_error.infos.insert_or_assign(ErrorStringKeySQL, sql);
     } else {
         m_error.infos.erase(ErrorStringKeySQL);

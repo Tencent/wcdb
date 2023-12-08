@@ -24,6 +24,7 @@
 
 #include "BaseBinding.hpp"
 #include "Assertion.hpp"
+#include "CompressionConst.hpp"
 #include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
 #include "MigratingHandleDecorator.hpp"
@@ -249,6 +250,9 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
                 }
             }
             for (const auto &columnName : columnNames) {
+                if (columnName.hasPrefix(CompressionColumnTypePrefix)) {
+                    continue;
+                }
                 Error error(Error::Code::Mismatch, Error::Level::Notice, "Skip column");
                 error.infos.insert_or_assign("Table", StringView(tableName));
                 error.infos.insert_or_assign("Column", StringView(columnName));

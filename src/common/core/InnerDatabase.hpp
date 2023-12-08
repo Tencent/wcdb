@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "Compression.hpp"
 #include "Configs.hpp"
 #include "Factory.hpp"
 #include "HandlePool.hpp"
@@ -42,6 +43,7 @@ class BaseOperation;
 // TODO: support authorize
 class InnerDatabase final : private HandlePool,
                             public MigrationEvent,
+                            public CompressionEvent,
                             public MergeFTSIndexHandleProvider,
                             public TransactionEvent {
     friend BaseOperation;
@@ -161,10 +163,10 @@ private:
 
 #pragma mark - Migration
 public:
-    typedef Migration::TableFilter TableFilter;
+    typedef Migration::TableFilter MigrationTableFilter;
     void addMigration(const UnsafeStringView &sourcePath,
                       const UnsafeData &sourceCipher,
-                      const TableFilter &filter);
+                      const MigrationTableFilter &filter);
 
     typedef std::function<void(InnerDatabase *, const MigrationBaseInfo *)> MigratedCallback;
     void setNotificationWhenMigrated(const MigratedCallback &callback);
@@ -179,6 +181,23 @@ protected:
     void didMigrate(const MigrationBaseInfo *info) override final;
     Migration m_migration; // thread-safe
     MigratedCallback m_migratedCallback;
+
+#pragma mark - Compression
+public:
+    typedef Compression::TableFilter CompressionTableFilter;
+    void addCompression(const CompressionTableFilter &filter);
+
+    typedef std::function<void(InnerDatabase *, const CompressionTableBaseInfo *)> CompressedCallback;
+    void setNotificationWhenCompressed(const CompressedCallback &callback);
+
+    Optional<bool> stepCompression(bool interruptible);
+
+    bool isCompressed() const;
+
+protected:
+    void didCompress(const CompressionTableBaseInfo *info) override final;
+    Compression m_compression; // thread-safe
+    CompressedCallback m_compressedCallback;
 
 #pragma mark - Checkpoint
 public:

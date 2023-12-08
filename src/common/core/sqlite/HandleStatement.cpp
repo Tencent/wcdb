@@ -245,7 +245,10 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
     bool invalidStatement = false;
 
     copyStatement.syntax();
-    copyStatement.iterate([&](Syntax::Identifier &identifier, bool &stop) {
+    copyStatement.iterate([&](Syntax::Identifier &identifier, bool isBegin, bool &stop) {
+        if (!isBegin) {
+            return;
+        }
         StringView curTableName;
         Syntax::Schema curSchema;
         bool needCheckTable = false;

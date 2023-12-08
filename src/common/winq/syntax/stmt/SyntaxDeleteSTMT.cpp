@@ -84,7 +84,7 @@ bool DeleteSTMT::describle(std::ostream& stream, bool skipSchema) const
 
 void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     listIterate(commonTableExpressions, iterator, stop);
     recursiveIterate(table, iterator, stop);
     if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(condition)) {
@@ -102,6 +102,7 @@ void DeleteSTMT::iterate(const Iterator& iterator, bool& stop)
             break;
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

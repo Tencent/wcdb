@@ -112,6 +112,7 @@ public:
 
 protected:
     Optional<bool> migrationShouldBeOperated(const UnsafeStringView& path) override final;
+    Optional<bool> compressionShouldBeOperated(const UnsafeStringView& path) override final;
     void backupShouldBeOperated(const UnsafeStringView& path) override final;
     void checkpointShouldBeOperated(const UnsafeStringView& path) override final;
     void integrityShouldBeChecked(const UnsafeStringView& path) override final;
@@ -139,10 +140,17 @@ protected:
 
 #pragma mark - Migration
 public:
-    void enableAutoMigration(InnerDatabase* database, bool enable);
+    void enableAutoMigrate(InnerDatabase* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;
+
+#pragma mark - Compression
+public:
+    void enableAutoCompress(InnerDatabase* database, bool enable);
+
+protected:
+    std::shared_ptr<Config> m_autoCompressConfig;
 
 #pragma mark - Trace
 public:

@@ -92,8 +92,9 @@ bool CreateVirtualTableSTMT::describle(std::ostream& stream) const
 
 void CreateVirtualTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
+    Identifier::iterate(iterator, false, stop);
 }
 
 StringView CreateVirtualTableSTMT::tokenizerPreFix()

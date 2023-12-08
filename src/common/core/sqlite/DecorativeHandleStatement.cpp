@@ -128,7 +128,11 @@ void DecorativeHandleStatement::initDecorativeFunctions()
 #pragma mark - DecorativeHandleStatement - Override
 bool DecorativeHandleStatement::prepare(const Statement &statement)
 {
-    return WCDBCallDecorativeFunction(HandleStatement, prepare, statement);
+    if (!WCDBCallDecorativeFunction(HandleStatement, prepare, statement)) {
+        finalize();
+        return false;
+    }
+    return true;
 }
 
 void DecorativeHandleStatement::finalize()

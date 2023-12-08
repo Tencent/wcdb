@@ -69,12 +69,13 @@ bool WindowDef::describle(std::ostream& stream) const
 
 void WindowDef::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     listIterate(expressions, iterator, stop);
     listIterate(orderingTerms, iterator, stop);
     if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(frameSpec)) {
         recursiveIterate(frameSpec.value(), iterator, stop);
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

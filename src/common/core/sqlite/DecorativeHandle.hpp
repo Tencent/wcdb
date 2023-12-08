@@ -62,7 +62,8 @@ public:
     virtual void rollbackTransaction();
     WCDBAssertFunctionTypeConsistent(HandleDecorator, InnerHandle, rollbackTransaction);
 
-    virtual DecorativeHandleStatement *getStatement();
+    virtual DecorativeHandleStatement *
+    getStatement(const UnsafeStringView &skipDecorator = UnsafeStringView());
     WCDBAssertFunctionTypeConsistent(HandleDecorator, InnerHandle, getStatement);
 
     virtual void finalizeStatements();
@@ -112,7 +113,8 @@ public:
 
     bool commitTransaction() override final;
     void rollbackTransaction() override final;
-    DecorativeHandleStatement *getStatement() override final;
+    DecorativeHandleStatement *getStatement(const UnsafeStringView &skipDecorator
+                                            = UnsafeStringView()) override final;
     void finalizeStatements() override final;
 };
 

@@ -824,6 +824,7 @@
 		0D19BA262B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
+		0D2789D92B21995800F60E2D /* CompressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D2789D82B21995800F60E2D /* CompressionTests.mm */; };
 		0D32815F2B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
 		0D3281602B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
 		0D3281612B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
@@ -863,6 +864,22 @@
 		0D5363F1290A75F20026A4DC /* Sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5363EE290A75F20026A4DC /* Sequence.cpp */; };
 		0D5363F2290A75F20026A4DC /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363EF290A75F20026A4DC /* Sequence.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D5363F3290A75F20026A4DC /* Sequence.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5363EF290A75F20026A4DC /* Sequence.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D5403032B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5403012B160693007DF415 /* CompressingStatementDecorator.cpp */; };
+		0D5403042B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5403012B160693007DF415 /* CompressingStatementDecorator.cpp */; };
+		0D5403052B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5403012B160693007DF415 /* CompressingStatementDecorator.cpp */; };
+		0D5403062B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D5403012B160693007DF415 /* CompressingStatementDecorator.cpp */; };
+		0D5403072B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5403022B160693007DF415 /* CompressingStatementDecorator.hpp */; };
+		0D5403082B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5403022B160693007DF415 /* CompressingStatementDecorator.hpp */; };
+		0D5403092B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5403022B160693007DF415 /* CompressingStatementDecorator.hpp */; };
+		0D54030A2B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D5403022B160693007DF415 /* CompressingStatementDecorator.hpp */; };
+		0D54030D2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D54030B2B1606BC007DF415 /* CompressingHandleDecorator.cpp */; };
+		0D54030E2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D54030B2B1606BC007DF415 /* CompressingHandleDecorator.cpp */; };
+		0D54030F2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D54030B2B1606BC007DF415 /* CompressingHandleDecorator.cpp */; };
+		0D5403102B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D54030B2B1606BC007DF415 /* CompressingHandleDecorator.cpp */; };
+		0D5403112B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D54030C2B1606BC007DF415 /* CompressingHandleDecorator.hpp */; };
+		0D5403122B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D54030C2B1606BC007DF415 /* CompressingHandleDecorator.hpp */; };
+		0D5403132B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D54030C2B1606BC007DF415 /* CompressingHandleDecorator.hpp */; };
+		0D5403142B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D54030C2B1606BC007DF415 /* CompressingHandleDecorator.hpp */; };
 		0D71F9342A8B377100F7B4F6 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D71F9332A8B377100F7B4F6 /* Random.swift */; };
 		0D71F9352A8B377100F7B4F6 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D71F9332A8B377100F7B4F6 /* Random.swift */; };
 		0D71F9362A8B659400F7B4F6 /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1671827F434E800D2C926 /* RandomData.swift */; };
@@ -898,6 +915,7 @@
 		0DE68B3B2AB45F6C008BD74C /* NormalRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */; };
 		0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */; };
 		0DE68B412AB466F1008BD74C /* WithoutRowidRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */; };
+		0DE7BF052B22ABDC0087CC56 /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; };
 		0DE84ACA2B030F5B00522A4E /* ZSTDBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */; };
 		0DE84AD22B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
 		0DE84AD32B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
@@ -1652,6 +1670,7 @@
 		7511EA50293CDAFB00FB033B /* NewPropertyObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7511EA4F293CDAFB00FB033B /* NewPropertyObject.mm */; };
 		75195E812852454700EC8C1F /* FrameSpecTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195E802852454700EC8C1F /* FrameSpecTests.swift */; };
 		751CA67728C64B7B00874A7A /* CPPAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */; };
+		751FE4E72B1E10F200BFC7AD /* CompressingCRUDTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 751FE4E62B1E10F200BFC7AD /* CompressingCRUDTest.mm */; };
 		75204AE8283FD6DC0002E40C /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE7283FD6DC0002E40C /* Schema.swift */; };
 		75204AEB283FD7410002E40C /* SchemaBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE9283FD7410002E40C /* SchemaBridge.cpp */; };
 		75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75204AEA283FD7410002E40C /* SchemaBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -2937,6 +2956,46 @@
 		7522B5322A6D78BB00B465D6 /* NormalMigrationObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7522B52F2A6D78BB00B465D6 /* NormalMigrationObject.mm */; };
 		7522B5332A6D78BB00B465D6 /* AutoIncrementMigrationObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7522B5302A6D78BB00B465D6 /* AutoIncrementMigrationObject.mm */; };
 		7524940A29D1F10000493FF9 /* WCTBridgeProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50B628115AB8007365CD /* WCTBridgeProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7525175B2B12D43700485175 /* DecompressFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517592B12D43700485175 /* DecompressFunction.cpp */; };
+		7525175C2B12D43700485175 /* DecompressFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517592B12D43700485175 /* DecompressFunction.cpp */; };
+		7525175D2B12D43700485175 /* DecompressFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517592B12D43700485175 /* DecompressFunction.cpp */; };
+		7525175E2B12D43700485175 /* DecompressFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517592B12D43700485175 /* DecompressFunction.cpp */; };
+		7525175F2B12D43700485175 /* DecompressFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525175A2B12D43700485175 /* DecompressFunction.hpp */; };
+		752517602B12D43700485175 /* DecompressFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525175A2B12D43700485175 /* DecompressFunction.hpp */; };
+		752517612B12D43700485175 /* DecompressFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525175A2B12D43700485175 /* DecompressFunction.hpp */; };
+		752517622B12D43700485175 /* DecompressFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525175A2B12D43700485175 /* DecompressFunction.hpp */; };
+		752517662B12F13C00485175 /* CompressionConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517652B12F13C00485175 /* CompressionConst.hpp */; };
+		752517672B12F13C00485175 /* CompressionConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517652B12F13C00485175 /* CompressionConst.hpp */; };
+		752517682B12F13C00485175 /* CompressionConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517652B12F13C00485175 /* CompressionConst.hpp */; };
+		752517692B12F13C00485175 /* CompressionConst.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517652B12F13C00485175 /* CompressionConst.hpp */; };
+		7525176C2B12FDC700485175 /* ZSTDContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525176A2B12FDC700485175 /* ZSTDContext.cpp */; };
+		7525176D2B12FDC700485175 /* ZSTDContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525176A2B12FDC700485175 /* ZSTDContext.cpp */; };
+		7525176E2B12FDC700485175 /* ZSTDContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525176A2B12FDC700485175 /* ZSTDContext.cpp */; };
+		7525176F2B12FDC700485175 /* ZSTDContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525176A2B12FDC700485175 /* ZSTDContext.cpp */; };
+		752517702B12FDC700485175 /* ZSTDContext.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525176B2B12FDC700485175 /* ZSTDContext.hpp */; };
+		752517712B12FDC700485175 /* ZSTDContext.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525176B2B12FDC700485175 /* ZSTDContext.hpp */; };
+		752517722B12FDC700485175 /* ZSTDContext.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525176B2B12FDC700485175 /* ZSTDContext.hpp */; };
+		752517732B12FDC700485175 /* ZSTDContext.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525176B2B12FDC700485175 /* ZSTDContext.hpp */; };
+		752517752B132DAB00485175 /* CompressionConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517742B132DAB00485175 /* CompressionConst.cpp */; };
+		752517762B132DAB00485175 /* CompressionConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517742B132DAB00485175 /* CompressionConst.cpp */; };
+		752517772B132DAB00485175 /* CompressionConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517742B132DAB00485175 /* CompressionConst.cpp */; };
+		752517782B132DAB00485175 /* CompressionConst.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752517742B132DAB00485175 /* CompressionConst.cpp */; };
+		752517812B1338AF00485175 /* CompressionRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525177F2B1338AF00485175 /* CompressionRecord.cpp */; };
+		752517822B1338AF00485175 /* CompressionRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525177F2B1338AF00485175 /* CompressionRecord.cpp */; };
+		752517832B1338AF00485175 /* CompressionRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525177F2B1338AF00485175 /* CompressionRecord.cpp */; };
+		752517842B1338AF00485175 /* CompressionRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525177F2B1338AF00485175 /* CompressionRecord.cpp */; };
+		752517852B1338AF00485175 /* CompressionRecord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517802B1338AF00485175 /* CompressionRecord.hpp */; };
+		752517862B1338AF00485175 /* CompressionRecord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517802B1338AF00485175 /* CompressionRecord.hpp */; };
+		752517872B1338AF00485175 /* CompressionRecord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517802B1338AF00485175 /* CompressionRecord.hpp */; };
+		752517882B1338AF00485175 /* CompressionRecord.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 752517802B1338AF00485175 /* CompressionRecord.hpp */; };
+		7525178D2B133DB700485175 /* CompressHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525178B2B133DB700485175 /* CompressHandleOperator.cpp */; };
+		7525178E2B133DB700485175 /* CompressHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525178B2B133DB700485175 /* CompressHandleOperator.cpp */; };
+		7525178F2B133DB700485175 /* CompressHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525178B2B133DB700485175 /* CompressHandleOperator.cpp */; };
+		752517902B133DB700485175 /* CompressHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7525178B2B133DB700485175 /* CompressHandleOperator.cpp */; };
+		752517912B133DB700485175 /* CompressHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525178C2B133DB700485175 /* CompressHandleOperator.hpp */; };
+		752517922B133DB700485175 /* CompressHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525178C2B133DB700485175 /* CompressHandleOperator.hpp */; };
+		752517932B133DB700485175 /* CompressHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525178C2B133DB700485175 /* CompressHandleOperator.hpp */; };
+		752517942B133DB700485175 /* CompressHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7525178C2B133DB700485175 /* CompressHandleOperator.hpp */; };
 		752594932851FCEF0068A602 /* RaiseFunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752594922851FCEF0068A602 /* RaiseFunctionTests.swift */; };
 		752594E5285226C00068A602 /* FrameSpecBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752594E3285226C00068A602 /* FrameSpecBridge.cpp */; };
 		752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752594E4285226C00068A602 /* FrameSpecBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -3029,6 +3088,38 @@
 		754212042B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		754212052B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		754212062B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		754212122B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120A2B124CFF00A2FF4D /* CompressionCenter.cpp */; };
+		754212132B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120A2B124CFF00A2FF4D /* CompressionCenter.cpp */; };
+		754212142B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120A2B124CFF00A2FF4D /* CompressionCenter.cpp */; };
+		754212152B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120A2B124CFF00A2FF4D /* CompressionCenter.cpp */; };
+		754212162B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120B2B124CFF00A2FF4D /* ZSTDDict.cpp */; };
+		754212172B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120B2B124CFF00A2FF4D /* ZSTDDict.cpp */; };
+		754212182B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120B2B124CFF00A2FF4D /* ZSTDDict.cpp */; };
+		754212192B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120B2B124CFF00A2FF4D /* ZSTDDict.cpp */; };
+		7542121A2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120C2B124CFF00A2FF4D /* CompressionInfo.cpp */; };
+		7542121B2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120C2B124CFF00A2FF4D /* CompressionInfo.cpp */; };
+		7542121C2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120C2B124CFF00A2FF4D /* CompressionInfo.cpp */; };
+		7542121D2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120C2B124CFF00A2FF4D /* CompressionInfo.cpp */; };
+		7542121E2B124CFF00A2FF4D /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120D2B124CFF00A2FF4D /* Compression.cpp */; };
+		7542121F2B124CFF00A2FF4D /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120D2B124CFF00A2FF4D /* Compression.cpp */; };
+		754212202B124CFF00A2FF4D /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120D2B124CFF00A2FF4D /* Compression.cpp */; };
+		754212212B124CFF00A2FF4D /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7542120D2B124CFF00A2FF4D /* Compression.cpp */; };
+		754212222B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120E2B124CFF00A2FF4D /* CompressionCenter.hpp */; };
+		754212232B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120E2B124CFF00A2FF4D /* CompressionCenter.hpp */; };
+		754212242B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120E2B124CFF00A2FF4D /* CompressionCenter.hpp */; };
+		754212252B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120E2B124CFF00A2FF4D /* CompressionCenter.hpp */; };
+		754212262B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120F2B124CFF00A2FF4D /* ZSTDDict.hpp */; };
+		754212272B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120F2B124CFF00A2FF4D /* ZSTDDict.hpp */; };
+		754212282B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120F2B124CFF00A2FF4D /* ZSTDDict.hpp */; };
+		754212292B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7542120F2B124CFF00A2FF4D /* ZSTDDict.hpp */; };
+		7542122A2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212102B124CFF00A2FF4D /* CompressionInfo.hpp */; };
+		7542122B2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212102B124CFF00A2FF4D /* CompressionInfo.hpp */; };
+		7542122C2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212102B124CFF00A2FF4D /* CompressionInfo.hpp */; };
+		7542122D2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212102B124CFF00A2FF4D /* CompressionInfo.hpp */; };
+		7542122E2B124CFF00A2FF4D /* Compression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212112B124CFF00A2FF4D /* Compression.hpp */; };
+		7542122F2B124CFF00A2FF4D /* Compression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212112B124CFF00A2FF4D /* Compression.hpp */; };
+		754212302B124CFF00A2FF4D /* Compression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212112B124CFF00A2FF4D /* Compression.hpp */; };
+		754212312B124CFF00A2FF4D /* Compression.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 754212112B124CFF00A2FF4D /* Compression.hpp */; };
 		754359462B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
 		754359472B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
 		754359482B066DBD00CDF232 /* HandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754359442B066DBD00CDF232 /* HandleOperator.cpp */; };
@@ -3087,8 +3178,33 @@
 		758D9D0728BA7F06001B3D2D /* CPPColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 758D9D0528BA7F06001B3D2D /* CPPColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758D9D0928BA819A001B3D2D /* CPPVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 758D9D0828BA819A001B3D2D /* CPPVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758D9D0A28BA819A001B3D2D /* CPPVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 758D9D0828BA819A001B3D2D /* CPPVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758E7EB82B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
+		758E7EB92B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
+		758E7EBA2B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
+		758E7EBB2B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
+		758E7EBC2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */; };
+		758E7EBD2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */; };
+		758E7EBE2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */; };
+		758E7EBF2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */; };
+		758E7EC22B1B41AA00319991 /* WCTCompressionInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EC12B1B41AA00319991 /* WCTCompressionInfo.mm */; };
+		758E7EC32B1B41AA00319991 /* WCTCompressionInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EC12B1B41AA00319991 /* WCTCompressionInfo.mm */; };
+		758E7EC72B1B41C500319991 /* WCTCompressionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC62B1B41C500319991 /* WCTCompressionInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758E7EC82B1B41C500319991 /* WCTCompressionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC62B1B41C500319991 /* WCTCompressionInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758E7ECA2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */; };
+		758E7ECB2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */; };
+		758E7ECD2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; };
+		758E7ECE2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; };
+		758E7ED02B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */; };
+		758E7ED12B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */; };
+		758E7F312B1C82F400319991 /* CompressionTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F2F2B1C82EC00319991 /* CompressionTestObject.mm */; };
+		758E7F392B1C864700319991 /* Random+CompressionTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F382B1C864700319991 /* Random+CompressionTestObject.mm */; };
+		758E7F3E2B1C99C700319991 /* CompressionTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F3D2B1C99C700319991 /* CompressionTestCase.mm */; };
 		7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		759EFEC12B0BAF80009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
+		759EFEC22B0BAF87009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
+		759EFEC32B0BAF97009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
+		759EFEC42B0BAF9E009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
 		75A46C00284310CE00B58207 /* ColumnConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */; };
 		75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75A46C0428431D6300B58207 /* ForeignKeyBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0228431D6300B58207 /* ForeignKeyBridge.cpp */; };
@@ -3752,6 +3868,7 @@
 		0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IntegerityHandleOperator.hpp; sourceTree = "<group>"; };
 		0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MergeFTSIndexLogic.hpp; sourceTree = "<group>"; };
 		0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergeFTSIndexLogic.cpp; sourceTree = "<group>"; };
+		0D2789D82B21995800F60E2D /* CompressionTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressionTests.mm; sourceTree = "<group>"; };
 		0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DecorativeHandle.cpp; sourceTree = "<group>"; };
 		0D32815E2B04A8E60027B973 /* DecorativeHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DecorativeHandle.hpp; sourceTree = "<group>"; };
 		0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionContainer.cpp; sourceTree = "<group>"; };
@@ -3776,6 +3893,10 @@
 		0D5363E9290A65390026A4DC /* Master.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Master.hpp; sourceTree = "<group>"; };
 		0D5363EE290A75F20026A4DC /* Sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sequence.cpp; sourceTree = "<group>"; };
 		0D5363EF290A75F20026A4DC /* Sequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
+		0D5403012B160693007DF415 /* CompressingStatementDecorator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CompressingStatementDecorator.cpp; sourceTree = "<group>"; };
+		0D5403022B160693007DF415 /* CompressingStatementDecorator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CompressingStatementDecorator.hpp; sourceTree = "<group>"; };
+		0D54030B2B1606BC007DF415 /* CompressingHandleDecorator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CompressingHandleDecorator.cpp; sourceTree = "<group>"; };
+		0D54030C2B1606BC007DF415 /* CompressingHandleDecorator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CompressingHandleDecorator.hpp; sourceTree = "<group>"; };
 		0D71F9332A8B377100F7B4F6 /* Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
 		0D8084202A861E8500C81BBF /* WCTCancellationSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTCancellationSignal.h; sourceTree = "<group>"; };
 		0D8084232A861E9500C81BBF /* WCTCancellationSignal.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCancellationSignal.mm; sourceTree = "<group>"; };
@@ -4635,6 +4756,7 @@
 		751CA67228C6491A00874A7A /* CPPFieldObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPFieldObject.h; sourceTree = "<group>"; };
 		751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CPPAllTypesObject.mm; sourceTree = "<group>"; };
 		751CA67628C64B7B00874A7A /* CPPAllTypesObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPAllTypesObject.h; sourceTree = "<group>"; };
+		751FE4E62B1E10F200BFC7AD /* CompressingCRUDTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressingCRUDTest.mm; sourceTree = "<group>"; };
 		75204AE7283FD6DC0002E40C /* Schema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		75204AE9283FD7410002E40C /* SchemaBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SchemaBridge.cpp; sourceTree = "<group>"; };
 		75204AEA283FD7410002E40C /* SchemaBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchemaBridge.h; sourceTree = "<group>"; };
@@ -4674,6 +4796,16 @@
 		7522B52E2A6D78BA00B465D6 /* IntegerPrimaryKeyMigrationObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegerPrimaryKeyMigrationObject.h; sourceTree = "<group>"; };
 		7522B52F2A6D78BB00B465D6 /* NormalMigrationObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NormalMigrationObject.mm; sourceTree = "<group>"; };
 		7522B5302A6D78BB00B465D6 /* AutoIncrementMigrationObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoIncrementMigrationObject.mm; sourceTree = "<group>"; };
+		752517592B12D43700485175 /* DecompressFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DecompressFunction.cpp; sourceTree = "<group>"; };
+		7525175A2B12D43700485175 /* DecompressFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DecompressFunction.hpp; sourceTree = "<group>"; };
+		752517652B12F13C00485175 /* CompressionConst.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CompressionConst.hpp; sourceTree = "<group>"; };
+		7525176A2B12FDC700485175 /* ZSTDContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZSTDContext.cpp; sourceTree = "<group>"; };
+		7525176B2B12FDC700485175 /* ZSTDContext.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ZSTDContext.hpp; sourceTree = "<group>"; };
+		752517742B132DAB00485175 /* CompressionConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CompressionConst.cpp; sourceTree = "<group>"; };
+		7525177F2B1338AF00485175 /* CompressionRecord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CompressionRecord.cpp; sourceTree = "<group>"; };
+		752517802B1338AF00485175 /* CompressionRecord.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CompressionRecord.hpp; sourceTree = "<group>"; };
+		7525178B2B133DB700485175 /* CompressHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CompressHandleOperator.cpp; sourceTree = "<group>"; };
+		7525178C2B133DB700485175 /* CompressHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CompressHandleOperator.hpp; sourceTree = "<group>"; };
 		752594922851FCEF0068A602 /* RaiseFunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaiseFunctionTests.swift; sourceTree = "<group>"; };
 		752594E3285226C00068A602 /* FrameSpecBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSpecBridge.cpp; sourceTree = "<group>"; };
 		752594E4285226C00068A602 /* FrameSpecBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameSpecBridge.h; sourceTree = "<group>"; };
@@ -4710,6 +4842,14 @@
 		754211F32B12359400A2FF4D /* ScalarFunctionConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScalarFunctionConfig.cpp; sourceTree = "<group>"; };
 		754211F42B12359400A2FF4D /* ScalarFunctionConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScalarFunctionConfig.hpp; sourceTree = "<group>"; };
 		754211FE2B123E3200A2FF4D /* ScalarFunctionTemplate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScalarFunctionTemplate.hpp; sourceTree = "<group>"; };
+		7542120A2B124CFF00A2FF4D /* CompressionCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressionCenter.cpp; sourceTree = "<group>"; };
+		7542120B2B124CFF00A2FF4D /* ZSTDDict.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZSTDDict.cpp; sourceTree = "<group>"; };
+		7542120C2B124CFF00A2FF4D /* CompressionInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressionInfo.cpp; sourceTree = "<group>"; };
+		7542120D2B124CFF00A2FF4D /* Compression.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Compression.cpp; sourceTree = "<group>"; };
+		7542120E2B124CFF00A2FF4D /* CompressionCenter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CompressionCenter.hpp; sourceTree = "<group>"; };
+		7542120F2B124CFF00A2FF4D /* ZSTDDict.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ZSTDDict.hpp; sourceTree = "<group>"; };
+		754212102B124CFF00A2FF4D /* CompressionInfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CompressionInfo.hpp; sourceTree = "<group>"; };
+		754212112B124CFF00A2FF4D /* Compression.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Compression.hpp; sourceTree = "<group>"; };
 		754359442B066DBD00CDF232 /* HandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HandleOperator.cpp; sourceTree = "<group>"; };
 		754359452B066DBD00CDF232 /* HandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HandleOperator.hpp; sourceTree = "<group>"; };
 		7543594E2B0671DE00CDF232 /* BackupHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackupHandleOperator.cpp; sourceTree = "<group>"; };
@@ -4761,6 +4901,19 @@
 		758D9D0228BA7265001B3D2D /* CPPTableConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPTableConstraintMacro.h; sourceTree = "<group>"; };
 		758D9D0528BA7F06001B3D2D /* CPPColumnConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPColumnConstraintMacro.h; sourceTree = "<group>"; };
 		758D9D0828BA819A001B3D2D /* CPPVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPVirtualTableMacro.h; sourceTree = "<group>"; };
+		758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoCompressConfig.cpp; sourceTree = "<group>"; };
+		758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoCompressConfig.hpp; sourceTree = "<group>"; };
+		758E7EC12B1B41AA00319991 /* WCTCompressionInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCompressionInfo.mm; sourceTree = "<group>"; };
+		758E7EC62B1B41C500319991 /* WCTCompressionInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTCompressionInfo.h; sourceTree = "<group>"; };
+		758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTCompressionInfo+Private.h"; sourceTree = "<group>"; };
+		758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Compression.h"; sourceTree = "<group>"; };
+		758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Compression.mm"; sourceTree = "<group>"; };
+		758E7F2F2B1C82EC00319991 /* CompressionTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressionTestObject.mm; sourceTree = "<group>"; };
+		758E7F322B1C830A00319991 /* CompressionTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompressionTestObject.h; sourceTree = "<group>"; };
+		758E7F372B1C85A900319991 /* Random+CompressionTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Random+CompressionTestObject.h"; sourceTree = "<group>"; };
+		758E7F382B1C864700319991 /* Random+CompressionTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+CompressionTestObject.mm"; sourceTree = "<group>"; };
+		758E7F3D2B1C99C700319991 /* CompressionTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressionTestCase.mm; sourceTree = "<group>"; };
+		758E7F3F2B1C99D200319991 /* CompressionTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompressionTestCase.h; sourceTree = "<group>"; };
 		7596162228BFB05100AE86BA /* CPPDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPDeclaration.h; sourceTree = "<group>"; };
 		75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnConstraintBridge.cpp; sourceTree = "<group>"; };
 		75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColumnConstraintBridge.h; sourceTree = "<group>"; };
@@ -4926,6 +5079,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759EFEC32B0BAF97009433EB /* zstd.framework in Frameworks */,
 				037C3A812897E33600328EC8 /* Security.framework in Frameworks */,
 				037C3A822897E33600328EC8 /* Foundation.framework in Frameworks */,
 				037C3A832897E33600328EC8 /* libz.tbd in Frameworks */,
@@ -4953,6 +5107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DE7BF052B22ABDC0087CC56 /* zstd.framework in Frameworks */,
 				750080EC2920EDA2009C0F38 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4969,6 +5124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759EFEC12B0BAF80009433EB /* zstd.framework in Frameworks */,
 				2366BB22221BC0E6000ED712 /* Security.framework in Frameworks */,
 				2366BB21221BC0D2000ED712 /* Foundation.framework in Frameworks */,
 				23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */,
@@ -4996,6 +5152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759EFEC22B0BAF87009433EB /* zstd.framework in Frameworks */,
 				7521D88E291E9ABB009642EF /* Security.framework in Frameworks */,
 				7521D88F291E9ABB009642EF /* Foundation.framework in Frameworks */,
 				7521D890291E9ABB009642EF /* libz.tbd in Frameworks */,
@@ -5007,6 +5164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759EFEC42B0BAF9E009433EB /* zstd.framework in Frameworks */,
 				7521DC24291EA349009642EF /* Security.framework in Frameworks */,
 				7521DC25291EA349009642EF /* Foundation.framework in Frameworks */,
 				7521DC26291EA349009642EF /* libz.tbd in Frameworks */,
@@ -5911,6 +6069,7 @@
 				234F0376227A9EFA00DD65A2 /* tests */,
 				2370B0E321914EC200D3227C /* builtin */,
 				757457022402D571005E3682 /* statement */,
+				758E7EC02B1B400F00319991 /* compression */,
 				236BACDF21BF9F5900C8B4D9 /* migration */,
 				234DBCFE2064DE04000E31E8 /* transaction */,
 				234DBCEB2064DD0B000E31E8 /* handle */,
@@ -5945,6 +6104,7 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				754212092B124CFF00A2FF4D /* compression */,
 				754211D92B11FCDE00A2FF4D /* function */,
 				0D19BA1C2B0747E80028F92B /* integrity */,
 				75F3140F2AAC07C9007FFDFB /* cipher */,
@@ -6210,6 +6370,7 @@
 				234F0473227A9EFA00DD65A2 /* convenient */,
 				234F0478227A9EFA00DD65A2 /* thread */,
 				234F049D227A9EFA00DD65A2 /* repair */,
+				758E7F2D2B1C82AA00319991 /* compression */,
 				7522B4BD2A6D2E3800B465D6 /* migration */,
 			);
 			path = tests;
@@ -7496,6 +7657,37 @@
 			path = scalar;
 			sourceTree = "<group>";
 		};
+		754212092B124CFF00A2FF4D /* compression */ = {
+			isa = PBXGroup;
+			children = (
+				7542120A2B124CFF00A2FF4D /* CompressionCenter.cpp */,
+				7542120E2B124CFF00A2FF4D /* CompressionCenter.hpp */,
+				7542120B2B124CFF00A2FF4D /* ZSTDDict.cpp */,
+				7542120F2B124CFF00A2FF4D /* ZSTDDict.hpp */,
+				7525176A2B12FDC700485175 /* ZSTDContext.cpp */,
+				7525176B2B12FDC700485175 /* ZSTDContext.hpp */,
+				7542120C2B124CFF00A2FF4D /* CompressionInfo.cpp */,
+				754212102B124CFF00A2FF4D /* CompressionInfo.hpp */,
+				7542120D2B124CFF00A2FF4D /* Compression.cpp */,
+				754212112B124CFF00A2FF4D /* Compression.hpp */,
+				752517592B12D43700485175 /* DecompressFunction.cpp */,
+				7525175A2B12D43700485175 /* DecompressFunction.hpp */,
+				752517652B12F13C00485175 /* CompressionConst.hpp */,
+				752517742B132DAB00485175 /* CompressionConst.cpp */,
+				7525177F2B1338AF00485175 /* CompressionRecord.cpp */,
+				752517802B1338AF00485175 /* CompressionRecord.hpp */,
+				7525178B2B133DB700485175 /* CompressHandleOperator.cpp */,
+				7525178C2B133DB700485175 /* CompressHandleOperator.hpp */,
+				0D5403012B160693007DF415 /* CompressingStatementDecorator.cpp */,
+				0D5403022B160693007DF415 /* CompressingStatementDecorator.hpp */,
+				0D54030B2B1606BC007DF415 /* CompressingHandleDecorator.cpp */,
+				0D54030C2B1606BC007DF415 /* CompressingHandleDecorator.hpp */,
+				758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */,
+				758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */,
+			);
+			path = compression;
+			sourceTree = "<group>";
+		};
 		757457022402D571005E3682 /* statement */ = {
 			isa = PBXGroup;
 			children = (
@@ -7559,6 +7751,49 @@
 				0D81CDAD2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.hpp */,
 			);
 			path = column_constraint;
+			sourceTree = "<group>";
+		};
+		758E7EC02B1B400F00319991 /* compression */ = {
+			isa = PBXGroup;
+			children = (
+				758E7EC62B1B41C500319991 /* WCTCompressionInfo.h */,
+				758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */,
+				758E7EC12B1B41AA00319991 /* WCTCompressionInfo.mm */,
+				758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */,
+				758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */,
+			);
+			path = compression;
+			sourceTree = "<group>";
+		};
+		758E7F2D2B1C82AA00319991 /* compression */ = {
+			isa = PBXGroup;
+			children = (
+				758E7F2E2B1C82BC00319991 /* common */,
+				758E7F3C2B1C998300319991 /* compatible */,
+			);
+			path = compression;
+			sourceTree = "<group>";
+		};
+		758E7F2E2B1C82BC00319991 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				758E7F322B1C830A00319991 /* CompressionTestObject.h */,
+				758E7F2F2B1C82EC00319991 /* CompressionTestObject.mm */,
+				758E7F372B1C85A900319991 /* Random+CompressionTestObject.h */,
+				758E7F382B1C864700319991 /* Random+CompressionTestObject.mm */,
+				758E7F3F2B1C99D200319991 /* CompressionTestCase.h */,
+				758E7F3D2B1C99C700319991 /* CompressionTestCase.mm */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		758E7F3C2B1C998300319991 /* compatible */ = {
+			isa = PBXGroup;
+			children = (
+				751FE4E62B1E10F200BFC7AD /* CompressingCRUDTest.mm */,
+				0D2789D82B21995800F60E2D /* CompressionTests.mm */,
+			);
+			path = compatible;
 			sourceTree = "<group>";
 		};
 		75B69889290AD0A9006E1F8F /* auxfunction */ = {
@@ -7739,6 +7974,7 @@
 				0D19BA252B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */,
 				037C3A882897E33600328EC8 /* WINQ.h in Headers */,
 				7521DDDF291EA729009642EF /* StatementOperation.hpp in Headers */,
+				758E7EBE2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */,
 				037C3A8A2897E33600328EC8 /* UnsafeData.hpp in Headers */,
 				037C3A8C2897E33600328EC8 /* Core.hpp in Headers */,
 				037C3A8F2897E33600328EC8 /* Pragma.hpp in Headers */,
@@ -7771,6 +8007,7 @@
 				037C3AB02897E33600328EC8 /* LiteralValue.hpp in Headers */,
 				037C3AB12897E33600328EC8 /* CustomConfig.hpp in Headers */,
 				037C3AB22897E33600328EC8 /* StatementCreateTable.hpp in Headers */,
+				754212302B124CFF00A2FF4D /* Compression.hpp in Headers */,
 				037C3AB32897E33600328EC8 /* ForeignKey.hpp in Headers */,
 				037C3AB62897E33600328EC8 /* Version.h in Headers */,
 				037C3AB82897E33600328EC8 /* StatementDropTrigger.hpp in Headers */,
@@ -7787,10 +8024,12 @@
 				037C3AC72897E33600328EC8 /* BusyRetryConfig.hpp in Headers */,
 				037C3AC82897E33600328EC8 /* Progress.hpp in Headers */,
 				037C3AC92897E33600328EC8 /* SyntaxForeignKeyClause.hpp in Headers */,
+				752517722B12FDC700485175 /* ZSTDContext.hpp in Headers */,
 				754359562B0671DE00CDF232 /* BackupHandleOperator.hpp in Headers */,
 				037C3ACA2897E33600328EC8 /* SyntaxAssertion.hpp in Headers */,
 				037C3ACB2897E33600328EC8 /* SyntaxSelectCore.hpp in Headers */,
 				037C3ACC2897E33600328EC8 /* SyntaxTableConstraint.hpp in Headers */,
+				754212242B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */,
 				037C3ACD2897E33600328EC8 /* ThreadedErrors.hpp in Headers */,
 				037C3ACE2897E33600328EC8 /* TableConstraint.hpp in Headers */,
 				037C3ACF2897E33600328EC8 /* AuxiliaryFunctionConfig.hpp in Headers */,
@@ -7857,6 +8096,7 @@
 				037C3B1A2897E33600328EC8 /* StatementDropTable.hpp in Headers */,
 				037C3B1B2897E33600328EC8 /* SyntaxExpression.hpp in Headers */,
 				037C3B1C2897E33600328EC8 /* MasterCrawler.hpp in Headers */,
+				752517682B12F13C00485175 /* CompressionConst.hpp in Headers */,
 				0373310D289A94E00030C113 /* PreparedStatement.hpp in Headers */,
 				037C3B1F2897E33600328EC8 /* TokenizerModules.hpp in Headers */,
 				037C3B212897E33600328EC8 /* QualifiedTable.hpp in Headers */,
@@ -7925,6 +8165,7 @@
 				037C3B7C2897E33600328EC8 /* StatementSavepoint.hpp in Headers */,
 				030C987C28D068B0008636DF /* TransactionGuard.hpp in Headers */,
 				7533CB5F2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
+				752517932B133DB700485175 /* CompressHandleOperator.hpp in Headers */,
 				037C3B7E2897E33600328EC8 /* FullCrawler.hpp in Headers */,
 				75CB08D12A88B9A300429364 /* HandleCounter.hpp in Headers */,
 				037C3B802897E33600328EC8 /* SQLiteAssembler.hpp in Headers */,
@@ -7957,6 +8198,7 @@
 				037C3BAC2897E33600328EC8 /* OperationQueue.hpp in Headers */,
 				037C3BAE2897E33600328EC8 /* WindowDef.hpp in Headers */,
 				DDADC4742949F7C20057AEDB /* Builtin.h in Headers */,
+				0D5403092B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */,
 				754211E22B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				037C3BB32897E33600328EC8 /* SyntaxTableOrSubquery.hpp in Headers */,
 				037C3BB42897E33600328EC8 /* StatementRelease.hpp in Headers */,
@@ -7985,6 +8227,7 @@
 				037C3BCC2897E33600328EC8 /* Mechanic.hpp in Headers */,
 				037C3BCF2897E33600328EC8 /* SyntaxJoinConstraint.hpp in Headers */,
 				037C3BD02897E33600328EC8 /* ErrorProne.hpp in Headers */,
+				754212282B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */,
 				037C3BD52897E33600328EC8 /* StatementCommit.hpp in Headers */,
 				75C6E415299E80D3002579A5 /* WCDBOptional.hpp in Headers */,
 				75EF25062AA33FEB0009C99F /* IncrementalMaterial.hpp in Headers */,
@@ -8014,6 +8257,7 @@
 				0DE84AD42B03295400522A4E /* FunctionContainer.hpp in Headers */,
 				037C3BEE2897E33600328EC8 /* Assemble.hpp in Headers */,
 				037C3BF02897E33600328EC8 /* SyntaxBindParameter.hpp in Headers */,
+				752517872B1338AF00485175 /* CompressionRecord.hpp in Headers */,
 				037C3BF12897E33600328EC8 /* Lock.hpp in Headers */,
 				037C3BF22897E33600328EC8 /* FactoryRetriever.hpp in Headers */,
 				037C3BF52897E33600328EC8 /* AutoCheckpointConfig.hpp in Headers */,
@@ -8021,16 +8265,19 @@
 				7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */,
 				037C3BF92897E33600328EC8 /* SyntaxVacuumSTMT.hpp in Headers */,
 				037C3BFA2897E33600328EC8 /* Material.hpp in Headers */,
+				752517612B12D43700485175 /* DecompressFunction.hpp in Headers */,
 				037C3BFB2897E33600328EC8 /* SyntaxInsertSTMT.hpp in Headers */,
 				037C3BFC2897E33600328EC8 /* AggregateFunction.hpp in Headers */,
 				03D077F628C1F951009A3B18 /* HandleORMOperation.hpp in Headers */,
 				037C3BFF2897E33600328EC8 /* FactoryRenewer.hpp in Headers */,
+				0D5403132B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */,
 				03AFD33428B883E700EF5E56 /* Accessor.hpp in Headers */,
 				037C3C002897E33600328EC8 /* StatementAnalyze.hpp in Headers */,
 				0DE84C832B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */,
 				037C3C022897E33600328EC8 /* FactoryBackup.hpp in Headers */,
 				03733111289A94F10030C113 /* Handle.hpp in Headers */,
 				037C3C042897E33600328EC8 /* CipherConfig.hpp in Headers */,
+				7542122C2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */,
 				037C3C052897E33600328EC8 /* SyntaxRollbackSTMT.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8046,6 +8293,7 @@
 				03E3180F28A21B0000540CB1 /* Handle.hpp in Headers */,
 				23DF0A0E219029DB00F0B2B6 /* WCTDeclaration.h in Headers */,
 				234591F6204433E200DC7D34 /* Core.hpp in Headers */,
+				758E7EBC2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */,
 				03D077F728C1F951009A3B18 /* HandleORMOperation.hpp in Headers */,
 				754211E02B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				233A058B2062698E00F1A212 /* WCTHandle+ChainCall.h in Headers */,
@@ -8070,12 +8318,14 @@
 				23EEDD36217DFADC006E9E73 /* SyntaxCreateTableSTMT.hpp in Headers */,
 				23EEDD46217DFADC006E9E73 /* SyntaxDropTriggerSTMT.hpp in Headers */,
 				23B4DCDC2112AC5600954D71 /* TokenizerModuleTemplate.hpp in Headers */,
+				7542122A2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */,
 				23EEDC6A217DFADC006E9E73 /* Convertible.hpp in Headers */,
 				23AF4E2020CD04E20050033C /* Initializeable.hpp in Headers */,
 				75A46C112843B73C00B58207 /* WinqBridge.hpp in Headers */,
 				2316D93121057CA700707AFC /* Recyclable.hpp in Headers */,
 				237C900721D45E6700EE6E44 /* CoreConst.h in Headers */,
 				23775B8420AD666900E21AB0 /* Cell.hpp in Headers */,
+				758E7ECD2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */,
 				23F70FA820A055BE00CCE3CD /* BasicConfig.hpp in Headers */,
 				23EEDCCE217DFADC006E9E73 /* StatementDropIndex.hpp in Headers */,
 				23775B8C20AD666900E21AB0 /* Pager.hpp in Headers */,
@@ -8115,9 +8365,12 @@
 				7533CB5D2B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
 				75DF229A2AEFF995006A3311 /* SharedPtrAccessor.hpp in Headers */,
 				75E50A0E29067BC800B73E62 /* MultiObject.hpp in Headers */,
+				752517912B133DB700485175 /* CompressHandleOperator.hpp in Headers */,
 				23EEDD1E217DFADC006E9E73 /* SyntaxSelectCore.hpp in Headers */,
 				23EEDD20217DFADC006E9E73 /* SyntaxTableConstraint.hpp in Headers */,
+				752517852B1338AF00485175 /* CompressionRecord.hpp in Headers */,
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
+				0D5403072B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */,
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,
 				7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */,
 				23EEDCA6217DFADC006E9E73 /* SQL.hpp in Headers */,
@@ -8144,6 +8397,7 @@
 				236BACE621BF9FC900C8B4D9 /* WCTMigrationInfo.h in Headers */,
 				03D077F428C1F611009A3B18 /* TableORMOperation.hpp in Headers */,
 				23D4DA452085A40A00AE6D90 /* Interface.h in Headers */,
+				758E7ECA2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */,
 				235EE9C522B6321A008F6658 /* StringView.hpp in Headers */,
 				23B9E66B20AE6EEA00CF1683 /* RepairKit.h in Headers */,
 				23F340DA204D32C3007DB8AB /* WCTTable.h in Headers */,
@@ -8157,6 +8411,7 @@
 				0DE84AD22B03295400522A4E /* FunctionContainer.hpp in Headers */,
 				7543DD93271C601F00B533B4 /* SubstringMatchInfo.hpp in Headers */,
 				23EEDD30217DFADC006E9E73 /* SyntaxBeginSTMT.hpp in Headers */,
+				0D5403112B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */,
 				23EEDD58217DFADC006E9E73 /* SyntaxUpdateSTMT.hpp in Headers */,
 				23EEDCA2217DFADC006E9E73 /* ResultColumn.hpp in Headers */,
 				23EEDCC4217DFADC006E9E73 /* StatementCreateTrigger.hpp in Headers */,
@@ -8305,6 +8560,7 @@
 				2349F75B1EA0D6680021EFA7 /* WCTRuntimeObjCAccessor.h in Headers */,
 				03450DB92738C8F800C4DC1B /* PinyinTokenizer.hpp in Headers */,
 				23EEDCBA217DFADC006E9E73 /* StatementAttach.hpp in Headers */,
+				754212262B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */,
 				23EEDC7E217DFADC006E9E73 /* ColumnDef.hpp in Headers */,
 				2349F75A1EA0D6680021EFA7 /* WCTRuntimeCppAccessor.h in Headers */,
 				39690190233B20BC006EEFD4 /* WCTTableProtocol.h in Headers */,
@@ -8337,6 +8593,7 @@
 				752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */,
 				75AF6AFB2856303700A7C43D /* PragmaBridge.h in Headers */,
 				75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */,
+				754212222B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */,
 				03EE3DAB288165A700C8F0B3 /* StatementInsertBridge.h in Headers */,
 				75AF6ADC2854C5ED00A7C43D /* JoinBridge.h in Headers */,
 				03E822922844E1AB0072CA57 /* RaiseFunctionBridge.h in Headers */,
@@ -8373,18 +8630,21 @@
 				03B6A33D2869C51B00D83EC4 /* StatementAlterTableBridge.h in Headers */,
 				0393BEE427F715180058B295 /* HandleBridge.h in Headers */,
 				75204AEC283FD7410002E40C /* SchemaBridge.h in Headers */,
+				752517702B12FDC700485175 /* ZSTDContext.hpp in Headers */,
 				0D36C0FD2AF1F0B6000BC0DD /* WCDBOptionalAccessor.hpp in Headers */,
 				75C1034328450D840006BBCB /* WindowDefBridge.h in Headers */,
 				0D19BA0F2B0702250028F92B /* AssembleHandleOperator.hpp in Headers */,
 				750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */,
 				032613BB283F8E4900836E0F /* ExpressionBridge.h in Headers */,
 				75F4DE342883E43C00760DC3 /* StatementExplainBridge.h in Headers */,
+				752517662B12F13C00485175 /* CompressionConst.hpp in Headers */,
 				75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */,
 				039760AB27F5C0DD0071FA8F /* DatabaseBridge.h in Headers */,
 				03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */,
 				039BD4372846113D00C58BE2 /* ExpressionOperatableBridge.h in Headers */,
 				75F4DE402883F0A800760DC3 /* StatementReindexBridge.h in Headers */,
 				75F4DE4C288405DD00760DC3 /* StatementSavepointBridge.h in Headers */,
+				758E7EC72B1B41C500319991 /* WCTCompressionInfo.h in Headers */,
 				03E822852844B8760072CA57 /* CommonTableExpressionBridge.h in Headers */,
 				03DCB5E7286C2E5300CBC75D /* StatementAnalyzeBridge.h in Headers */,
 				75A46C0528431D6300B58207 /* ForeignKeyBridge.h in Headers */,
@@ -8427,6 +8687,7 @@
 				2349F7481EA0D6680021EFA7 /* WCTDatabase+File.h in Headers */,
 				23EEDD4C217DFADC006E9E73 /* SyntaxPragmaSTMT.hpp in Headers */,
 				23EEDCAC217DFADC006E9E73 /* Upsert.hpp in Headers */,
+				7542122E2B124CFF00A2FF4D /* Compression.hpp in Headers */,
 				7543DD87271C2FD000B533B4 /* AuxiliaryFunctionModule.hpp in Headers */,
 				234DBD0D2064E045000E31E8 /* WCTChainCall.h in Headers */,
 				75B698D8290AD4C0006E1F8F /* BaseTokenizerUtil.hpp in Headers */,
@@ -8486,6 +8747,7 @@
 				23775B7C20AD666900E21AB0 /* Material.hpp in Headers */,
 				23EEDD4A217DFADC006E9E73 /* SyntaxInsertSTMT.hpp in Headers */,
 				23EEDC67217DFADC006E9E73 /* AggregateFunction.hpp in Headers */,
+				7525175F2B12D43700485175 /* DecompressFunction.hpp in Headers */,
 				2386B3C51ED442FE000B72F6 /* WCTError.h in Headers */,
 				2349F72E1EA0D6680021EFA7 /* WCTSelectable+Private.h in Headers */,
 				75D566FB2951B7DE00098DD9 /* WCTSequence.h in Headers */,
@@ -8504,6 +8766,7 @@
 			files = (
 				7521D893291E9ABB009642EF /* AsyncQueue.hpp in Headers */,
 				7521D894291E9ABB009642EF /* AutoBackupConfig.hpp in Headers */,
+				752517922B133DB700485175 /* CompressHandleOperator.hpp in Headers */,
 				7521D895291E9ABB009642EF /* WINQ.h in Headers */,
 				7521D896291E9ABB009642EF /* UnsafeData.hpp in Headers */,
 				7521D898291E9ABB009642EF /* WCTDeclaration.h in Headers */,
@@ -8546,6 +8809,7 @@
 				7521D8C2291E9ABB009642EF /* WCTTryDisposeGuard.h in Headers */,
 				7521D8C3291E9ABB009642EF /* Version.h in Headers */,
 				7521D8C5291E9ABB009642EF /* WCTHandle+Convenient.h in Headers */,
+				758E7ECB2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */,
 				7521D8C6291E9ABB009642EF /* StatementDropTrigger.hpp in Headers */,
 				7521D8C8291E9ABB009642EF /* FTSFunction.hpp in Headers */,
 				7521D8C9291E9ABB009642EF /* WCTTransaction.h in Headers */,
@@ -8564,6 +8828,7 @@
 				7521D8D4291E9ABB009642EF /* Progress.hpp in Headers */,
 				7521D8D5291E9ABB009642EF /* SyntaxForeignKeyClause.hpp in Headers */,
 				7521D8D6291E9ABB009642EF /* SyntaxAssertion.hpp in Headers */,
+				754212272B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */,
 				7521D8D8291E9ABB009642EF /* SyntaxSelectCore.hpp in Headers */,
 				7521D8D9291E9ABB009642EF /* SyntaxTableConstraint.hpp in Headers */,
 				7521D8DA291E9ABB009642EF /* ThreadedErrors.hpp in Headers */,
@@ -8598,6 +8863,7 @@
 				7521D8F7291E9ABB009642EF /* OrderingTerm.hpp in Headers */,
 				7521D8F8291E9ABB009642EF /* SyntaxUpsertClause.hpp in Headers */,
 				7521D8F9291E9ABB009642EF /* Shm.hpp in Headers */,
+				752517602B12D43700485175 /* DecompressFunction.hpp in Headers */,
 				7521D8FA291E9ABB009642EF /* StatementDetach.hpp in Headers */,
 				754211E12B11FE9200A2FF4D /* ScalarFunctionModule.hpp in Headers */,
 				7521D8FC291E9ABB009642EF /* SubstringMatchInfo.hpp in Headers */,
@@ -8617,6 +8883,7 @@
 				7521D90A291E9ABB009642EF /* SyntaxAlterTableSTMT.hpp in Headers */,
 				7521D90B291E9ABB009642EF /* OneOrBinaryTokenizer.hpp in Headers */,
 				7521D90C291E9ABB009642EF /* IndexedColumn.hpp in Headers */,
+				758E7EC82B1B41C500319991 /* WCTCompressionInfo.h in Headers */,
 				7521D90E291E9ABB009642EF /* WCTDatabase+Version.h in Headers */,
 				7521D90F291E9ABB009642EF /* TokenizerModule.hpp in Headers */,
 				7521D910291E9ABB009642EF /* AbstractHandle.hpp in Headers */,
@@ -8639,6 +8906,7 @@
 				7521D923291E9ABB009642EF /* HighWater.hpp in Headers */,
 				7521D924291E9ABB009642EF /* SyntaxIdentifier.hpp in Headers */,
 				7521D925291E9ABB009642EF /* Fraction.hpp in Headers */,
+				754212232B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */,
 				7521D926291E9ABB009642EF /* StatementDropTable.hpp in Headers */,
 				7521D927291E9ABB009642EF /* SyntaxExpression.hpp in Headers */,
 				7521D928291E9ABB009642EF /* MasterCrawler.hpp in Headers */,
@@ -8652,6 +8920,7 @@
 				7521D930291E9ABB009642EF /* WCTMacro.h in Headers */,
 				7521D931291E9ABB009642EF /* Page.hpp in Headers */,
 				7521D932291E9ABB009642EF /* SyntaxFilter.hpp in Headers */,
+				758E7EBD2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */,
 				7521D933291E9ABB009642EF /* StatementRollback.hpp in Headers */,
 				75294DA829C74142005E7FC0 /* WCTBridgeProperty+CPP.h in Headers */,
 				7521D934291E9ABB009642EF /* StatementAlterTable.hpp in Headers */,
@@ -8662,6 +8931,7 @@
 				7521D93A291E9ABB009642EF /* SyntaxLiteralValue.hpp in Headers */,
 				7521D93C291E9ABB009642EF /* StatementReindex.hpp in Headers */,
 				7521D93D291E9ABB009642EF /* SyntaxList.hpp in Headers */,
+				752517862B1338AF00485175 /* CompressionRecord.hpp in Headers */,
 				7521D93E291E9ABB009642EF /* WCTTableConstraintMacro.h in Headers */,
 				7533CB542B050FA300C8B47D /* MigratingHandleDecorator.hpp in Headers */,
 				7521D940291E9ABB009642EF /* ColumnConstraint.hpp in Headers */,
@@ -8691,12 +8961,14 @@
 				7521D95B291E9ABB009642EF /* SyntaxCommonTableExpression.hpp in Headers */,
 				7521D95C291E9ABB009642EF /* UpgradeableErrorProne.hpp in Headers */,
 				7521D95D291E9ABB009642EF /* WCTDelete.h in Headers */,
+				7542122F2B124CFF00A2FF4D /* Compression.hpp in Headers */,
 				75D567022951B90F00098DD9 /* WCTSequence+WCTTableCoding.h in Headers */,
 				7521D95E291E9ABB009642EF /* PagerRelated.hpp in Headers */,
 				7521D95F291E9ABB009642EF /* WCTColumnBinding.h in Headers */,
 				0D3FFA472A2F2911002DF7CD /* SysTypes.h in Headers */,
 				7521D961291E9ABB009642EF /* Tag.hpp in Headers */,
 				7521D962291E9ABB009642EF /* SQLite.h in Headers */,
+				752517712B12FDC700485175 /* ZSTDContext.hpp in Headers */,
 				7521D963291E9ABB009642EF /* SyntaxPragma.hpp in Headers */,
 				7521D964291E9ABB009642EF /* WCTBinding.h in Headers */,
 				0D4F0F962AC5728A0067027E /* WCTPerformanceInfo.h in Headers */,
@@ -8741,6 +9013,7 @@
 				7521D98D291E9ABB009642EF /* SyntaxSavepointSTMT.hpp in Headers */,
 				7521D98E291E9ABB009642EF /* AutoMigrateConfig.hpp in Headers */,
 				7521D990291E9ABB009642EF /* UniqueList.hpp in Headers */,
+				7542122B2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */,
 				7521D991291E9ABB009642EF /* HandleStatement.hpp in Headers */,
 				7521D992291E9ABB009642EF /* FTS5AuxiliaryFunctionTemplate.hpp in Headers */,
 				7521D993291E9ABB009642EF /* WCTCommon.h in Headers */,
@@ -8761,6 +9034,7 @@
 				7521D9DF291E9ABB009642EF /* WCTObjCAccessor.h in Headers */,
 				7521D9E0291E9ABB009642EF /* CoreFunction.hpp in Headers */,
 				7521D9E1291E9ABB009642EF /* Frame.hpp in Headers */,
+				0D5403082B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */,
 				7521D9E2291E9ABB009642EF /* FTSConst.h in Headers */,
 				7521D9E3291E9ABB009642EF /* WCTChainCall+Private.h in Headers */,
 				7521D9E6291E9ABB009642EF /* WCTProperty.h in Headers */,
@@ -8775,8 +9049,10 @@
 				7521D9F3291E9ABB009642EF /* WCTPropertyMacro.h in Headers */,
 				7521D9F4291E9ABB009642EF /* SyntaxTableOrSubquery.hpp in Headers */,
 				7521D9F5291E9ABB009642EF /* StatementRelease.hpp in Headers */,
+				758E7ECE2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */,
 				7521D9F6291E9ABB009642EF /* WCTORM.h in Headers */,
 				7521D9F7291E9ABB009642EF /* Notifier.hpp in Headers */,
+				752517672B12F13C00485175 /* CompressionConst.hpp in Headers */,
 				7521D9F8291E9ABB009642EF /* SyntaxCreateTriggerSTMT.hpp in Headers */,
 				7521D9F9291E9ABB009642EF /* TransactionGuard.hpp in Headers */,
 				7521D9FA291E9ABB009642EF /* SyntaxIndexedColumn.hpp in Headers */,
@@ -8829,6 +9105,7 @@
 				7521DA28291E9ABB009642EF /* ThreadLocal.hpp in Headers */,
 				7521DA29291E9ABB009642EF /* Schema.hpp in Headers */,
 				7521DA2A291E9ABB009642EF /* SyntaxDropIndexSTMT.hpp in Headers */,
+				0D5403122B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */,
 				7521DA2B291E9ABB009642EF /* Assemble.hpp in Headers */,
 				7521DA2C291E9ABB009642EF /* WCTDatabase+Transaction.h in Headers */,
 				7521DA2E291E9ABB009642EF /* SyntaxBindParameter.hpp in Headers */,
@@ -8861,6 +9138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7521DC29291EA349009642EF /* AsyncQueue.hpp in Headers */,
+				752517882B1338AF00485175 /* CompressionRecord.hpp in Headers */,
 				7533CB602B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
 				7521DC2A291EA349009642EF /* AutoBackupConfig.hpp in Headers */,
 				7521DC2B291EA349009642EF /* WINQ.h in Headers */,
@@ -8898,6 +9176,7 @@
 				7521DC50291EA349009642EF /* SyntaxCreateIndexSTMT.hpp in Headers */,
 				7521DC52291EA349009642EF /* Crawlable.hpp in Headers */,
 				7521DC53291EA349009642EF /* LiteralValue.hpp in Headers */,
+				754212252B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */,
 				7521DC55291EA349009642EF /* CustomConfig.hpp in Headers */,
 				7521DC56291EA349009642EF /* StatementCreateTable.hpp in Headers */,
 				7521DC57291EA349009642EF /* ForeignKey.hpp in Headers */,
@@ -8925,6 +9204,7 @@
 				7521DC75291EA349009642EF /* SequenceCrawler.hpp in Headers */,
 				7521DC76291EA349009642EF /* PageBasedFileHandle.hpp in Headers */,
 				7521DC77291EA349009642EF /* SQLTraceConfig.hpp in Headers */,
+				752517942B133DB700485175 /* CompressHandleOperator.hpp in Headers */,
 				7521DC78291EA349009642EF /* Data.hpp in Headers */,
 				7533CB6B2B051C4F00C8B47D /* ClassDecorator.hpp in Headers */,
 				7521DC7A291EA349009642EF /* Assertion.hpp in Headers */,
@@ -8940,6 +9220,7 @@
 				7521DC8D291EA349009642EF /* OrderingTerm.hpp in Headers */,
 				7521DC8E291EA349009642EF /* SyntaxUpsertClause.hpp in Headers */,
 				7521DC8F291EA349009642EF /* Shm.hpp in Headers */,
+				758E7EBF2B1B24AD00319991 /* AutoCompressConfig.hpp in Headers */,
 				754211FC2B12359400A2FF4D /* ScalarFunctionConfig.hpp in Headers */,
 				7521DC90291EA349009642EF /* StatementDetach.hpp in Headers */,
 				7521DC92291EA349009642EF /* SubstringMatchInfo.hpp in Headers */,
@@ -9025,7 +9306,9 @@
 				7521DD06291EA349009642EF /* FrameSpec.hpp in Headers */,
 				7521DD07291EA349009642EF /* TokenizerConfig.hpp in Headers */,
 				7521DD08291EA349009642EF /* SyntaxCreateViewSTMT.hpp in Headers */,
+				0D54030A2B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */,
 				7521DD0C291EA349009642EF /* Enum.hpp in Headers */,
+				754212312B124CFF00A2FF4D /* Compression.hpp in Headers */,
 				7521DD0D291EA349009642EF /* SyntaxDetachSTMT.hpp in Headers */,
 				7521DD0E291EA349009642EF /* ColumnType.hpp in Headers */,
 				7521DD11291EA349009642EF /* SyntaxDeleteSTMT.hpp in Headers */,
@@ -9036,6 +9319,7 @@
 				7521DD1E291EA349009642EF /* StatementAttach.hpp in Headers */,
 				7521DD1F291EA349009642EF /* ColumnDef.hpp in Headers */,
 				7521DD22291EA349009642EF /* Wal.hpp in Headers */,
+				0D5403142B1606BC007DF415 /* CompressingHandleDecorator.hpp in Headers */,
 				7521DD23291EA349009642EF /* SyntaxSavepointSTMT.hpp in Headers */,
 				7521DD24291EA349009642EF /* AutoMigrateConfig.hpp in Headers */,
 				0DE84C842B03886800522A4E /* DecorativeHandleStatement.hpp in Headers */,
@@ -9078,6 +9362,7 @@
 				7521DD4D291EA349009642EF /* StatementDetachBridge.h in Headers */,
 				7521DD4E291EA349009642EF /* StatementBeginBridge.h in Headers */,
 				7521DD4F291EA349009642EF /* StatementCreateVirtualTableBridge.h in Headers */,
+				7542122D2B124CFF00A2FF4D /* CompressionInfo.hpp in Headers */,
 				7521DD50291EA349009642EF /* StatementCreateIndexBridge.h in Headers */,
 				7521DD51291EA349009642EF /* StatementDropIndexBridge.h in Headers */,
 				7521DD52291EA349009642EF /* StatementVacuumBridge.h in Headers */,
@@ -9130,12 +9415,15 @@
 				7521DD8A291EA349009642EF /* SyntaxTableOrSubquery.hpp in Headers */,
 				7521DD8B291EA349009642EF /* StatementRelease.hpp in Headers */,
 				0DD8D11E2B074C47002C97D3 /* MigrateHandleOperator.hpp in Headers */,
+				752517692B12F13C00485175 /* CompressionConst.hpp in Headers */,
 				7521DD8D291EA349009642EF /* Notifier.hpp in Headers */,
 				7521DD8E291EA349009642EF /* SyntaxCreateTriggerSTMT.hpp in Headers */,
 				7521DD8F291EA349009642EF /* TransactionGuard.hpp in Headers */,
+				754212292B124CFF00A2FF4D /* ZSTDDict.hpp in Headers */,
 				7521DD90291EA349009642EF /* SyntaxIndexedColumn.hpp in Headers */,
 				7521DD91291EA349009642EF /* SyntaxCommonConst.hpp in Headers */,
 				7521DD92291EA349009642EF /* StatementUpdate.hpp in Headers */,
+				752517622B12D43700485175 /* DecompressFunction.hpp in Headers */,
 				7521DD93291EA349009642EF /* SQLiteBase.hpp in Headers */,
 				7521DD94291EA349009642EF /* Expression.hpp in Headers */,
 				7521DD96291EA349009642EF /* SyntaxPragmaSTMT.hpp in Headers */,
@@ -9182,6 +9470,7 @@
 				7521DDD3291EA349009642EF /* FactoryBackup.hpp in Headers */,
 				7521DDD4291EA349009642EF /* CipherConfig.hpp in Headers */,
 				7521DDD5291EA349009642EF /* SyntaxRollbackSTMT.hpp in Headers */,
+				752517732B12FDC700485175 /* ZSTDContext.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9743,7 +10032,9 @@
 				037C392D2897E33600328EC8 /* HandleNotification.cpp in Sources */,
 				037C392E2897E33600328EC8 /* SequenceItem.cpp in Sources */,
 				037C392F2897E33600328EC8 /* AuxiliaryFunctionModule.cpp in Sources */,
+				7525178F2B133DB700485175 /* CompressHandleOperator.cpp in Sources */,
 				03E5CC6E28A3BDF3005353D9 /* Value.cpp in Sources */,
+				0D5403052B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */,
 				037C39322897E33600328EC8 /* StatementAlterTable.cpp in Sources */,
 				0D3281612B04A8E60027B973 /* DecorativeHandle.cpp in Sources */,
 				037C39332897E33600328EC8 /* CipherConfig.cpp in Sources */,
@@ -9772,6 +10063,7 @@
 				037C39602897E33600328EC8 /* Recyclable.cpp in Sources */,
 				037C39612897E33600328EC8 /* Data.cpp in Sources */,
 				037C39622897E33600328EC8 /* SyntaxForeignKeyClause.cpp in Sources */,
+				754212202B124CFF00A2FF4D /* Compression.cpp in Sources */,
 				037C39632897E33600328EC8 /* IndexedColumn.cpp in Sources */,
 				037C39642897E33600328EC8 /* RaiseFunction.cpp in Sources */,
 				037C39662897E33600328EC8 /* ColumnConstraint.cpp in Sources */,
@@ -9783,15 +10075,19 @@
 				037C39782897E33600328EC8 /* FactoryDepositor.cpp in Sources */,
 				037C397D2897E33600328EC8 /* TokenizerConfig.cpp in Sources */,
 				037C397E2897E33600328EC8 /* FactoryRetriever.cpp in Sources */,
+				7542121C2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */,
 				0D8084252A861E9500C81BBF /* WCTCancellationSignal.mm in Sources */,
 				037C39812897E33600328EC8 /* StatementRollback.cpp in Sources */,
 				037C39822897E33600328EC8 /* Exiting.cpp in Sources */,
+				752517832B1338AF00485175 /* CompressionRecord.cpp in Sources */,
 				0D32816A2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */,
 				037C39852897E33600328EC8 /* Migration.cpp in Sources */,
 				037C39862897E33600328EC8 /* Configs.cpp in Sources */,
 				037C39872897E33600328EC8 /* SyntaxCreateTriggerSTMT.cpp in Sources */,
 				037C398A2897E33600328EC8 /* Column.cpp in Sources */,
 				754359482B066DBD00CDF232 /* HandleOperator.cpp in Sources */,
+				0D54030F2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */,
+				758E7EBA2B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */,
 				0D19BA212B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */,
 				037C398E2897E33600328EC8 /* StatementSelect.cpp in Sources */,
 				037C39952897E33600328EC8 /* SyntaxReindexSTMT.cpp in Sources */,
@@ -9838,6 +10134,7 @@
 				037C39DA2897E33600328EC8 /* StringView.cpp in Sources */,
 				037C39DD2897E33600328EC8 /* SyntaxRollbackSTMT.cpp in Sources */,
 				037C39DE2897E33600328EC8 /* HandleStatement.cpp in Sources */,
+				7525176E2B12FDC700485175 /* ZSTDContext.cpp in Sources */,
 				0373310C289A94E00030C113 /* PreparedStatement.cpp in Sources */,
 				037C39E02897E33600328EC8 /* CoreFunction.cpp in Sources */,
 				037C39E52897E33600328EC8 /* FactoryRenewer.cpp in Sources */,
@@ -9881,6 +10178,7 @@
 				037C3A252897E33600328EC8 /* StatementPragma.cpp in Sources */,
 				037C3A262897E33600328EC8 /* MergeFTSIndexLogic.cpp in Sources */,
 				037C3A272897E33600328EC8 /* SyntaxAnalyzeSTMT.cpp in Sources */,
+				752517772B132DAB00485175 /* CompressionConst.cpp in Sources */,
 				037C3A292897E33600328EC8 /* SyntaxQualifiedTableName.cpp in Sources */,
 				037C3A2A2897E33600328EC8 /* SyntaxSchema.cpp in Sources */,
 				75A60AB129345A38009C1B3C /* Cipher.cpp in Sources */,
@@ -9895,6 +10193,7 @@
 				037C3A372897E33600328EC8 /* StatementBegin.cpp in Sources */,
 				037C3A392897E33600328EC8 /* MigrationInfo.cpp in Sources */,
 				037C3A3A2897E33600328EC8 /* Material.cpp in Sources */,
+				754212142B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */,
 				037C3A3B2897E33600328EC8 /* ForeignKey.cpp in Sources */,
 				0DE08A2B29CBEB4E009A7CA3 /* WCTFileManager.cpp in Sources */,
 				037C3A3D2897E33600328EC8 /* Crawlable.cpp in Sources */,
@@ -9930,7 +10229,9 @@
 				037C3A742897E33600328EC8 /* SyntaxSelectSTMT.cpp in Sources */,
 				037C3A752897E33600328EC8 /* InnerHandle.cpp in Sources */,
 				037C3A772897E33600328EC8 /* Lock.cpp in Sources */,
+				754212182B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */,
 				037C3A7A2897E33600328EC8 /* SyntaxSelectCore.cpp in Sources */,
+				7525175D2B12D43700485175 /* DecompressFunction.cpp in Sources */,
 				037C3A7D2897E33600328EC8 /* StatementRelease.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10061,6 +10362,7 @@
 				234F06D3227AA57D00DD65A2 /* ColumnConstraintNotNull.mm in Sources */,
 				234F05F6227AA4F600DD65A2 /* StatementCreateTriggerTests.mm in Sources */,
 				234F060C227AA4F600DD65A2 /* StatementCommitTests.mm in Sources */,
+				0D2789D92B21995800F60E2D /* CompressionTests.mm in Sources */,
 				234F0615227AA4F600DD65A2 /* ColumnTests.mm in Sources */,
 				234F0610227AA4F600DD65A2 /* SyntaxListTests.mm in Sources */,
 				234F04B1227A9EFA00DD65A2 /* ConfigTests.mm in Sources */,
@@ -10068,6 +10370,7 @@
 				234F0737227AA5C700DD65A2 /* BackupTestCase.mm in Sources */,
 				39327B6322CF275200AABD4B /* Dispatch.mm in Sources */,
 				234F0527227A9EFA00DD65A2 /* ORMTests.mm in Sources */,
+				751FE4E72B1E10F200BFC7AD /* CompressingCRUDTest.mm in Sources */,
 				7522B5322A6D78BB00B465D6 /* NormalMigrationObject.mm in Sources */,
 				234F05FB227AA4F600DD65A2 /* StatementVacuumTests.mm in Sources */,
 				234F05E7227AA4F600DD65A2 /* CoreFunctionTests.mm in Sources */,
@@ -10144,6 +10447,7 @@
 				234F06AE227AA56300DD65A2 /* VirtualTableFTS4Object.mm in Sources */,
 				39327B1F22CF271F00AABD4B /* BaseTestCase.mm in Sources */,
 				03BF4B3E2888FA3800A30500 /* DatabaseTestCase.mm in Sources */,
+				758E7F312B1C82F400319991 /* CompressionTestObject.mm in Sources */,
 				234F0611227AA4F600DD65A2 /* CommonTableExpressionTests.mm in Sources */,
 				234F0600227AA4F600DD65A2 /* SchemaTests.mm in Sources */,
 				234F061B227AA4F600DD65A2 /* StatementRollbackTests.mm in Sources */,
@@ -10177,6 +10481,7 @@
 				234F060F227AA4F600DD65A2 /* StatementCreateViewTests.mm in Sources */,
 				234F0613227AA4F600DD65A2 /* WCTPropertyTests.mm in Sources */,
 				234F06F5227AA59600DD65A2 /* ConvenientSelectTests.mm in Sources */,
+				758E7F392B1C864700319991 /* Random+CompressionTestObject.mm in Sources */,
 				234F061F227AA4F600DD65A2 /* PragmaTests.mm in Sources */,
 				234F06D5227AA57D00DD65A2 /* ColumnConstraintAutoIncrementAsc.mm in Sources */,
 				234F0738227AA5C700DD65A2 /* RetrieveRobustyTests.mm in Sources */,
@@ -10205,6 +10510,7 @@
 				234F05E8227AA4F600DD65A2 /* StatementReleaseTests.mm in Sources */,
 				39327B8122CF275900AABD4B /* Random+WCDB.mm in Sources */,
 				39327B6B22CF275200AABD4B /* TestCaseCounter.mm in Sources */,
+				758E7F3E2B1C99C700319991 /* CompressionTestCase.mm in Sources */,
 				234F0640227AA50800DD65A2 /* ColumnCodingTests.mm in Sources */,
 				234F06EE227AA58E00DD65A2 /* NewRemapObject.mm in Sources */,
 				75D2A9BE2AB49C890024B8B2 /* Random+RepairTestObject.mm in Sources */,
@@ -10386,6 +10692,7 @@
 				23AF4E1E20CD04E20050033C /* Initializeable.cpp in Sources */,
 				2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */,
 				03E1660827F42D6500D2C926 /* OrderingTerm.swift in Sources */,
+				7542121A2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */,
 				23A6D4BF20BFD7F9004F2DAA /* Progress.cpp in Sources */,
 				23775B7E20AD666900E21AB0 /* Mechanic.cpp in Sources */,
 				7521DDEB29209D04009642EF /* Insert+WCTTableCoding.swift in Sources */,
@@ -10440,6 +10747,7 @@
 				23EEDD23217DFADC006E9E73 /* SyntaxUpsertClause.cpp in Sources */,
 				39690195233B2235006EEFD4 /* WCTTable+Table.mm in Sources */,
 				75A46C0F2843B3BC00B58207 /* OrderingTermBridge.cpp in Sources */,
+				7525178D2B133DB700485175 /* CompressHandleOperator.cpp in Sources */,
 				23EEDC83217DFADC006E9E73 /* Expression.cpp in Sources */,
 				03D3A2A828A65F3E0064D4D4 /* Lock.swift in Sources */,
 				23EEDD4B217DFADC006E9E73 /* SyntaxPragmaSTMT.cpp in Sources */,
@@ -10503,6 +10811,7 @@
 				0DD8D1172B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */,
 				03E1663327F42D6600D2C926 /* MultiSelect.swift in Sources */,
 				03E1661127F42D6500D2C926 /* StatementUpdate.swift in Sources */,
+				754212162B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */,
 				23D0C35520C149D80001BFAE /* FactoryDepositor.cpp in Sources */,
 				03E1662B27F42D6600D2C926 /* Update.swift in Sources */,
 				23A3CFB6205FB1A800692F94 /* WCTHandle+Convenient.mm in Sources */,
@@ -10578,6 +10887,7 @@
 				23408F0F211897AA0071E5A7 /* Shm.cpp in Sources */,
 				2349F6FE1EA0D6680021EFA7 /* InnerDatabase.cpp in Sources */,
 				23EEDC99217DFADC006E9E73 /* Pragma.cpp in Sources */,
+				7525176C2B12FDC700485175 /* ZSTDContext.cpp in Sources */,
 				23AD52F220DBAC4C00664B62 /* UpgradeableErrorProne.cpp in Sources */,
 				03E1661927F42D6500D2C926 /* StatementAlterTable.swift in Sources */,
 				23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */,
@@ -10585,17 +10895,20 @@
 				23567D7520CA9200005F1C35 /* SharedThreadedErrorProne.cpp in Sources */,
 				23EEDC93217DFADC006E9E73 /* LiteralValue.cpp in Sources */,
 				03E1662927F42D6600D2C926 /* Declare.swift in Sources */,
+				0D5403032B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */,
 				75C4409E291D0C9C00D74EB7 /* CheckExpressionConfig.swift in Sources */,
 				75F4DE51288407F800760DC3 /* StatementVacuumBridge.cpp in Sources */,
 				03E1663027F42D6600D2C926 /* Select.swift in Sources */,
 				23EEDD33217DFADC006E9E73 /* SyntaxCreateIndexSTMT.cpp in Sources */,
 				756A773D27F9EDDE00105B7C /* HandleStatementBridge.cpp in Sources */,
 				03E822842844B8760072CA57 /* CommonTableExpressionBridge.cpp in Sources */,
+				752517812B1338AF00485175 /* CompressionRecord.cpp in Sources */,
 				75CD026928CF8DC00071B6C3 /* InsertInterface.swift in Sources */,
 				2349F7241EA0D6680021EFA7 /* WCTInsert.mm in Sources */,
 				2349F7601EA0D6680021EFA7 /* WCTColumnBinding.mm in Sources */,
 				2349F72D1EA0D6680021EFA7 /* WCTSelect.mm in Sources */,
 				75F4DE5F2884149100760DC3 /* StatementCommitBridge.cpp in Sources */,
+				7542121E2B124CFF00A2FF4D /* Compression.cpp in Sources */,
 				75C44094291CE12300D74EB7 /* ColumnConstraintConfig.swift in Sources */,
 				23EEDD29217DFADC006E9E73 /* SyntaxAlterTableSTMT.cpp in Sources */,
 				23EEDD3B217DFADC006E9E73 /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
@@ -10631,6 +10944,7 @@
 				757821E1286DF5EB0092F858 /* StatementCreateTableBridge.cpp in Sources */,
 				23DD76BD20CF78C800E9B451 /* FactoryRenewer.cpp in Sources */,
 				2304B42822156CD700901953 /* TokenizerModule.cpp in Sources */,
+				758E7ED02B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */,
 				23EEDCFF217DFADC006E9E73 /* SyntaxFrameSpec.cpp in Sources */,
 				234DBCF42064DD0C000E31E8 /* WCTDatabase+Handle.mm in Sources */,
 				23EEDD21217DFADC006E9E73 /* SyntaxTableOrSubquery.cpp in Sources */,
@@ -10648,6 +10962,7 @@
 				2349F7351EA0D6680021EFA7 /* WCTUpdate.mm in Sources */,
 				3960D89F2319288C00EF05D1 /* StatementExplain.cpp in Sources */,
 				23B4DCBD2112A9C800954D71 /* Core.cpp in Sources */,
+				7525175B2B12D43700485175 /* DecompressFunction.cpp in Sources */,
 				23EEDD05217DFADC006E9E73 /* SyntaxIndexedColumn.cpp in Sources */,
 				03E1660A27F42D6500D2C926 /* TableConstraint.swift in Sources */,
 				23775B8A20AD666900E21AB0 /* Pager.cpp in Sources */,
@@ -10680,6 +10995,7 @@
 				039760A827F563F00071FA8F /* ObjectBridge.swift in Sources */,
 				23B35C7820BFE39500425033 /* Path.cpp in Sources */,
 				23EEDC7F217DFADC006E9E73 /* CommonTableExpression.cpp in Sources */,
+				752517752B132DAB00485175 /* CompressionConst.cpp in Sources */,
 				0DAD93C129FA2A1200E5788C /* TableChainCall.swift in Sources */,
 				75204AEB283FD7410002E40C /* SchemaBridge.cpp in Sources */,
 				2360A60720D78F2C00E4A311 /* PerformanceTraceConfig.cpp in Sources */,
@@ -10687,6 +11003,7 @@
 				2349F7301EA0D6680021EFA7 /* WCTSelectable.mm in Sources */,
 				23F70FB820A055CF00CCE3CD /* AutoCheckpointConfig.cpp in Sources */,
 				03E1661E27F42D6500D2C926 /* ColumnDef.swift in Sources */,
+				754212122B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */,
 				0397605827F54FA10071FA8F /* ObjectBridge.cpp in Sources */,
 				23EEDC85217DFADC006E9E73 /* Filter.cpp in Sources */,
 				390E1C5C2296414C00C24598 /* Thread.cpp in Sources */,
@@ -10721,6 +11038,7 @@
 				23EEDCBB217DFADC006E9E73 /* StatementBegin.cpp in Sources */,
 				2316D93721058B5500707AFC /* WCTFileManager.mm in Sources */,
 				23A64D09214A458A00ED28BB /* MigrationInfo.cpp in Sources */,
+				0D54030D2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */,
 				0D3281682B04AC7A0027B973 /* FunctionContainer.cpp in Sources */,
 				23775B7A20AD666900E21AB0 /* Material.cpp in Sources */,
 				23EEDC87217DFADC006E9E73 /* ForeignKey.cpp in Sources */,
@@ -10757,6 +11075,7 @@
 				75F4DE5528840C4800760DC3 /* StatementBeginBridge.cpp in Sources */,
 				03A57F192840B5A700D2A4C3 /* BindParameter.swift in Sources */,
 				75E76AD429161EE400073CCA /* FTSBridge.swift in Sources */,
+				758E7EB82B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */,
 				2308F84F20E32A51001CD9C3 /* FileHandle.cpp in Sources */,
 				03E1661627F42D6500D2C926 /* Join.swift in Sources */,
 				75AF6AFA2856303700A7C43D /* PragmaBridge.cpp in Sources */,
@@ -10785,6 +11104,7 @@
 				03E1663C27F42D6600D2C926 /* Property.swift in Sources */,
 				03E5CC5A28A39B19005353D9 /* Database.cpp in Sources */,
 				23EEDD55217DFADC006E9E73 /* SyntaxSelectSTMT.cpp in Sources */,
+				758E7EC22B1B41AA00319991 /* WCTCompressionInfo.mm in Sources */,
 				39B524DE2304F9A2001DF52D /* InnerHandle.cpp in Sources */,
 				03D077FD28C20FEE009A3B18 /* Delete.cpp in Sources */,
 				75E50A2E2907921600B73E62 /* MultiSelect.cpp in Sources */,
@@ -10938,6 +11258,7 @@
 				7521D730291E9ABB009642EF /* AsyncQueue.cpp in Sources */,
 				7521D731291E9ABB009642EF /* SyntaxUpsertClause.cpp in Sources */,
 				7521D732291E9ABB009642EF /* WCTTable+Table.mm in Sources */,
+				752517822B1338AF00485175 /* CompressionRecord.cpp in Sources */,
 				7521D734291E9ABB009642EF /* Expression.cpp in Sources */,
 				7521D736291E9ABB009642EF /* SyntaxPragmaSTMT.cpp in Sources */,
 				7521D738291E9ABB009642EF /* WCTFoundation.mm in Sources */,
@@ -10950,6 +11271,7 @@
 				7521D74A291E9ABB009642EF /* WalRelated.cpp in Sources */,
 				7521D74B291E9ABB009642EF /* SyntaxBeginSTMT.cpp in Sources */,
 				7521D74C291E9ABB009642EF /* SyntaxCommonTableExpression.cpp in Sources */,
+				7542121F2B124CFF00A2FF4D /* Compression.cpp in Sources */,
 				7521D74E291E9ABB009642EF /* StatementDropTable.cpp in Sources */,
 				7521D751291E9ABB009642EF /* SyntaxExpression.cpp in Sources */,
 				7521D752291E9ABB009642EF /* StatementCreateVirtualTable.cpp in Sources */,
@@ -10963,6 +11285,7 @@
 				7521D75B291E9ABB009642EF /* RaiseFunction.cpp in Sources */,
 				7521D75E291E9ABB009642EF /* ColumnConstraint.cpp in Sources */,
 				7521D75F291E9ABB009642EF /* WCTRuntimeBaseAccessor.mm in Sources */,
+				0D54030E2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */,
 				7521D762291E9ABB009642EF /* Range.cpp in Sources */,
 				7521D763291E9ABB009642EF /* WCTHandle.mm in Sources */,
 				7521D764291E9ABB009642EF /* ThreadedErrors.cpp in Sources */,
@@ -10971,8 +11294,11 @@
 				7521D76A291E9ABB009642EF /* StatementCreateTrigger.cpp in Sources */,
 				7521D76B291E9ABB009642EF /* DatabasePool.cpp in Sources */,
 				7521D76D291E9ABB009642EF /* WCTMigrationInfo.mm in Sources */,
+				754212132B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */,
 				754211F62B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */,
+				7525175C2B12D43700485175 /* DecompressFunction.cpp in Sources */,
 				7521D76E291E9ABB009642EF /* TokenizerModules.cpp in Sources */,
+				758E7ED12B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */,
 				7521D771291E9ABB009642EF /* FactoryDepositor.cpp in Sources */,
 				7521D773291E9ABB009642EF /* WCTHandle+Convenient.mm in Sources */,
 				7521D777291E9ABB009642EF /* TokenizerConfig.cpp in Sources */,
@@ -10997,6 +11323,7 @@
 				75C6E41829A0C2F0002579A5 /* WCDBOptional.cpp in Sources */,
 				7521D795291E9ABB009642EF /* AutoBackupConfig.cpp in Sources */,
 				7521D797291E9ABB009642EF /* WCTDatabase+Memory.mm in Sources */,
+				7525176D2B12FDC700485175 /* ZSTDContext.cpp in Sources */,
 				7521D799291E9ABB009642EF /* SyntaxRaiseFunction.cpp in Sources */,
 				7521D79A291E9ABB009642EF /* FrameSpec.cpp in Sources */,
 				7521D79D291E9ABB009642EF /* HandlePool.cpp in Sources */,
@@ -11010,6 +11337,7 @@
 				7521D7AC291E9ABB009642EF /* FileManager.cpp in Sources */,
 				7521D7AD291E9ABB009642EF /* SyntaxColumn.cpp in Sources */,
 				7521D7AE291E9ABB009642EF /* SyntaxFilter.cpp in Sources */,
+				7542121B2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */,
 				7521D7AF291E9ABB009642EF /* StatementDelete.cpp in Sources */,
 				7521D7B0291E9ABB009642EF /* ErrorProne.cpp in Sources */,
 				75D566FF2951B7EA00098DD9 /* WCTSequence.mm in Sources */,
@@ -11031,6 +11359,7 @@
 				7521D7C9291E9ABB009642EF /* WCTSelect.mm in Sources */,
 				7521D7CC291E9ABB009642EF /* SyntaxAlterTableSTMT.cpp in Sources */,
 				7521D7CD291E9ABB009642EF /* SyntaxCreateVirtualTableSTMT.cpp in Sources */,
+				0D5403042B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */,
 				7521D7CE291E9ABB009642EF /* SyntaxAttachSTMT.cpp in Sources */,
 				7521D7D0291E9ABB009642EF /* SyntaxJoinClause.cpp in Sources */,
 				7521D7D1291E9ABB009642EF /* WCTDatabase+FTS.mm in Sources */,
@@ -11040,6 +11369,7 @@
 				754359512B0671DE00CDF232 /* BackupHandleOperator.cpp in Sources */,
 				7521D7D9291E9ABB009642EF /* NSData+WCTColumnCoding.mm in Sources */,
 				7521D7DA291E9ABB009642EF /* SyntaxLiteralValue.cpp in Sources */,
+				7525178E2B133DB700485175 /* CompressHandleOperator.cpp in Sources */,
 				7521D7DC291E9ABB009642EF /* StringView.cpp in Sources */,
 				7521D7DF291E9ABB009642EF /* SyntaxRollbackSTMT.cpp in Sources */,
 				7521D7E0291E9ABB009642EF /* HandleStatement.cpp in Sources */,
@@ -11062,6 +11392,7 @@
 				7521D7F7291E9ABB009642EF /* WCTHandle+Table.mm in Sources */,
 				75EF250B2AA42DD90009C99F /* EncryptedSerialization.cpp in Sources */,
 				7521D7F8291E9ABB009642EF /* WCTUpdate.mm in Sources */,
+				754212172B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */,
 				7521D7F9291E9ABB009642EF /* StatementExplain.cpp in Sources */,
 				7521D7FA291E9ABB009642EF /* Core.cpp in Sources */,
 				7521D7FB291E9ABB009642EF /* SyntaxIndexedColumn.cpp in Sources */,
@@ -11098,6 +11429,7 @@
 				7521D82C291E9ABB009642EF /* SyntaxQualifiedTableName.cpp in Sources */,
 				7521D82D291E9ABB009642EF /* SyntaxSchema.cpp in Sources */,
 				7521D82E291E9ABB009642EF /* WCTProperty.mm in Sources */,
+				752517762B132DAB00485175 /* CompressionConst.cpp in Sources */,
 				7521D833291E9ABB009642EF /* WCTError.mm in Sources */,
 				7521D835291E9ABB009642EF /* ColumnMeta.cpp in Sources */,
 				7521D836291E9ABB009642EF /* UnsafeData.cpp in Sources */,
@@ -11110,6 +11442,7 @@
 				7521D83D291E9ABB009642EF /* WCTFileManager.mm in Sources */,
 				7521D83E291E9ABB009642EF /* MigrationInfo.cpp in Sources */,
 				7521D83F291E9ABB009642EF /* Material.cpp in Sources */,
+				758E7EC32B1B41AA00319991 /* WCTCompressionInfo.mm in Sources */,
 				7521D840291E9ABB009642EF /* ForeignKey.cpp in Sources */,
 				7521D841291E9ABB009642EF /* Crawlable.cpp in Sources */,
 				7521D843291E9ABB009642EF /* AggregateFunction.cpp in Sources */,
@@ -11131,6 +11464,7 @@
 				7521D85E291E9ABB009642EF /* SQLiteAssembler.cpp in Sources */,
 				7521D863291E9ABB009642EF /* FileHandle.cpp in Sources */,
 				7521D868291E9ABB009642EF /* SyntaxJoinConstraint.cpp in Sources */,
+				758E7EB92B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */,
 				7521D869291E9ABB009642EF /* WCTDatabase+Config.mm in Sources */,
 				7521D86A291E9ABB009642EF /* SyntaxReleaseSTMT.cpp in Sources */,
 				7521D86B291E9ABB009642EF /* WCTDatabase+Repair.mm in Sources */,
@@ -11165,6 +11499,7 @@
 				7521DA5B291EA349009642EF /* Scoreable.cpp in Sources */,
 				7521DA5C291EA349009642EF /* StatementCreateView.cpp in Sources */,
 				7521DA5D291EA349009642EF /* MappedData.cpp in Sources */,
+				752517782B132DAB00485175 /* CompressionConst.cpp in Sources */,
 				7521DA5E291EA349009642EF /* Backup.cpp in Sources */,
 				7521DA5F291EA349009642EF /* Operable.swift in Sources */,
 				7521DA60291EA349009642EF /* Master.swift in Sources */,
@@ -11219,6 +11554,7 @@
 				7521DA94291EA349009642EF /* StatementUpdate.cpp in Sources */,
 				7521DA95291EA349009642EF /* SyntaxResultColumn.cpp in Sources */,
 				7521DA96291EA349009642EF /* Initializeable.cpp in Sources */,
+				752517842B1338AF00485175 /* CompressionRecord.cpp in Sources */,
 				7521DA97291EA349009642EF /* PageBasedFileHandle.cpp in Sources */,
 				754211DF2B11FE9200A2FF4D /* ScalarFunctionModule.cpp in Sources */,
 				75CB08CE2A88B9A300429364 /* HandleCounter.cpp in Sources */,
@@ -11268,11 +11604,13 @@
 				7521DACB291EA349009642EF /* Lock.swift in Sources */,
 				7521DACC291EA349009642EF /* SyntaxPragmaSTMT.cpp in Sources */,
 				7521DACD291EA349009642EF /* CodingTableKey.swift in Sources */,
+				0D5403062B160693007DF415 /* CompressingStatementDecorator.cpp in Sources */,
 				7521DAD0291EA349009642EF /* WinqBridge.cpp in Sources */,
 				7521DAD1291EA349009642EF /* ErrorBridge.cpp in Sources */,
 				750080E22920E4A1009C0F38 /* WCTFTSTokenizerUtil.mm in Sources */,
 				7521DAD2291EA349009642EF /* Identifier.swift in Sources */,
 				7521DAD3291EA349009642EF /* RaiseFunction.swift in Sources */,
+				7542121D2B124CFF00A2FF4D /* CompressionInfo.cpp in Sources */,
 				7521DAD4291EA349009642EF /* StatementAnalyzeBridge.cpp in Sources */,
 				7521DAD6291EA349009642EF /* ColumnTypeDecoder.swift in Sources */,
 				7521DAD7291EA349009642EF /* Redirectable.swift in Sources */,
@@ -11283,6 +11621,7 @@
 				7521DADC291EA349009642EF /* StatementCreateIndexBridge.cpp in Sources */,
 				750080DA2920DD1B009C0F38 /* WCTOperationQueue.mm in Sources */,
 				7521DADD291EA349009642EF /* AutoMigrateConfig.cpp in Sources */,
+				752517902B133DB700485175 /* CompressHandleOperator.cpp in Sources */,
 				7521DADE291EA349009642EF /* TableOrSubquery.cpp in Sources */,
 				7521DAE0291EA349009642EF /* WalRelated.cpp in Sources */,
 				7521DAE1291EA349009642EF /* SyntaxBeginSTMT.cpp in Sources */,
@@ -11342,9 +11681,11 @@
 				7521DB20291EA349009642EF /* StatementCreateTable.swift in Sources */,
 				7521DB21291EA349009642EF /* OneOrBinaryTokenizer.cpp in Sources */,
 				7521DB22291EA349009642EF /* Pragma.swift in Sources */,
+				754212212B124CFF00A2FF4D /* Compression.cpp in Sources */,
 				0D19BA0E2B0702250028F92B /* AssembleHandleOperator.cpp in Sources */,
 				7521DB23291EA349009642EF /* QualifiedTable.swift in Sources */,
 				7521DB25291EA349009642EF /* SyntaxReindexSTMT.cpp in Sources */,
+				0D5403102B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */,
 				0DD8D11A2B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */,
 				7521DB26291EA349009642EF /* StatementDetachBridge.cpp in Sources */,
 				7521DB28291EA349009642EF /* ColumnBridge.cpp in Sources */,
@@ -11377,6 +11718,7 @@
 				7521DB48291EA349009642EF /* SyntaxInsertSTMT.cpp in Sources */,
 				7521DB4A291EA349009642EF /* JoinBridge.cpp in Sources */,
 				7521DB4B291EA349009642EF /* Shm.cpp in Sources */,
+				7525175E2B12D43700485175 /* DecompressFunction.cpp in Sources */,
 				7521DB4C291EA349009642EF /* InnerDatabase.cpp in Sources */,
 				7521DB4D291EA349009642EF /* Pragma.cpp in Sources */,
 				7521DB4E291EA349009642EF /* UpgradeableErrorProne.cpp in Sources */,
@@ -11417,10 +11759,12 @@
 				7521DB79291EA349009642EF /* CoreFunction.cpp in Sources */,
 				7521DB7C291EA349009642EF /* StatementCreateTriggerBridge.cpp in Sources */,
 				7521DB7D291EA349009642EF /* StatementCreateTableBridge.cpp in Sources */,
+				754212192B124CFF00A2FF4D /* ZSTDDict.cpp in Sources */,
 				7521DB7E291EA349009642EF /* FactoryRenewer.cpp in Sources */,
 				7521DB7F291EA349009642EF /* TokenizerModule.cpp in Sources */,
 				7521DB80291EA349009642EF /* SyntaxFrameSpec.cpp in Sources */,
 				7521DB82291EA349009642EF /* SyntaxTableOrSubquery.cpp in Sources */,
+				7525176F2B12FDC700485175 /* ZSTDContext.cpp in Sources */,
 				7521DB83291EA349009642EF /* TransactionGuard.cpp in Sources */,
 				7521DB84291EA349009642EF /* StatementAttach.swift in Sources */,
 				7521DB85291EA349009642EF /* Expression.swift in Sources */,
@@ -11441,6 +11785,7 @@
 				7521DB98291EA349009642EF /* Handle.swift in Sources */,
 				7521DB99291EA349009642EF /* Console.cpp in Sources */,
 				7521DB9A291EA349009642EF /* IndexedColumn.swift in Sources */,
+				754212152B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */,
 				7521DB9B291EA349009642EF /* Upsert.cpp in Sources */,
 				7521DB9C291EA349009642EF /* MasterItem.cpp in Sources */,
 				7521DB9D291EA349009642EF /* StatementDropIndex.cpp in Sources */,
@@ -11456,6 +11801,7 @@
 				75E0A5C32A7F4EEE00D4FE9A /* CoreConst.cpp in Sources */,
 				7521DBA7291EA349009642EF /* Optional.swift in Sources */,
 				7521DBA9291EA349009642EF /* RowSelect.swift in Sources */,
+				758E7EBB2B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */,
 				7521DBAA291EA349009642EF /* Frame.cpp in Sources */,
 				7521DBAB291EA349009642EF /* ObjectBridge.swift in Sources */,
 				7521DBAC291EA349009642EF /* Path.cpp in Sources */,

@@ -132,4 +132,4 @@
     WCDB_EXTERN const StringView name;
 
 #define WCDBLiteralStringImplement(name)                                       \
-    WCDB_NO_DESTROY const StringView name = StringView::makeConstant(k_##name);
+    WCDB_NO_DESTROY const StringView name = StringView::makeConstant(k_##name)

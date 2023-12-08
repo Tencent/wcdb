@@ -57,9 +57,10 @@ bool ColumnDef::describle(std::ostream& stream) const
 
 void ColumnDef::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(column.getOrCreate(), iterator, stop);
     listIterate(constraints, iterator, stop);
+    Identifier::iterate(iterator, false, stop);
 }
 
 #pragma mark - Utility

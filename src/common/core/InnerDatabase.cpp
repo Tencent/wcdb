@@ -33,9 +33,11 @@
 
 #include "AssembleHandleOperator.hpp"
 #include "BackupHandleOperator.hpp"
+#include "CompressHandleOperator.hpp"
 #include "IntegerityHandleOperator.hpp"
 #include "MigrateHandleOperator.hpp"
 
+#include "CompressingHandleDecorator.hpp"
 #include "MigratingHandleDecorator.hpp"
 
 #include "BusyRetryConfig.hpp"
@@ -60,6 +62,8 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_needLoadIncremetalMaterial(false)
 , m_migration(this)
 , m_migratedCallback(nullptr)
+, m_compression(this)
+, m_compressedCallback(nullptr)
 , m_isInMemory(false)
 , m_sharedInMemoryHandle(nullptr)
 , m_mergeLogic(this)
@@ -133,7 +137,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
     {
         SharedLockGuard concurrencyGuard(m_concurrency);
         SharedLockGuard memoryGuard(m_memory);
-        // suspend auto checkpoint/backup/integrity check/migrate/merge fts5 index
+        // suspend auto checkpoint/backup/integrity check/migrate/compress/merge fts5 index
         for (auto &handle : getHandlesOfSlot(HandleSlot::HandleSlotAutoTask)) {
             handle->suspend(true);
         }
@@ -356,13 +360,23 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     handle->markErrorAsUnignorable(99); //Clear all ignorable code
 
     // Decoration
-    if (slot == HandleSlotNormal) {
+    if (slot == HandleSlotNormal || slot == HandleSlotAutoTask) {
+        bool hasDecorator = false;
         WCTAssert(dynamic_cast<DecorativeHandle *>(handle) != nullptr);
         DecorativeHandle *decorativeHandle = static_cast<DecorativeHandle *>(handle);
-        if (m_migration.shouldMigrate()) {
+        // CompressingHandleDecorator must be added before MigratingHandleDecorator.
+        if ((type == HandleType::Normal || type == HandleType::Migrate)
+            && m_compression.shouldCompress()) {
+            hasDecorator = true;
+            decorativeHandle->tryAddDecorator<CompressingHandleDecorator>(
+            DecoratorCompressingHandle, m_compression);
+        }
+        if (type == HandleType::Normal && m_migration.shouldMigrate()) {
+            hasDecorator = true;
             decorativeHandle->tryAddDecorator<MigratingHandleDecorator>(
             DecoratorMigratingHandle, m_migration);
-        } else {
+        }
+        if (!hasDecorator) {
             decorativeHandle->clearDecorators();
         }
     }
@@ -962,7 +976,7 @@ void InnerDatabase::setNotificationWhenMigrated(const MigratedCallback &callback
 
 void InnerDatabase::addMigration(const UnsafeStringView &sourcePath,
                                  const UnsafeData &sourceCipher,
-                                 const TableFilter &filter)
+                                 const MigrationTableFilter &filter)
 {
     StringView sourceDatabase;
     if (sourcePath.compare(getPath()) != 0) {
@@ -980,6 +994,63 @@ bool InnerDatabase::isMigrated() const
 std::set<StringView> InnerDatabase::getPathsOfSourceDatabases() const
 {
     return m_migration.getPathsOfSourceDatabases();
+}
+
+#pragma mark - Compression
+Optional<bool> InnerDatabase::stepCompression(bool interruptible)
+{
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return NullOpt;
+    }
+    WCTRemedialAssert(
+    !isInTransaction(), "Compressing can't be run in transaction.", return NullOpt;);
+    WCTRemedialAssert(m_compression.shouldCompress(),
+                      "It's not configured for compression.",
+                      return NullOpt;);
+    Optional<bool> done;
+    RecyclableHandle handle = flowOut(HandleType::Compress);
+    if (handle != nullptr) {
+        CompressHandleOperator &compressOperator
+        = handle.getDecorative()->getOrCreateOperator<CompressHandleOperator>(OperatorCompress);
+        if (interruptible) {
+            if (checkShouldInterruptWhenClosing(ErrorTypeCompress)) {
+                return false;
+            }
+            handle->markAsCanBeSuspended(true);
+        }
+        handle->markErrorAsIgnorable(Error::Code::Busy);
+
+        done = m_compression.step(compressOperator);
+        if (!done.succeed() && handle->getError().isIgnorable()) {
+            done = false;
+        }
+    }
+    return done;
+}
+
+void InnerDatabase::didCompress(const CompressionTableBaseInfo *info)
+{
+    SharedLockGuard lockGuard(m_memory);
+    if (m_compressedCallback != nullptr) {
+        m_compressedCallback(this, info);
+    }
+}
+
+void InnerDatabase::setNotificationWhenCompressed(const CompressedCallback &callback)
+{
+    LockGuard lockGuard(m_memory);
+    m_compressedCallback = callback;
+}
+
+void InnerDatabase::addCompression(const CompressionTableFilter &filter)
+{
+    close([=]() { m_compression.setTableFilter(filter); });
+}
+
+bool InnerDatabase::isCompressed() const
+{
+    return m_compression.isCompressed();
 }
 
 #pragma mark - Checkpoint

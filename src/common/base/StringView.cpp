@@ -42,7 +42,10 @@ namespace WCDB {
 constexpr int kReferenceSize = sizeof(std::atomic<int>) / sizeof(char);
 
 #pragma mark - UnsafeStringView - Constructor
-UnsafeStringView::UnsafeStringView() = default;
+UnsafeStringView::UnsafeStringView()
+: m_data(""), m_length(0), m_referenceCount(nullptr)
+{
+}
 
 UnsafeStringView::UnsafeStringView(const char* string)
 : m_data(string != nullptr ? string : "")
@@ -229,8 +232,13 @@ std::wstring UnsafeStringView::getWString() const
 UnsafeStringView
 UnsafeStringView::createFromUTF16(const char16_t* utf16Str, size_t length, char* buffer)
 {
+    return UnsafeStringView(buffer, changeToUTF8(utf16Str, length, buffer));
+}
+
+size_t UnsafeStringView::changeToUTF8(const char16_t* utf16Str, size_t length, char* buffer)
+{
     if (length == 0) {
-        return UnsafeStringView();
+        return length;
     }
     const char* in = (const char*) utf16Str;
     const char* end = (const char*) (utf16Str + length);
@@ -251,7 +259,7 @@ UnsafeStringView::createFromUTF16(const char16_t* utf16Str, size_t length, char*
         }
     }
     *out = 0;
-    return UnsafeStringView(buffer, out - buffer);
+    return out - buffer;
 }
 
 #pragma mark - UnsafeStringView - Comparison
@@ -510,6 +518,18 @@ void StringView::assignString(const char* content, size_t length)
     m_data = data;
 }
 
+#pragma mark - UTF16
+StringView StringView::createFromUTF16(const char16_t* utf16Str, size_t length)
+{
+    StringView ret;
+    if (length == 0 || utf16Str == nullptr) {
+        return ret;
+    }
+    ret.ensureNewSpace(4 * length + 1);
+    ret.m_length = changeToUTF8(utf16Str, length, const_cast<char*>(ret.m_data));
+    return ret;
+}
+
 StringView::StringView(const char* string) : UnsafeStringView()
 {
 #ifdef __ANDROID__
@@ -616,11 +636,13 @@ StringView StringView::makeConstant(const char* string)
     return ret;
 }
 
-StringView StringView::createConstant(const char* string)
+StringView StringView::createConstant(const char* string, size_t length)
 {
     StringView ret;
     if (string != nullptr) {
-        size_t length = strlen(string);
+        if (length == 0) {
+            length = strlen(string);
+        }
 #ifdef __ANDROID__
         if (tryRetrievePreAllocatedMemory(string)) {
             ret.m_data = string;

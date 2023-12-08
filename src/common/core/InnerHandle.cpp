@@ -50,6 +50,9 @@ void InnerHandle::setType(HandleType type)
     case HandleType::Migrate:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
         break;
+    case HandleType::Compress:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCompress);
+        break;
     case HandleType::BackupRead:
     case HandleType::BackupWrite:
     case HandleType::BackupCipher:
