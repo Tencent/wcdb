@@ -58,10 +58,19 @@ ZSTDDict* CompressionCenter::getDict(DictId id) const
     return m_dicts[id];
 }
 
-bool CompressionCenter::registerDict(const UnsafeData& data)
+bool CompressionCenter::registerDict(DictId dictId, const UnsafeData& data)
 {
     ZSTDDict* dict = new ZSTDDict;
     if (!dict->loadData(data)) {
+        delete dict;
+        return false;
+    }
+    if (dictId != dict->getDictId()) {
+        Error error(Error::Code::Error, Error::Level::Error, "DictId mismatch!");
+        error.infos.insert_or_assign("GivenDictId", dictId);
+        error.infos.insert_or_assign("ActualDictId", dict->getDictId());
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
         delete dict;
         return false;
     }
@@ -144,7 +153,7 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
                                         allData.buffer(),
                                         dataSizes.data(),
                                         (unsigned int) dataSizes.size(),
-                                        { ZSTD_defaultCLevel(), 0, dictId });
+                                        { ZSTD_CLEVEL_DEFAULT, 0, dictId });
     if (ZSTD_isError(dictSize)) {
         Error error(Error::Code::Error, Error::Level::Error, "Finalize dict failed");
         error.infos.insert_or_assign("ZSTDErrorCode", dictSize);

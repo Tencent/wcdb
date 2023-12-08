@@ -46,7 +46,7 @@
             NSArray<NSString *> *contents = [[Random shared] compressionStringWithCount:3000];
             NSData *dict = [WCTDatabase trainDictWithStrings:contents andDictId:(WCTDictId) i];
             XCTAssertNotNil(dict);
-            TestCaseAssertTrue([WCTDatabase registerZSTDDict:dict]);
+            TestCaseAssertTrue([WCTDatabase registerZSTDDict:dict andDictId:(WCTDictId) i]);
         }
     });
     m_sourceDatabase = [[WCTDatabase alloc] initWithPath:[self.path stringByAppendingString:@"_source"]];

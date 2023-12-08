@@ -77,8 +77,7 @@ bool ZSTDDict::loadData(const UnsafeData& data)
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
     }
-    m_cDict
-    = (ZCDict*) ZSTD_createCDict(data.buffer(), data.size(), ZSTD_defaultCLevel());
+    m_cDict = (ZCDict*) ZSTD_createCDict(data.buffer(), data.size(), ZSTD_CLEVEL_DEFAULT);
     if (m_cDict == nullptr) {
         Error error(Error::Code::Error, Error::Level::Error, "Create compress dict failed!");
         error.infos.insert_or_assign("DictSize", data.size());
