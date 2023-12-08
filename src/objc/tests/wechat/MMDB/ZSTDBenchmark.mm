@@ -124,7 +124,7 @@ typedef enum : NSUInteger {
     [super setUp];
     NSMutableArray* paths = [[NSMutableArray alloc] init];
     NSString* dir = @"/Users/chenqiuwen/Desktop/ZSTDTest/";
-    for (int i = 2; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         [paths addObject:[dir stringByAppendingFormat:@"Brand/Brand%d/BrandMsg.db", i]];
     }
     for (int i = 1; i < 5; i++) {
@@ -166,6 +166,96 @@ typedef enum : NSUInteger {
         ZSTD_freeDCtx(_dctx);
     }
     _dctx = ZSTD_createDCtx();
+}
+
+- (void)testTrainBigDict
+{
+    NSMutableString* content = [[NSMutableString alloc] init];
+    std::vector<size_t> sizes;
+    int64_t remainSize = (unsigned) -1;
+    [self readDataFromFile:@"/Users/chenqiuwen/Desktop/BrandXml/20231125群发xml.csv" toContent:content withSizeRecord:sizes remainSize:remainSize];
+    [self readDataFromFile:@"/Users/chenqiuwen/Desktop/BrandXml/20231126群发xml.csv" toContent:content withSizeRecord:sizes remainSize:remainSize];
+    size_t bufferSize = 100 * 1024;
+    void* dictBuffer = malloc(bufferSize);
+    size_t dictSize = ZDICT_trainFromBuffer(dictBuffer, bufferSize, content.UTF8String, sizes.data(), (unsigned int) sizes.size());
+    XCTAssertFalse(ZDICT_isError(dictSize));
+    dictSize = ZDICT_finalizeDictionary(dictBuffer, bufferSize, dictBuffer, dictSize, content.UTF8String, sizes.data(), (unsigned int) sizes.size(), { self.compressLevel, 0, 1 });
+    NSData* data = [[NSData alloc] initWithBytes:dictBuffer length:dictSize];
+    XCTAssertTrue([data writeToFile:@"/Users/chenqiuwen/Desktop/BrandDict.zstd" atomically:YES]);
+}
+
+- (void)readDataFromFile:(NSString*)path toContent:(NSMutableString*)content withSizeRecord:(std::vector<size_t>&)sizes remainSize:(int64_t&)remainSize
+{
+    @autoreleasepool {
+        NSString* allContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+        ZSTD_DCtx* ctx = ZSTD_createDCtx();
+        size_t bufferSize = 1024 * 1024;
+        void* buffer = malloc(bufferSize);
+        TestCaseAssertNotNil(buffer);
+        for (NSString* line in [allContent componentsSeparatedByString:@"\n"]) {
+            @autoreleasepool {
+                NSData* data = [[NSData alloc] initWithBase64EncodedString:line options:0];
+                if (data == nil) {
+                    continue;
+                }
+                size_t decompressSize = ZSTD_decompressDCtx(ctx, buffer, bufferSize, data.bytes, data.length);
+                if (ZSTD_isError(decompressSize)) {
+                    continue;
+                }
+                remainSize -= decompressSize;
+                if (remainSize < 0) {
+                    break;
+                }
+                NSString* xml = [[NSString alloc] initWithBytes:buffer length:decompressSize encoding:NSUTF8StringEncoding];
+                if (xml.length < 10) {
+                    continue;
+                }
+                [content appendString:xml];
+                sizes.push_back(decompressSize);
+            }
+        }
+    }
+}
+
+- (void)testCompressWithBigDict
+{
+    self.compressLevel = ZSTD_defaultCLevel();
+    self.skipDebugLog = YES;
+    NSData* dictData = [NSData dataWithContentsOfFile:@"/Users/chenqiuwen/Desktop/BrandDict.zstd"];
+    ZDict* dict = [[ZDict alloc] init];
+    dict.cDict = ZSTD_createCDict(dictData.bytes, dictData.length, self.compressLevel);
+    dict.dDict = ZSTD_createDDict(dictData.bytes, dictData.length);
+    self.dicts[@(DictType_msgCommon)] = dict;
+
+    self.usingCommonDict = true;
+    self.usingTypedDict = false;
+    self.dictSize = 100 * 1024;
+    self.dictMsgCount = 200000;
+    for (NSString* path in self.allDatabasePaths) {
+        if (![path containsString:@"BrandMsg"]) {
+            continue;
+        }
+        if (self.dicts[@(DictType_msgExt)] == nil) {
+            [self setPath:path];
+            self.allTables = [self.database getColumnOnResultColumn:WCTMaster.name
+                                                          fromTable:WCTMaster.tableName
+                                                              where:WCTMaster.type == "table"
+                                                                    && (WCTMaster.name.like("Chat\\_%%").escape("\\") || WCTMaster.name.like("ChatExt2\\_%%").escape("\\"))];
+
+            NSMutableDictionary<NSNumber*, NSMutableArray<NSString*>*>* trainingContents = [[NSMutableDictionary alloc] init];
+            for (int i = 0; i < DictType_Count; i++) {
+                trainingContents[@(i)] = [[NSMutableArray alloc] init];
+            }
+            [self findTrainingMessage:trainingContents inTables:self.allTables from:self.database];
+            ZDict* extDict = [self tranDictWith:trainingContents[@(DictType_msgExt)]];
+            self.dicts[@(DictType_msgExt)] = extDict;
+        }
+        @autoreleasepool {
+            self.allTables = nil;
+            [self commonTestWithPath:path andId:[NSString stringWithFormat:@"%d-%d-%d", self.usingTypedDict, self.usingCommonDict, self.dictMsgCount]];
+        }
+    }
+    [self printBenchmark];
 }
 
 - (ZDict*)tranDictWith:(NSArray<NSString*>*)contents
@@ -826,6 +916,9 @@ typedef enum : NSUInteger {
     [self log:title];
     for (NSString* path in self.allDatabasePaths) {
         NSArray<CompressBenchmark*>* benchmarks = self.benchmarks[path];
+        if (benchmarks == nil) {
+            continue;
+        }
         NSMutableString* log = [[NSMutableString alloc] initWithString:benchmarks.firstObject.compressDB];
         for (CompressBenchmark* benchmark in benchmarks) {
             [log appendFormat:@"\t%.4f", benchmark.compressRadio];
@@ -837,6 +930,9 @@ typedef enum : NSUInteger {
     [self log:title];
     for (NSString* path in self.allDatabasePaths) {
         NSArray<CompressBenchmark*>* benchmarks = self.benchmarks[path];
+        if (benchmarks == nil) {
+            continue;
+        }
         NSMutableString* log = [[NSMutableString alloc] initWithString:benchmarks.firstObject.compressDB];
         for (CompressBenchmark* benchmark in benchmarks) {
             [log appendFormat:@"\t%lld", benchmark.compressTimeInUs];
@@ -848,7 +944,11 @@ typedef enum : NSUInteger {
     [self log:title];
     for (NSString* path in self.allDatabasePaths) {
         NSArray<CompressBenchmark*>* benchmarks = self.benchmarks[path];
+        if (benchmarks == nil) {
+            continue;
+        }
         NSMutableString* log = [[NSMutableString alloc] initWithString:benchmarks.firstObject.compressDB];
+
         for (CompressBenchmark* benchmark in benchmarks) {
             [log appendFormat:@"\t%lld", benchmark.decompressTimeInUs];
         }
