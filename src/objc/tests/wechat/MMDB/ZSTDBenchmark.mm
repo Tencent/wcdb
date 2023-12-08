@@ -65,7 +65,7 @@
 @end
 
 typedef enum : NSUInteger {
-    DictType_msgCommon,
+    DictType_msgCommon = 1,
     DictType_msgExt,
     DictType_Text,
     DictType_ImageMsg,
@@ -123,8 +123,8 @@ typedef enum : NSUInteger {
 {
     [super setUp];
     NSMutableArray* paths = [[NSMutableArray alloc] init];
-    NSString* dir = @"/Users/chenqiuwen/Desktop/ZSTDTest/";
-    for (int i = 0; i < 5; i++) {
+    NSString* dir = @"/Users/qiuwenchen/Desktop/ZSTDTest/";
+    for (int i = 1; i < 7; i++) {
         [paths addObject:[dir stringByAppendingFormat:@"Brand/Brand%d/BrandMsg.db", i]];
     }
     for (int i = 1; i < 5; i++) {
@@ -247,7 +247,7 @@ typedef enum : NSUInteger {
                 trainingContents[@(i)] = [[NSMutableArray alloc] init];
             }
             [self findTrainingMessage:trainingContents inTables:self.allTables from:self.database];
-            ZDict* extDict = [self tranDictWith:trainingContents[@(DictType_msgExt)]];
+            ZDict* extDict = [self tranDictWith:trainingContents[@(DictType_msgExt)] dictId:(unsigned) DictType_msgExt];
             self.dicts[@(DictType_msgExt)] = extDict;
         }
         @autoreleasepool {
@@ -258,13 +258,45 @@ typedef enum : NSUInteger {
     [self printBenchmark];
 }
 
-- (ZDict*)tranDictWith:(NSArray<NSString*>*)contents
+- (void)testCompressBrand
+{
+    self.compressLevel = ZSTD_defaultCLevel();
+    self.skipDebugLog = YES;
+
+    self.usingCommonDict = true;
+    self.usingTypedDict = false;
+    self.dictSize = 100 * 1024;
+    self.dictMsgCount = 10000000;
+    for (NSString* path in self.allDatabasePaths) {
+        if (![path containsString:@"BrandMsg"]) {
+            continue;
+        }
+        @autoreleasepool {
+            self.allTables = nil;
+            [self commonTestWithPath:path andId:[NSString stringWithFormat:@"%d-%d-%d", self.usingTypedDict, self.usingCommonDict, self.dictMsgCount]];
+        }
+    }
+    [self printBenchmark];
+    NSData* brandDict = self.dicts[@(DictType_msgCommon)].dict;
+    XCTAssertTrue([brandDict writeToFile:@"/Users/qiuwenchen/Desktop/BrandDict.zstd" atomically:YES]);
+    NSData* extDict = self.dicts[@(DictType_msgExt)].dict;
+    XCTAssertTrue([extDict writeToFile:@"/Users/qiuwenchen/Desktop/BrandExtDict.zstd" atomically:YES]);
+}
+
+- (ZDict*)tranDictWith:(NSArray<NSString*>*)contents dictId:(unsigned)dictId
 {
     std::vector<size_t> contentSizes;
     NSMutableString* allContent = [[NSMutableString alloc] init];
+    size_t totalSize = 0;
+    static size_t g_maxSize = 4L * 1024 * 1024 * 1024;
     for (NSString* content in contents) {
+        size_t size = [content lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        if (totalSize + size > g_maxSize) {
+            break;
+        }
+        totalSize += size;
         [allContent appendString:content];
-        contentSizes.push_back([content lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        contentSizes.push_back(size);
     }
     size_t bufferSize = self.dictSize;
     void* dictBuffer = malloc(bufferSize);
@@ -274,7 +306,7 @@ typedef enum : NSUInteger {
         [self log:@"train dict error with code %llu, name %s", dictSize, ZDICT_getErrorName(dictSize)];
         return nil;
     }
-    dictSize = ZDICT_finalizeDictionary(dictBuffer, bufferSize, dictBuffer, dictSize, allContent.UTF8String, contentSizes.data(), (unsigned int) contentSizes.size(), { self.compressLevel, 0, 1 });
+    dictSize = ZDICT_finalizeDictionary(dictBuffer, bufferSize, dictBuffer, dictSize, allContent.UTF8String, contentSizes.data(), (unsigned int) contentSizes.size(), { self.compressLevel, 0, dictId });
     if (ZDICT_isError(dictSize)) {
         [self log:@"finalize dict error with code %llu, name %s", dictSize, ZDICT_getErrorName(dictSize)];
         return nil;
@@ -423,7 +455,7 @@ typedef enum : NSUInteger {
             if (contents.count < self.dictMsgCount) {
                 [self log:@"Require %d msg of type %@, but only has %llu", self.dictMsgCount, type, contents.count];
             }
-            ZDict* dict = [self tranDictWith:contents];
+            ZDict* dict = [self tranDictWith:contents dictId:type.unsignedIntValue];
             if (dict == nil) {
                 [self log:@"train %@ dict fail with content %@", type, contents];
                 *stop = true;
