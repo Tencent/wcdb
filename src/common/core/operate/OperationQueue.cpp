@@ -184,6 +184,9 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
     case Operation::Type::Migrate:
         doMigrate(operation.path, parameter.numberOfFailures);
         break;
+    case Operation::Type::Compress:
+        doCompress(operation.path, parameter.numberOfFailures);
+        break;
     case Operation::Type::Checkpoint:
         doCheckpoint(operation.path);
         break;
@@ -217,7 +220,10 @@ void OperationQueue::async(const Operation& operation, double delay, const Param
 
 #pragma mark - Record
 OperationQueue::Record::Record()
-: registeredForMigration(false), registeredForBackup(false), registeredForCheckpoint(false)
+: registeredForMigration(false)
+, registeredForCompression(false)
+, registeredForBackup(false)
+, registeredForCheckpoint(false)
 {
 }
 
@@ -288,6 +294,78 @@ void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailure
                         "Auto migration is stopped due to too many errors.");
             error.infos.insert_or_assign(ErrorStringKeyPath, path);
             error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
+            Notifier::shared().notify(error);
+        }
+    }
+}
+
+#pragma mark - Compress
+void OperationQueue::registerAsRequiredCompression(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    LockGuard lockGuard(m_lock);
+    m_records[path].registeredForCompression = true;
+}
+
+void OperationQueue::registerAsNoCompressionRequired(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    LockGuard lockGuard(m_lock);
+    m_records[path].registeredForCompression = false;
+    Operation operation(Operation::Type::Compress, path);
+    m_timedQueue.remove(operation);
+}
+
+void OperationQueue::asyncCompress(const UnsafeStringView& path)
+{
+    asyncCompress(path, OperationQueueTimeIntervalForCompression, 0);
+}
+
+void OperationQueue::stopCompress(const UnsafeStringView& path)
+{
+    LockGuard lockGuard(m_lock);
+    Operation operation(Operation::Type::Compress, path);
+    m_timedQueue.remove(operation);
+}
+
+void OperationQueue::asyncCompress(const UnsafeStringView& path, double delay, int numberOfFailures)
+{
+    WCTAssert(!path.empty());
+    WCTAssert(numberOfFailures >= 0
+              && numberOfFailures < OperationQueueTolerableFailuresForCompression);
+
+    SharedLockGuard lockGuard(m_lock);
+    if (m_records[path].registeredForCompression) {
+        Operation operation(Operation::Type::Compress, path);
+        Parameter parameter;
+        parameter.numberOfFailures = numberOfFailures;
+        async(operation, delay, parameter);
+    }
+}
+
+void OperationQueue::doCompress(const UnsafeStringView& path, int numberOfFailures)
+{
+    WCTAssert(!path.empty());
+    WCTAssert(numberOfFailures >= 0
+              && numberOfFailures < OperationQueueTolerableFailuresForCompression);
+
+    auto done = m_event->compressionShouldBeOperated(path);
+    if (done.succeed()) {
+        if (!done.value()) {
+            asyncCompress(path, OperationQueueTimeIntervalForCompression, numberOfFailures);
+        }
+    } else {
+        if (numberOfFailures + 1 < OperationQueueTolerableFailuresForCompression) {
+            asyncCompress(
+            path, OperationQueueTimeIntervalForRetringAfterFailure, numberOfFailures + 1);
+        } else {
+            Error error(Error::Code::Notice,
+                        Error::Level::Notice,
+                        "Auto compression is stopped due to too many errors.");
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCompress);
             Notifier::shared().notify(error);
         }
     }

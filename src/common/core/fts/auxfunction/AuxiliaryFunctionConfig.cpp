@@ -24,7 +24,6 @@
 
 #include "AuxiliaryFunctionConfig.hpp"
 #include "Assertion.hpp"
-#include "AuxiliaryFunctionModules.hpp"
 #include "InnerHandle.hpp"
 #include "SQLite.h"
 
@@ -46,31 +45,28 @@ bool AuxiliaryFunctionConfig::invoke(InnerHandle* handle)
 {
     const FTS5AuxiliaryFunctionModule* module = m_modules->get(name);
     WCTRemedialAssert(module != nullptr, "Module does not exist.", return true;);
-    if (module->getFunc() != nullptr) {
-        fts5_api* api = nullptr;
-        if (handle->prepare(m_Statement)) {
-            const UnsafeStringView type = "fts5_api_ptr";
-            handle->bindPointer((void*) &api, 1, type, nullptr);
-            if (!handle->step() || api == nullptr) {
-                handle->finalize();
-                return false;
-            }
+    fts5_api* api = nullptr;
+    if (handle->prepare(m_Statement)) {
+        const UnsafeStringView type = "fts5_api_ptr";
+        handle->bindPointer((void*) &api, 1, type, nullptr);
+        if (!handle->step() || api == nullptr) {
             handle->finalize();
-        }
-        if (api->xCreateFunction(
-            api,
-            name.data(),
-            module->getContext(),
-            (void (*)(const Fts5ExtensionApi*, Fts5Context*, sqlite3_context*, int, sqlite3_value**))
-            module->getFunc(),
-            nullptr)
-            != SQLITE_OK) {
             return false;
         }
-        return true;
-    } else {
+        handle->finalize();
+    }
+    int rc = api->xCreateFunction(
+    api,
+    name.data(),
+    module->getContext(),
+    (void (*)(const Fts5ExtensionApi*, Fts5Context*, sqlite3_context*, int, sqlite3_value**))
+    module->getFunc(),
+    nullptr);
+    if (rc != SQLITE_OK) {
+        handle->notifyError(rc, "create fts5 auxiliary function");
         return false;
     }
+    return true;
 }
 
 } //namespace WCDB

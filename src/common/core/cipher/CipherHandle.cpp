@@ -65,7 +65,7 @@ bool CipherHandle::setCipherKey(const UnsafeData &data)
             // Please see: https://www.zetetic.net/sqlcipher/sqlcipher-api/#key
             void *buffer = malloc(67 * sizeof(unsigned char));
             if (buffer == nullptr) {
-                notifyError(SQLITE_NOMEM, "", "Malloc memory for cipher fail");
+                notifyError(Error::Code::NoMemory, "", "Malloc memory for cipher fail");
                 return false;
             }
             memcpy(buffer, data.buffer(), 66 * sizeof(unsigned char));

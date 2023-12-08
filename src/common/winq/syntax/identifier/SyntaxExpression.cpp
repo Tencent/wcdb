@@ -591,7 +591,7 @@ bool Expression::describle(std::ostream& stream) const
 
 void Expression::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     // one expression
     case Switch::UnaryOperation:
@@ -709,6 +709,7 @@ void Expression::iterate(const Iterator& iterator, bool& stop)
         }
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

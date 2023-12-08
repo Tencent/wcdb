@@ -63,9 +63,10 @@
 - (double)qualityOfPrototype:(WCTDatabase*)prototype
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:prototype.path]) {
-        NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix.data()];
+        NSString* sqlitePattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix.data()];
+        NSString* wcdbPattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinWCDBTablePrefix.data()];
 
-        WCTValue* count = [prototype getValueOnResultColumn:WCTMaster.allProperties.count() fromTable:WCTMaster.tableName where:WCTMaster.name.notLike(pattern)];
+        WCTValue* count = [prototype getValueOnResultColumn:WCTMaster.allProperties.count() fromTable:WCTMaster.tableName where:WCTMaster.name.notLike(sqlitePattern) && WCTMaster.name.notLike(wcdbPattern)];
         TestCaseAssertNotNil(count);
         return count.numberValue.intValue;
     }

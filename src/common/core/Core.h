@@ -48,6 +48,6 @@
 #include "TokenizerModules.hpp"
 
 #include "AuxiliaryFunctionModule.hpp"
-#include "AuxiliaryFunctionModules.hpp"
 
+#include "CompressionInfo.hpp"
 #include "MigrationInfo.hpp"

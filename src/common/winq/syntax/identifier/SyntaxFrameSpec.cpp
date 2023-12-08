@@ -113,7 +113,7 @@ bool FrameSpec::describle(std::ostream& stream) const
 
 void FrameSpec::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (firstEvent) {
     case FirstEvent::Preceding:
     case FirstEvent::Following:
@@ -134,6 +134,7 @@ void FrameSpec::iterate(const Iterator& iterator, bool& stop)
             break;
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

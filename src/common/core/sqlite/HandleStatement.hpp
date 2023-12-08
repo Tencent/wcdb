@@ -32,8 +32,11 @@
 
 namespace WCDB {
 
+class HandleStatementDecorator;
+
 class HandleStatement : public HandleRelated {
     friend class AbstractHandle;
+    friend class HandleStatementDecorator;
 
 public:
     HandleStatement() = delete;
@@ -48,12 +51,12 @@ public:
     virtual ~HandleStatement() override;
 
     virtual bool prepare(const Statement &statement);
-    virtual bool prepare(const UnsafeStringView &sql);
-    virtual bool isPrepared();
+    bool prepareSQL(const UnsafeStringView &sql);
+    bool isPrepared();
     virtual void finalize();
 
     virtual bool step();
-    virtual bool done();
+    bool done();
     virtual void reset();
 
     using Integer = ColumnTypeInfo<ColumnType::Integer>::UnderlyingType;
@@ -71,35 +74,35 @@ public:
     bindPointer(void *ptr, int index, const Text &type, void (*destructor)(void *));
     int bindParameterIndex(const Text &parameterName);
 
-    virtual void bindValue(const Value &value, int index = 1);
-    virtual void bindRow(const OneRowValue &row);
+    void bindValue(const Value &value, int index = 1);
+    void bindRow(const OneRowValue &row);
 
-    virtual ColumnType getType(int index = 0);
-    virtual signed long long getColumnSize(int index = 0);
-    virtual int getNumberOfColumns();
+    ColumnType getType(int index = 0);
+    signed long long getColumnSize(int index = 0);
+    int getNumberOfColumns();
 
-    virtual Integer getInteger(int index = 0);
-    virtual Float getDouble(int index = 0);
-    virtual Text getText(int index = 0);
-    virtual const char16_t *getText16(int index = 0);
-    virtual size_t getText16Length(int index = 0);
-    virtual const BLOB getBLOB(int index = 0);
+    Integer getInteger(int index = 0);
+    Float getDouble(int index = 0);
+    Text getText(int index = 0);
+    const char16_t *getText16(int index = 0);
+    size_t getText16Length(int index = 0);
+    const BLOB getBLOB(int index = 0);
 
-    virtual Value getValue(int index = 0);
-    virtual OptionalOneColumn getOneColumn(int index = 0);
-    virtual OneRowValue getOneRow();
-    virtual OptionalMultiRows getAllRows();
+    Value getValue(int index = 0);
+    OptionalOneColumn getOneColumn(int index = 0);
+    OneRowValue getOneRow();
+    OptionalMultiRows getAllRows();
 
-    virtual const UnsafeStringView getOriginColumnName(int index);
-    virtual const UnsafeStringView getColumnName(int index);
-    virtual const UnsafeStringView getColumnTableName(int index);
+    const UnsafeStringView getOriginColumnName(int index);
+    const UnsafeStringView getColumnName(int index);
+    const UnsafeStringView getColumnTableName(int index);
     int getBindParameterCount();
 
-    virtual bool isReadOnly();
+    bool isReadOnly();
     void enableAutoAddColumn();
 
 protected:
-    virtual bool isBusy();
+    bool isBusy();
 
 private:
     void analysisStatement(const Statement &statement);

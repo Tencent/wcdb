@@ -64,7 +64,7 @@ bool PragmaSTMT::describle(std::ostream& stream) const
 
 void PragmaSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
     recursiveIterate(pragma, iterator, stop);
     switch (switcher) {
@@ -75,6 +75,7 @@ void PragmaSTMT::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(value, iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

@@ -33,7 +33,8 @@
 
 #include "DatabasePool.hpp"
 
-#include "AuxiliaryFunctionModules.hpp"
+#include "AuxiliaryFunctionConfig.hpp"
+#include "ScalarFunctionConfig.hpp"
 #include "TokenizerModules.hpp"
 
 #include "Notifier.hpp"
@@ -74,6 +75,16 @@ protected:
     ThreadLocal<bool> m_errorIgnorable;
     ThreadLocal<StringView> m_errorPath;
 
+#pragma mark - ScalarFunction
+public:
+    void registerScalarFunction(const UnsafeStringView& name,
+                                const ScalarFunctionModule& module);
+    std::shared_ptr<Config> scalarFunctionConfig(const UnsafeStringView& ScalarFunctionName);
+    bool scalarFunctionExists(const UnsafeStringView& name) const;
+
+protected:
+    std::shared_ptr<ScalarFunctionModules> m_scalarFunctionModules;
+
 #pragma mark - Tokenizer
 public:
     void registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module);
@@ -103,6 +114,7 @@ public:
 
 protected:
     Optional<bool> migrationShouldBeOperated(const UnsafeStringView& path) override final;
+    Optional<bool> compressionShouldBeOperated(const UnsafeStringView& path) override final;
     void backupShouldBeOperated(const UnsafeStringView& path) override final;
     void checkpointShouldBeOperated(const UnsafeStringView& path) override final;
     void integrityShouldBeChecked(const UnsafeStringView& path) override final;
@@ -131,10 +143,17 @@ protected:
 
 #pragma mark - Migration
 public:
-    void enableAutoMigration(InnerDatabase* database, bool enable);
+    void enableAutoMigrate(InnerDatabase* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;
+
+#pragma mark - Compression
+public:
+    void enableAutoCompress(InnerDatabase* database, bool enable);
+
+protected:
+    std::shared_ptr<Config> m_autoCompressConfig;
 
 #pragma mark - Trace
 public:

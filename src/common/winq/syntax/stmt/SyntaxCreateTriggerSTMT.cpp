@@ -139,7 +139,7 @@ bool CreateTriggerSTMT::describle(std::ostream& stream) const
 
 void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
     if (event == Event::Update) {
         listIterate(columns, iterator, stop);
@@ -175,6 +175,7 @@ void CreateTriggerSTMT::iterate(const Iterator& iterator, bool& stop)
             break;
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

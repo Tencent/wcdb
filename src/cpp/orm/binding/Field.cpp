@@ -52,7 +52,7 @@ const BaseAccessor* Field::getAccessor() const
 void Field::configWithBinding(const Binding& binding, void* memberPointer)
 {
     syntax().name = binding.getColumnName(memberPointer);
-    syntax().tableBinding = dynamic_cast<const BaseBinding*>(&binding);
+    syntax().tableBinding = static_cast<const BaseBinding*>(&binding);
     m_accessor = binding.getAccessor(memberPointer);
 }
 

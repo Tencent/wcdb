@@ -60,7 +60,7 @@ bool AlterTableSTMT::describle(std::ostream& stream) const
 
 void AlterTableSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
     switch (switcher) {
     case Switch::RenameTable:
@@ -73,6 +73,7 @@ void AlterTableSTMT::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(newColumn, iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 bool AlterTableSTMT::isTargetingSameTable(const AlterTableSTMT& other) const

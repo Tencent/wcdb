@@ -69,10 +69,18 @@ void Identifier::recursiveIterate(Identifier &identifier, const Iterator &iterat
     identifier.iterate(iterator, stop);
 }
 
+void Identifier::iterate(const Iterator &iterator, bool isBegin, bool &stop)
+{
+    if (!stop && isValid()) {
+        iterator(*this, isBegin, stop);
+    }
+}
+
 void Identifier::iterate(const Iterator &iterator, bool &stop)
 {
     if (!stop && isValid()) {
-        iterator(*this, stop);
+        iterator(*this, true, stop);
+        iterator(*this, false, stop);
     }
 }
 

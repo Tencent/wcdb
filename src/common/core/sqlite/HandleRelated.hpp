@@ -37,9 +37,9 @@ public:
     virtual ~HandleRelated() = 0;
 
     AbstractHandle *getHandle() const;
+    sqlite3 *getRawHandle();
 
 protected:
-    sqlite3 *getRawHandle();
     bool APIExit(int rc);
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);

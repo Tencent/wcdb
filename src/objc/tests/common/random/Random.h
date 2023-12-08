@@ -54,6 +54,8 @@
 - (NSString*)stringWithLength:(UInt32)length;
 - (NSString*)chineseString;
 - (NSString*)chineseStringWithLength:(UInt32)length;
+- (NSString*)englishString;
+- (NSString*)englishStringWithLength:(UInt32)length;
 
 - (NSData*)data;
 - (NSData*)dataWithLength:(NSInteger)length;

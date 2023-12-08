@@ -341,6 +341,54 @@
     return string;
 }
 
+- (NSString *)englishString
+{
+    return [self englishStringWithLength:self.length];
+}
+
+- (NSString *)englishStringWithLength:(UInt32)length
+{
+    static NSArray<NSString *> *g_wordArray;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary<NSString *, NSNumber *> *g_wordFrequency = @{
+            @"a" : @408,
+            @"he" : @121,
+            @"but" : @86,
+            @"my" : @58,
+            @"if" : @51,
+            @"just" : @44,
+            @"people" : @33,
+            @"think" : @28,
+            @"because" : @25,
+            @"two" : @21,
+            @"very" : @19,
+            @"should" : @17,
+            @"work" : @15,
+            @"day" : @14,
+            @"oh" : @13,
+            @"use" : @11,
+            @"lot" : @10,
+            @"mr" : @10,
+            @"part" : @9,
+            @"without" : @8,
+        };
+        NSMutableArray *wordArray = [[NSMutableArray alloc] initWithCapacity:1000];
+        [g_wordFrequency enumerateKeysAndObjectsUsingBlock:^(NSString *word, NSNumber *frequency, BOOL *) {
+            for (int i = 0; i < frequency.intValue; i++) {
+                [wordArray addObject:word];
+            }
+        }];
+        g_wordArray = wordArray;
+    });
+    NSMutableString *ret = [[NSMutableString alloc] init];
+    for (int i = 0; i < length; i++) {
+        [ret appendString:g_wordArray[self.uint16 % 1000]];
+        [ret appendString:@" "];
+    }
+    return ret;
+}
+
 - (NSData *)data
 {
     return [self dataWithLength:self.length];

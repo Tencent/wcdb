@@ -38,9 +38,12 @@ bool isIntegerColumnType(const UnsafeStringView& type)
            || type.caseInsensitiveEqual("INT2") || type.caseInsensitiveEqual("INT8");
 }
 
-WCDBLiteralStringImplement(masterTable) WCDBLiteralStringImplement(sequenceTable)
-WCDBLiteralStringImplement(mainSchema) WCDBLiteralStringImplement(tempSchema)
-WCDBLiteralStringImplement(builtinTablePrefix)
+WCDBLiteralStringImplement(masterTable);
+WCDBLiteralStringImplement(sequenceTable);
+WCDBLiteralStringImplement(mainSchema);
+WCDBLiteralStringImplement(tempSchema);
+WCDBLiteralStringImplement(builtinTablePrefix);
+WCDBLiteralStringImplement(builtinWCDBTablePrefix);
 
 } // namespace Syntax
 

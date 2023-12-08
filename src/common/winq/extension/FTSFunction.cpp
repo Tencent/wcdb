@@ -29,7 +29,8 @@ namespace WCDB {
 
 Expression FTSFunction::offsets(const Expression &expression)
 {
-    return Expression::function("offsets").invoke().arguments(expression);
+    static const char *funcName = "offsets";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression FTSFunction::fts3Snippet(const Expression &expression,
@@ -39,18 +40,22 @@ Expression FTSFunction::fts3Snippet(const Expression &expression,
                                     int columnNumber,
                                     int approximateNumberOfTokens)
 {
-    return Expression::function("snippet").invoke().arguments(
-    { expression, startMatchText, endMatchText, ellipses, columnNumber, approximateNumberOfTokens });
+    static const char *funcName = "snippet";
+    return Expression::function(StringView::makeConstant(funcName))
+    .invoke()
+    .arguments({ expression, startMatchText, endMatchText, ellipses, columnNumber, approximateNumberOfTokens });
 }
 
 Expression FTSFunction::matchinfo(const Expression &expression)
 {
-    return Expression::function("matchinfo").invoke().arguments(expression);
+    static const char *funcName = "matchinfo";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression FTSFunction::bm25(const Expression &expression)
 {
-    return Expression::function("bm25").invoke().arguments(expression);
+    static const char *funcName = "bm25";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression FTSFunction::highlight(const Expression &expression,
@@ -58,7 +63,8 @@ Expression FTSFunction::highlight(const Expression &expression,
                                   const UnsafeStringView &startMatchText,
                                   const UnsafeStringView &endMatchText)
 {
-    return Expression::function("highlight")
+    static const char *funcName = "highlight";
+    return Expression::function(StringView::makeConstant(funcName))
     .invoke()
     .arguments({ expression, columnNumber, startMatchText, endMatchText });
 }
@@ -70,15 +76,17 @@ Expression FTSFunction::fts5Snippet(const Expression &expression,
                                     const UnsafeStringView &ellipses,
                                     int approximateNumberOfTokens)
 {
-    return Expression::function("snippet").invoke().arguments(
-    { expression, columnNumber, startMatchText, endMatchText, ellipses, approximateNumberOfTokens });
+    static const char *funcName = "snippet";
+    return Expression::function(StringView::makeConstant(funcName))
+    .invoke()
+    .arguments({ expression, columnNumber, startMatchText, endMatchText, ellipses, approximateNumberOfTokens });
 }
 
 Expression FTSFunction::substringMatchInfo(const Expression &expression,
                                            int columnNumber,
                                            const UnsafeStringView &separators)
 {
-    return Expression::function(WCDB::BuiltinAuxiliaryFunction::SubstringMatchInfo)
+    return Expression::function(StringView::makeConstant(BuiltinAuxiliaryFunction::SubstringMatchInfo))
     .invoke()
     .arguments({ expression, columnNumber, separators });
 }

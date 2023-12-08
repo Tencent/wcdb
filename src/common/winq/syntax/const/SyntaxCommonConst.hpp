@@ -102,6 +102,7 @@ WCDBLiteralStringDefine(sequenceTable, "sqlite_sequence");
 WCDBLiteralStringDefine(mainSchema, "main");
 WCDBLiteralStringDefine(tempSchema, "temp");
 WCDBLiteralStringDefine(builtinTablePrefix, "sqlite_");
+WCDBLiteralStringDefine(builtinWCDBTablePrefix, "wcdb_builtin_");
 
 } // namespace Syntax
 

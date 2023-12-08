@@ -60,7 +60,7 @@ void WCTProperty::configTableBindingRetrive()
     Class cls = m_columnBinding.getClass();
     syntax().tableBindingRetrive = [=]() {
         if ([cls respondsToSelector:@selector(objectRelationalMapping)]) {
-            return dynamic_cast<const WCDB::BaseBinding*>(&[cls objectRelationalMapping]);
+            return static_cast<const WCDB::BaseBinding*>(&[cls objectRelationalMapping]);
         }
         return (const WCDB::BaseBinding*) nullptr;
     };

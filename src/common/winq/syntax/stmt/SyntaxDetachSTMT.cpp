@@ -50,8 +50,9 @@ bool DetachSTMT::describle(std::ostream& stream) const
 
 void DetachSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     recursiveIterate(schema, iterator, stop);
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

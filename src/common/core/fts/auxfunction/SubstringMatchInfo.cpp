@@ -30,11 +30,8 @@ namespace WCDB {
 
 #pragma mark - MultiLevelHighlight
 
-SubstringMatchInfo::SubstringMatchInfo(int nVal,
-                                       FTS5AuxiliaryFunctionValue **apVal,
-                                       void *context,
-                                       FTS5AuxiliaryFunctionAPI *apiObj)
-: AbstractFTS5AuxiliaryFunctionObject(nVal, apVal, context, apiObj)
+SubstringMatchInfo::SubstringMatchInfo(void *userContext, FTS5AuxiliaryFunctionAPI &apiObj)
+: AbstractFTS5AuxiliaryFunctionObject(userContext, apiObj)
 , m_columnNum(0)
 , m_phaseMatchResult(nullptr)
 , m_substringPhaseMatchCount(0)
@@ -45,12 +42,12 @@ SubstringMatchInfo::SubstringMatchInfo(int nVal,
 , m_bytePos(0)
 , m_curLevelStartPos(0)
 {
-    WCTAssert(nVal == 2);
-    if (nVal != 2) {
+    WCTAssert(apiObj.getValueCount() == 2);
+    if (apiObj.getValueCount() != 2) {
         return;
     }
-    m_columnNum = (int) apiObj->getIntValue(apVal[0]);
-    m_seperators = apiObj->getTextValue(apVal[1]);
+    m_columnNum = (int) apiObj.getIntValue(0);
+    m_seperators = apiObj.getTextValue(1);
     m_matchIndex = new int[m_seperators.length()];
 }
 
@@ -145,21 +142,21 @@ int tflags, const char *pToken, int nToken, int iStartOff, int iEndOff)
     return rc;
 }
 
-void SubstringMatchInfo::process(FTS5AuxiliaryFunctionAPI *apiObj)
+void SubstringMatchInfo::process(FTS5AuxiliaryFunctionAPI &apiObj)
 {
     m_input = UnsafeStringView();
     m_tokenPos = 0;
     m_bytePos = 0;
     int rc = FTSError::OK();
 
-    rc = apiObj->getTextForThisRow(m_columnNum, m_input);
+    rc = apiObj.getTextForThisRow(m_columnNum, m_input);
     if (m_input.length() > 0) {
-        m_phaseCount = apiObj->getPhraseCount();
+        m_phaseCount = apiObj.getPhraseCount();
         if (!m_phaseMatchResult) {
             m_phaseMatchResult = new bool[m_phaseCount];
         }
         m_pIter = PhaseInstIter();
-        rc = m_pIter.init(apiObj);
+        rc = m_pIter.init(&apiObj);
         if (FTSError::isOK(rc)) {
             m_currentPhaseMatchCount = 0;
             memset(m_phaseMatchResult, 0, m_phaseCount * sizeof(bool));
@@ -181,7 +178,7 @@ void SubstringMatchInfo::process(FTS5AuxiliaryFunctionAPI *apiObj)
         }
         resetStatusFromLevel(0);
         if (FTSError::isOK(rc)) {
-            rc = apiObj->tokenize(m_input, this, tokenCallback);
+            rc = apiObj.tokenize(m_input, this, tokenCallback);
         }
         if (m_bytePos < m_input.length()) {
             int i = m_bytePos;
@@ -204,12 +201,12 @@ void SubstringMatchInfo::process(FTS5AuxiliaryFunctionAPI *apiObj)
             std::ostringstream stream;
             generateOutput(stream);
             StringView output = stream.str();
-            apiObj->setTextResult(output);
+            apiObj.setTextResult(output);
         }
     }
     if (!FTSError::isOK(rc) && !FTSError::isDone(rc)) {
         StringView msg = StringView("parse match info fail");
-        apiObj->setErrorResult(msg, rc);
+        apiObj.setErrorResult(rc, msg);
     }
 }
 

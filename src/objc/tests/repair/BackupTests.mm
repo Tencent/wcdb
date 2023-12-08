@@ -24,6 +24,7 @@
 
 #import "BackupTestCase.h"
 #import "CoreConst.h"
+#import "NormalRepairTestObject.h"
 #import "Random+RepairTestObject.h"
 
 @interface BackupTests : BackupTestCase
@@ -158,6 +159,30 @@
         NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
         [self checkObjects:self.objects containedIn:allObjects];
     }];
+}
+
+- (void)test_create_table_and_backup
+{
+    [self.database enableAutoBackup:true];
+    [self.database enableAutoCheckpoint:false];
+    size_t firstMaterialSize = 0;
+    for (int i = 0; i < 100; i++) {
+        bool ret = [self.database createTable:[NSString stringWithFormat:@"testTable_%d", i] withClass:NormalRepairTestObject.class];
+        XCTAssertTrue(ret);
+        [self.database passiveCheckpoint];
+        [self.database backup];
+        if (firstMaterialSize == 0) {
+            firstMaterialSize = [self.fileManager getFileSizeIfExists:self.database.firstMaterialPath];
+        }
+    }
+    size_t lastMaterialSize = [self.fileManager getFileSizeIfExists:self.database.lastMaterialPath];
+
+    TestCaseAssertTrue(lastMaterialSize < 200 * firstMaterialSize);
+    TestCaseAssertTrue([self.database retrieve:nil] > 0);
+
+    NSArray<WCTMaster *> *masters = [self.database getObjectsOfClass:WCTMaster.class fromTable:WCTMaster.tableName];
+    // They are sqlite_sequence, 100 tables and 100 indexes.
+    TestCaseAssertTrue(masters.count == 201);
 }
 
 - (void)test_dual_backup

@@ -510,7 +510,7 @@ void Database::addMigration(const UnsafeStringView& sourcePath,
                             const UnsafeData& sourceCipher,
                             const TableFilter& filter)
 {
-    InnerDatabase::TableFilter callback = nullptr;
+    InnerDatabase::MigrationTableFilter callback = nullptr;
     if (filter != nullptr) {
         callback = [filter](MigrationUserInfo& userInfo) {
             MigrationInfo info;
@@ -534,7 +534,7 @@ bool Database::stepMigration()
 
 void Database::enableAutoMigration(bool flag)
 {
-    Core::shared().enableAutoMigration(m_innerDatabase, flag);
+    Core::shared().enableAutoMigrate(m_innerDatabase, flag);
 }
 
 void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated)

@@ -25,9 +25,9 @@
 #pragma once
 
 #include "ColumnMeta.hpp"
+#include "DecorativeHandleStatement.hpp"
 #include "ErrorProne.hpp"
 #include "HandleNotification.hpp"
-#include "HandleStatement.hpp"
 #include "StringView.hpp"
 #include "TableAttribute.hpp"
 #include "Tag.hpp"
@@ -39,6 +39,8 @@
 
 namespace WCDB {
 
+class ScalarFunctionConfig;
+
 class AbstractHandle : public ErrorProne {
 #pragma mark - Initialize
 public:
@@ -49,6 +51,7 @@ public:
     virtual ~AbstractHandle() override = 0;
 
 private:
+    friend class ScalarFunctionConfig;
     friend class HandleRelated;
     sqlite3 *getRawHandle();
     sqlite3 *m_handle;
@@ -87,26 +90,27 @@ public:
     void setTag(Tag tag);
     Tag getTag();
 
-protected:
-    bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
+    bool executeSQL(const UnsafeStringView &sql);
+
+protected:
     int m_customOpenFlag;
     Tag m_tag;
 
 #pragma mark - Statement
 public:
-    virtual HandleStatement *getStatement();
+    virtual DecorativeHandleStatement *
+    getStatement(const UnsafeStringView &skipDecorator = UnsafeStringView());
     virtual void returnStatement(HandleStatement *handleStatement);
     virtual void resetAllStatements();
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
     HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
-    virtual void returnAllPreparedStatement();
 
 private:
     HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);
-    std::list<HandleStatement> m_handleStatements;
-    StringViewMap<HandleStatement *> m_preparedStatements;
+    std::list<DecorativeHandleStatement> m_handleStatements;
+    StringViewMap<DecorativeHandleStatement *> m_preparedStatements;
 
 #pragma mark - Meta
 public:
@@ -120,7 +124,6 @@ public:
 
     virtual Optional<std::set<StringView>>
     getColumns(const Schema &schema, const UnsafeStringView &table);
-    Optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
 
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
@@ -227,7 +230,12 @@ private:
 
 #pragma mark - Error
 public:
-    void notifyError(int rc, const char *sql, const char *msg = nullptr);
+    void notifyError(Error::Code rc,
+                     const UnsafeStringView &sql,
+                     const UnsafeStringView &msg = UnsafeStringView());
+    void notifyError(int rc,
+                     const UnsafeStringView &sql,
+                     const UnsafeStringView &msg = UnsafeStringView());
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);
@@ -245,6 +253,8 @@ private:
 public:
     void suspend(bool suspend);                     // thread-safe
     void markAsCanBeSuspended(bool canBeSuspended); // thread-safe, default to false
+    bool isSuspended() const;
+
 protected:
     virtual void doSuspend(bool suspend);
 

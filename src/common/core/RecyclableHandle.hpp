@@ -29,6 +29,7 @@
 namespace WCDB {
 
 class InnerHandle;
+class DecorativeHandle;
 
 class WCDB_API RecyclableHandle final : public Recyclable<std::shared_ptr<InnerHandle>> {
 public:
@@ -43,8 +44,9 @@ public:
     RecyclableHandle &operator=(const std::nullptr_t &);
     RecyclableHandle &operator=(const RecyclableHandle &other);
 
-    InnerHandle *operator->() const { return m_handle; }
+    InnerHandle *operator->() const;
     InnerHandle *get() const;
+    DecorativeHandle *getDecorative() const;
 
 protected:
     InnerHandle *m_handle;

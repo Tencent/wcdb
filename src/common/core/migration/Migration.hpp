@@ -74,7 +74,7 @@ protected:
 
     protected:
         virtual bool attachSourceDatabase(const MigrationUserInfo& userInfo) = 0;
-        virtual InnerHandle* getCurrentHandle() = 0;
+        virtual InnerHandle* getCurrentHandle() const = 0;
         virtual const StringView& getDatabasePath() const = 0;
 
         Optional<bool> checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo);

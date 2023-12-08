@@ -35,7 +35,10 @@
     auto testingSQL = WCDB::StatementInsert().insertIntoTable("testTable").schema("testSchema").column(WCDB::Column("testColumn")).values(1);
 
     std::list<WCDB::Syntax::Identifier::Type> types;
-    testingSQL.iterate([&types](WCDB::Syntax::Identifier& identifier, bool& stop) {
+    testingSQL.iterate([&types](WCDB::Syntax::Identifier& identifier, bool begin, bool& stop) {
+        if (!begin) {
+            return;
+        }
         types.push_back(identifier.getType());
         if (identifier.getType() == WCDB::Syntax::Identifier::Type::Schema) {
             stop = true;

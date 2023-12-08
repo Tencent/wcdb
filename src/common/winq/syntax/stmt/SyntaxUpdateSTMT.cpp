@@ -110,7 +110,7 @@ bool UpdateSTMT::describle(std::ostream& stream) const
 
 void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     listIterate(commonTableExpressions, iterator, stop);
     recursiveIterate(table, iterator, stop);
     if (!columnsList.empty()) {
@@ -141,6 +141,7 @@ void UpdateSTMT::iterate(const Iterator& iterator, bool& stop)
             }
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

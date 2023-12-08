@@ -39,7 +39,7 @@
     withSourceCipher:(nullable NSData*)cipher
           withFilter:(nullable WCDB_ESCAPE WCTMigrationFilterBlock)filter
 {
-    WCDB::InnerDatabase::TableFilter callback = nullptr;
+    WCDB::InnerDatabase::MigrationTableFilter callback = nullptr;
     if (filter != nil) {
         callback = [filter](WCDB::MigrationUserInfo& userInfo) {
             WCTMigrationUserInfo* nsUserInfo = [[WCTMigrationUserInfo alloc] initWithBaseInfo:userInfo];
@@ -61,7 +61,7 @@
 
 - (void)enableAutoMigration:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoMigration(_database, flag);
+    WCDB::Core::shared().enableAutoMigrate(_database, flag);
 }
 
 - (void)setNotificationWhenMigrated:(WCTMigratedNotificationBlock)onMigrated
