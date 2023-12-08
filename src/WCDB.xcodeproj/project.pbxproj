@@ -3192,8 +3192,8 @@
 		758E7EC82B1B41C500319991 /* WCTCompressionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC62B1B41C500319991 /* WCTCompressionInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758E7ECA2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */; };
 		758E7ECB2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */; };
-		758E7ECD2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; };
-		758E7ECE2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; };
+		758E7ECD2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758E7ECE2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758E7ED02B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */; };
 		758E7ED12B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */; };
 		758E7F312B1C82F400319991 /* CompressionTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F2F2B1C82EC00319991 /* CompressionTestObject.mm */; };
