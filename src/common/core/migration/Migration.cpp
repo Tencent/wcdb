@@ -129,11 +129,6 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
             return false;
         }
 
-        if (targetTableExsits && autoincrement
-            && !initializer.tryUpdateSequence(userInfo, integerPrimaryKey)) {
-            return false;
-        }
-
         LockGuard lockGuard(m_lock);
         if (m_filted.find(targetTable) == m_filted.end()) {
             m_migrated = false;
@@ -258,6 +253,33 @@ Optional<RecyclableMigrationInfo> Migration::getInfo(const UnsafeStringView& tab
     return NullOpt;
 }
 
+#pragma mark - Update sequence
+bool Migration::tryUpdateSequence(InfoInitializer& initializer, const MigrationInfo& info)
+{
+    if (!info.needUpdateSequance()) {
+        return true;
+    }
+    auto updated = initializer.tryUpdateSequence(info);
+    if (!updated.succeed()) {
+        return false;
+    }
+    info.setNeedUpdateSequence(false);
+    if (updated.value() && initializer.getCurrentHandle()->isInTransaction()) {
+        m_commitingInfos.getOrCreate().insert(&info);
+    }
+    return true;
+}
+
+void Migration::setTableInfoCommitted(bool committed)
+{
+    if (!committed) {
+        for (auto info : m_commitingInfos.getOrCreate()) {
+            info->setNeedUpdateSequence(true);
+        }
+    }
+    m_commitingInfos.getOrCreate().clear();
+}
+
 #pragma mark - InfoInitializer
 Migration::InfoInitializer::~InfoInitializer() = default;
 
@@ -330,10 +352,9 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
     return true;
 }
 
-bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& userInfo,
-                                                   const UnsafeStringView& primaryKey)
+Optional<bool> Migration::InfoInitializer::tryUpdateSequence(const MigrationInfo& info)
 {
-    const StringView& targetTable = userInfo.getTable();
+    const StringView& targetTable = info.getTable();
     InnerHandle* handle = getCurrentHandle();
     Column name("name");
     auto sequenceTable = TableOrSubquery(Syntax::sequenceTable).schema(Schema::main());
@@ -353,17 +374,17 @@ bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& user
                   && handle->execute(
                   StatementPragma().pragma(Pragma::writableSchema()).to(false));
             if (!ret) {
-                return false;
+                return NullOpt;
             }
             tableNames = StringViewSet();
         } else {
-            return false;
+            return NullOpt;
         }
     }
     if (tableNames.value().size() > 0) {
-        return true;
+        return false;
     }
-    return handle->runTransactionIfNotInTransaction([&](InnerHandle* handle) {
+    bool ret = handle->runTransactionIfNotInTransaction([&](InnerHandle* handle) {
         auto tableNames = handle->getValues(selectTable, 1);
         if (!tableNames.hasValue()) {
             return false;
@@ -371,11 +392,11 @@ bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& user
         if (tableNames.value().size() > 0) {
             return true;
         }
-        const StringView& sourceTable = userInfo.getSourceTable();
-        const Schema& sourceSchema = userInfo.getSchemaForSourceDatabase();
+        const StringView& sourceTable = info.getSourceTable();
+        const Schema& sourceSchema = info.getSchemaForSourceDatabase();
         auto selectMaxPrimaryKey
         = StatementSelect()
-          .select(Column(primaryKey).max())
+          .select(Column(info.getIntegerPrimaryKey()).max())
           .from(TableOrSubquery(sourceTable).schema(sourceSchema));
         HandleStatement handleStatement(handle);
         if (!handleStatement.prepare(selectMaxPrimaryKey)) {
@@ -401,6 +422,10 @@ bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& user
         handleStatement.finalize();
         return ret;
     });
+    if (!ret) {
+        return NullOpt;
+    }
+    return true;
 }
 
 #pragma mark - Bind
@@ -486,12 +511,21 @@ const MigrationInfo* Migration::Binder::getBoundInfo(const UnsafeStringView& tab
     return info;
 }
 
+void Migration::Binder::setTableInfoCommitted(bool committed)
+{
+    m_migration.setTableInfoCommitted(committed);
+}
+
 Optional<RecyclableMigrationInfo>
 Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table)
 {
     auto info = getInfo(table);
     if (!info.succeed() && initInfo(initializer, table)) {
         info = getInfo(table);
+    }
+    if (info.hasValue() && info.value().get() != nullptr
+        && !tryUpdateSequence(initializer, *(info.value().get()))) {
+        return NullOpt;
     }
     return info;
 }
@@ -624,11 +658,30 @@ Optional<bool> Migration::tryMigrateRows(Migration::Stepper& stepper)
         }
     }
     WCTAssert(info != nullptr);
+    InnerHandle* handle = stepper.getCurrentHandle();
+    WCTAssert(handle != nullptr);
+    auto exists = handle->tableExists(info->getTable());
+    if (!exists.succeed()) {
+        return NullOpt;
+    }
+
+    if (!exists.value()) {
+        markAsMigrated(info);
+        return true;
+    }
+
+    if (!tryUpdateSequence(stepper, *info)) {
+        return NullOpt;
+    }
+
     auto migrated = stepper.migrateRows(info);
+    if (migrated.failed()) {
+        return NullOpt;
+    }
     if (migrated.succeed() && migrated.value()) {
         markAsMigrated(info);
     }
-    return migrated;
+    return true;
 }
 
 Optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)

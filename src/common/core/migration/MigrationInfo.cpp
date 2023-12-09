@@ -235,6 +235,7 @@ MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
 : MigrationBaseInfo(userInfo)
 , m_autoincrement(autoincrement)
 , m_integerPrimaryKey(integerPrimaryKey)
+, m_needUpdateSequence(autoincrement)
 {
     WCTAssert(!uniqueColumns.empty());
 
@@ -333,6 +334,16 @@ bool MigrationInfo::isAutoIncrement() const
 const StringView& MigrationInfo::getIntegerPrimaryKey() const
 {
     return m_integerPrimaryKey;
+}
+
+bool MigrationInfo::needUpdateSequance() const
+{
+    return m_needUpdateSequence;
+}
+
+void MigrationInfo::setNeedUpdateSequence(bool needUpdate) const
+{
+    m_needUpdateSequence = needUpdate;
 }
 
 #pragma mark - Schema

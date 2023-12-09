@@ -335,6 +335,7 @@ bool MigratingHandleDecorator::commitTransaction()
     bool ret = Super::commitTransaction();
     if (ret && !getHandle()->isInTransaction()) {
         m_createdNewViewInTransaction = false;
+        setTableInfoCommitted(true);
     }
     return ret;
 }
@@ -345,6 +346,7 @@ void MigratingHandleDecorator::rollbackTransaction()
     if (m_createdNewViewInTransaction) {
         setNeedRebind();
         m_createdNewViewInTransaction = false;
+        setTableInfoCommitted(false);
     }
 }
 

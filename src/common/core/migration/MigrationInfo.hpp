@@ -123,10 +123,13 @@ public:
 
     bool isAutoIncrement() const;
     const StringView& getIntegerPrimaryKey() const;
+    bool needUpdateSequance() const;
+    void setNeedUpdateSequence(bool needUpdate) const;
 
 protected:
     bool m_autoincrement;
     StringView m_integerPrimaryKey;
+    mutable bool m_needUpdateSequence;
 
 #pragma mark - Schema
 public:
