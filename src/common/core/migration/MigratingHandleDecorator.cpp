@@ -73,7 +73,7 @@ MigratingHandleDecorator::getBindingInfo(const UnsafeStringView& table)
     return result;
 }
 
-Optional<std::set<StringView>>
+Optional<StringViewSet>
 MigratingHandleDecorator::getColumns(const Schema& schema, const UnsafeStringView& table)
 {
     auto ret = Super::getColumns(schema, table);
@@ -86,7 +86,7 @@ MigratingHandleDecorator::getColumns(const Schema& schema, const UnsafeStringVie
 
     auto info = getBindingInfo(table);
     if (!info.succeed()) {
-        return Optional<std::set<StringView>>();
+        return Optional<StringViewSet>();
     }
     if (info.value() == nullptr) {
         return ret;
@@ -203,7 +203,7 @@ bool MigratingHandleDecorator::attachSourceDatabase(const MigrationUserInfo& use
         if (!optionalAttacheds.succeed()) {
             return false;
         }
-        std::set<StringView>& attacheds = optionalAttacheds.value();
+        StringViewSet& attacheds = optionalAttacheds.value();
         if (attacheds.find(schema.getDescription()) == attacheds.end()) {
             if (!attachDatabase(&userInfo) || !trySynchronousTransactionAfterAttached()) {
                 return false;

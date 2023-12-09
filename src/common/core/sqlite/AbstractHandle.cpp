@@ -364,7 +364,7 @@ bool AbstractHandle::addColumn(const Schema &schema,
     return succeed;
 }
 
-Optional<std::set<StringView>>
+Optional<StringViewSet>
 AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     WCDB::StatementPragma statement
@@ -397,13 +397,12 @@ AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table
     return metas;
 }
 
-Optional<std::set<StringView>>
-AbstractHandle::getValues(const Statement &statement, int index)
+Optional<StringViewSet> AbstractHandle::getValues(const Statement &statement, int index)
 {
-    Optional<std::set<StringView>> values;
+    Optional<StringViewSet> values;
     HandleStatement handleStatement(this);
     if (handleStatement.prepare(statement)) {
-        std::set<StringView> rows;
+        StringViewSet rows;
         bool succeed = false;
         while ((succeed = handleStatement.step()) && !handleStatement.done()) {
             rows.emplace(handleStatement.getText(index));

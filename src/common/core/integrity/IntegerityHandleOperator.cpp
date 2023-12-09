@@ -66,7 +66,7 @@ void IntegerityHandleOperator::checkIntegrity()
     if (!needCheckFTS) {
         return;
     }
-    Optional<std::set<StringView>> ftsTableSet
+    Optional<StringViewSet> ftsTableSet
     = handle->getValues(m_statementForGetFTSTable, 0);
     if (!ftsTableSet.succeed()) {
         return;

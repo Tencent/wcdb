@@ -116,7 +116,7 @@ public:
 class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo,
-                  const std::set<StringView>& columns,
+                  const StringViewSet& columns,
                   bool autoincrement,
                   const UnsafeStringView& integerPrimaryKey);
     ~MigrationInfo() override final;

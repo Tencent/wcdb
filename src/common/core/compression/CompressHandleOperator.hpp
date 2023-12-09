@@ -37,7 +37,7 @@ public:
     ~CompressHandleOperator() override final;
 
 #pragma mark - Stepper
-    Optional<std::set<StringView>> getAllTables() override final;
+    Optional<StringViewSet> getAllTables() override final;
     bool filterComplessingTables(std::set<const CompressionTableInfo*>& allTableInfos) override final;
     Optional<bool> compressRows(const CompressionTableInfo* info) override final;
     bool compressRow(int64_t rowid);

@@ -122,12 +122,12 @@ public:
     virtual bool
     addColumn(const Schema &schema, const UnsafeStringView &table, const ColumnDef &column);
 
-    virtual Optional<std::set<StringView>>
+    virtual Optional<StringViewSet>
     getColumns(const Schema &schema, const UnsafeStringView &table);
 
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
-    Optional<std::set<StringView>> getValues(const Statement &statement, int index);
+    Optional<StringViewSet> getValues(const Statement &statement, int index);
     Optional<TableAttribute>
     getTableAttribute(const Schema &schema, const UnsafeStringView &tableName);
     bool configAutoIncrement(const UnsafeStringView &tableName);

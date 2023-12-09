@@ -229,7 +229,7 @@ MigrationUserInfo::~MigrationUserInfo() = default;
 
 #pragma mark - MigrationInfo
 MigrationInfo::MigrationInfo(const MigrationUserInfo& userInfo,
-                             const std::set<StringView>& uniqueColumns,
+                             const StringViewSet& uniqueColumns,
                              bool autoincrement,
                              const UnsafeStringView& integerPrimaryKey)
 : MigrationBaseInfo(userInfo)

@@ -63,7 +63,7 @@ public:
 
     void purge();
 
-    std::set<StringView> getPathsOfSourceDatabases() const;
+    StringViewSet getPathsOfSourceDatabases() const;
 
 protected:
     class InfoInitializer {
@@ -80,7 +80,7 @@ protected:
         Optional<bool> checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo);
         bool getTargetTableInfo(const MigrationUserInfo& userInfo,
                                 bool& exists,
-                                std::set<StringView>& columns,
+                                StringViewSet& columns,
                                 bool& autoincrement,
                                 StringView& integerPrimaryKey);
         bool tryUpdateSequence(const MigrationUserInfo& userInfo,
@@ -169,7 +169,7 @@ public:
         virtual ~Stepper() override = 0;
 
     protected:
-        virtual Optional<std::set<StringView>> getAllTables() = 0;
+        virtual Optional<StringViewSet> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
         virtual Optional<bool> migrateRows(const MigrationInfo* info) = 0;
     };

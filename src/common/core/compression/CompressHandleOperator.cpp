@@ -54,7 +54,7 @@ CompressHandleOperator::~CompressHandleOperator()
 }
 
 #pragma mark - Stepper
-Optional<std::set<StringView>> CompressHandleOperator::getAllTables()
+Optional<StringViewSet> CompressHandleOperator::getAllTables()
 {
     Column name("name");
     Column type("type");

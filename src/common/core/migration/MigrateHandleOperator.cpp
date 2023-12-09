@@ -104,7 +104,7 @@ bool MigrateHandleOperator::detach()
 }
 
 #pragma mark - Stepper
-Optional<std::set<StringView>> MigrateHandleOperator::getAllTables()
+Optional<StringViewSet> MigrateHandleOperator::getAllTables()
 {
     Column name("name");
     Column type("type");

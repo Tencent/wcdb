@@ -75,9 +75,9 @@ bool Migration::shouldMigrate() const
     return !m_migrationInfo.empty();
 }
 
-std::set<StringView> Migration::getPathsOfSourceDatabases() const
+StringViewSet Migration::getPathsOfSourceDatabases() const
 {
-    std::set<StringView> paths;
+    StringViewSet paths;
     {
         SharedLockGuard lockGuard(m_lock);
         for (const auto& info : m_migrationInfo) {
@@ -122,7 +122,7 @@ bool Migration::initInfo(InfoInitializer& initializer, const UnsafeStringView& t
 
         bool targetTableExsits = false;
         bool autoincrement = false;
-        std::set<StringView> columns;
+        StringViewSet columns;
         StringView integerPrimaryKey;
         if (!initializer.getTargetTableInfo(
             userInfo, targetTableExsits, columns, autoincrement, integerPrimaryKey)) {
@@ -288,7 +288,7 @@ Migration::InfoInitializer::checkSourceTableExistsAndHasRowid(const MigrationUse
 
 bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& userInfo,
                                                     bool& exists,
-                                                    std::set<StringView>& columns,
+                                                    StringViewSet& columns,
                                                     bool& autoincrement,
                                                     StringView& integerPrimaryKey)
 {
@@ -355,7 +355,7 @@ bool Migration::InfoInitializer::tryUpdateSequence(const MigrationUserInfo& user
             if (!ret) {
                 return false;
             }
-            tableNames = std::set<StringView>();
+            tableNames = StringViewSet();
         } else {
             return false;
         }
@@ -643,7 +643,7 @@ Optional<bool> Migration::tryAcquireTables(Migration::Stepper& stepper)
     if (!optionalTables.succeed()) {
         return NullOpt;
     }
-    std::set<StringView>& tables = optionalTables.value();
+    StringViewSet& tables = optionalTables.value();
     tables.insert(m_hints.begin(), m_hints.end());
     for (const auto& table : tables) {
         WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix)

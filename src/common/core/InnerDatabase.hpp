@@ -178,7 +178,7 @@ public:
 
     bool isMigrated() const;
 
-    std::set<StringView> getPathsOfSourceDatabases() const;
+    StringViewSet getPathsOfSourceDatabases() const;
 
 protected:
     void didMigrate(const MigrationBaseInfo *info) override final;

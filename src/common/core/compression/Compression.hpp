@@ -117,7 +117,7 @@ public:
         virtual ~Stepper() override = 0;
 
     protected:
-        virtual Optional<std::set<StringView>> getAllTables() = 0;
+        virtual Optional<StringViewSet> getAllTables() = 0;
         virtual bool
         filterComplessingTables(std::set<const CompressionTableInfo*>& allTableInfos)
         = 0;

@@ -997,7 +997,7 @@ bool InnerDatabase::isMigrated() const
     return m_migration.isMigrated();
 }
 
-std::set<StringView> InnerDatabase::getPathsOfSourceDatabases() const
+StringViewSet InnerDatabase::getPathsOfSourceDatabases() const
 {
     return m_migration.getPathsOfSourceDatabases();
 }

@@ -312,7 +312,7 @@ Optional<bool> Compression::tryAcquireTables(Compression::Stepper& stepper)
     if (!optionalTables.succeed()) {
         return NullOpt;
     }
-    std::set<StringView>& tables = optionalTables.value();
+    StringViewSet& tables = optionalTables.value();
     tables.insert(m_hints.begin(), m_hints.end());
     for (const auto& table : tables) {
         WCTAssert(!table.hasPrefix(Syntax::builtinTablePrefix)
