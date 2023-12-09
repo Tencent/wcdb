@@ -87,13 +87,12 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
     }
 
     bool targetTableExsits = false;
-    std::set<StringView> columns;
-    CompressionTableInfo info(userInfo);
-    if (!initializer.getTargetTableInfo(info, targetTableExsits, columns)) {
+    std::list<StringView> columns;
+    if (!initializer.getTargetTableInfo(userInfo.getTable(), targetTableExsits, columns)) {
         return false;
     }
 
-    if (targetTableExsits && !initializer.tryAddCompressionColumn(info, columns)) {
+    if (targetTableExsits && !initializer.checkCompressingColumns(userInfo, columns)) {
         return false;
     }
 
@@ -105,7 +104,7 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
             m_hints.emplace(targetTable);
             m_tableAcquired = false;
         } else {
-            m_holder.push_back(info);
+            m_holder.emplace_back(userInfo);
             const CompressionTableInfo* hold = &m_holder.back();
             m_filted.insert_or_assign(targetTable, hold);
             m_hints.erase(targetTable);
@@ -173,11 +172,10 @@ Compression::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView&
 #pragma mark - InfoInitializer
 Compression::InfoInitializer::~InfoInitializer() = default;
 
-bool Compression::InfoInitializer::getTargetTableInfo(const CompressionTableInfo& info,
+bool Compression::InfoInitializer::getTargetTableInfo(const UnsafeStringView& tableName,
                                                       bool& exists,
-                                                      std::set<StringView>& columns)
+                                                      std::list<StringView>& columns)
 {
-    const StringView& tableName = info.getTable();
     InnerHandle* handle = getCurrentHandle();
     WCTAssert(handle != nullptr);
     auto optionalExists = handle->tableExists(Schema::main(), tableName);
@@ -194,7 +192,7 @@ bool Compression::InfoInitializer::getTargetTableInfo(const CompressionTableInfo
     }
     auto& metas = optionalMetas.value();
     for (const auto& meta : metas) {
-        columns.emplace(meta.name);
+        columns.push_back(meta.name);
     }
     auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
     if (!tableConfig.succeed()) {
@@ -210,30 +208,38 @@ bool Compression::InfoInitializer::getTargetTableInfo(const CompressionTableInfo
     return true;
 }
 
-bool Compression::InfoInitializer::tryAddCompressionColumn(const CompressionTableInfo& info,
-                                                           std::set<StringView>& curColumns)
+bool Compression::InfoInitializer::checkCompressingColumns(CompressionTableUserInfo& info,
+                                                           std::list<StringView>& curColumns)
 {
-    const auto& compressingColumns = info.getColumnInfos();
+    auto& compressingColumns = info.getColumnInfos();
     const StringView& tableName = info.getTable();
     InnerHandle* handle = getCurrentHandle();
     WCTAssert(handle != nullptr);
-    std::list<StringView> toAddColumns;
-    for (const auto& column : compressingColumns) {
-        StringView statusColumn
-        = StringView::formatted("%s%s",
-                                CompressionColumnTypePrefix.data(),
-                                column.getColumn().syntax().name.data());
-        if (curColumns.find(statusColumn) != curColumns.end()) {
-            continue;
+    uint16_t newColumnIndex = (uint16_t) curColumns.size();
+    for (auto& compressingColumn : compressingColumns) {
+        uint16_t columnIndex = 0;
+        bool findTypeColumn = false;
+        for (const auto& column : curColumns) {
+            if (column.equal(compressingColumn.getColumn().syntax().name)) {
+                compressingColumn.setColumnIndex(columnIndex);
+            } else if (column.equal(compressingColumn.getTypeColumn().syntax().name)) {
+                compressingColumn.setTypeColumnIndex(columnIndex);
+                findTypeColumn = true;
+            } else if (column.equal(compressingColumn.getMatchColumn().syntax().name)) {
+                compressingColumn.setMatchColumnIndex(columnIndex);
+            }
+            columnIndex++;
         }
-        toAddColumns.push_back(statusColumn);
-    }
-    for (const auto& column : toAddColumns) {
-        if (!handle->addColumn(
-            Schema::main(),
-            tableName,
-            ColumnDef(column, ColumnType::Integer).constraint(ColumnConstraint().default_(nullptr)))) {
-            return false;
+        if (!findTypeColumn) {
+            if (!handle->addColumn(
+                Schema::main(),
+                tableName,
+                ColumnDef(compressingColumn.getTypeColumn(), ColumnType::Integer)
+                .constraint(ColumnConstraint().default_(nullptr)))) {
+                return false;
+            }
+            compressingColumn.setTypeColumnIndex(newColumnIndex);
+            newColumnIndex++;
         }
     }
     return true;

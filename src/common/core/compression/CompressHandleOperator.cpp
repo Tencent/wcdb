@@ -36,9 +36,11 @@ CompressHandleOperator::CompressHandleOperator(InnerHandle* handle)
 , m_compressionRecordTableCreated(false)
 , m_compressedCount(0)
 , m_compressingTableInfo(nullptr)
+, m_insertParameterCount(0)
 , m_selectRowidStatement(handle->getStatement())
-, m_selectValueStatement(handle->getStatement())
-, m_updateValueStatement(handle->getStatement())
+, m_selectRowStatement(handle->getStatement())
+, m_deleteRowStatement(handle->getStatement())
+, m_insertNewRowStatement(handle->getStatement())
 , m_updateRecordStatement(handle->getStatement())
 {
 }
@@ -47,10 +49,13 @@ CompressHandleOperator::~CompressHandleOperator()
 {
     finalizeCompressionStatements();
     m_updateRecordStatement->finalize();
-    getHandle()->returnStatement(m_selectRowidStatement);
-    getHandle()->returnStatement(m_selectValueStatement);
-    getHandle()->returnStatement(m_updateValueStatement);
-    getHandle()->returnStatement(m_updateRecordStatement);
+    InnerHandle* handle = getHandle();
+    WCTAssert(handle != nullptr);
+    handle->returnStatement(m_selectRowidStatement);
+    handle->returnStatement(m_selectRowStatement);
+    handle->returnStatement(m_deleteRowStatement);
+    handle->returnStatement(m_insertNewRowStatement);
+    handle->returnStatement(m_updateRecordStatement);
 }
 
 #pragma mark - Stepper
@@ -118,7 +123,7 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
         }
         const StringView& columns = recordIter->second.first;
         bool columnMatched = true;
-        for (auto& compressingColumn : (*iter)->getColumnInfos()) {
+        for (const auto& compressingColumn : (*iter)->getColumnInfos()) {
             const StringView& columnName
             = compressingColumn.getColumn().syntax().name;
             size_t pos = columns.find(columnName);
@@ -174,45 +179,173 @@ Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* 
         m_selectRowidStatement->reset();
         return NullOpt;
     }
-    int compressCount = 0;
-    if (!handle->runTransaction([&rowids, &compressCount, this](InnerHandle* handle) {
-            for (const auto& rowid : rowids.value()) {
-                if (!compressRow(rowid)) {
-                    return false;
-                }
-                compressCount++;
-                if (handle->checkHasBusyRetry()) {
-                    break;
-                }
-            }
-            return true;
-        })) {
-        resetCompressionStatements();
+    auto compressed = doCompressRows(rowids.value());
+    if (compressed.failed()) {
         return NullOpt;
     }
-    bool compressed = false;
-    if (compressCount == rowids.value().size() && rowids.value().size() < CompressionBatchCount) {
-        m_compressingTableInfo->setMinCompressedRowid(0);
-        compressed = true;
-    } else {
-        m_compressingTableInfo->setMinCompressedRowid(rowids.value().at(compressCount - 1));
+    if (!compressed.value()) {
+        return false;
     }
-    m_compressedCount += compressCount;
-    if (m_compressedCount >= CompressionUpdateRecordBatchCount || compressed) {
+
+    bool compressionFinish = false;
+    if (rowids.value().size() < CompressionBatchCount) {
+        m_compressingTableInfo->setMinCompressedRowid(0);
+        compressionFinish = true;
+    } else {
+        m_compressingTableInfo->setMinCompressedRowid(rowids.value().back());
+    }
+    m_compressedCount += rowids.value().size();
+    if (m_compressedCount >= CompressionUpdateRecordBatchCount || compressionFinish) {
         updateCompressionRecord();
     }
-    resetCompressionStatements();
-    return compressed;
+    return compressionFinish;
 }
 
-bool CompressHandleOperator::compressRow(int64_t rowid)
+Optional<bool> CompressHandleOperator::doCompressRows(const OneColumnValue& rowids)
 {
-    WCTAssert(m_selectValueStatement->isPrepared() && m_updateValueStatement->isPrepared());
-    WCTAssert(getHandle()->isInTransaction());
-    WCTAssert(m_selectValueStatement->getNumberOfColumns() >= 2);
-    WCTAssert(rowid < m_compressingTableInfo->getMinCompressedRowid());
-    return m_compressingTableInfo->stepSelectAndUpdateUncompressRowStatement(
-    m_selectValueStatement, m_updateValueStatement, rowid);
+    bool interrupted = false;
+    bool ret = getHandle()->runTransaction([&](InnerHandle* handle) {
+        MultiRowsValue rows;
+        for (const auto& rowid : rowids) {
+            m_selectRowStatement->reset();
+            m_selectRowStatement->bindInteger(rowid);
+            if (!m_selectRowStatement->step()) {
+                return false;
+            }
+            if (m_selectRowStatement->done()) {
+                continue;
+            }
+            auto row = m_selectRowStatement->getOneRow();
+
+            if (!compressRow(row)) {
+                return false;
+            }
+
+            rows.push_back(std::move(row));
+
+            m_deleteRowStatement->reset();
+            m_deleteRowStatement->bindInteger(rowid);
+            if (!m_deleteRowStatement->step()) {
+                return false;
+            }
+            if (handle->checkHasBusyRetry()) {
+                interrupted = true;
+                handle->notifyError(Error::Code::Notice, "", "Interrupt compression due to busy");
+                return false;
+            }
+        }
+        for (const auto& row : rows) {
+            if (handle->checkHasBusyRetry()) {
+                interrupted = true;
+                handle->notifyError(Error::Code::Notice, "", "Interrupt compression due to busy");
+                return false;
+            }
+            if (!m_insertNewRowStatement->isPrepared() || row.size() != m_insertParameterCount) {
+                m_insertNewRowStatement->finalize();
+                m_insertParameterCount = row.size();
+                if (!m_insertNewRowStatement->prepare(m_compressingTableInfo->getInsertNewRowStatement(
+                    m_insertParameterCount))) {
+                    return false;
+                }
+            }
+            m_insertNewRowStatement->reset();
+            m_insertNewRowStatement->bindRow(row);
+            if (!m_insertNewRowStatement->step()) {
+                return false;
+            }
+        }
+        return true;
+    });
+    resetCompressionStatements();
+    if (!ret && !interrupted) {
+        return NullOpt;
+    }
+    return !interrupted;
+}
+
+bool CompressHandleOperator::compressRow(OneRowValue& row)
+{
+    for (const auto& column : m_compressingTableInfo->getColumnInfos()) {
+        if (column.getColumnIndex() >= row.size()) {
+            getHandle()->notifyError(
+            Error::Code::Error,
+            nullptr,
+            StringView::formatted("Compressing column %s with index index %u out of range",
+                                  column.getColumn().syntax().name.data(),
+                                  column.getColumnIndex()));
+            return false;
+        }
+        Value& value = row[column.getColumnIndex()];
+        ColumnType valueType = value.getType();
+
+        if (column.getTypeColumnIndex() >= row.size()) {
+            getHandle()->notifyError(
+            Error::Code::Error,
+            nullptr,
+            StringView::formatted("Compressing type column %s with index index %u out of range",
+                                  column.getTypeColumn().syntax().name.data(),
+                                  column.getTypeColumnIndex()));
+            return false;
+        }
+
+        Value& compressedType = row[column.getTypeColumnIndex()];
+        if (valueType < ColumnType::Text) {
+            compressedType = CompressedType::None;
+            continue;
+        }
+        if (!compressedType.isNull()) {
+            continue;
+        }
+
+        CompressedType toCompressedType = CompressedType::ZSTDDict;
+        Optional<UnsafeData> compressedValue;
+        UnsafeData data;
+        if (valueType == ColumnType::Text) {
+            const StringView& text = value.textValue();
+            data = UnsafeData((unsigned char*) text.data(), text.length());
+        } else {
+            data = value.blobValue();
+        }
+
+        switch (column.getCompressionType()) {
+        case CompressionType::Normal: {
+            toCompressedType = CompressedType::ZSTDNormal;
+            compressedValue
+            = CompressionCenter::shared().compressContent(data, 0, getHandle());
+        } break;
+        case CompressionType::Dict: {
+            compressedValue = CompressionCenter::shared().compressContent(
+            data, column.getDictId(), getHandle());
+        } break;
+        case CompressionType::VariousDict: {
+            if (column.getMatchColumnIndex() >= row.size()) {
+                getHandle()->notifyError(
+                Error::Code::Error,
+                nullptr,
+                StringView::formatted("Compressing match column %s with index index %u out of range",
+                                      column.getMatchColumn().syntax().name.data(),
+                                      column.getMatchColumnIndex()));
+                return false;
+            }
+            Value& matchValue = row[column.getMatchColumnIndex()];
+            compressedValue = CompressionCenter::shared().compressContent(
+            data, column.getMatchDictId(matchValue), getHandle());
+        } break;
+        }
+
+        if (compressedValue.failed()) {
+            return false;
+        }
+        WCTAssert(compressedValue.value().size() <= data.size());
+
+        if (compressedValue.value().size() < data.size()) {
+            value = compressedValue.value();
+            compressedType = WCDBMergeCompressionType(toCompressedType, valueType);
+        } else {
+            compressedType = WCDBMergeCompressionType(CompressedType::None, valueType);
+        }
+    }
+    return true;
 }
 
 bool CompressHandleOperator::prepareCompressionStatements()
@@ -222,14 +355,12 @@ bool CompressHandleOperator::prepareCompressionStatements()
         m_compressingTableInfo->getSelectUncompressRowIdStatement())) {
         return false;
     }
-    if (!m_selectValueStatement->isPrepared()
-        && !m_selectValueStatement->prepare(
-        m_compressingTableInfo->getSelectUncompressRowStatement())) {
+    if (!m_selectRowStatement->isPrepared()
+        && !m_selectRowStatement->prepare(m_compressingTableInfo->getSelectRowStatement())) {
         return false;
     }
-    if (!m_updateValueStatement->isPrepared()
-        && !m_updateValueStatement->prepare(
-        m_compressingTableInfo->getUpdateUncompressRowStatement())) {
+    if (!m_deleteRowStatement->isPrepared()
+        && !m_deleteRowStatement->prepare(m_compressingTableInfo->getDelectRowStatement())) {
         return false;
     }
     return true;
@@ -237,16 +368,27 @@ bool CompressHandleOperator::prepareCompressionStatements()
 
 void CompressHandleOperator::resetCompressionStatements()
 {
-    m_selectRowidStatement->reset();
-    m_selectValueStatement->reset();
-    m_updateValueStatement->reset();
+    if (m_selectRowidStatement->isPrepared()) {
+        m_selectRowidStatement->reset();
+    }
+    if (m_selectRowStatement->isPrepared()) {
+        m_selectRowStatement->reset();
+    }
+    if (m_deleteRowStatement->isPrepared()) {
+        m_deleteRowStatement->reset();
+    }
+    if (m_insertNewRowStatement->isPrepared()) {
+        m_insertNewRowStatement->reset();
+    }
 }
 
 void CompressHandleOperator::finalizeCompressionStatements()
 {
+    m_insertParameterCount = 0;
     m_selectRowidStatement->finalize();
-    m_selectValueStatement->finalize();
-    m_updateValueStatement->finalize();
+    m_selectRowStatement->finalize();
+    m_deleteRowStatement->finalize();
+    m_insertNewRowStatement->finalize();
 }
 
 bool CompressHandleOperator::updateCompressionRecord()

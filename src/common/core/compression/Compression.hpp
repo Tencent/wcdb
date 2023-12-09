@@ -68,11 +68,11 @@ protected:
     protected:
         virtual InnerHandle* getCurrentHandle() const = 0;
 
-        bool getTargetTableInfo(const CompressionTableInfo& info,
+        bool getTargetTableInfo(const UnsafeStringView& tableName,
                                 bool& exists,
-                                std::set<StringView>& columns);
-        bool tryAddCompressionColumn(const CompressionTableInfo& info,
-                                     std::set<StringView>& curColumns);
+                                std::list<StringView>& columns);
+        bool checkCompressingColumns(CompressionTableUserInfo& info,
+                                     std::list<StringView>& curColumns);
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);

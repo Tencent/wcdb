@@ -51,8 +51,17 @@ public:
     CompressionColumnInfo(const Column &column, const Column &matchColumn);
 
     const Column &getColumn() const;
+    void setColumnIndex(uint16_t index);
+    uint16_t getColumnIndex() const;
+
     const Column &getTypeColumn() const;
+    void setTypeColumnIndex(uint16_t index);
+    uint16_t getTypeColumnIndex() const;
+
     const Column &getMatchColumn() const;
+    void setMatchColumnIndex(uint16_t index);
+    uint16_t getMatchColumnIndex() const;
+
     CompressionType getCompressionType() const;
     DictId getDictId() const;
     DictId getMatchDictId(const Integer &matchValue) const;
@@ -62,10 +71,14 @@ public:
 
 private:
     Column m_column;
+    uint16_t m_columnIndex;
     Column m_typeColumn;
+    uint16_t m_typeColumnIndex;
+    Column m_matchColumn;
+    uint16_t m_matchColumnIndex;
+
     CompressionType m_compressionType;
     DictId m_commonDictID;
-    Column m_matchColumn;
     std::unordered_map<Integer, DictId> m_matchDicts;
 };
 
@@ -84,6 +97,7 @@ class CompressionTableUserInfo : public CompressionTableBaseInfo {
 public:
     CompressionTableUserInfo(const UnsafeStringView &table);
     void addCompressingColumn(const CompressionColumnInfo &info);
+    std::list<CompressionColumnInfo> &getColumnInfos();
 };
 
 class CompressionTableInfo : public CompressionTableBaseInfo {
@@ -93,7 +107,7 @@ public:
     CompressionTableInfo(const CompressionTableUserInfo &userInfo);
     void addCompressingColumn(const CompressionColumnInfo &info);
 
-    typedef const std::list<CompressionColumnInfo> ColumnInfoList;
+    typedef const std::list<const CompressionColumnInfo> ColumnInfoList;
     typedef const std::list<const CompressionColumnInfo *> ColumnInfoPtrList;
     ColumnInfoList &getColumnInfos() const;
 
@@ -113,6 +127,21 @@ public:
      LIMIT 100
      */
     StatementSelect getSelectUncompressRowIdStatement() const;
+
+    /*
+     SELECT * FROM compressingTable WHERE rowid = ?
+     */
+    StatementSelect getSelectRowStatement() const;
+
+    /*
+     DELECT FROM compressingTable WHERE rowid = ?
+     */
+    StatementDelete getDelectRowStatement() const;
+
+    /*
+     INSERT INTO compressingTable VALUES(?1, ?2, ...)
+     */
+    StatementInsert getInsertNewRowStatement(size_t valueCount) const;
 
     /*
      SELECT compressingColumnA, WCDB_CT_compressingColumnA,

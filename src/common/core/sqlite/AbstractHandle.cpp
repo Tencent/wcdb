@@ -798,8 +798,8 @@ void AbstractHandle::notifyError(Error::Code rc, const UnsafeStringView &sql, co
 void AbstractHandle::notifyError(int rc, const UnsafeStringView &sql, const UnsafeStringView &msg)
 {
     WCTAssert(Error::isError(rc));
-    if (Error::rc2c(rc) != Error::Code::Misuse
-        && sqlite3_errcode(m_handle) == rc && msg.empty()) {
+    Error::Code code = Error::rc2c(rc);
+    if (code != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc && msg.empty()) {
         m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error
@@ -808,7 +808,11 @@ void AbstractHandle::notifyError(int rc, const UnsafeStringView &sql, const Unsa
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
         m_error.level = Error::Level::Error;
-        if (m_transactionError != TransactionError::Allowed) {
+        if (code == Error::Code::Warning) {
+            m_error.level = Error::Level::Warning;
+        } else if (code == Error::Code::Notice) {
+            m_error.level = Error::Level::Notice;
+        } else if (m_transactionError != TransactionError::Allowed) {
             m_transactionError = TransactionError::Fatal;
         }
     } else {
