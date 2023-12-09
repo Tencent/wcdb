@@ -72,7 +72,7 @@ const Column &CompressionColumnInfo::getColumn() const
     return m_column;
 }
 
-void CompressionColumnInfo::setColumnIndex(uint16_t index)
+void CompressionColumnInfo::setColumnIndex(uint16_t index) const
 {
     m_columnIndex = index;
 }
@@ -88,7 +88,7 @@ const Column &CompressionColumnInfo::getTypeColumn() const
     return m_typeColumn;
 }
 
-void CompressionColumnInfo::setTypeColumnIndex(uint16_t index)
+void CompressionColumnInfo::setTypeColumnIndex(uint16_t index) const
 {
     m_typeColumnIndex = index;
 }
@@ -104,7 +104,7 @@ const Column &CompressionColumnInfo::getMatchColumn() const
     return m_matchColumn;
 }
 
-void CompressionColumnInfo::setMatchColumnIndex(uint16_t index)
+void CompressionColumnInfo::setMatchColumnIndex(uint16_t index) const
 {
     m_matchColumnIndex = index;
 }
@@ -183,21 +183,15 @@ void CompressionTableUserInfo::addCompressingColumn(const CompressionColumnInfo 
     m_compressingColumns.push_back(info);
 }
 
-std::list<CompressionColumnInfo> &CompressionTableUserInfo::getColumnInfos()
-{
-    return m_compressingColumns;
-}
-
 #pragma mark - CompressionTableInfo
 CompressionTableInfo::CompressionTableInfo(const CompressionTableUserInfo &userInfo)
-: CompressionTableBaseInfo(userInfo), m_minCompressedRowid(0)
+: CompressionTableBaseInfo(userInfo), m_minCompressedRowid(0), m_needCheckColumn(true)
 {
 }
 
 CompressionTableInfo::ColumnInfoList &CompressionTableInfo::getColumnInfos() const
 {
-    ColumnInfoList *constList = reinterpret_cast<ColumnInfoList *>(&m_compressingColumns);
-    return *constList;
+    return m_compressingColumns;
 }
 
 void CompressionTableInfo::setMinCompressedRowid(int64_t rowid) const
@@ -208,6 +202,16 @@ void CompressionTableInfo::setMinCompressedRowid(int64_t rowid) const
 int64_t CompressionTableInfo::getMinCompressedRowid() const
 {
     return m_minCompressedRowid;
+}
+
+bool CompressionTableInfo::needCheckColumns() const
+{
+    return m_needCheckColumn;
+}
+
+void CompressionTableInfo::setNeedCheckColumns(bool needCheck) const
+{
+    m_needCheckColumn = needCheck;
 }
 
 #pragma mark - Compress Statements
@@ -250,7 +254,7 @@ StatementSelect
 CompressionTableInfo::getSelectUncompressRowStatement(ColumnInfoPtrList *columnList) const
 {
     ResultColumns resultColumns;
-    ColumnInfoIter columnIter(&getColumnInfos(), columnList);
+    ColumnInfoIter columnIter(&m_compressingColumns, columnList);
     const CompressionColumnInfo *column = nullptr;
     while ((column = columnIter.nextInfo()) != nullptr) {
         resultColumns.push_back(column->getColumn());
@@ -370,7 +374,7 @@ HandleStatement *select, HandleStatement *update, int64_t rowid, ColumnInfoPtrLi
     return true;
 }
 
-CompressionTableInfo::ColumnInfoIter::ColumnInfoIter(ColumnInfoList *infoList,
+CompressionTableInfo::ColumnInfoIter::ColumnInfoIter(const ColumnInfoList *infoList,
                                                      ColumnInfoPtrList *infoPtrList)
 : m_infoList(infoList), m_infoPtrList(infoPtrList)
 {

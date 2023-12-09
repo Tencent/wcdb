@@ -67,12 +67,8 @@ protected:
 
     protected:
         virtual InnerHandle* getCurrentHandle() const = 0;
-
-        bool getTargetTableInfo(const UnsafeStringView& tableName,
-                                bool& exists,
-                                std::list<StringView>& columns);
-        bool checkCompressingColumns(CompressionTableUserInfo& info,
-                                     std::list<StringView>& curColumns);
+        Optional<bool> tableExist(const UnsafeStringView& table);
+        Optional<bool> checkCompressingColumns(const CompressionTableInfo& info);
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);
@@ -83,9 +79,13 @@ protected:
     Optional<const CompressionTableInfo*> getInfo(const UnsafeStringView& table);
     Optional<const CompressionTableInfo*>
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
+    bool checkCompressingColumn(InfoInitializer& initializer,
+                                const CompressionTableInfo* info);
+    void setTableInfoCommitted(bool committed);
 
 private:
     ThreadLocal<StringViewMap<const CompressionTableInfo*>> m_localFilted;
+    ThreadLocal<std::set<const CompressionTableInfo*>> m_commitingTables;
     std::set<const CompressionTableInfo*> m_compressings;
     StringViewMap<const CompressionTableInfo*> m_filted;
     StringViewSet m_hints;
@@ -104,6 +104,7 @@ public:
         Optional<const CompressionTableInfo*>
         tryGetCompressionInfo(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
+        void setTableInfoCommitted(bool committed);
 
     private:
         Compression& m_compression;

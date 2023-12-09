@@ -51,15 +51,15 @@ public:
     CompressionColumnInfo(const Column &column, const Column &matchColumn);
 
     const Column &getColumn() const;
-    void setColumnIndex(uint16_t index);
+    void setColumnIndex(uint16_t index) const;
     uint16_t getColumnIndex() const;
 
     const Column &getTypeColumn() const;
-    void setTypeColumnIndex(uint16_t index);
+    void setTypeColumnIndex(uint16_t index) const;
     uint16_t getTypeColumnIndex() const;
 
     const Column &getMatchColumn() const;
-    void setMatchColumnIndex(uint16_t index);
+    void setMatchColumnIndex(uint16_t index) const;
     uint16_t getMatchColumnIndex() const;
 
     CompressionType getCompressionType() const;
@@ -71,11 +71,11 @@ public:
 
 private:
     Column m_column;
-    uint16_t m_columnIndex;
+    mutable uint16_t m_columnIndex;
     Column m_typeColumn;
-    uint16_t m_typeColumnIndex;
+    mutable uint16_t m_typeColumnIndex;
     Column m_matchColumn;
-    uint16_t m_matchColumnIndex;
+    mutable uint16_t m_matchColumnIndex;
 
     CompressionType m_compressionType;
     DictId m_commonDictID;
@@ -97,7 +97,6 @@ class CompressionTableUserInfo : public CompressionTableBaseInfo {
 public:
     CompressionTableUserInfo(const UnsafeStringView &table);
     void addCompressingColumn(const CompressionColumnInfo &info);
-    std::list<CompressionColumnInfo> &getColumnInfos();
 };
 
 class CompressionTableInfo : public CompressionTableBaseInfo {
@@ -107,15 +106,19 @@ public:
     CompressionTableInfo(const CompressionTableUserInfo &userInfo);
     void addCompressingColumn(const CompressionColumnInfo &info);
 
-    typedef const std::list<const CompressionColumnInfo> ColumnInfoList;
+    typedef const std::list<CompressionColumnInfo> ColumnInfoList;
     typedef const std::list<const CompressionColumnInfo *> ColumnInfoPtrList;
     ColumnInfoList &getColumnInfos() const;
 
     void setMinCompressedRowid(int64_t rowid) const;
     int64_t getMinCompressedRowid() const;
 
+    bool needCheckColumns() const;
+    void setNeedCheckColumns(bool needCheck) const;
+
 private:
     mutable int64_t m_minCompressedRowid;
+    mutable bool m_needCheckColumn;
 
 #pragma mark - Compress Statements
 public:

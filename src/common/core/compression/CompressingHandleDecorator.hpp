@@ -41,6 +41,8 @@ public:
 
 #pragma mark - InfoInitializer
     InnerHandle *getCurrentHandle() const override final;
+    bool commitTransaction() override final;
+    void rollbackTransaction() override final;
 
 #pragma mark - Statement
 public:

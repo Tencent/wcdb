@@ -155,16 +155,6 @@ Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* 
     WCTAssert(info != nullptr);
     InnerHandle* handle = getHandle();
     WCTAssert(handle != nullptr);
-    auto exists = handle->tableExists(info->getTable());
-    if (!exists.succeed()) {
-        return NullOpt;
-    }
-    if (!exists.value()) {
-        handle->execute(StatementDelete()
-                        .deleteFrom(CompressionRecord::tableName)
-                        .where(Column(CompressionRecord::columnTable) == info->getTable()));
-        return true;
-    }
     if (m_compressingTableInfo != info) {
         finalizeCompressionStatements();
         m_compressedCount = 0;

@@ -25,6 +25,7 @@
 #include "Compression.hpp"
 #include "Assertion.hpp"
 #include "CompressionConst.hpp"
+#include "CompressionRecord.hpp"
 #include "InnerHandle.hpp"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
@@ -86,20 +87,15 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
         return true;
     }
 
-    bool targetTableExsits = false;
-    std::list<StringView> columns;
-    if (!initializer.getTargetTableInfo(userInfo.getTable(), targetTableExsits, columns)) {
-        return false;
-    }
-
-    if (targetTableExsits && !initializer.checkCompressingColumns(userInfo, columns)) {
+    auto tableExist = initializer.tableExist(userInfo.getTable());
+    if (tableExist.failed()) {
         return false;
     }
 
     LockGuard lockGuard(m_lock);
     if (m_filted.find(targetTable) == m_filted.end()) {
         m_compressed = false;
-        if (!targetTableExsits || columns.empty()) {
+        if (!tableExist.value()) {
             // it's not created
             m_hints.emplace(targetTable);
             m_tableAcquired = false;
@@ -166,55 +162,77 @@ Compression::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView&
     if (!info.succeed() && initInfo(initializer, table)) {
         info = getInfo(table);
     }
+    if (info.hasValue() && info.value() != nullptr
+        && !checkCompressingColumn(initializer, info.value())) {
+        return NullOpt;
+    }
     return info;
+}
+
+bool Compression::checkCompressingColumn(InfoInitializer& initializer,
+                                         const CompressionTableInfo* info)
+{
+    if (!info->needCheckColumns()) {
+        return true;
+    }
+    auto addColumn = initializer.checkCompressingColumns(*info);
+    if (addColumn.failed()) {
+        return false;
+    }
+    info->setNeedCheckColumns(false);
+    if (addColumn.value() && initializer.getCurrentHandle()->isInTransaction()) {
+        m_commitingTables.getOrCreate().insert(info);
+    }
+    return true;
+}
+
+void Compression::setTableInfoCommitted(bool committed)
+{
+    if (!committed) {
+        for (auto tableInfo : m_commitingTables.getOrCreate()) {
+            tableInfo->setNeedCheckColumns(true);
+        }
+    }
+    m_commitingTables.getOrCreate().clear();
 }
 
 #pragma mark - InfoInitializer
 Compression::InfoInitializer::~InfoInitializer() = default;
 
-bool Compression::InfoInitializer::getTargetTableInfo(const UnsafeStringView& tableName,
-                                                      bool& exists,
-                                                      std::list<StringView>& columns)
+Optional<bool> Compression::InfoInitializer::tableExist(const UnsafeStringView& table)
 {
     InnerHandle* handle = getCurrentHandle();
     WCTAssert(handle != nullptr);
-    auto optionalExists = handle->tableExists(Schema::main(), tableName);
-    if (!optionalExists.hasValue()) {
-        return false;
-    }
-    exists = optionalExists.value();
-    if (!exists) {
-        return true;
-    }
+    return handle->tableExists(Schema::main(), table);
+}
+
+Optional<bool>
+Compression::InfoInitializer::checkCompressingColumns(const CompressionTableInfo& info)
+{
+    auto& compressingColumns = info.getColumnInfos();
+    const StringView& tableName = info.getTable();
+    InnerHandle* handle = getCurrentHandle();
+    WCTAssert(handle != nullptr);
     auto optionalMetas = handle->getTableMeta(Schema::main(), tableName);
     if (!optionalMetas.succeed()) {
-        return false;
+        return NullOpt;
     }
     auto& metas = optionalMetas.value();
+    std::list<StringView> curColumns;
     for (const auto& meta : metas) {
-        columns.push_back(meta.name);
+        curColumns.push_back(meta.name);
     }
     auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
     if (!tableConfig.succeed()) {
-        return false;
+        return NullOpt;
     }
     if (tableConfig.value().withoutRowid) {
         StringView msg = StringView::formatted(
         "Does not support to compress data in the table without rowid: %s",
         tableName.data());
         handle->notifyError(Error::Code::Error, nullptr, msg);
-        return false;
+        return NullOpt;
     }
-    return true;
-}
-
-bool Compression::InfoInitializer::checkCompressingColumns(CompressionTableUserInfo& info,
-                                                           std::list<StringView>& curColumns)
-{
-    auto& compressingColumns = info.getColumnInfos();
-    const StringView& tableName = info.getTable();
-    InnerHandle* handle = getCurrentHandle();
-    WCTAssert(handle != nullptr);
     uint16_t newColumnIndex = (uint16_t) curColumns.size();
     for (auto& compressingColumn : compressingColumns) {
         uint16_t columnIndex = 0;
@@ -236,13 +254,16 @@ bool Compression::InfoInitializer::checkCompressingColumns(CompressionTableUserI
                 tableName,
                 ColumnDef(compressingColumn.getTypeColumn(), ColumnType::Integer)
                 .constraint(ColumnConstraint().default_(nullptr)))) {
-                return false;
+                return NullOpt;
             }
             compressingColumn.setTypeColumnIndex(newColumnIndex);
             newColumnIndex++;
         }
     }
-    return true;
+    if (newColumnIndex != curColumns.size()) {
+        return true;
+    }
+    return false;
 }
 
 Compression::Binder::Binder(Compression& compression)
@@ -255,6 +276,11 @@ Compression::Binder::~Binder() = default;
 bool Compression::Binder::hintThatTableWillBeCreated(const UnsafeStringView& table)
 {
     return m_compression.hintThatTableWillBeCreated(*this, table);
+}
+
+void Compression::Binder::setTableInfoCommitted(bool committed)
+{
+    m_compression.setTableInfoCommitted(committed);
 }
 
 Optional<const CompressionTableInfo*>
@@ -283,17 +309,6 @@ Optional<bool> Compression::step(Compression::Stepper& stepper)
     }
     if (worked.value()) {
         return step(stepper);
-    }
-    WCTAssert(worked.succeed());
-    WCTAssert(!worked.value());
-
-    {
-        SharedLockGuard lockGuard(m_lock);
-        WCTAssert(m_tableAcquired);
-        if (!m_compressings.empty()) {
-            // wait until all tables unreferenced
-            return false;
-        }
     }
     LockGuard lockGuard(m_lock);
     WCTAssert(m_tableAcquired);
@@ -360,11 +375,28 @@ Optional<bool> Compression::tryCompressRows(Compression::Stepper& stepper)
         info = *m_compressings.begin();
     }
     WCTAssert(info != nullptr);
+    InnerHandle* handle = stepper.getCurrentHandle();
+    auto exists = handle->tableExists(info->getTable());
+    if (!exists.succeed()) {
+        return NullOpt;
+    }
+    if (!exists.value()) {
+        handle->execute(CompressionRecord::getDeleteRecordStatement(info->getTable()));
+        markAsCompressed(info);
+        return true;
+    }
+    if (!checkCompressingColumn(stepper, info)) {
+        return NullOpt;
+    }
+
     auto compressed = stepper.compressRows(info);
+    if (compressed.failed()) {
+        return NullOpt;
+    }
     if (compressed.succeed() && compressed.value()) {
         markAsCompressed(info);
     }
-    return compressed;
+    return true;
 }
 
 #pragma mark - Event
