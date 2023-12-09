@@ -301,6 +301,11 @@ void Core::purgeShouldBeOperated()
     purgeDatabasePool();
 }
 
+void Core::stopAllDatabaseEvent(const UnsafeStringView& path)
+{
+    m_operationQueue->stopAllDatabaseEvent(path);
+}
+
 bool Core::isFileObservedCorrupted(const UnsafeStringView& path)
 {
     return m_operationQueue->isFileObservedCorrupted(path);

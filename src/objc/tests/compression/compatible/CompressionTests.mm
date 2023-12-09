@@ -298,6 +298,7 @@
 
 - (void)test_feature_auto_compress_will_stop_due_to_error
 {
+    [self.database enableAutoCheckpoint:NO];
     [self doTestCompress:^{
         TestCaseAssertTrue([self.database canOpen]);
 
@@ -317,16 +318,17 @@
         [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
 
         // wait until auto migrate stopped
-        while (numberOfFailures.value < WCDB::OperationQueueTolerableFailuresForMigration)
+        while (numberOfFailures.value < WCDB::OperationQueueTolerableFailuresForCompression)
             ;
 
         // wait to confirm migration is stopped.
-        [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTimeIntervalForMigration];
+        [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTolerableFailuresForCompression];
 
         TestCaseAssertTrue(numberOfFailures.value == WCDB::OperationQueueTolerableFailuresForCompression);
 
         [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     }];
+    [self.database enableAutoCheckpoint:YES];
 }
 
 - (void)test_feature_compress_newly_created_table_after_compressed

@@ -143,6 +143,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
             handle->suspend(true);
         }
     }
+    Core::shared().stopAllDatabaseEvent(getPath());
     drain(onClosed);
     --m_closing;
 }
