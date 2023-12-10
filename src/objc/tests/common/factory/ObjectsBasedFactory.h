@@ -29,6 +29,6 @@
 
 @property (nonatomic, readonly) NSString* tableName;
 
-@property (nonatomic, retain) NSData* cipher;
+@property (nonatomic, strong) NSString* category;
 
 @end

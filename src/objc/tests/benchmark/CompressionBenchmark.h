@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/12/10.
 //
 
 /*
@@ -22,32 +22,16 @@
  * limitations under the License.
  */
 
-#import "ObjectsBasedFactory.h"
-#import "TestCase.h"
+#import "ObjectsBasedBenchmark.h"
 
-@interface ObjectsBasedBenchmark : Benchmark
+typedef enum : NSUInteger {
+    CompressionMode_NoCompression = 0,
+    CompressionMode_NormalCompress,
+    CompressionMode_DictCompress,
+} CompressionMode;
 
-@property (nonatomic, retain) NSString* tableName;
+@interface CompressionBenchmark : ObjectsBasedBenchmark
 
-@property (nonatomic, readonly) ObjectsBasedFactory* factory;
-
-@property (nonatomic, assign) int testQuality;
-
-- (void)setUpDatabase;
-- (void)tearDownDatabase;
-
-- (void)doTestWrite;
-
-- (void)doTestRead;
-
-- (void)doTestBatchRead;
-
-- (void)doTestBatchWrite;
-
-- (void)doTestRandomRead;
-
-- (void)doTestRandomUpdate;
-
-- (void)doTestRandomDelete;
+@property (nonatomic, assign) CompressionMode mode;
 
 @end
