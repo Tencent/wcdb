@@ -85,9 +85,6 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
             return false;
         }
         if (!tableExist.value()) {
-            for (auto compressionTableInfo : allTableInfos) {
-                compressionTableInfo->setMinCompressedRowid(INT64_MAX);
-            }
             return true;
         }
     }
@@ -136,11 +133,11 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
             }
         }
         if (!columnMatched) {
-            (*iter)->setMinCompressedRowid(INT64_MAX);
             iter++;
             continue;
         }
         if (recordIter->second.second <= 0) {
+            (*iter)->setMinCompressedRowid(0);
             iter = allTableInfos.erase(iter);
         } else {
             (*iter)->setMinCompressedRowid(recordIter->second.second);
