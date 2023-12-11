@@ -230,7 +230,7 @@ Compression::InfoInitializer::checkCompressingColumns(const CompressionTableInfo
         StringView msg = StringView::formatted(
         "Does not support to compress data in the table without rowid: %s",
         tableName.data());
-        handle->notifyError(Error::Code::Error, nullptr, msg);
+        handle->notifyError(Error::Code::Misuse, nullptr, msg);
         return NullOpt;
     }
     uint16_t newColumnIndex = (uint16_t) curColumns.size();

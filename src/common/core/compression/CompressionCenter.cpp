@@ -66,7 +66,7 @@ bool CompressionCenter::registerDict(DictId dictId, const UnsafeData& data)
         return false;
     }
     if (dictId != dict->getDictId()) {
-        Error error(Error::Code::Error, Error::Level::Error, "DictId mismatch!");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "DictId mismatch!");
         error.infos.insert_or_assign("GivenDictId", dictId);
         error.infos.insert_or_assign("ActualDictId", dict->getDictId());
         Notifier::shared().notify(error);
@@ -75,7 +75,7 @@ bool CompressionCenter::registerDict(DictId dictId, const UnsafeData& data)
         return false;
     }
     if (dict->getDictId() >= MaxDictId || dict->getDictId() == 0) {
-        Error error(Error::Code::Error, Error::Level::Error, "DictId must be an integer between 1 and 999!");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "DictId must be an integer between 1 and 999!");
         error.infos.insert_or_assign("CurrendDictId", dict->getDictId());
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -83,7 +83,7 @@ bool CompressionCenter::registerDict(DictId dictId, const UnsafeData& data)
         return false;
     }
     if (m_dicts[dict->getDictId()] != nullptr) {
-        Error error(Error::Code::Error, Error::Level::Error, "Duplicate dictid!");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "Duplicate dictid!");
         error.infos.insert_or_assign("DictId", dict->getDictId());
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -97,7 +97,7 @@ bool CompressionCenter::registerDict(DictId dictId, const UnsafeData& data)
 Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator dataEnummerator)
 {
     if (dictId == 0 || dictId >= MaxDictId) {
-        Error error(Error::Code::Error, Error::Level::Error, "DictId must be an integer between 1 and 999");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "DictId must be an integer between 1 and 999");
         error.infos.insert_or_assign("CurrendDictId", dictId);
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -138,7 +138,7 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
                                      dataSizes.data(),
                                      (unsigned int) dataSizes.size());
     if (ZSTD_isError(dictSize)) {
-        Error error(Error::Code::Error, Error::Level::Error, "Train dict failed");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "Train dict failed");
         error.infos.insert_or_assign("ZSTDErrorCode", dictSize);
         error.infos.insert_or_assign("ZSTDErrorName", ZSTD_getErrorName(dictSize));
         Notifier::shared().notify(error);
@@ -155,7 +155,7 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
                                         (unsigned int) dataSizes.size(),
                                         { ZSTD_CLEVEL_DEFAULT, 0, dictId });
     if (ZSTD_isError(dictSize)) {
-        Error error(Error::Code::Error, Error::Level::Error, "Finalize dict failed");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "Finalize dict failed");
         error.infos.insert_or_assign("ZSTDErrorCode", dictSize);
         error.infos.insert_or_assign("ZSTDErrorName", ZSTD_getErrorName(dictSize));
         Notifier::shared().notify(error);
@@ -175,7 +175,7 @@ CompressionCenter::compressContent(const UnsafeData& data, DictId dictId, InnerH
     int64_t boundSize = ZSTD_compressBound(data.size());
     if (ZSTD_isError(boundSize)) {
         errorReportHandle->notifyError(
-        Error::Code::Error,
+        Error::Code::ZstdError,
         nullptr,
         StringView::formatted("Compress bound fail: %s", ZSTD_getErrorName(boundSize)));
         return NullOpt;
@@ -192,7 +192,7 @@ CompressionCenter::compressContent(const UnsafeData& data, DictId dictId, InnerH
         ZSTDDict* dict = getDict(dictId);
         if (dict == nullptr) {
             errorReportHandle->notifyError(
-            Error::Code::Error,
+            Error::Code::ZstdError,
             nullptr,
             StringView::formatted("Can not find compress dict with id: %d", dictId));
             return NullOpt;
@@ -212,7 +212,7 @@ CompressionCenter::compressContent(const UnsafeData& data, DictId dictId, InnerH
     }
     if (ZSTD_isError(compressSize)) {
         errorReportHandle->notifyError(
-        Error::Code::Error,
+        Error::Code::ZstdError,
         nullptr,
         StringView::formatted("Compress fail: %s", ZSTD_getErrorName(boundSize)));
         return NullOpt;
@@ -230,7 +230,7 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
 {
     int64_t frameSize = ZSTD_getFrameContentSize(data.buffer(), data.size());
     if (ZSTD_isError(frameSize)) {
-        resultAPI.setErrorResult(Error::Code::Error,
+        resultAPI.setErrorResult(Error::Code::ZstdError,
                                  StringView::formatted("Get compress content frame size fail: %s",
                                                        ZSTD_getErrorName(frameSize)));
         return;
@@ -245,13 +245,13 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
     if (usingDict) {
         DictId dictId = ZSTD_getDictID_fromFrame(data.buffer(), data.size());
         if (dictId == 0) {
-            resultAPI.setErrorResult(Error::Code::Error, "Can not decode dictid");
+            resultAPI.setErrorResult(Error::Code::ZstdError, "Can not decode dictid");
             return;
         }
         ZSTDDict* dict = getDict(dictId);
         if (dict == nullptr) {
             resultAPI.setErrorResult(
-            Error::Code::Error,
+            Error::Code::ZstdError,
             StringView::formatted("Can not find decompress dict with id: %d", dictId));
             return;
         }
@@ -271,7 +271,7 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
 
     if (ZSTD_isError(decompressSize)) {
         resultAPI.setErrorResult(
-        Error::Code::Error,
+        Error::Code::ZstdError,
         StringView::formatted("Decompress fail: %s", ZSTD_getErrorName(decompressSize)));
         return;
     }

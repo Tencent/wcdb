@@ -156,13 +156,13 @@ MigratingStatementDecorator::process(const Statement& originStatement)
                 Syntax::BindParameter& bindParameter = (Syntax::BindParameter&) identifier;
                 if (bindParameter.switcher != Syntax::BindParameter::Switch::QuestionSign) {
                     getHandle()->notifyError(
-                    Error::Code::Error,
+                    Error::Code::Misuse,
                     originStatement.getDescription(),
                     "Only numeric bind parameters are allowed to used in the migrating database");
                     succeed = false;
                 } else if (bindParameter.n <= 0) {
                     getHandle()->notifyError(
-                    (int) Error::Code::Error,
+                    (int) Error::Code::Misuse,
                     originStatement.getDescription().data(),
                     "The indexes of bind parameters must be assigned in the migrating database");
                     succeed = false;

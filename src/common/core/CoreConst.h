@@ -191,6 +191,7 @@ WCDBLiteralStringDefine(ErrorSourceSystem, "System");
 WCDBLiteralStringDefine(ErrorSourceAssertion, "Assertion");
 WCDBLiteralStringDefine(ErrorSourceNative, "Native");
 WCDBLiteralStringDefine(ErrorSourceSwift, "Swift");
+WCDBLiteralStringDefine(ErrorSourceZstd, "Zstd");
 
 #pragma mark - Error - Type
 WCDBLiteralStringDefine(ErrorTypeMigrate, "Migrate");

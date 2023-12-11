@@ -78,6 +78,7 @@ WCDBLiteralStringImplement(ErrorSourceSystem);
 WCDBLiteralStringImplement(ErrorSourceAssertion);
 WCDBLiteralStringImplement(ErrorSourceNative);
 WCDBLiteralStringImplement(ErrorSourceSwift);
+WCDBLiteralStringImplement(ErrorSourceZstd);
 
 WCDBLiteralStringImplement(ErrorTypeMigrate);
 WCDBLiteralStringImplement(ErrorTypeCompress);

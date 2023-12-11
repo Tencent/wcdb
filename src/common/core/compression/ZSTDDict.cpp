@@ -72,14 +72,14 @@ bool ZSTDDict::loadData(const UnsafeData& data)
 {
     WCTAssert(m_dictId == 0 && m_cDict == nullptr && m_dDict == nullptr);
     if (data.empty()) {
-        Error error(Error::Code::Error, Error::Level::Error, "Empty dict!");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "Empty dict!");
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
     }
     m_cDict = (ZCDict*) ZSTD_createCDict(data.buffer(), data.size(), ZSTD_CLEVEL_DEFAULT);
     if (m_cDict == nullptr) {
-        Error error(Error::Code::Error, Error::Level::Error, "Create compress dict failed!");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "Create compress dict failed!");
         error.infos.insert_or_assign("DictSize", data.size());
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
@@ -87,13 +87,20 @@ bool ZSTDDict::loadData(const UnsafeData& data)
     }
     m_dDict = (ZDDcit*) ZSTD_createDDict(data.buffer(), data.size());
     if (m_dDict == nullptr) {
-        Error error(Error::Code::Error, Error::Level::Error, "Create decompress dict failed!");
+        Error error(Error::Code::ZstdError, Error::Level::Error, "Create decompress dict failed!");
         error.infos.insert_or_assign("DictSize", data.size());
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
     }
     m_dictId = ZSTD_getDictID_fromCDict((ZSTD_CDict*) m_cDict);
+    if(m_dictId == 0){
+        Error error(Error::Code::ZstdError, Error::Level::Error, "The dictionary is not conformant to ZSTD specification");
+        error.infos.insert_or_assign("DictSize", data.size());
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
+        return false;
+    }
     return true;
 }
 

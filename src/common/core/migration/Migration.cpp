@@ -302,7 +302,7 @@ Migration::InfoInitializer::checkSourceTableExistsAndHasRowid(const MigrationUse
         StringView msg = StringView::formatted(
         "Does not support migrating data from the table without rowid: %s",
         tableName.data());
-        handle->notifyError(Error::Code::Error, nullptr, msg);
+        handle->notifyError(Error::Code::Misuse, nullptr, msg);
         return NullOpt;
     }
     return optionalExists;
@@ -344,7 +344,7 @@ bool Migration::InfoInitializer::getTargetTableInfo(const MigrationUserInfo& use
         StringView msg = StringView::formatted(
         "Does not support migrating data to the table without rowid: %s",
         tableName.data());
-        handle->notifyError(Error::Code::Error, nullptr, msg);
+        handle->notifyError(Error::Code::Misuse, nullptr, msg);
         return false;
     }
     autoincrement = tableConfig.value().autoincrement;
