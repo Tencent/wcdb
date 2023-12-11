@@ -116,17 +116,20 @@ public:
 class MigrationInfo final : public MigrationBaseInfo {
 public:
     MigrationInfo(const MigrationUserInfo& userInfo,
-                  const std::set<StringView>& columns,
+                  const StringViewSet& columns,
                   bool autoincrement,
                   const UnsafeStringView& integerPrimaryKey);
     ~MigrationInfo() override final;
 
     bool isAutoIncrement() const;
     const StringView& getIntegerPrimaryKey() const;
+    bool needUpdateSequance() const;
+    void setNeedUpdateSequence(bool needUpdate) const;
 
 protected:
     bool m_autoincrement;
     StringView m_integerPrimaryKey;
+    mutable bool m_needUpdateSequence;
 
 #pragma mark - Schema
 public:

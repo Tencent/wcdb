@@ -191,6 +191,7 @@
 
 - (void)test_feature_auto_migrate_will_stop_due_to_error
 {
+    [self.database enableAutoCheckpoint:NO];
     [self doTestTableAndDatabaseMigrate:^{
         TestCaseAssertTrue([self.database canOpen]);
 
@@ -220,6 +221,7 @@
 
         [WCTDatabase simulateIOError:WCTSimulateNoneIOError];
     }];
+    [self.database enableAutoCheckpoint:YES];
 }
 
 - (void)test_feature_migrate_newly_created_table_after_migrated

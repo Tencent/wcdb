@@ -3178,6 +3178,9 @@
 		758D9D0728BA7F06001B3D2D /* CPPColumnConstraintMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 758D9D0528BA7F06001B3D2D /* CPPColumnConstraintMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758D9D0928BA819A001B3D2D /* CPPVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 758D9D0828BA819A001B3D2D /* CPPVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758D9D0A28BA819A001B3D2D /* CPPVirtualTableMacro.h in Headers */ = {isa = PBXBuildFile; fileRef = 758D9D0828BA819A001B3D2D /* CPPVirtualTableMacro.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758DC8022B255EBF00E71D9B /* CompressionBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758DC8012B255EBF00E71D9B /* CompressionBenchmark.mm */; };
+		758DC8052B25671E00E71D9B /* NormalCompressionBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758DC8042B25671E00E71D9B /* NormalCompressionBenchmark.mm */; };
+		758DC8072B25678800E71D9B /* DictCompressionBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758DC8062B25678800E71D9B /* DictCompressionBenchmark.mm */; };
 		758E7EB82B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
 		758E7EB92B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
 		758E7EBA2B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */; };
@@ -3192,8 +3195,8 @@
 		758E7EC82B1B41C500319991 /* WCTCompressionInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC62B1B41C500319991 /* WCTCompressionInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758E7ECA2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */; };
 		758E7ECB2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7EC92B1B423200319991 /* WCTCompressionInfo+Private.h */; };
-		758E7ECD2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; };
-		758E7ECE2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; };
+		758E7ECD2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		758E7ECE2B1B49E300319991 /* WCTDatabase+Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 758E7ECC2B1B49E300319991 /* WCTDatabase+Compression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		758E7ED02B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */; };
 		758E7ED12B1B49EF00319991 /* WCTDatabase+Compression.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7ECF2B1B49EF00319991 /* WCTDatabase+Compression.mm */; };
 		758E7F312B1C82F400319991 /* CompressionTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F2F2B1C82EC00319991 /* CompressionTestObject.mm */; };
@@ -4901,6 +4904,10 @@
 		758D9D0228BA7265001B3D2D /* CPPTableConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPTableConstraintMacro.h; sourceTree = "<group>"; };
 		758D9D0528BA7F06001B3D2D /* CPPColumnConstraintMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPColumnConstraintMacro.h; sourceTree = "<group>"; };
 		758D9D0828BA819A001B3D2D /* CPPVirtualTableMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPVirtualTableMacro.h; sourceTree = "<group>"; };
+		758DC8012B255EBF00E71D9B /* CompressionBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressionBenchmark.mm; sourceTree = "<group>"; };
+		758DC8032B255EF900E71D9B /* CompressionBenchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompressionBenchmark.h; sourceTree = "<group>"; };
+		758DC8042B25671E00E71D9B /* NormalCompressionBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NormalCompressionBenchmark.mm; sourceTree = "<group>"; };
+		758DC8062B25678800E71D9B /* DictCompressionBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DictCompressionBenchmark.mm; sourceTree = "<group>"; };
 		758E7EB62B1B24AD00319991 /* AutoCompressConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoCompressConfig.cpp; sourceTree = "<group>"; };
 		758E7EB72B1B24AD00319991 /* AutoCompressConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoCompressConfig.hpp; sourceTree = "<group>"; };
 		758E7EC12B1B41AA00319991 /* WCTCompressionInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WCTCompressionInfo.mm; sourceTree = "<group>"; };
@@ -6389,6 +6396,10 @@
 				39327BB022CF2C5400AABD4B /* MigrationBenchmark.mm */,
 				39327BB122CF2C5400AABD4B /* TableMigrationBenchmark.mm */,
 				39327BB222CF2C5400AABD4B /* DatabaseMigrationBenchmark.mm */,
+				758DC8032B255EF900E71D9B /* CompressionBenchmark.h */,
+				758DC8012B255EBF00E71D9B /* CompressionBenchmark.mm */,
+				758DC8042B25671E00E71D9B /* NormalCompressionBenchmark.mm */,
+				758DC8062B25678800E71D9B /* DictCompressionBenchmark.mm */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -10248,6 +10259,7 @@
 				03BF4B442888FA5E00A30500 /* ObjectsBasedFactory.mm in Sources */,
 				03BF4B482888FA6B00A30500 /* TestCaseObject.mm in Sources */,
 				03BF4B262888F90400A30500 /* BaselineWriteBenchmark.swift in Sources */,
+				758DC8022B255EBF00E71D9B /* CompressionBenchmark.mm in Sources */,
 				03BF4B372888F98600A30500 /* CipherBenchmark.mm in Sources */,
 				03BF4B2D2888F91B00A30500 /* BaseMultithreadBenchmark.swift in Sources */,
 				03BF4B4B2888FA7500A30500 /* Random+WCDB.mm in Sources */,
@@ -10277,9 +10289,11 @@
 				03BF4B312888F95300A30500 /* Assert.swift in Sources */,
 				03BF4B3B2888F99500A30500 /* TableMigrationBenchmark.mm in Sources */,
 				03BF4B512888FA8600A30500 /* TestCaseResult.mm in Sources */,
+				758DC8072B25678800E71D9B /* DictCompressionBenchmark.mm in Sources */,
 				03BF4B282888F90A00A30500 /* BaselineReadBenchmark.swift in Sources */,
 				03BF4B2E2888F91F00A30500 /* MultithreadReadWriteBenchmark.swift in Sources */,
 				03BF4B3C2888F99800A30500 /* DatabaseMigrationBenchmark.mm in Sources */,
+				758DC8052B25671E00E71D9B /* NormalCompressionBenchmark.mm in Sources */,
 				03BF4B452888FA6100A30500 /* SizeBasedFactory.mm in Sources */,
 				03BF4B502888FA8300A30500 /* TestCaseLog.mm in Sources */,
 				03BF4B4C2888FA7A00A30500 /* Dispatch.mm in Sources */,

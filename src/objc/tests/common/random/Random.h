@@ -24,11 +24,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSUInteger {
+    RandomStringType_Default = 0,
+    RandomStringType_English,
+    RandomStringType_Chinese,
+} RandomStringType;
+
 @interface Random : NSObject
 
 + (instancetype)shared;
 
 - (void)setStable:(BOOL)stable;
+- (void)setStringType:(RandomStringType)type;
 
 - (void)reset;
 

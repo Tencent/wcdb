@@ -45,7 +45,7 @@ typedef void (^WCTCompressdNotificationBlock)(WCTDatabase* _Nonnull database, WC
 
 WCDB_API @interface WCTDatabase(Compression)
 
-+ (BOOL)registerZSTDDict:(NSData*)dict;
++ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId;
 
 + (NSData*)trainDictWithStrings:(NSArray<NSString*>*)strings andDictId:(WCTDictId)dictId;
 

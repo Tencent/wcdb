@@ -37,12 +37,14 @@ public:
     ~CompressHandleOperator() override final;
 
 #pragma mark - Stepper
-    Optional<std::set<StringView>> getAllTables() override final;
+    Optional<StringViewSet> getAllTables() override final;
     bool filterComplessingTables(std::set<const CompressionTableInfo*>& allTableInfos) override final;
     Optional<bool> compressRows(const CompressionTableInfo* info) override final;
-    bool compressRow(int64_t rowid);
 
 private:
+    Optional<bool> doCompressRows(const OneColumnValue& rowids);
+    bool compressRow(OneRowValue& row);
+
     bool prepareCompressionStatements();
     void resetCompressionStatements();
     void finalizeCompressionStatements();
@@ -50,9 +52,11 @@ private:
     bool m_compressionRecordTableCreated;
     int m_compressedCount;
     const CompressionTableInfo* m_compressingTableInfo;
+    size_t m_insertParameterCount;
     HandleStatement* m_selectRowidStatement;
-    HandleStatement* m_selectValueStatement;
-    HandleStatement* m_updateValueStatement;
+    HandleStatement* m_selectRowStatement;
+    HandleStatement* m_deleteRowStatement;
+    HandleStatement* m_insertNewRowStatement;
     HandleStatement* m_updateRecordStatement;
 
 #pragma mark - Info Initializer

@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/12/10.
 //
 
 /*
@@ -22,32 +22,54 @@
  * limitations under the License.
  */
 
-#import "ObjectsBasedFactory.h"
-#import "TestCase.h"
+#import "CompressionBenchmark.h"
+#import <Foundation/Foundation.h>
 
-@interface ObjectsBasedBenchmark : Benchmark
+@interface NormalCompressionBenchmark : CompressionBenchmark
 
-@property (nonatomic, retain) NSString* tableName;
+@end
 
-@property (nonatomic, readonly) ObjectsBasedFactory* factory;
+@implementation NormalCompressionBenchmark
 
-@property (nonatomic, assign) int testQuality;
+- (void)setUp
+{
+    self.mode = CompressionMode_NormalCompress;
+    [super setUp];
+}
 
-- (void)setUpDatabase;
-- (void)tearDownDatabase;
+- (void)test_read
+{
+    [self doTestRead];
+}
 
-- (void)doTestWrite;
+- (void)test_batch_read
+{
+    [self doTestBatchRead];
+}
 
-- (void)doTestRead;
+- (void)test_write
+{
+    [self doTestWrite];
+}
 
-- (void)doTestBatchRead;
+- (void)test_batch_write
+{
+    [self doTestBatchWrite];
+}
 
-- (void)doTestBatchWrite;
+- (void)test_random_read
+{
+    [self doTestRandomRead];
+}
 
-- (void)doTestRandomRead;
+- (void)test_random_update
+{
+    [self doTestRandomUpdate];
+}
 
-- (void)doTestRandomUpdate;
-
-- (void)doTestRandomDelete;
+- (void)test_random_delete
+{
+    [self doTestRandomDelete];
+}
 
 @end

@@ -73,6 +73,8 @@ public:
     OperationQueue(const UnsafeStringView& name, OperationEvent* event);
     ~OperationQueue() override final;
 
+    void stopAllDatabaseEvent(const UnsafeStringView& path);
+
 protected:
     void main() override final;
     void handleError(const Error& error);

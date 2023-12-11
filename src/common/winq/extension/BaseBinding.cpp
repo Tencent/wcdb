@@ -235,7 +235,7 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
             if (!optionalColumnNames.succeed()) {
                 return false;
             }
-            std::set<StringView> &columnNames = optionalColumnNames.value();
+            StringViewSet &columnNames = optionalColumnNames.value();
             //Check whether the column names exists
             const auto &columnDefs = getColumnDefs();
             for (const auto &columnDef : columnDefs) {
@@ -354,7 +354,7 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
     if (!optionalColumnNames.succeed()) {
         return false;
     }
-    std::set<StringView> &columnNames = optionalColumnNames.value();
+    StringViewSet &columnNames = optionalColumnNames.value();
 
     const auto &columnDefs = getColumnDefs();
     int matchCount = 0;

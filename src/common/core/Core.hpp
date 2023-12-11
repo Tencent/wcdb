@@ -107,6 +107,7 @@ protected:
 
 #pragma mark - Operation
 public:
+    void stopAllDatabaseEvent(const UnsafeStringView& path);
     typedef std::function<void(InnerDatabase*)> CorruptedNotification;
     bool isFileObservedCorrupted(const UnsafeStringView& path);
     void setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,

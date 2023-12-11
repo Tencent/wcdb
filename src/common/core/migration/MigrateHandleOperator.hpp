@@ -49,7 +49,7 @@ private:
 
 #pragma mark - Stepper
 protected:
-    Optional<std::set<StringView>> getAllTables() override final;
+    Optional<StringViewSet> getAllTables() override final;
     bool dropSourceTable(const MigrationInfo* info) override final;
     Optional<bool> migrateRows(const MigrationInfo* info) override final;
     Optional<bool> migrateRow();

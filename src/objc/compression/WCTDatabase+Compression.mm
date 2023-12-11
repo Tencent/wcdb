@@ -32,9 +32,9 @@
 
 @implementation WCTDatabase (Compression)
 
-+ (BOOL)registerZSTDDict:(NSData*)dict
++ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId
 {
-    return WCDB::CompressionCenter::shared().registerDict(dict);
+    return WCDB::CompressionCenter::shared().registerDict(dictId, dict);
 }
 
 + (NSData*)trainDictWithStrings:(NSArray<NSString*>*)strings andDictId:(WCTDictId)dictId

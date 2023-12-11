@@ -51,8 +51,17 @@ public:
     CompressionColumnInfo(const Column &column, const Column &matchColumn);
 
     const Column &getColumn() const;
+    void setColumnIndex(uint16_t index) const;
+    uint16_t getColumnIndex() const;
+
     const Column &getTypeColumn() const;
+    void setTypeColumnIndex(uint16_t index) const;
+    uint16_t getTypeColumnIndex() const;
+
     const Column &getMatchColumn() const;
+    void setMatchColumnIndex(uint16_t index) const;
+    uint16_t getMatchColumnIndex() const;
+
     CompressionType getCompressionType() const;
     DictId getDictId() const;
     DictId getMatchDictId(const Integer &matchValue) const;
@@ -62,10 +71,14 @@ public:
 
 private:
     Column m_column;
+    mutable uint16_t m_columnIndex;
     Column m_typeColumn;
+    mutable uint16_t m_typeColumnIndex;
+    Column m_matchColumn;
+    mutable uint16_t m_matchColumnIndex;
+
     CompressionType m_compressionType;
     DictId m_commonDictID;
-    Column m_matchColumn;
     std::unordered_map<Integer, DictId> m_matchDicts;
 };
 
@@ -100,8 +113,12 @@ public:
     void setMinCompressedRowid(int64_t rowid) const;
     int64_t getMinCompressedRowid() const;
 
+    bool needCheckColumns() const;
+    void setNeedCheckColumns(bool needCheck) const;
+
 private:
     mutable int64_t m_minCompressedRowid;
+    mutable bool m_needCheckColumn;
 
 #pragma mark - Compress Statements
 public:
@@ -113,6 +130,21 @@ public:
      LIMIT 100
      */
     StatementSelect getSelectUncompressRowIdStatement() const;
+
+    /*
+     SELECT * FROM compressingTable WHERE rowid = ?
+     */
+    StatementSelect getSelectRowStatement() const;
+
+    /*
+     DELECT FROM compressingTable WHERE rowid = ?
+     */
+    StatementDelete getDelectRowStatement() const;
+
+    /*
+     INSERT INTO compressingTable VALUES(?1, ?2, ...)
+     */
+    StatementInsert getInsertNewRowStatement(size_t valueCount) const;
 
     /*
      SELECT compressingColumnA, WCDB_CT_compressingColumnA,

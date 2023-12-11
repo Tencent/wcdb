@@ -40,7 +40,7 @@ public:
     void decorate(Decorative *handle) override final;
 
 #pragma mark - Meta
-    Optional<std::set<StringView>>
+    Optional<StringViewSet>
     getColumns(const Schema &schema, const UnsafeStringView &table) override final;
     bool addColumn(const Schema &schema,
                    const UnsafeStringView &table,

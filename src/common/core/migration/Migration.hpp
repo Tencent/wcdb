@@ -27,6 +27,7 @@
 #include "Lock.hpp"
 #include "MigrationInfo.hpp"
 #include "Recyclable.hpp"
+#include "ThreadLocal.hpp"
 #include "WCDBOptional.hpp"
 #include <functional>
 #include <map>
@@ -63,7 +64,7 @@ public:
 
     void purge();
 
-    std::set<StringView> getPathsOfSourceDatabases() const;
+    StringViewSet getPathsOfSourceDatabases() const;
 
 protected:
     class InfoInitializer {
@@ -80,11 +81,10 @@ protected:
         Optional<bool> checkSourceTableExistsAndHasRowid(const MigrationUserInfo& userInfo);
         bool getTargetTableInfo(const MigrationUserInfo& userInfo,
                                 bool& exists,
-                                std::set<StringView>& columns,
+                                StringViewSet& columns,
                                 bool& autoincrement,
                                 StringView& integerPrimaryKey);
-        bool tryUpdateSequence(const MigrationUserInfo& userInfo,
-                               const UnsafeStringView& primaryKey);
+        Optional<bool> tryUpdateSequence(const MigrationInfo& info);
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);
@@ -125,6 +125,14 @@ private:
 
     StringViewMap<std::shared_ptr<MigrationDatabaseInfo>> m_migrationInfo;
 
+#pragma mark - Update sequence
+public:
+    bool tryUpdateSequence(InfoInitializer& initializer, const MigrationInfo& info);
+    void setTableInfoCommitted(bool committed);
+
+protected:
+    ThreadLocal<std::set<const MigrationInfo*>> m_commitingInfos;
+
 #pragma mark - Bind
 public:
     class Binder : public InfoInitializer {
@@ -144,6 +152,8 @@ public:
         const MigrationInfo* getBoundInfo(const UnsafeStringView& table);
 
         virtual bool bindInfos(const StringViewMap<const MigrationInfo*>& infos) = 0;
+
+        void setTableInfoCommitted(bool committed);
 
     private:
         Migration& m_migration;
@@ -169,7 +179,7 @@ public:
         virtual ~Stepper() override = 0;
 
     protected:
-        virtual Optional<std::set<StringView>> getAllTables() = 0;
+        virtual Optional<StringViewSet> getAllTables() = 0;
         virtual bool dropSourceTable(const MigrationInfo* info) = 0;
         virtual Optional<bool> migrateRows(const MigrationInfo* info) = 0;
     };

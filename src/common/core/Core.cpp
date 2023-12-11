@@ -286,7 +286,7 @@ void Core::integrityShouldBeChecked(const UnsafeStringView& path)
     if (database != nullptr) {
         database->checkIntegrity(true);
 
-        std::set<StringView> sourcePaths = database->getPathsOfSourceDatabases();
+        StringViewSet sourcePaths = database->getPathsOfSourceDatabases();
         for (const UnsafeStringView& sourcePath : sourcePaths) {
             RecyclableDatabase sourceDatabase = m_databasePool.getOrCreate(sourcePath);
             if (sourceDatabase != nullptr) {
@@ -299,6 +299,11 @@ void Core::integrityShouldBeChecked(const UnsafeStringView& path)
 void Core::purgeShouldBeOperated()
 {
     purgeDatabasePool();
+}
+
+void Core::stopAllDatabaseEvent(const UnsafeStringView& path)
+{
+    m_operationQueue->stopAllDatabaseEvent(path);
 }
 
 bool Core::isFileObservedCorrupted(const UnsafeStringView& path)

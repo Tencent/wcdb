@@ -143,6 +143,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
             handle->suspend(true);
         }
     }
+    Core::shared().stopAllDatabaseEvent(getPath());
     drain(onClosed);
     --m_closing;
 }
@@ -997,7 +998,7 @@ bool InnerDatabase::isMigrated() const
     return m_migration.isMigrated();
 }
 
-std::set<StringView> InnerDatabase::getPathsOfSourceDatabases() const
+StringViewSet InnerDatabase::getPathsOfSourceDatabases() const
 {
     return m_migration.getPathsOfSourceDatabases();
 }

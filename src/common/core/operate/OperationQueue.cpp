@@ -65,6 +65,28 @@ OperationQueue::~OperationQueue()
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
+void OperationQueue::stopAllDatabaseEvent(const UnsafeStringView& path)
+{
+    LockGuard lockGuard(m_lock);
+    Operation integerity(Operation::Type::Integrity, path);
+    m_timedQueue.remove(integerity);
+
+    Operation checkpoint(Operation::Type::Checkpoint, path);
+    m_timedQueue.remove(checkpoint);
+
+    Operation backup(Operation::Type::Backup, path);
+    m_timedQueue.remove(backup);
+
+    Operation migrate(Operation::Type::Migrate, path);
+    m_timedQueue.remove(migrate);
+
+    Operation compress(Operation::Type::Compress, path);
+    m_timedQueue.remove(compress);
+
+    Operation mergeIndex(Operation::Type::MergeIndex, path);
+    m_timedQueue.remove(mergeIndex);
+}
+
 void OperationQueue::main()
 {
     m_timedQueue.loop(std::bind(

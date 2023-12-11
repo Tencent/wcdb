@@ -43,6 +43,7 @@
     std::shared_ptr<std::uniform_int_distribution<unsigned char>> _uniformUChar;
     std::shared_ptr<std::uniform_int_distribution<int>> _uniformLength;
     BOOL _stable;
+    RandomStringType _stringType;
 }
 
 + (instancetype)shared
@@ -55,6 +56,13 @@
 {
     @synchronized(self) {
         _stable = stable;
+    }
+}
+
+- (void)setStringType:(RandomStringType)type
+{
+    @synchronized(self) {
+        _stringType = type;
     }
 }
 
@@ -305,7 +313,14 @@
 
 - (NSString *)string
 {
-    return [self stringWithLength:self.length];
+    switch (_stringType) {
+    case RandomStringType_Default:
+        return [self stringWithLength:self.length];
+    case RandomStringType_English:
+        return [self englishStringWithLength:self.length];
+    case RandomStringType_Chinese:
+        return [self chineseStringWithLength:self.length];
+    }
 }
 
 - (NSString *)stringWithLength:(UInt32)length

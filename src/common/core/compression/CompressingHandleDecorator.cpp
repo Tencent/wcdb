@@ -38,6 +38,8 @@ void CompressingHandleDecorator::decorate(Decorative* handle)
 {
     Super::decorate(handle);
     WCDBSwizzleDecorativeFunction(handle, CompressingHandleDecorator, getStatement);
+    WCDBSwizzleDecorativeFunction(handle, CompressingHandleDecorator, commitTransaction);
+    WCDBSwizzleDecorativeFunction(handle, CompressingHandleDecorator, rollbackTransaction);
 }
 
 InnerHandle* CompressingHandleDecorator::getCurrentHandle() const
@@ -55,6 +57,21 @@ CompressingHandleDecorator::getStatement(const UnsafeStringView& skipDecorator)
         DecoratorCompressingHandleStatement, this);
     }
     return statement;
+}
+
+bool CompressingHandleDecorator::commitTransaction()
+{
+    bool ret = Super::commitTransaction();
+    if (ret && !getHandle()->isInTransaction()) {
+        setTableInfoCommitted(true);
+    }
+    return ret;
+}
+
+void CompressingHandleDecorator::rollbackTransaction()
+{
+    Super::rollbackTransaction();
+    setTableInfoCommitted(false);
 }
 
 } // namespace WCDB

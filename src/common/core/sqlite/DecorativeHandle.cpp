@@ -32,7 +32,7 @@ DecorativeHandle *HandleDecorator::getHandle() const
     return static_cast<DecorativeHandle *>(m_decoratedObj);
 }
 
-Optional<std::set<StringView>>
+Optional<StringViewSet>
 HandleDecorator::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     return WCDBCallDecoratedFunction(InnerHandle, getColumns, schema, table);
@@ -84,7 +84,7 @@ void DecorativeHandle::initDecorativeFunctions()
     WCDBRegisterDecorativeFunction(InnerHandle, finalizeStatements);
 }
 
-Optional<std::set<StringView>>
+Optional<StringViewSet>
 DecorativeHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     return WCDBCallDecorativeFunction(InnerHandle, getColumns, schema, table);

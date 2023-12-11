@@ -48,7 +48,7 @@ class HandleDecorator
 public:
     DecorativeHandle *getHandle() const;
 
-    virtual Optional<std::set<StringView>>
+    virtual Optional<StringViewSet>
     getColumns(const Schema &schema, const UnsafeStringView &table);
     WCDBAssertFunctionTypeConsistent(HandleDecorator, InnerHandle, getColumns);
 
@@ -105,7 +105,7 @@ private:
 
 #pragma mark - Override
 public:
-    Optional<std::set<StringView>>
+    Optional<StringViewSet>
     getColumns(const Schema &schema, const UnsafeStringView &table) override final;
     bool addColumn(const Schema &schema,
                    const UnsafeStringView &table,

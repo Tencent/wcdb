@@ -65,7 +65,7 @@
 @end
 
 typedef enum : NSUInteger {
-    DictType_msgCommon,
+    DictType_msgCommon = 1,
     DictType_msgExt,
     DictType_Text,
     DictType_ImageMsg,
@@ -115,6 +115,8 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, strong) NSArray* allDatabasePaths;
 
+@property (nonatomic, strong) NSString* desktop;
+
 @end
 
 @implementation ZSTDBenchmark
@@ -122,9 +124,10 @@ typedef enum : NSUInteger {
 - (void)setUp
 {
     [super setUp];
+    self.desktop = @"/Users/chenqiuwen/Desktop";
     NSMutableArray* paths = [[NSMutableArray alloc] init];
-    NSString* dir = @"/Users/chenqiuwen/Desktop/ZSTDTest/";
-    for (int i = 0; i < 5; i++) {
+    NSString* dir = [self.desktop stringByAppendingString:@"/ZSTDTest/"];
+    for (int i = 1; i < 7; i++) {
         [paths addObject:[dir stringByAppendingFormat:@"Brand/Brand%d/BrandMsg.db", i]];
     }
     for (int i = 1; i < 5; i++) {
@@ -173,15 +176,15 @@ typedef enum : NSUInteger {
     NSMutableString* content = [[NSMutableString alloc] init];
     std::vector<size_t> sizes;
     int64_t remainSize = (unsigned) -1;
-    [self readDataFromFile:@"/Users/chenqiuwen/Desktop/BrandXml/20231125群发xml.csv" toContent:content withSizeRecord:sizes remainSize:remainSize];
-    [self readDataFromFile:@"/Users/chenqiuwen/Desktop/BrandXml/20231126群发xml.csv" toContent:content withSizeRecord:sizes remainSize:remainSize];
+    [self readDataFromFile:[self.desktop stringByAppendingPathComponent:@"BrandXml/20231125群发xml.csv"] toContent:content withSizeRecord:sizes remainSize:remainSize];
+    [self readDataFromFile:[self.desktop stringByAppendingPathComponent:@"BrandXml/20231126群发xml.csv"] toContent:content withSizeRecord:sizes remainSize:remainSize];
     size_t bufferSize = 100 * 1024;
     void* dictBuffer = malloc(bufferSize);
     size_t dictSize = ZDICT_trainFromBuffer(dictBuffer, bufferSize, content.UTF8String, sizes.data(), (unsigned int) sizes.size());
     XCTAssertFalse(ZDICT_isError(dictSize));
     dictSize = ZDICT_finalizeDictionary(dictBuffer, bufferSize, dictBuffer, dictSize, content.UTF8String, sizes.data(), (unsigned int) sizes.size(), { self.compressLevel, 0, 1 });
     NSData* data = [[NSData alloc] initWithBytes:dictBuffer length:dictSize];
-    XCTAssertTrue([data writeToFile:@"/Users/chenqiuwen/Desktop/BrandDict.zstd" atomically:YES]);
+    XCTAssertTrue([data writeToFile:[self.desktop stringByAppendingPathComponent:@"BrandDict.zstd"] atomically:YES]);
 }
 
 - (void)readDataFromFile:(NSString*)path toContent:(NSMutableString*)content withSizeRecord:(std::vector<size_t>&)sizes remainSize:(int64_t&)remainSize
@@ -221,7 +224,7 @@ typedef enum : NSUInteger {
 {
     self.compressLevel = ZSTD_defaultCLevel();
     self.skipDebugLog = YES;
-    NSData* dictData = [NSData dataWithContentsOfFile:@"/Users/chenqiuwen/Desktop/BrandDict.zstd"];
+    NSData* dictData = [NSData dataWithContentsOfFile:[self.desktop stringByAppendingPathComponent:@"BrandDict.zstd"]];
     ZDict* dict = [[ZDict alloc] init];
     dict.cDict = ZSTD_createCDict(dictData.bytes, dictData.length, self.compressLevel);
     dict.dDict = ZSTD_createDDict(dictData.bytes, dictData.length);
@@ -247,7 +250,7 @@ typedef enum : NSUInteger {
                 trainingContents[@(i)] = [[NSMutableArray alloc] init];
             }
             [self findTrainingMessage:trainingContents inTables:self.allTables from:self.database];
-            ZDict* extDict = [self tranDictWith:trainingContents[@(DictType_msgExt)]];
+            ZDict* extDict = [self tranDictWith:trainingContents[@(DictType_msgExt)] dictId:(unsigned) DictType_msgExt];
             self.dicts[@(DictType_msgExt)] = extDict;
         }
         @autoreleasepool {
@@ -258,13 +261,45 @@ typedef enum : NSUInteger {
     [self printBenchmark];
 }
 
-- (ZDict*)tranDictWith:(NSArray<NSString*>*)contents
+- (void)testCompressBrand
+{
+    self.compressLevel = ZSTD_defaultCLevel();
+    self.skipDebugLog = YES;
+
+    self.usingCommonDict = true;
+    self.usingTypedDict = false;
+    self.dictSize = 100 * 1024;
+    self.dictMsgCount = 10000000;
+    for (NSString* path in self.allDatabasePaths) {
+        if (![path containsString:@"BrandMsg"]) {
+            continue;
+        }
+        @autoreleasepool {
+            self.allTables = nil;
+            [self commonTestWithPath:path andId:[NSString stringWithFormat:@"%d-%d-%d", self.usingTypedDict, self.usingCommonDict, self.dictMsgCount]];
+        }
+    }
+    [self printBenchmark];
+    NSData* brandDict = self.dicts[@(DictType_msgCommon)].dict;
+    XCTAssertTrue([brandDict writeToFile:@"~/Desktop/BrandDict.zstd" atomically:YES]);
+    NSData* extDict = self.dicts[@(DictType_msgExt)].dict;
+    XCTAssertTrue([extDict writeToFile:@"~/Desktop/BrandExtDict.zstd" atomically:YES]);
+}
+
+- (ZDict*)tranDictWith:(NSArray<NSString*>*)contents dictId:(unsigned)dictId
 {
     std::vector<size_t> contentSizes;
     NSMutableString* allContent = [[NSMutableString alloc] init];
+    size_t totalSize = 0;
+    static size_t g_maxSize = 4L * 1024 * 1024 * 1024;
     for (NSString* content in contents) {
+        size_t size = [content lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+        if (totalSize + size > g_maxSize) {
+            break;
+        }
+        totalSize += size;
         [allContent appendString:content];
-        contentSizes.push_back([content lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        contentSizes.push_back(size);
     }
     size_t bufferSize = self.dictSize;
     void* dictBuffer = malloc(bufferSize);
@@ -274,7 +309,7 @@ typedef enum : NSUInteger {
         [self log:@"train dict error with code %llu, name %s", dictSize, ZDICT_getErrorName(dictSize)];
         return nil;
     }
-    dictSize = ZDICT_finalizeDictionary(dictBuffer, bufferSize, dictBuffer, dictSize, allContent.UTF8String, contentSizes.data(), (unsigned int) contentSizes.size(), { self.compressLevel, 0, 1 });
+    dictSize = ZDICT_finalizeDictionary(dictBuffer, bufferSize, dictBuffer, dictSize, allContent.UTF8String, contentSizes.data(), (unsigned int) contentSizes.size(), { self.compressLevel, 0, dictId });
     if (ZDICT_isError(dictSize)) {
         [self log:@"finalize dict error with code %llu, name %s", dictSize, ZDICT_getErrorName(dictSize)];
         return nil;
@@ -423,7 +458,7 @@ typedef enum : NSUInteger {
             if (contents.count < self.dictMsgCount) {
                 [self log:@"Require %d msg of type %@, but only has %llu", self.dictMsgCount, type, contents.count];
             }
-            ZDict* dict = [self tranDictWith:contents];
+            ZDict* dict = [self tranDictWith:contents dictId:type.unsignedIntValue];
             if (dict == nil) {
                 [self log:@"train %@ dict fail with content %@", type, contents];
                 *stop = true;
@@ -1039,6 +1074,47 @@ typedef enum : NSUInteger {
         if (appMsgCount[i] > 0) {
             [self log:@"Type Info:\t%d\t%d\t%lld", i, appMsgCount[i], appMsgLength[i]];
         }
+    }
+}
+
+- (void)testDirectCompress
+{
+    self.skipDebugLog = YES;
+    NSData* brandDictData = [NSData dataWithContentsOfFile:[self.desktop stringByAppendingPathComponent:@"ZSTDTest/BrandDict.zstd"]];
+    TestCaseAssertTrue([WCTDatabase registerZSTDDict:brandDictData andDictId:1]);
+    NSData* brandExtDictData = [NSData dataWithContentsOfFile:[self.desktop stringByAppendingPathComponent:@"ZSTDTest/BrandExtDict.zstd"]];
+    TestCaseAssertTrue([WCTDatabase registerZSTDDict:brandExtDictData andDictId:2]);
+
+    int i = 0;
+    for (NSString* path in self.allDatabasePaths) {
+        if (![path containsString:@"BrandMsg"]) {
+            continue;
+        }
+        i++;
+
+        NSString* testPath = [path stringByAppendingString:@"-test"];
+        WCTDatabase* database = [[WCTDatabase alloc] initWithPath:testPath];
+        [database removeFiles];
+        [self.fileManager copyItemsIfExistsAtPath:path toPath:testPath];
+
+        [database setCompressionWithFilter:^(WCTCompressionUserInfo* info) {
+            if ([info.table hasPrefix:@"Chat_"]) {
+                [info addZSTDDictCompressProperty:DBMessage.message withDictId:1];
+            } else if ([info.table hasPrefix:@"ChatExt2_"]) {
+                [info addZSTDDictCompressProperty:DBMessageExt.msgSource withDictId:2];
+            }
+        }];
+        int totalPageCount = [database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::pageCount())].numberValue.intValue;
+        int freePageCount = [database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::freelistCount())].numberValue.intValue;
+        int preCount = totalPageCount - freePageCount;
+        [self log:@"Database %d page count before compression: %d, free rate %f", i, preCount, (double) freePageCount / totalPageCount];
+        while (!database.isCompressed) {
+            [database stepCompression];
+        }
+        totalPageCount = [database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::pageCount())].numberValue.intValue;
+        freePageCount = [database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::freelistCount())].numberValue.intValue;
+        int afterCount = totalPageCount - freePageCount;
+        [self log:@"Database %d page count after compression: %d, compression ratio %f", i, afterCount, (double) afterCount / preCount];
     }
 }
 

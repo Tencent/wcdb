@@ -73,8 +73,8 @@ private:
     SharedLock m_lock;
 
     Statement m_getTableStatement;
-    std::set<StringView> m_mergingTables;
-    std::set<StringView> m_mergedTables;
+    StringViewSet m_mergingTables;
+    StringViewSet m_mergedTables;
 
 private:
     class OperationQueue : public AsyncQueue {

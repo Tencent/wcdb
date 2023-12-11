@@ -48,7 +48,7 @@ public:
     using DictId = ZSTDDict::DictId;
     static constexpr const DictId MaxDictId = 1000;
 
-    bool registerDict(const UnsafeData& data);
+    bool registerDict(DictId dictId, const UnsafeData& data);
     typedef std::function<Optional<UnsafeData>()> TrainDataEnumerator;
     Optional<Data> trainDict(DictId dictId, TrainDataEnumerator dataEnummerator);
 

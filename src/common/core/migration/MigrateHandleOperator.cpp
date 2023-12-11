@@ -104,7 +104,7 @@ bool MigrateHandleOperator::detach()
 }
 
 #pragma mark - Stepper
-Optional<std::set<StringView>> MigrateHandleOperator::getAllTables()
+Optional<StringViewSet> MigrateHandleOperator::getAllTables()
 {
     Column name("name");
     Column type("type");
@@ -146,15 +146,6 @@ bool MigrateHandleOperator::dropSourceTable(const MigrationInfo* info)
 Optional<bool> MigrateHandleOperator::migrateRows(const MigrationInfo* info)
 {
     WCTAssert(info != nullptr);
-    auto exists = getHandle()->tableExists(info->getTable());
-    if (!exists.succeed()) {
-        return NullOpt;
-    }
-
-    if (!exists.value()) {
-        return true;
-    }
-
     if (m_migratingInfo != info) {
         if (!reAttach(info)) {
             return NullOpt;
