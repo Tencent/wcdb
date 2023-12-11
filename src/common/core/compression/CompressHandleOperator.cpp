@@ -28,6 +28,7 @@
 #include "CompressionConst.hpp"
 #include "CompressionRecord.hpp"
 #include "CoreConst.h"
+#include <stdlib.h>
 
 namespace WCDB {
 
