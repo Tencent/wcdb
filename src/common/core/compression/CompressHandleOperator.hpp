@@ -42,6 +42,14 @@ public:
     Optional<bool> compressRows(const CompressionTableInfo* info) override final;
 
 private:
+    typedef struct CompressionPerformance {
+        int compressedCount = 0;
+        int uncompressedCount = 0;
+        size_t compressedSize = 0;
+        size_t originalSize = 0;
+        int64_t compressTime = 0;
+    } CompressionPerformance;
+    
     Optional<bool> doCompressRows(const OneColumnValue& rowids);
     bool compressRow(OneRowValue& row);
 
@@ -58,6 +66,9 @@ private:
     HandleStatement* m_deleteRowStatement;
     HandleStatement* m_insertNewRowStatement;
     HandleStatement* m_updateRecordStatement;
+    
+    CompressionPerformance m_performance;
+    void tryReportPerformance();
 
 #pragma mark - Info Initializer
 protected:

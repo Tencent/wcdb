@@ -28,6 +28,8 @@
 #include "CompressionConst.hpp"
 #include "CompressionRecord.hpp"
 #include "CoreConst.h"
+#include "Time.hpp"
+#include "Notifier.hpp"
 #include <stdlib.h>
 
 namespace WCDB {
@@ -153,6 +155,7 @@ Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* 
     WCTAssert(info != nullptr);
     InnerHandle* handle = getHandle();
     WCTAssert(handle != nullptr);
+    int64_t start = Time::currentThreadCPUTimeInMicroseconds();
     if (m_compressingTableInfo != info) {
         finalizeCompressionStatements();
         m_compressedCount = 0;
@@ -186,6 +189,10 @@ Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* 
     if (m_compressedCount >= CompressionUpdateRecordBatchCount || compressionFinish) {
         updateCompressionRecord();
     }
+    
+    m_performance.compressTime += Time::currentThreadCPUTimeInMicroseconds() - start;
+    tryReportPerformance();
+    
     return compressionFinish;
 }
 
@@ -327,9 +334,13 @@ bool CompressHandleOperator::compressRow(OneRowValue& row)
         WCTAssert(compressedValue.value().size() <= data.size());
 
         if (compressedValue.value().size() < data.size()) {
+            m_performance.compressedCount++;
+            m_performance.compressedSize += compressedValue.value().size();
+            m_performance.originalSize += data.size();
             value = compressedValue.value();
             compressedType = WCDBMergeCompressionType(toCompressedType, valueType);
         } else {
+            m_performance.uncompressedCount++;
             compressedType = WCDBMergeCompressionType(CompressedType::None, valueType);
         }
     }
@@ -426,6 +437,25 @@ bool CompressHandleOperator::updateCompressionRecord()
     free(columns);
     m_updateRecordStatement->reset();
     return ret;
+}
+
+void CompressHandleOperator::tryReportPerformance() {
+    if(m_performance.compressedCount + m_performance.uncompressedCount < CompressionUpdateRecordBatchCount) {
+        return;
+    }
+    
+    Error error(Error::Code::Notice, Error::Level::Notice, "Compression performance");
+    error.infos.insert_or_assign(ErrorStringKeyPath, getHandle()->getPath());
+    error.infos.insert_or_assign(ErrorIntKeyTag, (long)getHandle()->getTag());
+    error.infos.insert_or_assign("CompressTime", m_performance.compressTime);
+    error.infos.insert_or_assign("CompressedCount", m_performance.compressedCount);
+    error.infos.insert_or_assign("UncompressedCount", m_performance.uncompressedCount);
+    error.infos.insert_or_assign("OriginalSize", m_performance.originalSize);
+    error.infos.insert_or_assign("CompressedSize", m_performance.compressedSize);
+    
+    Notifier::shared().notify(error);
+    
+    m_performance = CompressionPerformance();
 }
 
 InnerHandle* CompressHandleOperator::getCurrentHandle() const
