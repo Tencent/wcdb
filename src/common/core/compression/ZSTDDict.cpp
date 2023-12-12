@@ -94,8 +94,10 @@ bool ZSTDDict::loadData(const UnsafeData& data)
         return false;
     }
     m_dictId = ZSTD_getDictID_fromCDict((ZSTD_CDict*) m_cDict);
-    if(m_dictId == 0){
-        Error error(Error::Code::ZstdError, Error::Level::Error, "The dictionary is not conformant to ZSTD specification");
+    if (m_dictId == 0) {
+        Error error(Error::Code::ZstdError,
+                    Error::Level::Error,
+                    "The dictionary is not conformant to ZSTD specification");
         error.infos.insert_or_assign("DictSize", data.size());
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));

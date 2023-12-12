@@ -28,8 +28,8 @@
 #include "CompressionConst.hpp"
 #include "CompressionRecord.hpp"
 #include "CoreConst.h"
-#include "Time.hpp"
 #include "Notifier.hpp"
+#include "Time.hpp"
 #include <stdlib.h>
 
 namespace WCDB {
@@ -189,10 +189,10 @@ Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* 
     if (m_compressedCount >= CompressionUpdateRecordBatchCount || compressionFinish) {
         updateCompressionRecord();
     }
-    
+
     m_performance.compressTime += Time::currentThreadCPUTimeInMicroseconds() - start;
     tryReportPerformance();
-    
+
     return compressionFinish;
 }
 
@@ -439,22 +439,24 @@ bool CompressHandleOperator::updateCompressionRecord()
     return ret;
 }
 
-void CompressHandleOperator::tryReportPerformance() {
-    if(m_performance.compressedCount + m_performance.uncompressedCount < CompressionUpdateRecordBatchCount) {
+void CompressHandleOperator::tryReportPerformance()
+{
+    if (m_performance.compressedCount + m_performance.uncompressedCount
+        < CompressionUpdateRecordBatchCount) {
         return;
     }
-    
+
     Error error(Error::Code::Notice, Error::Level::Notice, "Compression performance");
     error.infos.insert_or_assign(ErrorStringKeyPath, getHandle()->getPath());
-    error.infos.insert_or_assign(ErrorIntKeyTag, (long)getHandle()->getTag());
+    error.infos.insert_or_assign(ErrorIntKeyTag, (long) getHandle()->getTag());
     error.infos.insert_or_assign("CompressTime", m_performance.compressTime);
     error.infos.insert_or_assign("CompressedCount", m_performance.compressedCount);
     error.infos.insert_or_assign("UncompressedCount", m_performance.uncompressedCount);
     error.infos.insert_or_assign("OriginalSize", m_performance.originalSize);
     error.infos.insert_or_assign("CompressedSize", m_performance.compressedSize);
-    
+
     Notifier::shared().notify(error);
-    
+
     m_performance = CompressionPerformance();
 }
 

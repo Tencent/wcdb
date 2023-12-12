@@ -185,7 +185,9 @@ void CompressionTableUserInfo::addCompressingColumn(const CompressionColumnInfo 
 
 #pragma mark - CompressionTableInfo
 CompressionTableInfo::CompressionTableInfo(const CompressionTableUserInfo &userInfo)
-: CompressionTableBaseInfo(userInfo), m_minCompressedRowid(INT64_MAX), m_needCheckColumn(true)
+: CompressionTableBaseInfo(userInfo)
+, m_minCompressedRowid(INT64_MAX)
+, m_needCheckColumn(true)
 {
 }
 
