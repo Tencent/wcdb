@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "CompressionRecord.hpp"
 #import "CompressionTestCase.h"
 #import "CoreConst.h"
 #import "Random+CompressionTestObject.h"
@@ -385,6 +386,34 @@
 
         WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
         TestCaseAssertTrue(uncompressedBlobCount.numberValue.intValue == 0);
+    }];
+}
+
+- (void)test_compressed_content_will_persist_after_retrieving
+{
+    self.compressionStatus = CompressionStatus_finishCompressed;
+    [self doTestCompress:^{
+        [self.database retrieve:nil];
+        WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from(WCDB::CompressionRecord::tableName).where(WCDB::Column(WCDB::CompressionRecord::columnTable) == self.tableName)];
+
+        TestCaseAssertTrue(record != nil && record[2].numberValue.intValue == 0);
+        if (!self.compressTwoColumn) {
+            TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text"]);
+        } else {
+            TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text blob"]);
+        }
+
+        NSArray* objects = [self.table getObjects];
+        NSArray* originObjects = [self.uncompressTable getObjects];
+        TestCaseAssertTrue([originObjects isEqualTo:objects]);
+
+        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_text").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
+        TestCaseAssertTrue(uncompressedTextCount != nil && uncompressedTextCount.numberValue.intValue == 0);
+        if (!self.compressTwoColumn) {
+            return;
+        }
+        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
+        TestCaseAssertTrue(uncompressedBlobCount != nil && uncompressedBlobCount.numberValue.intValue == 0);
     }];
 }
 
