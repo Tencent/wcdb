@@ -378,7 +378,8 @@ MigratingHandleDecorator::getStatement(const UnsafeStringView& skipDecorator)
 {
     DecorativeHandleStatement* statement = Super::getStatement(skipDecorator);
     if (!statement->containDecorator(DecoratorMigratingHandleStatement)
-        && !skipDecorator.equal(DecoratorMigratingHandleStatement)) {
+        && !skipDecorator.equal(DecoratorMigratingHandleStatement)
+        && !skipDecorator.equal(DecoratorAllType)) {
         statement->tryAddDecorator<MigratingStatementDecorator>(
         DecoratorMigratingHandleStatement, this);
     }

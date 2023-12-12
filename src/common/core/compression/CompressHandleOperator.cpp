@@ -40,11 +40,11 @@ CompressHandleOperator::CompressHandleOperator(InnerHandle* handle)
 , m_compressedCount(0)
 , m_compressingTableInfo(nullptr)
 , m_insertParameterCount(0)
-, m_selectRowidStatement(handle->getStatement())
-, m_selectRowStatement(handle->getStatement())
-, m_deleteRowStatement(handle->getStatement())
-, m_insertNewRowStatement(handle->getStatement())
-, m_updateRecordStatement(handle->getStatement())
+, m_selectRowidStatement(handle->getStatement(DecoratorAllType))
+, m_selectRowStatement(handle->getStatement(DecoratorAllType))
+, m_deleteRowStatement(handle->getStatement(DecoratorAllType))
+, m_insertNewRowStatement(handle->getStatement(DecoratorAllType))
+, m_updateRecordStatement(handle->getStatement(DecoratorAllType))
 {
 }
 
@@ -418,7 +418,7 @@ bool CompressHandleOperator::updateCompressionRecord()
     for (const auto& column : m_compressingTableInfo->getColumnInfos()) {
         columnSize += column.getColumn().syntax().name.size() + 1;
     }
-    char* columns = (char*) malloc(columnSize);
+    char* columns = (char*) malloc(columnSize + 1);
     if (columns == nullptr) {
         getHandle()->notifyError(Error::Code::NoMemory, nullptr, "Alloc compressed columns fail");
         return false;

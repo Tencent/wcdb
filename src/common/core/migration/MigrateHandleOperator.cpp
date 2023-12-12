@@ -33,8 +33,8 @@ namespace WCDB {
 MigrateHandleOperator::MigrateHandleOperator(InnerHandle* handle)
 : HandleOperator(handle)
 , m_migratingInfo(nullptr)
-, m_migrateStatement(handle->getStatement())
-, m_removeMigratedStatement(handle->getStatement())
+, m_migrateStatement(handle->getStatement(DecoratorMigratingHandleStatement))
+, m_removeMigratedStatement(handle->getStatement(DecoratorMigratingHandleStatement))
 , m_samplePointing(0)
 {
 }

@@ -95,6 +95,7 @@ WCDBLiteralStringImplement(MonitorInfoKeyTableCount);
 WCDBLiteralStringImplement(MonitorInfoKeyIndexCount);
 WCDBLiteralStringImplement(MonitorInfoKeyTriggerCount);
 
+WCDBLiteralStringImplement(DecoratorAllType);
 WCDBLiteralStringImplement(DecoratorMigratingHandleStatement);
 WCDBLiteralStringImplement(DecoratorMigratingHandle);
 WCDBLiteralStringImplement(DecoratorCompressingHandleStatement);

@@ -372,8 +372,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
         WCTAssert(dynamic_cast<DecorativeHandle *>(handle) != nullptr);
         DecorativeHandle *decorativeHandle = static_cast<DecorativeHandle *>(handle);
         // CompressingHandleDecorator must be added before MigratingHandleDecorator.
-        if ((type == HandleType::Normal || type == HandleType::Migrate)
-            && m_compression.shouldCompress()) {
+        if (m_compression.shouldCompress()) {
             hasDecorator = true;
             decorativeHandle->tryAddDecorator<CompressingHandleDecorator>(
             DecoratorCompressingHandle, m_compression);

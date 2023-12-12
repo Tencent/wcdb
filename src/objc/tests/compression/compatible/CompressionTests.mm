@@ -417,4 +417,24 @@
     }];
 }
 
+-(void)test_migrate_and_checkpoint_during_compression {
+    self.compressionStatus = CompressionStatus_startCompressed;
+    self.migrationStatus = MigrationStatus_unmigrated;
+    [self doTestCompress:^{
+        while (![self.database isCompressed] && ![self.database isMigrated]) {
+            if(![self.database isCompressed]) {
+                [self.database stepCompression];
+            }
+            if(![self.database isMigrated]){
+                [self.database stepMigration];
+            }
+            [self.database passiveCheckpoint];
+        }
+        
+        NSArray* objects = [self.table getObjects];
+        NSArray* originObjects = [self.uncompressTable getObjects];
+        TestCaseAssertTrue([originObjects isEqualTo:objects]);
+    }];
+}
+
 @end

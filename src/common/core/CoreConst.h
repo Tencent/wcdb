@@ -211,6 +211,7 @@ WCDBLiteralStringDefine(MonitorInfoKeyIndexCount, "IndexCount");
 WCDBLiteralStringDefine(MonitorInfoKeyTriggerCount, "TriggerCount");
 
 #pragma mark - Decorator
+WCDBLiteralStringDefine(DecoratorAllType, "AllType");
 WCDBLiteralStringDefine(DecoratorMigratingHandleStatement, "MigratingHandleStatement");
 WCDBLiteralStringDefine(DecoratorMigratingHandle, "MigratingHandle");
 WCDBLiteralStringDefine(DecoratorCompressingHandleStatement, "CompressingHandleStatement");
