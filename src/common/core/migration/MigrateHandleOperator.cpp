@@ -46,6 +46,19 @@ MigrateHandleOperator::~MigrateHandleOperator()
     getHandle()->returnStatement(m_removeMigratedStatement);
 }
 
+void MigrateHandleOperator::onDecorationChange()
+{
+    finalizeMigrationStatement();
+
+    InnerHandle* handle = getHandle();
+
+    handle->returnStatement(m_migrateStatement);
+    m_migrateStatement = handle->getStatement(DecoratorMigratingHandleStatement);
+
+    handle->returnStatement(m_removeMigratedStatement);
+    m_removeMigratedStatement = handle->getStatement(DecoratorMigratingHandleStatement);
+}
+
 bool MigrateHandleOperator::reAttach(const MigrationBaseInfo* info)
 {
     WCTAssert(!getHandle()->isInTransaction());

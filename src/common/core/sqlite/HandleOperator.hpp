@@ -37,6 +37,8 @@ public:
 
     InnerHandle *getHandle() const;
 
+    virtual void onDecorationChange();
+
 private:
     InnerHandle *m_handle;
 };

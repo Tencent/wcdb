@@ -38,6 +38,8 @@ public:
     MigrateHandleOperator(InnerHandle* handle);
     ~MigrateHandleOperator() override final;
 
+    void onDecorationChange() override final;
+
 #pragma mark - Schema
 protected:
     bool reAttach(const MigrationBaseInfo* info);
