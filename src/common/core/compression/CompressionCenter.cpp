@@ -282,4 +282,62 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
     }
 }
 
+bool CompressionCenter::testContentCanBeDecompressed(const UnsafeData& data,
+                                                     bool usingDict,
+                                                     InnerHandle* errorReportHandle)
+{
+    int64_t frameSize = ZSTD_getFrameContentSize(data.buffer(), data.size());
+    if (ZSTD_isError(frameSize)) {
+        errorReportHandle->notifyError(
+        Error::Code::ZstdError,
+        StringView::formatted("Get compress content frame size fail: %s",
+                              ZSTD_getErrorName(frameSize)));
+        return false;
+    }
+    ZSTDContext& ctx = m_ctxes.getOrCreate();
+    void* buffer = ctx.getOrCreateBuffer(frameSize);
+    if (buffer == nullptr) {
+        errorReportHandle->notifyError(
+        Error::Code::NoMemory, "", "Decompress fail due to no memory");
+        return false;
+    }
+    int64_t decompressSize = 0;
+    if (usingDict) {
+        DictId dictId = ZSTD_getDictID_fromFrame(data.buffer(), data.size());
+        if (dictId == 0) {
+            errorReportHandle->notifyError(Error::Code::ZstdError, "", "Can not decode dictid");
+            return false;
+        }
+        ZSTDDict* dict = getDict(dictId);
+        if (dict == nullptr) {
+            errorReportHandle->notifyError(
+            Error::Code::ZstdError,
+            "",
+            StringView::formatted("Can not find decompress dict with id: %d", dictId));
+            return false;
+        }
+        decompressSize = ZSTD_decompress_usingDDict((ZSTD_DCtx*) ctx.getOrCreateDCtx(),
+                                                    buffer,
+                                                    frameSize,
+                                                    data.buffer(),
+                                                    data.size(),
+                                                    (ZSTD_DDict*) dict->getDDict());
+    } else {
+        decompressSize = ZSTD_decompressDCtx((ZSTD_DCtx*) ctx.getOrCreateDCtx(),
+                                             buffer,
+                                             frameSize,
+                                             data.buffer(),
+                                             data.size());
+    }
+
+    if (ZSTD_isError(decompressSize)) {
+        errorReportHandle->notifyError(
+        Error::Code::ZstdError,
+        "",
+        StringView::formatted("Decompress fail: %s", ZSTD_getErrorName(decompressSize)));
+        return false;
+    }
+    return true;
+}
+
 } // namespace WCDB

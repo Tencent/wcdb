@@ -334,11 +334,16 @@ bool CompressHandleOperator::compressRow(OneRowValue& row)
         WCTAssert(compressedValue.value().size() <= data.size());
 
         if (compressedValue.value().size() < data.size()) {
+            value = compressedValue.value();
+            if (!CompressionCenter::shared().testContentCanBeDecompressed(
+                value.blobValue(), toCompressedType == CompressedType::ZSTDDict, getHandle())) {
+                return false;
+            }
+            compressedType = WCDBMergeCompressionType(toCompressedType, valueType);
+
             m_performance.compressedCount++;
             m_performance.compressedSize += compressedValue.value().size();
             m_performance.originalSize += data.size();
-            value = compressedValue.value();
-            compressedType = WCDBMergeCompressionType(toCompressedType, valueType);
         } else {
             m_performance.uncompressedCount++;
             compressedType = WCDBMergeCompressionType(CompressedType::None, valueType);
