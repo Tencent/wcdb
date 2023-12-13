@@ -43,4 +43,8 @@ InnerHandle *HandleOperator::getHandle() const
     return m_handle;
 }
 
+void HandleOperator::onDecorationChange()
+{
+}
+
 } // namespace WCDB

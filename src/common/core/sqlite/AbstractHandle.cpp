@@ -799,7 +799,11 @@ void AbstractHandle::notifyError(int rc, const UnsafeStringView &sql, const Unsa
 {
     WCTAssert(Error::isError(rc));
     Error::Code code = Error::rc2c(rc);
-    if (code != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc && msg.empty()) {
+    if (code == Error::Code::ZstdError) {
+        m_error.setCode(code, !msg.empty() ? msg : sqlite3_errmsg(m_handle));
+        m_error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceZstd);
+    } else if (code != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc
+               && msg.empty()) {
         m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error

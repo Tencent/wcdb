@@ -24,6 +24,7 @@
 
 #include "ZSTDContext.hpp"
 #include <memory>
+#include <stdlib.h>
 #include <zstd/zstd.h>
 
 namespace WCDB {

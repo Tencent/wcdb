@@ -52,7 +52,8 @@ CompressingHandleDecorator::getStatement(const UnsafeStringView& skipDecorator)
 {
     DecorativeHandleStatement* statement = Super::getStatement(skipDecorator);
     if (!statement->containDecorator(DecoratorCompressingHandleStatement)
-        && !skipDecorator.equal(DecoratorCompressingHandleStatement)) {
+        && !skipDecorator.equal(DecoratorCompressingHandleStatement)
+        && !skipDecorator.equal(DecoratorAllType)) {
         statement->tryAddDecorator<CompressingStatementDecorator>(
         DecoratorCompressingHandleStatement, this);
     }

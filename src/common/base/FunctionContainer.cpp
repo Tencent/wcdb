@@ -23,6 +23,7 @@
  */
 
 #include "FunctionContainer.hpp"
+#include <stdlib.h>
 
 namespace WCDB {
 

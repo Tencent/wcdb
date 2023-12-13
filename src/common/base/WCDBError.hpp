@@ -110,6 +110,7 @@ public:
         Warning = 28,
         Row = 100,
         Done = 101,
+        ZstdError = 1000,
     };
     static Error::Code rc2c(int rc);
     static int c2rc(Error::Code code);
@@ -179,6 +180,8 @@ public:
             return "Row";
         case Code::Done:
             return "Done";
+        case Code::ZstdError:
+            return "ZstdError";
         }
     }
 

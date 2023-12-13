@@ -78,6 +78,7 @@ WCDBLiteralStringImplement(ErrorSourceSystem);
 WCDBLiteralStringImplement(ErrorSourceAssertion);
 WCDBLiteralStringImplement(ErrorSourceNative);
 WCDBLiteralStringImplement(ErrorSourceSwift);
+WCDBLiteralStringImplement(ErrorSourceZstd);
 
 WCDBLiteralStringImplement(ErrorTypeMigrate);
 WCDBLiteralStringImplement(ErrorTypeCompress);
@@ -94,6 +95,7 @@ WCDBLiteralStringImplement(MonitorInfoKeyTableCount);
 WCDBLiteralStringImplement(MonitorInfoKeyIndexCount);
 WCDBLiteralStringImplement(MonitorInfoKeyTriggerCount);
 
+WCDBLiteralStringImplement(DecoratorAllType);
 WCDBLiteralStringImplement(DecoratorMigratingHandleStatement);
 WCDBLiteralStringImplement(DecoratorMigratingHandle);
 WCDBLiteralStringImplement(DecoratorCompressingHandleStatement);

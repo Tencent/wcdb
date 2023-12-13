@@ -72,6 +72,9 @@ void DecorativeHandle::onDecorationChange()
     m_mainStatement->finalize();
     returnStatement(m_mainStatement);
     m_mainStatement = getStatement();
+    for (auto iter : m_operators) {
+        iter.second->onDecorationChange();
+    }
 }
 
 void DecorativeHandle::initDecorativeFunctions()

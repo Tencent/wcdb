@@ -59,6 +59,10 @@ public:
                            ColumnType originType,
                            ScalarFunctionAPI& resultAPI);
 
+    bool testContentCanBeDecompressed(const UnsafeData& data,
+                                      bool usingDict,
+                                      InnerHandle* errorReportHandle);
+
 private:
     ZSTDDict* getDict(DictId id) const;
     ZSTDDict** m_dicts;

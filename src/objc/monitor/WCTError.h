@@ -80,6 +80,7 @@ typedef NS_ENUM(NSUInteger, WCTErrorCode) {
     WCTErrorCodeWarning = 28,
     WCTErrorCodeRow = 100,
     WCTErrorCodeDone = 101,
+    WCTErrorCodeZstdError = 1000,
 };
 
 typedef NS_ENUM(NSUInteger, WCTErrorExtendedCode) {
