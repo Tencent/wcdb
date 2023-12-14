@@ -28,8 +28,10 @@
 #include "Notifier.hpp"
 #include "ScalarFunctionModule.hpp"
 #include "WCDBError.hpp"
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
 #include <zstd/zdict.h>
 #include <zstd/zstd.h>
+#endif
 
 namespace WCDB {
 
@@ -93,6 +95,8 @@ bool CompressionCenter::registerDict(DictId dictId, const UnsafeData& data)
     m_dicts[dict->getDictId()] = dict;
     return true;
 }
+
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
 
 Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator dataEnummerator)
 {
@@ -339,5 +343,38 @@ bool CompressionCenter::testContentCanBeDecompressed(const UnsafeData& data,
     }
     return true;
 }
+
+#else
+
+Optional<Data> CompressionCenter::trainDict(DictId, TrainDataEnumerator)
+{
+    Error error(Error::Code::ZstdError, Error::Level::Error, "You need to build WCDB with WCDB_ZSTD macro");
+    Notifier::shared().notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+    return NullOpt;
+}
+
+Optional<UnsafeData>
+CompressionCenter::compressContent(const UnsafeData&, DictId, InnerHandle* errorReportHandle)
+{
+    errorReportHandle->notifyError(
+    Error::Code::ZstdError, nullptr, "You need to build WCDB with WCDB_ZSTD macro");
+    return NullOpt;
+}
+
+void CompressionCenter::decompressContent(const UnsafeData&, bool, ColumnType, ScalarFunctionAPI& resultAPI)
+{
+    resultAPI.setErrorResult(Error::Code::ZstdError,
+                             "You need to build WCDB with WCDB_ZSTD macro");
+}
+
+bool CompressionCenter::testContentCanBeDecompressed(const UnsafeData&, bool, InnerHandle* errorReportHandle)
+{
+    errorReportHandle->notifyError(
+    Error::Code::ZstdError, "", "You need to build WCDB with WCDB_ZSTD macro");
+    return false;
+}
+
+#endif
 
 } // namespace WCDB

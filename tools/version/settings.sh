@@ -9,6 +9,7 @@ showUsage() {
 """
 }
 wechat=false
+zstd=false
 enable_bitcode=false
 static_framework=false
 

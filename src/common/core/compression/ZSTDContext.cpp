@@ -25,7 +25,9 @@
 #include "ZSTDContext.hpp"
 #include <memory>
 #include <stdlib.h>
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
 #include <zstd/zstd.h>
+#endif
 
 namespace WCDB {
 
@@ -36,12 +38,14 @@ ZSTDContext::ZSTDContext()
 
 ZSTDContext::~ZSTDContext()
 {
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
     if (m_cctx != nullptr) {
         ZSTD_freeCCtx((ZSTD_CCtx*) m_cctx);
     }
     if (m_dctx != nullptr) {
         ZSTD_freeDCtx((ZSTD_DCtx*) m_dctx);
     }
+#endif
     if (m_buffer != nullptr) {
         free(m_buffer);
     }
@@ -50,7 +54,9 @@ ZSTDContext::~ZSTDContext()
 ZCCtx* ZSTDContext::getOrCreateCCtx()
 {
     if (m_cctx == nullptr) {
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
         m_cctx = (ZCCtx*) ZSTD_createCCtx();
+#endif
     }
     return m_cctx;
 }
@@ -58,7 +64,9 @@ ZCCtx* ZSTDContext::getOrCreateCCtx()
 ZDCtx* ZSTDContext::getOrCreateDCtx()
 {
     if (m_dctx == nullptr) {
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
         m_dctx = (ZDCtx*) ZSTD_createDCtx();
+#endif
     }
     return m_dctx;
 }

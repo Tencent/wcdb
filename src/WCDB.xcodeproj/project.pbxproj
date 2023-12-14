@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -822,6 +822,10 @@
 		0D19BA242B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
 		0D19BA252B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
 		0D19BA262B07481B0028F92B /* IntegerityHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D19BA1E2B07481B0028F92B /* IntegerityHandleOperator.hpp */; };
+		0D22E7AE2B298E9A00AA44D2 /* zstd.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0D22E7B12B298EA400AA44D2 /* zstd.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0D22E7B42B298EAB00AA44D2 /* zstd.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0D22E7B72B298EB200AA44D2 /* zstd.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D2789D92B21995800F60E2D /* CompressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D2789D82B21995800F60E2D /* CompressionTests.mm */; };
@@ -915,7 +919,6 @@
 		0DE68B3B2AB45F6C008BD74C /* NormalRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3A2AB45F6C008BD74C /* NormalRepairTestObject.mm */; };
 		0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B3D2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm */; };
 		0DE68B412AB466F1008BD74C /* WithoutRowidRepairTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE68B402AB466F1008BD74C /* WithoutRowidRepairTestObject.mm */; };
-		0DE7BF052B22ABDC0087CC56 /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; };
 		0DE84ACA2B030F5B00522A4E /* ZSTDBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DE84AC82B030F5A00522A4E /* ZSTDBenchmark.mm */; };
 		0DE84AD22B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
 		0DE84AD32B03295400522A4E /* FunctionContainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DE84ACD2B03295400522A4E /* FunctionContainer.hpp */; };
@@ -3204,10 +3207,6 @@
 		758E7F3E2B1C99C700319991 /* CompressionTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F3D2B1C99C700319991 /* CompressionTestCase.mm */; };
 		7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		759EFEC12B0BAF80009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
-		759EFEC22B0BAF87009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
-		759EFEC32B0BAF97009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
-		759EFEC42B0BAF9E009433EB /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; platformFilters = (ios, macos, tvos, ); };
 		75A46C00284310CE00B58207 /* ColumnConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */; };
 		75A46C01284310CE00B58207 /* ColumnConstraintBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75A46C0428431D6300B58207 /* ForeignKeyBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46C0228431D6300B58207 /* ForeignKeyBridge.cpp */; };
@@ -3335,7 +3334,6 @@
 		75E76AE029176FA600073CCA /* TokenizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E76ADF29176FA600073CCA /* TokenizerTests.swift */; };
 		75E76AE42917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE22917AE2A00073CCA /* CPPVirtualTableFTS4Object.cpp */; };
 		75E76AE72917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E76AE52917B07E00073CCA /* CPPVirtualTableFTS5Object.cpp */; };
-		75EABA6C2ADAE14600AAD3C9 /* zstd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EABA0D2ADA4F2600AAD3C9 /* zstd.framework */; };
 		75EB1965287F068200AA62F7 /* StatementDropTriggerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1963287F068200AA62F7 /* StatementDropTriggerBridge.cpp */; };
 		75EB1966287F068200AA62F7 /* StatementDropTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1964287F068200AA62F7 /* StatementDropTriggerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75EB1968287F078E00AA62F7 /* StatementDropTrigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EB1967287F078E00AA62F7 /* StatementDropTrigger.swift */; };
@@ -3465,6 +3463,34 @@
 			remoteGlobalIDString = 239E8A6F2160A5B100BCB308;
 			remoteInfo = Host;
 		};
+		0DACF74E2B29ABD400CB0710 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 75EAB79B2ADA376000AAD3C9;
+			remoteInfo = zstd;
+		};
+		0DACF7502B29ABDB00CB0710 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 75EAB79B2ADA376000AAD3C9;
+			remoteInfo = zstd;
+		};
+		0DACF7522B29ABE600CB0710 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 75EAB79B2ADA376000AAD3C9;
+			remoteInfo = zstd;
+		};
+		0DACF7542B29ABEC00CB0710 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75EABA082ADA4F2600AAD3C9 /* zstd.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 75EAB79B2ADA376000AAD3C9;
+			remoteInfo = zstd;
+		};
 		23F5BE0520887FD4000CCD37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23A747BE20039675003CECFA /* sqlcipher.preprocessed.xcodeproj */;
@@ -3550,6 +3576,53 @@
 			remoteInfo = zstd;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0D22E7AF2B298E9B00AA44D2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D22E7AE2B298E9A00AA44D2 /* zstd.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D22E7B22B298EA400AA44D2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D22E7B12B298EA400AA44D2 /* zstd.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D22E7B52B298EAC00AA44D2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D22E7B42B298EAB00AA44D2 /* zstd.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D22E7B82B298EB200AA44D2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D22E7B72B298EB200AA44D2 /* zstd.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		030C987828D068B0008636DF /* TransactionGuard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TransactionGuard.cpp; sourceTree = "<group>"; };
@@ -3909,6 +3982,7 @@
 		0D81CDAA2A569CFC0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h"; sourceTree = "<group>"; };
 		0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPColumnConstraintEnablePrimaryAutoIncrement.cpp; sourceTree = "<group>"; };
 		0D81CDAD2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPColumnConstraintEnablePrimaryAutoIncrement.hpp; sourceTree = "<group>"; };
+		0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB.xcconfig; sourceTree = "<group>"; };
 		0DAD93C029FA2A1200E5788C /* TableChainCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChainCall.swift; sourceTree = "<group>"; };
 		0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableChainCall+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
@@ -4048,7 +4122,7 @@
 		234F036C227A9E3D00DD65A2 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		234F036D227A9E3D00DD65A2 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		234F036E227A9E3D00DD65A2 /* WCDB.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = WCDB.modulemap; sourceTree = "<group>"; };
-		234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB.xcconfig; sourceTree = "<group>"; };
+		234F0370227A9E3D00DD65A2 /* WCDBWithoutCompression.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDBWithoutCompression.xcconfig; sourceTree = "<group>"; };
 		234F0388227A9EFA00DD65A2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		234F0389227A9EFA00DD65A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Info.plist; sourceTree = "<group>"; };
 		234F038B227A9EFA00DD65A2 /* ConfigTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigTests.mm; sourceTree = "<group>"; };
@@ -5086,7 +5160,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				759EFEC32B0BAF97009433EB /* zstd.framework in Frameworks */,
 				037C3A812897E33600328EC8 /* Security.framework in Frameworks */,
 				037C3A822897E33600328EC8 /* Foundation.framework in Frameworks */,
 				037C3A832897E33600328EC8 /* libz.tbd in Frameworks */,
@@ -5114,7 +5187,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DE7BF052B22ABDC0087CC56 /* zstd.framework in Frameworks */,
 				750080EC2920EDA2009C0F38 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5131,7 +5203,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				759EFEC12B0BAF80009433EB /* zstd.framework in Frameworks */,
 				2366BB22221BC0E6000ED712 /* Security.framework in Frameworks */,
 				2366BB21221BC0D2000ED712 /* Foundation.framework in Frameworks */,
 				23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */,
@@ -5150,7 +5221,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75EABA6C2ADAE14600AAD3C9 /* zstd.framework in Frameworks */,
 				398B475E239E22F4008CF7C5 /* WCDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5159,7 +5229,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				759EFEC22B0BAF87009433EB /* zstd.framework in Frameworks */,
 				7521D88E291E9ABB009642EF /* Security.framework in Frameworks */,
 				7521D88F291E9ABB009642EF /* Foundation.framework in Frameworks */,
 				7521D890291E9ABB009642EF /* libz.tbd in Frameworks */,
@@ -5171,7 +5240,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				759EFEC42B0BAF9E009433EB /* zstd.framework in Frameworks */,
 				7521DC24291EA349009642EF /* Security.framework in Frameworks */,
 				7521DC25291EA349009642EF /* Foundation.framework in Frameworks */,
 				7521DC26291EA349009642EF /* libz.tbd in Frameworks */,
@@ -7436,7 +7504,8 @@
 				234F036C227A9E3D00DD65A2 /* Release.xcconfig */,
 				234F042F227A9EFA00DD65A2 /* Tests.xcconfig */,
 				234F0369227A9E3C00DD65A2 /* Info.plist */,
-				234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */,
+				234F0370227A9E3D00DD65A2 /* WCDBWithoutCompression.xcconfig */,
+				0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */,
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
 				7521DA49291E9D9E009642EF /* WCDBCpp.modulemap */,
 				7521DA4A291E9D9E009642EF /* WCDBObjc.modulemap */,
@@ -9495,6 +9564,7 @@
 				03330FAD28167ECC0094CFCF /* Sources */,
 				03330FFC28167ECC0094CFCF /* Frameworks */,
 				03330FFE28167ECC0094CFCF /* Resources */,
+				0D22E7AF2B298E9B00AA44D2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -9520,6 +9590,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0DACF7532B29ABE600CB0710 /* PBXTargetDependency */,
 				037C38D12897E33600328EC8 /* PBXTargetDependency */,
 			);
 			name = WCDBCpp;
@@ -9534,6 +9605,7 @@
 				03BF4ABC2888F87C00A30500 /* Sources */,
 				03BF4B192888F87C00A30500 /* Frameworks */,
 				03BF4B1B2888F87C00A30500 /* Resources */,
+				0D22E7B82B298EB200AA44D2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -9553,6 +9625,7 @@
 				03E5CB9E28A38CCA005353D9 /* Sources */,
 				03E5CC4328A38CCA005353D9 /* Frameworks */,
 				03E5CC4528A38CCA005353D9 /* Resources */,
+				0D22E7B22B298EA400AA44D2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -9591,6 +9664,7 @@
 				234F8AD0227B0B5400791E45 /* Sources */,
 				234F8AD1227B0B5400791E45 /* Frameworks */,
 				234F8AD2227B0B5400791E45 /* Resources */,
+				0D22E7B52B298EAC00AA44D2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -9616,6 +9690,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0DACF74F2B29ABD400CB0710 /* PBXTargetDependency */,
 				23F5BE0E20887FFF000CCD37 /* PBXTargetDependency */,
 			);
 			name = WCDB;
@@ -9673,6 +9748,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0DACF7512B29ABDB00CB0710 /* PBXTargetDependency */,
 				7521D6BF291E9ABB009642EF /* PBXTargetDependency */,
 			);
 			name = WCDBObjc;
@@ -9693,6 +9769,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0DACF7552B29ABEC00CB0710 /* PBXTargetDependency */,
 				7521DA55291EA349009642EF /* PBXTargetDependency */,
 			);
 			name = WCDBSwift;
@@ -11957,6 +12034,26 @@
 			target = 239E8A6F2160A5B100BCB308 /* Host */;
 			targetProxy = 03E5CB9B28A38CCA005353D9 /* PBXContainerItemProxy */;
 		};
+		0DACF74F2B29ABD400CB0710 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = zstd;
+			targetProxy = 0DACF74E2B29ABD400CB0710 /* PBXContainerItemProxy */;
+		};
+		0DACF7512B29ABDB00CB0710 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = zstd;
+			targetProxy = 0DACF7502B29ABDB00CB0710 /* PBXContainerItemProxy */;
+		};
+		0DACF7532B29ABE600CB0710 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = zstd;
+			targetProxy = 0DACF7522B29ABE600CB0710 /* PBXContainerItemProxy */;
+		};
+		0DACF7552B29ABEC00CB0710 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = zstd;
+			targetProxy = 0DACF7542B29ABEC00CB0710 /* PBXContainerItemProxy */;
+		};
 		23F5BE0E20887FFF000CCD37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "sqlcipher static";
@@ -12028,7 +12125,7 @@
 		};
 		037C3C0A2897E33600328EC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBCpp.modulemap";
 			};
@@ -12036,7 +12133,7 @@
 		};
 		037C3C0B2897E33600328EC8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBCpp.modulemap";
 			};
@@ -12062,11 +12159,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -12078,11 +12171,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -12118,7 +12207,7 @@
 		};
 		239326671E836D7300D677CC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -12137,7 +12226,7 @@
 		};
 		239326681E836D7300D677CC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -12227,7 +12316,7 @@
 		};
 		7521DA45291E9ABB009642EF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBObjc.modulemap";
 			};
@@ -12235,7 +12324,7 @@
 		};
 		7521DA46291E9ABB009642EF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBObjc.modulemap";
 			};
@@ -12243,7 +12332,7 @@
 		};
 		7521DDDB291EA349009642EF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
 			};
@@ -12251,7 +12340,7 @@
 		};
 		7521DDDC291EA349009642EF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 234F0370227A9E3D00DD65A2 /* WCDB.xcconfig */;
+			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
 			};
