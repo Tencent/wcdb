@@ -28,6 +28,7 @@
 #include "Notifier.hpp"
 #include "ScalarFunctionModule.hpp"
 #include "WCDBError.hpp"
+#include <string.h>
 #if defined(WCDB_ZSTD) && WCDB_ZSTD
 #include <zstd/zdict.h>
 #include <zstd/zstd.h>

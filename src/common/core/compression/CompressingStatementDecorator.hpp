@@ -26,6 +26,7 @@
 
 #include "Compression.hpp"
 #include "DecorativeHandleStatement.hpp"
+#include <limits.h>
 #include <list>
 #include <unordered_map>
 

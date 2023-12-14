@@ -31,6 +31,7 @@
 #include "Notifier.hpp"
 #include "Time.hpp"
 #include <stdlib.h>
+#include <string.h>
 
 namespace WCDB {
 
