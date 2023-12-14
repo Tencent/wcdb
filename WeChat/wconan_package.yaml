@@ -58,7 +58,7 @@ ios:
     system: custom
     # Build static lib. Add one more line with "ObjC" replaced by "Swift" to build swift version
     script: |-
-      ../tools/version/build.sh -p iOS -l All -c Release -d apple_build/ios/release/static --wechat --disable-bitcode --static-framework
+      ../tools/version/build.sh -p iOS -l All -c Release -d apple_build/ios/release/static --wechat --zstd --disable-bitcode --static-framework
 
   dependencies:
 
@@ -101,8 +101,8 @@ macos:
     system: custom
     # build static lib
     script: |-
-      ../tools/version/build.sh -p macOS -l Cpp -c Release -d apple_build/macos-all/release/shared --wechat --disable-bitcode --universal && \
-      ../tools/version/build.sh -p macOS -l Cpp -c Release -d apple_build/macos-all/release/static --wechat --disable-bitcode --static-framework --universal
+      ../tools/version/build.sh -p macOS -l Cpp -c Release -d apple_build/macos-all/release/shared --disable-bitcode --universal && \
+      ../tools/version/build.sh -p macOS -l Cpp -c Release -d apple_build/macos-all/release/static --disable-bitcode --static-framework --universal
 
   dependencies:
 
