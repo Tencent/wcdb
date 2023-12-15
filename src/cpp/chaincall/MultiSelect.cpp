@@ -37,7 +37,7 @@ MultiSelect::MultiSelect(Recyclable<InnerDatabase *> databaseHolder)
 {
 }
 
-MultiSelect &MultiSelect::fromTables(ValueArray<StringView> tableNames)
+MultiSelect &MultiSelect::fromTables(const ValueArray<StringView> &tableNames)
 {
     WCTRemedialAssert(tableNames.size() != 0, "Table names can't be empty.", return *this;);
     TablesOrSubqueries tables;

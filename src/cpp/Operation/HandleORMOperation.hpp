@@ -116,6 +116,22 @@ public:
 
 #pragma mark - Insert
     /**
+     @brief Execute inserting with one object on specific(or all) fields.
+     @return True if no error occurs.
+     */
+    template<class ObjectType>
+    bool insertObject(const ObjectType &obj,
+                      const UnsafeStringView &table,
+                      const Fields &fields = Fields())
+    {
+        auto insert = prepareInsert<ObjectType>().intoTable(table).value(&obj);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
      @brief Execute inserting with multi objects on specific(or all) fields.
      @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
      @return True if no error occurs.
@@ -128,7 +144,25 @@ public:
         if (objs.size() == 0) {
             return true;
         }
-        auto insert = prepareInsert<ObjectType>().intoTable(table).values(objs);
+        auto insert = prepareInsert<ObjectType>().intoTable(table).values(&objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with one object on specific(or all) fields.
+     It will replace the original row while they have same primary key or row id.
+     @return True if no error occurs.
+     */
+    template<class ObjectType>
+    bool insertOrReplaceObject(const ObjectType &obj,
+                               const UnsafeStringView &table,
+                               const Fields &fields = Fields())
+    {
+        auto insert
+        = prepareInsert<ObjectType>().orReplace().intoTable(table).value(&obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -150,7 +184,25 @@ public:
             return true;
         }
         auto insert
-        = prepareInsert<ObjectType>().orReplace().intoTable(table).values(objs);
+        = prepareInsert<ObjectType>().orReplace().intoTable(table).values(&objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will ignore the object while there already exists the same primary key or row id in current table.
+     @return True if no error occurs.
+     */
+    template<class ObjectType>
+    bool insertOrIgnoreObject(const ObjectType &obj,
+                              const UnsafeStringView &table,
+                              const Fields &fields = Fields())
+    {
+        auto insert
+        = prepareInsert<ObjectType>().orIgnore().intoTable(table).value(&obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -172,7 +224,7 @@ public:
             return true;
         }
         auto insert
-        = prepareInsert<ObjectType>().orIgnore().intoTable(table).values(objs);
+        = prepareInsert<ObjectType>().orIgnore().intoTable(table).values(&objs);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -204,7 +256,8 @@ public:
                       const Expression &limit = Expression(),
                       const Expression &offset = Expression())
     {
-        auto update = prepareUpdate<ObjectType>().table(table).set(fields).toObject(obj);
+        auto update
+        = prepareUpdate<ObjectType>().table(table).set(fields).toObject(&obj);
         configStatement(update, where, orders, limit, offset);
         return update.execute();
     }

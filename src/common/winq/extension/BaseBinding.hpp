@@ -39,6 +39,7 @@ public:
 public:
     const CaseInsensitiveList<ColumnDef> &getColumnDefs() const;
     ColumnDef *getColumnDef(const UnsafeStringView &columnName);
+    const ColumnDef *getColumnDef(const UnsafeStringView &columnName) const;
     void enableAutoIncrementForExistingTable();
 
 protected:
