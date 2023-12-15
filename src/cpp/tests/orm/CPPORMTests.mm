@@ -620,8 +620,10 @@
                         @"SELECT value1, value2, value3, value4, value5 FROM testTable WHERE value2 == 2 ORDER BY rowid ASC LIMIT 1",
                         @"DELETE FROM testTable WHERE value3 == 3" ]
          inOperation:^BOOL {
-             XCTAssertTrue(self.database->insertObjects<CPPInheritObject>(object, self.tableName.UTF8String));
-             XCTAssertTrue(self.database->updateRow("def", WCDB_FIELD(CPPInheritObject::value4), self.tableName.UTF8String, WCDB_FIELD(CPPInheritObject::value1) == 1));
+             XCTAssertTrue(self.database->insertObject<CPPInheritBase1>(object, self.tableName.UTF8String, CPPInheritObject::allFields()));
+             CPPInheritObject object2;
+             object2.value4 = "def";
+             XCTAssertTrue(self.database->updateObject<CPPInheritBase1>(object2, { WCDB_FIELD(CPPInheritObject::value4) }, self.tableName.UTF8String, WCDB_FIELD(CPPInheritBase1::value1) == 1));
              auto ret = self.database->getFirstObject<CPPInheritObject>(self.tableName.UTF8String, WCDB_FIELD(CPPInheritObject::value2) == 2);
              XCTAssertTrue(ret.succeed());
              XCTAssertTrue(ret.value().value2 == 2.0 && ret.value().value3 == 3 && ret.value().value4 == "def");

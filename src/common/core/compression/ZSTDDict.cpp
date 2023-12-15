@@ -26,8 +26,10 @@
 #include "Assertion.hpp"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
 #include <zstd/zdict.h>
 #include <zstd/zstd.h>
+#endif
 
 namespace WCDB {
 
@@ -61,6 +63,8 @@ ZSTDDict::~ZSTDDict()
 {
     clearDict();
 }
+
+#if defined(WCDB_ZSTD) && WCDB_ZSTD
 
 void ZSTDDict::clearDict()
 {
@@ -105,6 +109,23 @@ bool ZSTDDict::loadData(const UnsafeData& data)
     }
     return true;
 }
+
+#else
+
+void ZSTDDict::clearDict()
+{
+}
+
+bool ZSTDDict::loadData(const UnsafeData& data)
+{
+    Error error(Error::Code::ZstdError, Error::Level::Error, "You need to build WCDB with WCDB_ZSTD macro");
+    error.infos.insert_or_assign("DictSize", data.size());
+    Notifier::shared().notify(error);
+    SharedThreadedErrorProne::setThreadedError(std::move(error));
+    return false;
+}
+
+#endif
 
 ZSTDDict::DictId ZSTDDict::getDictId() const
 {

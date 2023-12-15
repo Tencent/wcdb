@@ -87,12 +87,13 @@ public:
 
     /**
      @brief Inset an array of objects.
-     @param values Objects to be inserted into table.
+     @param objects Objects to be inserted into table.
      @return this.
      */
-    Insert<ObjectType>& values(const ValueArray<ObjectType> values)
+    Insert<ObjectType>& values(const ValueArray<ObjectType>& objects)
     {
-        m_values = values;
+        m_objs = objects;
+        m_objsptr = &m_objs;
         return *this;
     }
 
@@ -105,11 +106,11 @@ public:
     bool execute()
     {
         bool succeed = true;
-        if (m_values.size() > 0) {
+        if (m_obj != nullptr || m_objsptr != nullptr) {
             if (!checkHandle(true)) {
                 return false;
             }
-            if (m_values.size() > 1) {
+            if (m_objsptr != nullptr && m_objsptr->size() > 1) {
                 succeed = m_handle->runTransaction([&](Handle& handle) {
                     WCDB_UNUSED(handle);
                     return realExecute();
@@ -128,6 +129,18 @@ protected:
     {
     }
 
+    Insert<ObjectType>& values(const ValueArray<ObjectType>* objects)
+    {
+        m_objsptr = objects;
+        return *this;
+    }
+
+    Insert<ObjectType>& value(const ObjectType* obj)
+    {
+        m_obj = obj;
+        return *this;
+    }
+
 private:
     bool realExecute()
     {
@@ -140,41 +153,28 @@ private:
         }
         std::vector<bool> autoIncrementsOfDefinitions;
         if (!m_statement.syntax().conflictActionValid()) {
-            const CaseInsensitiveList<ColumnDef>& columnDefs
-            = ObjectType::getObjectRelationBinding().getColumnDefs();
             for (const Field& field : m_fields) {
                 // auto increment?
-                auto iter = columnDefs.caseInsensitiveFind(field.getDescription());
-                if (iter == columnDefs.end()) {
-                    assertError("Related field is not found.");
+                const ColumnDef* def
+                = field.syntax().getTableBinding()->getColumnDef(field.syntax().name);
+                if (def == nullptr) {
+                    assertError("Related columndef is not found.");
                     return false;
                 }
-                autoIncrementsOfDefinitions.push_back(iter->second.syntax().isAutoIncrement());
+                autoIncrementsOfDefinitions.push_back(def->syntax().isAutoIncrement());
             }
         }
         bool succeed = false;
         if (m_handle->prepare(m_statement)) {
             succeed = true;
-
-            for (ObjectType& value : m_values) {
-                m_handle->reset();
-                int index = 1;
-                assert(!value.isAutoIncrement
-                       || !m_statement.syntax().conflictActionValid());
-                for (const Field& field : m_fields) {
-                    if (autoIncrementsOfDefinitions.empty()
-                        || !autoIncrementsOfDefinitions[index - 1] || !value.isAutoIncrement) {
-                        m_handle->bindObject(value, field, index);
-                    } else {
-                        m_handle->bindNull(index);
+            if (m_obj == nullptr) {
+                for (const ObjectType& obj : *m_objsptr) {
+                    if (!(succeed = stepOneObject(obj, autoIncrementsOfDefinitions))) {
+                        break;
                     }
-                    ++index;
                 }
-                if (!m_handle->step()) {
-                    succeed = false;
-                    break;
-                }
-                *value.lastInsertedRowID = m_handle->getLastInsertedRowID();
+            } else {
+                succeed = stepOneObject(*m_obj, autoIncrementsOfDefinitions);
             }
             assignChanges();
             m_handle->finalize();
@@ -182,8 +182,31 @@ private:
         return succeed;
     }
 
+    bool stepOneObject(const ObjectType& obj, const std::vector<bool>& autoIncrementsOfDefinitions)
+    {
+        m_handle->reset();
+        int index = 1;
+        assert(!obj.isAutoIncrement || !m_statement.syntax().conflictActionValid());
+        for (const Field& field : m_fields) {
+            if (autoIncrementsOfDefinitions.empty()
+                || !autoIncrementsOfDefinitions[index - 1] || !obj.isAutoIncrement) {
+                m_handle->bindObject(obj, field, index);
+            } else {
+                m_handle->bindNull(index);
+            }
+            ++index;
+        }
+        if (!m_handle->step()) {
+            return false;
+        }
+        *obj.lastInsertedRowID = m_handle->getLastInsertedRowID();
+        return true;
+    }
+
     Fields m_fields;
-    ValueArray<ObjectType> m_values;
+    ValueArray<ObjectType> m_objs;
+    const ValueArray<ObjectType>* m_objsptr = nullptr;
+    const ObjectType* m_obj = nullptr;
 };
 
 } // namespace WCDB

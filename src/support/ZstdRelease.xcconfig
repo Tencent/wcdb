@@ -1,0 +1,19 @@
+#include "ZstdBase.xcconfig"
+
+// Architectures
+ONLY_ACTIVE_ARCH = NO
+
+// Build Options
+DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
+
+// Linking
+DEAD_CODE_STRIPPING = YES
+
+// Code Generation
+GCC_OPTIMIZATION_LEVEL = s
+
+// Preprocessing
+GCC_PREPROCESSOR_DEFINITIONS = NDEBUG=1 $(SQLITE_PREPROCESSOR_DEFINITIONS)
+
+// User-Defined
+BITCODE_GENERATION_MODE = bitcode

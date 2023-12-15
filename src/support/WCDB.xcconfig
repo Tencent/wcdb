@@ -1,14 +1,6 @@
-#include "../../sqlcipher/macosx/SQLite.xcconfig"
+#include "WCDBWithoutCompression.xcconfig"
 
-// Linking
-MACH_O_TYPE = mh_dylib
+OTHER_LDFLAGS = $(inherited) -framework zstd
 
-// Packaging
-INFOPLIST_FILE = $(SRCROOT)/support/Info.plist
-PRODUCT_BUNDLE_IDENTIFIER = com.Tencent.$(PRODUCT_NAME:rfc1034identifier)
-
-// Versioning
-MARKETING_VERSION = 1.1.0
-
-// Preprocessing
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) $(WCDB_VERSION_DEFINITIONS) $(SQLITE_PREPROCESSOR_DEFINITIONS) ZLIB_CONST=1 SQLITE_WCDB=1
+WCDB_USE_ZSTD = 1
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) WCDB_ZSTD=$(WCDB_USE_ZSTD)

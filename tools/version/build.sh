@@ -11,6 +11,7 @@ showUsage() {
        [--disable-bitcode]: Use bitcode if not specified.
        [--static-framework]: Produce dynamic framework if not specified.
        [--pretty]: Use \`xcpretty\` if available.
+       [--zstd]: Use Zstd
        [--wechat]: For WeChat.
        [--universal]: Build universal library for macOS.
 """
@@ -27,6 +28,7 @@ static_framework=false
 configuration=Release
 pretty=false
 action=build
+zstd=0
 wechat=false
 universal=false
 
@@ -71,6 +73,10 @@ case "$key" in
     pretty=true
     shift
     ;;
+    --zstd)
+    zstd=1
+    shift
+    ;;
     --wechat)
     wechat=true
     shift
@@ -106,10 +112,10 @@ if $static_framework; then
     settingsPrameter+="--static-framework "
 fi
 if $enable_bitcode; then
-	settingsPrameter+="--enable-bitcode "
+    settingsPrameter+="--enable-bitcode "
 fi
 if $wechat; then
-	settingsPrameter+="--wechat "
+    settingsPrameter+="--wechat "
 fi
 
 settings=`bash $ScriptDir/settings.sh $settingsPrameter`
@@ -189,7 +195,17 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
     if [ -z "$template" ]; then
         template="$product"
     fi
-    builder="xcrun xcodebuild -arch $arch -scheme $scheme -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk $settings $action"
+    builder="xcrun xcodebuild -arch $arch -scheme $scheme -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk WCDB_USE_ZSTD=$zstd $settings $action"
+    if { $static_framework && $wechat; } || !$zstd; then
+        # skip zstd
+        if [ "$platform" = "iOS" ]; then
+          builder+=" OTHER_LDFLAGS="-framework UIKit""
+        elif [ "$platform" = "macOS" ]; then
+          builder+=" OTHER_LDFLAGS="-framework Cocoa""
+        else
+          builder+=" OTHER_LDFLAGS="""
+        fi
+    fi
     if $pretty; then
         if type xcpretty > /dev/null; then
             builder+=" | xcpretty"

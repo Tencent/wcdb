@@ -77,7 +77,7 @@ public:
      @param tableNames The names of the tables to query data from.
      @return this
      */
-    MultiSelect &fromTables(ValueArray<StringView> tableNames);
+    MultiSelect &fromTables(const ValueArray<StringView> &tableNames);
 
     /**
      @brief Get first selected objects.

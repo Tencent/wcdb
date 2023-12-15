@@ -55,6 +55,16 @@ ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName)
     return columnDef;
 }
 
+const ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName) const
+{
+    const ColumnDef *columnDef = nullptr;
+    auto iter = m_columnDefs.caseInsensitiveFind(columnName);
+    if (iter != m_columnDefs.end()) {
+        columnDef = &iter->second;
+    }
+    return columnDef;
+}
+
 void BaseBinding::enableAutoIncrementForExistingTable()
 {
     m_enableAutoIncrementForExistingTable = true;
