@@ -93,7 +93,8 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
     }
 
     LockGuard lockGuard(m_lock);
-    if (m_filted.find(targetTable) == m_filted.end()) {
+    auto iter = m_filted.find(targetTable);
+    if (iter == m_filted.end()) {
         m_compressed = false;
         if (!tableExist.value()) {
             // it's not created
@@ -105,6 +106,8 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
             m_filted.insert_or_assign(targetTable, hold);
             m_hints.erase(targetTable);
         }
+    } else {
+        iter->second->setNeedCheckColumns(true);
     }
     return true;
 }

@@ -99,6 +99,32 @@
          }];
 }
 
+- (void)testRecreateTable
+{
+    [self clearData];
+    self.compressionStatus = CompressionStatus_finishCompressed;
+    [self configCompression];
+    WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from(m_recordTable)];
+    TestCaseAssertTrue(record.count == 3);
+    TestCaseAssertTrue([record[0].stringValue isEqualToString:self.tableName]);
+    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text"]);
+    TestCaseAssertTrue(record[2].numberValue.intValue == 0);
+    [self doTestSQLs:@[
+        @"DROP TABLE IF EXISTS testTable",
+        @"DELETE FROM wcdb_builtin_compression_record WHERE tableName == 'testTable'",
+        @"CREATE TABLE IF NOT EXISTS testTable(mainId INTEGER PRIMARY KEY AUTOINCREMENT, subId REAL, text TEXT, textMatchId INTEGER, blob BLOB, blobMatchId INTEGER)",
+        @"ALTER TABLE main.testTable ADD COLUMN WCDB_CT_text INTEGER DEFAULT NULL",
+        @"INSERT INTO testTable(mainId, subId, text, textMatchId, blob, blobMatchId, WCDB_CT_text) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7)"
+    ]
+         inOperation:^BOOL {
+             TestCaseAssertTrue([self.database dropTable:self.table.tableName]);
+             TestCaseAssertTrue([self.database createTable:self.table.tableName withClass:self.table.tableClass]);
+             return [self.table insertObjects:self.originObjects];
+         }];
+    WCTValue* count = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(m_recordTable)];
+    TestCaseAssertTrue(count.numberValue.intValue == 0);
+}
+
 - (void)testAlterTable
 {
     [self clearData];
