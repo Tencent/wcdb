@@ -67,6 +67,32 @@ CompressionColumnInfo::CompressionColumnInfo(const Column &column, const Column 
     m_column.syntax().m_compressionInfo = this;
 }
 
+CompressionColumnInfo::CompressionColumnInfo(const CompressionColumnInfo &other)
+: m_column(other.m_column)
+, m_columnIndex(other.m_columnIndex.load())
+, m_typeColumn(other.m_typeColumn)
+, m_typeColumnIndex(other.m_typeColumnIndex.load())
+, m_matchColumn(other.m_matchColumn)
+, m_matchColumnIndex(other.m_matchColumnIndex.load())
+, m_compressionType(other.m_compressionType)
+, m_commonDictID(other.m_commonDictID)
+, m_matchDicts(other.m_matchDicts)
+{
+}
+
+CompressionColumnInfo::CompressionColumnInfo(CompressionColumnInfo &&other)
+: m_column(std::move(other.m_column))
+, m_columnIndex(other.m_columnIndex.load())
+, m_typeColumn(std::move(other.m_typeColumn))
+, m_typeColumnIndex(other.m_typeColumnIndex.load())
+, m_matchColumn(std::move(other.m_matchColumn))
+, m_matchColumnIndex(other.m_matchColumnIndex.load())
+, m_compressionType(other.m_compressionType)
+, m_commonDictID(other.m_commonDictID)
+, m_matchDicts(std::move(other.m_matchDicts))
+{
+}
+
 const Column &CompressionColumnInfo::getColumn() const
 {
     return m_column;
@@ -221,7 +247,7 @@ void CompressionTableInfo::setNeedCheckColumns(bool needCheck) const
 StatementSelect CompressionTableInfo::getSelectUncompressRowIdStatement() const
 {
     Expression condition;
-    for (auto column : m_compressingColumns) {
+    for (auto &column : m_compressingColumns) {
         if (condition.syntax().isValid()) {
             condition = condition || column.getTypeColumn().isNull();
         } else {

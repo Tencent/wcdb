@@ -893,6 +893,7 @@
 		0D8084252A861E9500C81BBF /* WCTCancellationSignal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D8084232A861E9500C81BBF /* WCTCancellationSignal.mm */; };
 		0D81CDAB2A569FAB0051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDA92A569CE40051FF8E /* ColumnConstraintEnablePrimaryAutoIncrement.mm */; };
 		0D81CDAE2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */; };
+		0DAD8FF72B303D2A00372DBF /* CompressRobustyTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD8FF62B303D2A00372DBF /* CompressRobustyTests.mm */; };
 		0DAD93C129FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
 		0DAD93C229FA2A1200E5788C /* TableChainCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C029FA2A1200E5788C /* TableChainCall.swift */; };
 		0DAD93C429FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */; };
@@ -3983,6 +3984,7 @@
 		0D81CDAC2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPColumnConstraintEnablePrimaryAutoIncrement.cpp; sourceTree = "<group>"; };
 		0D81CDAD2A56DA070051FF8E /* CPPColumnConstraintEnablePrimaryAutoIncrement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPColumnConstraintEnablePrimaryAutoIncrement.hpp; sourceTree = "<group>"; };
 		0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDB.xcconfig; sourceTree = "<group>"; };
+		0DAD8FF62B303D2A00372DBF /* CompressRobustyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressRobustyTests.mm; sourceTree = "<group>"; };
 		0DAD93C029FA2A1200E5788C /* TableChainCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChainCall.swift; sourceTree = "<group>"; };
 		0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableChainCall+WCTTableCoding.swift"; sourceTree = "<group>"; };
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
@@ -7872,6 +7874,7 @@
 			children = (
 				751FE4E62B1E10F200BFC7AD /* CompressingCRUDTest.mm */,
 				0D2789D82B21995800F60E2D /* CompressionTests.mm */,
+				0DAD8FF62B303D2A00372DBF /* CompressRobustyTests.mm */,
 			);
 			path = compatible;
 			sourceTree = "<group>";
@@ -10600,6 +10603,7 @@
 				0DE68B3E2AB461AA008BD74C /* AutoIncrementRepairTestObject.mm in Sources */,
 				234F05E8227AA4F600DD65A2 /* StatementReleaseTests.mm in Sources */,
 				39327B8122CF275900AABD4B /* Random+WCDB.mm in Sources */,
+				0DAD8FF72B303D2A00372DBF /* CompressRobustyTests.mm in Sources */,
 				39327B6B22CF275200AABD4B /* TestCaseCounter.mm in Sources */,
 				758E7F3E2B1C99C700319991 /* CompressionTestCase.mm in Sources */,
 				234F0640227AA50800DD65A2 /* ColumnCodingTests.mm in Sources */,

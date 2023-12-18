@@ -28,6 +28,7 @@
 #include "ColumnType.hpp"
 #include "StringView.hpp"
 #include "ZSTDDict.hpp"
+#include <atomic>
 #include <list>
 #include <memory>
 #include <unordered_map>
@@ -49,6 +50,8 @@ public:
     CompressionColumnInfo() = delete;
     CompressionColumnInfo(const Column &column, CompressionType type);
     CompressionColumnInfo(const Column &column, const Column &matchColumn);
+    CompressionColumnInfo(const CompressionColumnInfo &other);
+    CompressionColumnInfo(CompressionColumnInfo &&other);
 
     const Column &getColumn() const;
     void setColumnIndex(uint16_t index) const;
@@ -71,11 +74,11 @@ public:
 
 private:
     Column m_column;
-    mutable uint16_t m_columnIndex;
+    mutable std::atomic_ushort m_columnIndex;
     Column m_typeColumn;
-    mutable uint16_t m_typeColumnIndex;
+    mutable std::atomic_ushort m_typeColumnIndex;
     Column m_matchColumn;
-    mutable uint16_t m_matchColumnIndex;
+    mutable std::atomic_ushort m_matchColumnIndex;
 
     CompressionType m_compressionType;
     DictId m_commonDictID;

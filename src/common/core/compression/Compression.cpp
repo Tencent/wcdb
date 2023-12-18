@@ -178,12 +178,21 @@ bool Compression::checkCompressingColumn(InfoInitializer& initializer,
     if (!info->needCheckColumns()) {
         return true;
     }
+    InnerHandle* handle = initializer.getCurrentHandle();
     auto addColumn = initializer.checkCompressingColumns(*info);
     if (addColumn.failed()) {
         return false;
+    } else if (addColumn.value() && !handle->isInTransaction()) {
+        bool ret = handle->runTransaction([&](InnerHandle*) {
+            addColumn = initializer.checkCompressingColumns(*info);
+            return addColumn.succeed();
+        });
+        if (!ret) {
+            return false;
+        }
     }
     info->setNeedCheckColumns(false);
-    if (addColumn.value() && initializer.getCurrentHandle()->isInTransaction()) {
+    if (addColumn.value() && handle->isInTransaction()) {
         m_commitingTables.getOrCreate().insert(info);
     }
     return true;
@@ -252,6 +261,9 @@ Compression::InfoInitializer::checkCompressingColumns(const CompressionTableInfo
             columnIndex++;
         }
         if (!findTypeColumn) {
+            if (!handle->isInTransaction()) {
+                return true;
+            }
             if (!handle->addColumn(
                 Schema::main(),
                 tableName,
