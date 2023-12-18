@@ -59,6 +59,7 @@ typedef NS_ENUM(NSUInteger, DatabaseTestCaseExpect) {
 @property (nonatomic, assign) BOOL expectSQLsInAllThreads;
 @property (nonatomic, assign) DatabaseTestCaseExpect expectMode;
 @property (nonatomic, assign) BOOL skipFullSQLTrace;
+@property (nonatomic, assign) BOOL logSQL;
 
 - (void)doTestSQLs:(NSArray<NSString*>*)expectedSQLs
        inOperation:(BOOL (^)())block;

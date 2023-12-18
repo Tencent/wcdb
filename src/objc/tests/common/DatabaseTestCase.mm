@@ -147,6 +147,9 @@
             @synchronized(expectedSQLs) {
                 [self checkInfo:info withSQL:sql];
                 [self doTestSQLAsExpected:expectedSQLs sql:sql];
+                if (self.logSQL) {
+                    [self log:sql];
+                }
             }
         }];
         if (self.expectMode != DatabaseTestCaseExpectSomeSQLs) {

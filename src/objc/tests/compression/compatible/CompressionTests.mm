@@ -84,6 +84,21 @@
     TestCaseAssertTrue(count.numberValue.intValue == 0);
 }
 
+- (void)testDropUncompressedTable
+{
+    [self clearData];
+    self.compressionStatus = CompressionStatus_uncompressed;
+    [self configCompression];
+    WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from(m_recordTable)];
+    TestCaseAssertNil(record);
+    [self doTestSQLs:@[
+        @"DROP TABLE IF EXISTS testTable",
+    ]
+         inOperation:^BOOL {
+             return [self.database dropTable:self.table.tableName];
+         }];
+}
+
 - (void)testAlterTable
 {
     [self clearData];
@@ -106,6 +121,21 @@
     TestCaseAssertTrue([record[0].stringValue isEqualToString:@"newTable"]);
     TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text"]);
     TestCaseAssertTrue(record[2].numberValue.intValue == 0);
+}
+
+- (void)testAlterUncompressedTable
+{
+    [self clearData];
+    self.compressionStatus = CompressionStatus_uncompressed;
+    [self configCompression];
+    WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from(m_recordTable)];
+    TestCaseAssertNil(record);
+    [self doTestSQLs:@[
+        @"ALTER TABLE testTable RENAME TO newTable"
+    ]
+         inOperation:^BOOL {
+             return [self.database execute:WCDB::StatementAlterTable().alterTable(self.tableName).renameToTable(@"newTable")];
+         }];
 }
 
 - (void)testCompressionType
