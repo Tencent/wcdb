@@ -326,7 +326,7 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
     for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
             bool added = false;
-            for (auto constrain : iter.second.syntax().constraints) {
+            for (auto &constrain : iter.second.syntax().constraints) {
                 if (constrain.switcher == WCDB::Syntax::ColumnConstraint::Switch::UnIndexed) {
                     arguments.push_back(StringView().formatted(
                     "%s %s",

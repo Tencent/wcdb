@@ -112,7 +112,7 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
         return false;
     }
     StringViewMap<std::pair<StringView, int64_t>> allRecordsMap;
-    for (auto row : allRecords.value()) {
+    for (auto& row : allRecords.value()) {
         allRecordsMap.emplace(row[0].textValue(),
                               { row[1].textValue(), row[2].intValue() });
     }
