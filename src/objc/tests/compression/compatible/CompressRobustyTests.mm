@@ -22,67 +22,20 @@
  * limitations under the License.
  */
 
-#import "TableTestCase.h"
 #import "TestCase.h"
 
-@interface CompressRobustyTests : TableTestCase
-
-@property (nonatomic, assign) NSInteger expectedDatabaseSize;
-@property (nonatomic, strong) NSArray<NSString*>* allTables;
+@interface CompressRobustyTests : RobustyTestCase
 
 @end
 
 @implementation CompressRobustyTests
-
-- (BOOL)fillDatabaseUntilMeetExpectedSize
-{
-    NSMutableArray* allTables = [[NSMutableArray alloc] init];
-    NSString* currentTable = nil;
-    BOOL checkpointed = NO; // leave wal exists
-    while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
-        @autoreleasepool {
-            if (currentTable == nil || Random.shared.uint16 % 10 == 0) {
-                currentTable = [Random.shared tableNameWithPrefix:self.tablePrefix];
-                if (![self.database createTable:currentTable withClass:TestCaseObject.class]) {
-                    TestCaseFailure();
-                    return NO;
-                }
-                [allTables addObject:currentTable];
-            }
-
-            int count = 0;
-            do {
-                count = Random.shared.uint8;
-            } while (count == 0);
-            NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:count];
-            if (![self.database insertObjects:objects intoTable:currentTable]) {
-                TestCaseFailure();
-                return NO;
-            }
-            if (Random.shared.uint8 % 100 == 0) {
-                if (![self.database passiveCheckpoint]) {
-                    TestCaseFailure();
-                    return NO;
-                }
-                checkpointed = YES;
-            } else {
-                checkpointed = NO;
-            }
-        }
-    }
-    if (![self.fileManager fileExistsAtPath:self.database.walPath]) {
-        TestCaseFailure();
-        return NO;
-    }
-    self.allTables = allTables;
-    return YES;
-}
 
 - (void)setUp
 {
     [super setUp];
     self.skipDebugLog = YES;
     [self.database enableAutoCheckpoint:YES];
+    self.tableFactor = 10;
 }
 
 - (NSString*)tablePrefix

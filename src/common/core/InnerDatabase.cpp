@@ -180,6 +180,14 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             assignWithSharedThreadedError();
             break;
         }
+        // vaccum
+        {
+            Repair::FactoryVacuum vaccumer = m_factory.vaccumer();
+            if (!vaccumer.work()) {
+                setThreadedError(vaccumer.getError());
+                break;
+            }
+        }
         // retrieveRenewed
         {
             Repair::FactoryRenewer renewer = m_factory.renewer();
@@ -332,7 +340,7 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
         handle = std::make_shared<CipherHandle>();
         break;
     default:
-        WCTAssert(slot == HandleSlotAssemble);
+        WCTAssert(slot == HandleSlotAssemble || slot == HandleSlotVacuum);
         handle = std::make_shared<ConfiguredHandle>();
         break;
     }
@@ -362,7 +370,8 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
     handle->setBusyTraceEnable(Core::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
-    handle->enableWriteMainDB(slot == HandleSlotAutoTask || slot == HandleSlotAssemble);
+    handle->enableWriteMainDB(slot == HandleSlotAutoTask || slot == HandleSlotAssemble
+                              || slot == HandleSlotVacuum);
     handle->markAsCanBeSuspended(false);
     handle->markErrorAsUnignorable(99); //Clear all ignorable code
 
@@ -398,7 +407,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
         return false;
     }
 
-    if (slot != HandleSlotAssemble && slot != HandleSlotCipher) {
+    if (slot != HandleSlotAssemble && slot != HandleSlotVacuum && slot != HandleSlotCipher) {
         handle->setPath(path);
         bool hasOpened = handle->isOpened();
         Time start = Time::now();
@@ -820,7 +829,25 @@ bool InnerDatabase::deposit()
     return result;
 }
 
-double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated)
+bool InnerDatabase::containsDeposited() const
+{
+    SharedLockGuard concurrencyGuard(m_concurrency);
+    return m_factory.containsDeposited();
+}
+
+bool InnerDatabase::removeDeposited()
+{
+    bool result = false;
+    close([&result, this]() {
+        result = m_factory.removeDeposited();
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
+    return result;
+}
+
+double InnerDatabase::retrieve(const ProgressCallback &onProgressUpdated)
 {
     if (m_isInMemory) {
         return 0;
@@ -844,6 +871,7 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
         if (assemblerHandle == nullptr) {
             return;
         }
+        assemblerHandle->markAsCanBeSuspended(true);
         RecyclableHandle cipherHandle = flowOut(HandleType::AssembleCipher);
         if (cipherHandle == nullptr) {
             return;
@@ -881,20 +909,77 @@ double InnerDatabase::retrieve(const RetrieveProgressCallback &onProgressUpdated
     return result;
 }
 
-bool InnerDatabase::containsDeposited() const
+bool InnerDatabase::vaccum(const ProgressCallback &onProgressUpdated)
 {
-    SharedLockGuard concurrencyGuard(m_concurrency);
-    return m_factory.containsDeposited();
-}
-
-bool InnerDatabase::removeDeposited()
-{
-    bool result = false;
-    close([&result, this]() {
-        result = m_factory.removeDeposited();
-        if (!result) {
-            assignWithSharedThreadedError();
+    if (m_isInMemory) {
+        return true;
+    }
+    int64_t pageCount = 0;
+    {
+        RecyclableHandle handle = getHandle(false);
+        if (handle == nullptr) {
+            return false;
         }
+        if (!handle->prepare(StatementPragma().pragma(Pragma::pageCount()))
+            || !handle->step() || handle->done()) {
+            setThreadedError(handle->getError());
+            handle->finalize();
+            return false;
+        }
+        pageCount = handle->getInteger();
+        handle->finalize();
+        if (!handle->prepare(StatementPragma().pragma(Pragma::freelistCount()))
+            || !handle->step() || handle->done()) {
+            setThreadedError(handle->getError());
+            handle->finalize();
+            return false;
+        }
+        pageCount -= handle->getInteger();
+        handle->finalize();
+    }
+    bool result = false;
+    close([&result, &onProgressUpdated, &pageCount, this]() {
+        InitializedGuard initializedGuard = initialize();
+        if (!initializedGuard.valid()) {
+            return;
+        }
+
+        RecyclableHandle assemblerHandle = flowOut(HandleType::Vacuum);
+        if (assemblerHandle == nullptr) {
+            return;
+        }
+        assemblerHandle->markAsCanBeSuspended(true);
+        RecyclableHandle cipherHandle = flowOut(HandleType::VacuumCipher);
+        if (cipherHandle == nullptr) {
+            return;
+        }
+
+        WCTAssert(assemblerHandle.get() != cipherHandle.get());
+        WCTAssert(!assemblerHandle->isOpened());
+
+        Core::shared().setThreadedErrorPath(path);
+
+        Repair::FactoryVacuum vaccummer = m_factory.vaccumer();
+        AssembleHandleOperator assembleOperator(assemblerHandle.get());
+        vaccummer.setAssembleDelegate(&assembleOperator);
+        WCTAssert(dynamic_cast<CipherHandle *>(cipherHandle.get()) != nullptr);
+        vaccummer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
+        vaccummer.setProgressCallback(onProgressUpdated);
+
+        if (!vaccummer.prepare(pageCount)) {
+            setThreadedError(vaccummer.getError());
+            Core::shared().setThreadedErrorPath("");
+            return;
+        }
+
+        if (!vaccummer.work()) {
+            setThreadedError(vaccummer.getError());
+            Core::shared().setThreadedErrorPath("");
+            return;
+        }
+        Core::shared().setThreadedErrorPath("");
+        cipherHandle->close();
+        result = true;
     });
     return result;
 }

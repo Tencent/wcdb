@@ -106,12 +106,12 @@ bool Mechanic::work()
 
             if (!m_assembleDelegate->isAssemblingTableWithoutRowid()) {
                 for (const auto &verifiedPagenosElement : contentElement.second->verifiedPagenos) {
-                    if (isErrorCritial()) {
-                        break;
-                    }
                     m_checksum = verifiedPagenosElement.hash;
                     if (!crawl(verifiedPagenosElement.number)) {
                         tryUpgradeCrawlerError();
+                        if (isErrorCritial()) {
+                            break;
+                        }
                     }
                 }
             } else if (contentElement.second->rootPage > 1) {
@@ -121,7 +121,9 @@ bool Mechanic::work()
             }
             assembleAssociatedSQLs(contentElement.second->associatedSQLs);
         }
-        markAsAssembled();
+        if (!isErrorCritial()) {
+            markAsAssembled();
+        }
     }
     if (numberOfPages == 0 && !isErrorCritial() && getScore().value() == 0) {
         increaseScore(1);

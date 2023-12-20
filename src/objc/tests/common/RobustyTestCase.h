@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/09/26
+// Created by qiuwenchen on 2023/12/20.
 //
 
 /*
@@ -22,32 +22,16 @@
  * limitations under the License.
  */
 
-#pragma once
+#import "DatabaseTestCase.h"
+#import "TestCaseObject.h"
 
-#include <functional>
+@interface RobustyTestCase : DatabaseTestCase
+@property (nonatomic, assign) NSInteger expectedDatabaseSize;
+@property (nonatomic, assign) NSInteger tableFactor;
+@property (nonatomic, readonly) NSString* tablePrefix;
+@property (nonatomic, readonly) NSArray<NSString*>* allTables;
 
-namespace WCDB {
+- (BOOL)fillDatabaseUntilMeetExpectedSize;
+- (NSDictionary<NSString*, NSArray<TestCaseObject*>*>*)getTableObjects;
 
-namespace Repair {
-
-class Progress {
-public:
-    Progress();
-    virtual ~Progress() = 0;
-
-    typedef std::function<bool(double progress, double increment)> ProgressUpdateCallback;
-    void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
-
-protected:
-    bool increaseProgress(double increment);
-    bool finishProgress();
-
-private:
-    bool updateProgress(double progress);
-    double m_progress;
-    ProgressUpdateCallback m_onProgressUpdated;
-};
-
-} //namespace Repair
-
-} //namespace WCDB
+@end

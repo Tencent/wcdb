@@ -115,12 +115,18 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
     switch (rootpage.getType()) {
     case Page::Type::InteriorTable:
         for (int i = 0; i < rootpage.getNumberOfSubpages(); ++i) {
+            if (m_suspend) {
+                return;
+            }
             int pageno = rootpage.getSubpageno(i);
             safeCrawl(pageno, crawledInteriorPages, height + 1);
         }
         break;
     case Page::Type::InteriorIndex:
         for (int i = 0; i < rootpage.getNumberOfCells(); ++i) {
+            if (m_suspend) {
+                return;
+            }
             Cell cell = rootpage.getCell(i);
             if (cell.initialize()) {
                 safeCrawl(cell.getLeftChild(), crawledInteriorPages, height + 1);
@@ -134,6 +140,9 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
     case Page::Type::LeafTable:
     case Page::Type::LeafIndex:
         for (int i = 0; i < rootpage.getNumberOfCells(); ++i) {
+            if (m_suspend) {
+                return;
+            }
             Cell cell = rootpage.getCell(i);
             if (cell.initialize()) {
                 onCellCrawled(cell);

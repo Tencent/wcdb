@@ -22,8 +22,6 @@
  * limitations under the License.
  */
 
-#import "AllTypesObject+WCTTableCoding.h"
-#import "AllTypesObject.h"
 #import "BackupTestCase.h"
 #import "Random+RepairTestObject.h"
 #import "SizeBasedFactory.h"
@@ -77,6 +75,7 @@
             sanity = NO;
         }
         lastPercentage = percentage;
+        return true;
     }];
     TestCaseAssertTrue(sanity);
     TestCaseAssertEqual(score, 1.0);
@@ -94,10 +93,30 @@
             sanity = NO;
         }
         lastPercentage = percentage;
+        return true;
     }];
     TestCaseAssertTrue(sanity);
     TestCaseAssertNotEqual(score, 1.0);
     TestCaseAssertEqual(lastPercentage, 1.0);
+}
+
+- (void)doTestRetrieveInterrupt
+{
+    __block double lastPercentage = 0;
+    __block BOOL sanity = YES;
+    float interruptPoint = Random.shared.float_0_1;
+    double score = [self.database retrieve:^(double percentage, double increment) {
+        if (percentage - lastPercentage != increment
+            || increment <= 0) {
+            TestCaseFailure();
+            sanity = NO;
+        }
+        lastPercentage = percentage;
+        return percentage < interruptPoint;
+    }];
+    TestCaseAssertTrue(sanity);
+    TestCaseAssertEqual(score, -1);
+    TestCaseAssertTrue(lastPercentage >= interruptPoint && lastPercentage < 1 && lastPercentage < interruptPoint + [self.testClass hasRowid] ? 0.1 : 0.5);
 }
 
 #pragma mark - Non-Corrupted
@@ -109,6 +128,16 @@
         TestCaseAssertTrue([self.database deposit]);
 
         [self doTestRetrieve];
+        [self doTestObjectsRetrieved];
+    }];
+}
+
+- (void)test_interrupt_retrieve_with_backup_and_deposit
+{
+    [self
+    executeTest:^{
+        [self doBackupWithIncrementalMaterial];
+        [self doTestRetrieveInterrupt];
         [self doTestObjectsRetrieved];
     }];
 }
@@ -156,7 +185,6 @@
     [self
     executeTest:^{
         [self doBackupWithIncrementalMaterial];
-        ;
 
         [self doTestRetrieve];
         [self doTestObjectsRetrieved];
@@ -288,6 +316,7 @@
                                 TestCaseLog(@"Retrieving %.2f%%", newPercentage);
                                 percentage = newPercentage;
                             }
+                            return true;
                         }],
                         1.0);
 }

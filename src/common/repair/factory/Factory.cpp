@@ -49,7 +49,7 @@ Optional<std::list<StringView>> Factory::getWorkshopDirectories() const
         directory,
         [&workshopDirectories](
         const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
-            if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
+            if (isDirectory && isWorkshopDirectory(subpath)) {
                 workshopDirectories.push_back(Path::addComponent(root, subpath));
             }
             return true;
@@ -89,7 +89,7 @@ bool Factory::containsDeposited() const
     directory,
     [&contains, &databaseName](
     const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
-        if (isDirectory && subpath != restoreDirectoryName && subpath != renewDirectoryName) {
+        if (isDirectory && isWorkshopDirectory(subpath)) {
             StringView databasePath
             = Path::addComponent(Path::addComponent(root, subpath), databaseName);
             auto exist = FileManager::fileExists(databasePath);
@@ -101,6 +101,11 @@ bool Factory::containsDeposited() const
         return true;
     });
     return contains;
+}
+
+bool Factory::isWorkshopDirectory(const UnsafeStringView &dir)
+{
+    return dir != restoreDirectoryName && dir != renewDirectoryName && dir != vaccumDirectoryName;
 }
 
 #pragma mark - Factory Related
@@ -124,6 +129,11 @@ FactoryRetriever Factory::retriever() const
     return FactoryRetriever(*this);
 }
 
+FactoryVacuum Factory::vaccumer() const
+{
+    return FactoryVacuum(*this);
+}
+
 FactoryBackup Factory::backup() const
 {
     return FactoryBackup(*this);
@@ -142,7 +152,7 @@ bool Factory::removeDeposited() const
         directory,
         [&depositedPath](
         const UnsafeStringView &root, const UnsafeStringView &subpath, bool isDirectory) -> bool {
-            if (isDirectory && subpath != renewDirectoryName && subpath != restoreDirectoryName) {
+            if (isDirectory && isWorkshopDirectory(subpath)) {
                 depositedPath.push_back(Path::addComponent(root, subpath));
             }
             return true;
@@ -206,6 +216,11 @@ StringView Factory::getRestoreDirectory() const
 StringView Factory::getRenewDirectory() const
 {
     return Path::addComponent(directory, renewDirectoryName);
+}
+
+StringView Factory::getVacuumDirectory() const
+{
+    return Path::addComponent(directory, vaccumDirectoryName);
 }
 
 StringView Factory::getDatabaseName() const

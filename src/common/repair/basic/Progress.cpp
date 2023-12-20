@@ -35,27 +35,28 @@ Progress::Progress() : m_progress(0), m_onProgressUpdated(nullptr)
 
 Progress::~Progress() = default;
 
-void Progress::increaseProgress(double increment)
+bool Progress::increaseProgress(double increment)
 {
     double progress = m_progress + increment;
-    updateProgress(progress > 0.9999 ? 0.9999 : progress);
+    return updateProgress(progress > 0.9999 ? 0.9999 : progress);
 }
 
-void Progress::finishProgress()
+bool Progress::finishProgress()
 {
-    updateProgress(1);
+    return updateProgress(1);
 }
 
-void Progress::updateProgress(double progress)
+bool Progress::updateProgress(double progress)
 {
     double increment = progress - m_progress;
     WCTAssert(increment >= 0);
     if (increment > 0) {
         m_progress = progress;
         if (m_onProgressUpdated != nullptr) {
-            m_onProgressUpdated(m_progress, increment);
+            return m_onProgressUpdated(m_progress, increment);
         }
     }
+    return true;
 }
 
 void Progress::setProgressCallback(const ProgressUpdateCallback &onProgressUpdated)

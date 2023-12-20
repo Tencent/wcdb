@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/09/26
+// Created by qiuwenchen on 2023/12/16.
 //
 
 /*
@@ -24,30 +24,21 @@
 
 #pragma once
 
-#include <functional>
-
 namespace WCDB {
 
 namespace Repair {
 
-class Progress {
+class ErrorSensitivity {
 public:
-    Progress();
-    virtual ~Progress() = 0;
-
-    typedef std::function<bool(double progress, double increment)> ProgressUpdateCallback;
-    void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
-
-protected:
-    bool increaseProgress(double increment);
-    bool finishProgress();
+    ErrorSensitivity();
+    virtual ~ErrorSensitivity();
+    virtual void setErrorSensitive(bool sensitive);
+    bool isErrorSensitive() const;
 
 private:
-    bool updateProgress(double progress);
-    double m_progress;
-    ProgressUpdateCallback m_onProgressUpdated;
+    bool m_errorSensitive;
 };
 
-} //namespace Repair
+} // namespace Repair
 
-} //namespace WCDB
+} // namespace WCDB

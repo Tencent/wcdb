@@ -48,7 +48,11 @@ bool UpgradeableErrorProne::isErrorCritial() const
 
 int UpgradeableErrorProne::errorSeverity(const Error &error)
 {
-    if (error.level < Error::Level::Error) {
+    if (error.level == Error::Level::Ignore) {
+        if (error.code() != Error::Code::Interrupt) {
+            return -1;
+        }
+    } else if (!isErrorSensitive() && error.level < Error::Level::Error) {
         return -1;
     }
     switch (error.code()) {
@@ -60,11 +64,16 @@ int UpgradeableErrorProne::errorSeverity(const Error &error)
     case Error::Code::IOError:
         return Severity::Critical + 1;
     case Error::Code::NoMemory:
+    case Error::Code::Interrupt:
         return Severity::Critical;
     case Error::Code::OK:
         return Severity::None;
     default:
-        return Severity::Normal;
+        if (isErrorSensitive()) {
+            return Severity::Normal;
+        } else {
+            return Severity::Critical;
+        }
     }
 }
 

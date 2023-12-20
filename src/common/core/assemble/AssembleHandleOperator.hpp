@@ -39,6 +39,7 @@ public:
     const StringView &getAssemblePath() const override final;
     const Error &getAssembleError() const override final;
 
+    void suspendAssemble() override final;
     void finishAssemble() override final;
 
     bool markAsAssembling() override final;

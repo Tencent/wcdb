@@ -38,13 +38,24 @@ namespace Repair {
 
 #pragma mark - Initialize
 FullCrawler::FullCrawler(const UnsafeStringView &source)
-: Repairman(source), m_masterCrawler(), m_sequenceCrawler()
+: Repairman(source), m_pageCount(0), m_masterCrawler(), m_sequenceCrawler()
 {
     m_sequenceCrawler.setAssociatedPager(&m_pager);
     m_masterCrawler.setAssociatedPager(&m_pager);
 }
 
 FullCrawler::~FullCrawler() = default;
+
+void FullCrawler::setPageCount(int64_t pageCount)
+{
+    m_pageCount = pageCount;
+}
+
+void FullCrawler::setErrorSensitive(bool sensitive)
+{
+    Repairman::setErrorSensitive(sensitive);
+    m_pager.setErrorSensitive(sensitive);
+}
 
 #pragma mark - Repair
 bool FullCrawler::work()
@@ -69,14 +80,14 @@ bool FullCrawler::work()
             setCriticalError(m_cipherDelegate->getCipherError());
             return exit(false);
         }
-        m_pager.setCipherContext(m_cipherDelegate->getCipherContext());
+        m_pager.setCipherContext(pCodec);
         m_pager.setPageSize((int) pageSize);
     }
 
     if (!m_pager.initialize()) {
         if (m_pager.getError().isCorruption()) {
             tryUpgradeCrawlerError();
-            return exit(true);
+            return exit(isErrorSensitive() ? false : true);
         } else {
             setCriticalError(m_pager.getError());
             return exit(false);
@@ -84,20 +95,26 @@ bool FullCrawler::work()
     }
 
     //calculate score
-    int numbersOfLeafTablePages = 0;
-    for (int i = 1; i <= m_pager.getNumberOfPages(); ++i) {
-        Page page(i, &m_pager);
-        auto type = page.acquireType();
-        // treat as leaf table if unknown
-        if (type.failed() || type.value() == Page::Type::LeafTable) {
-            ++numbersOfLeafTablePages;
+    int64_t numbersOfLeafTablePages = 0;
+    if (m_pageCount != 0) {
+        numbersOfLeafTablePages = m_pageCount;
+    } else {
+        for (int i = 1; i <= m_pager.getNumberOfPages(); ++i) {
+            Page page(i, &m_pager);
+            auto type = page.acquireType();
+            // treat as leaf table if unknown
+            if (type.failed() || type.value() == Page::Type::LeafTable) {
+                ++numbersOfLeafTablePages;
+            }
         }
     }
     // If there are only without-rowid tables in the db, numbersOfLeafTablePages will be 0
     setPageWeight(Fraction(1, numbersOfLeafTablePages == 0 ? 1 : numbersOfLeafTablePages));
 
     if (markAsAssembling()) {
-        m_masterCrawler.work(this);
+        if (!m_masterCrawler.work(this) || isErrorCritial()) {
+            return exit();
+        }
         for (const auto &element : m_associatedSQLs) {
             assembleAssociatedSQLs(element.second);
         }
@@ -125,8 +142,10 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
     if (page.getType() == Page::Type::LeafTable) {
         increaseProgress(getPageWeight().value());
     }
-    m_assembleDelegate->markDuplicatedAsReplaceable(
-    m_pager.containPageInWal(page.number));
+    if (!isErrorSensitive()) {
+        m_assembleDelegate->markDuplicatedAsReplaceable(
+        m_pager.containPageInWal(page.number));
+    }
     return true;
 }
 

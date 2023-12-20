@@ -592,9 +592,9 @@ public:
     bool containsDeposited() const;
 
     /**
-     Triggered when repairment progresses.
+     Triggered when operation progresses, you can return false to stop the operation.
      */
-    typedef std::function<void(double progress /* percentage */, double increment /* increment */)> ProgressUpdateCallback;
+    typedef std::function<bool /* continue flag */ (double progress /* percentage */, double increment /* increment */)> ProgressUpdateCallback;
 
     /**
      @brief Recover data from a corruped db.

@@ -25,11 +25,9 @@
 #import "BackupTestCase.h"
 #import "TestCase.h"
 
-@interface RetrieveRobustyTests : BackupTestCase
+@interface RetrieveRobustyTests : RobustyTestCase
 
 @property (nonatomic, readonly) double expectedAttackRadio;
-@property (nonatomic, readonly) NSString* tablePrefix;
-@property (nonatomic, assign) NSInteger expectedDatabaseSize;
 @property (nonatomic, readonly) double deviationForTolerance;
 
 @end
@@ -40,17 +38,13 @@
 {
     [super setUp];
     self.skipDebugLog = YES;
+    self.tableFactor = 1000;
     [self.database enableAutoCheckpoint:YES];
 }
 
 - (double)expectedAttackRadio
 {
     return 0.01;
-}
-
-- (NSString*)tablePrefix
-{
-    return @"t_";
 }
 
 - (double)deviationForTolerance
@@ -90,66 +84,6 @@
         }
     }
     return (double) matchedCount / totalCount;
-}
-
-- (BOOL)fillDatabaseUntilMeetExpectedSize
-{
-    NSString* currentTable = nil;
-    BOOL checkpointed = NO; // leave wal exists
-    while (checkpointed || [self.database getFilesSize] < self.expectedDatabaseSize) {
-        if (currentTable == nil || Random.shared.uint16 % 1000 == 0) {
-            currentTable = [Random.shared tableNameWithPrefix:self.tablePrefix];
-            if (![self.database createTable:currentTable withClass:TestCaseObject.class]) {
-                TestCaseFailure();
-                return NO;
-            }
-        }
-
-        int count = 0;
-        do {
-            count = Random.shared.uint8;
-        } while (count == 0);
-        NSArray<TestCaseObject*>* objects = [Random.shared autoIncrementTestCaseObjectsWithCount:count];
-        if (![self.database insertObjects:objects intoTable:currentTable]) {
-            TestCaseFailure();
-            return NO;
-        }
-        if (Random.shared.uint8 % 100 == 0) {
-            if (![self.database passiveCheckpoint]) {
-                TestCaseFailure();
-                return NO;
-            }
-            checkpointed = YES;
-        } else {
-            checkpointed = NO;
-        }
-    }
-    if (![self.fileManager fileExistsAtPath:self.database.walPath]) {
-        TestCaseFailure();
-        return NO;
-    }
-    return YES;
-}
-
-- (NSDictionary<NSString*, NSArray<TestCaseObject*>*>*)getTableObjects
-{
-    NSMutableDictionary<NSString*, NSArray<TestCaseObject*>*>* tableObjects = [NSMutableDictionary<NSString*, NSArray<TestCaseObject*>*> dictionary];
-    {
-        // get all objects
-        NSString* likeExpressions = [NSString stringWithFormat:@"%@%%", self.tablePrefix];
-        NSArray* tableNames = [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.like(likeExpressions))];
-        if (tableNames.count == 0) {
-            TestCaseFailure();
-            return nil;
-        }
-        for (NSString* tableName in tableNames) {
-            NSArray<TestCaseObject*>* objects = [self.database getObjectsOfClass:TestCaseObject.class fromTable:tableName];
-            if (objects != nil) {
-                [tableObjects setObject:objects forKey:tableName];
-            }
-        }
-    }
-    return tableObjects;
 }
 
 - (double)pageBasedAttackAsExpectedRadio

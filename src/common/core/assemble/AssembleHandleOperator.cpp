@@ -67,6 +67,11 @@ const Error &AssembleHandleOperator::getAssembleError() const
     return getHandle()->getError();
 }
 
+void AssembleHandleOperator::suspendAssemble()
+{
+    return getHandle()->suspend(true);
+}
+
 void AssembleHandleOperator::finishAssemble()
 {
     getHandle()->close();
@@ -95,7 +100,6 @@ bool AssembleHandleOperator::markAsAssembled()
     if (handle->isInTransaction()) {
         succeed = handle->commitOrRollbackTransaction() && succeed;
     }
-    handle->checkpoint(AbstractHandle::CheckpointMode::Passive);
     // TODO: check integrity after assembled?
     handle->close();
     return succeed;
@@ -108,7 +112,6 @@ bool AssembleHandleOperator::markAsMilestone()
         if (!handle->commitOrRollbackTransaction()) {
             return false;
         }
-        handle->checkpoint(AbstractHandle::CheckpointMode::Passive);
     }
     return handle->beginTransaction();
 }
@@ -116,12 +119,17 @@ bool AssembleHandleOperator::markAsMilestone()
 bool AssembleHandleOperator::assembleSQL(const UnsafeStringView &sql)
 {
     InnerHandle *handle = getHandle();
-    handle->markErrorAsIgnorable(Error::Code::Error);
-    bool succeed = handle->executeSQL(sql);
-    if (!succeed && handle->getError().code() == Error::Code::Error) {
-        succeed = true;
+    bool succeed = false;
+    if (isErrorSensitive()) {
+        succeed = handle->executeSQL(sql);
+    } else {
+        handle->markErrorAsIgnorable(Error::Code::Error);
+        succeed = handle->executeSQL(sql);
+        if (!succeed && handle->getError().code() == Error::Code::Error) {
+            succeed = true;
+        }
+        handle->markErrorAsUnignorable();
     }
-    handle->markErrorAsUnignorable();
     return succeed;
 }
 
@@ -132,12 +140,17 @@ bool AssembleHandleOperator::assembleTable(const UnsafeStringView &tableName,
     m_cellStatement->finalize();
     m_table.clear();
     InnerHandle *handle = getHandle();
-    handle->markErrorAsIgnorable(Error::Code::Error);
-    bool succeed = handle->executeSQL(sql);
-    if (!succeed && handle->getError().code() == Error::Code::Error) {
-        succeed = true;
+    bool succeed = false;
+    if (isErrorSensitive()) {
+        succeed = handle->executeSQL(sql);
+    } else {
+        handle->markErrorAsIgnorable(Error::Code::Error);
+        succeed = handle->executeSQL(sql);
+        if (!succeed && handle->getError().code() == Error::Code::Error) {
+            succeed = true;
+        }
+        handle->markErrorAsUnignorable();
     }
-    handle->markErrorAsUnignorable();
     if (succeed) {
         m_table = tableName;
         auto attribute = handle->getTableAttribute(Schema::main(), tableName);

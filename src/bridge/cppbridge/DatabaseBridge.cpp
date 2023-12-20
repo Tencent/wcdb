@@ -676,10 +676,11 @@ double WCDBDatabaseRetrieve(CPPDatabase database, SwiftClosure* _Nullable onProg
     WCDBSwiftRetrieveProgress progress
     = WCDBCreateSwiftBridgedClosure(WCDBSwiftRetrieveProgress, onProgressUpdated);
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
-    WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
     if (WCDBGetSwiftClosure(progress) != nullptr) {
         callback = [progress](double percentage, double increment) {
             WCDBSwiftClosureCallWithMultiArgument(progress, nullptr, percentage, increment);
+            return true;
         };
     }
     return cppDatabase->retrieve(callback);
@@ -691,11 +692,12 @@ double WCDBDatabaseRetrieve2(CPPDatabase database,
                              WCDBContextDestructor _Nullable destructor)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
-    WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
     if (monitor != nullptr) {
         WCDB::RecyclableContext recyclableContext(context, destructor);
         callback = [monitor, recyclableContext](double percentage, double increment) {
             monitor(recyclableContext.get(), percentage, increment);
+            return true;
         };
     }
     return cppDatabase->retrieve(callback);

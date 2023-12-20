@@ -46,6 +46,7 @@ public:
 
 protected:
     void markWalAsCorrupted(int frame, const UnsafeStringView &message);
+    bool isErrorSensitive() const;
     void setError(Error &&error);
     void assignWithSharedThreadedError();
     std::pair<uint32_t, uint32_t>

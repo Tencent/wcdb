@@ -351,7 +351,9 @@ bool Wal::doInitialize()
 #pragma mark - Error
 void Wal::markAsCorrupted(int frame, const UnsafeStringView &message)
 {
-    Error error(Error::Code::Corrupt, Error::Level::Notice, message);
+    Error error(Error::Code::Corrupt,
+                isErrorSensitive() ? Error::Level::Error : Error::Level::Notice,
+                message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPagerPath());
     error.infos.insert_or_assign("Frame", frame);
