@@ -577,7 +577,7 @@ int64_t Deserialization::get8BytesInt(offset_t offset) const
 int64_t Deserialization::get6BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 6));
-    return get4BytesInt(offset + 2) + (((int64_t) 1) << 32) * get2BytesInt(offset);
+    return get4BytesUInt(offset + 2) + (((int64_t) 1) << 32) * get2BytesInt(offset);
 }
 
 int32_t Deserialization::get4BytesInt(offset_t offset) const
