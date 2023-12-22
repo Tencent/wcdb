@@ -51,7 +51,7 @@ public:
 
     static constexpr const char *restoreDirectoryName = "restore";
     static constexpr const char *renewDirectoryName = "renew";
-    static constexpr const char *vaccumDirectoryName = "vaccum";
+    static constexpr const char *vacuumDirectoryName = "vacuum";
     StringView getRestoreDirectory() const;
     StringView getRenewDirectory() const;
     StringView getVacuumDirectory() const;
@@ -68,7 +68,7 @@ public:
     friend class FactoryRelated;
     FactoryDepositor depositor() const;
     FactoryRetriever retriever() const;
-    FactoryVacuum vaccumer() const;
+    FactoryVacuum vacuumer() const;
     FactoryBackup backup() const;
     FactoryRenewer renewer() const;
 

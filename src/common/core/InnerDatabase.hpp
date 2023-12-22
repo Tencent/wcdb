@@ -157,7 +157,7 @@ public:
 
     typedef Repair::FactoryRetriever::ProgressUpdateCallback ProgressCallback;
     double retrieve(const ProgressCallback &onProgressUpdated);
-    bool vaccum(const ProgressCallback &onProgressUpdated);
+    bool vacuum(const ProgressCallback &onProgressUpdated);
 
     void checkIntegrity(bool interruptible);
 

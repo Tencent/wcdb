@@ -180,11 +180,11 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             assignWithSharedThreadedError();
             break;
         }
-        // vaccum
+        // vacuum
         {
-            Repair::FactoryVacuum vaccumer = m_factory.vaccumer();
-            if (!vaccumer.work()) {
-                setThreadedError(vaccumer.getError());
+            Repair::FactoryVacuum vacuumer = m_factory.vacuumer();
+            if (!vacuumer.work()) {
+                setThreadedError(vacuumer.getError());
                 break;
             }
         }
@@ -909,7 +909,7 @@ double InnerDatabase::retrieve(const ProgressCallback &onProgressUpdated)
     return result;
 }
 
-bool InnerDatabase::vaccum(const ProgressCallback &onProgressUpdated)
+bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
 {
     if (m_isInMemory) {
         return true;
@@ -959,21 +959,21 @@ bool InnerDatabase::vaccum(const ProgressCallback &onProgressUpdated)
 
         Core::shared().setThreadedErrorPath(path);
 
-        Repair::FactoryVacuum vaccummer = m_factory.vaccumer();
+        Repair::FactoryVacuum vacuummer = m_factory.vacuumer();
         AssembleHandleOperator assembleOperator(assemblerHandle.get());
-        vaccummer.setAssembleDelegate(&assembleOperator);
+        vacuummer.setAssembleDelegate(&assembleOperator);
         WCTAssert(dynamic_cast<CipherHandle *>(cipherHandle.get()) != nullptr);
-        vaccummer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
-        vaccummer.setProgressCallback(onProgressUpdated);
+        vacuummer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
+        vacuummer.setProgressCallback(onProgressUpdated);
 
-        if (!vaccummer.prepare(pageCount)) {
-            setThreadedError(vaccummer.getError());
+        if (!vacuummer.prepare(pageCount)) {
+            setThreadedError(vacuummer.getError());
             Core::shared().setThreadedErrorPath("");
             return;
         }
 
-        if (!vaccummer.work()) {
-            setThreadedError(vaccummer.getError());
+        if (!vacuummer.work()) {
+            setThreadedError(vacuummer.getError());
             Core::shared().setThreadedErrorPath("");
             return;
         }

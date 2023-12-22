@@ -38,7 +38,7 @@
     [self
     executeTest:^{
         self.path = [self.directory stringByAppendingPathComponent:@"empty"];
-        TestCaseAssertTrue([self.database vaccum:nil]);
+        TestCaseAssertTrue([self.database vacuum:nil]);
         self.path = nil;
     }];
 }
@@ -62,7 +62,7 @@
 {
     __block double lastPercentage = 0;
     __block BOOL sanity = YES;
-    bool succeed = [self.database vaccum:^(double percentage, double increment) {
+    bool succeed = [self.database vacuum:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
             TestCaseFailure();
@@ -81,7 +81,7 @@
     __block double lastPercentage = 0;
     __block BOOL sanity = YES;
     float interruptPoint = Random.shared.float_0_1 * 0.6f;
-    bool succeed = [self.database vaccum:^(double percentage, double increment) {
+    bool succeed = [self.database vacuum:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
             TestCaseFailure();
@@ -99,7 +99,7 @@
 {
     __block double lastPercentage = 0;
     __block BOOL sanity = YES;
-    bool succeed = [self.database vaccum:^(double percentage, double increment) {
+    bool succeed = [self.database vacuum:^(double percentage, double increment) {
         if (percentage - lastPercentage != increment
             || increment <= 0) {
             TestCaseFailure();
@@ -114,7 +114,7 @@
 }
 
 #pragma mark - Non-Corrupted
-- (void)test_vaccum
+- (void)test_vacuum
 {
     [self
     executeTest:^{
@@ -125,7 +125,7 @@
 }
 
 #pragma mark - Non-Corrupted
-- (void)test_interrupt_vaccum
+- (void)test_interrupt_vacuum
 {
     [self
     executeTest:^{
@@ -136,7 +136,7 @@
 }
 
 #pragma mark - Corrupted
-- (void)test_vaccum_corrupted
+- (void)test_vacuum_corrupted
 {
     [self
     executeTest:^{
@@ -147,7 +147,7 @@
     }];
 }
 
-- (void)test_vaccum_corrupt_opened
+- (void)test_vacuum_corrupt_opened
 {
     [self
     executeTest:^{
@@ -164,7 +164,7 @@
 }
 
 #ifndef WCDB_QUICK_TESTS
-- (void)test_vaccum_huge_database
+- (void)test_vacuum_huge_database
 {
     self.skipDebugLog = YES;
     SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
@@ -174,7 +174,7 @@
     [factory produce:self.path];
 
     __block double percentage = 0;
-    TestCaseAssertTrue([self.database vaccum:^(double progress, double increment) {
+    TestCaseAssertTrue([self.database vacuum:^(double progress, double increment) {
         WCDB_UNUSED(increment);
         double newPercentage = progress * 100.0;
         if (newPercentage - percentage >= 1.0) {

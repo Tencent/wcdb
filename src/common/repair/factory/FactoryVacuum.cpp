@@ -60,7 +60,7 @@ bool FactoryVacuum::work()
         return exit(false);
     }
     if (exists.value()) {
-        Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when vaccum.");
+        Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when vacuum.");
         error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.insert_or_assign(ErrorStringKeyPath, factory.database);
         Notifier::shared().notify(error);
@@ -115,7 +115,7 @@ bool FactoryVacuum::prepare(int64_t totalPageSize)
     }
     WCTAssert(fullCrawler.getScore().value() <= 1);
 
-    // 3. move the assembled database to vaccum directory.
+    // 3. move the assembled database to vacuum directory.
     std::list<StringView> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse(); // move from end to start, which can avoid issues that unexpected crash happens before all files moved.
     if (!FileManager::removeItems(toRemove)) {

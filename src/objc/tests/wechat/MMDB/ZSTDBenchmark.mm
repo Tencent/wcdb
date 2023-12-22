@@ -991,7 +991,7 @@ typedef enum : NSUInteger {
     }
 }
 
-- (void)testVaccumAllDatabase
+- (void)testVacuumAllDatabase
 {
     for (NSString* path in self.allDatabasePaths) {
         [self setPath:path];
