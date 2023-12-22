@@ -87,6 +87,11 @@ void OperationQueue::stopAllDatabaseEvent(const UnsafeStringView& path)
     m_timedQueue.remove(mergeIndex);
 }
 
+void OperationQueue::stop()
+{
+    m_timedQueue.stop();
+}
+
 void OperationQueue::main()
 {
     m_timedQueue.loop(std::bind(

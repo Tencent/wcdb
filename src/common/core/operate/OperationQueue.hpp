@@ -75,6 +75,8 @@ public:
 
     void stopAllDatabaseEvent(const UnsafeStringView& path);
 
+    void stop();
+
 protected:
     void main() override final;
     void handleError(const Error& error);
