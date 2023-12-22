@@ -108,6 +108,7 @@ enum HandleSlot : unsigned char {
     HandleSlotNormal = 0,
     HandleSlotAutoTask,
     HandleSlotAssemble,
+    HandleSlotVacuum,
     HandleSlotCipher,
     HandleSlotCount,
 };
@@ -138,6 +139,8 @@ enum class HandleType : unsigned int {
     AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
+    Vacuum = (HandleCategoryNormal << 8) | HandleSlotVacuum,
+    VacuumCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
     MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotAutoTask,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)

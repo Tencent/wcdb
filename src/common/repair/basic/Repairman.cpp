@@ -64,13 +64,17 @@ int Repairman::getDisposedWalPageCount() const
 
 bool Repairman::exit()
 {
-    finishProgress();
-    return !isErrorCritial();
+    if (!isErrorCritial()) {
+        return finishProgress();
+    }
+    return false;
 }
 
 bool Repairman::exit(bool result)
 {
-    finishProgress();
+    if (result) {
+        return finishProgress();
+    }
     return result;
 }
 
@@ -105,7 +109,7 @@ bool Repairman::markAsAssembling()
 void Repairman::markAsAssembled()
 {
     markAsMilestone();
-    if (!m_assembleDelegate->markAsAssembled()) {
+    if (!isErrorCritial() && !m_assembleDelegate->markAsAssembled()) {
         setCriticalError(m_assembleDelegate->getAssembleError());
     }
 }
@@ -182,7 +186,7 @@ void Repairman::onCrawlerError()
 int Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
-    if (error.isCorruption()) {
+    if (error.isCorruption() && !isErrorSensitive()) {
         error.level = Error::Level::Notice;
     }
     return tryUpgradeError(std::move(error));
@@ -191,7 +195,7 @@ int Repairman::tryUpgradeCrawlerError()
 int Repairman::tryUpgrateAssembleError()
 {
     Error error = m_assembleDelegate->getAssembleError();
-    if (error.code() == Error::Code::Constraint) {
+    if (error.code() == Error::Code::Constraint && !isErrorCritial()) {
         error.level = Error::Level::Notice;
     }
     return tryUpgradeError(std::move(error));

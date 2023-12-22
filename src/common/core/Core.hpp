@@ -61,6 +61,8 @@ public:
     void releaseSQLiteMemory(int bytes);
     void setSoftHeapLimit(int64_t limit);
 
+    void stopQueue();
+
 protected:
     void databaseDidCreate(InnerDatabase* database) override final;
     DatabasePool m_databasePool;

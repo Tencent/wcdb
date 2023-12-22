@@ -25,6 +25,7 @@
 #pragma once
 
 #include "ErrorProne.hpp"
+#include "ErrorSensitivity.hpp"
 #include "HighWater.hpp"
 #include "Initializeable.hpp"
 #include "PageBasedFileHandle.hpp"
@@ -37,7 +38,7 @@ class Data;
 
 namespace Repair {
 
-class Pager final : public ErrorProne, public Initializeable {
+class Pager final : public ErrorProne, public Initializeable, public ErrorSensitivity {
 #pragma mark - Initialize
 public:
     Pager(const UnsafeStringView& path);

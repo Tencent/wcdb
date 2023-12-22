@@ -29,6 +29,7 @@
 #include "FactoryDepositor.hpp"
 #include "FactoryRenewer.hpp"
 #include "FactoryRetriever.hpp"
+#include "FactoryVacuum.hpp"
 
 #include "Assemble.hpp"
 #include "Cell.hpp"

@@ -93,7 +93,8 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
     }
 
     LockGuard lockGuard(m_lock);
-    if (m_filted.find(targetTable) == m_filted.end()) {
+    auto iter = m_filted.find(targetTable);
+    if (iter == m_filted.end()) {
         m_compressed = false;
         if (!tableExist.value()) {
             // it's not created
@@ -105,6 +106,8 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
             m_filted.insert_or_assign(targetTable, hold);
             m_hints.erase(targetTable);
         }
+    } else {
+        iter->second->setNeedCheckColumns(true);
     }
     return true;
 }
@@ -175,12 +178,21 @@ bool Compression::checkCompressingColumn(InfoInitializer& initializer,
     if (!info->needCheckColumns()) {
         return true;
     }
+    InnerHandle* handle = initializer.getCurrentHandle();
     auto addColumn = initializer.checkCompressingColumns(*info);
     if (addColumn.failed()) {
         return false;
+    } else if (addColumn.value() && !handle->isInTransaction()) {
+        bool ret = handle->runTransaction([&](InnerHandle*) {
+            addColumn = initializer.checkCompressingColumns(*info);
+            return addColumn.succeed();
+        });
+        if (!ret) {
+            return false;
+        }
     }
     info->setNeedCheckColumns(false);
-    if (addColumn.value() && initializer.getCurrentHandle()->isInTransaction()) {
+    if (addColumn.value() && handle->isInTransaction()) {
         m_commitingTables.getOrCreate().insert(info);
     }
     return true;
@@ -249,6 +261,9 @@ Compression::InfoInitializer::checkCompressingColumns(const CompressionTableInfo
             columnIndex++;
         }
         if (!findTypeColumn) {
+            if (!handle->isInTransaction()) {
+                return true;
+            }
             if (!handle->addColumn(
                 Schema::main(),
                 tableName,

@@ -66,6 +66,12 @@
         if (_needCipher) {
             cipher = [Random.shared data];
         }
+        TestCaseLog(@"Test repair %d: testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
+                    i,
+                    self.testClass,
+                    self.needCipher,
+                    self.incrementalBackup,
+                    self.corruptHeader);
         [self.database setCipherKey:cipher];
         TestCaseAssertTrue([self.database createTable:self.tableName withClass:self.testClass]);
         self.table = [self.database getTable:self.tableName withClass:self.testClass];
@@ -91,7 +97,8 @@
         config /= 2;
         _testClass = [BackupTestCase allTestClassess][config];
 
-        TestCaseLog(@"Test repair: testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
+        TestCaseLog(@"Test repair %d: testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
+                    i,
                     self.testClass,
                     self.needCipher,
                     self.incrementalBackup,

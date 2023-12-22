@@ -823,8 +823,16 @@ bool CompressingStatementDecorator::processDropTable(const StatementDropTable& d
         return true;
     }
     m_additionalStatements.emplace_back(getHandle());
-    return m_additionalStatements.back().prepare(
-    CompressionRecord::getDeleteRecordStatement(dropTable.syntax().table));
+    if (!m_additionalStatements.back().prepare(
+        CompressionRecord::getDeleteRecordStatement(dropTable.syntax().table))) {
+        if (getHandle()->getError().code() == Error::Code::Error
+            && getHandle()->getError().getMessage().hasPrefix("no such table:")) {
+            m_additionalStatements.pop_back();
+        } else {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool CompressingStatementDecorator::processAlterTable(const StatementAlterTable& alterTable)

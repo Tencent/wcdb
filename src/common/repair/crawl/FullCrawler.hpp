@@ -43,6 +43,12 @@ public:
     FullCrawler(const UnsafeStringView &source);
     ~FullCrawler() override final;
 
+    void setErrorSensitive(bool sensitive) override final;
+    void setPageCount(int64_t pageCount);
+
+private:
+    int64_t m_pageCount;
+
 #pragma mark - Repair
 public:
     bool work();

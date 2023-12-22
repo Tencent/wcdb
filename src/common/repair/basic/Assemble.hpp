@@ -25,6 +25,7 @@
 #pragma once
 
 #include "Cipher.hpp"
+#include "ErrorSensitivity.hpp"
 #include <map>
 
 namespace WCDB {
@@ -35,7 +36,7 @@ namespace Repair {
 
 class Cell;
 
-class AssembleDelegate {
+class AssembleDelegate : public ErrorSensitivity {
 public:
     AssembleDelegate();
     virtual ~AssembleDelegate() = 0;
@@ -60,6 +61,7 @@ public:
 
     virtual const Error &getAssembleError() const = 0;
 
+    virtual void suspendAssemble() = 0;
     virtual void finishAssemble() = 0;
 
 protected:

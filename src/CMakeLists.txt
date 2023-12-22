@@ -80,6 +80,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
     ${WCDB_SRC_DIR}/common/*/JoinConstraint.hpp
     ${WCDB_SRC_DIR}/common/*/LiteralValue.hpp
     ${WCDB_SRC_DIR}/common/*/Macro.h
+    ${WCDB_SRC_DIR}/common/*/MemberPointer.hpp
     ${WCDB_SRC_DIR}/common/*/OneOrBinaryTokenizer.hpp
     ${WCDB_SRC_DIR}/common/*/OrderingTerm.hpp
     ${WCDB_SRC_DIR}/common/*/Pragma.hpp
@@ -88,6 +89,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
     ${WCDB_SRC_DIR}/common/*/Recyclable.hpp
     ${WCDB_SRC_DIR}/common/*/RecyclableHandle.hpp
     ${WCDB_SRC_DIR}/common/*/ResultColumn.hpp
+    ${WCDB_SRC_DIR}/common/*/ScalarFunctionModule.hpp
     ${WCDB_SRC_DIR}/common/*/Schema.hpp
     ${WCDB_SRC_DIR}/common/*/Shadow.hpp
     ${WCDB_SRC_DIR}/common/*/SharedThreadedErrorProne.hpp
@@ -213,7 +215,6 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
     ${WCDB_SRC_DIR}/cpp/*/HandleORMOperation.hpp
     ${WCDB_SRC_DIR}/cpp/*/Insert.hpp
     ${WCDB_SRC_DIR}/cpp/*/Master.hpp
-    ${WCDB_SRC_DIR}/cpp/*/MemberPointer.hpp
     ${WCDB_SRC_DIR}/cpp/*/MultiObject.hpp
     ${WCDB_SRC_DIR}/cpp/*/MultiSelect.hpp
     ${WCDB_SRC_DIR}/cpp/*/PreparedStatement.hpp

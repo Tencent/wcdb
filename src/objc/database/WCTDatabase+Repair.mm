@@ -79,12 +79,12 @@
     return _database->backup(false);
 }
 
-- (double)retrieve:(WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated
+- (double)retrieve:(WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated
 {
-    WCDB::InnerDatabase::RetrieveProgressCallback callback = nullptr;
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
     if (onProgressUpdated != nil) {
         callback = [onProgressUpdated](double percentage, double increment) {
-            onProgressUpdated(percentage, increment);
+            return onProgressUpdated(percentage, increment);
         };
     }
     return _database->retrieve(callback);
@@ -98,6 +98,17 @@
 - (BOOL)containsDeposited
 {
     return _database->containsDeposited();
+}
+
+- (BOOL)vaccum:(WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated
+{
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
+    if (onProgressUpdated != nil) {
+        callback = [onProgressUpdated](double percentage, double increment) {
+            return onProgressUpdated(percentage, increment);
+        };
+    }
+    return _database->vaccum(callback);
 }
 
 @end

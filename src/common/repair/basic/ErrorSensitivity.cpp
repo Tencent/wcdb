@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/09/26
+// Created by 陈秋文 on 2023/12/16.
 //
 
 /*
@@ -22,32 +22,28 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <functional>
+#include "ErrorSensitivity.hpp"
 
 namespace WCDB {
 
 namespace Repair {
 
-class Progress {
-public:
-    Progress();
-    virtual ~Progress() = 0;
+ErrorSensitivity::ErrorSensitivity() : m_errorSensitive(false)
+{
+}
 
-    typedef std::function<bool(double progress, double increment)> ProgressUpdateCallback;
-    void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
+ErrorSensitivity::~ErrorSensitivity() = default;
 
-protected:
-    bool increaseProgress(double increment);
-    bool finishProgress();
+void ErrorSensitivity::setErrorSensitive(bool sensitive)
+{
+    m_errorSensitive = sensitive;
+}
 
-private:
-    bool updateProgress(double progress);
-    double m_progress;
-    ProgressUpdateCallback m_onProgressUpdated;
-};
+bool ErrorSensitivity::isErrorSensitive() const
+{
+    return m_errorSensitive;
+}
 
-} //namespace Repair
+} // namespace Repair
 
-} //namespace WCDB
+} // namespace WCDB

@@ -137,6 +137,11 @@ void Core::setSoftHeapLimit(int64_t limit)
     sqlite3_soft_heap_limit64(limit);
 }
 
+void Core::stopQueue()
+{
+    m_operationQueue->stop();
+}
+
 void Core::databaseDidCreate(InnerDatabase* database)
 {
     WCTAssert(database != nullptr);

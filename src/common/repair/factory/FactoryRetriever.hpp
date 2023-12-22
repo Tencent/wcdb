@@ -79,7 +79,7 @@ protected:
 protected:
     bool calculateSizes(const std::list<StringView> &workshopDirectories);
     bool calculateSize(const UnsafeStringView &database);
-    void increaseProgress(const UnsafeStringView &database,
+    bool increaseProgress(const UnsafeStringView &database,
                           bool useMaterial,
                           double progress,
                           double increment);

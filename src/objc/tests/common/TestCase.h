@@ -30,6 +30,7 @@
 #import "Benchmark.h"
 #import "CRUDTestCase.h"
 #import "DatabaseTestCase.h"
+#import "RobustyTestCase.h"
 #import "TableTestCase.h"
 
 #import "Dispatch.h"

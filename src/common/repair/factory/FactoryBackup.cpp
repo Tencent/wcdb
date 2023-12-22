@@ -178,7 +178,7 @@ void FactoryBackup::notifiyBackupEnd(const UnsafeStringView& database,
 {
     uint32_t associatedTableCount = 0;
     uint32_t leafPageCount = 0;
-    for (auto content : material.contentsMap) {
+    for (auto& content : material.contentsMap) {
         associatedTableCount += content.second->associatedSQLs.size();
         leafPageCount += content.second->verifiedPagenos.size();
     }

@@ -159,7 +159,9 @@ bool FactoryRetriever::work()
 bool FactoryRetriever::exit(bool result)
 {
     factory.removeDirectoryIfEmpty();
-    finishProgress();
+    if (result) {
+        finishProgress();
+    }
     return result;
 }
 
@@ -215,7 +217,6 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
             SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
             if (!result) {
-                WCTAssert(isErrorCritial());
                 setCriticalError(mechanic.getError());
                 return false;
             } else {
@@ -379,7 +380,7 @@ Fraction FactoryRetriever::getWeight(const UnsafeStringView &databasePath)
     return Fraction(m_sizes[databasePath], m_totalSize > 0 ? m_totalSize : 1);
 }
 
-void FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
+bool FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
                                         bool useMaterial,
                                         double progress,
                                         double increment)
@@ -388,7 +389,11 @@ void FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
     if (useMaterial) {
         increment *= 0.5;
     }
-    Progress::increaseProgress(getWeight(databasePath).value() * increment);
+    if (!Progress::increaseProgress(getWeight(databasePath).value() * increment)) {
+        m_assembleDelegate->suspendAssemble();
+        return false;
+    }
+    return true;
 }
 
 void FactoryRetriever::increaseScore(const UnsafeStringView &databasePath,

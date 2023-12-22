@@ -153,10 +153,11 @@ public:
 
     bool deposit();
     bool removeDeposited();
-
-    typedef Repair::FactoryRetriever::ProgressUpdateCallback RetrieveProgressCallback;
-    double retrieve(const RetrieveProgressCallback &onProgressUpdated);
     bool containsDeposited() const;
+
+    typedef Repair::FactoryRetriever::ProgressUpdateCallback ProgressCallback;
+    double retrieve(const ProgressCallback &onProgressUpdated);
+    bool vaccum(const ProgressCallback &onProgressUpdated);
 
     void checkIntegrity(bool interruptible);
 

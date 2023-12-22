@@ -37,9 +37,9 @@ typedef void (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
 
 /**
- Triggered when repairment progresses.
+ Triggered when repairment/vaccum progresses.
  */
-typedef void (^WCTRetrieveProgressUpdateBlock)(double /* percentage */, double /* increment */);
+typedef bool /* continue or not */ (^WCTProgressUpdateBlock)(double /* percentage */, double /* increment */);
 
 WCDB_API @interface WCTDatabase(Repair)
 
@@ -120,7 +120,9 @@ WCDB_API @interface WCTDatabase(Repair)
  @see   `WCTRetrieveProgressUpdateBlock`.
  @return Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
  */
-- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated;
+- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
+
+- (BOOL)vaccum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
 
 @end
 

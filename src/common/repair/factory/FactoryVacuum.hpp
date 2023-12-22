@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2018/09/26
+// Created by qiuwenchen on 2023/12/15.
 //
 
 /*
@@ -24,30 +24,36 @@
 
 #pragma once
 
-#include <functional>
+#include "Assemble.hpp"
+#include "Backup.hpp"
+#include "ErrorProne.hpp"
+#include "FactoryRelated.hpp"
+#include "Progress.hpp"
 
 namespace WCDB {
 
 namespace Repair {
 
-class Progress {
+class FactoryVacuum final : public FactoryRelated,
+                            public ErrorProne,
+                            public Progress,
+                            public CipherDelegateHolder,
+                            public AssembleDelegateHolder {
 public:
-    Progress();
-    virtual ~Progress() = 0;
+    FactoryVacuum(const Factory &factory);
+    ~FactoryVacuum() override final;
 
-    typedef std::function<bool(double progress, double increment)> ProgressUpdateCallback;
-    void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
+    const StringView directory;
+    const StringView database;
+
+    bool work();
+    bool prepare(int64_t totalPageSize);
 
 protected:
-    bool increaseProgress(double increment);
-    bool finishProgress();
-
-private:
-    bool updateProgress(double progress);
-    double m_progress;
-    ProgressUpdateCallback m_onProgressUpdated;
+    bool increaseProgress(double progress, double increment);
+    bool exit(bool result);
 };
 
-} //namespace Repair
+} // namespace Repair
 
-} //namespace WCDB
+} // namespace WCDB
