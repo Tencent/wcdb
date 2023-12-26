@@ -44,7 +44,6 @@ public:
 
 protected:
     void markPagerAsCorrupted(int page, const UnsafeStringView &message);
-    bool isErrorSensitive() const;
     void setError(Error &&error);
     void assignWithSharedThreadedError();
 

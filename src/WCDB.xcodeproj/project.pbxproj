@@ -3349,14 +3349,6 @@
 		75E0A5D72A7FE2A200D4FE9A /* ContainerBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */; };
 		75E0A5D82A7FE2A200D4FE9A /* ContainerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		75E0A5D92A7FE2A200D4FE9A /* ContainerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		75E29CA42B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */; };
-		75E29CA52B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */; };
-		75E29CA62B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */; };
-		75E29CA72B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */; };
-		75E29CA82B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */; };
-		75E29CA92B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */; };
-		75E29CAA2B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */; };
-		75E29CAB2B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */; };
 		75E29CAF2B2F2F20003340FF /* VacuumTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75E29CAE2B2F2F20003340FF /* VacuumTests.mm */; };
 		75E50A0B29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
 		75E50A0C29067BC800B73E62 /* MultiObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75E50A0929067BC800B73E62 /* MultiObject.cpp */; };
@@ -5126,8 +5118,6 @@
 		75E0A5BF2A7F4EEE00D4FE9A /* CoreConst.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoreConst.cpp; sourceTree = "<group>"; };
 		75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContainerBridge.cpp; sourceTree = "<group>"; };
 		75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContainerBridge.h; sourceTree = "<group>"; };
-		75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ErrorSensitivity.cpp; sourceTree = "<group>"; };
-		75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ErrorSensitivity.hpp; sourceTree = "<group>"; };
 		75E29CAE2B2F2F20003340FF /* VacuumTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VacuumTests.mm; sourceTree = "<group>"; };
 		75E50A0929067BC800B73E62 /* MultiObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiObject.cpp; sourceTree = "<group>"; };
 		75E50A0A29067BC800B73E62 /* MultiObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MultiObject.hpp; sourceTree = "<group>"; };
@@ -7124,8 +7114,6 @@
 				23AD52DC20DB56D200664B62 /* SequenceItem.hpp */,
 				75A60AAD29345A38009C1B3C /* Cipher.cpp */,
 				75A60AAE29345A38009C1B3C /* Cipher.hpp */,
-				75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */,
-				75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */,
 				759362CD2B36D450000AF163 /* Vacuum.cpp */,
 				759362CE2B36D450000AF163 /* Vacuum.hpp */,
 			);
@@ -8247,7 +8235,6 @@
 				037C3B182897E33600328EC8 /* SyntaxIdentifier.hpp in Headers */,
 				037C3B192897E33600328EC8 /* Fraction.hpp in Headers */,
 				037C3B1A2897E33600328EC8 /* StatementDropTable.hpp in Headers */,
-				75E29CAA2B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */,
 				037C3B1B2897E33600328EC8 /* SyntaxExpression.hpp in Headers */,
 				037C3B1C2897E33600328EC8 /* MasterCrawler.hpp in Headers */,
 				752517682B12F13C00485175 /* CompressionConst.hpp in Headers */,
@@ -8891,7 +8878,6 @@
 				2370B12121914ED500D3227C /* NSDate+WCTColumnCoding.h in Headers */,
 				23EEDCB4217DFADC006E9E73 /* Statement.hpp in Headers */,
 				23F0FEB6215F5E9A008399FB /* ThreadLocal.hpp in Headers */,
-				75E29CA82B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */,
 				23EEDCA4217DFADC006E9E73 /* Schema.hpp in Headers */,
 				23EEDD42217DFADC006E9E73 /* SyntaxDropIndexSTMT.hpp in Headers */,
 				39C70CC82313E20F002D773C /* Assemble.hpp in Headers */,
@@ -9166,7 +9152,6 @@
 				7521D983291E9ABB009642EF /* WCTDatabase+Table.h in Headers */,
 				7521D984291E9ABB009642EF /* SQLiteAssembler.hpp in Headers */,
 				7521D985291E9ABB009642EF /* WCTSelectable.h in Headers */,
-				75E29CA92B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */,
 				7521D986291E9ABB009642EF /* WCTRuntimeObjCAccessor.h in Headers */,
 				7521D987291E9ABB009642EF /* PinyinTokenizer.hpp in Headers */,
 				7521D988291E9ABB009642EF /* StatementAttach.hpp in Headers */,
@@ -9511,7 +9496,6 @@
 				7521DD3A291EA349009642EF /* WCDBBridging.h in Headers */,
 				7521DD3B291EA349009642EF /* FrameSpecBridge.h in Headers */,
 				7521DD3C291EA349009642EF /* PragmaBridge.h in Headers */,
-				75E29CAB2B2DF0D0003340FF /* ErrorSensitivity.hpp in Headers */,
 				7521DD3E291EA349009642EF /* StatementInsertBridge.h in Headers */,
 				7521DD3F291EA349009642EF /* JoinBridge.h in Headers */,
 				7521DD40291EA349009642EF /* RaiseFunctionBridge.h in Headers */,
@@ -10268,7 +10252,6 @@
 				0D54030F2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */,
 				758E7EBA2B1B24AD00319991 /* AutoCompressConfig.cpp in Sources */,
 				0D19BA212B07481B0028F92B /* IntegerityHandleOperator.cpp in Sources */,
-				75E29CA62B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */,
 				037C398E2897E33600328EC8 /* StatementSelect.cpp in Sources */,
 				037C39952897E33600328EC8 /* SyntaxReindexSTMT.cpp in Sources */,
 				037C39982897E33600328EC8 /* SyntaxCreateViewSTMT.cpp in Sources */,
@@ -11295,7 +11278,6 @@
 				7533CB592B050FB200C8B47D /* MigratingStatementDecorator.cpp in Sources */,
 				03E1663C27F42D6600D2C926 /* Property.swift in Sources */,
 				03E5CC5A28A39B19005353D9 /* Database.cpp in Sources */,
-				75E29CA42B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */,
 				23EEDD55217DFADC006E9E73 /* SyntaxSelectSTMT.cpp in Sources */,
 				758E7EC22B1B41AA00319991 /* WCTCompressionInfo.mm in Sources */,
 				39B524DE2304F9A2001DF52D /* InnerHandle.cpp in Sources */,
@@ -11487,7 +11469,6 @@
 				7521D769291E9ABB009642EF /* WCTObjCAccessor.mm in Sources */,
 				7529C7702ABC4D6600518293 /* CipherHandle.cpp in Sources */,
 				7521D76A291E9ABB009642EF /* StatementCreateTrigger.cpp in Sources */,
-				75E29CA52B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */,
 				7521D76B291E9ABB009642EF /* DatabasePool.cpp in Sources */,
 				7521D76D291E9ABB009642EF /* WCTMigrationInfo.mm in Sources */,
 				754212132B124CFF00A2FF4D /* CompressionCenter.cpp in Sources */,
@@ -12035,7 +12016,6 @@
 				7521DBCF291EA349009642EF /* TableConstraint.cpp in Sources */,
 				7521DBD0291EA349009642EF /* SyntaxColumnConstraint.cpp in Sources */,
 				7521DBD1291EA349009642EF /* Repairman.cpp in Sources */,
-				75E29CA72B2DF0D0003340FF /* ErrorSensitivity.cpp in Sources */,
 				7521DBD2291EA349009642EF /* StatementBegin.cpp in Sources */,
 				7521DBD4291EA349009642EF /* MigrationInfo.cpp in Sources */,
 				7521DBD5291EA349009642EF /* Material.cpp in Sources */,

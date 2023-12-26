@@ -76,9 +76,7 @@ Shm::Salt Shm::getSalt() const
 
 void Shm::markAsCorrupted(const UnsafeStringView &message)
 {
-    Error error(Error::Code::Corrupt,
-                isErrorSensitive() ? Error::Level::Error : Error::Level::Notice,
-                message);
+    Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPagerPath());
     Notifier::shared().notify(error);
