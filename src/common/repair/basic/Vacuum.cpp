@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by qiuwenchen on 2023/12/23.
 //
 
 /*
@@ -22,22 +22,37 @@
  * limitations under the License.
  */
 
-#import "RepairTestObject.h"
-#import "TestCase.h"
+#include "Vacuum.hpp"
 
-@interface BackupTestCase : TableTestCase
+namespace WCDB {
 
-@property (nonatomic, assign) BOOL needCipher;
-@property (nonatomic, strong) Class<RepairTestObject> testClass;
-@property (nonatomic, assign) int objectCount;
-@property (nonatomic, readonly) NSMutableArray<NSObject<RepairTestObject>*>* objects;
-@property (nonatomic, assign) bool incrementalBackup;
-@property (nonatomic, assign) bool corruptHeader;
+namespace Repair {
 
-- (void)executeTest:(void (^)())operation;
+VacuumDelegate::VacuumDelegate() = default;
 
-- (void)executeFullTest:(void (^)())operation withCheck:(void (^)())check;
+VacuumDelegate::~VacuumDelegate() = default;
 
-- (void)checkObjects:(NSArray*)object containedIn:(NSArray*)allObject;
+void VacuumDelegate::setOriginalDatabase(const UnsafeStringView &originalPath)
+{
+    m_originalPath = originalPath;
+}
 
-@end
+void VacuumDelegate::setVacuumDatabase(const UnsafeStringView &vacuumPath)
+{
+    m_vacuumPath = vacuumPath;
+}
+
+VacuumDelegateHolder::VacuumDelegateHolder() : m_vacuumDelegate(nullptr)
+{
+}
+
+void VacuumDelegateHolder::setVacuumDelegate(VacuumDelegate *delegate)
+{
+    m_vacuumDelegate = delegate;
+}
+
+VacuumDelegateHolder::~VacuumDelegateHolder() = default;
+
+} //namespace Repair
+
+} //namespace WCDB

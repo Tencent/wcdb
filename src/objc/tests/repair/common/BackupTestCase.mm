@@ -46,6 +46,7 @@
 - (void)setUp
 {
     [super setUp];
+    self.objectCount = 100;
     [WCTDatabase setABTestConfigWithName:@"clicfg_wcdb_incremental_backup" andValue:@"1"];
 }
 
@@ -76,7 +77,7 @@
         TestCaseAssertTrue([self.database createTable:self.tableName withClass:self.testClass]);
         self.table = [self.database getTable:self.tableName withClass:self.testClass];
 
-        NSArray* objects = [[Random shared] repairObjectsWithClass:_testClass andCount:100 startingFromIdentifier:1];
+        NSArray* objects = [[Random shared] repairObjectsWithClass:_testClass andCount:self.objectCount startingFromIdentifier:1];
         [m_objects addObjectsFromArray:objects];
         XCTAssertTrue([self.table insertObjects:objects]);
 
@@ -115,7 +116,7 @@
             XCTAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
             XCTAssertTrue([self.fileManager fileExistsAtPath:self.database.lastMaterialPath]);
 
-            NSArray* objects = [[Random shared] repairObjectsWithClass:_testClass andCount:100 startingFromIdentifier:1000];
+            NSArray* objects = [[Random shared] repairObjectsWithClass:_testClass andCount:self.objectCount startingFromIdentifier:1000];
             if ([self.table insertObjects:objects]) {
                 [m_objects addObjectsFromArray:objects];
             }
@@ -168,7 +169,7 @@
     TestCaseAssertTrue([self.database createTable:self.tableName withClass:self.testClass]);
     self.table = [self.database getTable:self.tableName withClass:self.testClass];
 
-    NSArray* objects = [[Random shared] repairObjectsWithClass:_testClass andCount:100 startingFromIdentifier:1];
+    NSArray* objects = [[Random shared] repairObjectsWithClass:_testClass andCount:self.objectCount startingFromIdentifier:1];
     [m_objects addObjectsFromArray:objects];
     XCTAssertTrue([self.table insertObjects:objects]);
     XCTAssertTrue([self.database passiveCheckpoint]);

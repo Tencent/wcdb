@@ -33,6 +33,12 @@
 
 @implementation VacuumTests
 
+- (void)setUp
+{
+    [super setUp];
+    self.objectCount = 10000;
+}
+
 - (void)test_empty
 {
     [self
@@ -92,7 +98,7 @@
     }];
     TestCaseAssertTrue(sanity);
     TestCaseAssertTrue(!succeed || ![self.testClass hasRowid]);
-    TestCaseAssertTrue(![self.testClass hasRowid] || (lastPercentage >= interruptPoint && lastPercentage < 1 && lastPercentage < interruptPoint + 0.2));
+    TestCaseAssertTrue(![self.testClass hasRowid] || (lastPercentage >= interruptPoint && lastPercentage < 1 && lastPercentage < interruptPoint + 0.5));
 }
 
 - (void)doTestVacuumFailed

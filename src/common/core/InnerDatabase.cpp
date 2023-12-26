@@ -36,6 +36,7 @@
 #include "CompressHandleOperator.hpp"
 #include "IntegerityHandleOperator.hpp"
 #include "MigrateHandleOperator.hpp"
+#include "VacuumHandleOperator.hpp"
 
 #include "CompressingHandleDecorator.hpp"
 #include "MigratingHandleDecorator.hpp"
@@ -914,59 +915,26 @@ bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
     if (m_isInMemory) {
         return true;
     }
-    int64_t pageCount = 0;
-    {
-        RecyclableHandle handle = getHandle(false);
-        if (handle == nullptr) {
-            return false;
-        }
-        if (!handle->prepare(StatementPragma().pragma(Pragma::pageCount()))
-            || !handle->step() || handle->done()) {
-            setThreadedError(handle->getError());
-            handle->finalize();
-            return false;
-        }
-        pageCount = handle->getInteger();
-        handle->finalize();
-        if (!handle->prepare(StatementPragma().pragma(Pragma::freelistCount()))
-            || !handle->step() || handle->done()) {
-            setThreadedError(handle->getError());
-            handle->finalize();
-            return false;
-        }
-        pageCount -= handle->getInteger();
-        handle->finalize();
-    }
     bool result = false;
-    close([&result, &onProgressUpdated, &pageCount, this]() {
+    close([&result, &onProgressUpdated, this]() {
         InitializedGuard initializedGuard = initialize();
         if (!initializedGuard.valid()) {
             return;
         }
 
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Vacuum);
-        if (assemblerHandle == nullptr) {
+        RecyclableHandle vacuumHandle = flowOut(HandleType::Vacuum);
+        if (vacuumHandle == nullptr) {
             return;
         }
-        assemblerHandle->markAsCanBeSuspended(true);
-        RecyclableHandle cipherHandle = flowOut(HandleType::VacuumCipher);
-        if (cipherHandle == nullptr) {
-            return;
-        }
-
-        WCTAssert(assemblerHandle.get() != cipherHandle.get());
-        WCTAssert(!assemblerHandle->isOpened());
 
         Core::shared().setThreadedErrorPath(path);
 
         Repair::FactoryVacuum vacuummer = m_factory.vacuumer();
-        AssembleHandleOperator assembleOperator(assemblerHandle.get());
-        vacuummer.setAssembleDelegate(&assembleOperator);
-        WCTAssert(dynamic_cast<CipherHandle *>(cipherHandle.get()) != nullptr);
-        vacuummer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
+        VacuumHandleOperator vacuumOperator(vacuumHandle.get());
+        vacuummer.setVacuumDelegate(&vacuumOperator);
         vacuummer.setProgressCallback(onProgressUpdated);
 
-        if (!vacuummer.prepare(pageCount)) {
+        if (!vacuummer.prepare()) {
             setThreadedError(vacuummer.getError());
             Core::shared().setThreadedErrorPath("");
             return;
@@ -978,7 +946,6 @@ bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
             return;
         }
         Core::shared().setThreadedErrorPath("");
-        cipherHandle->close();
         result = true;
     });
     return result;

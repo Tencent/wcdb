@@ -3216,6 +3216,23 @@
 		758E7F312B1C82F400319991 /* CompressionTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F2F2B1C82EC00319991 /* CompressionTestObject.mm */; };
 		758E7F392B1C864700319991 /* Random+CompressionTestObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F382B1C864700319991 /* Random+CompressionTestObject.mm */; };
 		758E7F3E2B1C99C700319991 /* CompressionTestCase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 758E7F3D2B1C99C700319991 /* CompressionTestCase.mm */; };
+		759362CC2B368D87000AF163 /* VacuumBenchmark.mm in Sources */ = {isa = PBXBuildFile; fileRef = 759362CB2B368D87000AF163 /* VacuumBenchmark.mm */; };
+		759362CF2B36D450000AF163 /* Vacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362CD2B36D450000AF163 /* Vacuum.cpp */; };
+		759362D02B36D450000AF163 /* Vacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362CD2B36D450000AF163 /* Vacuum.cpp */; };
+		759362D12B36D450000AF163 /* Vacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362CD2B36D450000AF163 /* Vacuum.cpp */; };
+		759362D22B36D450000AF163 /* Vacuum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362CD2B36D450000AF163 /* Vacuum.cpp */; };
+		759362D32B36D450000AF163 /* Vacuum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362CE2B36D450000AF163 /* Vacuum.hpp */; };
+		759362D42B36D450000AF163 /* Vacuum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362CE2B36D450000AF163 /* Vacuum.hpp */; };
+		759362D52B36D450000AF163 /* Vacuum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362CE2B36D450000AF163 /* Vacuum.hpp */; };
+		759362D62B36D450000AF163 /* Vacuum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362CE2B36D450000AF163 /* Vacuum.hpp */; };
+		759362DA2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */; };
+		759362DB2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */; };
+		759362DC2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */; };
+		759362DD2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */; };
+		759362DE2B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
+		759362DF2B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
+		759362E02B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
+		759362E12B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
 		7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A46C00284310CE00B58207 /* ColumnConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */; };
@@ -5021,6 +5038,11 @@
 		758E7F382B1C864700319991 /* Random+CompressionTestObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "Random+CompressionTestObject.mm"; sourceTree = "<group>"; };
 		758E7F3D2B1C99C700319991 /* CompressionTestCase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CompressionTestCase.mm; sourceTree = "<group>"; };
 		758E7F3F2B1C99D200319991 /* CompressionTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompressionTestCase.h; sourceTree = "<group>"; };
+		759362CB2B368D87000AF163 /* VacuumBenchmark.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VacuumBenchmark.mm; sourceTree = "<group>"; };
+		759362CD2B36D450000AF163 /* Vacuum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vacuum.cpp; sourceTree = "<group>"; };
+		759362CE2B36D450000AF163 /* Vacuum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vacuum.hpp; sourceTree = "<group>"; };
+		759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VacuumHandleOperator.cpp; sourceTree = "<group>"; };
+		759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VacuumHandleOperator.hpp; sourceTree = "<group>"; };
 		7596162228BFB05100AE86BA /* CPPDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPDeclaration.h; sourceTree = "<group>"; };
 		75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnConstraintBridge.cpp; sourceTree = "<group>"; };
 		75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColumnConstraintBridge.h; sourceTree = "<group>"; };
@@ -6208,6 +6230,7 @@
 		2349F6151EA0D6680021EFA7 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				759362D72B36D667000AF163 /* vacuum */,
 				754212092B124CFF00A2FF4D /* compression */,
 				754211D92B11FCDE00A2FF4D /* function */,
 				0D19BA1C2B0747E80028F92B /* integrity */,
@@ -6497,6 +6520,7 @@
 				758DC8012B255EBF00E71D9B /* CompressionBenchmark.mm */,
 				758DC8042B25671E00E71D9B /* NormalCompressionBenchmark.mm */,
 				758DC8062B25678800E71D9B /* DictCompressionBenchmark.mm */,
+				759362CB2B368D87000AF163 /* VacuumBenchmark.mm */,
 			);
 			path = benchmark;
 			sourceTree = "<group>";
@@ -7102,6 +7126,8 @@
 				75A60AAE29345A38009C1B3C /* Cipher.hpp */,
 				75E29CA22B2DF0D0003340FF /* ErrorSensitivity.cpp */,
 				75E29CA32B2DF0D0003340FF /* ErrorSensitivity.hpp */,
+				759362CD2B36D450000AF163 /* Vacuum.cpp */,
+				759362CE2B36D450000AF163 /* Vacuum.hpp */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -7914,6 +7940,15 @@
 			path = compatible;
 			sourceTree = "<group>";
 		};
+		759362D72B36D667000AF163 /* vacuum */ = {
+			isa = PBXGroup;
+			children = (
+				759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */,
+				759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */,
+			);
+			path = vacuum;
+			sourceTree = "<group>";
+		};
 		75B69889290AD0A9006E1F8F /* auxfunction */ = {
 			isa = PBXGroup;
 			children = (
@@ -8228,6 +8263,7 @@
 				037C3B2A2897E33600328EC8 /* SyntaxFilter.hpp in Headers */,
 				0D3FFA482A2F2911002DF7CD /* SysTypes.h in Headers */,
 				7533CB6A2B051C4F00C8B47D /* ClassDecorator.hpp in Headers */,
+				759362D52B36D450000AF163 /* Vacuum.hpp in Headers */,
 				037C3B2B2897E33600328EC8 /* StatementRollback.hpp in Headers */,
 				037C3B2D2897E33600328EC8 /* StatementAlterTable.hpp in Headers */,
 				037C3B2E2897E33600328EC8 /* StatementPragma.hpp in Headers */,
@@ -8359,6 +8395,7 @@
 				037C3BDA2897E33600328EC8 /* Column.hpp in Headers */,
 				75F32F1628BA066400A72697 /* CPPBindingMacro.h in Headers */,
 				037C3BDC2897E33600328EC8 /* TimedQueue.hpp in Headers */,
+				759362E02B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */,
 				037C3BDD2897E33600328EC8 /* Time.hpp in Headers */,
 				037C3BDE2897E33600328EC8 /* FileManager.hpp in Headers */,
 				758D9D0928BA819A001B3D2D /* CPPVirtualTableMacro.h in Headers */,
@@ -8491,6 +8528,7 @@
 				752517852B1338AF00485175 /* CompressionRecord.hpp in Headers */,
 				23F1698A20B6638F009B5C47 /* ThreadedErrors.hpp in Headers */,
 				0D5403072B160693007DF415 /* CompressingStatementDecorator.hpp in Headers */,
+				759362DE2B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */,
 				23EEDCA8217DFADC006E9E73 /* TableConstraint.hpp in Headers */,
 				7543DD8F271C360E00B533B4 /* AuxiliaryFunctionConfig.hpp in Headers */,
 				23EEDCA6217DFADC006E9E73 /* SQL.hpp in Headers */,
@@ -8717,6 +8755,7 @@
 				754212222B124CFF00A2FF4D /* CompressionCenter.hpp in Headers */,
 				03EE3DAB288165A700C8F0B3 /* StatementInsertBridge.h in Headers */,
 				75AF6ADC2854C5ED00A7C43D /* JoinBridge.h in Headers */,
+				759362D32B36D450000AF163 /* Vacuum.hpp in Headers */,
 				03E822922844E1AB0072CA57 /* RaiseFunctionBridge.h in Headers */,
 				757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */,
 				75F4DE482884032600760DC3 /* StatementRollbackBridge.h in Headers */,
@@ -9011,6 +9050,7 @@
 				7521D90F291E9ABB009642EF /* TokenizerModule.hpp in Headers */,
 				7521D910291E9ABB009642EF /* AbstractHandle.hpp in Headers */,
 				7521D911291E9ABB009642EF /* Factory.hpp in Headers */,
+				759362DF2B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */,
 				7521D912291E9ABB009642EF /* WCTConvenient.h in Headers */,
 				7521D913291E9ABB009642EF /* SyntaxFrameSpec.hpp in Headers */,
 				7521D914291E9ABB009642EF /* Path.hpp in Headers */,
@@ -9074,6 +9114,7 @@
 				7521D94E291E9ABB009642EF /* WCTFoundation.h in Headers */,
 				7521D94F291E9ABB009642EF /* SyntaxColumn.hpp in Headers */,
 				7521D950291E9ABB009642EF /* InnerDatabase.hpp in Headers */,
+				759362D42B36D450000AF163 /* Vacuum.hpp in Headers */,
 				7521D951291E9ABB009642EF /* WCTTag.h in Headers */,
 				7521D953291E9ABB009642EF /* MergeFTSIndexLogic.hpp in Headers */,
 				7521D954291E9ABB009642EF /* SyntaxAnalyzeSTMT.hpp in Headers */,
@@ -9261,6 +9302,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759362D62B36D450000AF163 /* Vacuum.hpp in Headers */,
 				7521DC29291EA349009642EF /* AsyncQueue.hpp in Headers */,
 				752517882B1338AF00485175 /* CompressionRecord.hpp in Headers */,
 				7533CB602B050FB200C8B47D /* MigratingStatementDecorator.hpp in Headers */,
@@ -9403,6 +9445,7 @@
 				7521DCD8291EA349009642EF /* SyntaxEnum.hpp in Headers */,
 				7521DCD9291EA349009642EF /* DBOperationNotifier.hpp in Headers */,
 				7521DCDA291EA349009642EF /* StatementCreateView.hpp in Headers */,
+				759362E12B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */,
 				7521DCDB291EA349009642EF /* SyntaxCreateVirtualTableSTMT.hpp in Headers */,
 				7521DCDC291EA349009642EF /* Shadow.hpp in Headers */,
 				7521DCE0291EA349009642EF /* JoinConstraint.hpp in Headers */,
@@ -10103,6 +10146,7 @@
 			files = (
 				037C38D42897E33600328EC8 /* SQL.cpp in Sources */,
 				037C38D52897E33600328EC8 /* HighWater.cpp in Sources */,
+				759362D12B36D450000AF163 /* Vacuum.cpp in Sources */,
 				037C38D62897E33600328EC8 /* ConvertibleImplementation.cpp in Sources */,
 				037C38D72897E33600328EC8 /* Scoreable.cpp in Sources */,
 				037C38D82897E33600328EC8 /* StatementCreateView.cpp in Sources */,
@@ -10140,6 +10184,7 @@
 				037C39092897E33600328EC8 /* SQLiteLocker.cpp in Sources */,
 				037C390D2897E33600328EC8 /* StatementUpdate.cpp in Sources */,
 				037C390E2897E33600328EC8 /* SyntaxResultColumn.cpp in Sources */,
+				759362DC2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */,
 				037C390F2897E33600328EC8 /* Initializeable.cpp in Sources */,
 				037C39102897E33600328EC8 /* PageBasedFileHandle.cpp in Sources */,
 				75E50A2D2907921600B73E62 /* MultiSelect.cpp in Sources */,
@@ -10400,6 +10445,7 @@
 				03BF4B4D2888FA7C00A30500 /* NSObject+TestCase.mm in Sources */,
 				03BF4B3D2888FA3000A30500 /* Benchmark.mm in Sources */,
 				0D71F9352A8B377100F7B4F6 /* Random.swift in Sources */,
+				759362CC2B368D87000AF163 /* VacuumBenchmark.mm in Sources */,
 				03BF4B332888F95800A30500 /* Convenience.swift in Sources */,
 				03BF4B522888FA8900A30500 /* WCTDatabase+TestCase.mm in Sources */,
 				03BF4B3A2888F99200A30500 /* MigrationBenchmark.mm in Sources */,
@@ -10809,6 +10855,7 @@
 				03E1662427F42D6500D2C926 /* StatementPragma.swift in Sources */,
 				03E1661427F42D6500D2C926 /* Value.swift in Sources */,
 				23EEDC97217DFADC006E9E73 /* OrderingTerm.cpp in Sources */,
+				759362DA2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */,
 				03E1661A27F42D6500D2C926 /* StatementRollback.swift in Sources */,
 				23EEDC68217DFADC006E9E73 /* ColumnType.cpp in Sources */,
 				2372E05921A2633800051D9A /* WCTTryDisposeGuard.mm in Sources */,
@@ -11175,6 +11222,7 @@
 				237B47B021FEEA200059227A /* ColumnMeta.cpp in Sources */,
 				23759461210081AA00DBB721 /* UnsafeData.cpp in Sources */,
 				23EEDC7D217DFADC006E9E73 /* ColumnDef.cpp in Sources */,
+				759362CF2B36D450000AF163 /* Vacuum.cpp in Sources */,
 				2370B12B21914ED500D3227C /* NSString+WCTColumnCoding.mm in Sources */,
 				23EEDCA7217DFADC006E9E73 /* TableConstraint.cpp in Sources */,
 				23EEDCF1217DFADC006E9E73 /* SyntaxColumnConstraint.cpp in Sources */,
@@ -11416,6 +11464,7 @@
 				7521D74A291E9ABB009642EF /* WalRelated.cpp in Sources */,
 				7521D74B291E9ABB009642EF /* SyntaxBeginSTMT.cpp in Sources */,
 				7521D74C291E9ABB009642EF /* SyntaxCommonTableExpression.cpp in Sources */,
+				759362D02B36D450000AF163 /* Vacuum.cpp in Sources */,
 				7542121F2B124CFF00A2FF4D /* Compression.cpp in Sources */,
 				7521D74E291E9ABB009642EF /* StatementDropTable.cpp in Sources */,
 				7521D751291E9ABB009642EF /* SyntaxExpression.cpp in Sources */,
@@ -11428,6 +11477,7 @@
 				7521D759291E9ABB009642EF /* IndexedColumn.cpp in Sources */,
 				7521D75A291E9ABB009642EF /* BaseTokenizerUtil.cpp in Sources */,
 				7521D75B291E9ABB009642EF /* RaiseFunction.cpp in Sources */,
+				759362DB2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */,
 				7521D75E291E9ABB009642EF /* ColumnConstraint.cpp in Sources */,
 				7521D75F291E9ABB009642EF /* WCTRuntimeBaseAccessor.mm in Sources */,
 				0D54030E2B1606BC007DF415 /* CompressingHandleDecorator.cpp in Sources */,
@@ -11680,6 +11730,7 @@
 				7521DA7F291EA349009642EF /* OrderingTerm.cpp in Sources */,
 				7521DA80291EA349009642EF /* StatementRollback.swift in Sources */,
 				7521DA81291EA349009642EF /* ColumnType.cpp in Sources */,
+				759362D22B36D450000AF163 /* Vacuum.cpp in Sources */,
 				7521DA83291EA349009642EF /* StatementAttach.cpp in Sources */,
 				750080D92920DCFF009C0F38 /* WCTFileManager.mm in Sources */,
 				7521DA84291EA349009642EF /* Fraction.cpp in Sources */,
@@ -11993,6 +12044,7 @@
 				7521DBD9291EA349009642EF /* AggregateFunction.cpp in Sources */,
 				7521DBDA291EA349009642EF /* MultiPrimaryConfig.swift in Sources */,
 				7521DBDB291EA349009642EF /* SQLiteBase.cpp in Sources */,
+				759362DD2B36D756000AF163 /* VacuumHandleOperator.cpp in Sources */,
 				7521DBDC291EA349009642EF /* Join.cpp in Sources */,
 				75EF25032AA33FEB0009C99F /* IncrementalMaterial.cpp in Sources */,
 				7521DBDD291EA349009642EF /* SyntaxCreateTableSTMT.cpp in Sources */,

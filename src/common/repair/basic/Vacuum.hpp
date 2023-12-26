@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2023/12/15.
+// Created by qiuwenchen on 2023/12/23.
 //
 
 /*
@@ -24,34 +24,40 @@
 
 #pragma once
 
-#include "Backup.hpp"
-#include "ErrorProne.hpp"
-#include "FactoryRelated.hpp"
-#include "Vacuum.hpp"
+#include "Progress.hpp"
+#include "StringView.hpp"
+#include "WCDBError.hpp"
 
 namespace WCDB {
 
 namespace Repair {
 
-class FactoryVacuum final : public FactoryRelated,
-                            public ErrorProne,
-                            public Progress,
-                            public VacuumDelegateHolder {
+class VacuumDelegate : public Progress {
 public:
-    FactoryVacuum(const Factory &factory);
-    ~FactoryVacuum() override final;
+    VacuumDelegate();
+    virtual ~VacuumDelegate() = 0;
 
-    const StringView directory;
-    const StringView database;
+    void setOriginalDatabase(const UnsafeStringView &originalPath);
+    void setVacuumDatabase(const UnsafeStringView &vacuumPath);
 
-    bool work();
-    bool prepare();
+    virtual bool executeVacuum() = 0;
+    virtual const Error &getVacuumError() = 0;
 
 protected:
-    bool increaseProgress(double progress, double increment);
-    bool exit(bool result);
+    StringView m_originalPath;
+    StringView m_vacuumPath;
 };
 
-} // namespace Repair
+class VacuumDelegateHolder {
+public:
+    VacuumDelegateHolder();
+    virtual ~VacuumDelegateHolder() = 0;
+    void setVacuumDelegate(VacuumDelegate *delegate);
 
-} // namespace WCDB
+protected:
+    VacuumDelegate *m_vacuumDelegate;
+};
+
+} //namespace Repair
+
+} //namespace WCDB
