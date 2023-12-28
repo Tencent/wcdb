@@ -99,7 +99,7 @@ public:
      You can asynchronously cancel all operations on the current handle through `CancellationSignal`.
      
          WCDB::Handle::CancellationSignal signal;
-         std::async(std::launch::async, [=](){
+         auto future = std::async(std::launch::async, [=](){
             WCDB::Handle handle = database.getHandle();
             handle.attachCancellationSignal(signal);
      

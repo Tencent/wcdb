@@ -60,7 +60,7 @@ bool FactoryVacuum::work()
         return exit(false);
     }
     if (exists.value()) {
-        Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when vaccum.");
+        Error error(Error::Code::Misuse, Error::Level::Warning, "Database already exists when vacuum.");
         error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
         error.infos.insert_or_assign(ErrorStringKeyPath, factory.database);
         Notifier::shared().notify(error);
@@ -82,17 +82,15 @@ bool FactoryVacuum::work()
     return exit(true);
 }
 
-bool FactoryVacuum::prepare(int64_t totalPageSize)
+bool FactoryVacuum::prepare()
 {
     WCTRemedialAssert(
-    m_assembleDelegate != nullptr, "Assemble is not available.", return false;);
+    m_vacuumDelegate != nullptr, "Vacuum delegate is not available.", return false;);
 
     // 1. create temp directory for acquisition
     StringView tempDirectory = Path::addComponent(directory, "temp");
     StringView tempDatabase
     = Path::addComponent(tempDirectory, factory.getDatabaseName());
-    m_assembleDelegate->setAssemblePath(tempDatabase);
-    m_assembleDelegate->setErrorSensitive(true);
 
     if (!FileManager::removeItem(tempDirectory)
         || !FileManager::createDirectoryWithIntermediateDirectories(tempDirectory)) {
@@ -100,22 +98,18 @@ bool FactoryVacuum::prepare(int64_t totalPageSize)
         return exit(false);
     }
 
-    // 2. Crawl database and assemble it into temp directory
-    FullCrawler fullCrawler(factory.database);
-    m_assembleDelegate->markDuplicatedAsIgnorable(false);
-    fullCrawler.setErrorSensitive(true);
-    fullCrawler.setPageCount(totalPageSize);
-    fullCrawler.setAssembleDelegate(m_assembleDelegate);
-    fullCrawler.setProgressCallback(std::bind(
+    // 2. Copy all data into temp database
+    m_vacuumDelegate->setVacuumDatabase(tempDatabase);
+    m_vacuumDelegate->setOriginalDatabase(factory.database);
+    m_vacuumDelegate->setProgressCallback(std::bind(
     &FactoryVacuum::increaseProgress, this, std::placeholders::_1, std::placeholders::_2));
-    fullCrawler.setCipherDelegate(m_cipherDelegate);
-    if (!fullCrawler.work()) {
-        setError(fullCrawler.getError());
+    ;
+    if (!m_vacuumDelegate->executeVacuum()) {
+        setError(m_vacuumDelegate->getVacuumError());
         return exit(false);
     }
-    WCTAssert(fullCrawler.getScore().value() <= 1);
 
-    // 3. move the assembled database to vaccum directory.
+    // 3. move the assembled database to vacuum directory.
     std::list<StringView> toRemove = Factory::associatedPathsForDatabase(database);
     toRemove.reverse(); // move from end to start, which can avoid issues that unexpected crash happens before all files moved.
     if (!FileManager::removeItems(toRemove)) {
@@ -141,11 +135,7 @@ bool FactoryVacuum::prepare(int64_t totalPageSize)
 
 bool FactoryVacuum::increaseProgress(double, double increment)
 {
-    if (!Progress::increaseProgress(increment)) {
-        m_assembleDelegate->suspendAssemble();
-        return false;
-    }
-    return true;
+    return Progress::increaseProgress(increment);
 }
 
 bool FactoryVacuum::exit(bool result)

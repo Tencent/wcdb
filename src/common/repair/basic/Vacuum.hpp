@@ -1,5 +1,5 @@
 //
-// Created by qiuwenchen on 2023/12/16.
+// Created by qiuwenchen on 2023/12/23.
 //
 
 /*
@@ -24,21 +24,40 @@
 
 #pragma once
 
+#include "Progress.hpp"
+#include "StringView.hpp"
+#include "WCDBError.hpp"
+
 namespace WCDB {
 
 namespace Repair {
 
-class ErrorSensitivity {
+class VacuumDelegate : public Progress {
 public:
-    ErrorSensitivity();
-    virtual ~ErrorSensitivity();
-    virtual void setErrorSensitive(bool sensitive);
-    bool isErrorSensitive() const;
+    VacuumDelegate();
+    virtual ~VacuumDelegate() = 0;
 
-private:
-    bool m_errorSensitive;
+    void setOriginalDatabase(const UnsafeStringView &originalPath);
+    void setVacuumDatabase(const UnsafeStringView &vacuumPath);
+
+    virtual bool executeVacuum() = 0;
+    virtual const Error &getVacuumError() = 0;
+
+protected:
+    StringView m_originalPath;
+    StringView m_vacuumPath;
 };
 
-} // namespace Repair
+class VacuumDelegateHolder {
+public:
+    VacuumDelegateHolder();
+    virtual ~VacuumDelegateHolder() = 0;
+    void setVacuumDelegate(VacuumDelegate *delegate);
 
-} // namespace WCDB
+protected:
+    VacuumDelegate *m_vacuumDelegate;
+};
+
+} //namespace Repair
+
+} //namespace WCDB

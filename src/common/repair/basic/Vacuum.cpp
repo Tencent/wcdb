@@ -1,5 +1,5 @@
 //
-// Created by 陈秋文 on 2023/12/16.
+// Created by qiuwenchen on 2023/12/23.
 //
 
 /*
@@ -22,28 +22,37 @@
  * limitations under the License.
  */
 
-#include "ErrorSensitivity.hpp"
+#include "Vacuum.hpp"
 
 namespace WCDB {
 
 namespace Repair {
 
-ErrorSensitivity::ErrorSensitivity() : m_errorSensitive(false)
+VacuumDelegate::VacuumDelegate() = default;
+
+VacuumDelegate::~VacuumDelegate() = default;
+
+void VacuumDelegate::setOriginalDatabase(const UnsafeStringView &originalPath)
+{
+    m_originalPath = originalPath;
+}
+
+void VacuumDelegate::setVacuumDatabase(const UnsafeStringView &vacuumPath)
+{
+    m_vacuumPath = vacuumPath;
+}
+
+VacuumDelegateHolder::VacuumDelegateHolder() : m_vacuumDelegate(nullptr)
 {
 }
 
-ErrorSensitivity::~ErrorSensitivity() = default;
-
-void ErrorSensitivity::setErrorSensitive(bool sensitive)
+void VacuumDelegateHolder::setVacuumDelegate(VacuumDelegate *delegate)
 {
-    m_errorSensitive = sensitive;
+    m_vacuumDelegate = delegate;
 }
 
-bool ErrorSensitivity::isErrorSensitive() const
-{
-    return m_errorSensitive;
-}
+VacuumDelegateHolder::~VacuumDelegateHolder() = default;
 
-} // namespace Repair
+} //namespace Repair
 
-} // namespace WCDB
+} //namespace WCDB

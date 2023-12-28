@@ -26,8 +26,11 @@
 
 namespace WCDB {
 
-TableAttribute::TableAttribute(bool autoincrement, bool withoutRowid, StringView integerPrimaryKey)
-: autoincrement(autoincrement), withoutRowid(withoutRowid), integerPrimaryKey(integerPrimaryKey)
+TableAttribute::TableAttribute(bool autoincrement, bool withoutRowid, bool isVirtual, StringView integerPrimaryKey)
+: autoincrement(autoincrement)
+, withoutRowid(withoutRowid)
+, isVirtual(isVirtual)
+, integerPrimaryKey(integerPrimaryKey)
 {
 }
 

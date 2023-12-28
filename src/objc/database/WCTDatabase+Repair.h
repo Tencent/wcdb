@@ -37,7 +37,7 @@ typedef void (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
 
 /**
- Triggered when repairment/vaccum progresses.
+ Triggered when repairment/vacuum progresses.
  */
 typedef bool /* continue or not */ (^WCTProgressUpdateBlock)(double /* percentage */, double /* increment */);
 
@@ -122,7 +122,7 @@ WCDB_API @interface WCTDatabase(Repair)
  */
 - (double)retrieve:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
 
-- (BOOL)vaccum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
+- (BOOL)vacuum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
 
 @end
 

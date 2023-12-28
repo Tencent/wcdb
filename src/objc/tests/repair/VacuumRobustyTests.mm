@@ -25,11 +25,11 @@
 #import "TestCase.h"
 #import <Foundation/Foundation.h>
 
-@interface VaccumRobustyTests : RobustyTestCase
+@interface VacuumRobustyTests : RobustyTestCase
 
 @end
 
-@implementation VaccumRobustyTests
+@implementation VacuumRobustyTests
 
 - (void)setUp
 {
@@ -38,7 +38,7 @@
     [self.database enableAutoCheckpoint:YES];
 }
 
-- (void)test_vaccum_robusty
+- (void)test_vacuum_robusty
 {
     NSArray* sizes = @[
         @(10 * 1024 * 1024),
@@ -55,7 +55,7 @@
         NSDictionary<NSString*, NSArray<TestCaseObject*>*>* expectedTableObjects = [self getTableObjects];
         TestCaseAssertTrue(expectedTableObjects != nil);
 
-        TestCaseAssertTrue([self.database vaccum:nil]);
+        TestCaseAssertTrue([self.database vacuum:nil]);
 
         NSDictionary<NSString*, NSArray<TestCaseObject*>*>* currentTableObjects = [self getTableObjects];
 

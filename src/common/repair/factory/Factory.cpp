@@ -105,7 +105,7 @@ bool Factory::containsDeposited() const
 
 bool Factory::isWorkshopDirectory(const UnsafeStringView &dir)
 {
-    return dir != restoreDirectoryName && dir != renewDirectoryName && dir != vaccumDirectoryName;
+    return dir != restoreDirectoryName && dir != renewDirectoryName && dir != vacuumDirectoryName;
 }
 
 #pragma mark - Factory Related
@@ -129,7 +129,7 @@ FactoryRetriever Factory::retriever() const
     return FactoryRetriever(*this);
 }
 
-FactoryVacuum Factory::vaccumer() const
+FactoryVacuum Factory::vacuumer() const
 {
     return FactoryVacuum(*this);
 }
@@ -220,7 +220,7 @@ StringView Factory::getRenewDirectory() const
 
 StringView Factory::getVacuumDirectory() const
 {
-    return Path::addComponent(directory, vaccumDirectoryName);
+    return Path::addComponent(directory, vacuumDirectoryName);
 }
 
 StringView Factory::getDatabaseName() const

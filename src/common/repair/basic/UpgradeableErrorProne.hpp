@@ -25,14 +25,13 @@
 #pragma once
 
 #include "ErrorProne.hpp"
-#include "ErrorSensitivity.hpp"
 #include <limits>
 
 namespace WCDB {
 
 namespace Repair {
 
-class UpgradeableErrorProne : private ErrorProne, public ErrorSensitivity {
+class UpgradeableErrorProne : private ErrorProne {
 public:
     UpgradeableErrorProne();
     virtual ~UpgradeableErrorProne() override = 0;

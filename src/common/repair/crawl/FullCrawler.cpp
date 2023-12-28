@@ -51,12 +51,6 @@ void FullCrawler::setPageCount(int64_t pageCount)
     m_pageCount = pageCount;
 }
 
-void FullCrawler::setErrorSensitive(bool sensitive)
-{
-    Repairman::setErrorSensitive(sensitive);
-    m_pager.setErrorSensitive(sensitive);
-}
-
 #pragma mark - Repair
 bool FullCrawler::work()
 {
@@ -87,7 +81,7 @@ bool FullCrawler::work()
     if (!m_pager.initialize()) {
         if (m_pager.getError().isCorruption()) {
             tryUpgradeCrawlerError();
-            return exit(isErrorSensitive() ? false : true);
+            return exit(true);
         } else {
             setCriticalError(m_pager.getError());
             return exit(false);
@@ -142,10 +136,8 @@ bool FullCrawler::willCrawlPage(const Page &page, int)
     if (page.getType() == Page::Type::LeafTable) {
         increaseProgress(getPageWeight().value());
     }
-    if (!isErrorSensitive()) {
-        m_assembleDelegate->markDuplicatedAsReplaceable(
-        m_pager.containPageInWal(page.number));
-    }
+    m_assembleDelegate->markDuplicatedAsReplaceable(
+    m_pager.containPageInWal(page.number));
     return true;
 }
 

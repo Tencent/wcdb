@@ -42,8 +42,6 @@ class FullCrawler final : public Repairman, public MasterCrawlerDelegate, public
 public:
     FullCrawler(const UnsafeStringView &source);
     ~FullCrawler() override final;
-
-    void setErrorSensitive(bool sensitive) override final;
     void setPageCount(int64_t pageCount);
 
 private:

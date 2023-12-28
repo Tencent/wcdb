@@ -137,10 +137,11 @@ void AutoBackupConfig::onCheckpointBegin(AbstractHandle* handle,
     m_checkpointPages.erase(path);
     FileManager::removeItem(Repair::Factory::incrementalMaterialPathForDatabase(path));
 
-    std::async(std::launch::async, [=]() {
+    std::thread asyncNotify([=]() {
         Error newError = error;
         Notifier::shared().notify(newError);
     });
+    asyncNotify.detach();
 }
 
 void AutoBackupConfig::onCheckpointPage(AbstractHandle* handle, uint32_t pageNo, const UnsafeData& data)

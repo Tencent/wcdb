@@ -52,7 +52,7 @@ int UpgradeableErrorProne::errorSeverity(const Error &error)
         if (error.code() != Error::Code::Interrupt) {
             return -1;
         }
-    } else if (!isErrorSensitive() && error.level < Error::Level::Error) {
+    } else if (error.level < Error::Level::Error) {
         return -1;
     }
     switch (error.code()) {
@@ -69,11 +69,7 @@ int UpgradeableErrorProne::errorSeverity(const Error &error)
     case Error::Code::OK:
         return Severity::None;
     default:
-        if (isErrorSensitive()) {
-            return Severity::Normal;
-        } else {
-            return Severity::Critical;
-        }
+        return Severity::Normal;
     }
 }
 

@@ -100,7 +100,7 @@
     return _database->containsDeposited();
 }
 
-- (BOOL)vaccum:(WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated
+- (BOOL)vacuum:(WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated
 {
     WCDB::InnerDatabase::ProgressCallback callback = nullptr;
     if (onProgressUpdated != nil) {
@@ -108,7 +108,7 @@
             return onProgressUpdated(percentage, increment);
         };
     }
-    return _database->vaccum(callback);
+    return _database->vacuum(callback);
 }
 
 @end

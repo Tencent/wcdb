@@ -24,11 +24,10 @@
 
 #pragma once
 
-#include "Assemble.hpp"
 #include "Backup.hpp"
 #include "ErrorProne.hpp"
 #include "FactoryRelated.hpp"
-#include "Progress.hpp"
+#include "Vacuum.hpp"
 
 namespace WCDB {
 
@@ -37,8 +36,7 @@ namespace Repair {
 class FactoryVacuum final : public FactoryRelated,
                             public ErrorProne,
                             public Progress,
-                            public CipherDelegateHolder,
-                            public AssembleDelegateHolder {
+                            public VacuumDelegateHolder {
 public:
     FactoryVacuum(const Factory &factory);
     ~FactoryVacuum() override final;
@@ -47,7 +45,7 @@ public:
     const StringView database;
 
     bool work();
-    bool prepare(int64_t totalPageSize);
+    bool prepare();
 
 protected:
     bool increaseProgress(double progress, double increment);

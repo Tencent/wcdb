@@ -256,9 +256,7 @@ bool Pager::containPageInWal(uint32_t pageno)
 #pragma mark - Error
 void Pager::markAsCorrupted(int page, const UnsafeStringView& message)
 {
-    Error error(Error::Code::Corrupt,
-                isErrorSensitive() ? Error::Level::Error : Error::Level::Notice,
-                message);
+    Error error(Error::Code::Corrupt, Error::Level::Notice, message);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
     error.infos.insert_or_assign("Page", page);
@@ -268,7 +266,7 @@ void Pager::markAsCorrupted(int page, const UnsafeStringView& message)
 
 void Pager::markAsError(Error::Code code)
 {
-    Error error(code, isErrorSensitive() ? Error::Level::Error : Error::Level::Notice);
+    Error error(code, Error::Level::Notice);
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, getPath());
     Notifier::shared().notify(error);

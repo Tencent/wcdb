@@ -186,7 +186,7 @@ void Repairman::onCrawlerError()
 int Repairman::tryUpgradeCrawlerError()
 {
     Error error = m_pager.getError();
-    if (error.isCorruption() && !isErrorSensitive()) {
+    if (error.isCorruption()) {
         error.level = Error::Level::Notice;
     }
     return tryUpgradeError(std::move(error));

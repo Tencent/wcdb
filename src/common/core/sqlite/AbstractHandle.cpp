@@ -104,7 +104,7 @@ bool AbstractHandle::open()
     if (!isOpened()) {
         if (m_customOpenFlag == 0) {
             succeed = APIExit(sqlite3_open_v2(
-            m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MAINDB_READONLY, 0));
+            m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, 0));
         } else {
             succeed
             = APIExit(sqlite3_open_v2(m_path.data(), &m_handle, m_customOpenFlag, 0));
@@ -420,9 +420,15 @@ AbstractHandle::getTableAttribute(const Schema &schema, const UnsafeStringView &
 {
     int isAutoincrement = 0;
     int isWithoutRowid = 0;
+    int isVirtual = 0;
     const char *integerPrimaryKey = nullptr;
-    bool ret = APIExit(sqlite3_table_config(
-    m_handle, schema.syntax().name.data(), tableName.data(), &isAutoincrement, &isWithoutRowid, &integerPrimaryKey));
+    bool ret = APIExit(sqlite3_table_config(m_handle,
+                                            schema.syntax().name.data(),
+                                            tableName.data(),
+                                            &isAutoincrement,
+                                            &isWithoutRowid,
+                                            &isVirtual,
+                                            &integerPrimaryKey));
     if (!ret) {
         if (integerPrimaryKey != nullptr) {
             free((void *) integerPrimaryKey);
@@ -430,7 +436,7 @@ AbstractHandle::getTableAttribute(const Schema &schema, const UnsafeStringView &
         return NullOpt;
     }
     TableAttribute config(
-    isAutoincrement > 0, isWithoutRowid > 0, StringView(integerPrimaryKey));
+    isAutoincrement > 0, isWithoutRowid > 0, isVirtual > 0, StringView(integerPrimaryKey));
     if (integerPrimaryKey != nullptr) {
         free((void *) integerPrimaryKey);
     }

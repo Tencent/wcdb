@@ -29,6 +29,7 @@
 
 @property (nonatomic, assign) BOOL needCipher;
 @property (nonatomic, strong) Class<RepairTestObject> testClass;
+@property (nonatomic, assign) int objectCount;
 @property (nonatomic, readonly) NSMutableArray<NSObject<RepairTestObject>*>* objects;
 @property (nonatomic, assign) bool incrementalBackup;
 @property (nonatomic, assign) bool corruptHeader;

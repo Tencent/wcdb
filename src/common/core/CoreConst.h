@@ -140,7 +140,6 @@ enum class HandleType : unsigned int {
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
     Vacuum = (HandleCategoryNormal << 8) | HandleSlotVacuum,
-    VacuumCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
     MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotAutoTask,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)
@@ -168,6 +167,9 @@ static constexpr const double MigrateMaxInitializeDuration = 0.005;
 #pragma mark - Compression
 static constexpr const int CompressionBatchCount = 100;
 static constexpr const int CompressionUpdateRecordBatchCount = 1000;
+
+#pragma mark - Vacuum
+static constexpr const int VacuumBatchCount = 1000;
 
 WCDBLiteralStringDefine(ErrorStringKeyType, "Type");
 WCDBLiteralStringDefine(ErrorStringKeySource, "Source")

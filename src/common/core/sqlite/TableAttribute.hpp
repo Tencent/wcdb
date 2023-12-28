@@ -28,10 +28,11 @@ namespace WCDB {
 
 class TableAttribute {
 public:
-    TableAttribute(bool autoincrement, bool withoutRowid, StringView integerPrimaryKey);
+    TableAttribute(bool autoincrement, bool withoutRowid, bool isVirtual, StringView integerPrimaryKey);
 
     bool autoincrement;
     bool withoutRowid;
+    bool isVirtual;
     StringView integerPrimaryKey;
 };
 

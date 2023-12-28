@@ -120,16 +120,12 @@ bool AssembleHandleOperator::assembleSQL(const UnsafeStringView &sql)
 {
     InnerHandle *handle = getHandle();
     bool succeed = false;
-    if (isErrorSensitive()) {
-        succeed = handle->executeSQL(sql);
-    } else {
-        handle->markErrorAsIgnorable(Error::Code::Error);
-        succeed = handle->executeSQL(sql);
-        if (!succeed && handle->getError().code() == Error::Code::Error) {
-            succeed = true;
-        }
-        handle->markErrorAsUnignorable();
+    handle->markErrorAsIgnorable(Error::Code::Error);
+    succeed = handle->executeSQL(sql);
+    if (!succeed && handle->getError().code() == Error::Code::Error) {
+        succeed = true;
     }
+    handle->markErrorAsUnignorable();
     return succeed;
 }
 
@@ -141,16 +137,12 @@ bool AssembleHandleOperator::assembleTable(const UnsafeStringView &tableName,
     m_table.clear();
     InnerHandle *handle = getHandle();
     bool succeed = false;
-    if (isErrorSensitive()) {
-        succeed = handle->executeSQL(sql);
-    } else {
-        handle->markErrorAsIgnorable(Error::Code::Error);
-        succeed = handle->executeSQL(sql);
-        if (!succeed && handle->getError().code() == Error::Code::Error) {
-            succeed = true;
-        }
-        handle->markErrorAsUnignorable();
+    handle->markErrorAsIgnorable(Error::Code::Error);
+    succeed = handle->executeSQL(sql);
+    if (!succeed && handle->getError().code() == Error::Code::Error) {
+        succeed = true;
     }
+    handle->markErrorAsUnignorable();
     if (succeed) {
         m_table = tableName;
         auto attribute = handle->getTableAttribute(Schema::main(), tableName);

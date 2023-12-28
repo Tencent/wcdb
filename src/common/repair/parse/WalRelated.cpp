@@ -57,11 +57,6 @@ const StringView &WalRelated::getPagerPath() const
     return m_pager->getPath();
 }
 
-bool WalRelated::isErrorSensitive() const
-{
-    return m_pager->isErrorSensitive();
-}
-
 void WalRelated::setError(Error &&error)
 {
     m_wal->setError(std::move(error));

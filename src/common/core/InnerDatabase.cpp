@@ -36,6 +36,7 @@
 #include "CompressHandleOperator.hpp"
 #include "IntegerityHandleOperator.hpp"
 #include "MigrateHandleOperator.hpp"
+#include "VacuumHandleOperator.hpp"
 
 #include "CompressingHandleDecorator.hpp"
 #include "MigratingHandleDecorator.hpp"
@@ -180,11 +181,11 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             assignWithSharedThreadedError();
             break;
         }
-        // vaccum
+        // vacuum
         {
-            Repair::FactoryVacuum vaccumer = m_factory.vaccumer();
-            if (!vaccumer.work()) {
-                setThreadedError(vaccumer.getError());
+            Repair::FactoryVacuum vacuumer = m_factory.vacuumer();
+            if (!vacuumer.work()) {
+                setThreadedError(vacuumer.getError());
                 break;
             }
         }
@@ -909,76 +910,42 @@ double InnerDatabase::retrieve(const ProgressCallback &onProgressUpdated)
     return result;
 }
 
-bool InnerDatabase::vaccum(const ProgressCallback &onProgressUpdated)
+bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
 {
     if (m_isInMemory) {
         return true;
     }
-    int64_t pageCount = 0;
-    {
-        RecyclableHandle handle = getHandle(false);
-        if (handle == nullptr) {
-            return false;
-        }
-        if (!handle->prepare(StatementPragma().pragma(Pragma::pageCount()))
-            || !handle->step() || handle->done()) {
-            setThreadedError(handle->getError());
-            handle->finalize();
-            return false;
-        }
-        pageCount = handle->getInteger();
-        handle->finalize();
-        if (!handle->prepare(StatementPragma().pragma(Pragma::freelistCount()))
-            || !handle->step() || handle->done()) {
-            setThreadedError(handle->getError());
-            handle->finalize();
-            return false;
-        }
-        pageCount -= handle->getInteger();
-        handle->finalize();
-    }
     bool result = false;
-    close([&result, &onProgressUpdated, &pageCount, this]() {
+    close([&result, &onProgressUpdated, this]() {
         InitializedGuard initializedGuard = initialize();
         if (!initializedGuard.valid()) {
             return;
         }
 
-        RecyclableHandle assemblerHandle = flowOut(HandleType::Vacuum);
-        if (assemblerHandle == nullptr) {
+        RecyclableHandle vacuumHandle = flowOut(HandleType::Vacuum);
+        if (vacuumHandle == nullptr) {
             return;
         }
-        assemblerHandle->markAsCanBeSuspended(true);
-        RecyclableHandle cipherHandle = flowOut(HandleType::VacuumCipher);
-        if (cipherHandle == nullptr) {
-            return;
-        }
-
-        WCTAssert(assemblerHandle.get() != cipherHandle.get());
-        WCTAssert(!assemblerHandle->isOpened());
 
         Core::shared().setThreadedErrorPath(path);
 
-        Repair::FactoryVacuum vaccummer = m_factory.vaccumer();
-        AssembleHandleOperator assembleOperator(assemblerHandle.get());
-        vaccummer.setAssembleDelegate(&assembleOperator);
-        WCTAssert(dynamic_cast<CipherHandle *>(cipherHandle.get()) != nullptr);
-        vaccummer.setCipherDelegate(static_cast<CipherHandle *>(cipherHandle.get()));
-        vaccummer.setProgressCallback(onProgressUpdated);
+        Repair::FactoryVacuum vacuummer = m_factory.vacuumer();
+        VacuumHandleOperator vacuumOperator(vacuumHandle.get());
+        vacuummer.setVacuumDelegate(&vacuumOperator);
+        vacuummer.setProgressCallback(onProgressUpdated);
 
-        if (!vaccummer.prepare(pageCount)) {
-            setThreadedError(vaccummer.getError());
+        if (!vacuummer.prepare()) {
+            setThreadedError(vacuummer.getError());
             Core::shared().setThreadedErrorPath("");
             return;
         }
 
-        if (!vaccummer.work()) {
-            setThreadedError(vaccummer.getError());
+        if (!vacuummer.work()) {
+            setThreadedError(vacuummer.getError());
             Core::shared().setThreadedErrorPath("");
             return;
         }
         Core::shared().setThreadedErrorPath("");
-        cipherHandle->close();
         result = true;
     });
     return result;

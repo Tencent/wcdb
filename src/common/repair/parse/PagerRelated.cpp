@@ -56,11 +56,6 @@ const StringView &PagerRelated::getPagerPath() const
     return m_pager->getPath();
 }
 
-bool PagerRelated::isErrorSensitive() const
-{
-    return m_pager->isErrorSensitive();
-}
-
 void PagerRelated::setError(Error &&error)
 {
     m_pager->setError(std::move(error));
