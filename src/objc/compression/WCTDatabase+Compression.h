@@ -55,10 +55,18 @@ WCDB_API @interface WCTDatabase(Compression)
  @brief Configure which tables in the current database need to compress data.
  Once configured, newly written data will be compressed immediately and synchronously,
  and you can use `-[WCTDatabase stepCompression]` and `-[WCTDatabase enableAutoCompression:]` to compress existing data.
- @warning  You need to use this method to configure the compression before excuting any statements on current database.
+ @warning You need to use this method to configure the compression before excuting any statements on current database.
  @see   `WCTCompressionFilterBlock`
  */
 - (void)setCompressionWithFilter:(nullable WCDB_ESCAPE WCTCompressionFilterBlock)filter;
+
+/**
+ @brief Configure not to compress new data written to the current database.
+ This configuration is mainly used to deal with some emergency scenarios.
+ It allows already compressed data to be read normally, but new data is no longer compressed.
+ @param disable disable compress or not.
+ */
+- (void)disableCompresssNewData:(BOOL)disable;
 
 /**
  @brief Manually compress 100 rows of data. You can call this method periodically until all data is compressed.

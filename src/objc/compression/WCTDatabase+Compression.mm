@@ -89,6 +89,11 @@
     _database->addCompression(callback);
 }
 
+- (void)disableCompresssNewData:(BOOL)disable
+{
+    _database->setCanCompressNewData(!disable);
+}
+
 - (BOOL)stepCompression
 {
     auto done = _database->stepCompression(false);

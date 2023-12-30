@@ -105,10 +105,18 @@ public:
         tryGetCompressionInfo(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
         void setTableInfoCommitted(bool committed);
+        bool canCompressNewData() const;
 
     private:
         Compression& m_compression;
     };
+
+    bool canCompressNewData() const;
+    void setCanCompressNewData(bool canCompress);
+
+private:
+    volatile bool m_canCompressNewData;
+
 #pragma mark - Step
 public:
     class Stepper : public InfoInitializer {

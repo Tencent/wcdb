@@ -36,7 +36,7 @@ CompressionEvent::~CompressionEvent() = default;
 
 #pragma mark - Initialize
 Compression::Compression(CompressionEvent* event)
-: m_tableAcquired(false), m_compressed(false), m_event(event)
+: m_canCompressNewData(true), m_tableAcquired(false), m_compressed(false), m_event(event)
 {
 }
 
@@ -302,6 +302,21 @@ Optional<const CompressionTableInfo*>
 Compression::Binder::tryGetCompressionInfo(const UnsafeStringView& table)
 {
     return m_compression.getOrInitInfo(*this, table);
+}
+
+bool Compression::Binder::canCompressNewData() const
+{
+    return m_compression.canCompressNewData();
+}
+
+bool Compression::canCompressNewData() const
+{
+    return m_canCompressNewData;
+}
+
+void Compression::setCanCompressNewData(bool canCompress)
+{
+    m_canCompressNewData = canCompress;
 }
 
 #pragma mark - Step

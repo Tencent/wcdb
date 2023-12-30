@@ -191,6 +191,8 @@ public:
     typedef Compression::TableFilter CompressionTableFilter;
     void addCompression(const CompressionTableFilter &filter);
 
+    void setCanCompressNewData(bool canCompress);
+
     typedef std::function<void(InnerDatabase *, const CompressionTableBaseInfo *)> CompressedCallback;
     void setNotificationWhenCompressed(const CompressedCallback &callback);
 
