@@ -64,7 +64,7 @@ bool CompressingHandleDecorator::commitTransaction()
 {
     bool ret = Super::commitTransaction();
     if (ret && !getHandle()->isInTransaction()) {
-        setTableInfoCommitted(true);
+        notifyTransactionCommitted(true);
     }
     return ret;
 }
@@ -72,7 +72,7 @@ bool CompressingHandleDecorator::commitTransaction()
 void CompressingHandleDecorator::rollbackTransaction()
 {
     Super::rollbackTransaction();
-    setTableInfoCommitted(false);
+    notifyTransactionCommitted(false);
 }
 
 } // namespace WCDB

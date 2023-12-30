@@ -35,7 +35,7 @@ const StringView &CompressionRecord::columnRowdid = CompressionRecordColumn_Rowi
 StatementCreateTable CompressionRecord::getCreateTableStatement()
 {
     StatementCreateTable createTable;
-    createTable.createTable(tableName);
+    createTable.createTable(tableName).ifNotExists();
     createTable.define(
     ColumnDef(columnTable, ColumnType::Text).constraint(ColumnConstraint().primaryKey()));
     createTable.define(ColumnDef(columnCompressColumns, ColumnType::Text)

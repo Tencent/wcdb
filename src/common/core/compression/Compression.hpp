@@ -81,7 +81,8 @@ protected:
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
     bool checkCompressingColumn(InfoInitializer& initializer,
                                 const CompressionTableInfo* info);
-    void setTableInfoCommitted(bool committed);
+    void notifyTransactionCommitted(bool committed);
+    bool tryCreateRecordTable(InfoInitializer& initializer);
 
 private:
     ThreadLocal<StringViewMap<const CompressionTableInfo*>> m_localFilted;
@@ -91,6 +92,9 @@ private:
     StringViewSet m_hints;
     std::list<CompressionTableInfo> m_holder;
     mutable SharedLock m_lock;
+
+    volatile bool m_hasCreatedRecord;
+    ThreadLocal<bool> m_localHasCreatedRecord;
 
 #pragma mark - Bind
 public:
@@ -104,7 +108,7 @@ public:
         Optional<const CompressionTableInfo*>
         tryGetCompressionInfo(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
-        void setTableInfoCommitted(bool committed);
+        void notifyTransactionCommitted(bool committed);
         bool canCompressNewData() const;
 
     private:
