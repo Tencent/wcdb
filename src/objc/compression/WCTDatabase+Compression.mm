@@ -32,11 +32,6 @@
 
 @implementation WCTDatabase (Compression)
 
-+ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId
-{
-    return WCDB::CompressionCenter::shared().registerDict(dictId, dict);
-}
-
 + (NSData*)trainDictWithStrings:(NSArray<NSString*>*)strings andDictId:(WCTDictId)dictId
 {
     int index = 0;
@@ -71,6 +66,11 @@
         return [[NSData alloc] initWithBytes:dict->buffer() length:dict->size()];
     }
     return nil;
+}
+
++ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId
+{
+    return WCDB::CompressionCenter::shared().registerDict(dictId, dict);
 }
 
 - (void)setCompressionWithFilter:(WCTCompressionFilterBlock)filter

@@ -88,6 +88,7 @@ jboolean WCDBJNIDatabaseClassMethod(deposit, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(removeDepositedFiles, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(containDepositedFiles, jlong self);
 jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate);
+jdouble WCDBJNIDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate);
 
 jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self);
@@ -107,4 +108,25 @@ jboolean WCDBJNIDatabaseClassMethod(stepMigration, jlong self);
 void WCDBJNIDatabaseClassMethod(enableAutoMigration, jlong self, jboolean flag);
 void WCDBJNIDatabaseClassMethod(setNotificationWhenMigrated, jlong self, jobject onMigrated);
 jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self);
+
+jbyteArray
+WCDBJNIDatabaseClassMethod(trainDictWithStrings, jobjectArray stringArray, jbyte dictId);
+jbyteArray
+WCDBJNIDatabaseClassMethod(trainDictWithDatas, jobjectArray dataArray, jbyte dictId);
+jboolean WCDBJNIDatabaseClassMethod(registerDict, jbyteArray dict, jbyte dictId);
+void WCDBJNIDatabaseClassMethod(addZSTDNormalCompress, jlong info, jlong column);
+void WCDBJNIDatabaseClassMethod(addZSTDDictCompress, jlong info, jlong column, jbyte dictId);
+void WCDBJNIDatabaseClassMethod(addZSTDMultiDictCompress,
+                                jlong info,
+                                jlong column,
+                                jlong matchColumn,
+                                jlongArray values,
+                                jbyteArray dictIds);
+void WCDBJNIDatabaseClassMethod(setCompression, jlong self, jobject filter);
+void WCDBJNIDatabaseClassMethod(disableCompressNewData, jlong self, jboolean disable);
+jboolean WCDBJNIDatabaseClassMethod(stepCompression, jlong self);
+void WCDBJNIDatabaseClassMethod(enableAutoCompression, jlong self, jboolean enable);
+void WCDBJNIDatabaseClassMethod(setNotificationWhenCompressed, jlong self, jobject onCompressed);
+jboolean WCDBJNIDatabaseClassMethod(isCompressed, jlong self);
+
 jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self);

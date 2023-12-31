@@ -42,12 +42,60 @@ class Random {
         return data
     }
 
+    static let wordArray: [String] = {
+        let wordFrequency: [String: Int] = [
+            "a": 408,
+            "he": 121,
+            "but": 86,
+            "my": 58,
+            "if": 51,
+            "just": 44,
+            "people": 33,
+            "think": 28,
+            "because": 25,
+            "two": 21,
+            "very": 19,
+            "should": 17,
+            "work": 15,
+            "day": 14,
+            "oh": 13,
+            "use": 11,
+            "lot": 10,
+            "mr": 10,
+            "part": 9,
+            "without": 8
+        ]
+        var wordArray: [String] = []
+        wordArray.reserveCapacity(1000)
+        for (word, frequency) in wordFrequency {
+            for _ in 0..<frequency {
+                wordArray.append(word)
+            }
+        }
+        return wordArray
+    }()
+
+    public static func englishString(withLength length: Int) -> String {
+        var ret = ""
+        for _ in 0..<length {
+            ret += wordArray[Int(arc4random_uniform(UInt32(1000)))]
+            ret += " "
+        }
+        return ret
+    }
+
+    public static var useEnglishString = false
+
     public static func testObjects(startWith id: Int, count: Int) -> [TestObject] {
         var objects: [TestObject] = []
         for i in 0..<count {
             let object = TestObject()
             object.variable1 = id + i
-            object.variable2 = string(withLength: 100)
+            if !useEnglishString {
+                object.variable2 = string(withLength: 100)
+            } else {
+                object.variable2 = englishString(withLength: 100)
+            }
             objects.append(object)
         }
         return objects

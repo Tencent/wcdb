@@ -868,11 +868,12 @@ static const JNINativeMethod g_handleMethods[] = {
     { "detachCancellationSignal", "(J)V", (void *) WCDBJNIHandleFuncName(detachCancellationSignal) },
 };
 
-static const JNINativeMethod g_databaseMethods[]
-= { { "createDatabase", "(" WCDBJNIStringSignature ")J", (void *) WCDBJNICoreFuncName(createDatabase) },
+static const JNINativeMethod g_databaseMethods[] = {
+    { "createDatabase", "(" WCDBJNIStringSignature ")J", (void *) WCDBJNICoreFuncName(createDatabase) },
     { "setDefaultCipherVersion", "(I)V", (void *) WCDBJNICoreFuncName(setDefaultCipherConfig) },
     { "getNumberOfAliveHandle", "(J)I", (void *) WCDBJNIDatabaseFuncName(getNumberOfAliveHandle) },
     { "getError", "(J)J", (void *) WCDBJNIDatabaseFuncName(getError) },
+    { "getThreadedError", "()J", (void *) WCDBJNICoreFuncName(getThreadedError) },
     { "getPath", "(J)" WCDBJNIStringSignature, (void *) WCDBJNIDatabaseFuncName(getPath) },
     { "getPaths", "(J)Ljava/util/List;", (void *) WCDBJNIDatabaseFuncName(getPaths) },
     { "setTag", "(JJ)V", (void *) WCDBJNIDatabaseFuncName(setTag) },
@@ -939,8 +940,11 @@ static const JNINativeMethod g_databaseMethods[]
       "(J" WCDBJNIDatabaseSignature "$BackupFilter;)V",
       (void *) WCDBJNIDatabaseFuncName(filterBackup) },
     { "retrieve",
-      "(J" WCDBJNIDatabaseSignature "$RetrieveProgressMonitor;)D",
+      "(J" WCDBJNIDatabaseSignature "$ProgressMonitor;)D",
       (void *) WCDBJNIDatabaseFuncName(retrieve) },
+    { "vacuum",
+      "(J" WCDBJNIDatabaseSignature "$ProgressMonitor;)Z",
+      (void *) WCDBJNIDatabaseFuncName(vacuum) },
     { "deposit", "(J)Z", (void *) WCDBJNIDatabaseFuncName(deposit) },
     { "removeDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(removeDepositedFiles) },
     { "containDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(containDepositedFiles) },
@@ -959,7 +963,24 @@ static const JNINativeMethod g_databaseMethods[]
     { "setNotificationWhenMigrated",
       "(J" WCDBJNIDatabaseSignature "$MigrationNotification;)V",
       (void *) WCDBJNIDatabaseFuncName(setNotificationWhenMigrated) },
-    { "isMigrated", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isMigrated) } };
+    { "isMigrated", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isMigrated) },
+    { "trainDict", "([" WCDBJNIStringSignature "B)[B", (void *) WCDBJNIDatabaseFuncName(trainDictWithStrings) },
+    { "trainDict", "([[BB)[B", (void *) WCDBJNIDatabaseFuncName(trainDictWithDatas) },
+    { "nativeRegisterDict", "([BB)Z", (void *) WCDBJNIDatabaseFuncName(registerDict) },
+    { "addZSTDNormalCompress", "(JJ)V", (void *) WCDBJNIDatabaseFuncName(addZSTDNormalCompress) },
+    { "addZSTDDictCompress", "(JJB)V", (void *) WCDBJNIDatabaseFuncName(addZSTDDictCompress) },
+    { "addZSTDMultiDictCompress", "(JJJ[J[B)V", (void *) WCDBJNIDatabaseFuncName(addZSTDMultiDictCompress) },
+    { "setCompression",
+      "(J" WCDBJNIDatabaseSignature "$CompressionFilter;)V",
+      (void *) WCDBJNIDatabaseFuncName(setCompression) },
+    { "disableCompressNewData", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(disableCompressNewData) },
+    { "stepCompression", "(J)Z", (void *) WCDBJNIDatabaseFuncName(stepCompression) },
+    { "enableAutoCompression", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(enableAutoCompression) },
+    { "setNotificationWhenCompressed",
+      "(J" WCDBJNIDatabaseSignature "$CompressionNotification;)V",
+      (void *) WCDBJNIDatabaseFuncName(setNotificationWhenCompressed) },
+    { "isCompressed", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isCompressed) },
+};
 
 static const JNIBinding g_bindingInfo[] = {
     WCDBJNIRegister("com/tencent/wcdb/base/CppObject", g_objectBridgeMethods),

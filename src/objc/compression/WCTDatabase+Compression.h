@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Triggered at any time when WCDB needs to know whether a table in the current database needs to compress data,
  mainly including creating a new table, reading and writing a table,and starting to compress a new table.
- If the current table does not need to compress data, you don't need to config WCTCompressionUserInfo.
+ If the current table does not need to compress data, you don't need to config `WCTCompressionUserInfo`.
  */
 typedef void (^WCTCompressionFilterBlock)(WCTCompressionUserInfo*);
 
@@ -39,23 +39,43 @@ typedef unsigned char WCTDictId;
 /**
  Triggered when a table is compressed completely.
  When a table is compressed successfully, tableInfo will carry the information of the table.
- When a database is totally compressed, tableInfo will .
+ When a database is totally compressed, tableInfo will be nil.
  */
 typedef void (^WCTCompressdNotificationBlock)(WCTDatabase* _Nonnull database, WCTCompressionBaseInfo* _Nullable tableInfo);
 
 WCDB_API @interface WCTDatabase(Compression)
 
-+ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId;
-
+/**
+ @brief Train a zstd formalized dict with a set of sample strings.
+ @Warning The total size of all samples cannot exceed 4G.
+ @param strings samples.
+ @param dictId spercified id of the result dict. It can not be zero.
+ @return a dict of 100KB if succeed.
+ */
 + (NSData*)trainDictWithStrings:(NSArray<NSString*>*)strings andDictId:(WCTDictId)dictId;
 
+/**
+ @brief Train a zstd formalized dict with a set of sample datas.
+ @Warning The total size of all samples cannot exceed 4G.
+ @param datas samples.
+ @param dictId spercified id of the result dict. It can not be zero.
+ @return a dict of 100KB if succeed.
+ */
 + (NSData*)trainDictWithDatas:(NSArray<NSData*>*)datas andDictId:(WCTDictId)dictId;
+
+/**
+ @brief Register a zstd dict in to wcdb.
+ @Note You must register a dict before using it.
+ @param dict dict data.
+ @param dictId id of the dict. It can not be zero.
+ @return YES if the dictionary can be successfully decoded and the dictId does not conflict with a registered dict.
+ */
++ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId;
 
 /**
  @brief Configure which tables in the current database need to compress data.
  Once configured, newly written data will be compressed immediately and synchronously,
  and you can use `-[WCTDatabase stepCompression]` and `-[WCTDatabase enableAutoCompression:]` to compress existing data.
- @warning You need to use this method to configure the compression before excuting any statements on current database.
  @see   `WCTCompressionFilterBlock`
  */
 - (void)setCompressionWithFilter:(nullable WCDB_ESCAPE WCTCompressionFilterBlock)filter;
@@ -64,18 +84,19 @@ WCDB_API @interface WCTDatabase(Compression)
  @brief Configure not to compress new data written to the current database.
  This configuration is mainly used to deal with some emergency scenarios.
  It allows already compressed data to be read normally, but new data is no longer compressed.
- @param disable disable compress or not.
+ @param disable disable compression or not.
  */
 - (void)disableCompresssNewData:(BOOL)disable;
 
 /**
- @brief Manually compress 100 rows of data. You can call this method periodically until all data is compressed.
+ @brief Manually compress 100 rows of existing data.
+ You can call this method periodically until all data is compressed.
  @return YES if no error occurred.
  */
 - (BOOL)stepCompression;
 
 /**
- @brief Configure the database to automatically step compression every two seconds.
+ @brief Configure the database to automatically compress 100 rows of existing data every two seconds.
  @param flag to enable auto-compression.
  */
 - (void)enableAutoCompression:(BOOL)flag;

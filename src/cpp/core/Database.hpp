@@ -607,6 +607,14 @@ public:
      */
     double retrieve(ProgressUpdateCallback onProgressUpdated);
 
+    /**
+     @brief Vacuum current database.
+     It can be used to vacuum a database of any size with limited memory usage.
+     @see   `Database::ProgressUpdateCallback`.
+     @return YES if vacuum succeed.
+     */
+    bool vacuum(ProgressUpdateCallback onProgressUpdated);
+
 #pragma mark - Config
     enum CipherVersion : int {
         DefaultVersion = 0,
@@ -734,7 +742,133 @@ public:
      @return True if all tables in the database has finished migration.
      */
     bool isMigrated() const;
-#pragma mark - version
+
+#pragma mark - Compression
+
+    typedef unsigned char DictId;
+    static constexpr const int64_t DictDefaultMatchValue = INT64_MAX;
+
+    class CompressionInfo {
+    public:
+        /**
+         @brief The table to be compressed.
+         */
+        const StringView &getTableName() const;
+
+        /**
+         @brief Configure to compress all data in the specified column with the default zstd compression algorithm.
+         */
+        void addZSTDNormalCompressField(const Field &field);
+
+        /**
+         @brief Configure to compress all data in the specified column with a registed zstd dict.
+         */
+        void addZSTDDictCompressProperty(const Field &field, DictId dictId);
+
+        /**
+         @brief Configure to compress all data in the specified column with multi registed zstd dict.
+         Which dict to use when compressing is based on the value of the specified matching column.
+         @note You can use `DictDefaultMatchValue` to specify a default dict.
+         @warning The matching column must be an integer column.
+         */
+        void addZSTDDictCompressProperty(
+        const Field &field,
+        const Field &matchField,
+        const std::map<int64_t /* Value of match column */, DictId> &dictIds);
+
+    protected:
+        friend class Database;
+        CompressionInfo(void *innerInfo);
+
+    private:
+        void *m_innerInfo;
+    };
+
+    /**
+     @brief Train a zstd formalized dict with a set of sample strings.
+     @Warning The total size of all samples cannot exceed 4G.
+     @param strings samples.
+     @param dictId spercified id of the result dict. It can not be zero.
+     @return a dict of 100KB if succeed.
+     */
+    static Optional<Data> trainDict(const std::vector<std::string> &strings, DictId dictId);
+
+    /**
+     @brief Train a zstd formalized dict with a set of sample datas.
+     @Warning The total size of all samples cannot exceed 4G.
+     @param datas samples.
+     @param dictId spercified id of the result dict. It can not be zero.
+     @return a dict of 100KB if succeed.
+     */
+    static Optional<Data> trainDict(const std::vector<Data> &datas, DictId dictId);
+
+    /**
+     @brief Register a zstd dict in to wcdb.
+     @Note You must register a dict before using it.
+     @param dict dict data.
+     @param dictId id of the dict. It can not be zero.
+     @return true if the dictionary can be successfully decoded and the dictId does not conflict with a registered dict.
+     */
+    static bool registerZSTDDict(const UnsafeData &dict, DictId dictId);
+
+    /**
+     Triggered at any time when WCDB needs to know whether a table in the current database needs to compress data,
+     mainly including creating a new table, reading and writing a table,and starting to compress a new table.
+     If the current table does not need to compress data, you don't need to config WCTCompressionUserInfo.
+     */
+    typedef std::function<void(CompressionInfo &)> CompressionFilter;
+
+    /**
+     @brief Configure which tables in the current database need to compress data.
+     Once configured, newly written data will be compressed immediately and synchronously,
+     and you can use `Database::stepCompression()` and `Database::enableAutoCompression()` to compress existing data.
+     @warning  You need to use this method to configure the compression before excuting any statements on current database.
+     @see   `Database::CompressionFilter`
+     */
+    void setCompression(const CompressionFilter &filter);
+
+    /**
+     @brief Configure not to compress new data written to the current database.
+     This configuration is mainly used to deal with some emergency scenarios.
+     It allows already compressed data to be read normally, but new data is no longer compressed.
+     @param disable disable compression or not.
+     */
+    void disableCompresssNewData(bool disable);
+
+    /**
+     @brief Manually compress 100 rows of existing data. 
+     You can call this method periodically until all data is compressed.
+     @return true if no error occurred.
+     */
+    bool stepCompression();
+
+    /**
+     @brief Configure the database to automatically compress 100 rows of existing data every two seconds.
+     @param flag to enable auto-compression.
+     */
+    void enableAutoCompression(bool flag);
+
+    /**
+     Triggered when a table is compressed completely.
+     When a table is compressed successfully, tableName will be valid.
+     When a database is totally compressed, tableName will be NullOpt.
+     */
+    typedef std::function<void(Database &database, Optional<StringView> tableName)> CompressedCallback;
+
+    /**
+     @brief Register a callback for compression notification. The callback will be called when each table completes the compression.
+     @see   `Database::CompressedCallback`
+     */
+    void setNotificationWhenCompressd(const CompressedCallback &onCompressd);
+
+    /**
+     @brief Check if all tables in the database has finished compression.
+     @note  It only check an internal flag of database.
+     @return true if all tables in the database has finished compression.
+     */
+    bool isCompressed() const;
+
+#pragma mark - Version
     /**
      Version of WCDB.
      */

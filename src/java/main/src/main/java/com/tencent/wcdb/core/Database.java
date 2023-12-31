@@ -25,10 +25,15 @@ package com.tencent.wcdb.core;
 import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
+import com.tencent.wcdb.orm.Field;
+import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Expression;
 
+import java.security.PrivilegedExceptionAction;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database extends HandleORMOperation {
     private Database() {
@@ -133,8 +138,12 @@ public class Database extends HandleORMOperation {
     WCDBException createException() {
         return WCDBException.createException(getError(cppObj));
     }
+    static WCDBException createThreadedException() {
+        return WCDBException.createException(getThreadedError());
+    }
 
     private static native long getError(long self);
+    private static native long getThreadedError();
 
     public Handle getHandle() {
         return new Handle(this, false);
@@ -445,15 +454,15 @@ public class Database extends HandleORMOperation {
 
     private static native void filterBackup(long self, BackupFilter filter);
 
-    public interface RetrieveProgressMonitor {
-        void onProgressUpdate(double percentage, double increment);
+    public interface ProgressMonitor {
+        boolean onProgressUpdate(double percentage, double increment);
     }
 
-    private static void onRetrieveProgressUpdate(RetrieveProgressMonitor progress, double percentage, double increment) {
-        progress.onProgressUpdate(percentage, increment);
+    private static boolean onProgressUpdate(ProgressMonitor progress, double percentage, double increment) {
+        return progress.onProgressUpdate(percentage, increment);
     }
 
-    public double retrieve(RetrieveProgressMonitor monitor) throws WCDBException {
+    public double retrieve(ProgressMonitor monitor) throws WCDBException {
         double score = retrieve(cppObj, monitor);
         if(score < 0) {
             throw createException();
@@ -461,7 +470,15 @@ public class Database extends HandleORMOperation {
         return score;
     }
 
-    private static native double retrieve(long self, RetrieveProgressMonitor monitor);
+    private static native double retrieve(long self, ProgressMonitor monitor);
+
+    public void vacuum(ProgressMonitor monitor) throws WCDBException {
+        if(!vacuum(cppObj, monitor)) {
+            throw createException();
+        }
+    }
+
+    private static native boolean vacuum(long self, ProgressMonitor monitor);
 
     public void deposit() throws WCDBException {
         if(!deposit(cppObj)) {
@@ -579,6 +596,126 @@ public class Database extends HandleORMOperation {
     }
 
     private static native boolean isMigrated(long self);
+
+    public static byte[] trainDictWithString(List<String> samples, byte dictId) throws WCDBException {
+        byte[] dict = trainDict(samples.toArray(new String[0]), dictId);
+        if(dict == null || dict.length == 0) {
+            throw createThreadedException();
+        }
+        return dict;
+    }
+
+    private static native byte[] trainDict(String[] samples, byte dictId);
+
+    public static byte[] trainDictWithData(List<byte[]> samples, byte dictId) throws WCDBException {
+        byte[] dict = trainDict(samples.toArray(new byte[0][]), dictId);
+        if(dict == null || dict.length == 0) {
+            throw createThreadedException();
+        }
+        return dict;
+    }
+
+    private static native byte[] trainDict(byte[][] samples, byte dictId);
+
+    public static void registerDict(byte[] dict, byte dictId) throws WCDBException {
+        if(!nativeRegisterDict(dict, dictId)){
+            throw createThreadedException();
+        }
+    }
+
+    private static native boolean nativeRegisterDict(byte[] dict, byte dictId);
+
+    public static final long DictDefaultMatchValue = Long.MAX_VALUE;
+    public static class CompressionInfo {
+        public String table;
+
+        public <T> void addZSTDNormalCompress(Field<T> field) {
+            Database.addZSTDNormalCompress(cppInfo, CppObject.get(field));
+        }
+
+        public <T> void addZSTDDictCompress(Field<T> field, byte dictId) {
+            Database.addZSTDDictCompress(cppInfo, CppObject.get(field), dictId);
+        }
+
+        public <T> void addZSTDMultiDictCompress(Field<T> field, Field<T> matchField, Map<Long, Byte> dicts) {
+            long[] values = new long[dicts.size()];
+            byte[] dictIds = new byte[dicts.size()];
+            int index = 0;
+            for(Map.Entry<Long, Byte> entry : dicts.entrySet()) {
+                values[index] = entry.getKey();
+                dictIds[index] = entry.getValue();
+                index++;
+            }
+            Database.addZSTDMultiDictCompress(cppInfo, CppObject.get(field), CppObject.get(matchField), values, dictIds);
+        }
+
+        CompressionInfo(long cppInfo, String table) {
+            this.cppInfo = cppInfo;
+            this.table = table;
+        }
+        private long cppInfo;
+    }
+
+    private static native void addZSTDNormalCompress(long cppInfo, long cppColumn);
+    private static native void addZSTDDictCompress(long cppInfo, long cppColumn, byte dictId);
+    private static native void addZSTDMultiDictCompress(long cppInfo, long cppColumn, long cppMatchColumn, long[] values, byte[] dictIds);
+
+    public interface CompressionFilter {
+        void filterCompress(CompressionInfo info);
+    }
+
+    private static void filterCompress(CompressionFilter filter, long cppInfo, String table) {
+        CompressionInfo info = new CompressionInfo(cppInfo, table);
+        filter.filterCompress(info);
+    }
+
+    public void setCompression(CompressionFilter filter) {
+        setCompression(cppObj, filter);
+    }
+
+    private static native void setCompression(long self, CompressionFilter filter);
+
+    public void disableCompressNewData(boolean disable) {
+        disableCompressNewData(cppObj, disable);
+    }
+
+    private static native void disableCompressNewData(long self, boolean disable);
+
+    public void stepCompression() throws WCDBException {
+        if(!stepCompression(cppObj)){
+            throw createException();
+        }
+    }
+
+    private static native boolean stepCompression(long self);
+
+    public void enableAutoCompression(boolean enable) {
+        enableAutoCompression(cppObj, enable);
+    }
+
+    private static native void enableAutoCompression(long self, boolean enable);
+
+    public interface CompressionNotification {
+        void onCompressed(Database database, String table);
+    }
+
+    private static void onTableCompressed(CompressionNotification notification, long cppDatabase, String table) {
+        Database database = new Database();
+        database.cppObj = cppDatabase;
+        notification.onCompressed(database, table);
+    }
+
+    public void setNotificationWhenCompressed(CompressionNotification notification) {
+        setNotificationWhenCompressed(cppObj, notification);
+    }
+
+    private static native void setNotificationWhenCompressed(long self, CompressionNotification notification);
+
+    public boolean isCompressed() {
+        return isCompressed(cppObj);
+    }
+
+    private static native boolean isCompressed(long self);
 
     @Override
     boolean autoInvalidateHandle() {

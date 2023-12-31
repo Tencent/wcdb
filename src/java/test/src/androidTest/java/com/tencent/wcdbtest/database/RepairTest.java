@@ -167,11 +167,12 @@ public class RepairTest extends TableTestCase {
 
     void doTestRetrieve(boolean success) throws WCDBException {
         final WrappedValue lastPercentage = new WrappedValue();
-        double score = database.retrieve(new Database.RetrieveProgressMonitor() {
+        double score = database.retrieve(new Database.ProgressMonitor() {
             @Override
-            public void onProgressUpdate(double percentage, double increment) {
+            public boolean onProgressUpdate(double percentage, double increment) {
                 assertTrue(percentage - lastPercentage.doubleValue == increment && increment > 0);
                 lastPercentage.doubleValue = percentage;
+                return true;
             }
         });
         assertTrue((success && score == 1.0) || (!success && score < 1.0));
@@ -242,6 +243,26 @@ public class RepairTest extends TableTestCase {
                 database.deposit();
                 doTestRetrieve(false);
                 doTestObjectsRetrieved(false);
+            }
+        });
+    }
+
+    @Test
+    public void testVacuum() {
+        executeTest(new TestOperation() {
+            @Override
+            public void execute() throws WCDBException {
+                final WrappedValue lastPercentage = new WrappedValue();
+                database.vacuum(new Database.ProgressMonitor() {
+                    @Override
+                    public boolean onProgressUpdate(double percentage, double increment) {
+                        assertTrue(percentage - lastPercentage.doubleValue == increment && increment > 0);
+                        lastPercentage.doubleValue = percentage;
+                        return true;
+                    }
+                });
+                assertEquals(lastPercentage.doubleValue, 1.0, 0.00001);
+                doTestObjectsRetrieved(true);
             }
         });
     }

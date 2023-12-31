@@ -24,7 +24,10 @@
 
 #include "Database.hpp"
 #include "CipherConfig.hpp"
+#import "CompressionCenter.hpp"
+#import "CompressionConst.hpp"
 #include "Core.hpp"
+#import "CoreConst.h"
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
 #include "FileManager.hpp"
@@ -40,6 +43,8 @@
 #endif
 
 namespace WCDB {
+
+#pragma mark - Basic
 
 Database::Database(const UnsafeStringView& path)
 {
@@ -193,6 +198,8 @@ void Database::setUIThreadId(std::thread::id uiThreadId)
 }
 #endif
 
+#pragma mark - Monitor
+
 void Database::globalTraceError(Database::ErrorNotification trace)
 {
     Core::shared().setNotificationWhenErrorTraced(trace);
@@ -315,6 +322,8 @@ void Database::globalTraceBusy(BusyTrace trace, double timeOut)
     Core::shared().setBusyMonitor(trace, timeOut);
 }
 
+#pragma mark - File
+
 bool Database::removeFiles()
 {
     return m_innerDatabase->removeFiles();
@@ -334,6 +343,8 @@ Optional<size_t> Database::getFilesSize() const
 {
     return m_innerDatabase->getFilesSize();
 }
+
+#pragma mark - FTS
 
 void Database::enableAutoMergeFTS5Index(bool flag)
 {
@@ -388,6 +399,8 @@ void Database::configTraditionalChineseConverter(TraditionalChineseConverter con
     FTSTokenizerUtil::configTraditionalChineseConverter(converter);
 }
 
+#pragma mark - Memory
+
 void Database::purge()
 {
     m_innerDatabase->purge();
@@ -397,6 +410,8 @@ void Database::purgeAll()
 {
     Core::shared().purgeDatabasePool();
 }
+
+#pragma mark - Repair
 
 void Database::setNotificationWhenCorrupted(Database::CorruptionNotification onCorrupted)
 {
@@ -453,6 +468,13 @@ double Database::retrieve(Database::ProgressUpdateCallback onProgressUpdated)
     return m_innerDatabase->retrieve(onProgressUpdated);
 }
 
+bool Database::vacuum(ProgressUpdateCallback onProgressUpdated)
+{
+    return m_innerDatabase->vacuum(onProgressUpdated);
+}
+
+#pragma mark - Config
+
 void Database::setCipherKey(const UnsafeData& cipherKey, int cipherPageSize, CipherVersion cipherVersion)
 {
     if (cipherKey.size() > 0) {
@@ -505,6 +527,8 @@ bool Database::setDefaultTemporaryDirectory(const UnsafeStringView& directory)
 {
     return Core::shared().setDefaultTemporaryDirectory(directory);
 }
+
+#pragma mark - Migration
 
 void Database::addMigration(const UnsafeStringView& sourcePath,
                             const UnsafeData& sourceCipher,
@@ -560,6 +584,137 @@ bool Database::isMigrated() const
 {
     return m_innerDatabase->isMigrated();
 }
+
+#pragma mark - Compression
+
+Database::CompressionInfo::CompressionInfo(void* innerInfo)
+: m_innerInfo(innerInfo)
+{
+}
+
+const StringView& Database::CompressionInfo::getTableName() const
+{
+    return ((CompressionTableInfo*) m_innerInfo)->getTable();
+}
+
+void Database::CompressionInfo::addZSTDNormalCompressField(const Field& field)
+{
+    CompressionColumnInfo columnInfo(field, CompressionType::Normal);
+    ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
+}
+
+void Database::CompressionInfo::addZSTDDictCompressProperty(const Field& field, DictId dictId)
+{
+    CompressionColumnInfo columnInfo(field, CompressionType::Dict);
+    columnInfo.setCommonDict(dictId);
+    ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
+}
+
+void Database::CompressionInfo::addZSTDDictCompressProperty(
+const Field& field, const Field& matchField, const std::map<int64_t, DictId>& dictIds)
+{
+    if (dictIds.empty()) {
+        return;
+    }
+    CompressionColumnInfo columnInfo(field, matchField);
+    for (const auto& iter : dictIds) {
+        if (iter.first == DictDefaultMatchValue) {
+            columnInfo.setCommonDict(iter.second);
+        } else {
+            columnInfo.addMatchDict(iter.first, iter.second);
+        }
+    }
+    ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
+}
+
+Optional<Data> Database::trainDict(const std::vector<std::string>& strings, DictId dictId)
+{
+    int index = 0;
+    return CompressionCenter::shared().trainDict(dictId, [&]() -> Optional<UnsafeData> {
+        if (index < strings.size()) {
+            const std::string& string = strings[index];
+            index++;
+            return UnsafeData((unsigned char*) string.data(), string.size());
+        } else {
+            return NullOpt;
+        }
+    });
+}
+
+Optional<Data> Database::trainDict(const std::vector<Data>& datas, DictId dictId)
+{
+    int index = 0;
+    return CompressionCenter::shared().trainDict(dictId, [&]() -> Optional<UnsafeData> {
+        if (index < datas.size()) {
+            const Data& data = datas[index];
+            index++;
+            return data;
+        } else {
+            return NullOpt;
+        }
+    });
+}
+
+bool Database::registerZSTDDict(const UnsafeData& dict, DictId dictId)
+{
+    return CompressionCenter::shared().registerDict(dictId, dict);
+}
+
+void Database::setCompression(const CompressionFilter& filter)
+{
+    InnerDatabase::CompressionTableFilter callback = nullptr;
+    if (filter != nullptr) {
+        callback = [filter](CompressionTableUserInfo& userInfo) {
+            CompressionInfo info(&userInfo);
+            filter(info);
+        };
+        StringView configName = StringView::formatted(
+        "%s%s", ScalarFunctionConfigPrefix.data(), DecompressFunctionName.data());
+        m_innerDatabase->setConfig(configName,
+                                   Core::shared().scalarFunctionConfig(DecompressFunctionName),
+                                   Configs::Priority::Higher);
+    }
+    m_innerDatabase->addCompression(callback);
+}
+
+void Database::disableCompresssNewData(bool disable)
+{
+    m_innerDatabase->setCanCompressNewData(!disable);
+}
+
+bool Database::stepCompression()
+{
+    return m_innerDatabase->stepCompression(false).succeed();
+}
+
+void Database::enableAutoCompression(bool flag)
+{
+    Core::shared().enableAutoCompress(m_innerDatabase, flag);
+}
+
+void Database::setNotificationWhenCompressd(const CompressedCallback& onCompressd)
+{
+    InnerDatabase::CompressedCallback callback = nullptr;
+    if (onCompressd != nullptr) {
+        callback = [onCompressd](InnerDatabase* innerDatabase,
+                                 const CompressionTableBaseInfo* info) {
+            Database database = Database(innerDatabase);
+            if (info != nullptr) {
+                onCompressd(database, info->getTable());
+            } else {
+                onCompressd(database, NullOpt);
+            }
+        };
+    }
+    m_innerDatabase->setNotificationWhenCompressed(callback);
+}
+
+bool Database::isCompressed() const
+{
+    return m_innerDatabase->isCompressed();
+}
+
+#pragma mark - Version
 
 const StringView Database::getVersion()
 {

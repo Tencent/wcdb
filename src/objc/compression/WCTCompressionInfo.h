@@ -28,27 +28,39 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef unsigned char WCTDictId;
 
-#define WCTDictDefaultMatchValue ((uint64_t) -1)
+#define WCTDictDefaultMatchValue INT64_MAX
 
 WCDB_API @interface WCTCompressionBaseInfo : NSObject
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 
-// Table of compression
+// The table to be compressed
 @property (nonatomic, readonly) NSString *table;
 
 @end
 
 WCDB_API @interface WCTCompressionUserInfo : WCTCompressionBaseInfo
 
+/**
+ @brief Configure to compress all data in the specified column with the default zstd compression algorithm.
+ */
 - (void)addZSTDNormalCompressProperty:(const WCTProperty &)property;
 
+/**
+ @brief Configure to compress all data in the specified column with a registed zstd dict.
+ */
 - (void)addZSTDDictCompressProperty:(const WCTProperty &)property
                          withDictId:(WCTDictId)dictId;
 
+/**
+ @brief Configure to compress all data in the specified column with multi registed zstd dict.
+ Which dict to use when compressing is based on the value of the specified matching column.
+ @note You can use `WCTDictDefaultMatchValue` to specify a default dict.
+ @warning The matching column must be an integer column.
+ */
 - (void)addZSTDDictCompressProperty:(const WCTProperty &)property
                   withMatchProperty:(const WCTProperty &)matchProperty
-                      andMatchDicts:(NSDictionary<NSNumber *, NSNumber *> *)dictIds;
+                      andMatchDicts:(NSDictionary<NSNumber * /* Value of match column */, NSNumber * /* ID of dict */> *)dictIds;
 
 @end
 

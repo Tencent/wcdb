@@ -26,6 +26,7 @@
 #include "DatabaseBridge.h"
 #include "FTSBridge.h"
 #include <assert.h>
+#include <string.h>
 
 #define WCDBJNITryGetDatabaseMethodId(name, signature, action)                        \
     static jmethodID g_methodId = NULL;                                               \
@@ -89,7 +90,7 @@ jobject WCDBJNIDatabaseClassMethod(getPaths, jlong self)
     context.env = env;
     context.array = arrayList;
     context.arrayClass = g_arrayClass;
-    WCDBDatabaseGetPaths2(selfStruct, &context, (WCDBStringEnumerater) WCDBJNIStringEnumerator);
+    WCDBDatabaseGetPaths(selfStruct, &context, (WCDBStringEnumerater) WCDBJNIStringEnumerator);
     return arrayList;
 }
 
@@ -138,10 +139,9 @@ void WCDBJNIDatabaseClassMethod(close, jlong self, jobject callback)
         CloseDatabaseContext context;
         context.env = env;
         context.callback = callback;
-        WCDBDatabaseClose2(
-        selfStruct, &context, (WCDBDatabaseCloseCallback) WCDBJNIDatabaseCloseCallback);
+        WCDBDatabaseClose(selfStruct, &context, (WCDBDatabaseCloseCallback) WCDBJNIDatabaseCloseCallback);
     } else {
-        WCDBDatabaseClose2(selfStruct, NULL, NULL);
+        WCDBDatabaseClose(selfStruct, NULL, NULL);
     }
 }
 
@@ -194,14 +194,14 @@ config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint
     WCDBJNICreateGlobalRel(invocation);
     WCDBJNICreateGlobalRel(unInvocation);
     WCDBJNIGetString(name);
-    WCDBDatabaseConfig2(selfStruct,
-                        nameString,
-                        invocation != NULL ? WCDBJNIDatabaseConfig : NULL,
-                        invocation,
-                        unInvocation != NULL ? WCDBJNIDatabaseConfig : NULL,
-                        unInvocation,
-                        priority,
-                        WCDBJNIDestructContext);
+    WCDBDatabaseConfig(selfStruct,
+                       nameString,
+                       invocation != NULL ? WCDBJNIDatabaseConfig : NULL,
+                       invocation,
+                       unInvocation != NULL ? WCDBJNIDatabaseConfig : NULL,
+                       unInvocation,
+                       priority,
+                       WCDBJNIDestructContext);
     WCDBJNIReleaseString(name);
 }
 
@@ -278,7 +278,7 @@ void WCDBJNIDatabaseClassMethod(globalTraceSQL, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseGlobalTraceSQL2(
+    WCDBDatabaseGlobalTraceSQL(
     tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
@@ -287,7 +287,7 @@ void WCDBJNIDatabaseClassMethod(traceSQL, jlong self, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseTraceSQL2(
+    WCDBDatabaseTraceSQL(
     selfStruct, tracer != NULL ? WCDBJNIDatabaseSQLTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
@@ -311,7 +311,7 @@ void WCDBJNIDatabaseClassMethod(globalTraceError, jobject tracer)
 {
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseGlobalTraceError2(
+    WCDBDatabaseGlobalTraceError(
     tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
@@ -320,7 +320,7 @@ void WCDBJNIDatabaseClassMethod(traceError, jlong self, jobject tracer)
     WCDBJNITryGetVM;
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNICreateGlobalRel(tracer);
-    WCDBDatabaseTraceError2(
+    WCDBDatabaseTraceError(
     selfStruct, tracer != NULL ? WCDBJNIDatabaseErrorTrace : NULL, tracer, WCDBJNIDestructContext);
 }
 
@@ -477,7 +477,7 @@ void WCDBJNIDatabaseClassMethod(setNotificationWhenCorrupted, jlong self, jobjec
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(notification);
-    WCDBDatabaseSetNotificationWhenCorrupted2(
+    WCDBDatabaseSetNotificationWhenCorrupted(
     selfStruct, notification != NULL ? WCDBJNIDatabaseCorrupted : NULL, notification, WCDBJNIDestructContext);
 }
 
@@ -527,7 +527,7 @@ void WCDBJNIDatabaseClassMethod(filterBackup, jlong self, jobject tableShouldBeB
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(tableShouldBeBackup);
-    WCDBDatabaseFilterBackup2(
+    WCDBDatabaseFilterBackup(
     selfStruct,
     tableShouldBeBackup != NULL ? WCDBJNIDatabaseTableShouldBeBackup : NULL,
     tableShouldBeBackup,
@@ -552,15 +552,15 @@ jboolean WCDBJNIDatabaseClassMethod(containDepositedFiles, jlong self)
     return WCDBDatabaseContainDepositedFiles(selfStruct);
 }
 
-void WCDBJNIDatabaseOnRetrievePorgressUpdate(jobject monitor, double percentage, double increment)
+bool WCDBJNIDatabaseOnProgressUpdate(jobject monitor, double percentage, double increment)
 {
-    WCDBJNITryGetEnvOr(return );
-    WCDBJNITryGetDatabaseMethodId("onRetrieveProgressUpdate",
-                                  "(" WCDBJNIDatabaseSignature "$RetrieveProgressMonitor;DD)V",
-                                  return );
-    (*env)->CallStaticVoidMethod(
+    WCDBJNITryGetEnvOr(return false);
+    WCDBJNITryGetDatabaseMethodId(
+    "onProgressUpdate", "(" WCDBJNIDatabaseSignature "$ProgressMonitor;DD)Z", return false);
+    bool ret = (*env)->CallStaticBooleanMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, monitor, (jdouble) percentage, (jdouble) increment);
     WCDBJNITryDetach;
+    return ret;
 }
 
 jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate)
@@ -568,12 +568,23 @@ jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdat
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(onProgressUpdate);
-    return WCDBDatabaseRetrieve2(selfStruct,
-                                 onProgressUpdate != NULL ?
-                                 (WCDBRetrieveProgressMonitor) WCDBJNIDatabaseOnRetrievePorgressUpdate :
-                                 NULL,
-                                 onProgressUpdate,
-                                 WCDBJNIDestructContext);
+    return WCDBDatabaseRetrieve(
+    selfStruct,
+    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBJNIDatabaseOnProgressUpdate : NULL,
+    onProgressUpdate,
+    WCDBJNIDestructContext);
+}
+
+jdouble WCDBJNIDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNITryGetVM;
+    WCDBJNICreateGlobalRel(onProgressUpdate);
+    return WCDBDatabaseVacuum(
+    selfStruct,
+    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBJNIDatabaseOnProgressUpdate : NULL,
+    onProgressUpdate,
+    WCDBJNIDestructContext);
 }
 
 jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self)
@@ -668,7 +679,7 @@ void WCDBJNIDatabaseClassMethod(setNotificationWhenMigrated, jlong self, jobject
     WCDBJNIBridgeStruct(CPPDatabase, self);
     WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(onMigrated);
-    WCDBDatabaseSetNotificationWhenMigrated2(
+    WCDBDatabaseSetNotificationWhenMigrated(
     selfStruct, onMigrated != NULL ? WCDBJNIDatabaseOnTableMigrate : NULL, onMigrated, WCDBJNIDestructContext);
 }
 
@@ -676,6 +687,215 @@ jboolean WCDBJNIDatabaseClassMethod(isMigrated, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseIsMigrated(selfStruct);
+}
+
+typedef struct DataEnumeratorContext {
+    JNIEnv* env;
+    bool isString;
+    jint totalCount;
+    jint index;
+    jobjectArray* objects;
+    jobject preObject;
+    jbyte* preContent;
+} DataEnumeratorContext;
+
+void WCDBJNITryReleaseLastElement(DataEnumeratorContext* context)
+{
+    if (context->preObject == NULL || context->preContent == NULL) {
+        return;
+    }
+    JNIEnv* env = context->env;
+    if (context->isString) {
+        (*env)->ReleaseStringCritical(
+        env, context->preObject, (const jchar*) context->preContent);
+        WCDBClearAllPreAllocatedMemory();
+    } else {
+        (*env)->ReleasePrimitiveArrayCritical(
+        env, context->preObject, context->preContent, 0);
+    }
+    context->preContent = NULL;
+    context->preObject = NULL;
+}
+
+CPPData WCDBJNIDataEnumerator(DataEnumeratorContext* context)
+{
+    CPPData ret;
+    if (context->index >= context->totalCount) {
+        ret.buffer = NULL;
+        ret.size = 0;
+        return ret;
+    }
+    WCDBJNITryReleaseLastElement(context);
+    JNIEnv* env = context->env;
+    if (context->isString) {
+        jstring string = (jstring) (*env)->GetObjectArrayElement(
+        env, context->objects, context->index);
+        WCDBJNIGetStringCritical(string);
+        ret.buffer = (unsigned char*) stringString;
+        ret.size = stringString != NULL ? strlen(stringString) : 0;
+        context->preObject = string;
+        context->preObject = (jbyte*) string_utf16String;
+    } else {
+        jbyteArray array = (jbyteArray) (*env)->GetObjectArrayElement(
+        env, context->objects, context->index);
+        WCDBJNIGetByteArrayCritical(array);
+        ret.buffer = (unsigned char*) arrayArray;
+        ret.size = arrayLength;
+        context->preObject = array;
+        context->preContent = arrayArray;
+    }
+    context->index++;
+    return ret;
+}
+
+jbyteArray
+WCDBJNIDatabaseClassMethod(trainDictWithStrings, jobjectArray stringArray, jbyte dictId)
+{
+    DataEnumeratorContext context;
+    context.env = env;
+    context.isString = true;
+    context.totalCount
+    = stringArray != NULL ? (*env)->GetArrayLength(env, stringArray) : 0;
+    context.objects = stringArray;
+    context.preObject = NULL;
+    context.preContent = NULL;
+    context.index = 0;
+    CPPData dict = WCDBDatabaseTrainDict(
+    dictId, (WCDBDataEnumerator) WCDBJNIDataEnumerator, &context);
+    WCDBJNITryReleaseLastElement(&context);
+    jbyteArray ret = NULL;
+    if (dict.size > 0 && dict.buffer != NULL) {
+        ret = (*env)->NewByteArray(env, dict.size);
+        (*env)->SetByteArrayRegion(env, ret, 0, dict.size, (const jbyte*) dict.buffer);
+        free(dict.buffer);
+    }
+    return ret;
+}
+
+jbyteArray WCDBJNIDatabaseClassMethod(trainDictWithDatas, jobjectArray dataArray, jbyte dictId)
+{
+    DataEnumeratorContext context;
+    context.env = env;
+    context.isString = false;
+    context.totalCount = dataArray != NULL ? (*env)->GetArrayLength(env, dataArray) : 0;
+    context.objects = dataArray;
+    context.preObject = NULL;
+    context.preContent = NULL;
+    context.index = 0;
+    CPPData dict = WCDBDatabaseTrainDict(
+    dictId, (WCDBDataEnumerator) WCDBJNIDataEnumerator, &context);
+    WCDBJNITryReleaseLastElement(&context);
+    jbyteArray ret = NULL;
+    if (dict.size > 0 && dict.buffer != NULL) {
+        ret = (*env)->NewByteArray(env, dict.size);
+        (*env)->SetByteArrayRegion(env, ret, 0, dict.size, (const jbyte*) dict.buffer);
+        free(dict.buffer);
+    }
+    return ret;
+}
+
+jboolean WCDBJNIDatabaseClassMethod(registerDict, jbyteArray dict, jbyte dictId)
+{
+    WCDBJNIGetByteArray(dict);
+    bool ret = WCDBDatabaseRegisterDict(dictArray, dictLength, dictId);
+    WCDBJNIReleaseByteArray(dict);
+    return ret;
+}
+
+void WCDBJNIDatabaseClassMethod(addZSTDNormalCompress, jlong info, jlong column)
+{
+    WCDBJNIBridgeStruct(CPPColumn, column);
+    WCDBDatabaseSetZSTDNormalCompress((void*) info, columnStruct);
+}
+
+void WCDBJNIDatabaseClassMethod(addZSTDDictCompress, jlong info, jlong column, jbyte dictId)
+{
+    WCDBJNIBridgeStruct(CPPColumn, column);
+    WCDBDatabaseSetZSTDDictCompress((void*) info, columnStruct, dictId);
+}
+
+void WCDBJNIDatabaseClassMethod(addZSTDMultiDictCompress,
+                                jlong info,
+                                jlong column,
+                                jlong matchColumn,
+                                jlongArray values,
+                                jbyteArray dictIds)
+{
+    WCDBJNIGetLongArray(values);
+    WCDBJNIGetByteArray(dictIds);
+    WCDBJNIBridgeStruct(CPPColumn, column);
+    WCDBJNIBridgeStruct(CPPColumn, matchColumn);
+    WCDBDatabaseSetZSTDMultiDictCompress(
+    (void*) info, columnStruct, matchColumnStruct, valuesArray, dictIdsArray, dictIdsLength);
+    WCDBJNIReleaseLongArray(values);
+    WCDBJNIReleaseByteArray(dictIds);
+}
+
+void WCDBJNIDatabaseFilterCompress(jobject filter, const char* table, void* info)
+{
+    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetDatabaseMethodId("filterCompress",
+                                  "(" WCDBJNIDatabaseSignature
+                                  "$CompressionFilter;J" WCDBJNIStringSignature ")V",
+                                  return );
+    WCDBJNICreateJavaString(table);
+    (*env)->CallStaticVoidMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, filter, (jlong) info, jtable);
+    WCDBJNITryDetach;
+}
+
+void WCDBJNIDatabaseClassMethod(setCompression, jlong self, jobject filter)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNICreateGlobalRel(filter);
+    WCDBDatabaseSetCompression(
+    selfStruct, filter != NULL ? WCDBJNIDatabaseFilterCompress : NULL, filter, WCDBJNIDestructContext);
+}
+
+void WCDBJNIDatabaseClassMethod(disableCompressNewData, jlong self, jboolean disable)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseDisableCompressNewData(selfStruct, disable);
+}
+
+jboolean WCDBJNIDatabaseClassMethod(stepCompression, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseStepCompression(selfStruct);
+}
+
+void WCDBJNIDatabaseClassMethod(enableAutoCompression, jlong self, jboolean enable)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseEnableAutoCompression(selfStruct, enable);
+}
+
+void WCDBJNIDatabaseOnTableCompressed(jobject notification, CPPDatabase database, const char* table)
+{
+    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetDatabaseMethodId("onTableCompressed",
+                                  "(" WCDBJNIDatabaseSignature
+                                  "$CompressionNotification;J" WCDBJNIStringSignature ")V",
+                                  return );
+    WCDBJNICreateJavaString(table);
+    (*env)->CallStaticVoidMethod(
+    env, WCDBJNIGetDatabaseClass(), g_methodId, notification, (jlong) database.innerValue, jtable);
+    WCDBJNITryDetach;
+}
+
+void WCDBJNIDatabaseClassMethod(setNotificationWhenCompressed, jlong self, jobject onCompressed)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNITryGetVM;
+    WCDBJNICreateGlobalRel(onCompressed);
+    WCDBDatabaseSetNotificationWhenCompressed(
+    selfStruct, onCompressed != NULL ? WCDBJNIDatabaseOnTableCompressed : NULL, onCompressed, WCDBJNIDestructContext);
+}
+
+jboolean WCDBJNIDatabaseClassMethod(isCompressed, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseIsCompressed(selfStruct);
 }
 
 jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self)

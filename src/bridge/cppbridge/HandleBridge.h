@@ -54,16 +54,14 @@ bool WCDBHandleBeginTransaction(CPPHandle handle);
 bool WCDBHandleCommitTransaction(CPPHandle handle);
 void WCDBHandleRollbackTransaction(CPPHandle handle);
 
-bool WCDBHandleRunTransaction(CPPHandle handle, SwiftClosure* _Nullable transaction);
 typedef bool (*TransactionCallback)(void* _Nonnull context, CPPHandle handle);
-bool WCDBHandleRunTransaction2(CPPHandle handle,
-                               void* _Nonnull context,
-                               TransactionCallback _Nonnull transaction);
-bool WCDBHandleRunPausableTransaction(CPPHandle handle, SwiftClosure* _Nullable pausableTransaction);
+bool WCDBHandleRunTransaction(CPPHandle handle,
+                              void* _Nonnull context,
+                              TransactionCallback _Nonnull transaction);
 typedef bool (*PausableTransaction)(void* _Nonnull context, CPPHandle, bool* _Nonnull, bool);
-bool WCDBHandleRunPausableTransaction2(CPPHandle handle,
-                                       void* _Nonnull context,
-                                       PausableTransaction _Nonnull pausableTransaction);
+bool WCDBHandleRunPausableTransaction(CPPHandle handle,
+                                      void* _Nonnull context,
+                                      PausableTransaction _Nonnull pausableTransaction);
 
 CPPCancellationSignal WCDBCancellationSignalCreate();
 void WCDBCancellationSignalCancel(CPPCancellationSignal signal);

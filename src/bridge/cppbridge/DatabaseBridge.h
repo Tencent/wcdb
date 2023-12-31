@@ -35,22 +35,21 @@ CPPError WCDBDatabaseGetError(CPPDatabase database);
 long WCDBDatabaseGetTag(const CPPDatabase database);
 void WCDBDatabaseSetTag(CPPDatabase database, long tag);
 const char* _Nullable WCDBDatabaseGetPath(CPPDatabase database);
-void WCDBDatabaseGetPaths(CPPDatabase database, SwiftClosure* _Nonnull enumerator);
 
 typedef void (*WCDBStringEnumerater)(void* _Nullable context, const char* _Nonnull string);
-void WCDBDatabaseGetPaths2(CPPDatabase database,
-                           void* _Nullable context,
-                           WCDBStringEnumerater _Nonnull enumerater);
+void WCDBDatabaseGetPaths(CPPDatabase database,
+                          void* _Nullable context,
+                          WCDBStringEnumerater _Nonnull enumerater);
+
 CPPHandle WCDBDatabaseGetHandle(CPPDatabase database, bool writeHint);
 
 bool WCDBDatabaseCanOpen(CPPDatabase database);
 bool WCDBDatabaseIsOpened(CPPDatabase database);
 bool WCDBDatabaseIsBlockaded(CPPDatabase database);
-void WCDBDatabaseClose(CPPDatabase database, SwiftClosure* _Nullable callback);
 typedef void (*WCDBDatabaseCloseCallback)(void* _Nonnull context);
-void WCDBDatabaseClose2(CPPDatabase database,
-                        void* _Nullable context,
-                        WCDBDatabaseCloseCallback _Nullable callback);
+void WCDBDatabaseClose(CPPDatabase database,
+                       void* _Nullable context,
+                       WCDBDatabaseCloseCallback _Nullable callback);
 void WCDBDatabaseBlockade(CPPDatabase database);
 void WCDBDatabaseUnblockade(CPPDatabase database);
 void WCDBDatabasePurge(CPPDatabase database);
@@ -60,22 +59,16 @@ void WCDBDatabaseConfigCipher(CPPDatabase database,
                               int keyLength,
                               int pageSize,
                               int cipherVersion);
-void WCDBDatabaseConfig(CPPDatabase database,
-                        const char* _Nonnull name,
-                        SwiftClosure* _Nonnull invocation,
-                        SwiftClosure* _Nullable uninvocation,
-                        int priority);
 
 typedef bool (*WCDBConfigCallback)(void* _Nonnull context, CPPHandle handle);
-
-void WCDBDatabaseConfig2(CPPDatabase database,
-                         const char* _Nonnull name,
-                         WCDBConfigCallback _Nonnull invocation,
-                         void* _Nonnull invocationContext,
-                         WCDBConfigCallback _Nullable unInvocation,
-                         void* _Nullable unInvocationContext,
-                         int priority,
-                         WCDBContextDestructor _Nonnull destructor);
+void WCDBDatabaseConfig(CPPDatabase database,
+                        const char* _Nullable name,
+                        WCDBConfigCallback _Nonnull invocation,
+                        void* _Nonnull invocationContext,
+                        WCDBConfigCallback _Nullable unInvocation,
+                        void* _Nullable unInvocationContext,
+                        int priority,
+                        WCDBContextDestructor _Nonnull destructor);
 
 typedef struct CPPPerformanceInfo {
     int tablePageReadCount;
@@ -101,36 +94,31 @@ void WCDBDatabaseTracePerformance(CPPDatabase database,
                                   void* _Nullable context,
                                   WCDBContextDestructor _Nullable destructor);
 
-void WCDBDatabaseGlobalTraceSQL(SwiftClosure* _Nullable tracer);
-void WCDBDatabaseTraceSQL(CPPDatabase database, SwiftClosure* _Nullable tracer);
-
 typedef void (*WCDBSQLTracer)(void* _Nullable context,
                               long tag,
                               const char* _Nonnull path,
                               unsigned long long handleId,
                               const char* _Nonnull sql,
-                              const char* _Nullable info);
-void WCDBDatabaseGlobalTraceSQL2(WCDBSQLTracer _Nullable tracer,
-                                 void* _Nullable context,
-                                 WCDBContextDestructor _Nullable destructor);
-void WCDBDatabaseTraceSQL2(CPPDatabase database,
-                           WCDBSQLTracer _Nullable tracer,
-                           void* _Nullable context,
-                           WCDBContextDestructor _Nullable destructor);
+                              const char* _Nonnull info);
+void WCDBDatabaseGlobalTraceSQL(WCDBSQLTracer _Nullable tracer,
+                                void* _Nullable context,
+                                WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseTraceSQL(CPPDatabase database,
+                          WCDBSQLTracer _Nullable tracer,
+                          void* _Nullable context,
+                          WCDBContextDestructor _Nullable destructor);
 
 void WCDBDatabaseSetFullSQLTraceEnable(CPPDatabase database, bool enable);
 
-void WCDBDatabaseGlobalTraceError(SwiftClosure* _Nullable tracer);
-void WCDBDatabaseTraceError(CPPDatabase database, SwiftClosure* _Nullable tracer);
-
 typedef void (*WCDBErrorTracer)(void* _Nullable context, CPPError error);
-void WCDBDatabaseGlobalTraceError2(WCDBErrorTracer _Nullable tracer,
-                                   void* _Nullable context,
-                                   WCDBContextDestructor _Nullable destructor);
-void WCDBDatabaseTraceError2(CPPDatabase database,
-                             WCDBErrorTracer _Nullable tracer,
-                             void* _Nullable context,
-                             WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseGlobalTraceError(WCDBErrorTracer _Nullable tracer,
+                                  void* _Nullable context,
+                                  WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseTraceError(CPPDatabase database,
+                            WCDBErrorTracer _Nullable tracer,
+                            void* _Nullable context,
+                            WCDBContextDestructor _Nullable destructor);
+
 #ifndef __ANDROID__
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount;
 extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime;
@@ -154,39 +142,37 @@ bool WCDBDatabaseMoveFile(CPPDatabase database, const char* _Nonnull destination
 
 OptionalUInt64 WCDBDatabaseGetFileSize(CPPDatabase database);
 
-void WCDBDatabaseSetNotificationWhenCorrupted(CPPDatabase database,
-                                              SwiftClosure* _Nullable onCorrupted);
-
 typedef void (*WCDBCorruptioNotification)(void* _Nullable context, CPPDatabase database);
-void WCDBDatabaseSetNotificationWhenCorrupted2(CPPDatabase database,
-                                               WCDBCorruptioNotification _Nullable notification,
-                                               void* _Nullable context,
-                                               WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseSetNotificationWhenCorrupted(CPPDatabase database,
+                                              WCDBCorruptioNotification _Nullable notification,
+                                              void* _Nullable context,
+                                              WCDBContextDestructor _Nullable destructor);
 
 bool WCDBDatabaseCheckIfCorrupted(CPPDatabase database);
 bool WCDBDatabaseCheckIsAlreadyCorrupted(CPPDatabase database);
 void WCDBDatabaseEnableAutoBackup(CPPDatabase database, bool enable);
 bool WCDBDatabaseBackup(CPPDatabase database);
-void WCDBDatabaseFilterBackup(CPPDatabase database, SwiftClosure* _Nullable tableShouldBeBackedUp);
 
 typedef bool (*WCDBBackupFilter)(void* _Nullable context, const char* _Nonnull tableName);
-void WCDBDatabaseFilterBackup2(CPPDatabase database,
-                               WCDBBackupFilter _Nullable filter,
-                               void* _Nullable context,
-                               WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseFilterBackup(CPPDatabase database,
+                              WCDBBackupFilter _Nullable filter,
+                              void* _Nullable context,
+                              WCDBContextDestructor _Nullable destructor);
 
 bool WCDBDatabaseDeposit(CPPDatabase database);
 bool WCDBDatabaseRemoveDepositedFiles(CPPDatabase database);
 bool WCDBDatabaseContainDepositedFiles(CPPDatabase database);
-double WCDBDatabaseRetrieve(CPPDatabase database, SwiftClosure* _Nullable onProgressUpdated);
 
-typedef bool (*WCDBRetrieveProgressMonitor)(void* _Nullable context,
-                                            double percentage,
-                                            double increment);
-double WCDBDatabaseRetrieve2(CPPDatabase database,
-                             WCDBRetrieveProgressMonitor _Nullable monitor,
-                             void* _Nullable context,
-                             WCDBContextDestructor _Nullable destructor);
+typedef bool (*WCDBProgressUpdate)(void* _Nullable context, double percentage, double increment);
+double WCDBDatabaseRetrieve(CPPDatabase database,
+                            WCDBProgressUpdate _Nullable monitor,
+                            void* _Nullable context,
+                            WCDBContextDestructor _Nullable destructor);
+
+bool WCDBDatabaseVacuum(CPPDatabase database,
+                        WCDBProgressUpdate _Nullable monitor,
+                        void* _Nullable context,
+                        WCDBContextDestructor _Nullable destructor);
 
 bool WCDBDatabasePassiveCheckpoint(CPPDatabase database);
 bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database);
@@ -208,19 +194,51 @@ void WCDBDatabaseAddMigration(CPPDatabase database,
 
 bool WCDBDatabaseStepMigration(CPPDatabase database);
 void WCDBDatabaseEnableAutoMigration(CPPDatabase database, bool flag);
-void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database,
-                                             SwiftClosure* _Nullable onMigrated);
-
 typedef void (*WCDBMigrationNotification)(void* _Nullable context,
                                           CPPDatabase database,
                                           const char* _Nullable table,
                                           const char* _Nullable sourceTable);
-void WCDBDatabaseSetNotificationWhenMigrated2(CPPDatabase database,
-                                              WCDBMigrationNotification _Nullable notification,
-                                              void* _Nullable context,
-                                              WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseSetNotificationWhenMigrated(CPPDatabase database,
+                                             WCDBMigrationNotification _Nullable notification,
+                                             void* _Nullable context,
 
+                                             WCDBContextDestructor _Nullable destructor);
 bool WCDBDatabaseIsMigrated(CPPDatabase database);
+
+typedef CPPData (*WCDBDataEnumerator)(void* _Nonnull context);
+CPPData WCDBDatabaseTrainDict(unsigned char dictId,
+                              WCDBDataEnumerator _Nonnull dataEnumerator,
+                              void* _Nonnull enumerateContext);
+
+bool WCDBDatabaseRegisterDict(const unsigned char* _Nullable dict, long dictSize, unsigned char dictId);
+
+void WCDBDatabaseSetZSTDNormalCompress(void* _Nonnull context, CPPColumn column);
+void WCDBDatabaseSetZSTDDictCompress(void* _Nonnull context, CPPColumn column, unsigned char dictid);
+void WCDBDatabaseSetZSTDMultiDictCompress(void* _Nonnull context,
+                                          CPPColumn column,
+                                          CPPColumn matchColumn,
+                                          const long long* _Nullable values,
+                                          const unsigned char* _Nullable dictIds,
+                                          int dictCount);
+typedef void (*WCDBCompressionFilter)(void* _Nonnull context,
+                                      const char* _Nonnull table,
+                                      void* _Nonnull info);
+void WCDBDatabaseSetCompression(CPPDatabase database,
+                                WCDBCompressionFilter _Nullable filter,
+                                void* _Nullable context,
+                                WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseDisableCompressNewData(CPPDatabase database, bool disable);
+bool WCDBDatabaseStepCompression(CPPDatabase database);
+void WCDBDatabaseEnableAutoCompression(CPPDatabase database, bool enable);
+bool WCDBDatabaseIsCompressed(CPPDatabase database);
+typedef void (*WCDBCompressdNotification)(void* _Nonnull context,
+                                          CPPDatabase,
+                                          const char* _Nullable table);
+void WCDBDatabaseSetNotificationWhenCompressed(CPPDatabase database,
+                                               WCDBCompressdNotification _Nullable notification,
+                                               void* _Nullable context,
+                                               WCDBContextDestructor _Nullable destructor);
+
 short WCDBDatabaseGetAliveHandleCount(CPPDatabase database);
 
 WCDB_EXTERN_C_END

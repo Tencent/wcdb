@@ -131,7 +131,7 @@ typedef struct TransactionContext {
     jobject transaction;
 } TransactionContext;
 
-bool WCDBJNIHanldeTransactionCallBack(TransactionContext *context, CPPHandle handle)
+bool WCDBJNIHandleTransactionCallBack(TransactionContext *context, CPPHandle handle)
 {
     JNIEnv *env = context->env;
 
@@ -159,8 +159,8 @@ jboolean WCDBJNIHandleObjectMethod(runTransaction, jlong self, jobject transacti
     context.env = env;
     context.handle = obj;
     context.transaction = transaction;
-    return WCDBHandleRunTransaction2(
-    selfStruct, &context, (TransactionCallback) WCDBJNIHanldeTransactionCallBack);
+    return WCDBHandleRunTransaction(
+    selfStruct, &context, (TransactionCallback) WCDBJNIHandleTransactionCallBack);
 }
 
 bool WCDBJNIHandlePausableTransactionCallBack(TransactionContext *context,
@@ -199,7 +199,7 @@ jboolean WCDBJNIHandleObjectMethod(runPausableTransaction, jlong self, jobject t
     context.env = env;
     context.handle = obj;
     context.transaction = transaction;
-    return WCDBHandleRunPausableTransaction2(
+    return WCDBHandleRunPausableTransaction(
     selfStruct, &context, (PausableTransaction) WCDBJNIHandlePausableTransactionCallBack);
 }
 

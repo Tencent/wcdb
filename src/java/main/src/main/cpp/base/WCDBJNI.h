@@ -68,6 +68,20 @@
     }                                                                          \
     WCDBClearAllPreAllocatedMemory();
 
+#define WCDBJNIGetByteArray(value)                                                \
+    const unsigned char *value##Array = NULL;                                     \
+    int value##Length = 0;                                                        \
+    if (value != NULL) {                                                          \
+        value##Length = (*env)->GetArrayLength(env, value);                       \
+        value##Array                                                              \
+        = (const unsigned char *) (*env)->GetByteArrayElements(env, value, NULL); \
+    }
+
+#define WCDBJNIReleaseByteArray(value)                                           \
+    if (value##Array != NULL) {                                                  \
+        (*env)->ReleaseByteArrayElements(env, value, (jbyte *) value##Array, 0); \
+    }
+
 #define WCDBJNIGetByteArrayCritical(value)                                             \
     const unsigned char *value##Array = NULL;                                          \
     int value##Length = 0;                                                             \

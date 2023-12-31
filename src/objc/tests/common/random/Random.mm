@@ -317,7 +317,7 @@
     case RandomStringType_Default:
         return [self stringWithLength:self.length];
     case RandomStringType_English:
-        return [self englishStringWithLength:self.length];
+        return [self englishStringWithLength:100];
     case RandomStringType_Chinese:
         return [self chineseStringWithLength:self.length];
     }
@@ -358,7 +358,7 @@
 
 - (NSString *)englishString
 {
-    return [self englishStringWithLength:self.length];
+    return [self englishStringWithLength:100];
 }
 
 - (NSString *)englishStringWithLength:(UInt32)length

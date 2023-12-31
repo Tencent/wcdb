@@ -150,15 +150,17 @@ class RepairTests: DatabaseTestCase {
     func doTestRetrieve(expecting success: Bool) {
         var lastPercentage = 0.0
         var sanity = true
-        let score = database.retrieve { percentage, increment in
+        let score = WCDBAssertNoThrowReturned(try database.retrieve { percentage, increment in
             if percentage - lastPercentage != increment || increment <= 0 {
                 XCTFail()
                 sanity = false
             }
             lastPercentage = percentage
-        }
+            return true
+        })
+        XCTAssertNotNil(score)
         XCTAssertTrue(sanity)
-        XCTAssertTrue((success && score == 1.0) || (!success && score < 1.0))
+        XCTAssertTrue((success && score! == 1.0) || (!success && score! < 1.0))
         XCTAssertTrue(lastPercentage == 1.0)
     }
 
@@ -206,6 +208,24 @@ class RepairTests: DatabaseTestCase {
             XCTAssertNoThrow(try database.deposit())
             doTestRetrieve(expecting: false)
             doTestObjectsRetrieved(expecting: false)
+        }
+    }
+
+    func testVacuum() {
+        executeTest {
+            var lastPercentage = 0.0
+            var sanity = true
+            try database.vacuum { percentage, increment in
+                if percentage - lastPercentage != increment || increment <= 0 {
+                    XCTFail()
+                    sanity = false
+                }
+                lastPercentage = percentage
+                return true
+            }
+            XCTAssertTrue(sanity)
+            XCTAssertTrue(lastPercentage == 1.0)
+            doTestObjectsRetrieved(expecting: true)
         }
     }
 }
