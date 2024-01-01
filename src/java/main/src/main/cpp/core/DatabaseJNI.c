@@ -826,7 +826,7 @@ void WCDBJNIDatabaseClassMethod(addZSTDMultiDictCompress,
     WCDBJNIBridgeStruct(CPPColumn, column);
     WCDBJNIBridgeStruct(CPPColumn, matchColumn);
     WCDBDatabaseSetZSTDMultiDictCompress(
-    (void*) info, columnStruct, matchColumnStruct, valuesArray, dictIdsArray, dictIdsLength);
+    (void*) info, columnStruct, matchColumnStruct, (const long long*) valuesArray, dictIdsArray, dictIdsLength);
     WCDBJNIReleaseLongArray(values);
     WCDBJNIReleaseByteArray(dictIds);
 }

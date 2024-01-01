@@ -41,7 +41,7 @@ public:
         LockGuard lockGuard(m_lock);
         WCTRemedialAssert(
         m_modules.find(name) == m_modules.end(), "Module already exists.", return;);
-        m_modules.emplace(name, module).first;
+        m_modules.emplace(name, module);
     }
 
     const FunctionModule* get(const UnsafeStringView& name) const

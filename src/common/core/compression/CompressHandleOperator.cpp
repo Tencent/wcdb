@@ -144,8 +144,6 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
 Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* info)
 {
     WCTAssert(info != nullptr);
-    InnerHandle* handle = getHandle();
-    WCTAssert(handle != nullptr);
     int64_t start = Time::currentThreadCPUTimeInMicroseconds();
     if (m_compressingTableInfo != info) {
         finalizeCompressionStatements();
