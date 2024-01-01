@@ -433,7 +433,7 @@ public:
     /**
      @brief Register custom auxiliary function for fts5.
      @Note  The custom auxiliary function needs to inherit `WCDB::AbstractFTS5AuxiliaryFunctionObject`.
-     @param module Auxiliary function module for fts5. You can use WCDB::FTS5AuxiliaryFunctionTemplate to construct your custom auxiliary function as auxiliary function module.
+     @param module Auxiliary function module for fts5. You can use `WCDB::FTS5AuxiliaryFunctionTemplate` to construct your custom auxiliary function as auxiliary function module.
      @param name Name of auxiliary function.
      */
     static void registerAuxiliaryFunction(const UnsafeStringView &name,
@@ -687,6 +687,22 @@ public:
     @return true if directory exists or create directory success.
     */
     static bool setDefaultTemporaryDirectory(const UnsafeStringView &directory);
+
+    /**
+     @brief Register custom scalar function.
+     @Note  The custom scalar function needs to inherit `WCDB::AbstractScalarFunctionObject`.
+     @param module Scalar function module. You can use WCDB::ScalarFunctionTemplate to construct your custom scalar function as scalar function module.
+     @param name Name of scalar function.
+     */
+    static void registerScalarFunction(const ScalarFunctionModule &module,
+                                       const UnsafeStringView &name);
+
+    /**
+     @brief Setup scalar function with name for current database.
+     @Note  You can set up the built-in scalar functions of sqlite and the scalar functions implemented by WCDB directly. If you want to use your custom scalar function, you should firstly register it through `static Database::registerScalarFunction()`.
+     @see   `static Database::registerScalarFunction()`
+     */
+    void addScalarFunction(const UnsafeStringView &name);
 
 #pragma mark - Migration
     typedef struct MigrationInfo {

@@ -528,6 +528,21 @@ bool Database::setDefaultTemporaryDirectory(const UnsafeStringView& directory)
     return Core::shared().setDefaultTemporaryDirectory(directory);
 }
 
+void Database::registerScalarFunction(const ScalarFunctionModule& module,
+                                      const UnsafeStringView& name)
+{
+    Core::shared().registerScalarFunction(name, module);
+}
+
+void Database::addScalarFunction(const UnsafeStringView& name)
+{
+    WCDB::StringView configName = WCDB::StringView::formatted(
+    "%s%s", WCDB::ScalarFunctionConfigPrefix.data(), name.data());
+    m_innerDatabase->setConfig(configName,
+                               WCDB::Core::shared().scalarFunctionConfig(name),
+                               WCDB::Configs::Priority::Higher);
+}
+
 #pragma mark - Migration
 
 void Database::addMigration(const UnsafeStringView& sourcePath,

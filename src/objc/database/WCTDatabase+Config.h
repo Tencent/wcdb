@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+#import "ScalarFunctionTemplate.hpp"
 #import "WCTCommon.h"
 #import "WCTDatabase.h"
 
@@ -110,6 +111,21 @@ WCDB_API @interface WCTDatabase(Config)
  @brief Remove a config.
  */
 - (void)removeConfigForName:(NSString*)name;
+
+/**
+ @brief Register custom scalar function.
+ @Note  The custom scalar function needs to inherit `WCDB::AbstractScalarFunctionObject`.
+ @param module Scalar function module. You can use `WCDB::ScalarFunctionTemplate` to construct your custom scalar function as scalar function module.
+ @param name Name of scalar function.
+ */
++ (void)registerScalarFunction:(const WCDB::ScalarFunctionModule&)module named:(NSString*)name;
+
+/**
+ @brief Setup scalar function with name for current database.
+ @Note  You can set up the built-in scalar functions of sqlite and the scalar functions implemented by WCDB directly. If you want to use your custom scalar function, you should firstly register it through `+[WCTDatabase registerScalarFunction:named:]`.
+ @see   `+[WCTDatabase registerScalarFunction:named:]`
+ */
+- (void)addScalarFunction:(NSString*)scalarFunctionName;
 
 /**
   @brief These three interfaces are used to access and modify the global ABtest configuration of WCDB.
