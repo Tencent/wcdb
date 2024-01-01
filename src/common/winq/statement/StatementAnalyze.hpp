@@ -33,7 +33,7 @@ class WCDB_API StatementAnalyze final
 public:
     StatementAnalyze();
     using SpecifiedSyntax<Syntax::AnalyzeSTMT, Statement>::SpecifiedSyntax;
-    ~StatementAnalyze() override final;
+    ~StatementAnalyze() override;
 
     StatementAnalyze& analyze();
     StatementAnalyze& schema(const Schema& schema);

@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API BeginSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~BeginSTMT() override final;
+    ~BeginSTMT() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Deferred, Immediate, Exclusive, );
 

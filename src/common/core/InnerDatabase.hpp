@@ -53,7 +53,7 @@ public:
     InnerDatabase() = delete;
     InnerDatabase(const InnerDatabase &) = delete;
     InnerDatabase &operator=(const InnerDatabase &) = delete;
-    ~InnerDatabase() override final;
+    ~InnerDatabase() override;
 
 protected:
     // All public interfaces that are related with concurrency should make sure the initialization.

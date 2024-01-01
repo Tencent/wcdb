@@ -34,7 +34,7 @@ class WCDB_API PreparedStatement final : public StatementOperation {
 
 public:
     PreparedStatement(PreparedStatement &&other);
-    ~PreparedStatement() override final;
+    ~PreparedStatement() override;
 
 protected:
     PreparedStatement() = delete;

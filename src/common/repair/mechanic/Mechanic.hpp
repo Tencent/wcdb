@@ -39,7 +39,7 @@ class Mechanic final : public Repairman {
 #pragma mark - Initialize
 public:
     Mechanic(const UnsafeStringView &path);
-    ~Mechanic() override final;
+    ~Mechanic() override;
 
 #pragma mark - Mechanic
 public:

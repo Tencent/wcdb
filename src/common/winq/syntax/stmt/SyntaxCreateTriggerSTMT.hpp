@@ -38,7 +38,7 @@ class SelectSTMT;
 class WCDB_API CreateTriggerSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~CreateTriggerSTMT() override final;
+    ~CreateTriggerSTMT() override;
 
     bool temp = false;
     bool ifNotExists = false;

@@ -40,7 +40,7 @@ class WCDB_API Column final : public Identifier {
     friend Column;
 #pragma mark - Syntax
 public:
-    ~Column() override final;
+    ~Column() override;
 
     Schema schema;
     StringView table;

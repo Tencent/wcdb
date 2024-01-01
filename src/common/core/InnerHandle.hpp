@@ -140,7 +140,7 @@ private:
 
 class ConfiguredHandle final : public InnerHandle {
 public:
-    ~ConfiguredHandle() override final;
+    ~ConfiguredHandle() override;
 };
 
 } //namespace WCDB

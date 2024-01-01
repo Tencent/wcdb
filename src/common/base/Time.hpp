@@ -40,7 +40,7 @@ public:
     Time(Super &&super);
     Time(const struct timespec &ts);
     Time(const uint64_t &second);
-    ~Time() override final;
+    ~Time() override;
 
     static Time now();
     static uint64_t currentThreadCPUTimeInMicroseconds();

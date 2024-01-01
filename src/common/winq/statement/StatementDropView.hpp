@@ -33,7 +33,7 @@ class WCDB_API StatementDropView final
 public:
     using SpecifiedSyntax<Syntax::DropViewSTMT, Statement>::SpecifiedSyntax;
     StatementDropView();
-    ~StatementDropView() override final;
+    ~StatementDropView() override;
 
     StatementDropView& dropView(const UnsafeStringView& view);
     StatementDropView& schema(const Schema& schema);

@@ -35,7 +35,7 @@ private:
 #pragma mark - Initialize
 public:
     MigratingHandleDecorator(Migration &migration);
-    ~MigratingHandleDecorator() override final;
+    ~MigratingHandleDecorator() override;
 
     void decorate(Decorative *handle) override final;
 

@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API VacuumSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~VacuumSTMT() override final;
+    ~VacuumSTMT() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(All, Schema);
     Schema schema;

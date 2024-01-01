@@ -36,7 +36,7 @@ namespace WCDB {
 class BusyRetryConfig final : public Config {
 public:
     BusyRetryConfig();
-    ~BusyRetryConfig() override final;
+    ~BusyRetryConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
     bool uninvoke(InnerHandle* handle) override final;

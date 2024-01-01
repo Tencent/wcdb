@@ -34,7 +34,7 @@ class WCDB_API StatementSelect final : public SpecifiedSyntax<Syntax::SelectSTMT
 public:
     using SpecifiedSyntax<Syntax::SelectSTMT, Statement>::SpecifiedSyntax;
     StatementSelect();
-    ~StatementSelect() override final;
+    ~StatementSelect() override;
 
     StatementSelect& with(const CommonTableExpressions& commonTableExpressions);
     StatementSelect& recursive();

@@ -59,7 +59,7 @@ private:
 
 public:
     Handle(Handle&& other);
-    ~Handle() override final;
+    ~Handle() override;
 
     /**
      @brief Recycle the sqlite db handle inside, and the current handle will no longer be able to perform other operations.

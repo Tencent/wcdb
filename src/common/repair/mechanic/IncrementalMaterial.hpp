@@ -47,7 +47,7 @@ public:
     bool serialize(Serialization &serialization) const override final;
     using Serializable::serialize;
 
-    ~IncrementalMaterial() override final;
+    ~IncrementalMaterial() override;
 
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
@@ -75,7 +75,7 @@ protected:
     public:
         static constexpr const int saltSize = sizeof(uint32_t) * 4;
         Info();
-        ~Info() override final;
+        ~Info() override;
         std::pair<uint32_t, uint32_t> lastWalSalt;
         std::pair<uint32_t, uint32_t> currentWalSalt;
         uint32_t lastNBackFill;
@@ -100,7 +100,7 @@ public:
     class Page final : public Serializable, public Deserializable {
     public:
         Page();
-        ~Page() override final;
+        ~Page() override;
 
         typedef Repair::Page::Type Type;
 

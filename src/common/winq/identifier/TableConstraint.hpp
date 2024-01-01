@@ -33,7 +33,7 @@ class WCDB_API TableConstraint final
 public:
     TableConstraint();
     explicit TableConstraint(const UnsafeStringView& name);
-    ~TableConstraint() override final;
+    ~TableConstraint() override;
 
     TableConstraint& primaryKey();
     TableConstraint& unique();

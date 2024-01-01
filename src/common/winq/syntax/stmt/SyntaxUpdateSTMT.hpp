@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API UpdateSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~UpdateSTMT() override final;
+    ~UpdateSTMT() override;
 
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;

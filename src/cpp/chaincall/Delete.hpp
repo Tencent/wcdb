@@ -36,7 +36,7 @@ class WCDB_API Delete final : public ChainCall<StatementDelete> {
     friend class HandleORMOperation;
 
 public:
-    ~Delete() override final;
+    ~Delete() override;
 
     /**
      @brief WINQ interface for SQL.

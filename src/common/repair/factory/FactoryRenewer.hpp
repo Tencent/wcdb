@@ -40,7 +40,7 @@ class FactoryRenewer final : public FactoryRelated,
                              public BackupDelegateHolder {
 public:
     FactoryRenewer(const Factory &factory);
-    ~FactoryRenewer() override final;
+    ~FactoryRenewer() override;
 
     const StringView directory;
     const StringView database;

@@ -48,7 +48,7 @@ public:
     bool serialize(Serialization &serialization) const override final;
     using Serializable::serialize;
 
-    ~Material() override final;
+    ~Material() override;
 
 protected:
     static bool serializeData(Serialization &serialization, const Data &data);
@@ -80,7 +80,7 @@ public:
     public:
         static constexpr const int size = sizeof(uint32_t) * 6;
         Info();
-        ~Info() override final;
+        ~Info() override;
 
         uint32_t pageSize;
         uint32_t reservedBytes;
@@ -110,7 +110,7 @@ public:
     class Content final : public Serializable, public Deserializable {
     public:
         Content();
-        ~Content() override final;
+        ~Content() override;
 
         StringView tableName;
         StringView sql;

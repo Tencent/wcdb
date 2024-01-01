@@ -37,7 +37,7 @@ class CompressingStatementDecorator final : public HandleStatementDecorator {
 public:
     CompressingStatementDecorator(Compression::Binder *binder);
     CompressingStatementDecorator(CompressingStatementDecorator &&other);
-    ~CompressingStatementDecorator() override final;
+    ~CompressingStatementDecorator() override;
 
     CompressingStatementDecorator() = delete;
     CompressingStatementDecorator(const CompressingStatementDecorator &) = delete;

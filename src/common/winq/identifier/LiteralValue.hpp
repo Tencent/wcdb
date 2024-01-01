@@ -33,7 +33,7 @@ class WCDB_API LiteralValue final : public SpecifiedSyntax<Syntax::LiteralValue,
 public:
     using SpecifiedSyntax<Syntax::LiteralValue, SQL>::SpecifiedSyntax;
     LiteralValue();
-    ~LiteralValue() override final;
+    ~LiteralValue() override;
 
     LiteralValue(int64_t value);
     LiteralValue(uint64_t value);

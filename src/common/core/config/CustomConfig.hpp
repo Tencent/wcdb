@@ -34,7 +34,7 @@ public:
     using Invocation = std::function<bool(InnerHandle *)>;
 
     CustomConfig(const Invocation &invocation, const Invocation &uninvocation);
-    ~CustomConfig() override final;
+    ~CustomConfig() override;
 
     bool invoke(InnerHandle *handle) override final;
     bool uninvoke(InnerHandle *handle) override final;

@@ -34,7 +34,7 @@ namespace WCDB {
 class CipherConfig final : public Config {
 public:
     CipherConfig(const UnsafeData &cipher, int pageSize, int cipherVersion);
-    ~CipherConfig() override final;
+    ~CipherConfig() override;
 
     bool invoke(InnerHandle *handle) override final;
     void trySaveRawKey(InnerHandle *handle);

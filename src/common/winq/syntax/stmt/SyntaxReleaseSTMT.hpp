@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API ReleaseSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~ReleaseSTMT() override final;
+    ~ReleaseSTMT() override;
 
     StringView savepoint;
 

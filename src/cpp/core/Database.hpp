@@ -50,7 +50,7 @@ public:
     Database() = delete;
     Database(const Database &);
     Database &operator=(const Database &);
-    ~Database() override final;
+    ~Database() override;
 
 protected:
     Database(Recyclable<InnerDatabase *> database);

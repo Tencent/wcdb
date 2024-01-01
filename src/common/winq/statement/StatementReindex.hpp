@@ -33,7 +33,7 @@ class WCDB_API StatementReindex final
 public:
     using SpecifiedSyntax<Syntax::ReindexSTMT, Statement>::SpecifiedSyntax;
     StatementReindex();
-    ~StatementReindex() override final;
+    ~StatementReindex() override;
 
     StatementReindex& reindex();
     StatementReindex& collation(const UnsafeStringView& collation);

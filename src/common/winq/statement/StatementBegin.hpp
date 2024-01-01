@@ -32,7 +32,7 @@ class WCDB_API StatementBegin final : public SpecifiedSyntax<Syntax::BeginSTMT, 
 public:
     using SpecifiedSyntax<Syntax::BeginSTMT, Statement>::SpecifiedSyntax;
     StatementBegin();
-    ~StatementBegin() override final;
+    ~StatementBegin() override;
 
     StatementBegin& beginDeferred();
     StatementBegin& beginImmediate();

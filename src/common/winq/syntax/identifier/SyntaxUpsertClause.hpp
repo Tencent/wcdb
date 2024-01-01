@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API UpsertClause final : public Identifier {
 #pragma mark - Lang
 public:
-    ~UpsertClause() override final;
+    ~UpsertClause() override;
 
     std::list<IndexedColumn> indexedColumns;
     Shadow<Expression> condition;

@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API CreateViewSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~CreateViewSTMT() override final;
+    ~CreateViewSTMT() override;
 
     bool temp = false;
     bool ifNotExists = false;

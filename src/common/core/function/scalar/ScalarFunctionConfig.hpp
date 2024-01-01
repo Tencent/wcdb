@@ -35,7 +35,7 @@ class ScalarFunctionConfig final : public Config {
 public:
     ScalarFunctionConfig(const UnsafeStringView& name,
                          const std::shared_ptr<ScalarFunctionModules>& modules);
-    ~ScalarFunctionConfig() override final;
+    ~ScalarFunctionConfig() override;
 
     StringView name;
 

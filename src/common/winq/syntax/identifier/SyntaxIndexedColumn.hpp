@@ -35,7 +35,7 @@ namespace Syntax {
 class WCDB_API IndexedColumn final : public Identifier {
 #pragma mark - Lang
 public:
-    ~IndexedColumn() override final;
+    ~IndexedColumn() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Column, Expression);
 

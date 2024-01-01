@@ -39,7 +39,7 @@ public:
 
     ResultField(const Field& field);
     ResultField(const ResultColumn& resultColumn, const BaseAccessor* assessor);
-    ~ResultField() override final;
+    ~ResultField() override;
 
     template<class ORMType, typename FieldType>
     ResultField(FieldType ORMType::*memberPointer)
@@ -113,7 +113,7 @@ template<>
 class WCDB_API SyntaxList<ResultField> final : public _SyntaxList<ResultField> {
 public:
     using _SyntaxList<ResultField>::_SyntaxList;
-    ~SyntaxList() override final;
+    ~SyntaxList() override;
 
     ResultFields
     resultColumnsByAddingNewResultColumns(const ResultFields& resultColumns) const;

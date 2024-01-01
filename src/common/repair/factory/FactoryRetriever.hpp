@@ -50,7 +50,7 @@ class FactoryRetriever final : public FactoryRelated,
 #pragma mark - Retriever
 public:
     FactoryRetriever(const Factory &factory);
-    ~FactoryRetriever() override final;
+    ~FactoryRetriever() override;
 
     const StringView database;
 

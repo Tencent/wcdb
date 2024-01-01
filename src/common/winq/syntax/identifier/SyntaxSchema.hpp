@@ -34,7 +34,7 @@ class WCDB_API Schema final : public Identifier {
 #pragma mark - Syntax
 public:
     Schema();
-    ~Schema() override final;
+    ~Schema() override;
 
     StringView name;
 

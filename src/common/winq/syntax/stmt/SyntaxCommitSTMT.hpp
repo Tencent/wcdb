@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API CommitSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~CommitSTMT() override final;
+    ~CommitSTMT() override;
 
     bool inited = false;
     bool isValid() const override final;

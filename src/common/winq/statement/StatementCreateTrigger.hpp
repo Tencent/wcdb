@@ -33,7 +33,7 @@ class WCDB_API StatementCreateTrigger final
 public:
     using SpecifiedSyntax<Syntax::CreateTriggerSTMT, Statement>::SpecifiedSyntax;
     StatementCreateTrigger();
-    ~StatementCreateTrigger() override final;
+    ~StatementCreateTrigger() override;
 
     StatementCreateTrigger& createTrigger(const UnsafeStringView& trigger);
     StatementCreateTrigger& schema(const Schema& schema);

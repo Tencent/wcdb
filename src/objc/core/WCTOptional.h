@@ -103,7 +103,7 @@ public:
     using Super::WCTFundamentalOptional;
 
     WCTOptionalBool(WCDB::Optional<bool>&& optional);
-    ~WCTOptionalBool() override final;
+    ~WCTOptionalBool() override;
 };
 
 class WCDB_API WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger, 0> {
@@ -111,7 +111,7 @@ class WCDB_API WCTOptionalSize final : public WCTFundamentalOptional<NSUInteger,
 
 public:
     using Super::WCTFundamentalOptional;
-    ~WCTOptionalSize() override final;
+    ~WCTOptionalSize() override;
 
     WCTOptionalSize(WCDB::Optional<size_t>&& optional);
 };

@@ -40,7 +40,7 @@ class WCDB_API Field final : public Column {
 public:
     Field() = delete;
     Field(const UnsafeStringView& name, const BaseAccessor* accessor);
-    ~Field() override final;
+    ~Field() override;
 
     template<class ORMType, typename FieldType>
     Field(FieldType ORMType::*memberPointer)
@@ -124,7 +124,7 @@ template<>
 class WCDB_API SyntaxList<Field> final : public _SyntaxList<Field> {
 public:
     using _SyntaxList<Field>::_SyntaxList;
-    ~SyntaxList() override final;
+    ~SyntaxList() override;
 
 #ifndef __linux__
     ResultFields redirect(const ResultColumns& resultColumns) const;

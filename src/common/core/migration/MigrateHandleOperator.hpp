@@ -36,7 +36,7 @@ namespace WCDB {
 class MigrateHandleOperator final : public HandleOperator, public Migration::Stepper {
 public:
     MigrateHandleOperator(InnerHandle* handle);
-    ~MigrateHandleOperator() override final;
+    ~MigrateHandleOperator() override;
 
     void onDecorationChange() override final;
 

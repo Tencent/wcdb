@@ -42,7 +42,7 @@ public:
 class AutoMigrateConfig final : public Config {
 public:
     AutoMigrateConfig(const std::shared_ptr<AutoMigrateOperator> &operator_);
-    ~AutoMigrateConfig() override final;
+    ~AutoMigrateConfig() override;
 
     bool invoke(InnerHandle *handle) override final;
     bool uninvoke(InnerHandle *handle) override final;

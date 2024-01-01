@@ -42,7 +42,7 @@ public:
 class AutoCompressConfig final : public Config {
 public:
     AutoCompressConfig(const std::shared_ptr<AutoCompressOperator> &operator_);
-    ~AutoCompressConfig() override final;
+    ~AutoCompressConfig() override;
 
     bool invoke(InnerHandle *handle) override final;
     bool uninvoke(InnerHandle *handle) override final;

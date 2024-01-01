@@ -71,7 +71,7 @@ class OperationQueue final : public AsyncQueue,
                              public AutoCheckpointOperator {
 public:
     OperationQueue(const UnsafeStringView& name, OperationEvent* event);
-    ~OperationQueue() override final;
+    ~OperationQueue() override;
 
     void stopAllDatabaseEvent(const UnsafeStringView& path);
 

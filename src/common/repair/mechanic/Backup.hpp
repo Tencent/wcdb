@@ -89,7 +89,7 @@ class Backup final : public Crawlable,
 #pragma mark - Initialize
 public:
     Backup(const UnsafeStringView &path);
-    ~Backup() override final;
+    ~Backup() override;
 
 protected:
     Pager m_pager;

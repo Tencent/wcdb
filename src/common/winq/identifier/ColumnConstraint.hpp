@@ -33,7 +33,7 @@ class WCDB_API ColumnConstraint final
 public:
     ColumnConstraint();
     explicit ColumnConstraint(const UnsafeStringView& name);
-    ~ColumnConstraint() override final;
+    ~ColumnConstraint() override;
 
     ColumnConstraint& primaryKey();
     ColumnConstraint& order(const Order& order);

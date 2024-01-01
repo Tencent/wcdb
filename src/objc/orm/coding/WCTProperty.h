@@ -30,7 +30,7 @@ public:
     WCTProperty();
     WCTProperty(const WCTColumnBinding& columnBinding);
     WCTProperty(const WCDB::UnsafeStringView& name, const WCTColumnBinding& columnBinding);
-    ~WCTProperty() override final;
+    ~WCTProperty() override;
 
     WCTProperty table(const WCDB::UnsafeStringView& table) const;
     WCTProperty schema(const WCDB::Schema& schema) const;
@@ -46,7 +46,7 @@ template<>
 class WCDB_API SyntaxList<WCTProperty> final : public _SyntaxList<WCTProperty> {
 public:
     using _SyntaxList<WCTProperty>::_SyntaxList;
-    ~SyntaxList() override final;
+    ~SyntaxList() override;
 
     WCTResultColumns redirect(const WCDB::ResultColumns& resultColumns) const;
 

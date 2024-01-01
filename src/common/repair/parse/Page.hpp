@@ -41,7 +41,7 @@ class Page final : public PagerRelated, public Initializeable {
 public:
     Page(int number, Pager *pager);
     Page(int number, Pager *pager, const UnsafeData &data);
-    ~Page() override final;
+    ~Page() override;
 
     const int number;
 
