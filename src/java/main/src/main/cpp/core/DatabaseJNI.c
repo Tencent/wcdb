@@ -742,7 +742,7 @@ CPPData WCDBJNIDataEnumerator(DataEnumeratorContext* context)
         ret.buffer = (unsigned char*) arrayArray;
         ret.size = arrayLength;
         context->preObject = array;
-        context->preContent = arrayArray;
+        context->preContent = (jbyte*) arrayArray;
     }
     context->index++;
     return ret;
