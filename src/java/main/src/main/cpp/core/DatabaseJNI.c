@@ -734,7 +734,7 @@ CPPData WCDBJNIDataEnumerator(DataEnumeratorContext* context)
         ret.buffer = (unsigned char*) stringString;
         ret.size = stringString != NULL ? strlen(stringString) : 0;
         context->preObject = string;
-        context->preObject = (jbyte*) string_utf16String;
+        context->preContent = (jbyte*) string_utf16String;
     } else {
         jbyteArray array = (jbyteArray) (*env)->GetObjectArrayElement(
         env, context->objects, context->index);

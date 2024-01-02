@@ -4,7 +4,7 @@ apply from: rootProject.file('gradle/WeChatPublish.gradle')
 android {
     namespace 'com.tencent.wcdb.core'
     compileSdk 33
-    ndkVersion '22.1.7171670'
+    ndkVersion '21.4.7075529'
 
     defaultConfig {
         minSdk 21
