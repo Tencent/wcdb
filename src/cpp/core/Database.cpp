@@ -24,10 +24,10 @@
 
 #include "Database.hpp"
 #include "CipherConfig.hpp"
-#import "CompressionCenter.hpp"
-#import "CompressionConst.hpp"
+#include "CompressionCenter.hpp"
+#include "CompressionConst.hpp"
 #include "Core.hpp"
-#import "CoreConst.h"
+#include "CoreConst.h"
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
 #include "FileManager.hpp"
