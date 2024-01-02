@@ -54,7 +54,7 @@ public:
     void finalize();
 
     /**
-     This class is a wrapper for `sqlite3_stmt`.
+     It is a wrapper for `sqlite3_step`.
      @warning Not Thread-safe.
      @return True if no error occurs.
      */
@@ -98,7 +98,7 @@ public:
     void bindText(const Text& value, int index = 1);
 
     /**
-     @brief The wrapper of `sqlite3_bind_int64`.
+     @brief The wrapper of `sqlite3_bind_blob`.
      */
     void bindBLOB(const BLOB& value, int index = 1);
 
@@ -248,7 +248,7 @@ public:
 
     /**
      @brief Extract all values of current row.
-     @return An array of NSObject that conforms to WCTValue.
+     @return An array of value.
      */
     OneRowValue getOneRow();
 

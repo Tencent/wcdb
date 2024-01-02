@@ -51,10 +51,19 @@ public class ChainCall<T extends Statement> {
         }
     }
 
+    /**
+     * Get the number of changed rows in the most recent call.
+     * @return the number of changed rows.
+     */
     public int getChanges() {
         return changes;
     }
 
+    /**
+     * The statement that `ChainCall` will execute.
+     * You can customize this statement directly to implement the capabilities not provided by `ChainCall`.
+     * @return the current statement.
+     */
     public T getStatement() {
         return statement;
     }

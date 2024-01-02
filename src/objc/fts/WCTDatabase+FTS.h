@@ -33,7 +33,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- The following three are different versions of the sqlite fts module. `WCTModuleFTS5` is recomended. You can use `WCDB_VIRTUAL_TABLE_MODULE` to config fts module for a `WCTTableCoding` class.
+ The following three are different versions of the sqlite fts module. `WCTModuleFTS5` is recommended. You can use `WCDB_VIRTUAL_TABLE_MODULE` to config fts module for a `WCTTableCoding` class.
  */
 WCDB_EXTERN NSString* const WCTModuleFTS3;
 WCDB_EXTERN NSString* const WCTModuleFTS4;

@@ -33,7 +33,7 @@ WCDB_API @interface WCTDelete : WCTChainCall
 
 /**
  @brief The statement that `WCTDelete` will execute.
- You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ You can customize this statement directly to implement the capabilities not provided by the following methods.
  */
 - (WCDB::StatementDelete &)statement;
 

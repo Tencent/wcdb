@@ -64,7 +64,7 @@ WCDB_API @interface WCTDatabase(Compression)
 + (NSData*)trainDictWithDatas:(NSArray<NSData*>*)datas andDictId:(WCTDictId)dictId;
 
 /**
- @brief Register a zstd dict in to wcdb.
+ @brief Register a zstd dict in to WCDB.
  @Note You must register a dict before using it.
  @param dict dict data.
  @param dictId id of the dict. It can not be zero.

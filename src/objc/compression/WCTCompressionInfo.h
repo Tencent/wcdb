@@ -47,13 +47,13 @@ WCDB_API @interface WCTCompressionUserInfo : WCTCompressionBaseInfo
 - (void)addZSTDNormalCompressProperty:(const WCTProperty &)property;
 
 /**
- @brief Configure to compress all data in the specified column with a registed zstd dict.
+ @brief Configure to compress all data in the specified column with a registered zstd dict.
  */
 - (void)addZSTDDictCompressProperty:(const WCTProperty &)property
                          withDictId:(WCTDictId)dictId;
 
 /**
- @brief Configure to compress all data in the specified column with multi registed zstd dict.
+ @brief Configure to compress all data in the specified column with multi registered zstd dict.
  Which dict to use when compressing is based on the value of the specified matching column.
  @note You can use `WCTDictDefaultMatchValue` to specify a default dict.
  @warning The matching column must be an integer column.

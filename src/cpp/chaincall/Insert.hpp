@@ -86,7 +86,7 @@ public:
     }
 
     /**
-     @brief Inset an array of objects.
+     @brief Insert an array of objects.
      @param objects Objects to be inserted into table.
      @return this.
      */

@@ -38,6 +38,14 @@ import java.util.List;
 public abstract class HandleORMOperation extends HandleOperation{
     abstract Database getDatabase();
 
+    /**
+     * Create table and indexes from ORM binding if not exists.
+     * It will run embedded transaction, and add newly defined columns automatically.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param tableName This would be the name of the table and the prefix of the index names.
+     * @param binding ORM binding of table.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void createTable(String tableName, TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle(true);
         try {
@@ -51,6 +59,13 @@ public abstract class HandleORMOperation extends HandleOperation{
         }
     }
 
+    /**
+     * Create virtual table from ORM if not exists.
+     * @see <a href="http://www.sqlite.org/vtab.html">http://www.sqlite.org/vtab.html</a>
+     * @param tableName The name of the virtual table to be created.
+     * @param binding ORM binding of table.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void createVirtualTable(String tableName, TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle(true);
         try {
@@ -64,9 +79,15 @@ public abstract class HandleORMOperation extends HandleOperation{
         }
     }
 
+    /**
+     * Check the existence of the table.
+     * @param tableName The name of the table to be checked.
+     * @return true if table exists.
+     * @throws WCDBException if any error occurs.
+     */
     public boolean tableExist(String tableName) throws WCDBException {
         Handle handle = getHandle(false);
-        int ret = handle.tableExist(handle.cppObj, tableName);
+        int ret = Handle.tableExist(handle.cppObj, tableName);
         WCDBException exception = null;
         if(ret > 1) {
             exception = handle.createException();
@@ -80,14 +101,29 @@ public abstract class HandleORMOperation extends HandleOperation{
         return ret == 1;
     }
 
+    /**
+     * Get a wrapper from an existing table.
+     * @param tableName The name of the table.
+     * @param binding The ORM binding of table.
+     * @return Table object.
+     */
     public <T> Table<T> getTable(String tableName, TableBinding<T> binding) {
         return new Table<T>(tableName, binding, getDatabase());
     }
 
+    /**
+     * Drop table if exists.
+     * @param tableName The name of the table to be dropped.
+     * @throws WCDBException if any error occurs.
+     */
     public void dropTable(String tableName) throws WCDBException {
         execute(new StatementDropTable().dropTable(tableName).ifExist());
     }
 
+    /**
+     * Generate a {@link Insert} to do an insertion or replacement.
+     * @return An {@link Insert} object.
+     */
     public <T> Insert<T> prepareInsert() {
         Insert<T> insert = new Insert<T>(getHandle(true));
         insert.autoInvalidateHandle = autoInvalidateHandle();
@@ -95,6 +131,10 @@ public abstract class HandleORMOperation extends HandleOperation{
         return insert;
     }
 
+    /**
+     * Generate a {@link Update} to do an update.
+     * @return An {@link Update} object.
+     */
     public <T> Update<T> prepareUpdate() {
         Update<T> update = new Update<T>(getHandle(true));
         update.autoInvalidateHandle = autoInvalidateHandle();
@@ -102,6 +142,10 @@ public abstract class HandleORMOperation extends HandleOperation{
         return update;
     }
 
+    /**
+     * Generate a {@link Select} to do an object selection.
+     * @return An {@link Select} object.
+     */
     public <T> Select<T> prepareSelect() {
         Select<T> select = new Select<T>(getHandle(false));
         select.autoInvalidateHandle = autoInvalidateHandle();
@@ -109,6 +153,10 @@ public abstract class HandleORMOperation extends HandleOperation{
         return select;
     }
 
+    /**
+     * Generate a {@link Delete} to do a deletion.
+     * @return An {@link Delete} object.
+     */
     public Delete prepareDelete() {
         Delete delete = new Delete(getHandle(true));
         delete.autoInvalidateHandle = autoInvalidateHandle();
@@ -116,26 +164,75 @@ public abstract class HandleORMOperation extends HandleOperation{
         return delete;
     }
 
+    /**
+     * Execute inserting with one object on specific(or all) fields.
+     * @param object The object to insert.
+     * @param fields specific(or all) fields.
+     * @param tableName The table to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void insertObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with one object on specific(or all) fields.
+     * It will replace the original row while they have same primary key or row id.
+     * @param object The object to insert.
+     * @param fields specific(or all) fields.
+     * @param tableName The table to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void insertOrReplaceObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with one object on specific(or all) fields.
+     * It will ignore the object while there already exists the same primary key or row id in current table.
+     * @param object The object to insert.
+     * @param fields specific(or all) fields.
+     * @param tableName The table to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void insertOrIgnoreObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orIgnore().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on specific(or all) fields.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @param fields specific(or all) fields.
+     * @param tableName The table to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void insertObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on specific(or all) fields.
+     * It will replace the original row while they have same primary key or row id.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @param fields specific(or all) fields.
+     * @param tableName The table to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void insertOrReplaceObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on specific(or all) fields.
+     * It will ignore the object while there already exists the same primary key or row id in current table.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @param fields specific(or all) fields.
+     * @param tableName The table to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public <T> void insertOrIgnoreObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
         this.<T>prepareInsert().orIgnore().intoTable(tableName).values(objects).onFields(fields).execute();
     }

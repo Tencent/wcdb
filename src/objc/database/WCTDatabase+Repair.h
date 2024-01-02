@@ -45,7 +45,7 @@ WCDB_API @interface WCTDatabase(Repair)
 
 /**
  @brief Register database corruption notification callback.
- If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation, WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truely corrupted. Once confirmed, WCDB will notify you through the callback registered by this method. In the callback, you can delete the corrupted database or try to repair the database.
+ If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation, WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truly corrupted. Once confirmed, WCDB will notify you through the callback registered by this method. In the callback, you can delete the corrupted database or try to repair the database.
  @see   `-[WCTDatabase removeFiles]`
  @see   `-[WCTDatabase retrieve:]`
  @param onCorrupted The callback for database corruption.

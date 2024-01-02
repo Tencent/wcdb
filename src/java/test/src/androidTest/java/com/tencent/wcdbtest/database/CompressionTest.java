@@ -24,7 +24,10 @@
 package com.tencent.wcdbtest.database;
 
 import com.tencent.wcdb.base.Value;
+import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
+import com.tencent.wcdb.core.Handle;
+import com.tencent.wcdb.core.PausableTransaction;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdbtest.base.DBTestObject;

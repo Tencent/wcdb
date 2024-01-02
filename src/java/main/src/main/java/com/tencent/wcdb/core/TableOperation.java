@@ -44,34 +44,89 @@ public class TableOperation {
     String tableName = null;
     Database database = null;
 
+    /**
+     * Get table name.
+     */
     public String getTableName() {
         return tableName;
     }
 
+    /**
+     * Get related database.
+     */
     public Database getDatabase() {
         return database;
     }
 
+    /**
+     * Execute inserting with one row of values.
+     * @param row One row of value.
+     * @param columns Corresponding column of values.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertRow(Value[] row, Column[] columns) throws WCDBException {
         insertRows(Collections.singleton(row), columns);
     }
 
+    /**
+     * Execute inserting with multi rows of values.
+     * It will run embedded transaction while rows.size()>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction,
+     * otherwise it will be executed within the existing transaction.
+     * @param rows Multi rows of value.
+     * @param columns Corresponding column of values.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.None);
     }
 
+    /**
+     * Execute inserting with one row of values.
+     * It will replace the original row while they have same primary key or row id.
+     * @param row One row of value.
+     * @param columns Corresponding column of values.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceRow(Value[] row, Column[] columns) throws WCDBException {
         insertOrReplaceRows(Collections.singleton(row), columns);
     }
 
+    /**
+     * Execute inserting with multi rows of values.
+     * It will replace the original row while they have same primary key or row id.
+     * It will run embedded transaction while rows.size()>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction,
+     * otherwise it will be executed within the existing transaction.
+     * @param rows Multi rows of value.
+     * @param columns Corresponding column of values.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.Replace);
     }
 
+    /**
+     * Execute inserting with one row of values.
+     * It will ignore the row while there already exists the same primary key or row id in current table.
+     * @param row One row of value.
+     * @param columns Corresponding column of values.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreRow(Value[] row, Column[] columns) throws WCDBException {
         insertOrIgnoreRows(Collections.singleton(row), columns);
     }
 
+    /**
+     * Execute inserting with multi rows of values.
+     * It will ignore the row while there already exists the same primary key or row id in current table.
+     * It will run embedded transaction while rows.size()>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction,
+     * otherwise it will be executed within the existing transaction.
+     * @param rows Multi rows of value.
+     * @param columns Corresponding column of values.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.Ignore);
     }

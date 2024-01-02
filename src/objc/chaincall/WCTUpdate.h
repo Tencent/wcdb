@@ -33,7 +33,7 @@ WCDB_API @interface WCTUpdate<ObjectType> : WCTChainCall
 
 /**
  @brief The statement that `WCTUpdate` will execute.
- You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ You can customize this statement directly to implement the capabilities not provided by the following methods.
  */
 - (WCDB::StatementUpdate &)statement;
 

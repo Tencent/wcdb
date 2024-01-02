@@ -82,7 +82,8 @@ public:
 
     /**
      @brief Get the most recent error for current database in the current thread.
-            Since it is too cumbersome to get the error after every database operation, it‘s better to use monitoring interfaces to obtain database errors and print them to the log.
+     Since it is too cumbersome to get the error after every database operation,
+     it‘s better to use monitoring interfaces to obtain database errors and print them to the log.
      @see   `static Database::globalTraceError()`
      @see   `Database::traceError()`
      @return WCDB::Error
@@ -91,14 +92,18 @@ public:
 
     /**
      @brief Create a `WCDB::Handle` for current database.
-     `WCDB::Handle` is a wrapper for sqlite db handle of type `sqlite3*`, and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.
-     @note  All `WCDB::Handle` created by the current database in the current thread will share the same sqlite db handle internally, so it can avoid the deadlock between different sqlite db handles in some extreme cases.
+     `WCDB::Handle` is a wrapper for sqlite db handle of type `sqlite3*`, 
+     and the sqlite db handle is lazy initialized and will not be actually generated until the first operation on current handle takes place.
+     @note  All `WCDB::Handle` created by the current database in the current thread will share the same sqlite db handle internally, 
+     so it can avoid the deadlock between different sqlite db handles in some extreme cases.
      @return A `WCDB::Handle` object.
      */
     Handle getHandle();
 
     /**
-     @brief Since WCDB is using lazy initialization, you can create an instance of `WCDB::Database` even the database can't open. So you can call this to check whether the database can be opened.
+     @brief Check whether the database can be opened.
+     Since WCDB is using lazy initialization, you can create an instance of `WCDB::Database` even the database can't open.
+     So you can call this to check whether the database can be opened.
      @return False if an error occurs during sqlite db handle initialization.
      */
     bool canOpen() const;
@@ -116,14 +121,16 @@ public:
 
     /**
      @brief close the database.
-            Since Multi-threaded operation is supported in WCDB, other operations in different thread can open the closed database. So this function can make sure database is closed in the "onClosed" block. All other operations will be blocked until this function returns.
+            Since Multi-threaded operation is supported in WCDB, other operations in different thread can open the closed database. 
+            So this function can make sure database is closed in the "onClosed" closure. All other operations will be blocked until this function returns.
             A close operation consists of 4 steps:
                 1. blockade, which blocks all other operations.
                 2. close, which waits until all sqlite db handles return and closes them.
                 3. onClosed, which trigger the callback.
-                4. unblokade, which unblocks all other opreations.
-            You can simply call close: to do all steps above or call these separately.
-            Since this function will wait until all sqlite db handles return, it may lead to deadlock in some bad practice. The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
+                4. unblokade, which unblocks all other operations.
+            You can simply call close() to do all steps above or call these separately.
+            Since this function will wait until all sqlite db handles return, it may lead to deadlock in some bad practice.
+            The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
                 1. You should not keep WCDB objects, including `WCDB::Handle`, `WCDB::PreparedStatement`, `WCDB::Insert`, `WCDB::Delete`, `WCDB::Update`, `WCDB::Select`, `WCDB::MultiSelect`. These objects should not be kept. You should get them, use them, then release them right away.
                 2. WCDB objects may not be out of its' scope.
                 The best practice is to call close: in sub-thread and display a loading animation in main thread.
@@ -234,13 +241,13 @@ public:
                     sql.data());
          });
      
-     @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+     @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
      */
     static void globalTracePerformance(PerformanceNotification trace);
 
     /**
      @brief You can register a tracer to monitor the performance of all SQLs executed in the current database.
-     @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+     @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
      @param trace closure
      @see `PerformanceNotification`
      */
@@ -277,7 +284,7 @@ public:
              printf("Excution info %s", info.data());
          });
      
-     @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+     @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
      @see `SQLNotification`
      @param trace closure
      */
@@ -286,7 +293,7 @@ public:
     /**
      @brief You can register a tracer to monitor the execution of all SQLs executed in the current database.
      @note  You should register trace before all db operations.
-     @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+     @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
      @param trace trace
      @see `SQLNotification`
      */
@@ -296,8 +303,8 @@ public:
      @brief Enable to collect more SQL execution information in SQL tracer.
      @note  The detailed execution information of sql will include all bind parameters, step counts of `SELECT` statement,
         last inserted rowid of `INSERT` statement, changes of `UPDATE` and `DELETE` statements.
-        These informations will be returned in the last parameter of `SQLNotification`.
-     @warning Collecting these informations will significantly reduce the performance of wcdb,
+        These infomation will be returned in the last parameter of `SQLNotification`.
+     @warning Collecting these infomation will significantly reduce the performance of WCDB,
         please enable it only when necessary, and disable it when unnecessary.
      @see `SQLNotification`
      @param enable enable or not.
@@ -377,7 +384,10 @@ public:
 
     /**
      @brief Move all database-related files to another directory safely.
-     @warning Since file operation is not atomic, There may be some accidents during this period. For example, app may crash while db file is moved to destination and wal file is not. Then none of destination and source contains the whole data. This interface can make sure all of your data is in source or destination.
+     @warning Since file operation is not atomic, There may be some accidents during this period. 
+     For example, app may crash while db file is moved to destination and wal file is not.
+     Then none of destination and source contains the whole data.
+     This interface can make sure all of your data is in source or destination.
      @param directory destination
      @return True if all files are moved.
      */
@@ -407,7 +417,7 @@ public:
 
     /**
      @brief Setup tokenizer with name for current database.
-     It's recomemded to use the builtin tokenizers defined in `FTSConst.h`.
+     It's recommended to use the builtin tokenizers defined in `FTSConst.h`.
      @Note  You can set up the built-in tokenizers of sqlite and the tokenizers implemented by WCDB directly. If you want to use your custom tokenizer, you should firstly register it through `static Database::registerTokenizer()`.
      @see   `static Database::registerTokenizer()`
      */
@@ -520,7 +530,10 @@ public:
 
     /**
      @brief Register database corruption notification callback.
-     If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation, WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truely corrupted. Once confirmed, WCDB will notify you through the callback registered by this function. In the callback, you can delete the corrupted database or try to repair the database.
+     If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation, 
+     WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truly corrupted.
+     Once confirmed, WCDB will notify you through the callback registered by this function.
+     In the callback, you can delete the corrupted database or try to repair the database.
      @see   `Database::removeFiles()`
      @see   `Database::retrieve()`
      @param onCorrupted The callback for database corruption.
@@ -543,7 +556,8 @@ public:
 
     /**
      @brief Enable database to automatically backup itself after there are updates.
-     The backup content mainly includes the SQL statements related to table creation and all leaf page numbers of each table in database. And the backup file name is the database file name plus "-first.material" and "-last.material" suffixes.
+     The backup content mainly includes the SQL statements related to table creation and all leaf page numbers of each table in database. 
+     And the backup file name is the database file name plus "-first.material" and "-last.material" suffixes.
      @note  Auto-backup do not degrade IO performance of the database.
      @param flag to enable auto-backup.
      */
@@ -563,7 +577,8 @@ public:
 
     /**
      @brief Set a filter to tell which table should be backed up.
-     The filter will be called for every table in database. If there are some tables that do not need to be backed up, return false when these table names are passed into the filter.
+     The filter will be called for every table in database. 
+     If there are some tables that do not need to be backed up, return false when these table names are passed into the filter.
      @param tableShouldBeBackedUp block.
      @see   `BackupFilter`
      */
@@ -571,7 +586,9 @@ public:
 
     /**
      @brief Move the current database to a temporary directory and create a new database at current path.
-     This method is designed for conditions where the database is corrupted and cannot be repaired temporarily. It can deposit the corrupted database to a new location and create a temporary database for the user. The contents of the deposited database will be restored when you recover the database.
+     This method is designed for conditions where the database is corrupted and cannot be repaired temporarily.
+     It can deposit the corrupted database to a new location and create a temporary database for the user.
+     The contents of the deposited database will be restored when you recover the database.
      @note  This function can be called multiple times without loss of data.
      @return True if new database is successfully created.
      */
@@ -598,9 +615,11 @@ public:
 
     /**
      @brief Recover data from a corruped db.
-     If there is a valid backup of this database, most of the uncorrupted data can be recovered, otherwise WCDB will try to read all the data that can still be accessed, starting from the first page of the database.
+     If there is a valid backup of this database, most of the uncorrupted data can be recovered, 
+     otherwise WCDB will try to read all the data that can still be accessed, starting from the first page of the database.
      In the extreme case where this database is not backed up and the first page is corrupted, no data can be recovered.
-     @warning Since repairing a database requires reading all uncorrupted data and writing them to a new database, it may take a lot of time to finish the job. During this period, you'd better display a loading view on the screen and present the processing percentage.
+     @warning Since repairing a database requires reading all uncorrupted data and writing them to a new database, it may take a lot of time to finish the job. 
+     During this period, you'd better display a loading view on the screen and present the processing percentage.
      @param onProgressUpdated block.
      @see   `ProgressUpdateCallback`
      @return Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
@@ -626,7 +645,9 @@ public:
     /**
      @brief Set cipher key for a database.
      For an encrypted database, you must call it before all other operation.
-     The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. So for an existing database created by other database framework, you should set it to 1024. Otherwise, you'd better to use cipher page size with 4096 or simply call setCipherKey: interface to get better performance.
+     The cipher page size defaults to 4096 in WCDB, but it defaults to 1024 in other databases. 
+     So for an existing database created by other database framework, you should set it to 1024.
+     Otherwise, you'd better to use cipher page size with 4096 or simply call setCipherKey: interface to get better performance.
      
      @note  If your database is created with the default configuration of WCDB 1.0.x, please set cipherVersion to `CipherVersion::Version3`.
      
@@ -712,14 +733,19 @@ public:
     } MigrationInfo;
 
     /**
-     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `WCDB::Database::MigrationInfo` to empty string.
+     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, 
+     mainly including creating a new table, reading and writing a table, and starting to migrate a new table.
+     If the current table does not need to migrate data, you need to set the sourceTable in `WCDB::Database::MigrationInfo` to empty string.
      */
     typedef std::function<void(MigrationInfo &)> TableFilter;
 
     /**
      @brief Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.
-     Once configured, you can treat the target table as if it already has all the data of the source table, and can read and write these data through the target table. WCDB will internally convert your CRUD operations on the target table into the CRUD operations on both the target table and the source table appropriately. You neither need to be aware of the existence of the source table, nor care about the progress of data migration.
-     @warning  The column definition of the target table must be exactly the same as the column definition of the source table. The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before excuting any statements on current database.
+     Once configured, you can treat the target table as if it already has all the data of the source table, and can read and write these data through the target table. 
+     WCDB will internally convert your CRUD operations on the target table into the CRUD operations on both the target table and the source table appropriately.
+     You neither need to be aware of the existence of the source table, nor care about the progress of data migration.
+     @warning  The column definition of the target table must be exactly the same as the column definition of the source table. 
+     The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before executing any statements on current database.
      @note  If the source table is in the current database, you can set sourcePath to empty string.
      @note  If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete. After migration, source tables will be dropped.
      @see   `MigrationFilter`
@@ -729,7 +755,8 @@ public:
                       const TableFilter &filter);
 
     /**
-     @brief Manually spend about 0.01 sec. to migrate data. You can call this function periodically until all data is migrated.
+     @brief Manually spend about 0.01 sec. to migrate data. 
+     You can call this function periodically until all data is migrated.
      @return True if no error occurred.
      */
     bool stepMigration();
@@ -741,12 +768,15 @@ public:
     void enableAutoMigration(bool flag);
 
     /**
-     Triggered when a table or a database is migrated completely. When a table is migrated successfully, tableInfo will carry the information of the table. When a database is migrated, tableInfo has no value.
+     Triggered when a table or a database is migrated completely. 
+     When a table is migrated successfully, tableInfo will carry the information of the table.
+     When a database is migrated, tableInfo has no value.
      */
     typedef std::function<void(Database &database, Optional<MigrationInfo> tableInfo)> MigratedCallback;
 
     /**
-     @brief Register a callback for migration notification. The callback will be called when each table completes the migration.
+     @brief Register a callback for migration notification. 
+     The callback will be called when each table completes the migration.
      @param onMigrated closure
      @see   `MigratedCallback`
      */
@@ -777,12 +807,12 @@ public:
         void addZSTDNormalCompressField(const Field &field);
 
         /**
-         @brief Configure to compress all data in the specified column with a registed zstd dict.
+         @brief Configure to compress all data in the specified column with a registered zstd dict.
          */
         void addZSTDDictCompressProperty(const Field &field, DictId dictId);
 
         /**
-         @brief Configure to compress all data in the specified column with multi registed zstd dict.
+         @brief Configure to compress all data in the specified column with multi registered zstd dict.
          Which dict to use when compressing is based on the value of the specified matching column.
          @note You can use `DictDefaultMatchValue` to specify a default dict.
          @warning The matching column must be an integer column.
@@ -819,7 +849,7 @@ public:
     static Optional<Data> trainDict(const std::vector<Data> &datas, DictId dictId);
 
     /**
-     @brief Register a zstd dict in to wcdb.
+     @brief Register a zstd dict in to WCDB.
      @Note You must register a dict before using it.
      @param dict dict data.
      @param dictId id of the dict. It can not be zero.
@@ -838,7 +868,7 @@ public:
      @brief Configure which tables in the current database need to compress data.
      Once configured, newly written data will be compressed immediately and synchronously,
      and you can use `Database::stepCompression()` and `Database::enableAutoCompression()` to compress existing data.
-     @warning  You need to use this method to configure the compression before excuting any statements on current database.
+     @warning  You need to use this method to configure the compression before executing any statements on current database.
      @see   `Database::CompressionFilter`
      */
     void setCompression(const CompressionFilter &filter);
@@ -872,7 +902,8 @@ public:
     typedef std::function<void(Database &database, Optional<StringView> tableName)> CompressedCallback;
 
     /**
-     @brief Register a callback for compression notification. The callback will be called when each table completes the compression.
+     @brief Register a callback for compression notification. 
+     The callback will be called when each table completes the compression.
      @see   `Database::CompressedCallback`
      */
     void setNotificationWhenCompressd(const CompressedCallback &onCompressd);

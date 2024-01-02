@@ -36,41 +36,81 @@ public class Delete extends ChainCall<StatementDelete>{
         statement = new StatementDelete();
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param table The name of the table to delete data from.
+     * @return this
+     */
     public Delete fromTable(String table) {
         statement.deleteFrom(table);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param condition condition
+     * @return this.
+     */
     public Delete where(Expression condition) {
         statement.where(condition);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param orders order list
+     * @return this.
+     */
     public Delete orderBy(OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param count limit count.
+     * @return this.
+     */
     public Delete limit(long count) {
         statement.limit(count);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param count limit expression.
+     * @return this.
+     */
     public Delete limit(ExpressionConvertible count) {
         statement.limit(count);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param offset offset number.
+     * @return this.
+     */
     public Delete offset(long offset) {
         statement.offset(offset);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param offset offset expression.
+     * @return this.
+     */
     public Delete offset(ExpressionConvertible offset) {
         statement.offset(offset);
         return this;
     }
 
+    /**
+     * Execute the delete SQL.
+     * @return this.
+     * @throws WCDBException if any error occurs.
+     */
     public Delete execute() throws WCDBException {
         try {
             handle.execute(statement);

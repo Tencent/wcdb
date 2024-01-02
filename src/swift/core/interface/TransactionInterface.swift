@@ -77,7 +77,7 @@ public protocol TransactionInterface {
     /// This process will be repeated until the second parameter of the block is specified as true, or some error occurs during the transaction.
     ///
     ///     try self.database.run(pausableTransaction: { (handle, stop, isNewTransaction) in
-    ///         if (isNewTraction) {
+    ///         if (isNewTransaction) {
     ///             // Do some initialization for new transaction.
     ///         }
     ///

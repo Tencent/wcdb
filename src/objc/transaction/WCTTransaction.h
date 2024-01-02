@@ -75,11 +75,15 @@ typedef BOOL (^WCTTransactionBlockForOneLoop)(WCTHandle* /*handle*/, BOOL* /*sto
 
 /**
  @brief Run a pausable transaction in block.
- Firstly, WCDB will begin a transaction and call the block. After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction. If not, it will call the block again; if it is, it will temporarily commit the current transaction. Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block. This process will be repeated until the second parameter of the block is specified as YES, or some error occurs during the transaction.
+ Firstly, WCDB will begin a transaction and call the block. 
+ After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction.
+ If not, it will call the block again; if it is, it will temporarily commit the current transaction.
+ Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block.
+ This process will be repeated until the second parameter of the block is specified as true, or some error occurs during the transaction.
  You can use pausable transaction to do some long term database operations, such as data cleaning or data migration, and avoid to block the main thread.
  
-     BOOL allCommited = [database runPausableTransactionWithOneLoop:^BOOL(WCTHandle *handle, BOOL *stop, BOOL isNewTraction) {
-         if(isNewTraction) {
+     BOOL allCommited = [database runPausableTransactionWithOneLoop:^BOOL(WCTHandle *handle, BOOL *stop, BOOL isNewTransaction) {
+         if(isNewTransaction) {
              // Do some initialization for new transaction.
          }
      

@@ -34,7 +34,7 @@ WCDB_API @interface WCTInsert<ObjectType> : WCTChainCall
 
 /**
  @brief The statement that `WCTInsert` will execute.
- You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ You can customize this statement directly to implement the capabilities not provided by the following methods.
  */
 - (WCDB::StatementInsert &)statement;
 
@@ -65,14 +65,14 @@ WCDB_API @interface WCTInsert<ObjectType> : WCTChainCall
 - (instancetype)onProperties:(const WCTProperties &)properties;
 
 /**
- @brief Inset an array of objects.
+ @brief Insert an array of objects.
  @param objects Objects to be inserted into table.
  @return self.
  */
 - (instancetype)values:(NSArray<ObjectType> *)objects;
 
 /**
- @brief Inset one object.
+ @brief Insert one object.
  @param object Object to be inserted into table.
  @return self.
  */

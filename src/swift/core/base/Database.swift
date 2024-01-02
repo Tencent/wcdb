@@ -417,7 +417,7 @@ public extension Database {
     ///         print("The handle with id \(handleId) took \(info.costInNanoseconds) nanoseconds to execute \(sql)")
     ///     }
     ///
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global preformance trace.
     ///
@@ -440,7 +440,7 @@ public extension Database {
     }
 
     /// You can register a reporter to monitor all errors of current database.
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable preformance trace.
     func trace(ofPerformance trace: @escaping PerformanceTracer) {
@@ -479,7 +479,7 @@ public extension Database {
     ///         print("Execution info \(info)")
     ///     }
     ///
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global sql trace.
     static func globalTraceSQL(_ trace: @escaping SQLTracer) {
@@ -500,7 +500,7 @@ public extension Database {
     }
 
     /// You can register a tracer to monitor the execution of all SQLs executed in the current database.
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable sql trace.
     func traceSQL(_ trace: @escaping SQLTracer) {
@@ -525,9 +525,9 @@ public extension Database {
     /// The detailed execution information of sql will include all bind parameters,
     /// step counts of `SELECT` statement, last inserted rowid of `INSERT` statement,
     /// changes of `UPDATE` and `DELETE` statements.
-    /// These informations will be returned in the last parameter of `SQLTracer`.
+    /// These infomation will be returned in the last parameter of `SQLTracer`.
     ///
-    /// Note That collecting these informations will significantly reduce the performance of wcdb,
+    /// Note That collecting these infomation will significantly reduce the performance of WCDB,
     /// please enable it only when necessary, and disable it when unnecessary.
     ///
     /// - Parameter enable: enable or not.
@@ -760,7 +760,7 @@ public extension Database {
     typealias OnCorrupted = (_ corruptedDatabase: Database) -> Void
     /// You can register a notification callback for database corruption.
     /// If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation,
-    /// WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truely corrupted.
+    /// WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truly corrupted.
     /// Once confirmed, WCDB will notify you through the callback registered by this method.
     /// In the callback, you can delete the corrupted database or try to repair the database.
     ///
@@ -945,7 +945,7 @@ public extension Database {
     /// You neither need to be aware of the existence of the source table, nor care about the progress of data migration.
     ///
     /// The column definition of the target table must be exactly the same as the column definition of the source table.
-    /// The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before excuting any statements on current database.
+    /// The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before executing any statements on current database.
     ///
     /// If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete.
     /// After migration, source tables will be dropped.
@@ -1140,7 +1140,7 @@ public extension Database {
         }
     }
 
-    /// Register a zstd dict in to wcdb.
+    /// Register a zstd dict in to WCDB.
     /// You must register a dict before using it.
     ///
     /// - Parameter dict: dict data.
@@ -1167,7 +1167,7 @@ public extension Database {
             }
         }
 
-        // Configure to compress all data in the specified column with a registed zstd dict.
+        // Configure to compress all data in the specified column with a registered zstd dict.
         public func addZSTDDictCompress(to property: PropertyConvertible, withDict id: DictId) {
             let column = property.asColumn()
             withExtendedLifetime(column) {
@@ -1175,7 +1175,7 @@ public extension Database {
             }
         }
 
-        /// Configure to compress all data in the specified column with multi registed zstd dict.
+        /// Configure to compress all data in the specified column with multi registered zstd dict.
         /// Which dict to use when compressing is based on the value of the specified matching column.
         /// You can use `DictDefaultMatchValue` to specify a default dict.
         ///

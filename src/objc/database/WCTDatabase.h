@@ -73,7 +73,7 @@ WCDB_API @interface WCTDatabase : NSObject
             1. blockade, which blocks all other operations.
             2. close, which waits until all sqlite db handles return and closes them.
             3. onClosed, which trigger the callback.
-            4. unblokade, which unblocks all other opreations.
+            4. unblokade, which unblocks all other operations.
         You can simply call close: to do all steps above or call these separately.
         Since this method will wait until all sqlite db handles return, it may lead to deadlock in some bad practice. The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
             1. You should not keep WCDB objects, including `WCTHandle`, `WCTPreparedStatement`, `WCTInsert`, `WCTDelete`, `WCTUpdate`, `WCTSelect`, `WCTMultiSelect`. These objects should not be kept. You should get them, use them, then release them(set to nil) right away.
