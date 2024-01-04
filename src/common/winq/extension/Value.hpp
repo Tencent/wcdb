@@ -26,6 +26,9 @@
 #include "ColumnType.hpp"
 #include "ValueArray.hpp"
 #include "WCDBOptional.hpp"
+#if defined(__cplusplus) && __cplusplus > 201402L
+#include <optional>
+#endif
 
 namespace WCDB {
 

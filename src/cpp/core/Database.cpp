@@ -32,7 +32,7 @@
 #include "DBOperationNotifier.hpp"
 #include "FileManager.hpp"
 #include "InnerDatabase.hpp"
-#include "Version.h"
+#include "WCDBVersion.h"
 #include <errno.h>
 #include <stdlib.h>
 #ifndef _WIN32

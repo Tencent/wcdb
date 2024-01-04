@@ -308,7 +308,7 @@
 		037C3AB12897E33600328EC8 /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
 		037C3AB22897E33600328EC8 /* StatementCreateTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBC6217DFADC006E9E73 /* StatementCreateTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3AB32897E33600328EC8 /* ForeignKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB8B217DFADC006E9E73 /* ForeignKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		037C3AB62897E33600328EC8 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
+		037C3AB62897E33600328EC8 /* WCDBVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* WCDBVersion.h */; };
 		037C3AB82897E33600328EC8 /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD6217DFADC006E9E73 /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3AB92897E33600328EC8 /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		037C3ABF2897E33600328EC8 /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
@@ -955,7 +955,7 @@
 		2316D9432105D19500707AFC /* PageBasedFileHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */; };
 		2316D9452105D19500707AFC /* PageBasedFileHandle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */; };
 		2316D94B2105D21500707AFC /* LRUCache.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 2316D9482105D21500707AFC /* LRUCache.hpp */; };
-		23176A8C21B912B10051ACF9 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
+		23176A8C21B912B10051ACF9 /* WCDBVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* WCDBVersion.h */; };
 		23176A9B21BA7D460051ACF9 /* WCTDatabase+Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23176A9C21BA7D460051ACF9 /* WCTDatabase+Version.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */; };
 		231C35EE21DE09E800B5D3D2 /* Exiting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 231C35EC21DE09E400B5D3D2 /* Exiting.cpp */; };
@@ -1994,7 +1994,7 @@
 		7521D8C0291E9ABB009642EF /* StatementCreateTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBC6217DFADC006E9E73 /* StatementCreateTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8C1291E9ABB009642EF /* ForeignKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB8B217DFADC006E9E73 /* ForeignKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8C2291E9ABB009642EF /* WCTTryDisposeGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2372E05821A2633800051D9A /* WCTTryDisposeGuard.h */; };
-		7521D8C3291E9ABB009642EF /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
+		7521D8C3291E9ABB009642EF /* WCDBVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* WCDBVersion.h */; };
 		7521D8C5291E9ABB009642EF /* WCTHandle+Convenient.h in Headers */ = {isa = PBXBuildFile; fileRef = 23A3CFB3205FB1A800692F94 /* WCTHandle+Convenient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8C6291E9ABB009642EF /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD6217DFADC006E9E73 /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521D8C8291E9ABB009642EF /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2679,7 +2679,7 @@
 		7521DC55291EA349009642EF /* CustomConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23F70FD520A07CEC00CCE3CD /* CustomConfig.hpp */; };
 		7521DC56291EA349009642EF /* StatementCreateTable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBC6217DFADC006E9E73 /* StatementCreateTable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC57291EA349009642EF /* ForeignKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB8B217DFADC006E9E73 /* ForeignKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7521DC59291EA349009642EF /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* Version.h */; };
+		7521DC59291EA349009642EF /* WCDBVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 23176A8B21B912B10051ACF9 /* WCDBVersion.h */; };
 		7521DC5C291EA349009642EF /* StatementDropTrigger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDBD6217DFADC006E9E73 /* StatementDropTrigger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC5E291EA349009642EF /* FTSFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23EEDB74217DFADC006E9E73 /* FTSFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7521DC60291EA349009642EF /* WalRelated.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23593B7C20D3ADF80058B416 /* WalRelated.hpp */; };
@@ -4060,7 +4060,7 @@
 		2316D9412105D19500707AFC /* PageBasedFileHandle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PageBasedFileHandle.cpp; sourceTree = "<group>"; };
 		2316D9422105D19500707AFC /* PageBasedFileHandle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PageBasedFileHandle.hpp; sourceTree = "<group>"; };
 		2316D9482105D21500707AFC /* LRUCache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LRUCache.hpp; sourceTree = "<group>"; };
-		23176A8B21B912B10051ACF9 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
+		23176A8B21B912B10051ACF9 /* WCDBVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDBVersion.h; sourceTree = "<group>"; };
 		23176A9921BA7D460051ACF9 /* WCTDatabase+Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WCTDatabase+Version.h"; sourceTree = "<group>"; };
 		23176A9A21BA7D460051ACF9 /* WCTDatabase+Version.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "WCTDatabase+Version.mm"; sourceTree = "<group>"; };
 		231C35EA21DE090500B5D3D2 /* Exiting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Exiting.hpp; sourceTree = "<group>"; };
@@ -6430,7 +6430,7 @@
 			children = (
 				23B4DCDF2112B03C00954D71 /* AsyncQueue.cpp */,
 				23B4DCE02112B03C00954D71 /* AsyncQueue.hpp */,
-				23176A8B21B912B10051ACF9 /* Version.h */,
+				23176A8B21B912B10051ACF9 /* WCDBVersion.h */,
 				23EEDD5E217DFB16006E9E73 /* Enum.hpp */,
 				23EEDD5F217DFB17006E9E73 /* Shadow.hpp */,
 				239776D0202AF2E2000A681C /* Macro.h */,
@@ -8150,7 +8150,7 @@
 				037C3AB22897E33600328EC8 /* StatementCreateTable.hpp in Headers */,
 				754212302B124CFF00A2FF4D /* Compression.hpp in Headers */,
 				037C3AB32897E33600328EC8 /* ForeignKey.hpp in Headers */,
-				037C3AB62897E33600328EC8 /* Version.h in Headers */,
+				037C3AB62897E33600328EC8 /* WCDBVersion.h in Headers */,
 				037C3AB82897E33600328EC8 /* StatementDropTrigger.hpp in Headers */,
 				037C3AB92897E33600328EC8 /* FTSFunction.hpp in Headers */,
 				037C3ABF2897E33600328EC8 /* WalRelated.hpp in Headers */,
@@ -8482,7 +8482,7 @@
 				23EEDCC2217DFADC006E9E73 /* StatementCreateTable.hpp in Headers */,
 				23EEDC88217DFADC006E9E73 /* ForeignKey.hpp in Headers */,
 				2372E05A21A2633800051D9A /* WCTTryDisposeGuard.h in Headers */,
-				23176A8C21B912B10051ACF9 /* Version.h in Headers */,
+				23176A8C21B912B10051ACF9 /* WCDBVersion.h in Headers */,
 				03AFD34328B8B21B00EF5E56 /* Field.hpp in Headers */,
 				23A3CFB5205FB1A800692F94 /* WCTHandle+Convenient.h in Headers */,
 				75A60AB329345A38009C1B3C /* Cipher.hpp in Headers */,
@@ -8954,7 +8954,7 @@
 				754212042B123E3200A2FF4D /* ScalarFunctionTemplate.hpp in Headers */,
 				7521D8C1291E9ABB009642EF /* ForeignKey.hpp in Headers */,
 				7521D8C2291E9ABB009642EF /* WCTTryDisposeGuard.h in Headers */,
-				7521D8C3291E9ABB009642EF /* Version.h in Headers */,
+				7521D8C3291E9ABB009642EF /* WCDBVersion.h in Headers */,
 				756F7F692B2CA4B5002AEA0A /* FactoryVacuum.hpp in Headers */,
 				7521D8C5291E9ABB009642EF /* WCTHandle+Convenient.h in Headers */,
 				758E7ECB2B1B423200319991 /* WCTCompressionInfo+Private.h in Headers */,
@@ -9332,7 +9332,7 @@
 				7521DC55291EA349009642EF /* CustomConfig.hpp in Headers */,
 				7521DC56291EA349009642EF /* StatementCreateTable.hpp in Headers */,
 				7521DC57291EA349009642EF /* ForeignKey.hpp in Headers */,
-				7521DC59291EA349009642EF /* Version.h in Headers */,
+				7521DC59291EA349009642EF /* WCDBVersion.h in Headers */,
 				7521DC5C291EA349009642EF /* StatementDropTrigger.hpp in Headers */,
 				7521DC5E291EA349009642EF /* FTSFunction.hpp in Headers */,
 				7521DC60291EA349009642EF /* WalRelated.hpp in Headers */,
