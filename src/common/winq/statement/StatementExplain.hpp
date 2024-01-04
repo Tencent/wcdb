@@ -33,7 +33,7 @@ class WCDB_API StatementExplain final
 public:
     using SpecifiedSyntax<Syntax::ExplainSTMT, Statement>::SpecifiedSyntax;
     StatementExplain();
-    ~StatementExplain() override final;
+    ~StatementExplain() override;
 
     StatementExplain& explain(const Statement& statement);
     StatementExplain& explainQueryPlan(const Statement& statement);

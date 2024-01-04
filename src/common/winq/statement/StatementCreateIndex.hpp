@@ -33,7 +33,7 @@ class WCDB_API StatementCreateIndex final
 public:
     using SpecifiedSyntax<Syntax::CreateIndexSTMT, Statement>::SpecifiedSyntax;
     StatementCreateIndex();
-    ~StatementCreateIndex() override final;
+    ~StatementCreateIndex() override;
 
     StatementCreateIndex& createIndex(const UnsafeStringView& index);
     StatementCreateIndex& schema(const Schema& schema);

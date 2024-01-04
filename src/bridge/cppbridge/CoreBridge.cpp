@@ -25,6 +25,7 @@
 #include "CoreBridge.h"
 #include "Core.hpp"
 #include "ObjectBridge.hpp"
+#include "ThreadedErrors.hpp"
 
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path)
 {
@@ -66,6 +67,12 @@ void WCDBCoreReleaseSQLiteMemory(int bytes)
 void WCDBCoreSetSoftHeapLimit(long long limit)
 {
     WCDB::Core::shared().setSoftHeapLimit(limit);
+}
+
+CPPError WCDBCoreGetThreadedError()
+{
+    const WCDB::Error& error = WCDB::ThreadedErrors::shared().getThreadedError();
+    return WCDBCreateUnmanagedCPPObject(CPPError, &error);
 }
 
 void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,

@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API Pragma final : public Identifier {
 #pragma mark - Lang
 public:
-    ~Pragma() override final;
+    ~Pragma() override;
 
     StringView name;
 

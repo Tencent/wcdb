@@ -32,7 +32,7 @@ namespace WCDB {
 class DecompressFunction : public AbstractScalarFunctionObject {
 public:
     DecompressFunction(void* userContext, ScalarFunctionAPI& apiObj);
-    virtual ~DecompressFunction() override final;
+    virtual ~DecompressFunction() override;
     virtual void process(ScalarFunctionAPI& apiObj) override final;
 
 private:

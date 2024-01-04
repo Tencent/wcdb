@@ -45,26 +45,81 @@ public abstract class HandleOperation extends CppObject {
 
     abstract boolean autoInvalidateHandle();
 
+    /**
+     * Execute inserting with one row of values.
+     * @param row One row of value.
+     * @param columns Corresponding column of values.
+     * @param tableName The table to insert value.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
         insertRows(Collections.singleton(row), columns, tableName);
     }
 
+    /**
+     * Execute inserting with multi rows of values.
+     * It will run embedded transaction while rows.size()>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction,
+     * otherwise it will be executed within the existing transaction.
+     * @param rows Multi rows of value.
+     * @param columns Corresponding column of values.
+     * @param tableName The table to insert value.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertRows(Collection<Value[]> rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.None);
     }
 
+    /**
+     * Execute inserting with one row of values.
+     * It will replace the original row while they have same primary key or row id.
+     * @param row One row of value.
+     * @param columns Corresponding column of values.
+     * @param tableName The table to insert value.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
         insertOrReplaceRows(Collections.singleton(row), columns, tableName);
     }
 
+    /**
+     * Execute inserting with multi rows of values.
+     * It will replace the original row while they have same primary key or row id.
+     * It will run embedded transaction while rows.size()>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction,
+     * otherwise it will be executed within the existing transaction.
+     * @param rows Multi rows of value.
+     * @param columns Corresponding column of values.
+     * @param tableName The table to insert value.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceRows(Collection<Value[]> rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.Replace);
     }
 
+    /**
+     * Execute inserting with one row of values.
+     * It will ignore the row while there already exists the same primary key or row id in current table.
+     * @param row One row of value.
+     * @param columns Corresponding column of values.
+     * @param tableName The table to insert value.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreRow(Value[] row, Column[] columns, String tableName) throws WCDBException {
         insertOrIgnoreRows(Collections.singleton(row), columns, tableName);
     }
 
+    /**
+     * Execute inserting with multi rows of values.
+     * It will ignore the row while there already exists the same primary key or row id in current table.
+     * It will run embedded transaction while rows.size()>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction,
+     * otherwise it will be executed within the existing transaction.
+     * @param rows Multi rows of value.
+     * @param columns Corresponding column of values.
+     * @param tableName The table to insert value.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreRows(Collection<Value[]> rows, Column[] columns, String tableName) throws WCDBException {
         insertRows(rows, columns, tableName, ConflictAction.Ignore);
     }
@@ -942,6 +997,11 @@ public abstract class HandleOperation extends CppObject {
         return ret;
     }
 
+    /**
+     * Execute a statement directly.
+     * @param statement The statement to execute.
+     * @throws WCDBException if any error occurs.
+     */
     public void execute(Statement statement) throws WCDBException {
         Handle handle = getHandle(statement.isWriteStatement());
         WCDBException exception = null;
@@ -956,6 +1016,12 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
+    /**
+     * Execute a sql string directly.
+     * Note that you should no execute sql string on a migrating or compressing table.
+     * @param sql The sql string to execute.
+     * @throws WCDBException if any error occurs.
+     */
     public void execute(String sql) throws WCDBException {
         Handle handle = getHandle(false);
         WCDBException exception = null;
@@ -970,11 +1036,22 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
+    /**
+     * Check whether the current database has begun a transaction in the current thread with {@code sqlite3_get_autocommit}.
+     * @return True if current database has begun a transaction in the current thread.
+     * @throws WCDBException if any error occurs.
+     */
     public boolean isInTransaction() throws WCDBException{
         Handle handle = getHandle(false);
         return Handle.isInTransaction(handle.getCppHandle());
     }
 
+    /**
+     * Begin a transaction.
+     * Separate interface of {@link HandleOperation#runTransaction(Transaction)}
+     * You should call {@link HandleOperation#beginTransaction()}, {@link HandleOperation#commitTransaction()}, {@link HandleOperation#rollbackTransaction()} and all other operations in same thread.
+     * @throws WCDBException if any error occurs.
+     */
     public void beginTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
@@ -989,6 +1066,12 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
+    /**
+     * Commit current transaction.
+     * Separate interface of {@link HandleOperation#runTransaction(Transaction)}
+     * You should call {@link HandleOperation#beginTransaction()}, {@link HandleOperation#commitTransaction()}, {@link HandleOperation#rollbackTransaction()} and all other operations in same thread.
+     * @throws WCDBException if any error occurs.
+     */
     public void commitTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
@@ -1003,6 +1086,12 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
+    /**
+     * Rollback current transaction.
+     * Separate interface of {@link HandleOperation#runTransaction(Transaction)}
+     * You should call {@link HandleOperation#beginTransaction()}, {@link HandleOperation#commitTransaction()}, {@link HandleOperation#rollbackTransaction()} and all other operations in same thread.
+     * @throws WCDBException if any error occurs.
+     */
     public void rollbackTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         Handle.rollbackTransaction(handle.getCppHandle());
@@ -1011,6 +1100,11 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
+    /**
+     * Run a transaction in a closure. Transaction supports nesting.
+     * @param transaction The operation inside transaction.
+     * @throws WCDBException if any error occurs.
+     */
     public void runTransaction(Transaction transaction) throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
@@ -1025,6 +1119,39 @@ public abstract class HandleOperation extends CppObject {
         }
     }
 
+    /**
+     * Run a pausable transaction in a closure.
+     * Firstly, WCDB will begin a transaction and call the block.
+     * After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction.
+     * If not, it will call the block again; if it is, it will temporarily commit the current transaction.
+     * Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block.
+     * This process will be repeated until the second parameter of the block is specified as true, or some error occurs during the transaction.
+     * You can use pausable transaction to do some long term database operations, such as data cleaning or data migration, and avoid to block the main thread.
+     * <pre>
+     *     <code>
+     *         database.runPausableTransaction(new PausableTransaction() {
+     *             @Override
+     *             public boolean insideTransaction(Handle handle, boolean isNewTransaction) throws WCDBException {
+     *                 if(isNewTransaction) {
+     *                     // Do some initialization for new transaction.
+     *                 }
+     *
+     *                 // Perform a small amount of data processing.
+     *
+     *                 if( Error occurs ) {
+     *                     throws WCDBException;
+     *                 }
+     *                 if( All database operations are finished ) {
+     *                     return true;
+     *                 }
+     *                 return false;
+     *             }
+     *         });
+     *     </code>
+     * </pre>
+     * @param transaction The operation inside transaction.
+     * @throws WCDBException if any error occurs.
+     */
     public void runPausableTransaction(PausableTransaction transaction) throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;

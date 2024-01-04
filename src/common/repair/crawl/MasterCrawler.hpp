@@ -49,7 +49,7 @@ class MasterCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     MasterCrawler();
-    ~MasterCrawler() override final;
+    ~MasterCrawler() override;
 
 #pragma mark - Master
 public:

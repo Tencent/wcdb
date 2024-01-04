@@ -37,7 +37,7 @@ class AuxiliaryFunctionConfig final : public Config {
 public:
     AuxiliaryFunctionConfig(const UnsafeStringView& name,
                             const std::shared_ptr<AuxiliaryFunctionModules>& modules);
-    ~AuxiliaryFunctionConfig() override final;
+    ~AuxiliaryFunctionConfig() override;
 
     StringView name;
 

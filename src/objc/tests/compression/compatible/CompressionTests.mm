@@ -176,7 +176,7 @@
         } else {
             TestCaseAssertTrue(textCompressedTypes[1].numberValue.intValue == 4);
         }
-        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_text").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
+        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
         TestCaseAssertTrue(uncompressedTextCount.numberValue.intValue == 0);
         if (!self.compressTwoColumn) {
             return;
@@ -189,9 +189,31 @@
         } else {
             TestCaseAssertTrue(blobCompressedTypes[1].numberValue.intValue == 5);
         }
-        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
+        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
         TestCaseAssertTrue(uncompressedBlobCount.numberValue.intValue == 0);
     }];
+}
+
+- (void)testDisableCompressNewData
+{
+    self.compressionStatus = CompressionStatus_uncompressed;
+    [self.database disableCompresssNewData:YES];
+    [self doTestCompress:^{
+        NSArray* newObjects = [[Random shared] autoIncrementCompressionObjectWithCount:1000];
+        TestCaseAssertTrue([self.table insertObjects:newObjects]);
+
+        NSString* newContent = [[Random shared] englishString];
+        TestCaseAssertTrue([self.table updateProperty:CompressionTestObject.text toValue:newContent where:CompressionTestObject.textMatchId == 1]);
+
+        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
+        TestCaseAssertTrue(uncompressedTextCount.numberValue.intValue == 1000 + self.originObjects.count);
+        if (!self.compressTwoColumn) {
+            return;
+        }
+        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
+        TestCaseAssertTrue(uncompressedBlobCount.numberValue.intValue == 1000 + self.originObjects.count);
+    }];
+    [self.database disableCompresssNewData:NO];
 }
 
 - (void)testCompressDict
@@ -408,13 +430,13 @@
             TestCaseAssertTrue([self.database stepCompression]);
         } while (!self.database.isCompressed);
 
-        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_text").count()).from(self.anotherTable).where(WCDB::Column("WCDB_CT_text").isNull())];
+        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.anotherTable).where(WCDB::Column("WCDB_CT_text").isNull())];
         TestCaseAssertTrue(uncompressedTextCount.numberValue.intValue == 0);
         if (!self.compressTwoColumn) {
             return;
         }
 
-        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
+        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
         TestCaseAssertTrue(uncompressedBlobCount.numberValue.intValue == 0);
     }];
 }
@@ -440,7 +462,7 @@
             TestCaseAssertTrue([self.database stepCompression]);
         } while (!self.database.isCompressed);
 
-        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
+        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
         TestCaseAssertTrue(uncompressedBlobCount.numberValue.intValue == 0);
     }];
 }
@@ -463,12 +485,12 @@
         NSArray* originObjects = [self.uncompressTable getObjects];
         TestCaseAssertTrue([originObjects isEqualTo:objects]);
 
-        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_text").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
+        WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
         TestCaseAssertTrue(uncompressedTextCount != nil && uncompressedTextCount.numberValue.intValue == 0);
         if (!self.compressTwoColumn) {
             return;
         }
-        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
+        WCTValue* uncompressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").isNull())];
         TestCaseAssertTrue(uncompressedBlobCount != nil && uncompressedBlobCount.numberValue.intValue == 0);
     }];
 }

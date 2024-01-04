@@ -37,7 +37,7 @@ class OrderingTerm;
 class WCDB_API WindowDef final : public Identifier {
 #pragma mark - Lang
 public:
-    ~WindowDef() override final;
+    ~WindowDef() override;
 
     std::list<Expression> expressions;
     std::list<OrderingTerm> orderingTerms;

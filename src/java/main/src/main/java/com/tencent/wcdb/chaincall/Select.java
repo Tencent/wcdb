@@ -42,56 +42,112 @@ public class Select<T> extends ChainCall<StatementSelect> {
         statement = new StatementSelect();
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param fields The column results to be selected.
+     * @return
+     */
     public Select<T> select(Field<T>... fields) {
         this.fields = fields;
         statement.select(fields);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param condition condition.
+     * @return this.
+     */
     public Select<T> where(Expression condition) {
         statement.where(condition);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param order order term.
+     * @return this.
+     */
     public Select<T> orderBy(OrderingTerm order) {
         statement.orderBy(order);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param orders order list.
+     * @return this.
+     */
     public Select<T> orderBy(OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param count limit count.
+     * @return this.
+     */
     public Select<T> limit(long count) {
         statement.limit(count);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param count limit expression.
+     * @return this.
+     */
     public Select<T> limit(ExpressionConvertible count) {
         statement.limit(count);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param offset offset number.
+     * @return this.
+     */
     public Select<T> offset(long offset) {
         statement.offset(offset);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param offset offset expression.
+     * @return this.
+     */
     public Select<T> offset(ExpressionConvertible offset) {
         statement.offset(offset);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param tableName The name of the table to query data from.
+     * @return this.
+     */
     public Select<T> from(String tableName) {
         statement.from(tableName);
         return this;
     }
 
+    /**
+     * Get first selected object.
+     * @return a selected object.
+     * @throws WCDBException if any error occurs.
+     */
     public T firstObject() throws WCDBException {
         return firstObject(Field.getBindClass(fields));
     }
 
+    /**
+     * Get first selected object.
+     * @param cls A derived class of java orm class.
+     * @return The selected derived class object.
+     * @throws WCDBException if any error occurs.
+     */
     public <R extends T> R firstObject(Class<R> cls) throws WCDBException {
         R ret = null;
         PreparedStatement preparedStatement = null;
@@ -110,10 +166,21 @@ public class Select<T> extends ChainCall<StatementSelect> {
         return ret;
     }
 
+    /**
+     * Get all selected objects.
+     * @return A list of objects.
+     * @throws WCDBException if any error occurs.
+     */
     public List<T> allObjects() throws WCDBException {
         return allObjects(Field.getBindClass(fields));
     }
 
+    /**
+     * Get all selected objects.
+     * @param cls A derived class of java orm class.
+     * @return All selected derived class object.
+     * @throws WCDBException if any error occurs.
+     */
     public <R extends T> List<R> allObjects(Class<R> cls) throws WCDBException {
         List<R> ret;
         PreparedStatement preparedStatement = null;

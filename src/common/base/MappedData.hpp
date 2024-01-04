@@ -40,7 +40,7 @@ public:
     MappedData(MappedData&& other);
     MappedData& operator=(const MappedData& other);
     MappedData& operator=(MappedData&& other);
-    ~MappedData() override final;
+    ~MappedData() override;
 
     MappedData subdata(size_t size) const;
     MappedData subdata(offset_t offset, size_t size) const;

@@ -33,7 +33,7 @@ class WCDB_API CommonTableExpression final
 public:
     using SpecifiedSyntax<Syntax::CommonTableExpression, SQL>::SpecifiedSyntax;
     explicit CommonTableExpression(const UnsafeStringView& table);
-    ~CommonTableExpression() override final;
+    ~CommonTableExpression() override;
     CommonTableExpression();
     CommonTableExpression& column(const Column& column);
     CommonTableExpression& as(const StatementSelect& select);

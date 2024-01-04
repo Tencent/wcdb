@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API JoinConstraint final : public Identifier {
 #pragma mark - Lang
 public:
-    ~JoinConstraint() override final;
+    ~JoinConstraint() override;
 
     Optional<Expression> expression;
     std::list<Column> columns;

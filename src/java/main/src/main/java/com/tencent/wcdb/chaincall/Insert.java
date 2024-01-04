@@ -45,39 +45,74 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         statement = new StatementInsert();
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @return this.
+     */
     public Insert<T> orReplace() {
         hasConflictAction = true;
         statement.orReplace();
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @return this.
+     */
     public Insert<T> orIgnore() {
         hasConflictAction = true;
         statement.orIgnore();
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param table The name of the table to delete data from.
+     * @return this
+     */
     public Insert<T> intoTable(String table) {
         statement.insertInto(table);
         return this;
     }
 
+    /**
+     * WINQ interface for SQL.
+     * @param fields Do a partial insertion with the specific fields.
+     * @return this.
+     */
     public Insert<T> onFields(Field<T>... fields) {
         this.fields = fields;
         statement.columns(fields).valuesWithBindParameters(fields.length);
         return this;
     }
 
+    /**
+     * Insert an object.
+     * @param object The object to be inserted into table.
+     * @return this.
+     */
     public Insert<T> value(T object) {
         values = Collections.singleton(object);
         return this;
     }
 
+    /**
+     * Insert a batch of objects
+     * @param objects Objects to be inserted into table.
+     * @return this.
+     */
     public Insert<T> values(Collection<T> objects) {
         values = objects;
         return this;
     }
 
+    /**
+     * Execute the insert statement.
+     * Note that it will run embedded transaction while values.count>1.
+     * The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @return this.
+     * @throws WCDBException if no error occurs.
+     */
     public Insert<T> execute() throws WCDBException {
         if(values == null || values.size() == 0) {
             return this;
@@ -101,6 +136,10 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         return this;
     }
 
+    /**
+     * Get the rowid of the last inserted object.
+     * @return rowid.
+     */
     public long getLastInsertRowId() {
         return lastInsertRowId;
     }

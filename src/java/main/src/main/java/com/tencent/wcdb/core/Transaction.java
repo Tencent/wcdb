@@ -26,5 +26,11 @@ package com.tencent.wcdb.core;
 import com.tencent.wcdb.base.WCDBException;
 
 public interface Transaction {
+    /**
+     * Triggered when a new transaction is begun successfully.
+     * @param handle current handle of database.
+     * @return true to commit transaction.
+     * @throws WCDBException if any error occurs.
+     */
     boolean insideTransaction(Handle handle) throws WCDBException;
 }

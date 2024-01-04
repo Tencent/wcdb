@@ -38,7 +38,7 @@ class Page;
 class Cell final : public PagerRelated, public Initializeable {
 public:
     Cell(int pointer, Page *page, Pager *pager);
-    ~Cell() override final;
+    ~Cell() override;
 
     const Page &getPage() const;
 

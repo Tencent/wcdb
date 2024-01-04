@@ -32,7 +32,7 @@ namespace WCDB {
 class CipherHandle final : public InnerHandle, public Repair::CipherDelegate {
 public:
     CipherHandle();
-    ~CipherHandle() override final;
+    ~CipherHandle() override;
 
     bool execute(const Statement &statement) override final;
     bool setCipherKey(const UnsafeData &data) override final;

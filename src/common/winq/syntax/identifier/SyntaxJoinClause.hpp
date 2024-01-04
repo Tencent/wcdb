@@ -36,7 +36,7 @@ class JoinConstraint;
 class WCDB_API JoinClause final : public Identifier {
 #pragma mark - Lang
 public:
-    ~JoinClause() override final;
+    ~JoinClause() override;
 
     std::list<JoinOperator> joinOperators;
     std::list<TableOrSubquery> tableOrSubqueries;

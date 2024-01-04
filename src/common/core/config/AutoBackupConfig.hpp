@@ -42,7 +42,7 @@ public:
 class AutoBackupConfig final : public Config {
 public:
     AutoBackupConfig(const std::shared_ptr<AutoBackupOperator>& operator_);
-    ~AutoBackupConfig() override final;
+    ~AutoBackupConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
     bool uninvoke(InnerHandle* handle) override final;

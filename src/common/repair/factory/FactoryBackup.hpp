@@ -38,7 +38,7 @@ class FactoryBackup final : public FactoryRelated,
                             public BackupDelegateHolder {
 public:
     using FactoryRelated::FactoryRelated;
-    ~FactoryBackup() override final;
+    ~FactoryBackup() override;
     bool work(const UnsafeStringView& database, bool interruptible = false);
 
 protected:

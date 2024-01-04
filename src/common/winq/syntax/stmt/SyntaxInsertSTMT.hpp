@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API InsertSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~InsertSTMT() override final;
+    ~InsertSTMT() override;
 
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;

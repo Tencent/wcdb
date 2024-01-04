@@ -42,10 +42,17 @@ public class TableORMOperation<T> extends TableOperation {
         super();
     }
 
+    /**
+     * Get orm binding.
+     */
     public TableBinding<T> getBinding() {
         return binding;
     }
 
+    /**
+     * Generate a {@link Insert} to do an insertion or replacement.
+     * @return An {@link Insert} object.
+     */
     public Insert<T> prepareInsert() {
         Insert<T> insert = new Insert<T>(database.getHandle(true));
         insert.autoInvalidateHandle = true;
@@ -54,6 +61,10 @@ public class TableORMOperation<T> extends TableOperation {
         return insert;
     }
 
+    /**
+     * Generate a {@link Update} to do an update.
+     * @return An {@link Update} object.
+     */
     public Update<T> prepareUpdate() {
         Update<T> update = new Update<T>(database.getHandle(true));
         update.autoInvalidateHandle = true;
@@ -62,6 +73,10 @@ public class TableORMOperation<T> extends TableOperation {
         return update;
     }
 
+    /**
+     * Generate a {@link Select} to do an object selection.
+     * @return An {@link Select} object.
+     */
     public Select<T> prepareSelect() {
         Select<T> select = new Select<T>(database.getHandle(false));
         select.autoInvalidateHandle = true;
@@ -70,6 +85,10 @@ public class TableORMOperation<T> extends TableOperation {
         return select;
     }
 
+    /**
+     * Generate a {@link Delete} to do a deletion.
+     * @return An {@link Delete} object.
+     */
     public Delete prepareDelete() throws WCDBException {
         Delete delete = new Delete(database.getHandle(true));
         delete.autoInvalidateHandle = true;
@@ -78,50 +97,130 @@ public class TableORMOperation<T> extends TableOperation {
         return delete;
     }
 
+    /**
+     * Execute inserting with one object on all fields.
+     * @param object The object to insert..
+     * @throws WCDBException if any error occurs.
+     */
     public void insertObject(T object) throws WCDBException {
         prepareInsert().value(object).onFields(binding.allBindingFields()).execute();
     }
 
+    /**
+     * Execute inserting with one object on specific(or all) fields.
+     * @param object The object to insert.
+     * @param fields specific(or all) fields.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertObject(T object, Field<T>[] fields) throws WCDBException {
         prepareInsert().value(object).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with one object on all fields.
+     * It will replace the original row while they have same primary key or row id.
+     * @param object The object to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceObject(T object) throws WCDBException {
         prepareInsert().orReplace().value(object).onFields(binding.allBindingFields()).execute();
     }
 
+    /**
+     * Execute inserting with one object on specific(or all) fields.
+     * It will replace the original row while they have same primary key or row id.
+     * @param object The object to insert.
+     * @param fields specific(or all) fields.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceObject(T object, Field<T>[] fields) throws WCDBException {
         prepareInsert().orReplace().value(object).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with one object on all fields.
+     * It will ignore the object while there already exists the same primary key or row id in current table.
+     * @param object The object to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreObject(T object) throws WCDBException {
         prepareInsert().orIgnore().value(object).onFields(binding.allBindingFields()).execute();
     }
 
+    /**
+     * Execute inserting with one object on specific(or all) fields.
+     * It will ignore the object while there already exists the same primary key or row id in current table.
+     * @param object The object to insert.
+     * @param fields specific(or all) fields.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreObject(T object, Field<T>[] fields) throws WCDBException {
         prepareInsert().orIgnore().value(object).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on all fields.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertObjects(Collection<T> objects) throws WCDBException {
         prepareInsert().values(objects).onFields(binding.allBindingFields()).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on specific(or all) fields.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @param fields specific(or all) fields.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertObjects(Collection<T> objects, Field<T>[] fields) throws WCDBException {
         prepareInsert().values(objects).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on all fields.
+     * It will replace the original row while they have same primary key or row id.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceObjects(Collection<T> objects) throws WCDBException {
         prepareInsert().orReplace().values(objects).onFields(binding.allBindingFields()).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on specific(or all) fields.
+     * It will replace the original row while they have same primary key or row id.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @param fields specific(or all) fields.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrReplaceObjects(Collection<T> objects, Field<T>[] fields) throws WCDBException {
         prepareInsert().orReplace().values(objects).onFields(fields).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on all fields.
+     * It will ignore the object while there already exists the same primary key or row id in current table.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreObjects(Collection<T> objects) throws WCDBException {
         prepareInsert().orIgnore().values(objects).onFields(binding.allBindingFields()).execute();
     }
 
+    /**
+     * Execute inserting with multi objects on specific(or all) fields.
+     * It will ignore the object while there already exists the same primary key or row id in current table.
+     * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     * @param objects The objects to insert.
+     * @param fields specific(or all) fields.
+     * @throws WCDBException if any error occurs.
+     */
     public void insertOrIgnoreObjects(Collection<T> objects, Field<T>[] fields) throws WCDBException {
         prepareInsert().orIgnore().values(objects).onFields(fields).execute();
     }

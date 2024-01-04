@@ -56,3 +56,8 @@ void WCDBJNICoreClassMethod(setAutoCheckpointMinFrames, jint frames)
 {
     WCDBCoreSetAutoCheckpointMinFrames(frames);
 }
+
+jlong WCDBJNICoreClassMethodWithNoArg(getThreadedError)
+{
+    return (jlong) WCDBCoreGetThreadedError().innerValue;
+}

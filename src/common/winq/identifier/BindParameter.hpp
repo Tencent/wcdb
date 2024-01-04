@@ -34,7 +34,7 @@ public:
     BindParameter();
     BindParameter(int n);
     explicit BindParameter(const UnsafeStringView& name);
-    ~BindParameter() override final;
+    ~BindParameter() override;
 
     static BindParameters bindParameters(size_t count);
 

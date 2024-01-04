@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API DeleteSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~DeleteSTMT() override final;
+    ~DeleteSTMT() override;
 
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;

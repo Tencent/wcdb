@@ -32,7 +32,7 @@ class WCDB_API StatementVacuum final : public SpecifiedSyntax<Syntax::VacuumSTMT
 public:
     using SpecifiedSyntax<Syntax::VacuumSTMT, Statement>::SpecifiedSyntax;
     StatementVacuum();
-    ~StatementVacuum() override final;
+    ~StatementVacuum() override;
 
     StatementVacuum& vacuum();
     StatementVacuum& vacuum(const Schema& schema);

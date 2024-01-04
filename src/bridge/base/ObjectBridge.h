@@ -43,9 +43,6 @@ WCDB_EXTERN_C_BEGIN
 typedef void SwiftObject;
 extern void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj);
 
-typedef struct SwiftClosure SwiftClosure;
-extern void (*_Nullable WCDBReleaseSwiftClosure)(SwiftClosure* _Nonnull obj);
-
 typedef struct CPPObject {
     void* _Nonnull realValue;
     void (*_Nullable deleter)(void* _Nonnull);
@@ -61,24 +58,6 @@ typedef void (*WCDBContextDestructor)(void* _Nonnull context);
         WCDB::Recyclable<SwiftObject*> innerValue;                             \
     }                                                                          \
     typename;
-
-#define WCDBDefineMultiArgumentSwiftClosureBridgedType(typename, returnType, firstArgType, ...) \
-    static_assert(!std::is_floating_point<firstArgType>::value,                                 \
-                  "First argument should not be float");                                        \
-    static_assert(sizeof(firstArgType) <= 8, "Size of first argument is limited to 8 byte");    \
-    typedef returnType (*typename##ClosureType)(firstArgType, void*, __VA_ARGS__);              \
-    typedef WCDB::Recyclable<typename##ClosureType> typename;
-
-#define WCDBDefineOneArgumentSwiftClosureBridgedType(typename, returnType, firstArgType)     \
-    static_assert(!std::is_floating_point<firstArgType>::value,                              \
-                  "First argument should no be float");                                      \
-    static_assert(sizeof(firstArgType) <= 8, "Size of first argument is limited to 8 byte"); \
-    typedef returnType (*typename##ClosureType)(firstArgType);                               \
-    typedef WCDB::Recyclable<typename##ClosureType> typename;
-
-#define WCDBDefineNoArgumentSwiftClosureBridgedType(typename, returnType)      \
-    typedef returnType (*typename##ClosureType)();                             \
-    typedef WCDB::Recyclable<typename##ClosureType> typename;
 
 #define WCDBDefineCPPBridgedType(typename)                                     \
     typedef struct typename                                                    \
@@ -157,6 +136,11 @@ enum WCDBBridgedType {
     WCDBBridgedType_VacuumSTMT,
     WCDBBridgedType_ExplainSTMT,
 };
+
+typedef struct CPPData {
+    unsigned char* _Nullable buffer;
+    unsigned long long size;
+} CPPData;
 
 typedef struct CPPCommonValue {
     enum WCDBBridgedType type;

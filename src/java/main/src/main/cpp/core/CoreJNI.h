@@ -40,3 +40,4 @@ void WCDBJNICoreClassMethodWithNoArg(purgeAllDatabase);
 void WCDBJNICoreClassMethod(releaseSQLiteMemory, jint bytes);
 void WCDBJNICoreClassMethod(setSoftHeapLimit, jlong limit);
 void WCDBJNICoreClassMethod(setAutoCheckpointMinFrames, jint frames);
+jlong WCDBJNICoreClassMethodWithNoArg(getThreadedError);

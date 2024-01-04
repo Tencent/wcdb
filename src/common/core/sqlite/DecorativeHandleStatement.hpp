@@ -107,7 +107,7 @@ public:
     DecorativeHandleStatement(const DecorativeHandleStatement &) = delete;
     DecorativeHandleStatement &operator=(const DecorativeHandleStatement &) = delete;
     DecorativeHandleStatement(DecorativeHandleStatement &&other);
-    ~DecorativeHandleStatement() override final;
+    ~DecorativeHandleStatement() override;
 
 #pragma mark - Decoration
 public:

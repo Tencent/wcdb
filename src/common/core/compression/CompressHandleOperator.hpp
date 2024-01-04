@@ -34,7 +34,7 @@ namespace WCDB {
 class CompressHandleOperator final : public HandleOperator, public Compression::Stepper {
 public:
     CompressHandleOperator(InnerHandle* handle);
-    ~CompressHandleOperator() override final;
+    ~CompressHandleOperator() override;
 
 #pragma mark - Stepper
     Optional<StringViewSet> getAllTables() override final;
@@ -57,7 +57,6 @@ private:
     void resetCompressionStatements();
     void finalizeCompressionStatements();
     bool updateCompressionRecord();
-    bool m_compressionRecordTableCreated;
     int m_compressedCount;
     const CompressionTableInfo* m_compressingTableInfo;
     size_t m_insertParameterCount;

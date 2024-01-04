@@ -41,7 +41,7 @@ public:
 class AutoMergeFTSIndexConfig final : public Config {
 public:
     AutoMergeFTSIndexConfig(const std::shared_ptr<AutoMergeFTSIndexOperator>& operator_);
-    ~AutoMergeFTSIndexConfig() override final;
+    ~AutoMergeFTSIndexConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
     bool uninvoke(InnerHandle* handle) override final;

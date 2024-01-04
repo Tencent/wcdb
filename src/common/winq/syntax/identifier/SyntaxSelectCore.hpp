@@ -37,7 +37,7 @@ class TableOrSubquery;
 class WCDB_API SelectCore final : public Identifier {
 #pragma mark - Lang
 public:
-    ~SelectCore() override final;
+    ~SelectCore() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Select, Values, );
     bool distinct = false;

@@ -526,6 +526,7 @@ StringView StringView::createFromUTF16(const char16_t* utf16Str, size_t length)
         return ret;
     }
     ret.ensureNewSpace(4 * length + 1);
+    ret.m_data = (char*) (ret.m_referenceCount + 1);
     ret.m_length = changeToUTF8(utf16Str, length, const_cast<char*>(ret.m_data));
     return ret;
 }

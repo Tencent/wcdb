@@ -32,7 +32,7 @@ class WCDB_API StatementInsert final : public SpecifiedSyntax<Syntax::InsertSTMT
 public:
     using SpecifiedSyntax<Syntax::InsertSTMT, Statement>::SpecifiedSyntax;
     StatementInsert();
-    ~StatementInsert() override final;
+    ~StatementInsert() override;
 
     StatementInsert& with(const CommonTableExpressions& commonTableExpressions);
     StatementInsert& recursive();

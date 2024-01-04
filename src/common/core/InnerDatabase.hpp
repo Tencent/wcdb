@@ -53,7 +53,7 @@ public:
     InnerDatabase() = delete;
     InnerDatabase(const InnerDatabase &) = delete;
     InnerDatabase &operator=(const InnerDatabase &) = delete;
-    ~InnerDatabase() override final;
+    ~InnerDatabase() override;
 
 protected:
     // All public interfaces that are related with concurrency should make sure the initialization.
@@ -190,6 +190,8 @@ protected:
 public:
     typedef Compression::TableFilter CompressionTableFilter;
     void addCompression(const CompressionTableFilter &filter);
+
+    void setCanCompressNewData(bool canCompress);
 
     typedef std::function<void(InnerDatabase *, const CompressionTableBaseInfo *)> CompressedCallback;
     void setNotificationWhenCompressed(const CompressedCallback &callback);

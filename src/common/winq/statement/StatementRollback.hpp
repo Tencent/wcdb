@@ -33,7 +33,7 @@ class WCDB_API StatementRollback final
 public:
     using SpecifiedSyntax<Syntax::RollbackSTMT, Statement>::SpecifiedSyntax;
     StatementRollback();
-    ~StatementRollback() override final;
+    ~StatementRollback() override;
 
     StatementRollback& rollback();
     StatementRollback& rollbackToSavepoint(const UnsafeStringView& savepoint);

@@ -32,11 +32,6 @@
 
 @implementation WCTDatabase (Compression)
 
-+ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId
-{
-    return WCDB::CompressionCenter::shared().registerDict(dictId, dict);
-}
-
 + (NSData*)trainDictWithStrings:(NSArray<NSString*>*)strings andDictId:(WCTDictId)dictId
 {
     int index = 0;
@@ -73,6 +68,11 @@
     return nil;
 }
 
++ (BOOL)registerZSTDDict:(NSData*)dict andDictId:(WCTDictId)dictId
+{
+    return WCDB::CompressionCenter::shared().registerDict(dictId, dict);
+}
+
 - (void)setCompressionWithFilter:(WCTCompressionFilterBlock)filter
 {
     WCDB::InnerDatabase::CompressionTableFilter callback = nullptr;
@@ -87,6 +87,11 @@
                              WCDB::Configs::Priority::Higher);
     }
     _database->addCompression(callback);
+}
+
+- (void)disableCompresssNewData:(BOOL)disable
+{
+    _database->setCanCompressNewData(!disable);
 }
 
 - (BOOL)stepCompression

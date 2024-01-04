@@ -42,7 +42,7 @@ typedef struct CompressionRecord {
     static const StringView& columnRowdid;
 
     /*
-     CREATE TABLE wcdb_builtin_compression_record
+     CREATE TABLE IF NOT EXIST wcdb_builtin_compression_record
      (tableName TEXT PRIMARY KEY, columns TEXT NOT NULL, rowid INTEGER)
      WITHOUT ROWID
      */

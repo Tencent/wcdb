@@ -36,7 +36,11 @@ CompressionEvent::~CompressionEvent() = default;
 
 #pragma mark - Initialize
 Compression::Compression(CompressionEvent* event)
-: m_tableAcquired(false), m_compressed(false), m_event(event)
+: m_hasCreatedRecord(false)
+, m_canCompressNewData(true)
+, m_tableAcquired(false)
+, m_compressed(false)
+, m_event(event)
 {
 }
 
@@ -89,6 +93,10 @@ bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView&
 
     auto tableExist = initializer.tableExist(userInfo.getTable());
     if (tableExist.failed()) {
+        return false;
+    }
+
+    if (!tryCreateRecordTable(initializer)) {
         return false;
     }
 
@@ -198,14 +206,49 @@ bool Compression::checkCompressingColumn(InfoInitializer& initializer,
     return true;
 }
 
-void Compression::setTableInfoCommitted(bool committed)
+void Compression::notifyTransactionCommitted(bool committed)
 {
     if (!committed) {
         for (auto tableInfo : m_commitingTables.getOrCreate()) {
             tableInfo->setNeedCheckColumns(true);
         }
+        if (m_localHasCreatedRecord.getOrCreate()) {
+            m_hasCreatedRecord = false;
+        }
     }
+    m_localHasCreatedRecord.getOrCreate() = false;
     m_commitingTables.getOrCreate().clear();
+}
+
+bool Compression::tryCreateRecordTable(InfoInitializer& initializer)
+{
+    if (m_hasCreatedRecord) {
+        return true;
+    }
+    auto exist = initializer.tableExist(CompressionRecord::tableName);
+    if (exist.failed()) {
+        return false;
+    }
+    if (exist.value()) {
+        m_hasCreatedRecord = false;
+        return true;
+    }
+    InnerHandle* handle = initializer.getCurrentHandle();
+    WCTAssert(handle != nullptr);
+    HandleStatement createTable(handle);
+    if (!createTable.prepare(CompressionRecord::getCreateTableStatement())) {
+        return false;
+    }
+    bool created = createTable.step();
+    createTable.finalize();
+    if (!created) {
+        return false;
+    }
+    m_hasCreatedRecord = false;
+    if (handle->isInTransaction()) {
+        m_localHasCreatedRecord.getOrCreate() = true;
+    }
+    return true;
 }
 
 #pragma mark - InfoInitializer
@@ -293,15 +336,30 @@ bool Compression::Binder::hintThatTableWillBeCreated(const UnsafeStringView& tab
     return m_compression.hintThatTableWillBeCreated(*this, table);
 }
 
-void Compression::Binder::setTableInfoCommitted(bool committed)
+void Compression::Binder::notifyTransactionCommitted(bool committed)
 {
-    m_compression.setTableInfoCommitted(committed);
+    m_compression.notifyTransactionCommitted(committed);
 }
 
 Optional<const CompressionTableInfo*>
 Compression::Binder::tryGetCompressionInfo(const UnsafeStringView& table)
 {
     return m_compression.getOrInitInfo(*this, table);
+}
+
+bool Compression::Binder::canCompressNewData() const
+{
+    return m_compression.canCompressNewData();
+}
+
+bool Compression::canCompressNewData() const
+{
+    return m_canCompressNewData;
+}
+
+void Compression::setCanCompressNewData(bool canCompress)
+{
+    m_canCompressNewData = canCompress;
 }
 
 #pragma mark - Step

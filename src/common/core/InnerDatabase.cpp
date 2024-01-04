@@ -1106,6 +1106,11 @@ void InnerDatabase::addCompression(const CompressionTableFilter &filter)
     close([=]() { m_compression.setTableFilter(filter); });
 }
 
+void InnerDatabase::setCanCompressNewData(bool canCompress)
+{
+    m_compression.setCanCompressNewData(canCompress);
+}
+
 bool InnerDatabase::isCompressed() const
 {
     return m_compression.isCompressed();

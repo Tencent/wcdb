@@ -120,7 +120,7 @@ WCDB_API @interface WCTDatabase(Monitor)
         NSLog(@"The handle with id %llu took %lld nanoseconds to execute %@", handleIdentifier, info.costInNanoseconds, sql);
      }];
  
- @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+ @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
  @param trace trace
  @see `WCTPerformanceTraceBlock`
  */
@@ -128,7 +128,7 @@ WCDB_API @interface WCTDatabase(Monitor)
 
 /**
  @brief You can register a tracer to monitor the performance of all SQLs executed in the current database.
- @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+ @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
  @param trace trace
  @see `WCTPerformanceTraceBlock`
  */
@@ -152,7 +152,7 @@ WCDB_API @interface WCTDatabase(Monitor)
         NSLog(@"Excution info %@", info);
      }];
  
- @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+ @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
  @see `WCTSQLTraceBlock`
  @param trace trace
  */
@@ -161,7 +161,7 @@ WCDB_API @interface WCTDatabase(Monitor)
 /**
  @brief You can register a tracer to monitor the execution of all SQLs executed in the current database.
  @note  You should register trace before all db operations.
- @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+ @warning Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
  @see `WCTSQLTraceBlock`
  @param trace trace
  */
@@ -171,8 +171,8 @@ WCDB_API @interface WCTDatabase(Monitor)
  @brief Enable to collect more SQL execution information in SQL tracer.
  @note  The detailed execution information of sql will include all bind parameters, step counts of `SELECT` statement,
     last inserted rowid of `INSERT` statement, changes of `UPDATE` and `DELETE` statements.
-    These informations will be returned in the last parameter of `WCTSQLTraceBlock`.
- @warning Collecting these informations will significantly reduce the performance of wcdb,
+    These infomation will be returned in the last parameter of `WCTSQLTraceBlock`.
+ @warning Collecting these infomation will significantly reduce the performance of WCDB,
     please enable it only when necessary, and disable it when unnecessary.
  @see `WCTSQLTraceBlock`
  @param enable enable or not.

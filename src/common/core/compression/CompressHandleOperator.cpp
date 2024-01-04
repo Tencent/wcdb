@@ -37,7 +37,6 @@ namespace WCDB {
 
 CompressHandleOperator::CompressHandleOperator(InnerHandle* handle)
 : HandleOperator(handle)
-, m_compressionRecordTableCreated(false)
 , m_compressedCount(0)
 , m_compressingTableInfo(nullptr)
 , m_insertParameterCount(0)
@@ -83,15 +82,6 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
 {
     InnerHandle* handle = getHandle();
     WCTAssert(handle != nullptr);
-    if (!m_compressionRecordTableCreated) {
-        auto tableExist = handle->tableExists(CompressionRecord::tableName);
-        if (tableExist.failed()) {
-            return false;
-        }
-        if (!tableExist.value()) {
-            return true;
-        }
-    }
     StatementSelect select
     = StatementSelect().select(Column::all()).from(CompressionRecord::tableName);
     if (!handle->prepare(select)) {
@@ -154,8 +144,6 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
 Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* info)
 {
     WCTAssert(info != nullptr);
-    InnerHandle* handle = getHandle();
-    WCTAssert(handle != nullptr);
     int64_t start = Time::currentThreadCPUTimeInMicroseconds();
     if (m_compressingTableInfo != info) {
         finalizeCompressionStatements();
@@ -398,18 +386,6 @@ void CompressHandleOperator::finalizeCompressionStatements()
 
 bool CompressHandleOperator::updateCompressionRecord()
 {
-    InnerHandle* handle = getHandle();
-    if (!m_compressionRecordTableCreated) {
-        auto exists = handle->tableExists(CompressionRecord::tableName);
-        if (exists.failed()) {
-            return false;
-        }
-        if (!exists.value()
-            && !handle->execute(CompressionRecord::getCreateTableStatement())) {
-            return false;
-        }
-        m_compressionRecordTableCreated = true;
-    }
     if (!m_updateRecordStatement->isPrepared()
         && !m_updateRecordStatement->prepare(CompressionRecord::getInsertValueStatement())) {
         return false;

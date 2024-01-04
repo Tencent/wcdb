@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API CommonTableExpression final : public Identifier {
 #pragma mark - Lang
 public:
-    ~CommonTableExpression() override final;
+    ~CommonTableExpression() override;
 
     StringView table;
     std::list<Column> columns;

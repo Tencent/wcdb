@@ -40,7 +40,7 @@ public:
 class AutoCheckpointConfig final : public Config {
 public:
     AutoCheckpointConfig(const std::shared_ptr<AutoCheckpointOperator> &operator_);
-    ~AutoCheckpointConfig() override final;
+    ~AutoCheckpointConfig() override;
 
     bool invoke(InnerHandle *handle) override final;
     bool uninvoke(InnerHandle *handle) override final;

@@ -27,6 +27,7 @@
 #include "CompressionCenter.hpp"
 #include "CompressionConst.hpp"
 #include "CompressionRecord.hpp"
+#include "Core.hpp"
 #include "InnerHandle.hpp"
 #include "StringView.hpp"
 #include "WINQ.h"
@@ -220,11 +221,15 @@ void CompressingStatementDecorator::bindText(const Text& value, int index)
         UnsafeData data((unsigned char*) value.data(), value.size());
         if (info->matchColumnBindIndex > 0) {
             if (!info->bindedValue.isNull()) {
-                Optional<UnsafeData> compressedValue
-                = CompressionCenter::shared().compressContent(
-                data,
-                info->columnInfo->getMatchDictId(info->bindedValue.intValue()),
-                static_cast<InnerHandle*>(getHandle()));
+                Optional<UnsafeData> compressedValue;
+                if (m_compressionBinder->canCompressNewData()) {
+                    compressedValue = CompressionCenter::shared().compressContent(
+                    data,
+                    info->columnInfo->getMatchDictId(info->bindedValue.intValue()),
+                    static_cast<InnerHandle*>(getHandle()));
+                } else {
+                    compressedValue = data;
+                }
                 if (compressedValue.failed()) {
                     m_compressFail = true;
                     return;
@@ -236,9 +241,13 @@ void CompressingStatementDecorator::bindText(const Text& value, int index)
                                        info->typeBindIndex);
                 } else {
                     Super::bindText(value, index);
-                    Super::bindInteger(
-                    WCDBMergeCompressionType(CompressedType::None, ColumnType::Text),
-                    info->typeBindIndex);
+                    if (m_compressionBinder->canCompressNewData()) {
+                        Super::bindInteger(WCDBMergeCompressionType(
+                                           CompressedType::None, ColumnType::Text),
+                                           info->typeBindIndex);
+                    } else {
+                        Super::bindNull(info->typeBindIndex);
+                    }
                 }
             } else {
                 info->bindedValue = value;
@@ -246,10 +255,15 @@ void CompressingStatementDecorator::bindText(const Text& value, int index)
         } else {
             bool usingDict
             = info->columnInfo->getCompressionType() == CompressionType::Dict;
-            Optional<UnsafeData> compressedValue = CompressionCenter::shared().compressContent(
-            data,
-            usingDict ? info->columnInfo->getDictId() : 0,
-            static_cast<InnerHandle*>(getHandle()));
+            Optional<UnsafeData> compressedValue;
+            if (m_compressionBinder->canCompressNewData()) {
+                compressedValue = CompressionCenter::shared().compressContent(
+                data,
+                usingDict ? info->columnInfo->getDictId() : 0,
+                static_cast<InnerHandle*>(getHandle()));
+            } else {
+                compressedValue = data;
+            }
             if (compressedValue.failed()) {
                 m_compressFail = true;
                 return;
@@ -263,9 +277,13 @@ void CompressingStatementDecorator::bindText(const Text& value, int index)
                 info->typeBindIndex);
             } else {
                 Super::bindText(value, index);
-                Super::bindInteger(
-                WCDBMergeCompressionType(CompressedType::None, ColumnType::Text),
-                info->typeBindIndex);
+                if (m_compressionBinder->canCompressNewData()) {
+                    Super::bindInteger(
+                    WCDBMergeCompressionType(CompressedType::None, ColumnType::Text),
+                    info->typeBindIndex);
+                } else {
+                    Super::bindNull(info->typeBindIndex);
+                }
             }
         }
     } else {
@@ -314,11 +332,15 @@ void CompressingStatementDecorator::bindBLOB(const BLOB& value, int index)
         }
         if (info->matchColumnBindIndex > 0) {
             if (!info->bindedValue.isNull()) {
-                Optional<UnsafeData> compressedValue
-                = CompressionCenter::shared().compressContent(
-                value,
-                info->columnInfo->getMatchDictId(info->bindedValue.intValue()),
-                static_cast<InnerHandle*>(getHandle()));
+                Optional<UnsafeData> compressedValue;
+                if (m_compressionBinder->canCompressNewData()) {
+                    compressedValue = CompressionCenter::shared().compressContent(
+                    value,
+                    info->columnInfo->getMatchDictId(info->bindedValue.intValue()),
+                    static_cast<InnerHandle*>(getHandle()));
+                } else {
+                    compressedValue = value;
+                }
                 if (compressedValue.failed()) {
                     m_compressFail = true;
                     return;
@@ -330,9 +352,13 @@ void CompressingStatementDecorator::bindBLOB(const BLOB& value, int index)
                                        info->typeBindIndex);
                 } else {
                     Super::bindBLOB(value, index);
-                    Super::bindInteger(
-                    WCDBMergeCompressionType(CompressedType::None, ColumnType::BLOB),
-                    info->typeBindIndex);
+                    if (m_compressionBinder->canCompressNewData()) {
+                        Super::bindInteger(WCDBMergeCompressionType(
+                                           CompressedType::None, ColumnType::BLOB),
+                                           info->typeBindIndex);
+                    } else {
+                        Super::bindNull(info->typeBindIndex);
+                    }
                 }
             } else {
                 info->bindedValue = value;
@@ -340,10 +366,15 @@ void CompressingStatementDecorator::bindBLOB(const BLOB& value, int index)
         } else {
             bool usingDict
             = info->columnInfo->getCompressionType() == CompressionType::Dict;
-            Optional<UnsafeData> compressedValue = CompressionCenter::shared().compressContent(
-            value,
-            usingDict ? info->columnInfo->getDictId() : 0,
-            static_cast<InnerHandle*>(getHandle()));
+            Optional<UnsafeData> compressedValue;
+            if (m_compressionBinder->canCompressNewData()) {
+                compressedValue = CompressionCenter::shared().compressContent(
+                value,
+                usingDict ? info->columnInfo->getDictId() : 0,
+                static_cast<InnerHandle*>(getHandle()));
+            } else {
+                compressedValue = value;
+            }
             if (compressedValue.failed()) {
                 m_compressFail = true;
                 return;
@@ -357,9 +388,13 @@ void CompressingStatementDecorator::bindBLOB(const BLOB& value, int index)
                 info->typeBindIndex);
             } else {
                 Super::bindBLOB(value, index);
-                Super::bindInteger(
-                WCDBMergeCompressionType(CompressedType::None, ColumnType::BLOB),
-                info->typeBindIndex);
+                if (m_compressionBinder->canCompressNewData()) {
+                    Super::bindInteger(
+                    WCDBMergeCompressionType(CompressedType::None, ColumnType::BLOB),
+                    info->typeBindIndex);
+                } else {
+                    Super::bindNull(info->typeBindIndex);
+                }
             }
         }
     } else {
@@ -1090,8 +1125,15 @@ void CompressingStatementDecorator::bindValueInInfo(const BindInfo* info, const 
     } else {
         data = info->bindedValue.blobValue();
     }
-    Optional<UnsafeData> compressedValue = CompressionCenter::shared().compressContent(
-    data, info->columnInfo->getMatchDictId(matchValue), static_cast<InnerHandle*>(getHandle()));
+    Optional<UnsafeData> compressedValue;
+    if (m_compressionBinder->canCompressNewData()) {
+        compressedValue = CompressionCenter::shared().compressContent(
+        data,
+        info->columnInfo->getMatchDictId(matchValue),
+        static_cast<InnerHandle*>(getHandle()));
+    } else {
+        compressedValue = data;
+    }
     if (compressedValue.failed()) {
         m_compressFail = true;
         return;
@@ -1106,8 +1148,12 @@ void CompressingStatementDecorator::bindValueInInfo(const BindInfo* info, const 
         } else {
             Super::bindBLOB(data, info->columnBindIndex);
         }
-        Super::bindInteger(WCDBMergeCompressionType(CompressedType::None, valueType),
-                           info->typeBindIndex);
+        if (m_compressionBinder->canCompressNewData()) {
+            Super::bindInteger(WCDBMergeCompressionType(CompressedType::None, valueType),
+                               info->typeBindIndex);
+        } else {
+            Super::bindNull(info->typeBindIndex);
+        }
     }
 }
 

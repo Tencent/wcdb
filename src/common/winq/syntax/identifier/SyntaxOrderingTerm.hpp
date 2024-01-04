@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API OrderingTerm final : public Identifier {
 #pragma mark - Lang
 public:
-    ~OrderingTerm() override final;
+    ~OrderingTerm() override;
 
     Optional<Expression> expression;
     StringView collation;

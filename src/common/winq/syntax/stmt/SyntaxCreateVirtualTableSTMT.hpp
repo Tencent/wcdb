@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API CreateVirtualTableSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~CreateVirtualTableSTMT() override final;
+    ~CreateVirtualTableSTMT() override;
 
     bool ifNotExists = false;
     Schema schema;

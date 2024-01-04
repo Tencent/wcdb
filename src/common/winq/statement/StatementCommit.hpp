@@ -32,7 +32,7 @@ class WCDB_API StatementCommit final : public SpecifiedSyntax<Syntax::CommitSTMT
 public:
     using SpecifiedSyntax<Syntax::CommitSTMT, Statement>::SpecifiedSyntax;
     StatementCommit();
-    ~StatementCommit() override final;
+    ~StatementCommit() override;
 
     StatementCommit& commit();
 };

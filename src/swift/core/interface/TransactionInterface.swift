@@ -77,7 +77,7 @@ public protocol TransactionInterface {
     /// This process will be repeated until the second parameter of the block is specified as true, or some error occurs during the transaction.
     ///
     ///     try self.database.run(pausableTransaction: { (handle, stop, isNewTransaction) in
-    ///         if (isNewTraction) {
+    ///         if (isNewTransaction) {
     ///             // Do some initialization for new transaction.
     ///         }
     ///
@@ -126,7 +126,15 @@ extension TransactionInterface where Self: HandleRepresentable {
             try transaction(handle)
             return
         }
-        let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
+        let cppTransaction: @convention(c) (UnsafeMutableRawPointer, CPPHandle) -> Bool = {
+            cppContext, cppHandle in
+            let transactionWrap: ValueWrap<(CPPHandle) -> Bool>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let transactionWrap = transactionWrap else {
+                return false
+            }
+            return transactionWrap.value(cppHandle)
+        }
+        let transactionBlock: (CPPHandle) -> Bool = {
             cppHandle in
             let handle = Handle(withCPPHandle: cppHandle, database: getDatabase())
             var ret = true
@@ -137,15 +145,18 @@ extension TransactionInterface where Self: HandleRepresentable {
             }
             return ret
         }
-        let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
-        if !WCDBHandleRunTransaction(handle.cppHandle, transactionBlockImp) {
+        let transactionWrap = ValueWrap(transactionBlock)
+        let transactionWrapPointer = ObjectBridge.getUntypeSwiftObject(transactionWrap)
+        let ret = WCDBHandleRunTransaction(handle.cppHandle, transactionWrapPointer, cppTransaction)
+        ObjectBridge.releaseSwiftObject(transactionWrapPointer)
+        if !ret {
             throw handle.getError()
         }
     }
 
     public func run(controllableTransaction: @escaping ControlableTransactionClosure) throws {
         var transactionRet = true
-        let transactionBlock: @convention(block) (CPPHandle) -> Bool = {
+        let transactionBlock: (CPPHandle) -> Bool = {
             cppHandle in
             let handle = Handle(withCPPHandle: cppHandle, database: getDatabase())
             var ret = true
@@ -156,16 +167,30 @@ extension TransactionInterface where Self: HandleRepresentable {
             }
             return ret && transactionRet
         }
-        let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
+        let transactionWrap = ValueWrap(transactionBlock)
+        let transactionWrapPointer = ObjectBridge.getUntypeSwiftObject(transactionWrap)
+
+        let cppTransaction: @convention(c) (UnsafeMutableRawPointer, CPPHandle) -> Bool = {
+            cppContext, cppHandle in
+            let transactionWrap: ValueWrap<(CPPHandle) -> Bool>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let transactionWrap = transactionWrap else {
+                return false
+            }
+            return transactionWrap.value(cppHandle)
+        }
+
         let handle = try getHandle(writeHint: true)
-        if !WCDBHandleRunTransaction(handle.cppHandle, transactionBlockImp) && transactionRet {
+        let ret = WCDBHandleRunTransaction(handle.cppHandle, transactionWrapPointer, cppTransaction)
+        ObjectBridge.releaseSwiftObject(transactionWrapPointer)
+
+        if !ret && transactionRet {
             throw handle.getError()
         }
     }
 
     public func run(pausableTransaction: @escaping PausableTransactionClosure) throws {
         let handle = try getHandle(writeHint: true)
-        let transactionBlock: @convention(block) (CPPHandle, UnsafeMutablePointer<Bool>, Bool) -> Bool = {
+        let transactionBlock: (CPPHandle, UnsafeMutablePointer<Bool>, Bool) -> Bool = {
             _, cStop, isNewTransaction in
             var ret = true
             var stop = false
@@ -177,8 +202,20 @@ extension TransactionInterface where Self: HandleRepresentable {
             }
             return ret
         }
-        let transactionBlockImp = imp_implementationWithBlock(transactionBlock)
-        if !WCDBHandleRunPausableTransaction(handle.cppHandle, transactionBlockImp) {
+        let transactionWrap = ValueWrap(transactionBlock)
+        let transactionWrapPointer = ObjectBridge.getUntypeSwiftObject(transactionWrap)
+        let cppTransaction: @convention(c) (UnsafeMutableRawPointer, CPPHandle, UnsafeMutablePointer<Bool>, Bool) -> Bool = {
+            cppContext, cppHandle, canContinue, isNewTransaction in
+            let transactionWrap: ValueWrap<(CPPHandle, UnsafeMutablePointer<Bool>, Bool) -> Bool>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let transactionWrap = transactionWrap else {
+                return false
+            }
+            return transactionWrap.value(cppHandle, canContinue, isNewTransaction)
+        }
+
+        let ret = WCDBHandleRunPausableTransaction(handle.cppHandle, transactionWrapPointer, cppTransaction)
+        ObjectBridge.objectDestructor(transactionWrapPointer)
+        if !ret {
             throw handle.getError()
         }
     }

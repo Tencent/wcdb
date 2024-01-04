@@ -33,7 +33,7 @@ class MigratingStatementDecorator final : public HandleStatementDecorator {
 public:
     MigratingStatementDecorator(Migration::Binder *binder);
     MigratingStatementDecorator(MigratingStatementDecorator &&other);
-    ~MigratingStatementDecorator() override final;
+    ~MigratingStatementDecorator() override;
 
     MigratingStatementDecorator() = delete;
     MigratingStatementDecorator(const MigratingStatementDecorator &) = delete;

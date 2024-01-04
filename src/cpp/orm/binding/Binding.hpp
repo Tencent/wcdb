@@ -42,7 +42,7 @@ void assertFirstBaseClass()
 class WCDB_API Binding final : public BaseBinding {
 public:
     Binding();
-    ~Binding() override final;
+    ~Binding() override;
 
 #pragma mark - Inherit
 public:

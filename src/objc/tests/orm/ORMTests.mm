@@ -293,7 +293,7 @@
     }
 }
 
-- (void)test_config_auto_increment_whilt_excuting
+- (void)test_config_auto_increment_whilt_executing
 {
     TestCaseAssertTrue([self.database rawExecute:@"create table testTable(key integer primary key, content text)"]);
 

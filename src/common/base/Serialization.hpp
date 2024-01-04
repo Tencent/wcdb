@@ -53,7 +53,7 @@ protected:
 class Serialization final : public SerializeIteration {
 #pragma mark - Serialization
 public:
-    ~Serialization() override final;
+    ~Serialization() override;
 
     Data finalize();
     bool resize(size_t size);
@@ -80,7 +80,7 @@ class Deserialization final : public SerializeIteration {
 public:
     Deserialization();
     Deserialization(const UnsafeData &data);
-    ~Deserialization() override final;
+    ~Deserialization() override;
 
     void reset(const UnsafeData &data);
 

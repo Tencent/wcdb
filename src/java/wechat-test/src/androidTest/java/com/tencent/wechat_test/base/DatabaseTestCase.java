@@ -81,7 +81,7 @@ public class DatabaseTestCase extends BaseTestCase {
             final Thread thread = Thread.currentThread();
             database.traceSQL(new Database.SQLTracer() {
                 @Override
-                public void onTrace(String path, long handleId, String sql, String info) {
+                public void onTrace(long tag, String path, long handleId, String sql, String info) {
                     if(Thread.currentThread().getId() != thread.getId()) {
                         return;
                     }

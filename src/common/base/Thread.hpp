@@ -37,7 +37,7 @@ class Thread final : public SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
     Thread();
-    ~Thread() override final;
+    ~Thread() override;
     Thread& operator=(const std::nullptr_t&);
 
 private:

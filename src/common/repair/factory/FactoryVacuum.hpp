@@ -39,7 +39,7 @@ class FactoryVacuum final : public FactoryRelated,
                             public VacuumDelegateHolder {
 public:
     FactoryVacuum(const Factory &factory);
-    ~FactoryVacuum() override final;
+    ~FactoryVacuum() override;
 
     const StringView directory;
     const StringView database;

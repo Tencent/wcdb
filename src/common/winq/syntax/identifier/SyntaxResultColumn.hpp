@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API ResultColumn final : public Identifier {
 #pragma mark - Lang
 public:
-    ~ResultColumn() override final;
+    ~ResultColumn() override;
 
     Optional<Expression> expression;
     StringView alias;

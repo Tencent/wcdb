@@ -4,6 +4,10 @@ project(WCDB)
 include(utility.cmake)
 include(../sqlcipher/sqlcipher.cmake)
 
+if (NOT DEFINED WCDB_ZSTD)
+    set(WCDB_ZSTD ON CACHE BOOL "Build WCDB with zstd" FORCE)
+endif ()
+
 set(WCONAN_CMAKE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../WeChat/wconan.cmake)
 if (NOT SKIP_WCONAN AND EXISTS ${WCONAN_CMAKE_PATH})
     message(STATUS "${WCONAN_CMAKE_PATH} found.")
@@ -376,6 +380,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(${TARGET_NAME} ${WCDB_COMMON_SRC})
 target_link_libraries(${TARGET_NAME} PUBLIC sqlcipher)
 target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_COMMON_INCLUDES})
+
+if (WCDB_ZSTD)
+    include(zstd.cmake)
+    target_link_libraries(${TARGET_NAME} PUBLIC zstd)
+    target_compile_definitions(${TARGET_NAME} PRIVATE WCDB_ZSTD=1)
+endif ()
 
 target_compile_options(${TARGET_NAME} PRIVATE -fno-exceptions)
 

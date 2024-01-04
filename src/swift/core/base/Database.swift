@@ -146,15 +146,26 @@ public class Database {
     /// - Throws: Rethrows your error.
     public func close(onClosed: @escaping OnClosed) throws {
         var callbackError: Swift.Error?
-        let closeCallback: @convention(block) () -> Void = {
+        let closeCallback: () -> Void = {
             do {
                 try onClosed()
             } catch {
                 callbackError = error
             }
         }
-        let imp = imp_implementationWithBlock(closeCallback)
-        WCDBDatabaseClose(database, imp)
+
+        let cppCallback: @convention(c) (UnsafeMutableRawPointer) -> Void = {
+            cppContext in
+            let callbackWrap: ValueWrap<() -> Void>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let callbackWrap = callbackWrap else {
+                return
+            }
+            callbackWrap.value()
+        }
+        let callbackWrap = ValueWrap(closeCallback)
+        let callbackWrapPointer = ObjectBridge.getUntypeSwiftObject(callbackWrap)
+        WCDBDatabaseClose(database, callbackWrapPointer, cppCallback)
+        ObjectBridge.objectDestructor(callbackWrapPointer)
         if callbackError != nil {
             throw callbackError!
         }
@@ -162,7 +173,7 @@ public class Database {
 
     /// Close the database.
     public func close() {
-        WCDBDatabaseClose(database, nil)
+        WCDBDatabaseClose(database, nil, nil)
     }
 
     /// Blockade the database.
@@ -304,7 +315,15 @@ public extension Database {
                    withInvocation invocation: @escaping Config,
                    withUninvocation uninvocation: Config? = nil,
                    withPriority priority: ConfigPriority = ConfigPriority.default) {
-        let invocationBlock: @convention(block) (CPPHandle) -> Bool = {
+        let cppInvocation: @convention(c) (UnsafeMutableRawPointer, CPPHandle) -> Bool = {
+            cppContext, cppHandle in
+            let invocationWrap: ValueWrap<(CPPHandle) -> Bool>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let invocationWrap = invocationWrap else {
+                return false
+            }
+            return invocationWrap.value(cppHandle)
+        }
+        let invocationBlock: (CPPHandle) -> Bool = {
             cppHandle in
             let handle = Handle(withCPPHandle: cppHandle, database: self)
             var ret = true
@@ -315,10 +334,12 @@ public extension Database {
             }
             return ret
         }
-        let invocationImp = imp_implementationWithBlock(invocationBlock)
-        var uninvocationImp: IMP?
+        let invocationWrap = ValueWrap(invocationBlock)
+        let invocationWrapPointer = ObjectBridge.getUntypeSwiftObject(invocationWrap)
+
+        var uninvocationWrapPointer: UnsafeMutableRawPointer?
         if let uninvocation = uninvocation {
-            let uninvocationBlock: @convention(block) (CPPHandle) -> Bool = {
+            let uninvocationBlock: (CPPHandle) -> Bool = {
                 cppHandle in
                 let handle = Handle(withCPPHandle: cppHandle, database: self)
                 var ret = true
@@ -329,9 +350,17 @@ public extension Database {
                 }
                 return ret
             }
-            uninvocationImp = imp_implementationWithBlock(uninvocationBlock)
+            let uninvocationWrap = ValueWrap(uninvocationBlock)
+            uninvocationWrapPointer = ObjectBridge.getUntypeSwiftObject(uninvocationWrap)
         }
-        WCDBDatabaseConfig(database, name, invocationImp, uninvocationImp, priority.rawValue)
+        WCDBDatabaseConfig(database,
+                           name.cString,
+                           cppInvocation,
+                           invocationWrapPointer,
+                           uninvocationWrapPointer != nil ? cppInvocation : nil,
+                           uninvocationWrapPointer,
+                           priority.rawValue,
+                           ObjectBridge.objectDestructor)
     }
 
     /// Set the default directory for temporary database files.
@@ -388,7 +417,7 @@ public extension Database {
     ///         print("The handle with id \(handleId) took \(info.costInNanoseconds) nanoseconds to execute \(sql)")
     ///     }
     ///
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global preformance trace.
     ///
@@ -411,7 +440,7 @@ public extension Database {
     }
 
     /// You can register a reporter to monitor all errors of current database.
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable preformance trace.
     func trace(ofPerformance trace: @escaping PerformanceTracer) {
@@ -450,35 +479,45 @@ public extension Database {
     ///         print("Execution info \(info)")
     ///     }
     ///
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable global sql trace.
     static func globalTraceSQL(_ trace: @escaping SQLTracer) {
-        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CChar>) -> Void = {
-            (tag, path, handleId, sql, info) in
-            trace(tag, String(cString: path), handleId, String(cString: sql), String(cString: info))
+        let cppCallback: @convention(c) (UnsafeMutableRawPointer?, Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CChar>) -> Void = {
+            (cppContext, tag, path, handleId, sql, info) in
+            let traceWrap: ValueWrap<SQLTracer>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let traceWrap = traceWrap else {
+                return
+            }
+            traceWrap.value(tag, String(cString: path), handleId, String(cString: sql), String(cString: info))
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseGlobalTraceSQL(imp)
+        let traceWrap = ValueWrap(trace)
+        let traceWrapPointer = ObjectBridge.getUntypeSwiftObject(traceWrap)
+        WCDBDatabaseGlobalTraceSQL(cppCallback, traceWrapPointer, ObjectBridge.objectDestructor)
     }
     static func globalTraceSQL(_ trace: Void?) {
-        WCDBDatabaseGlobalTraceSQL(nil)
+        WCDBDatabaseGlobalTraceSQL(nil, nil, nil)
     }
 
     /// You can register a tracer to monitor the execution of all SQLs executed in the current database.
-    /// Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
+    /// Tracer may cause WCDB performance degradation, according to your needs to choose whether to open.
     ///
     /// - Parameter trace: trace. Nil to disable sql trace.
     func traceSQL(_ trace: @escaping SQLTracer) {
-        let callback: @convention(block) (Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CChar>) -> Void = {
-            (tag, path, handleId, sql, info) in
-            trace(tag, String(cString: path), handleId, String(cString: sql), String(cString: info))
+        let cppCallback: @convention(c) (UnsafeMutableRawPointer?, Int, UnsafePointer<CChar>, UInt64, UnsafePointer<CChar>, UnsafePointer<CChar>) -> Void = {
+            (cppContext, tag, path, handleId, sql, info) in
+            let traceWrap: ValueWrap<SQLTracer>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let traceWrap = traceWrap else {
+                return
+            }
+            traceWrap.value(tag, String(cString: path), handleId, String(cString: sql), String(cString: info))
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseTraceSQL(database, imp)
+        let traceWrap = ValueWrap(trace)
+        let traceWrapPointer = ObjectBridge.getUntypeSwiftObject(traceWrap)
+        WCDBDatabaseTraceSQL(database, cppCallback, traceWrapPointer, ObjectBridge.objectDestructor)
     }
     func traceSQL(_ trace: Void?) {
-        WCDBDatabaseTraceSQL(database, nil)
+        WCDBDatabaseTraceSQL(database, nil, nil, nil)
     }
 
     /// Enable to collect more SQL execution information in SQL tracer.
@@ -486,9 +525,9 @@ public extension Database {
     /// The detailed execution information of sql will include all bind parameters,
     /// step counts of `SELECT` statement, last inserted rowid of `INSERT` statement,
     /// changes of `UPDATE` and `DELETE` statements.
-    /// These informations will be returned in the last parameter of `SQLTracer`.
+    /// These infomation will be returned in the last parameter of `SQLTracer`.
     ///
-    /// Note That collecting these informations will significantly reduce the performance of wcdb,
+    /// Note That collecting these infomation will significantly reduce the performance of WCDB,
     /// please enable it only when necessary, and disable it when unnecessary.
     ///
     /// - Parameter enable: enable or not.
@@ -504,32 +543,42 @@ public extension Database {
     ///
     /// - Parameter errorReporter: report. Nil to disable error trace.
     static func globalTraceError(_ errorReporter: @escaping (WCDBError) -> Void) {
-        let callback: @convention(block) (CPPError) -> Void = {
-            (cppError) in
+        let cppCallback: @convention(c) (UnsafeMutableRawPointer?, CPPError) -> Void = {
+            cppContext, cppError in
+            let errorReporterWrap: ValueWrap<(WCDBError) -> Void>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let errorReporterWrap = errorReporterWrap else {
+                return
+            }
             let error = ErrorBridge.getErrorFrom(cppError: cppError)
-            errorReporter(error)
+            errorReporterWrap.value(error)
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseGlobalTraceError(imp)
+        let errorReporterWrap = ValueWrap(errorReporter)
+        let errorReporterWrapPointer = ObjectBridge.getUntypeSwiftObject(errorReporterWrap)
+        WCDBDatabaseGlobalTraceError(cppCallback, errorReporterWrapPointer, ObjectBridge.objectDestructor)
     }
     static func globalTraceError(_ trace: Void?) {
-        WCDBDatabaseGlobalTraceError(nil)
+        WCDBDatabaseGlobalTraceError(nil, nil, nil)
     }
 
     /// You can register a reporter to monitor all errors of current database.
     ///
     /// - Parameter errorReporter: report. Nil to disable error trace.
     func traceError(_ errorReporter: @escaping (WCDBError) -> Void) {
-        let callback: @convention(block) (CPPError) -> Void = {
-            (cppError) in
+        let cppCallback: @convention(c) (UnsafeMutableRawPointer?, CPPError) -> Void = {
+            cppContext, cppError in
+            let errorReporterWrap: ValueWrap<(WCDBError) -> Void>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let errorReporterWrap = errorReporterWrap else {
+                return
+            }
             let error = ErrorBridge.getErrorFrom(cppError: cppError)
-            errorReporter(error)
+            errorReporterWrap.value(error)
         }
-        let imp = imp_implementationWithBlock(callback)
-        WCDBDatabaseTraceError(database, imp)
+        let errorReporterWrap = ValueWrap(errorReporter)
+        let errorReporterWrapPointer = ObjectBridge.getUntypeSwiftObject(errorReporterWrap)
+        WCDBDatabaseTraceError(database, cppCallback, errorReporterWrapPointer, ObjectBridge.objectDestructor)
     }
     func traceError(_ trace: Void?) {
-        WCDBDatabaseTraceError(database, nil)
+        WCDBDatabaseTraceError(database, nil, nil, nil)
     }
 
     enum Operation: Int {
@@ -652,12 +701,22 @@ public extension Database {
     /// Paths to all database-related files.
     var paths: [String] {
         var paths: [String] = []
-        let enumerator: @convention(block) (UnsafePointer<CChar>) -> Void = {
+        let enumerator: (UnsafePointer<CChar>) -> Void = {
             path in
             paths.append(String(cString: path))
         }
-        let enumeratorImp = imp_implementationWithBlock(enumerator)
-        WCDBDatabaseGetPaths(database, enumeratorImp)
+        let cppEnumerater: @convention(c) (UnsafeMutableRawPointer?, UnsafePointer<CChar>) -> Void = {
+            cppContext, string in
+            let enumeratorWrap: ValueWrap<(UnsafePointer<CChar>) -> Void>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+            guard let enumeratorWrap = enumeratorWrap else {
+                return
+            }
+            enumeratorWrap.value(string)
+        }
+        let enumeratorWrap = ValueWrap(enumerator)
+        let enumeratorWrapPointer = ObjectBridge.getUntypeSwiftObject(enumeratorWrap)
+        WCDBDatabaseGetPaths(database, enumeratorWrapPointer, cppEnumerater)
+        ObjectBridge.objectDestructor(enumeratorWrapPointer)
         return paths
     }
 
@@ -701,21 +760,26 @@ public extension Database {
     typealias OnCorrupted = (_ corruptedDatabase: Database) -> Void
     /// You can register a notification callback for database corruption.
     /// If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation,
-    /// WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truely corrupted.
+    /// WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truly corrupted.
     /// Once confirmed, WCDB will notify you through the callback registered by this method.
     /// In the callback, you can delete the corrupted database or try to repair the database.
     ///
     /// - Parameter callback: The callback of notification.
     func setNotification(whenCorrupted callback: OnCorrupted?) {
         if let callback = callback {
-            let internalCallBack: @convention(block) (CPPDatabase) -> Void = {cppDatabase in
-                let database = Database(with: cppDatabase)
-                callback(database)
+            let cppCallback: @convention(c) (UnsafeMutableRawPointer?, CPPDatabase) -> Void = {
+                cppContext, database in
+                let callbackWrap: ValueWrap<OnCorrupted>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let callbackWrap = callbackWrap else {
+                    return
+                }
+                callbackWrap.value(Database(with: database))
             }
-            let internalCallBackImp = imp_implementationWithBlock(internalCallBack)
-            WCDBDatabaseSetNotificationWhenCorrupted(database, internalCallBackImp)
+            let callbackWrap = ValueWrap(callback)
+            let callbackWrapPointer = ObjectBridge.getUntypeSwiftObject(callbackWrap)
+            WCDBDatabaseSetNotificationWhenCorrupted(database, cppCallback, callbackWrapPointer, ObjectBridge.objectDestructor)
         } else {
-            WCDBDatabaseSetNotificationWhenCorrupted(database, nil)
+            WCDBDatabaseSetNotificationWhenCorrupted(database, nil, nil, nil)
         }
     }
 
@@ -762,17 +826,24 @@ public extension Database {
     /// - Parameter filter: The table filter. A table name will be pass to filter when it's called.
     func filterBackup(tableShouldBeBackedUp filter: BackupFiilter?) {
         if let filter = filter {
-            let internalFilter: @convention(block) (UnsafePointer<CChar>) -> Bool = {tableName in
-                return filter(String(cString: tableName))
+            let cppFilter: @convention(c) (UnsafeMutableRawPointer?, UnsafePointer<CChar>) -> Bool = {
+                cppContext, cppTable in
+                let filterWrap: ValueWrap<BackupFiilter>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let filterWrap = filterWrap else {
+                    return false
+                }
+                return filterWrap.value(String(cString: cppTable))
             }
-            let internalFilterImp = imp_implementationWithBlock(internalFilter)
-            WCDBDatabaseFilterBackup(database, internalFilterImp)
+            let filterWrap = ValueWrap(filter)
+            let filterWrapPointer = ObjectBridge.getUntypeSwiftObject(filterWrap)
+            WCDBDatabaseFilterBackup(database, cppFilter, filterWrapPointer, ObjectBridge.objectDestructor)
         } else {
-            WCDBDatabaseFilterBackup(database, nil)
+            WCDBDatabaseFilterBackup(database, nil, nil, nil)
         }
     }
 
-    typealias RetrieveProgress = (_ percentage: Double, _ increment: Double) -> Void
+    typealias ProgressUpdate = (_ percentage: Double, _ increment: Double) -> Bool /* Continue or not */
+
     /// Recover data from a corruped db.
     ///
     /// If there is a valid backup of this database, most of the uncorrupted data can be recovered,
@@ -784,17 +855,27 @@ public extension Database {
     ///
     /// - Parameter progress: A closure that receives the repair progress.
     /// - Returns: Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
-    func retrieve(with progress: RetrieveProgress?) -> Double {
-        var internalProgressImp: IMP?
+    func retrieve(with progress: ProgressUpdate?) throws -> Double {
+        var score = 0.0
         if let progress = progress {
-            let internalProgress: @convention(block) (OpaquePointer, Double, Double) -> Void = {
-                _, percentage, increment in
-                progress(percentage, increment)
+            let cppProgress: @convention(c) (UnsafeMutableRawPointer?, Double, Double) -> Bool = {
+                cppContext, percentage, increment in
+                let progressWrap: ValueWrap<ProgressUpdate>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let progressWrap = progressWrap else {
+                    return false
+                }
+                return progressWrap.value(percentage, increment)
             }
-            internalProgressImp = imp_implementationWithBlock(internalProgress)
-
+            let progressWrap = ValueWrap(progress)
+            let progressWrapPointer = ObjectBridge.getUntypeSwiftObject(progressWrap)
+            score = WCDBDatabaseRetrieve(database, cppProgress, progressWrapPointer, ObjectBridge.objectDestructor)
+        } else {
+            score = WCDBDatabaseRetrieve(database, nil, nil, nil)
         }
-        return WCDBDatabaseRetrieve(database, internalProgressImp)
+        if score < 0 {
+            throw getError()
+        }
+        return score
     }
 
     /// Deposit database.
@@ -818,6 +899,30 @@ public extension Database {
             throw getError()
         }
     }
+
+    /// Vacuum current database.
+    /// It can be used to vacuum a database of any size with limited memory usage.
+    func vacuum(with progress: ProgressUpdate?) throws {
+        if let progress = progress {
+            let cppProgress: @convention(c) (UnsafeMutableRawPointer?, Double, Double) -> Bool = {
+                cppContext, percentage, increment in
+                let progressWrap: ValueWrap<ProgressUpdate>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let progressWrap = progressWrap else {
+                    return false
+                }
+                return progressWrap.value(percentage, increment)
+            }
+            let progressWrap = ValueWrap(progress)
+            let progressWrapPointer = ObjectBridge.getUntypeSwiftObject(progressWrap)
+            if !WCDBDatabaseVacuum(database, cppProgress, progressWrapPointer, ObjectBridge.objectDestructor) {
+                throw getError()
+            }
+        } else {
+            if !WCDBDatabaseVacuum(database, nil, nil, nil) {
+                throw getError()
+            }
+        }
+    }
 }
 
 // Migration
@@ -828,9 +933,9 @@ public extension Database {
         public var filterCondition: Expression? // Filter condition of source table
     }
 
-    /**
-     Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data, mainly including creating a new table, reading and writing a table, and starting to migrate a new table. If the current table does not need to migrate data, you need to set the sourceTable in `MigrationInfo` to nil.
-     */
+    /// Triggered at any time when WCDB needs to know whether a table in the current database needs to migrate data,
+    /// mainly including creating a new table, reading and writing a table, and starting to migrate a new table.
+    /// If the current table does not need to migrate data, you need to set the sourceTable in `MigrationInfo` to nil.
     typealias TableFilter = (_ info: inout MigrationInfo) -> Void
 
     /// Configure which tables in the current database need to migrate data, and the source table they need to migrate data from.
@@ -840,7 +945,7 @@ public extension Database {
     /// You neither need to be aware of the existence of the source table, nor care about the progress of data migration.
     ///
     /// The column definition of the target table must be exactly the same as the column definition of the source table.
-    /// The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before excuting any statements on current database.
+    /// The database does not record the state of the migration to disk, so if you have data to migrate, you need to use this function to configure the migration before executing any statements on current database.
     ///
     /// If the source table is not in the current database, the database containing the source table will be attached to the current database before the migration is complete.
     /// After migration, source tables will be dropped.
@@ -909,10 +1014,14 @@ public extension Database {
     /// The callback will be called when each table completes the migration.
     ///
     /// - Parameter callback: see `MigratedCallback`.
-    func setNotification(whenMigrated callback: MigratedCallback?) {
+    func setNotificationWhenMigrated(_ callback: MigratedCallback?) {
         if let callback = callback {
-            let internalCallBack: @convention(block) (CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
-                cppDatabase, tableName, sourceTableName in
+            let cppCallback: @convention(c) (UnsafeMutableRawPointer?, CPPDatabase, UnsafePointer<CChar>?, UnsafePointer<CChar>?) -> Void = {
+                cppContext, cppDatabase, tableName, sourceTableName in
+                let callbackWrap: ValueWrap<MigratedCallback>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let callbackWrap = callbackWrap else {
+                    return
+                }
                 let database = Database(with: cppDatabase)
                 var info: MigrationInfo?
                 if let tableName = tableName,
@@ -920,13 +1029,276 @@ public extension Database {
                     info = MigrationInfo(table: String(cString: tableName),
                                          sourceTable: String(cString: sourceTableName))
                 }
-                callback(database, info)
+                callbackWrap.value(database, info)
             }
-            let internalCallBackImp = imp_implementationWithBlock(internalCallBack)
-            WCDBDatabaseSetNotificationWhenMigrated(database, internalCallBackImp)
+            let callbackWrap = ValueWrap(callback)
+            let callbackWrapPointer = ObjectBridge.getUntypeSwiftObject(callbackWrap)
+            WCDBDatabaseSetNotificationWhenMigrated(database, cppCallback, callbackWrapPointer, ObjectBridge.objectDestructor)
         } else {
-            WCDBDatabaseSetNotificationWhenMigrated(database, nil)
+            WCDBDatabaseSetNotificationWhenMigrated(database, nil, nil, nil)
         }
+    }
+}
+
+// Compression
+public extension Database {
+    static let DictDefaultMatchValue = INT64_MAX
+    typealias DictId = UInt8
+
+    /// Train a zstd formalized dict with a set of sample strings.
+    ///
+    /// Note that the total size of all samples cannot exceed 4G.
+    ///
+    /// - Parameter strings: samples.
+    /// - Parameter dictId: spercified id of the result dict. It can not be zero.
+    /// - Returns: a dict of 100KB if succeed.
+    /// - Throws: `Error`
+    static func trainDict(with strings: [String], and dictId: DictId) throws -> Data {
+        try withExtendedLifetime(strings) {
+            var index = 0
+            let dataEnumerator: () -> CPPData = {
+                var ret = CPPData(buffer: nil, size: 0)
+                if index >= strings.count {
+                    return ret
+                }
+                let cstring = strings[index].cString
+                guard let cstring = cstring else {
+                    index += 1
+                    return ret
+                }
+                ret.size = UInt64(strings[index].lengthOfBytes(using: .utf8))
+                cstring.withMemoryRebound(to: UInt8.self, capacity: Int(ret.size)) { pointer in
+                    ret.buffer = UnsafeMutablePointer(mutating: pointer)
+                }
+                index += 1
+                return ret
+            }
+            let cppDataEnumerator: @convention(c) (UnsafeMutableRawPointer) -> CPPData = {
+                cppContext in
+                let enumeratorWrap: ValueWrap<() -> CPPData>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let enumeratorWrap = enumeratorWrap else {
+                    return CPPData(buffer: nil, size: 0)
+                }
+                return enumeratorWrap.value()
+            }
+            let enumeratorWrap = ValueWrap(dataEnumerator)
+            let enumeratorWrapPointer = ObjectBridge.getUntypeSwiftObject(enumeratorWrap)
+            let dictData = WCDBDatabaseTrainDict(dictId, cppDataEnumerator, enumeratorWrapPointer)
+            ObjectBridge.objectDestructor(enumeratorWrapPointer)
+            if dictData.size > 0, let buffer = dictData.buffer {
+                let dict = Data(bytes: buffer, count: Int(dictData.size))
+                free(buffer)
+                return dict
+            }
+            let cppError = WCDBCoreGetThreadedError()
+            throw ErrorBridge.getErrorFrom(cppError: cppError)
+        }
+    }
+
+    /// Train a zstd formalized dict with a set of sample datas.
+    ///
+    /// Note that the total size of all samples cannot exceed 4G.
+    ///
+    /// - Parameter datas: samples.
+    /// - Parameter dictId: spercified id of the result dict. It can not be zero.
+    /// - Returns: a dict of 100KB if succeed.
+    /// - Throws: `Error`
+    static func trainDict(with datas: [Data], and dictId: DictId) throws -> Data {
+        try withExtendedLifetime(datas) {
+            var index = 0
+            let dataEnumerator: () -> CPPData = {
+                var ret = CPPData(buffer: nil, size: 0)
+                if index >= datas.count {
+                    return ret
+                }
+                ret.size = UInt64(datas[index].count)
+                datas[index].withUnsafeBytes { pointer in
+                    ret.buffer = UnsafeMutablePointer(mutating: pointer.bindMemory(to: UInt8.self).baseAddress)
+                }
+                index += 1
+                return ret
+            }
+            let cppDataEnumerator: @convention(c) (UnsafeMutableRawPointer) -> CPPData = {
+                cppContext in
+                let enumeratorWrap: ValueWrap<() -> CPPData>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let enumeratorWrap = enumeratorWrap else {
+                    return CPPData(buffer: nil, size: 0)
+                }
+                return enumeratorWrap.value()
+            }
+            let enumeratorWrap = ValueWrap(dataEnumerator)
+            let enumeratorWrapPointer = ObjectBridge.getUntypeSwiftObject(enumeratorWrap)
+            let dictData = WCDBDatabaseTrainDict(dictId, cppDataEnumerator, enumeratorWrapPointer)
+            ObjectBridge.objectDestructor(enumeratorWrapPointer)
+            if dictData.size > 0, let buffer = dictData.buffer {
+                let dict = Data(bytes: buffer, count: Int(dictData.size))
+                free(buffer)
+                return dict
+            }
+            let cppError = WCDBCoreGetThreadedError()
+            throw ErrorBridge.getErrorFrom(cppError: cppError)
+        }
+    }
+
+    /// Register a zstd dict in to WCDB.
+    /// You must register a dict before using it.
+    ///
+    /// - Parameter dict: dict data.
+    /// - Parameter dictId: id of the dict. It can not be zero.
+    /// - Throws: `Error`
+    static func register(dict: Data, with dictId: DictId) throws {
+        try dict.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> Void in
+            if !WCDBDatabaseRegisterDict(bytes.bindMemory(to: UInt8.self).baseAddress, dict.count, dictId) {
+                let cppError = WCDBCoreGetThreadedError()
+                throw ErrorBridge.getErrorFrom(cppError: cppError)
+            }
+        }
+    }
+
+    class CompressionInfo {
+        // The table to be compressed
+        public let tableName: String
+
+        // Configure to compress all data in the specified column with the default zstd compression algorithm.
+        public func addZSTDNormalCompress(to property: PropertyConvertible) {
+            let column = property.asColumn()
+            withExtendedLifetime(column) {
+                WCDBDatabaseSetZSTDNormalCompress(cppInfo, $0.cppObj)
+            }
+        }
+
+        // Configure to compress all data in the specified column with a registered zstd dict.
+        public func addZSTDDictCompress(to property: PropertyConvertible, withDict id: DictId) {
+            let column = property.asColumn()
+            withExtendedLifetime(column) {
+                WCDBDatabaseSetZSTDDictCompress(cppInfo, $0.cppObj, id)
+            }
+        }
+
+        /// Configure to compress all data in the specified column with multi registered zstd dict.
+        /// Which dict to use when compressing is based on the value of the specified matching column.
+        /// You can use `DictDefaultMatchValue` to specify a default dict.
+        ///
+        /// Note that the matching column must be an integer column.
+        public func addZSTDMultiDictCompress(to property: PropertyConvertible,
+                                             withMatchProperty matchProperty: PropertyConvertible,
+                                             andDicts dicts: [Int64/* Value of match column */: DictId]) {
+            let column = property.asColumn()
+            let matchColumn = matchProperty.asColumn()
+            ObjectBridge.extendLifetime(column, matchColumn) {
+                let keyBuffer: UnsafeMutableBufferPointer<Int64> = .allocate(capacity: dicts.count)
+                let valueBuffer: UnsafeMutableBufferPointer<UInt8> = .allocate(capacity: dicts.count)
+                var index = 0
+                for (key, value) in dicts {
+                    keyBuffer[index] = key
+                    valueBuffer[index] = value
+                    index += 1
+                }
+                WCDBDatabaseSetZSTDMultiDictCompress(self.cppInfo, column.cppObj, matchColumn.cppObj, keyBuffer.baseAddress, valueBuffer.baseAddress, Int32(dicts.count))
+                keyBuffer.deallocate()
+                valueBuffer.deallocate()
+            }
+        }
+
+        internal init(with cppInfo: UnsafeMutableRawPointer, table name: String) {
+            self.cppInfo = cppInfo
+            self.tableName = name
+        }
+        private let cppInfo: UnsafeMutableRawPointer
+    }
+
+    /// Triggered at any time when WCDB needs to know whether a table in the current database needs to compress data,
+    /// mainly including creating a new table, reading and writing a table,and starting to compress a new table.
+    /// If the current table does not need to compress data, you don't need to config `CompressionInfo`.
+    typealias CompressionFilter = (_ info: inout CompressionInfo) -> Void
+
+    /// Configure which tables in the current database need to compress data.
+    /// Once configured, newly written data will be compressed immediately and synchronously,
+    /// and you can use `Database.stepCompression()` and `Database.enableAutoCompression()` to compress existing data.
+    ///
+    /// - Parameter filter: a filter to configure which tables need to be compressed and how to compress them.
+    func setCompression(with filter: CompressionFilter?) {
+        if let filter = filter {
+            let filterWrap = ValueWrap(filter)
+            let filterPointer = ObjectBridge.getUntypeSwiftObject(filterWrap)
+            let cppFilter: @convention(c) (UnsafeMutableRawPointer, UnsafePointer<CChar>, UnsafeMutableRawPointer) -> Void  = {
+                cppContext, table, cppInfo in
+                let filterWrap: ValueWrap<CompressionFilter>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let filterWrap = filterWrap else {
+                    return
+                }
+                var info = CompressionInfo(with: cppInfo, table: String(cString: table))
+                filterWrap.value(&info)
+            }
+            WCDBDatabaseSetCompression(database, cppFilter, filterPointer, ObjectBridge.objectDestructor)
+        } else {
+            WCDBDatabaseSetCompression(database, nil, nil, nil)
+        }
+    }
+
+    /// Configure not to compress new data written to the current database.
+    /// This configuration is mainly used to deal with some emergency scenarios.
+    /// It allows already compressed data to be read normally, but new data is no longer compressed.
+    /// - Parameter disable: disable compression or not.
+    func disableCompressNewData(_ disable: Bool) {
+        WCDBDatabaseDisableCompressNewData(database, disable)
+    }
+
+    /// Manually compress 100 rows of existing data.
+    /// You can call this method periodically until all data is compressed.
+    ///
+    /// - Throws: `Error`
+    func stepCompression() throws {
+        if !WCDBDatabaseStepCompression(database) {
+            throw getError()
+        }
+    }
+
+    /// Configure the database to automatically compress 100 rows of data every two seconds.
+    ///
+    /// - Parameter enable: enable auto-compression or not.
+    func enableAutoCompression(_ enable: Bool) {
+        WCDBDatabaseEnableAutoCompression(database, enable)
+    }
+
+    /// Triggered when a table is compressed completely.
+    /// When a table is compressed successfully, tableName will be valid.
+    /// When a database is totally compressed, tableName will be nil.
+    typealias CompressedCallback = (_ database: Database, _ table: String?) -> Void
+
+    /// Register a callback for compression notification.
+    /// The callback will be called when each table completes the compression.
+    ///
+    /// - Parameter callback: see `CompressedCallback`.
+    func setNotificationWhenCompressed(_ callback: CompressedCallback?) {
+        if let callback = callback {
+            let cppCallback: @convention(c) (UnsafeMutableRawPointer, CPPDatabase, UnsafePointer<CChar>?) -> Void = {
+                cppContext, cppDatabase, cppTableName in
+                let callbackWrap: ValueWrap<CompressedCallback>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let callbackWrap = callbackWrap else {
+                    return
+                }
+                let database = Database(with: cppDatabase)
+                var tableName: String?
+                if let cppTableName = cppTableName {
+                    tableName = String(cString: cppTableName)
+                }
+                callbackWrap.value(database, tableName)
+            }
+            let callbackWrap = ValueWrap(callback)
+            let callbackWrapPointer = ObjectBridge.getUntypeSwiftObject(callbackWrap)
+            WCDBDatabaseSetNotificationWhenCompressed(database, cppCallback, callbackWrapPointer, ObjectBridge.objectDestructor)
+        } else {
+            WCDBDatabaseSetNotificationWhenCompressed(database, nil, nil, nil)
+        }
+    }
+
+    /// Check if all tables in the database has finished compression.
+    /// It only check an internal flag of database.
+    ///
+    /// - Returns: true if all tables in the database has finished compression.
+    func isCompressed() -> Bool {
+        return WCDBDatabaseIsCompressed(database)
     }
 }
 

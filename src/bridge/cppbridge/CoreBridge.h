@@ -36,6 +36,7 @@ void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable);
 void WCDBCoreSetAutoCheckpointMinFrames(int frames);
 void WCDBCoreReleaseSQLiteMemory(int bytes);
 void WCDBCoreSetSoftHeapLimit(long long limit);
+CPPError WCDBCoreGetThreadedError();
 
 typedef void (*WCDBBusyTracer)(void* _Nullable context,
                                long tag,

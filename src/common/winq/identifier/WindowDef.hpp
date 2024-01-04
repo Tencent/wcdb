@@ -31,7 +31,7 @@ namespace WCDB {
 class WCDB_API WindowDef final : public SpecifiedSyntax<Syntax::WindowDef, SQL> {
 public:
     WindowDef();
-    ~WindowDef() override final;
+    ~WindowDef() override;
 
     WindowDef& partition(const Expressions& expressions);
     WindowDef& order(const OrderingTerms& orders);

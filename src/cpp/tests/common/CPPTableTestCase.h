@@ -88,4 +88,6 @@
 
 - (WCDB::MultiRowsValue)getAllvalues;
 
+- (void)check:(const WCDB::MultiRowsValue &)selected isEqualTo:(const WCDB::MultiRowsValue &)expectedRows;
+
 @end

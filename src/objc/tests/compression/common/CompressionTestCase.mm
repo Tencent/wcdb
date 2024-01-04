@@ -256,7 +256,7 @@
     }
 
     // Check new data is compressed
-    WCTValue *compressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_text").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").notNull())];
+    WCTValue *compressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").notNull())];
     TestCaseAssertTrue(compressedTextCount.numberValue.intValue > 0);
     if (self.compressionStatus == CompressionStatus_finishCompressed) {
         TestCaseAssertTrue(compressedTextCount.numberValue.intValue == expectingObjs.count);
@@ -276,7 +276,7 @@
             return;
         }
     }
-    WCTValue *compressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_blob").count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").notNull())];
+    WCTValue *compressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").notNull())];
     TestCaseAssertTrue(compressedBlobCount.numberValue.intValue > 0);
     if (self.compressionStatus == CompressionStatus_finishCompressed) {
         TestCaseAssertTrue(compressedBlobCount.numberValue.intValue == expectingObjs.count);

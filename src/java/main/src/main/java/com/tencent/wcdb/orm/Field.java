@@ -22,9 +22,7 @@
  */
 package com.tencent.wcdb.orm;
 
-import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.winq.Column;
-import com.tencent.wcdb.winq.Identifier;
 import com.tencent.wcdb.winq.Schema;
 
 public class Field<T> extends Column {

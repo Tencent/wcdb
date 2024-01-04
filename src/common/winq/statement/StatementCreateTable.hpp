@@ -33,7 +33,7 @@ class WCDB_API StatementCreateTable final
 public:
     using SpecifiedSyntax<Syntax::CreateTableSTMT, Statement>::SpecifiedSyntax;
     StatementCreateTable();
-    ~StatementCreateTable() override final;
+    ~StatementCreateTable() override;
 
     StatementCreateTable& createTable(const UnsafeStringView& table);
     StatementCreateTable& schema(const Schema& schema);

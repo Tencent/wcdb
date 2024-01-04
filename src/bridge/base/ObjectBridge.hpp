@@ -68,16 +68,6 @@
 
 #define WCDBGetSwiftObject(typedObj) typedObj.innerValue.get()
 
-#define WCDBCreateSwiftBridgedClosure(objType, originObj)                      \
-    WCDB::ObjectBridge::createRecyclableSwiftClosure<objType##ClosureType>(originObj)
-
-#define WCDBGetSwiftClosure(typedObj) typedObj.get()
-#define WCDBSwiftClosureCall(typedObj) WCDBGetSwiftClosure(typedObj)()
-#define WCDBSwiftClosureCallWithOneArgument(typedObj, argument)                \
-    WCDBGetSwiftClosure(typedObj)(argument)
-#define WCDBSwiftClosureCallWithMultiArgument(typedObj, firstArgument, ...)    \
-    WCDBGetSwiftClosure(typedObj)(firstArgument, nullptr, __VA_ARGS__)
-
 #define WCDBGetBridgedData(type, data)                                         \
     (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject((CPPObject*) data.intValue)))
 
@@ -109,16 +99,6 @@ public:
         T ret;
         ret.innerValue = recylableObj;
         return ret;
-    }
-
-    template<typename T>
-    static Recyclable<T> createRecyclableSwiftClosure(SwiftClosure* _Nullable obj)
-    {
-        return Recyclable<T>((T) obj, [](T obj) {
-            if (obj != nullptr) {
-                WCDBReleaseSwiftClosure((SwiftClosure*) obj);
-            }
-        });
     }
 
     static CPPObject* _Nullable createUnmanagedCPPObject(void* _Nullable obj);

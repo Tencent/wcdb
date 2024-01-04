@@ -35,7 +35,7 @@ private:
 #pragma mark - Initialize
 public:
     CompressingHandleDecorator(Compression &compression);
-    ~CompressingHandleDecorator() override final;
+    ~CompressingHandleDecorator() override;
 
     void decorate(Decorative *handle) override final;
 

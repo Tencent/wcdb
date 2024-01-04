@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API DropViewSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~DropViewSTMT() override final;
+    ~DropViewSTMT() override;
 
     bool ifExists = false;
     Schema schema;

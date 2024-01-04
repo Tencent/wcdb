@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API QualifiedTableName final : public Identifier {
 #pragma mark - Lang
 public:
-    ~QualifiedTableName() override final;
+    ~QualifiedTableName() override;
 
     Schema schema;
     StringView table;

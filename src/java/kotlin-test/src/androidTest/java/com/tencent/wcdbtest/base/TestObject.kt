@@ -33,19 +33,19 @@ class TestObject {
     @WCDBField
     var content: String? = null
 
-    override fun equals(obj: Any?): Boolean {
-        return if (obj is TestObject) {
-            if (obj.id != id) {
+    override fun equals(other: Any?): Boolean {
+        return if (other is TestObject) {
+            if (other.id != id) {
                 return false
             }
             if (content == null) {
-                return obj.content == null || obj.content!!.isEmpty()
-            } else if (obj.content == null) {
+                return other.content == null || other.content!!.isEmpty()
+            } else if (other.content == null) {
                 return content!!.isEmpty()
             }
-            obj.content == content
+            other.content == content
         } else {
-            super.equals(obj)
+            super.equals(other)
         }
     }
 

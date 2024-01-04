@@ -26,8 +26,6 @@
 
 void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj) = nullptr;
 
-void (*_Nullable WCDBReleaseSwiftClosure)(SwiftClosure* _Nonnull obj) = nullptr;
-
 void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
 {
     if (obj == nullptr) {

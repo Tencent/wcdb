@@ -33,7 +33,7 @@ class WCDB_API StatementCreateView final
 public:
     using SpecifiedSyntax<Syntax::CreateViewSTMT, Statement>::SpecifiedSyntax;
     StatementCreateView();
-    ~StatementCreateView() override final;
+    ~StatementCreateView() override;
 
     StatementCreateView& createView(const UnsafeStringView& view);
     StatementCreateView& schema(const Schema& schema);

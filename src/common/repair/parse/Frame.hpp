@@ -39,7 +39,7 @@ class Wal;
 class Frame final : public WalRelated, public Initializeable {
 public:
     Frame(int frameno, Wal *wal);
-    ~Frame() override final;
+    ~Frame() override;
 
     static constexpr const int headerSize = 24;
     const int frameno;

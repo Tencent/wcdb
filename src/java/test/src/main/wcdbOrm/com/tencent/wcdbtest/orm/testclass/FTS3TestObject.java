@@ -30,7 +30,7 @@ import com.tencent.wcdb.fts.*;
         ftsModule = @FTSModule(
                 version = FTSVersion.FTS3,
                 tokenizer = BuiltinTokenizer.OneOrBinary,
-                tokenizerParameters = BuiltinTokenizer.Parameter.NeedSymbol
+                tokenizerParameters = BuiltinTokenizer.Parameter.SkipStemming
         )
 )
 public class FTS3TestObject {

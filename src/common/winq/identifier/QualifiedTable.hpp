@@ -33,7 +33,7 @@ class WCDB_API QualifiedTable final
 public:
     using SpecifiedSyntax<Syntax::QualifiedTableName, SQL>::SpecifiedSyntax;
     QualifiedTable();
-    ~QualifiedTable() override final;
+    ~QualifiedTable() override;
 
     template<typename T, typename Enable = typename std::enable_if<QualifiedTableConvertible<T>::value>::type>
     QualifiedTable(const T& t)

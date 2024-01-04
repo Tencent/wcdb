@@ -49,7 +49,7 @@ class SequenceCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     SequenceCrawler();
-    ~SequenceCrawler() override final;
+    ~SequenceCrawler() override;
 
 #pragma mark - Sequence
 public:

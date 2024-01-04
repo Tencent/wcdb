@@ -42,7 +42,7 @@ class WCDB_API Expression final : public SpecifiedSyntax<Syntax::Expression, SQL
                                   public FTSFunctionOperable {
 public:
     using SpecifiedSyntax<Syntax::Expression, SQL>::SpecifiedSyntax;
-    ~Expression() override final;
+    ~Expression() override;
 
     template<typename T, typename Enable = typename std::enable_if<ExpressionConvertible<T>::value>::type>
     Expression(const T& t)

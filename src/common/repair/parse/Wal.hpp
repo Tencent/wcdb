@@ -39,7 +39,7 @@ class Wal final : public PagerRelated, public Initializeable {
 #pragma mark - Initialize
 public:
     Wal(Pager *pager);
-    ~Wal() override final;
+    ~Wal() override;
 
     const StringView &getPath() const;
     static constexpr const int headerSize = 32;

@@ -106,7 +106,7 @@ protected:
 class MigrationUserInfo final : public MigrationBaseInfo {
 public:
     using MigrationBaseInfo::MigrationBaseInfo;
-    ~MigrationUserInfo() override final;
+    ~MigrationUserInfo() override;
 
     using MigrationBaseInfo::setSource;
     using MigrationBaseInfo::setFilter;
@@ -119,7 +119,7 @@ public:
                   const StringViewSet& columns,
                   bool autoincrement,
                   const UnsafeStringView& integerPrimaryKey);
-    ~MigrationInfo() override final;
+    ~MigrationInfo() override;
 
     bool isAutoIncrement() const;
     const StringView& getIntegerPrimaryKey() const;

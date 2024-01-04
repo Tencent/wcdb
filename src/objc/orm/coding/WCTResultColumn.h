@@ -31,7 +31,7 @@ public:
     WCTResultColumn(const WCTProperty& property);
     WCTResultColumn(const WCDB::ResultColumn& resultColumn,
                     const WCTColumnBinding& columnBinding);
-    ~WCTResultColumn() override final;
+    ~WCTResultColumn() override;
 };
 
 namespace WCDB {
@@ -40,7 +40,7 @@ template<>
 class WCDB_API SyntaxList<WCTResultColumn> final : public _SyntaxList<WCTResultColumn> {
 public:
     using _SyntaxList<WCTResultColumn>::_SyntaxList;
-    ~SyntaxList() override final;
+    ~SyntaxList() override;
 
     WCTResultColumns
     resultColumnsByAddingNewResultColumns(const WCTResultColumns& resultColumns) const;

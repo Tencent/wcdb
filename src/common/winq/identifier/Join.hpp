@@ -34,7 +34,7 @@ class WCDB_API Join final : public SpecifiedSyntax<Syntax::JoinClause, SQL> {
 public:
     using SpecifiedSyntax<Syntax::JoinClause, SQL>::SpecifiedSyntax;
     Join();
-    ~Join() override final;
+    ~Join() override;
 
     Join& table(const TableOrSubquery& tableOrSubquery);
 

@@ -41,7 +41,7 @@ class Pager final : public ErrorProne, public Initializeable {
 #pragma mark - Initialize
 public:
     Pager(const UnsafeStringView& path);
-    ~Pager() override final;
+    ~Pager() override;
 
     void setPageSize(int pageSize);
     void setReservedBytes(int reservedBytes);
@@ -114,7 +114,7 @@ protected:
     class Cache final : public LRUCache<uint32_t, UnsafeData> {
     public:
         Cache(size_t maxAllowedMemory);
-        ~Cache() override final;
+        ~Cache() override;
 
         void insert(uint32_t pageNum, const UnsafeData& data);
 

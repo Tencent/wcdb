@@ -33,7 +33,7 @@ class WCDB_API StatementRelease final
 public:
     using SpecifiedSyntax<Syntax::ReleaseSTMT, Statement>::SpecifiedSyntax;
     StatementRelease();
-    ~StatementRelease() override final;
+    ~StatementRelease() override;
 
     StatementRelease& release(const UnsafeStringView& savepoint);
 };

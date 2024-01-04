@@ -33,7 +33,7 @@ class WCDB_API StatementDropIndex final
 public:
     using SpecifiedSyntax<Syntax::DropIndexSTMT, Statement>::SpecifiedSyntax;
     StatementDropIndex();
-    ~StatementDropIndex() override final;
+    ~StatementDropIndex() override;
 
     StatementDropIndex& dropIndex(const UnsafeStringView& index);
     StatementDropIndex& schema(const Schema& schema);

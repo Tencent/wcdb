@@ -397,7 +397,7 @@ public class ORMTest extends DatabaseTestCase {
     @Test
     public void testFTS3Object() {
         doTestSQLs(new String[]{
-                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts3(tokenize = wcdb_one_or_binary need_symbol, id INTEGER, content TEXT, notindexed=id)"
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts3(tokenize = wcdb_one_or_binary skip_stemming, id INTEGER, content TEXT, notindexed=id)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {

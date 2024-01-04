@@ -21,8 +21,6 @@
  * limitations under the License.
  */
 
-#pragma once
-
 #include "StatementCreateVirtualTableJNI.h"
 #include "StatementCreateVirtualTableBridge.h"
 
@@ -68,6 +66,6 @@ void WCDBJNIStatementCreateVirtualTableClassMethod(configArguments, jlong self, 
     WCDBJNIBridgeStruct(CPPStatementCreateVirtualTable, self);
     WCDBJNIGetStringArray(arguments);
     WCDBStatementCreateVirtualTableConfigArguments(
-    selfStruct, argumentsCharArray, argumentsLength);
+    selfStruct, (const char *const *) argumentsCharArray, argumentsLength);
     WCDBJNIReleaseStringArray(arguments);
 }
