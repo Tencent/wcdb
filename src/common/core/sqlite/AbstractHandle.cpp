@@ -459,9 +459,6 @@ bool AbstractHandle::getSchemaInfo(int &memoryUsed, int &tableCount, int &indexC
 #pragma mark - Transaction
 void AbstractHandle::markErrorNotAllowedWithinTransaction()
 {
-    WCTRemedialAssert(m_transactionLevel == 0 || m_transactionLevel == 1,
-                      "Transaction error state should be changed without nested.",
-                      return;);
     if (m_transactionError == TransactionError::Allowed) {
         m_transactionError = TransactionError::NotAllowed;
     }
