@@ -121,9 +121,7 @@ bool Mechanic::work()
             }
             assembleAssociatedSQLs(contentElement.second->associatedSQLs);
         }
-        if (!isErrorCritial()) {
-            markAsAssembled();
-        }
+        markAsAssembled();
     }
     if (numberOfPages == 0 && !isErrorCritial() && getScore().value() == 0) {
         increaseScore(1);
