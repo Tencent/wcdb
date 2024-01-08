@@ -55,6 +55,10 @@ const Error &BackupHandleOperator::getBackupError() const
 bool BackupHandleOperator::acquireBackupSharedLock()
 {
     WCTAssert(getHandle()->isOpened());
+    if (!getHandle()->isOpened()) {
+        getHandle()->notifyError(Error::Code::Warning, "", "Handle is not opened!");
+        return false;
+    }
     int maxRryTimes = 5;
     do {
         if (getHandle()->setCheckPointLock(true)) {
