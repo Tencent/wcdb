@@ -233,7 +233,7 @@ class ORMTest : DatabaseTestCase() {
     fun testFTS3() {
         doTestSQLs(
             arrayOf(
-                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts3(tokenize = wcdb_one_or_binary need_symbol, id INTEGER, content TEXT, notindexed=id)"
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts3(tokenize = wcdb_one_or_binary skip_stemming, id INTEGER, content TEXT, notindexed=id)"
             )
         ) {
             database.addTokenizer(BuiltinTokenizer.OneOrBinary)
