@@ -322,6 +322,7 @@ bool CompressHandleOperator::compressRow(OneRowValue& row)
         }
         WCTAssert(compressedValue.value().size() <= data.size());
 
+        m_performance.totalSize += data.size();
         if (compressedValue.value().size() < data.size()) {
             value = compressedValue.value();
             if (!CompressionCenter::shared().testContentCanBeDecompressed(
@@ -436,6 +437,7 @@ void CompressHandleOperator::tryReportPerformance()
     error.infos.insert_or_assign("UncompressedCount", m_performance.uncompressedCount);
     error.infos.insert_or_assign("OriginalSize", m_performance.originalSize);
     error.infos.insert_or_assign("CompressedSize", m_performance.compressedSize);
+    error.infos.insert_or_assign("TotalSize", m_performance.totalSize);
 
     Notifier::shared().notify(error);
 
