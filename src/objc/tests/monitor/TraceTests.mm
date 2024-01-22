@@ -150,6 +150,7 @@
 
     TestCaseAssertFalse([self.database execute:WCDB::StatementSelect().select(1).from(@"dummy")]);
     TestCaseAssertTrue(tested);
+    [self.database traceError:nil];
 }
 
 - (void)test_global_trace_sql
