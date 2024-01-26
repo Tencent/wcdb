@@ -35,7 +35,7 @@ namespace Repair {
 
 #pragma mark - Initialize
 Mechanic::Mechanic(const UnsafeStringView &path)
-: Repairman(path), m_checksum(0)
+: Repairman(path), m_checksum(0), m_withoutRowId(false)
 {
 }
 
@@ -105,6 +105,7 @@ bool Mechanic::work()
             }
 
             if (!m_assembleDelegate->isAssemblingTableWithoutRowid()) {
+                m_withoutRowId = false;
                 for (const auto &verifiedPagenosElement : contentElement.second->verifiedPagenos) {
                     m_checksum = verifiedPagenosElement.hash;
                     if (!crawl(verifiedPagenosElement.number)) {
@@ -115,6 +116,7 @@ bool Mechanic::work()
                     }
                 }
             } else if (contentElement.second->rootPage > 1) {
+                m_withoutRowId = true;
                 if (!crawl(contentElement.second->rootPage)) {
                     tryUpgradeCrawlerError();
                 }
@@ -147,7 +149,7 @@ bool Mechanic::willCrawlPage(const Page &page, int)
     if (isErrorCritial()) {
         return false;
     }
-    if (page.getType() == Page::Type::LeafTable) {
+    if (page.getType() == Page::Type::LeafTable && !m_withoutRowId) {
         if (page.getData().hash() != m_checksum) {
             markAsCorrupted(page.number,
                             StringView::formatted(
@@ -155,7 +157,7 @@ bool Mechanic::willCrawlPage(const Page &page, int)
             return false;
         }
         markPageAsCounted(page);
-    } else if (page.isIndexPage()) {
+    } else if (page.isIndexPage() && m_withoutRowId) {
         markPageAsCounted(page);
     } else {
         markAsCorrupted(page.number,
