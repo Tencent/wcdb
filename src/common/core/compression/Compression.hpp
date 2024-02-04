@@ -58,6 +58,10 @@ private:
     void purge();
     TableFilter m_tableFilter;
 
+    volatile int m_dataVersion;
+    ThreadLocal<int> m_localDataVersion;
+    void tryResetLocalStatus();
+
 protected:
     class InfoInitializer {
         friend class Compression;

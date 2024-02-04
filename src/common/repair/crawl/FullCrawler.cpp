@@ -107,6 +107,7 @@ bool FullCrawler::work()
 
     if (markAsAssembling()) {
         if (!m_masterCrawler.work(this) || isErrorCritial()) {
+            markAsAssembled();
             return exit();
         }
         for (const auto &element : m_associatedSQLs) {

@@ -797,6 +797,7 @@
 		03F54825287D87F9007BCA3E /* StatementDropIndexBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54823287D87F9007BCA3E /* StatementDropIndexBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03F54828287D93A7007BCA3E /* StatementDropTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03F54826287D93A7007BCA3E /* StatementDropTableBridge.cpp */; };
 		03F54829287D93A7007BCA3E /* StatementDropTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F54827287D93A7007BCA3E /* StatementDropTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0D0136072B576AD400C95110 /* MMDBCompressTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0136062B576AD400C95110 /* MMDBCompressTest.mm */; };
 		0D0CD79F2A6FA1A900F89C6B /* CipherMigrationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0CD79E2A6FA1A900F89C6B /* CipherMigrationTests.mm */; };
 		0D0CD7A12A6FBE0C00F89C6B /* MigrateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0CD7A02A6FBE0C00F89C6B /* MigrateTests.mm */; };
 		0D0D56C1254ABEAA000F16A6 /* FTS5Object.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D0D56C0254ABEAA000F16A6 /* FTS5Object.mm */; };
@@ -3952,6 +3953,7 @@
 		03F54823287D87F9007BCA3E /* StatementDropIndexBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementDropIndexBridge.h; sourceTree = "<group>"; };
 		03F54826287D93A7007BCA3E /* StatementDropTableBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementDropTableBridge.cpp; sourceTree = "<group>"; };
 		03F54827287D93A7007BCA3E /* StatementDropTableBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementDropTableBridge.h; sourceTree = "<group>"; };
+		0D0136062B576AD400C95110 /* MMDBCompressTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MMDBCompressTest.mm; sourceTree = "<group>"; };
 		0D0CD79E2A6FA1A900F89C6B /* CipherMigrationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CipherMigrationTests.mm; sourceTree = "<group>"; };
 		0D0CD7A02A6FBE0C00F89C6B /* MigrateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MigrateTests.mm; sourceTree = "<group>"; };
 		0D0D56BF254ABE9B000F16A6 /* FTS5Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTS5Object.h; sourceTree = "<group>"; };
@@ -7842,6 +7844,7 @@
 				398B47AF239E34E6008CF7C5 /* MMDBMigrationTests.mm */,
 				398B47A3239E2540008CF7C5 /* MMDBFactory.h */,
 				398B47A4239E2540008CF7C5 /* MMDBFactory.mm */,
+				0D0136062B576AD400C95110 /* MMDBCompressTest.mm */,
 			);
 			path = MMDB;
 			sourceTree = "<group>";
@@ -11320,6 +11323,7 @@
 				398B46DE239E22F4008CF7C5 /* ObjectsBasedFactory.mm in Sources */,
 				398B46E9239E22F4008CF7C5 /* PrototypeFactory.mm in Sources */,
 				0D1297C62A4D7AA1006052AE /* VideoInfo.mm in Sources */,
+				0D0136072B576AD400C95110 /* MMDBCompressTest.mm in Sources */,
 				398B46EB239E22F4008CF7C5 /* Signpost.mm in Sources */,
 				398B47B0239E34E6008CF7C5 /* MMDBMigrationTests.mm in Sources */,
 				398B46ED239E22F4008CF7C5 /* WCTDatabase+TestCase.mm in Sources */,

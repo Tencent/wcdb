@@ -52,6 +52,7 @@ public:
 protected:
     const Material *m_material;
     uint32_t m_checksum;
+    bool m_withoutRowId;
 
 #pragma mark - Crawlable
 protected:

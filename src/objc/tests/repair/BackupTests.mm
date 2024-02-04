@@ -84,6 +84,25 @@
     }];
 }
 
+- (void)test_delete_all
+{
+    [self
+    executeFullTest:^{
+        XCTAssertTrue([self.table deleteObjects]);
+        XCTAssertTrue([self.database passiveCheckpoint]);
+        usleep(10000);
+        XCTAssertTrue([self.database backup]);
+    }
+    withCheck:^{
+        NSArray<NSObject<RepairTestObject> *> *allObjects = [self.table getObjects];
+        if (!self.incrementalBackup) {
+            TestCaseAssertTrue(allObjects.count == 0);
+        } else {
+            TestCaseAssertTrue(allObjects.firstObject.identifier == 1000);
+        }
+    }];
+}
+
 - (void)test_rename_table
 {
     NSString *newTable = @"newTable";

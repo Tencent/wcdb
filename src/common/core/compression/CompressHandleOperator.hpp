@@ -48,6 +48,7 @@ private:
         size_t compressedSize = 0;
         size_t originalSize = 0;
         int64_t compressTime = 0;
+        size_t totalSize = 0;
     } CompressionPerformance;
 
     Optional<bool> doCompressRows(const OneColumnValue& rowids);

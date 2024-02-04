@@ -36,7 +36,8 @@ CompressionEvent::~CompressionEvent() = default;
 
 #pragma mark - Initialize
 Compression::Compression(CompressionEvent* event)
-: m_hasCreatedRecord(false)
+: m_dataVersion(0)
+, m_hasCreatedRecord(false)
 , m_canCompressNewData(true)
 , m_tableAcquired(false)
 , m_compressed(false)
@@ -66,6 +67,18 @@ void Compression::purge()
     m_holder.clear();
     m_hints.clear();
     m_filted.clear();
+    // Invalidate all thread local data.
+    m_dataVersion++;
+}
+
+void Compression::tryResetLocalStatus()
+{
+    if (m_localDataVersion.getOrCreate() == m_dataVersion) {
+        return;
+    }
+    m_localFilted.getOrCreate().clear();
+    m_commitingTables.getOrCreate().clear();
+    m_localDataVersion.getOrCreate() = m_dataVersion;
 }
 
 bool Compression::initInfo(InfoInitializer& initializer, const UnsafeStringView& table)
@@ -152,6 +165,7 @@ void Compression::markAsCompressed(const CompressionTableInfo* info)
 
 Optional<const CompressionTableInfo*> Compression::getInfo(const UnsafeStringView& table)
 {
+    tryResetLocalStatus();
     auto localFilted = m_localFilted.getOrCreate();
     auto localIter = localFilted.find(table);
     if (localIter != localFilted.end()) {
@@ -201,6 +215,7 @@ bool Compression::checkCompressingColumn(InfoInitializer& initializer,
     }
     info->setNeedCheckColumns(false);
     if (addColumn.value() && handle->isInTransaction()) {
+        tryResetLocalStatus();
         m_commitingTables.getOrCreate().insert(info);
     }
     return true;
@@ -208,6 +223,7 @@ bool Compression::checkCompressingColumn(InfoInitializer& initializer,
 
 void Compression::notifyTransactionCommitted(bool committed)
 {
+    tryResetLocalStatus();
     if (!committed) {
         for (auto tableInfo : m_commitingTables.getOrCreate()) {
             tableInfo->setNeedCheckColumns(true);

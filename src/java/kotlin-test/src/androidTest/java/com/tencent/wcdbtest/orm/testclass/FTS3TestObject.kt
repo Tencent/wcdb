@@ -33,7 +33,7 @@ import com.tencent.wcdb.fts.BuiltinTokenizer
     ftsModule = FTSModule(
         version = FTSVersion.FTS3,
         tokenizer = BuiltinTokenizer.OneOrBinary,
-        tokenizerParameters = [BuiltinTokenizer.Parameter.NeedSymbol]
+        tokenizerParameters = [BuiltinTokenizer.Parameter.SkipStemming]
     )
 )
 class FTS3TestObject {

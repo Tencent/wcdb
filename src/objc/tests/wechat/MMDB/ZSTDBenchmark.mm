@@ -74,6 +74,7 @@ typedef enum : NSUInteger {
     DictType_App,
     DictType_Emoji,
     DictType_NEWXML,
+    DictType_OtherMsg,
     DictType_Link,
     DictType_Record,
     DictType_Ref,
@@ -82,7 +83,6 @@ typedef enum : NSUInteger {
     DictType_Finder,
     DictType_OpenSDKWeApp,
     DictType_Note,
-    DictType_OtherMsg,
     DictType_Count,
 } DictType;
 
@@ -127,10 +127,10 @@ typedef enum : NSUInteger {
     self.desktop = @"/Users/chenqiuwen/Desktop";
     NSMutableArray* paths = [[NSMutableArray alloc] init];
     NSString* dir = [self.desktop stringByAppendingString:@"/ZSTDTest/"];
-    for (int i = 1; i < 7; i++) {
+    for (int i = 1; i < 8; i++) {
         [paths addObject:[dir stringByAppendingFormat:@"Brand/Brand%d/BrandMsg.db", i]];
     }
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i < 6; i++) {
         for (int j = 1; j < 5; j++) {
             if ((i == 1 && j == 2) || (i == 2 && j == 4)) {
                 continue;
@@ -286,6 +286,42 @@ typedef enum : NSUInteger {
     XCTAssertTrue([extDict writeToFile:@"~/Desktop/BrandExtDict.zstd" atomically:YES]);
 }
 
+- (void)testCompressMessage
+{
+    self.compressLevel = ZSTD_defaultCLevel();
+    self.skipDebugLog = YES;
+
+    self.usingCommonDict = true;
+    self.usingTypedDict = true;
+    self.dictSize = 100 * 1024;
+    self.dictMsgCount = 1000000;
+    for (NSString* path in self.allDatabasePaths) {
+        if ([path containsString:@"BrandMsg"]) {
+            continue;
+        }
+        @autoreleasepool {
+            self.allTables = nil;
+            [self commonTestWithPath:path andId:[NSString stringWithFormat:@"%d-%d-%d", self.usingTypedDict, self.usingCommonDict, self.dictMsgCount]];
+        }
+        break;
+    }
+    [self printBenchmark];
+    NSData* textDict = self.dicts[@(DictType_Text)].dict;
+    XCTAssertTrue([textDict writeToFile:@"~/Desktop/TextMsgDict.zstd" atomically:YES]);
+    NSData* imageDict = self.dicts[@(DictType_ImageMsg)].dict;
+    XCTAssertTrue([imageDict writeToFile:@"~/Desktop/ImageMsgDict.zstd" atomically:YES]);
+    NSData* voiceDict = self.dicts[@(DictType_Voice)].dict;
+    XCTAssertTrue([voiceDict writeToFile:@"~/Desktop/VoiceMsgDict.zstd" atomically:YES]);
+    NSData* videoDict = self.dicts[@(DictType_Video)].dict;
+    XCTAssertTrue([videoDict writeToFile:@"~/Desktop/VideoMsgDict.zstd" atomically:YES]);
+    NSData* appDict = self.dicts[@(DictType_App)].dict;
+    XCTAssertTrue([appDict writeToFile:@"~/Desktop/AppMsgDict.zstd" atomically:YES]);
+    NSData* otherDict = self.dicts[@(DictType_OtherMsg)].dict;
+    XCTAssertTrue([otherDict writeToFile:@"~/Desktop/OtherMsgDict.zstd" atomically:YES]);
+    NSData* extDict = self.dicts[@(DictType_msgExt)].dict;
+    XCTAssertTrue([extDict writeToFile:@"~/Desktop/ExtMsgDict.zstd" atomically:YES]);
+}
+
 - (ZDict*)tranDictWith:(NSArray<NSString*>*)contents dictId:(unsigned)dictId
 {
     std::vector<size_t> contentSizes;
@@ -430,7 +466,10 @@ typedef enum : NSUInteger {
             [self findTrainingMessage:trainingContents inTables:self.allTables from:self.database];
         } else {
             bool isBrand = [self.path containsString:@"BrandMsg"];
-            for (int pathIndex = (isBrand ? 0 : 3); pathIndex < (isBrand ? 3 : self.allDatabasePaths.count); pathIndex++) {
+            for (int pathIndex = 0; pathIndex < self.allDatabasePaths.count; pathIndex++) {
+                if ([self.allDatabasePaths[pathIndex] containsString:@"BrandMsg"] != isBrand) {
+                    continue;
+                }
                 WCTDatabase* database = [[WCTDatabase alloc] initWithPath:self.allDatabasePaths[pathIndex]];
                 NSArray* tables = [self.database getColumnOnResultColumn:WCTMaster.name
                                                                fromTable:WCTMaster.tableName

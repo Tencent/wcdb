@@ -104,7 +104,7 @@ bool AbstractHandle::open()
     if (!isOpened()) {
         if (m_customOpenFlag == 0) {
             succeed = APIExit(sqlite3_open_v2(
-            m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, 0));
+            m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MAINDB_READONLY, 0));
         } else {
             succeed
             = APIExit(sqlite3_open_v2(m_path.data(), &m_handle, m_customOpenFlag, 0));

@@ -296,7 +296,7 @@ bool Backup::incrementalBackup()
     }
     for (auto iter = m_verifyingPagenos->begin(); iter != m_verifyingPagenos->end();) {
         auto &page = iter->second;
-        if (page.type != Page::Type::LeafTable) {
+        if (page.type != Page::Type::LeafTable && page.type != Page::Type::InteriorTable) {
             iter = m_verifyingPagenos->erase(iter);
         } else {
             iter++;
@@ -310,6 +310,14 @@ bool Backup::incrementalBackup()
         if (!crawl(iter->rootPage)) {
             setError(m_pager.getError());
             return false;
+        }
+        for (auto pageIter = iter->verifiedPagenos.begin();
+             pageIter != iter->verifiedPagenos.end();
+             pageIter++) {
+            if (pageIter->number > 0 && m_unchangedLeaves[pageIter->number - 1]) {
+                // Deleted page
+                pageIter->number = 0;
+            }
         }
         if (m_verifiedPagenos.size() > 0) {
             iter->verifiedPagenos.insert(iter->verifiedPagenos.end(),
@@ -437,16 +445,17 @@ bool Backup::canCrawlPage(uint32_t pageno)
             return false;
         }
         if (m_unchangedLeaves[pageno - 1]) {
+            m_unchangedLeaves[pageno - 1] = false;
             return false;
         }
         auto iter = m_verifyingPagenos->find(pageno);
         if (iter != m_verifyingPagenos->end()) {
-            m_verifiedPagenos.emplace_back(iter->first, iter->second.hash);
-            m_verifyingPagenos->erase(iter);
-            if (m_verifyingPagenos->size() == 0) {
-                suspend();
+            bool isLeaf = iter->second.type == Page::Type::LeafTable;
+            if (isLeaf) {
+                m_verifiedPagenos.emplace_back(iter->first, iter->second.hash);
             }
-            return false;
+            m_verifyingPagenos->erase(iter);
+            return !isLeaf;
         }
     }
     return true;
