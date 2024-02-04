@@ -480,7 +480,8 @@ Optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
 #pragma mark - Trace
 void Core::globalLog(int rc, const char* message)
 {
-    if (Error::rc2c(rc) == Error::Code::Warning) {
+    Error::Code code = Error::rc2c(rc);
+    if (code == Error::Code::Warning || code == Error::Code::Corrupt) {
         Error error;
         error.setSQLiteCode(rc, message);
         error.level = Error::Level::Warning;
