@@ -531,7 +531,7 @@ public extension Database {
     /// please enable it only when necessary, and disable it when unnecessary.
     ///
     /// - Parameter enable: enable or not.
-    func setFullSQL(enable: Bool) {
+    func setFullSQLTrace(enable: Bool) {
         WCDBDatabaseSetFullSQLTraceEnable(database, enable)
     }
 
