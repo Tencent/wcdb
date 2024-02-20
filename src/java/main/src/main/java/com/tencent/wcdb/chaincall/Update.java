@@ -38,8 +38,8 @@ public class Update<T> extends ChainCall<StatementUpdate> {
     private T object = null;
     private Value[] row = null;
 
-    public Update(Handle handle) {
-        super(handle);
+    public Update(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+        super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementUpdate();
     }
 

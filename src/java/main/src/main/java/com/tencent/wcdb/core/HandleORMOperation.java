@@ -125,9 +125,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @return An {@link Insert} object.
      */
     public <T> Insert<T> prepareInsert() {
-        Insert<T> insert = new Insert<T>(getHandle(true));
-        insert.autoInvalidateHandle = autoInvalidateHandle();
-        insert.needChanges = false;
+        Insert<T> insert = new Insert<T>(getHandle(true), false, autoInvalidateHandle());
         return insert;
     }
 
@@ -136,9 +134,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @return An {@link Update} object.
      */
     public <T> Update<T> prepareUpdate() {
-        Update<T> update = new Update<T>(getHandle(true));
-        update.autoInvalidateHandle = autoInvalidateHandle();
-        update.needChanges = false;
+        Update<T> update = new Update<T>(getHandle(true), false, autoInvalidateHandle());
         return update;
     }
 
@@ -147,9 +143,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @return An {@link Select} object.
      */
     public <T> Select<T> prepareSelect() {
-        Select<T> select = new Select<T>(getHandle(false));
-        select.autoInvalidateHandle = autoInvalidateHandle();
-        select.needChanges = false;
+        Select<T> select = new Select<T>(getHandle(false), false, autoInvalidateHandle());
         return select;
     }
 
@@ -158,9 +152,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @return An {@link Delete} object.
      */
     public Delete prepareDelete() {
-        Delete delete = new Delete(getHandle(true));
-        delete.autoInvalidateHandle = autoInvalidateHandle();
-        delete.needChanges = false;
+        Delete delete = new Delete(getHandle(true), false, autoInvalidateHandle());
         return delete;
     }
 

@@ -54,9 +54,7 @@ public class TableORMOperation<T> extends TableOperation {
      * @return An {@link Insert} object.
      */
     public Insert<T> prepareInsert() {
-        Insert<T> insert = new Insert<T>(database.getHandle(true));
-        insert.autoInvalidateHandle = true;
-        insert.needChanges = false;
+        Insert<T> insert = new Insert<T>(database.getHandle(true), false, true);
         insert.intoTable(tableName);
         return insert;
     }
@@ -66,9 +64,7 @@ public class TableORMOperation<T> extends TableOperation {
      * @return An {@link Update} object.
      */
     public Update<T> prepareUpdate() {
-        Update<T> update = new Update<T>(database.getHandle(true));
-        update.autoInvalidateHandle = true;
-        update.needChanges = false;
+        Update<T> update = new Update<T>(database.getHandle(true), false, true);
         update.table(tableName);
         return update;
     }
@@ -78,9 +74,7 @@ public class TableORMOperation<T> extends TableOperation {
      * @return An {@link Select} object.
      */
     public Select<T> prepareSelect() {
-        Select<T> select = new Select<T>(database.getHandle(false));
-        select.autoInvalidateHandle = true;
-        select.needChanges = false;
+        Select<T> select = new Select<T>(database.getHandle(false), false, true);
         select.from(tableName);
         return select;
     }
@@ -90,9 +84,7 @@ public class TableORMOperation<T> extends TableOperation {
      * @return An {@link Delete} object.
      */
     public Delete prepareDelete() throws WCDBException {
-        Delete delete = new Delete(database.getHandle(true));
-        delete.autoInvalidateHandle = true;
-        delete.needChanges = false;
+        Delete delete = new Delete(database.getHandle(true), false, true);
         delete.fromTable(tableName);
         return delete;
     }

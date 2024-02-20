@@ -31,12 +31,14 @@ public class ChainCall<T extends Statement> {
     Handle handle;
     int changes = 0;
     T statement;
-    public boolean needChanges = true;
-    public boolean autoInvalidateHandle = false;
+    boolean needChanges = true;
+    boolean autoInvalidateHandle = false;
 
-    public ChainCall(Handle handle) {
+    public ChainCall(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
         assert handle != null;
         this.handle = handle;
+        this.needChanges = needChanges;
+        this.autoInvalidateHandle = autoInvalidateHandle;
     }
 
     protected void updateChanges() throws WCDBException {

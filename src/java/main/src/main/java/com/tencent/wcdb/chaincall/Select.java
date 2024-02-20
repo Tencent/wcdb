@@ -37,8 +37,8 @@ import java.util.List;
 public class Select<T> extends ChainCall<StatementSelect> {
     private Field<T>[] fields = null;
 
-    public Select(Handle handle) {
-        super(handle);
+    public Select(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+        super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementSelect();
     }
 
