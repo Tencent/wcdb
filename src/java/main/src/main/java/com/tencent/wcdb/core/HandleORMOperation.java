@@ -30,6 +30,7 @@ import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.winq.Expression;
 import com.tencent.wcdb.winq.OrderingTerm;
+import com.tencent.wcdb.winq.StatementDropIndex;
 import com.tencent.wcdb.winq.StatementDropTable;
 
 import java.util.Collection;
@@ -118,6 +119,15 @@ public abstract class HandleORMOperation extends HandleOperation{
      */
     public void dropTable(String tableName) throws WCDBException {
         execute(new StatementDropTable().dropTable(tableName).ifExist());
+    }
+
+    /**
+     * Drop index if exists.
+     * @param indexName The name of the index to be dropped.
+     * @throws WCDBException if any error occurs.
+     */
+    public void dropIndex(String indexName) throws WCDBException {
+        execute(new StatementDropIndex().dropIndex(indexName).ifExist());
     }
 
     /**
