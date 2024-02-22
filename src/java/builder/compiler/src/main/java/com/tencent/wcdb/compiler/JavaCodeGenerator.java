@@ -220,6 +220,9 @@ public class JavaCodeGenerator {
             tokenizer.append(" ").append(para);
         }
         builder.append(TAB + TAB + "baseBinding.configVirtualModuleArgument(\"").append(tokenizer).append("\");\n");
+        if(!ftsModuleInfo.getExternalTable().isEmpty()) {
+            builder.append(TAB + TAB + "baseBinding.configVirtualModuleArgument(\"content='").append(ftsModuleInfo.getExternalTable()).append("'\");\n");
+        }
     }
 
     private void generateBindingType() {

@@ -186,6 +186,9 @@ class KotlinCodeGenerator {
             tokenizer.append(" ").append(para)
         }
         builder.append("$TAB${TAB}baseBinding.configVirtualModuleArgument(\"$tokenizer\")\n")
+        if (ftsModuleInfo.externalTable.isNotEmpty()) {
+            builder.append("$TAB${TAB}baseBinding.configVirtualModuleArgument(\"content='${ftsModuleInfo.externalTable}'\");\n")
+        }
     }
 
     private fun generateBindingType() {

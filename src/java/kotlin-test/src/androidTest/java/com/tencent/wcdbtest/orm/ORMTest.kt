@@ -246,7 +246,7 @@ class ORMTest : DatabaseTestCase() {
     fun testFTS5() {
         doTestSQLs(
             arrayOf(
-                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', id UNINDEXED, content)"
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', content='contentTable', id UNINDEXED, content)"
             )
         ) {
             database.addTokenizer(BuiltinTokenizer.Verbatim)
