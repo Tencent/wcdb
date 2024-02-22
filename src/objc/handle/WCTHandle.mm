@@ -209,6 +209,12 @@
     _handle->reset();
 }
 
+- (void)clearBindings
+{
+    WCTHandleAssert(return;);
+    _handle->clearBindings();
+}
+
 #pragma mark - State
 - (long long)getLastInsertedRowID
 {

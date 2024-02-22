@@ -381,6 +381,11 @@ void HandleStatement::reset()
     APIExit(sqlite3_reset(m_stmt));
 }
 
+void HandleStatement::clearBindings() {
+    WCTAssert(isPrepared());
+    APIExit(sqlite3_clear_bindings(m_stmt));
+}
+
 bool HandleStatement::done()
 {
     return m_done;

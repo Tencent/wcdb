@@ -76,6 +76,12 @@ void WCDBHandleStatementReset(CPPHandleStatement handleStatement)
     cppHandleStatement->reset();
 }
 
+void WCDBHandleStatementClearBindings(CPPHandleStatement handleStatement)
+{
+    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    cppHandleStatement->clearBindings();
+}
+
 void WCDBHandleStatementFinalize(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);

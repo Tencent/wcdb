@@ -63,6 +63,12 @@ void WCDBJNIHandleStatementClassMethod(reset, jlong self)
     WCDBHandleStatementReset(selfStruct);
 }
 
+void WCDBJNIHandleStatementClassMethod(clearBindings, jlong self)
+{
+    WCDBJNIBridgeStruct(CPPHandleStatement, self);
+    WCDBHandleStatementClearBindings(selfStruct);
+}
+
 void WCDBJNIHandleStatementClassMethod(finalize, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandleStatement, self);

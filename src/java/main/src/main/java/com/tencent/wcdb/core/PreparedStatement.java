@@ -98,6 +98,15 @@ public class PreparedStatement extends CppObject {
     private static native void reset(long self);
 
     /**
+     * It is a wrapper for {@code sqlite3_clear_bindings}.
+     */
+    public void clearBindings() {
+        clearBindings(cppObj);
+    }
+
+    private static native void clearBindings(long self);
+
+    /**
      * Finalize the statement previously prepared.
      */
     public void finalizeStatement() {

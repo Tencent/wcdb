@@ -808,6 +808,7 @@ static const JNINativeMethod g_handleStatementMethods[] = {
     { "checkPrepared", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(checkPrepared) },
     { "step", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(step) },
     { "reset", "(J)V", (void *) WCDBJNIHandleStatementFuncName(reset) },
+    { "clearBindings", "(J)V", (void *) WCDBJNIHandleStatementFuncName(clearBindings) },
     { "finalize", "(J)V", (void *) WCDBJNIHandleStatementFuncName(finalize) },
     { "isDone", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(isDone) },
     { "bindInteger", "(JJI)V", (void *) WCDBJNIHandleStatementFuncName(bindInteger) },

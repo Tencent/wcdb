@@ -80,6 +80,7 @@ public:
     bool step();
     bool done();
     void reset();
+    void clearBindings();
 
     using Integer = HandleStatement::Integer;
     using Text = HandleStatement::Text;

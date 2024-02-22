@@ -212,6 +212,11 @@ void InnerHandle::reset()
     m_mainStatement->reset();
 }
 
+void InnerHandle::clearBindings()
+{
+    m_mainStatement->clearBindings();
+}
+
 bool InnerHandle::done()
 {
     return m_mainStatement->done();

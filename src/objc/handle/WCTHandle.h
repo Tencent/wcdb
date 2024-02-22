@@ -141,6 +141,12 @@ WCDB_API @interface WCTHandle : NSObject
 - (void)reset;
 
 /**
+ @brief The wrapper of `sqlite3_clear_bindings`.
+ @note It is for the statement previously prepared by `-[WCTHandle prepare:]` or `-[WCTHandle rawPrepare:]`.
+ */
+- (void)clearBindings;
+
+/**
  @brief Check if you can continue stepping.
  @return YES if you can continue stepping.
  */

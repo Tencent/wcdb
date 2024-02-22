@@ -68,6 +68,7 @@ void CompressingStatementDecorator::decorate(Decorative* handleStatement)
     WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, finalize);
     WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, step);
     WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, reset);
+    WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, clearBindings);
     WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, bindInteger);
     WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, bindDouble);
     WCDBSwizzleDecorativeFunction(handleStatement, CompressingStatementDecorator, bindText);
@@ -149,6 +150,15 @@ void CompressingStatementDecorator::reset()
     Super::reset();
     for (auto& handleStatement : m_additionalStatements) {
         handleStatement.reset();
+    }
+    m_compressFail = false;
+}
+
+void CompressingStatementDecorator::clearBindings()
+{
+    Super::clearBindings();
+    for (auto& handleStatement : m_additionalStatements) {
+        handleStatement.clearBindings();
     }
     m_compressFail = false;
 }

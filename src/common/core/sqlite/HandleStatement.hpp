@@ -58,6 +58,7 @@ public:
     virtual bool step();
     bool done();
     virtual void reset();
+    virtual void clearBindings();
 
     using Integer = ColumnTypeInfo<ColumnType::Integer>::UnderlyingType;
     using Text = ColumnTypeInfo<ColumnType::Text>::UnderlyingType;

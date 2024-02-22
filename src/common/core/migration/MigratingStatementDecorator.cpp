@@ -73,6 +73,7 @@ void MigratingStatementDecorator::decorate(Decorative* handleStatement)
     WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, finalize);
     WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, step);
     WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, reset);
+    WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, clearBindings);
     WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, bindInteger);
     WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, bindDouble);
     WCDBSwizzleDecorativeFunction(handleStatement, MigratingStatementDecorator, bindText);
@@ -399,6 +400,17 @@ void MigratingStatementDecorator::reset()
     Super::reset();
     for (auto& handleStatement : m_additionalStatements) {
         handleStatement.reset();
+    }
+    if (m_primaryKeyIndex > 0) {
+        m_assignedPrimaryKey = NullOpt;
+    }
+}
+
+void MigratingStatementDecorator::clearBindings()
+{
+    Super::reset();
+    for (auto& handleStatement : m_additionalStatements) {
+        handleStatement.clearBindings();
     }
     if (m_primaryKeyIndex > 0) {
         m_assignedPrimaryKey = NullOpt;
