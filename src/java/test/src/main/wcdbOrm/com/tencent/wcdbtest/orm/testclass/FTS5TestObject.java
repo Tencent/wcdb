@@ -39,9 +39,18 @@ import com.tencent.wcdb.fts.BuiltinTokenizer;
         )
 )
 public class FTS5TestObject {
+    public FTS5TestObject() {
+        this.id = 0;
+        this.content = "";
+    }
+    public FTS5TestObject(int id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
     @WCDBField(isNotIndexed = true)
-    int id;
+    public int id;
     @WCDBField
-    String content;
+    public String content;
 }
 

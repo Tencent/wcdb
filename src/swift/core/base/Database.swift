@@ -1413,6 +1413,7 @@ public extension Database {
     }
 
     /// Configure the mapping relationship between Chinese characters and their pinyin.
+    /// It is designed for the builtin pinyin tokenizer.
     static func config(pinyinDict: [String /*Chinese character*/ : [String] /*Pinyin array*/]) {
         WCTAPIBridge.configPinyinDict(pinyinDict)
     }

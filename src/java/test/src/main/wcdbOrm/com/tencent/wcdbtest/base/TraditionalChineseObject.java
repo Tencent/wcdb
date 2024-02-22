@@ -1,4 +1,4 @@
-// Created by chenqiuwen on 2023/11/4.
+// Created by qiuwenchen on 2024/2/22.
 //
 
 /*
@@ -21,31 +21,18 @@
  * limitations under the License.
  */
 
-package com.tencent.wcdbtest.orm.testclass;
-
+package com.tencent.wcdbtest.base;
 import com.tencent.wcdb.*;
-import com.tencent.wcdb.fts.*;
+import com.tencent.wcdb.fts.BuiltinTokenizer;
 
 @WCDBTableCoding(
         ftsModule = @FTSModule(
-                version = FTSVersion.FTS3,
-                tokenizer = BuiltinTokenizer.OneOrBinary,
-                tokenizerParameters = BuiltinTokenizer.Parameter.SkipStemming
+                version = FTSVersion.FTS5,
+                tokenizer = BuiltinTokenizer.Verbatim,
+                tokenizerParameters = BuiltinTokenizer.Parameter.SimplifyChinese
         )
 )
-public class FTS3TestObject {
-    public FTS3TestObject() {
-        this.id = 0;
-        this.content = "";
-    }
-    public FTS3TestObject(int id, String content) {
-        this.id = id;
-        this.content = content;
-    }
-
-    @WCDBField(isNotIndexed = true)
-    public int id;
+public class TraditionalChineseObject {
     @WCDBField
-    public
-    String content;
+    public String content;
 }

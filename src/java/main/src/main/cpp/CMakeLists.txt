@@ -22,6 +22,7 @@ add_subdirectory(../../../../.. ${CMAKE_CURRENT_BINARY_DIR}/wcdb)
 set(WCDB_JNI_SRC_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 file(GLOB_RECURSE WCDB_JNI_SRC
+    ${WCDB_JNI_SRC_DIR}/*.cpp
     ${WCDB_JNI_SRC_DIR}/*.c
     ${WCDB_JNI_SRC_DIR}/*.h)
 

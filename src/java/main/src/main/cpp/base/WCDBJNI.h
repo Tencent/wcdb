@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include "Macro.h"
 #include "ObjectBridge.h"
 #include <jni.h>
 #include <stdlib.h>
@@ -364,6 +365,8 @@ extern JavaVM *g_vm;
         (*g_vm)->DetachCurrentThread(g_vm);                                    \
     }
 
+WCDB_EXTERN_C_BEGIN
+
 void WCDBJNIDestructContext(jobject config);
 
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject);
@@ -378,3 +381,5 @@ void WCDBJNIGetUTF8String(
 JNIEnv *env, jstring value, char **utf8String, const jchar **utf16String, bool critical);
 void WCDBJNIGetUTF8StringArray(JNIEnv *env, jobjectArray value, char ***stringArray, int *length);
 jstring WCDBJNICreateJString(JNIEnv *env, const char *utf8String);
+
+WCDB_EXTERN_C_END
