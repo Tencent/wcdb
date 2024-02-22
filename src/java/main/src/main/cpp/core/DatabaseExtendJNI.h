@@ -1,4 +1,4 @@
-// Created by chenqiuwen on 2023/11/4.
+// Created by qiuwenchen on 2024/2/21.
 //
 
 /*
@@ -21,31 +21,13 @@
  * limitations under the License.
  */
 
-package com.tencent.wcdbtest.orm.testclass;
+#pragma once
 
-import com.tencent.wcdb.*;
-import com.tencent.wcdb.fts.*;
+#include "DatabaseJNI.h"
 
-@WCDBTableCoding(
-        ftsModule = @FTSModule(
-                version = FTSVersion.FTS3,
-                tokenizer = BuiltinTokenizer.OneOrBinary,
-                tokenizerParameters = BuiltinTokenizer.Parameter.SkipStemming
-        )
-)
-public class FTS3TestObject {
-    public FTS3TestObject() {
-        this.id = 0;
-        this.content = "";
-    }
-    public FTS3TestObject(int id, String content) {
-        this.id = id;
-        this.content = content;
-    }
+WCDB_EXTERN_C_BEGIN
 
-    @WCDBField(isNotIndexed = true)
-    public int id;
-    @WCDBField
-    public
-    String content;
-}
+void WCDBJNIDatabaseClassMethod(configPinyinDict, jobjectArray keys, jobjectArray values);
+void WCDBJNIDatabaseClassMethod(configTraditionalChineseDict, jobjectArray keys, jobjectArray values);
+
+WCDB_EXTERN_C_END

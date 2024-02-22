@@ -57,6 +57,11 @@ void HandleStatementDecorator::reset()
     WCDBCallDecoratedFunction(HandleStatement, reset);
 }
 
+void HandleStatementDecorator::clearBindings()
+{
+    WCDBCallDecoratedFunction(HandleStatement, clearBindings);
+}
+
 void HandleStatementDecorator::bindInteger(const Integer &value, int index)
 {
     WCDBCallDecoratedFunction(HandleStatement, bindInteger, value, index);
@@ -116,6 +121,7 @@ void DecorativeHandleStatement::initDecorativeFunctions()
     WCDBRegisterDecorativeFunction(HandleStatement, finalize);
     WCDBRegisterDecorativeFunction(HandleStatement, step);
     WCDBRegisterDecorativeFunction(HandleStatement, reset);
+    WCDBRegisterDecorativeFunction(HandleStatement, clearBindings);
     WCDBRegisterDecorativeFunction(HandleStatement, bindInteger);
     WCDBRegisterDecorativeFunction(HandleStatement, bindDouble);
     WCDBRegisterDecorativeFunction(HandleStatement, bindText);
@@ -148,6 +154,11 @@ bool DecorativeHandleStatement::step()
 void DecorativeHandleStatement::reset()
 {
     WCDBCallDecorativeFunction(HandleStatement, reset);
+}
+
+void DecorativeHandleStatement::clearBindings()
+{
+    WCDBCallDecorativeFunction(HandleStatement, clearBindings);
 }
 
 void DecorativeHandleStatement::bindInteger(const Integer &value, int index)

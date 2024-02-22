@@ -698,6 +698,56 @@ public class Database extends HandleORMOperation {
     private static native void addTokenizer(long self, String tokenizer);
 
     /**
+     * Configure the mapping relationship between Chinese characters and their pinyin.
+     * It is designed for the builtin pinyin tokenizer.
+     * @see com.tencent.wcdb.fts.BuiltinTokenizer#Pinyin
+     * @param pinyinDict The keys are Chinese characters, and the values are the corresponding pinyin lists.
+     */
+    public static void configPinyinDict(Map<String, List<String>> pinyinDict) {
+        if(pinyinDict == null) {
+            return;
+        }
+        String[] keys = pinyinDict.keySet().toArray(new String[0]);
+        if(keys.length == 0){
+            return;
+        }
+        String[][] values = new String[keys.length][];
+        for(int i = 0; i < keys.length; i++) {
+            List<String> pinyin = pinyinDict.get(keys[i]);
+            if(pinyin == null){
+                continue;
+            }
+            values[i] = pinyin.toArray(new String[0]);
+        }
+        configPinyinDict(keys, values);
+    }
+
+    private static native void configPinyinDict(String[] keys, String[][] values);
+
+    /**
+     * Configure the mapping relationship between traditional Chinese characters and simplified Chinese characters.
+     * This is designed for the tokenizers configured with SimplifyChinese.
+     * @see com.tencent.wcdb.fts.BuiltinTokenizer.Parameter#SimplifyChinese
+     * @param traditionalChineseDict The keys are simplified Chinese characters, and the values are the corresponding Traditional Chinese characters.
+     */
+    public static void configTraditionalChineseDict(Map<String, String> traditionalChineseDict) {
+        if(traditionalChineseDict == null) {
+            return;
+        }
+        String[] keys = traditionalChineseDict.keySet().toArray(new String[0]);
+        if(keys.length == 0){
+            return;
+        }
+        String[] values = new String[keys.length];
+        for(int i = 0; i < keys.length; i++) {
+            values[i] = traditionalChineseDict.get(keys[i]);
+        }
+        configTraditionalChineseDict(keys, values);
+    }
+
+    private static native void configTraditionalChineseDict(String[] keys, String[] values);
+
+    /**
      * Setup auxiliary function with name for current database.
      * You can use the auxiliary function defined in {@link com.tencent.wcdb.fts.BuiltinFTSAuxiliaryFunction}.
      * @param auxiliaryFunction The function name.

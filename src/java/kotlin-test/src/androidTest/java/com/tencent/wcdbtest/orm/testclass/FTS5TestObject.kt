@@ -32,7 +32,8 @@ import com.tencent.wcdb.fts.BuiltinTokenizer
     ftsModule = FTSModule(
         version = FTSVersion.FTS5,
         tokenizer = BuiltinTokenizer.Verbatim,
-        tokenizerParameters = [BuiltinTokenizer.Parameter.SkipStemming, BuiltinTokenizer.Parameter.SimplifyChinese]
+        tokenizerParameters = [BuiltinTokenizer.Parameter.SkipStemming, BuiltinTokenizer.Parameter.SimplifyChinese],
+        externalTable = "contentTable"
     )
 )
 class FTS5TestObject {

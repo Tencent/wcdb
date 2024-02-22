@@ -410,7 +410,7 @@ public class ORMTest extends DatabaseTestCase {
     @Test
     public void testFTS5Object() {
         doTestSQLs(new String[]{
-                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', id UNINDEXED, content)"
+                "CREATE VIRTUAL TABLE IF NOT EXISTS testTable USING fts5(tokenize = 'wcdb_verbatim skip_stemming chinese_traditional_to_simplified', content='contentTable', id UNINDEXED, content)"
         }, new TestOperation() {
             @Override
             public void execute() throws WCDBException {

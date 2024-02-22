@@ -34,6 +34,7 @@ enum class HandleStatementFuncType : unsigned char {
     finalize,
     step,
     reset,
+    clearBindings,
     bindInteger,
     bindDouble,
     bindText,
@@ -68,6 +69,9 @@ public:
 
     virtual void reset();
     WCDBAssertFunctionTypeConsistent(HandleStatementDecorator, HandleStatement, reset);
+    
+    virtual void clearBindings();
+    WCDBAssertFunctionTypeConsistent(HandleStatementDecorator, HandleStatement, clearBindings);
 
     virtual void bindInteger(const Integer &value, int index);
     WCDBAssertFunctionTypeConsistent(HandleStatementDecorator, HandleStatement, bindInteger);
@@ -119,6 +123,7 @@ public:
     void finalize() override final;
     bool step() override final;
     void reset() override final;
+    void clearBindings() override final;
 
     void bindInteger(const Integer &value, int index = 1) override final;
     void bindDouble(const Float &value, int index = 1) override final;

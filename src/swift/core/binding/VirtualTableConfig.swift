@@ -27,7 +27,7 @@ import WCDB_Private
 
 public final class VirtualTableConfig: TableConfiguration {
     let module: String
-    let parameters: [String]
+    var parameters: [String]
 
     public func config(with tableBinding: TableBindingBase) {
         WCDBBindingConfigVirtualModule(tableBinding.cppBinding, module.cString)
@@ -36,9 +36,12 @@ public final class VirtualTableConfig: TableConfiguration {
         }
     }
 
-    public init(withModule version: FTSVersion, and tokenizer: String...) {
+    public init(withModule version: FTSVersion, and tokenizer: String..., withExternalContent table: String? = nil) {
         self.module = version.description
         self.parameters = ["tokenize = \(tokenizer.joined(separateBy: " "))"]
+        if let table = table {
+            self.parameters.append("content='\(table)'")
+        }
     }
 
     public init(withModule module: String, and parameters: String...) {

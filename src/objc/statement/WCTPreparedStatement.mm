@@ -59,6 +59,11 @@
     _handleStatement->reset();
 }
 
+- (void)clearBindings {
+    WCTPreparedStatementAssert(return );
+    _handleStatement->clearBindings();
+}
+
 - (BOOL)done
 {
     WCTPreparedStatementAssert(return NO);

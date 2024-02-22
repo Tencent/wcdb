@@ -23,6 +23,8 @@
 
 package com.tencent.wcdb.fts;
 
+import java.util.Map;
+
 public class BuiltinTokenizer {
     /**
      * The following four are sqlite built-in fts tokenizers.
@@ -58,6 +60,7 @@ public class BuiltinTokenizer {
      * You can use the simplified or full pinyin of Chinese characters to search for Chinese characters.
      * Before using this tokenizer, you need to use `Database.configPinyinDict()` to configure the mapping relationship between Chinese characters and their pinyin.
      * You can use `com.tencent.wcdb.FTSModule annotation` to config fts tokenizer for a Java ORM class.
+     * @see com.tencent.wcdb.core.Database#configPinyinDict(Map) 
      */
     public final static String Pinyin = "wcdb_pinyin";
 
@@ -70,6 +73,7 @@ public class BuiltinTokenizer {
          * `SimplifyChinese` enables the tokenizer to convert each traditional Chinese character into a simplified Chinese character,
          * so that you can use Simplified Chinese characters to search Traditional Chinese characters.
          * Note that you need to use `Database.configTraditionalChineseDict()` to config the mapping relationship between traditional Chinese characters and simplified Chinese characters.
+         * @see com.tencent.wcdb.core.Database#configTraditionalChineseDict(Map) 
          */
         public final static String SimplifyChinese = "chinese_traditional_to_simplified";
 

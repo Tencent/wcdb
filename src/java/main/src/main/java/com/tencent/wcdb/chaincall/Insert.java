@@ -40,8 +40,8 @@ public class Insert<T> extends ChainCall<StatementInsert> {
     private Collection<T> values = null;
     private long lastInsertRowId = 0;
 
-    public Insert(Handle handle) {
-        super(handle);
+    public Insert(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+        super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementInsert();
     }
 

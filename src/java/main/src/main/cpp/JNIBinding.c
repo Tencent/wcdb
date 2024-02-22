@@ -28,6 +28,7 @@
 #include "ColumnJNI.h"
 #include "CommonTableExpressionJNI.h"
 #include "CoreJNI.h"
+#include "DatabaseExtendJNI.h"
 #include "DatabaseJNI.h"
 #include "ErrorJNI.h"
 #include "ExpressionJNI.h"
@@ -807,6 +808,7 @@ static const JNINativeMethod g_handleStatementMethods[] = {
     { "checkPrepared", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(checkPrepared) },
     { "step", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(step) },
     { "reset", "(J)V", (void *) WCDBJNIHandleStatementFuncName(reset) },
+    { "clearBindings", "(J)V", (void *) WCDBJNIHandleStatementFuncName(clearBindings) },
     { "finalize", "(J)V", (void *) WCDBJNIHandleStatementFuncName(finalize) },
     { "isDone", "(J)Z", (void *) WCDBJNIHandleStatementFuncName(isDone) },
     { "bindInteger", "(JJI)V", (void *) WCDBJNIHandleStatementFuncName(bindInteger) },
@@ -926,6 +928,13 @@ static const JNINativeMethod g_databaseMethods[] = {
     { "moveFile", "(J" WCDBJNIStringSignature ")Z", (void *) WCDBJNIDatabaseFuncName(moveFile) },
     { "getFileSize", "(J)J", (void *) WCDBJNIDatabaseFuncName(getFileSize) },
     { "addTokenizer", "(J" WCDBJNIStringSignature ")V", (void *) WCDBJNIDatabaseFuncName(addTokenizer) },
+    { "configPinyinDict",
+      "([" WCDBJNIStringSignature "[[" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIDatabaseFuncName(configPinyinDict) },
+    { "configTraditionalChineseDict",
+      "([" WCDBJNIStringSignature "[" WCDBJNIStringSignature ")V",
+      (void *) WCDBJNIDatabaseFuncName(configTraditionalChineseDict) },
+
     { "addAuxiliaryFunction",
       "(J" WCDBJNIStringSignature ")V",
       (void *) WCDBJNIDatabaseFuncName(addAuxiliaryFunction) },

@@ -531,7 +531,7 @@ public extension Database {
     /// please enable it only when necessary, and disable it when unnecessary.
     ///
     /// - Parameter enable: enable or not.
-    func setFullSQL(enable: Bool) {
+    func setFullSQLTrace(enable: Bool) {
         WCDBDatabaseSetFullSQLTraceEnable(database, enable)
     }
 
@@ -1413,6 +1413,7 @@ public extension Database {
     }
 
     /// Configure the mapping relationship between Chinese characters and their pinyin.
+    /// It is designed for the builtin pinyin tokenizer.
     static func config(pinyinDict: [String /*Chinese character*/ : [String] /*Pinyin array*/]) {
         WCTAPIBridge.configPinyinDict(pinyinDict)
     }

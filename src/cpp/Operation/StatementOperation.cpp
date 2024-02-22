@@ -78,6 +78,12 @@ void StatementOperation::reset()
     handleStatement->reset();
 }
 
+void StatementOperation::clearBindings()
+{
+    GetHandleStatementOrReturn;
+    handleStatement->clearBindings();
+}
+
 bool StatementOperation::isReadOnly()
 {
     GetHandleStatementOrReturnValue(false);

@@ -31,8 +31,8 @@ import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDelete;
 
 public class Delete extends ChainCall<StatementDelete>{
-    public Delete(Handle handle) {
-        super(handle);
+    public Delete(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+        super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementDelete();
     }
 

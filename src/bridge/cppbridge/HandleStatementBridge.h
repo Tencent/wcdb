@@ -48,6 +48,7 @@ bool WCDBHandleStatementPrepareSQL(CPPHandleStatement handleStatement,
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement);
 bool WCDBHandleStatementStep(CPPHandleStatement handleStatement);
 void WCDBHandleStatementReset(CPPHandleStatement handleStatement);
+void WCDBHandleStatementClearBindings(CPPHandleStatement handleStatement);
 void WCDBHandleStatementFinalize(CPPHandleStatement handleStatement);
 bool WCDBHandleStatementIsDone(CPPHandleStatement handleStatement);
 

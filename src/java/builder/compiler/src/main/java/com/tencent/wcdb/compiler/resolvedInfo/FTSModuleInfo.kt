@@ -33,6 +33,7 @@ data class FTSModuleInfo (
     var ftsVersion: String = "",
     var tokenizer: String = "",
     var tokenizerParameters: MutableList<String> = mutableListOf(),
+    var externalTable: String = "",
 ) {
     companion object {
         fun resolve(annotation: KSAnnotation?, logger: KSPLogger): FTSModuleInfo?{
@@ -64,6 +65,7 @@ data class FTSModuleInfo (
                             return null
                         }
                     }
+                    "externalTable" -> resolvedInfo.externalTable = value as String
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in FTSModule")
                         return null
@@ -83,7 +85,7 @@ data class FTSModuleInfo (
             }
             resolvedInfo.tokenizer = ftsModule.tokenizer
             resolvedInfo.tokenizerParameters = ftsModule.tokenizerParameters.toMutableList()
-
+            resolvedInfo.externalTable = ftsModule.externalTable
             return resolvedInfo
         }
     }

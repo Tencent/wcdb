@@ -42,6 +42,7 @@ jboolean WCDBJNIHandleStatementClassMethod(prepareSQL, jlong self, jstring sql);
 jboolean WCDBJNIHandleStatementClassMethod(checkPrepared, jlong self);
 jboolean WCDBJNIHandleStatementClassMethod(step, jlong self);
 void WCDBJNIHandleStatementClassMethod(reset, jlong self);
+void WCDBJNIHandleStatementClassMethod(clearBindings, jlong self);
 void WCDBJNIHandleStatementClassMethod(finalize, jlong self);
 jboolean WCDBJNIHandleStatementClassMethod(isDone, jlong self);
 void WCDBJNIHandleStatementClassMethod(bindInteger, jlong self, jlong value, jint index);

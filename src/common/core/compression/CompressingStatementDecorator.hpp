@@ -57,6 +57,7 @@ public:
     void finalize() override final;
     bool step() override final;
     void reset() override final;
+    void clearBindings() override final;
 
     void bindInteger(const Integer &value, int index) override final;
     void bindDouble(const Float &value, int index) override final;
