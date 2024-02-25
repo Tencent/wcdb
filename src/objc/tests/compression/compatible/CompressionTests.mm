@@ -291,7 +291,7 @@
         __block int databaseCompressed;
         NSString* expectedTableName = self.tableName;
         WCTTag tag = self.database.tag;
-        [self.database setNotificationWhenCompressd:^(WCTDatabase* database, WCTCompressionBaseInfo* info) {
+        [self.database setNotificationWhenCompressed:^(WCTDatabase* database, WCTCompressionBaseInfo* info) {
             TestCaseAssertEqual(tag, database.tag);
             if (info == nil) {
                 ++databaseCompressed;
@@ -338,7 +338,7 @@
         TestCaseResult* tableCompressed = [TestCaseResult no];
         TestCaseResult* compressed = [TestCaseResult no];
         NSString* expectedTableName = self.tableName;
-        [self.database setNotificationWhenCompressd:^(WCTDatabase*, WCTCompressionBaseInfo* tableInfo) {
+        [self.database setNotificationWhenCompressed:^(WCTDatabase*, WCTCompressionBaseInfo* tableInfo) {
             if (tableInfo == nil) {
                 [compressed makeYES];
             } else if ([tableInfo.table isEqualToString:expectedTableName]) {

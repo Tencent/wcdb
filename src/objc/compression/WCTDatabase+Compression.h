@@ -106,7 +106,7 @@ WCDB_API @interface WCTDatabase(Compression)
  @param onCompressd block
  @see   `WCTCompressdNotificationBlock`
  */
-- (void)setNotificationWhenCompressd:(nullable WCDB_ESCAPE WCTCompressdNotificationBlock)onCompressd;
+- (void)setNotificationWhenCompressed:(nullable WCDB_ESCAPE WCTCompressdNotificationBlock)onCompressd;
 
 /**
  @brief Check if all tables in the database has finished compression.

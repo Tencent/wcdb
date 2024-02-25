@@ -707,7 +707,7 @@ void Database::enableAutoCompression(bool flag)
     Core::shared().enableAutoCompress(m_innerDatabase, flag);
 }
 
-void Database::setNotificationWhenCompressd(const CompressedCallback& onCompressd)
+void Database::setNotificationWhenCompressed(const CompressedCallback& onCompressd)
 {
     InnerDatabase::CompressedCallback callback = nullptr;
     if (onCompressd != nullptr) {
