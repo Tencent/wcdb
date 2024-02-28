@@ -24,6 +24,8 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 class CPPType {
     final static int Invalid = 0;
     final static int Null = 1;
@@ -107,15 +109,18 @@ public class Identifier extends CppObject implements IdentifierConvertible {
         return identifier.asIdentifier().getType();
     }
 
+    @NotNull
     public Identifier asIdentifier() {
         return this;
     }
 
+    @NotNull
     public String getDescription() {
         return getDescription(cppObj);
     }
 
     @Override
+    @NotNull
     public String toString() {
         return getDescription();
     }

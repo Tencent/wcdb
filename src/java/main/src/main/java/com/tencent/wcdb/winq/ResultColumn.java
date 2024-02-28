@@ -25,6 +25,8 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ResultColumn extends Identifier implements ResultColumnConvertible {
     @Override
     protected int getType() {
@@ -35,16 +37,17 @@ public class ResultColumn extends Identifier implements ResultColumnConvertible 
         this.cppObj = cppObj;
     }
 
-    public ResultColumn(ResultColumnConvertible resultColumnConvertible) {
+    public ResultColumn(@NotNull ResultColumnConvertible resultColumnConvertible) {
         cppObj = createCppObj(Identifier.getCppType(resultColumnConvertible), CppObject.get(resultColumnConvertible), null);
     }
 
-    public ResultColumn(String columnName) {
+    public ResultColumn(@NotNull String columnName) {
         cppObj = createCppObj(CPPType.String, 0, columnName);
     }
 
     private static native long createCppObj(int type, long convertibleObj, String columnName);
 
+    @NotNull
     public ResultColumn as(String alias) {
         configAlias(cppObj, alias);
         return this;

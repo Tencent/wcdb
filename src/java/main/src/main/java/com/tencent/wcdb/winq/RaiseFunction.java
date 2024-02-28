@@ -23,6 +23,8 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RaiseFunction extends Identifier implements ExpressionConvertible, ResultColumnConvertible{
     @Override
     protected int getType() {
@@ -35,22 +37,26 @@ public class RaiseFunction extends Identifier implements ExpressionConvertible, 
 
     private static native long createCppObj();
 
+    @NotNull
     public RaiseFunction ignore() {
         setAction(cppObj, 0, null);
         return this;
     }
 
-    public RaiseFunction rollback(String errMsg) {
+    @NotNull
+    public RaiseFunction rollback(@NotNull String errMsg) {
         setAction(cppObj, 1, errMsg);
         return this;
     }
 
-    public RaiseFunction abort(String errMsg) {
+    @NotNull
+    public RaiseFunction abort(@NotNull String errMsg) {
         setAction(cppObj, 2, errMsg);
         return this;
     }
 
-    public RaiseFunction fail(String errMsg) {
+    @NotNull
+    public RaiseFunction fail(@NotNull String errMsg) {
         setAction(cppObj, 3, errMsg);
         return this;
     }

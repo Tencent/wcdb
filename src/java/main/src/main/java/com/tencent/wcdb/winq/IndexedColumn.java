@@ -25,22 +25,25 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 public class IndexedColumn extends Identifier implements IndexedColumnConvertible {
     @Override
     protected int getType() {
         return CPPType.IndexedColumn;
     }
 
-    public IndexedColumn(IndexedColumnConvertible indexedColumnConvertible) {
+    public IndexedColumn(@NotNull IndexedColumnConvertible indexedColumnConvertible) {
         cppObj = createCppObj(Identifier.getCppType(indexedColumnConvertible), CppObject.get(indexedColumnConvertible), null);
     }
 
-    public IndexedColumn(String columnName) {
+    public IndexedColumn(@NotNull String columnName) {
         cppObj = createCppObj(CPPType.String, 0, columnName);
     }
 
     private static native long createCppObj(int type, long object, String columnName);
 
+    @NotNull
     public IndexedColumn collate(String collation) {
         collate(cppObj, collation);
         return this;
@@ -48,6 +51,7 @@ public class IndexedColumn extends Identifier implements IndexedColumnConvertibl
 
     private static native void collate(long indexedColumn, String collation);
 
+    @NotNull
     public IndexedColumn order(Order order) {
         order(cppObj, order.ordinal() + 1);
         return this;

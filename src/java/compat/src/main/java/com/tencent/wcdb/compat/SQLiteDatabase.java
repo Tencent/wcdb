@@ -1076,7 +1076,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
                     db.setCipherKey(password, cipher.pageSize);
                     db.setConfig("com.Tencent.WCDB.Config.CipherSpecCompat", new Database.Config() {
                         @Override
-                        public void onInvocation(Handle handle) throws WCDBException {
+                        public void onInvocation(@NotNull Handle handle) throws WCDBException {
                             handle.execute("PRAGMA cipher_use_hmac = " + cipher.hmacEnabled);
                             if (cipher.kdfIteration != 0) {
                                 handle.execute("PRAGMA kdf_iter = " + cipher.kdfIteration);

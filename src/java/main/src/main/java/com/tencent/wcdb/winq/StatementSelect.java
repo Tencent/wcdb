@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 
 public class StatementSelect extends Statement implements TableOrSubqueryConvertible {
@@ -37,11 +40,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     }
     private static native long createCppObj();
 
-    public StatementSelect with(CommonTableExpression expression) {
-        return with(new CommonTableExpression[]{expression});
-    }
-
-    public StatementSelect with(CommonTableExpression... expressions) {
+    @NotNull
+    public StatementSelect with(@Nullable CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -53,10 +53,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect withRecursive(CommonTableExpression expression) {
-        return withRecursive(new CommonTableExpression[]{expression});
-    }
-
+    @NotNull
     public StatementSelect withRecursive(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
@@ -74,14 +71,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configRecursive(long self);
 
-    public StatementSelect select(ResultColumnConvertible resultColumn) {
-        configResultColumns(cppObj, new int[]{Identifier.getCppType(resultColumn)},
-                new long[]{CppObject.get(resultColumn)}, null, null);
-        return this;
-    }
-
-    public StatementSelect select(ResultColumnConvertible... resultColumns) {
-        if(resultColumns == null || resultColumns.length == 0) {
+    @NotNull
+    public StatementSelect select(@NotNull ResultColumnConvertible... resultColumns) {
+        if(resultColumns.length == 0) {
             return this;
         }
         int totalCount = resultColumns.length;
@@ -95,14 +87,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect select(String resultColumn) {
-        configResultColumns(cppObj, new int[]{CPPType.String}, null, null,
-                new String[]{resultColumn});
-        return this;
-    }
-
-    public StatementSelect select(String... resultColumns) {
-        if(resultColumns == null || resultColumns.length == 0) {
+    @NotNull
+    public StatementSelect select(@NotNull String... resultColumns) {
+        if(resultColumns.length == 0) {
             return this;
         }
         int[] types = new int[resultColumns.length];
@@ -111,8 +98,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect select(Object... resultColumns) {
-        if(resultColumns == null || resultColumns.length == 0) {
+    @NotNull
+    public StatementSelect select(@NotNull Object... resultColumns) {
+        if(resultColumns.length == 0) {
             return this;
         }
         int totalCount = resultColumns.length;
@@ -147,6 +135,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configResultColumns(long self, int[] types, long[] columns, double[] unused, String[] columnNames);
 
+    @NotNull
     public StatementSelect distinct() {
         configDistinct(cppObj);
         return this;
@@ -154,14 +143,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configDistinct(long self);
 
-    public StatementSelect from(TableOrSubqueryConvertible tableOrSubquery) {
-        configTableOrSubqueries(cppObj, new int[]{Identifier.getCppType(tableOrSubquery)},
-                new long[]{CppObject.get(tableOrSubquery)}, null, null);
-        return this;
-    }
-
-    public StatementSelect from(TableOrSubqueryConvertible[] tableOrSubqueries) {
-        if(tableOrSubqueries == null || tableOrSubqueries.length == 0) {
+    @NotNull
+    public StatementSelect from(@NotNull TableOrSubqueryConvertible... tableOrSubqueries) {
+        if(tableOrSubqueries.length == 0) {
             return this;
         }
         int totalCount = tableOrSubqueries.length;
@@ -175,13 +159,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect from(String tableName) {
-        configTableOrSubqueries(cppObj, new int[]{CPPType.String}, null, null, new String[]{tableName});
-        return this;
-    }
-
-    public StatementSelect from(String... tableNames) {
-        if(tableNames == null || tableNames.length == 0) {
+    @NotNull
+    public StatementSelect from(@NotNull String... tableNames) {
+        if(tableNames.length == 0) {
             return this;
         }
         int[] types = new int[tableNames.length];
@@ -190,8 +170,9 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect from(Object... tableOrSubqueries) {
-        if(tableOrSubqueries == null || tableOrSubqueries.length == 0) {
+    @NotNull
+    public StatementSelect from(@NotNull Object... tableOrSubqueries) {
+        if(tableOrSubqueries.length == 0) {
             return this;
         }
         int totalCount = tableOrSubqueries.length;
@@ -226,19 +207,16 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configTableOrSubqueries(long self, int[] types, long[] tableOrSubqueries, double[] unused, String[] tableNames);
 
-    public StatementSelect where(Expression condition) {
+    @NotNull
+    public StatementSelect where(@Nullable Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
     private static native void configCondition(long self, long condition);
 
-    public StatementSelect groupBy(ExpressionConvertible expression) {
-        configGroups(cppObj, new int[]{Identifier.getCppType(expression)}, new long[]{CppObject.get(expression)}, null, null);
-        return this;
-    }
-
-    public StatementSelect groupBy(ExpressionConvertible... expressions) {
+    @NotNull
+    public StatementSelect groupBy(@Nullable ExpressionConvertible... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -253,12 +231,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect groupBy(String columnName) {
-        configGroups(cppObj, new int[]{CPPType.String}, null, null, new String[]{columnName});
-        return this;
-    }
-
-    public StatementSelect groupBy(String... columnNames) {
+    @NotNull
+    public StatementSelect groupBy(@Nullable String... columnNames) {
         if(columnNames == null || columnNames.length == 0) {
             return this;
         }
@@ -268,7 +242,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         return this;
     }
 
-    public StatementSelect groupBy(Object... expressions) {
+    @NotNull
+    public StatementSelect groupBy(@Nullable Object... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -304,13 +279,15 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configGroups(long self, int[] types, long[] exps, double[] unused, String[] columNames);
 
-    public StatementSelect having(Expression expression) {
+    @NotNull
+    public StatementSelect having(@Nullable Expression expression) {
         configHaving(cppObj, CppObject.get(expression));
         return this;
     }
 
     private static native void configHaving(long self, long expression);
 
+    @NotNull
     public StatementSelect union() {
         configUnion(cppObj);
         return this;
@@ -318,6 +295,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configUnion(long self);
 
+    @NotNull
     public StatementSelect unionAll() {
         configUnionAll(cppObj);
         return this;
@@ -325,6 +303,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configUnionAll(long self);
 
+    @NotNull
     public StatementSelect intersect() {
         configIntersect(cppObj);
         return this;
@@ -332,6 +311,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configIntersect(long self);
 
+    @NotNull
     public StatementSelect except() {
         configExcept(cppObj);
         return this;
@@ -339,12 +319,8 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configExcept(long self);
 
-    public StatementSelect orderBy(OrderingTerm order) {
-        configOrders(cppObj, new long[]{CppObject.get(order)});
-        return this;
-    }
-
-    public StatementSelect orderBy(OrderingTerm... orders) {
+    @NotNull
+    public StatementSelect orderBy(@Nullable OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }
@@ -358,46 +334,54 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     private static native void configOrders(long self, long[] orders);
 
+    @NotNull
     public StatementSelect limit(long from, long to) {
         configLimitRange(cppObj, CPPType.Int, from, CPPType.Int, to);
         return this;
     }
 
-    public StatementSelect limit(long from, ExpressionConvertible to) {
+    @NotNull
+    public StatementSelect limit(long from, @Nullable ExpressionConvertible to) {
         configLimitRange(cppObj, CPPType.Int, from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
-    public StatementSelect limit(ExpressionConvertible from, ExpressionConvertible to) {
+    @NotNull
+    public StatementSelect limit(@Nullable ExpressionConvertible from, @Nullable ExpressionConvertible to) {
         configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
-    public StatementSelect limit(ExpressionConvertible from, long to) {
+    @NotNull
+    public StatementSelect limit(@Nullable ExpressionConvertible from, long to) {
         configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int, to);
         return this;
     }
 
     private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
+    @NotNull
     public StatementSelect limit(long count) {
         configLimitCount(cppObj, CPPType.Int, count);
         return this;
     }
 
-    public StatementSelect limit(ExpressionConvertible count) {
+    @NotNull
+    public StatementSelect limit(@Nullable ExpressionConvertible count) {
         configLimitCount(cppObj, Identifier.getCppType(count), CppObject.get(count));
         return this;
     }
 
     private static native void configLimitCount(long self, int type, long count);
 
+    @NotNull
     public StatementSelect offset(long offset) {
         configOffset(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public StatementSelect offset(ExpressionConvertible offset) {
+    @NotNull
+    public StatementSelect offset(@Nullable ExpressionConvertible offset) {
         configOffset(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }

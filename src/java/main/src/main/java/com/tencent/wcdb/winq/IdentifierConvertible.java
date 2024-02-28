@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObjectConvertible;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface IdentifierConvertible extends CppObjectConvertible {
+    @NotNull
     Identifier asIdentifier();
 }

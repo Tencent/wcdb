@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementAttach extends Statement {
     @Override
     protected int getType() {
@@ -37,36 +40,42 @@ public class StatementAttach extends Statement {
 
     private static native long createCppObj();
 
-    public StatementAttach attach(String path) {
+    @NotNull
+    public StatementAttach attach(@NotNull String path) {
         configPath(cppObj, CPPType.String, 0, path);
         return this;
     }
 
-    public StatementAttach attach(BindParameter bindParameter) {
+    @NotNull
+    public StatementAttach attach(@NotNull BindParameter bindParameter) {
         configPath(cppObj, Identifier.getCppType(bindParameter), CppObject.get(bindParameter), null);
         return this;
     }
 
     private static native void configPath(long self, int type, long object, String path);
 
-    public StatementAttach as(String schemaName) {
+    @NotNull
+    public StatementAttach as(@NotNull String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementAttach as(Schema schema) {
+    @NotNull
+    public StatementAttach as(@NotNull Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
-    public StatementAttach key(String key) {
+    @NotNull
+    public StatementAttach key(@Nullable String key) {
         configKey(cppObj, CPPType.String, 0, key);
         return this;
     }
 
-    public StatementAttach key(BindParameter bindParameter) {
+    @NotNull
+    public StatementAttach key(@Nullable BindParameter bindParameter) {
         configKey(cppObj, Identifier.getCppType(bindParameter), CppObject.get(bindParameter), null);
         return this;
     }

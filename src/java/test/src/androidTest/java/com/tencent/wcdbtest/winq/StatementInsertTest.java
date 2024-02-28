@@ -70,16 +70,16 @@ public class StatementInsertTest {
         CommonTableExpression cte = new CommonTableExpression("tempTable")
                 .as(new StatementSelect().select("testColumn").from("table1"));
         winqEqual(new StatementInsert().with(cte).insertInto("table2")
-                        .column(new Column("testColumn")).value(1),
+                        .columns(new Column("testColumn")).values(1),
                 "WITH tempTable AS(SELECT testColumn FROM table1) INSERT INTO table2(testColumn) VALUES(1)");
         winqEqual(new StatementInsert().withRecursive(cte).insertInto("table2")
-                        .column(new Column("testColumn")).value(1),
+                        .columns(new Column("testColumn")).values(1),
                 "WITH RECURSIVE tempTable AS(SELECT testColumn FROM table1) INSERT INTO table2(testColumn) VALUES(1)");
 
-        winqEqual(new StatementInsert().insertInto("testTable").column(new Column("testColumn")).defaultValues(),
+        winqEqual(new StatementInsert().insertInto("testTable").columns(new Column("testColumn")).defaultValues(),
                 "INSERT INTO testTable(testColumn) DEFAULT VALUES");
 
-        winqEqual(new StatementInsert().insertInto("testTable").column(new Column("testColumn")).value(1)
+        winqEqual(new StatementInsert().insertInto("testTable").columns(new Column("testColumn")).values(1)
                 .upsert(new Upsert().onConflict().doNoThing()),
                 "INSERT INTO testTable(testColumn) VALUES(1) ON CONFLICT DO NOTHING");
     }

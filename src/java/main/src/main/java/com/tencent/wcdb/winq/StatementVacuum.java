@@ -25,6 +25,8 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementVacuum extends Statement {
     @Override
     protected int getType() {
@@ -37,12 +39,14 @@ public class StatementVacuum extends Statement {
 
     private static native long createCppObj();
 
-    public StatementVacuum vacuum(String schemaName) {
+    @NotNull
+    public StatementVacuum vacuum(@NotNull String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementVacuum vacuum(Schema schema) {
+    @NotNull
+    public StatementVacuum vacuum(@NotNull Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }

@@ -62,7 +62,7 @@ open class CRUDTestCase : TableTestCase() {
 
     fun allRowsCount(): Long {
         return try {
-            database.getValue(Column.all().count(), tableName).long
+            database.getValue(Column.all().count(), tableName)!!.long
         } catch (e: WCDBException) {
             throw RuntimeException(e)
         }

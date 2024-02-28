@@ -23,13 +23,15 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Schema extends Identifier {
     @Override
     protected int getType() {
         return CPPType.Schema;
     }
 
-    public Schema(String name) {
+    public Schema(@NotNull String name) {
         cppObj = createCppObj(name);
     }
 
@@ -39,10 +41,12 @@ public class Schema extends Identifier {
 
     private static native long createCppObj(String name);
 
+    @NotNull
     public static final Schema main = new Schema(createMainCppObj());
 
     private static native long createMainCppObj();
 
+    @NotNull
     public static final Schema temp = new Schema(createTempCppObj());
 
     private static native long createTempCppObj();

@@ -28,6 +28,9 @@ import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.winq.Expression;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +45,7 @@ public class Database extends HandleORMOperation {
      * WCDB will not generate a sqlite db handle until the first operation, which is also called as lazy initialization.
      * @param path Path to your database
      */
-    public Database(String path) {
+    public Database(@NotNull String path) {
         cppObj = createDatabase(path);
     }
 
@@ -51,6 +54,7 @@ public class Database extends HandleORMOperation {
     /**
      * Get the file path of the database.
      */
+    @NotNull
     public String getPath() {
         return getPath(cppObj);
     }
@@ -107,7 +111,7 @@ public class Database extends HandleORMOperation {
         void onClose() throws WCDBException;
     }
 
-    private static void onClose(CloseCallBack callBack) throws WCDBException {
+    private static void onClose(@NotNull CloseCallBack callBack) throws WCDBException {
         callBack.onClose();
     }
 
@@ -126,7 +130,7 @@ public class Database extends HandleORMOperation {
      * @param callBack on database is closed.
      * @throws WCDBException if any error occurs.
      */
-    public void close(CloseCallBack callBack) {
+    public void close(@Nullable CloseCallBack callBack) {
         close(cppObj, callBack);
     }
 
@@ -180,6 +184,7 @@ public class Database extends HandleORMOperation {
      * so it can avoid the deadlock between different sqlite db handles in some extreme cases.
      * @return A {@code Handle} object.
      */
+    @NotNull
     public Handle getHandle() {
         return new Handle(this, false);
     }
@@ -191,6 +196,7 @@ public class Database extends HandleORMOperation {
      * @return A {@code Handle}object.
      */
     @Override
+    @NotNull
     public Handle getHandle(boolean writeHint) {
         return new Handle(this, writeHint);
     }
@@ -251,6 +257,7 @@ public class Database extends HandleORMOperation {
      * Get paths to all database-related files.
      * @return all related paths
      */
+    @NotNull
     public List<String> getPaths() {
         return getPaths(cppObj);
     }
@@ -278,7 +285,7 @@ public class Database extends HandleORMOperation {
      * @param destination folder
      * @throws WCDBException if any error occurs.
      */
-    public void moveFile(String destination) throws WCDBException{
+    public void moveFile(@NotNull String destination) throws WCDBException{
         if(!moveFile(cppObj, destination)) {
             throw createException();
         }
@@ -319,7 +326,7 @@ public class Database extends HandleORMOperation {
      * @param pageSize The page size of database.
      * @param version Main version of sqlcipher.
      */
-    public void setCipherKey(byte[] key, int pageSize, CipherVersion version) {
+    public void setCipherKey(@NotNull byte[] key, int pageSize, CipherVersion version) {
         setCipherKey(cppObj, key, pageSize, version.ordinal());
     }
 
@@ -329,7 +336,7 @@ public class Database extends HandleORMOperation {
      * @param key Cipher key.
      * @param pageSize The page size of database
      */
-    public void setCipherKey(byte[] key, int pageSize) {
+    public void setCipherKey(@NotNull byte[] key, int pageSize) {
         setCipherKey(key, pageSize, CipherVersion.defaultVersion);
     }
 
@@ -338,7 +345,7 @@ public class Database extends HandleORMOperation {
      * @see #setCipherKey(long, byte[], int, int)
      * @param key Cipher key.
      */
-    public void setCipherKey(byte[] key) {
+    public void setCipherKey(@NotNull byte[] key) {
         setCipherKey(key, 4096);
     }
 
@@ -362,7 +369,7 @@ public class Database extends HandleORMOperation {
          * @param handle The handle need to be configured.
          * @throws WCDBException if any error occurs.
          */
-        void onInvocation(Handle handle) throws WCDBException;
+        void onInvocation(@NotNull Handle handle) throws WCDBException;
     }
 
     private static boolean onConfig(long cppHandle, Config config) {
@@ -396,7 +403,7 @@ public class Database extends HandleORMOperation {
      * @param unInvocation a config will be triggered when a handle is invalidated or closed.
      * @param priority priority of config. It determines the execute order of configs.
      */
-    public void setConfig(String configName, Config invocation, Config unInvocation, ConfigPriority priority) {
+    public void setConfig(@NotNull String configName, @NotNull Config invocation, @Nullable Config unInvocation, ConfigPriority priority) {
         int cppPriority = 0;
         switch (priority) {
             case low:
@@ -419,7 +426,7 @@ public class Database extends HandleORMOperation {
      * @param invocation A config will be triggered when a handle is open or reuse.
      * @param priority Priority of config. It determines the execute order of configs.
      */
-    public void setConfig(String configName, Config invocation, ConfigPriority priority) {
+    public void setConfig(@NotNull String configName, @NotNull Config invocation, ConfigPriority priority) {
         setConfig(configName, invocation, null, priority);
     }
 
@@ -429,7 +436,7 @@ public class Database extends HandleORMOperation {
      * @param configName The name of config. It should be different from each other.
      * @param invocation A config will be triggered when a handle is open or reuse.
      */
-    public void setConfig(String configName, Config invocation) {
+    public void setConfig(@NotNull String configName, @NotNull Config invocation) {
         setConfig(configName, invocation, ConfigPriority.default_);
     }
 
@@ -454,7 +461,7 @@ public class Database extends HandleORMOperation {
          * @param sql The executed sql.
          * @param info Detail performance Info.
          */
-        void onTrace(long tag, String path, long handleId, String sql, PerformanceInfo info);
+        void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull PerformanceInfo info);
     }
 
     private static void onTracePerformance(PerformanceTracer tracer, long tag, String path, long handleId, String sql, long costInNanoseconds, int[] infoValues) {
@@ -469,6 +476,7 @@ public class Database extends HandleORMOperation {
             info.overflowPageWriteCount = infoValues[5];
             info.costInNanoseconds = costInNanoseconds;
         }
+        assert info != null;
         tracer.onTrace(tag, path, handleId, sql, info);
     }
 
@@ -485,7 +493,7 @@ public class Database extends HandleORMOperation {
      * Note that trace may cause WCDB performance degradation, according to your needs to choose whether to open.
      * @param tracer of performance.
      */
-    public static native void globalTracePerformance(PerformanceTracer tracer);
+    public static native void globalTracePerformance(@Nullable PerformanceTracer tracer);
 
 
     /**
@@ -493,7 +501,7 @@ public class Database extends HandleORMOperation {
      * @see #globalTracePerformance(PerformanceTracer)
      * @param tracer of performance.
      */
-    public void tracePerformance(PerformanceTracer tracer) {
+    public void tracePerformance(@Nullable PerformanceTracer tracer) {
         tracePerformance(cppObj, tracer);
     }
     private static native void tracePerformance(long self, PerformanceTracer tracer);
@@ -508,7 +516,7 @@ public class Database extends HandleORMOperation {
          * @param sql The executed sql.
          * @param info The detail info of executed sql. It is valid only when full sql trace is enable.
          */
-        void onTrace(long tag, String path, long handleId, String sql, String info);
+        void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info);
     }
 
     private static void onTraceSQL(SQLTracer tracer, long tag,  String path, long handleId, String sql, String info) {
@@ -528,7 +536,7 @@ public class Database extends HandleORMOperation {
      * @see #setFullSQLTraceEnable(boolean)
      * @param tracer A tracer of sql.
      */
-    public static native void globalTraceSQL(SQLTracer tracer);
+    public static native void globalTraceSQL(@Nullable SQLTracer tracer);
 
     /**
      * You can register a tracer to monitor the execution of all SQLs executed in the current database.
@@ -536,7 +544,7 @@ public class Database extends HandleORMOperation {
      * @see #globalTraceSQL(SQLTracer)
      * @param tracer A tracer of sql.
      */
-    public void traceSQL(SQLTracer tracer) {
+    public void traceSQL(@Nullable SQLTracer tracer) {
         traceSQL(cppObj, tracer);
     }
 
@@ -562,7 +570,7 @@ public class Database extends HandleORMOperation {
          * Triggered synchronously before the database throws an WCDBException.
          * @param exception The exception to be thrown.
          */
-        void onTrace(WCDBException exception);
+        void onTrace(@NotNull WCDBException exception);
     }
 
     private static void onTraceException(ExceptionTracer tracer, long cppError) {
@@ -573,13 +581,13 @@ public class Database extends HandleORMOperation {
      * You can register a reporter to monitor all database exceptions.
      * @param tracer The exception tracer.
      */
-    public static native void globalTraceException(ExceptionTracer tracer);
+    public static native void globalTraceException(@Nullable ExceptionTracer tracer);
 
     /**
      * You can register a reporter to monitor all exceptions of current database.
      * @param tracer The exception tracer.
      */
-    public void traceException(ExceptionTracer tracer) {
+    public void traceException(@Nullable ExceptionTracer tracer) {
         traceException(cppObj, tracer);
     }
 
@@ -599,7 +607,7 @@ public class Database extends HandleORMOperation {
          * @param operation The event type.
          * @param info Detail info of event. It is only valid when the event type is Operation.OpenHandle
          */
-        void onTrace(Database database, Operation operation, HashMap<String, Value> info);
+        void onTrace(@NotNull Database database, Operation operation, @NotNull HashMap<String, Value> info);
     }
 
     /**
@@ -654,7 +662,7 @@ public class Database extends HandleORMOperation {
      * @see com.tencent.wcdb.core.Database.OperationTracer
      * @param tracer The tracer to event.
      */
-    public static native void globalTraceDatabaseOperation(OperationTracer tracer);
+    public static native void globalTraceDatabaseOperation(@Nullable OperationTracer tracer);
 
     public interface BusyTracer {
         /**
@@ -664,7 +672,7 @@ public class Database extends HandleORMOperation {
          * @param tid The id of the thread being waited on.
          * @param sql The sql executing in the thread being waited on.
          */
-        void onTrace(long tag, String path, long tid, String sql);
+        void onTrace(long tag, @NotNull String path, long tid, @NotNull String sql);
     }
 
     /**
@@ -679,7 +687,7 @@ public class Database extends HandleORMOperation {
      * @param tracer The tracer of busy event.
      * @param timeOut Timeout in seconds for blocking database operation.
      */
-    public static native void globalTraceBusy(BusyTracer tracer, double timeOut);
+    public static native void globalTraceBusy(@Nullable BusyTracer tracer, double timeOut);
 
     private static void onBusyTrace(BusyTracer tracer, long tag, String path, long tid, String sql) {
         tracer.onTrace(tag, path, tid, sql);
@@ -691,7 +699,7 @@ public class Database extends HandleORMOperation {
      * @see com.tencent.wcdb.fts.BuiltinTokenizer
      * @param tokenizer Name of tokenizer.
      */
-    public void addTokenizer(String tokenizer) {
+    public void addTokenizer(@NotNull String tokenizer) {
         addTokenizer(cppObj, tokenizer);
     }
 
@@ -703,10 +711,7 @@ public class Database extends HandleORMOperation {
      * @see com.tencent.wcdb.fts.BuiltinTokenizer#Pinyin
      * @param pinyinDict The keys are Chinese characters, and the values are the corresponding pinyin lists.
      */
-    public static void configPinyinDict(Map<String, List<String>> pinyinDict) {
-        if(pinyinDict == null) {
-            return;
-        }
+    public static void configPinyinDict(@NotNull Map<String, List<String>> pinyinDict) {
         String[] keys = pinyinDict.keySet().toArray(new String[0]);
         if(keys.length == 0){
             return;
@@ -730,10 +735,7 @@ public class Database extends HandleORMOperation {
      * @see com.tencent.wcdb.fts.BuiltinTokenizer.Parameter#SimplifyChinese
      * @param traditionalChineseDict The keys are simplified Chinese characters, and the values are the corresponding Traditional Chinese characters.
      */
-    public static void configTraditionalChineseDict(Map<String, String> traditionalChineseDict) {
-        if(traditionalChineseDict == null) {
-            return;
-        }
+    public static void configTraditionalChineseDict(@NotNull Map<String, String> traditionalChineseDict) {
         String[] keys = traditionalChineseDict.keySet().toArray(new String[0]);
         if(keys.length == 0){
             return;
@@ -752,7 +754,7 @@ public class Database extends HandleORMOperation {
      * You can use the auxiliary function defined in {@link com.tencent.wcdb.fts.BuiltinFTSAuxiliaryFunction}.
      * @param auxiliaryFunction The function name.
      */
-    public void addAuxiliaryFunction(String auxiliaryFunction) {
+    public void addAuxiliaryFunction(@NotNull String auxiliaryFunction) {
         addAuxiliaryFunction(cppObj, auxiliaryFunction);
     }
 
@@ -763,7 +765,7 @@ public class Database extends HandleORMOperation {
          * Triggered when a database is confirmed to be corrupted.
          * @param database The corrupted database.
          */
-        void onCorrupted(Database database);
+        void onCorrupted(@NotNull Database database);
     }
 
     private static void onCorrupted(CorruptionNotification monitor, long cppDatabase) {
@@ -780,7 +782,7 @@ public class Database extends HandleORMOperation {
      * In the callback, you can delete the corrupted database or try to repair the database.
      * @param monitor The corruption monitor.
      */
-    public void setNotificationWhenCorrupted(CorruptionNotification monitor) {
+    public void setNotificationWhenCorrupted(@Nullable CorruptionNotification monitor) {
         setNotificationWhenCorrupted(cppObj, monitor);
     }
 
@@ -841,7 +843,7 @@ public class Database extends HandleORMOperation {
          * @param tableName The name of tables need to be backed up.
          * @return True if current table needs to be backed up.
          */
-        boolean tableShouldBeBackup(String tableName);
+        boolean tableShouldBeBackup(@NotNull String tableName);
     }
 
     private static boolean checkTableShouldBeBackup(BackupFilter filter, String tableName) {
@@ -854,7 +856,7 @@ public class Database extends HandleORMOperation {
      * If there are some tables that do not need to be backed up, return false when these table names are passed into the filter.
      * @param filter A table filter.
      */
-    public void filterBackup(BackupFilter filter) {
+    public void filterBackup(@Nullable BackupFilter filter) {
         filterBackup(cppObj, filter);
     }
 
@@ -885,7 +887,7 @@ public class Database extends HandleORMOperation {
      * @return Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
      * @throws WCDBException if any error occurs.
      */
-    public double retrieve(ProgressMonitor monitor) throws WCDBException {
+    public double retrieve(@Nullable ProgressMonitor monitor) throws WCDBException {
         double score = retrieve(cppObj, monitor);
         if(score < 0) {
             throw createException();
@@ -901,7 +903,7 @@ public class Database extends HandleORMOperation {
      * @param monitor A progress monitor.
      * @throws WCDBException if any error occurs.
      */
-    public void vacuum(ProgressMonitor monitor) throws WCDBException {
+    public void vacuum(@Nullable ProgressMonitor monitor) throws WCDBException {
         if(!vacuum(cppObj, monitor)) {
             throw createException();
         }
@@ -1002,7 +1004,7 @@ public class Database extends HandleORMOperation {
          * If the current table does not need to migrate data, you need to set the sourceTable in {@link MigrationInfo} to empty string.
          * @param info Migration configuration info of a table.
          */
-        void filterMigrate(MigrationInfo info);
+        void filterMigrate(@NotNull MigrationInfo info);
     }
     private static void filterMigrate(MigrationFilter filter, long cppInfoSetter, long cppInfo, String table) {
         MigrationInfo info = new MigrationInfo();
@@ -1026,7 +1028,7 @@ public class Database extends HandleORMOperation {
      * @param sourceCipher Cipher of the source database for migration. It must be null if this is not a cross-database migration.
      * @param filter A filter to config migration relationship of all tables.
      */
-    public void addMigrationSource(String sourcePath, byte[] sourceCipher, MigrationFilter filter) {
+    public void addMigrationSource(@NotNull String sourcePath, @Nullable byte[] sourceCipher, @NotNull MigrationFilter filter) {
         addMigrationSource(cppObj, sourcePath, sourceCipher, filter);
     }
 
@@ -1037,7 +1039,7 @@ public class Database extends HandleORMOperation {
      * @param sourcePath Path of the source database for migration. It must be null if this is not a cross-database migration.
      * @param filter A filter to config migration relationship of all tables.
      */
-    public void addMigrationSource(String sourcePath, MigrationFilter filter) {
+    public void addMigrationSource(@NotNull String sourcePath, @NotNull MigrationFilter filter) {
         addMigrationSource(sourcePath, null, filter);
     }
 
@@ -1074,7 +1076,7 @@ public class Database extends HandleORMOperation {
          * @param database The target database being migrated.
          * @param info Table info of migration.
          */
-        void onMigrated(Database database, MigrationInfo info);
+        void onMigrated(@NotNull Database database, @Nullable MigrationInfo info);
     }
 
     private static void onTableMigrated(MigrationNotification notification, long cppDatabase, String table, String sourceTable) {
@@ -1094,7 +1096,7 @@ public class Database extends HandleORMOperation {
      * The callback will be called when each table completes the migration.
      * @param notification A notification callback.
      */
-    public void setNotificationWhenMigrated(MigrationNotification notification) {
+    public void setNotificationWhenMigrated(@Nullable MigrationNotification notification) {
         setNotificationWhenMigrated(cppObj, notification);
     }
 
@@ -1119,7 +1121,8 @@ public class Database extends HandleORMOperation {
      * @return A new zstd dict.
      * @throws WCDBException if any error occurs.
      */
-    public static byte[] trainDictWithString(List<String> samples, byte dictId) throws WCDBException {
+    @NotNull
+    public static byte[] trainDictWithString(@NotNull List<String> samples, byte dictId) throws WCDBException {
         byte[] dict = trainDict(samples.toArray(new String[0]), dictId);
         if(dict == null || dict.length == 0) {
             throw createThreadedException();
@@ -1137,7 +1140,8 @@ public class Database extends HandleORMOperation {
      * @return A new zstd dict.
      * @throws WCDBException if any error occurs.
      */
-    public static byte[] trainDictWithData(List<byte[]> samples, byte dictId) throws WCDBException {
+    @NotNull
+    public static byte[] trainDictWithData(@NotNull List<byte[]> samples, byte dictId) throws WCDBException {
         byte[] dict = trainDict(samples.toArray(new byte[0][]), dictId);
         if(dict == null || dict.length == 0) {
             throw createThreadedException();
@@ -1154,7 +1158,7 @@ public class Database extends HandleORMOperation {
      * @param dictId Id of the dict.
      * @throws WCDBException if any error occurs.
      */
-    public static void registerDict(byte[] dict, byte dictId) throws WCDBException {
+    public static void registerDict(@NotNull byte[] dict, byte dictId) throws WCDBException {
         if(!nativeRegisterDict(dict, dictId)){
             throw createThreadedException();
         }
@@ -1170,7 +1174,7 @@ public class Database extends HandleORMOperation {
          * Configure to compress all data in the specified column with the default zstd compression algorithm.
          * @param field The column to be compressed.
          */
-        public <T> void addZSTDNormalCompress(Field<T> field) {
+        public <T> void addZSTDNormalCompress(@NotNull Field<T> field) {
             Database.addZSTDNormalCompress(cppInfo, CppObject.get(field));
         }
 
@@ -1179,7 +1183,7 @@ public class Database extends HandleORMOperation {
          * @param field The column to be compressed.
          * @param dictId The id of zstd dict to use.
          */
-        public <T> void addZSTDDictCompress(Field<T> field, byte dictId) {
+        public <T> void addZSTDDictCompress(@NotNull Field<T> field, byte dictId) {
             Database.addZSTDDictCompress(cppInfo, CppObject.get(field), dictId);
         }
 
@@ -1191,7 +1195,7 @@ public class Database extends HandleORMOperation {
          * @param matchField The column used to distinguish different dict.
          * @param dicts The matching relationship between the dict id and the value of the matching column.
          */
-        public <T> void addZSTDMultiDictCompress(Field<T> field, Field<T> matchField, Map<Long, Byte> dicts) {
+        public <T> void addZSTDMultiDictCompress(@NotNull Field<T> field, @NotNull Field<T> matchField, @NotNull Map<Long, Byte> dicts) {
             long[] values = new long[dicts.size()];
             byte[] dictIds = new byte[dicts.size()];
             int index = 0;
@@ -1221,7 +1225,7 @@ public class Database extends HandleORMOperation {
          * If the current table does not need to compress data, you don't need to config CompressionInfo.
          * @param info An object used to configure the compression.
          */
-        void filterCompress(CompressionInfo info);
+        void filterCompress(@NotNull CompressionInfo info);
     }
 
     private static void filterCompress(CompressionFilter filter, long cppInfo, String table) {
@@ -1236,7 +1240,7 @@ public class Database extends HandleORMOperation {
      * Note that you need to use this method to configure the compression before executing any statements on current database.
      * @param filter A filter to config compression.
      */
-    public void setCompression(CompressionFilter filter) {
+    public void setCompression(@Nullable CompressionFilter filter) {
         setCompression(cppObj, filter);
     }
 
@@ -1286,7 +1290,7 @@ public class Database extends HandleORMOperation {
          * @param database The compressing database.
          * @param tableName The compressed table.
          */
-        void onCompressed(Database database, String tableName);
+        void onCompressed(@NotNull Database database, @Nullable String tableName);
     }
 
     private static void onTableCompressed(CompressionNotification notification, long cppDatabase, String table) {
@@ -1300,7 +1304,7 @@ public class Database extends HandleORMOperation {
      * The callback will be called when each table completes the compression.
      * @param notification The notification callback.
      */
-    public void setNotificationWhenCompressed(CompressionNotification notification) {
+    public void setNotificationWhenCompressed(@Nullable CompressionNotification notification) {
         setNotificationWhenCompressed(cppObj, notification);
     }
 

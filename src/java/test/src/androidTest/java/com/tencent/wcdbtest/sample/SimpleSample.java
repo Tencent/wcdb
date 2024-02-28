@@ -40,6 +40,7 @@ import com.tencent.wcdbtest.base.DBTestObject;
 import com.tencent.wcdbtest.base.RandomTool;
 import com.tencent.wcdbtest.base.TestObject;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class SimpleSample extends CRUDTestCase {
         // 自定义配置，一般不需要
         database.setConfig("自定义配置名", new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 // Pragma secure_delete = true
                 handle.execute(new StatementPragma().pragma(Pragma.secureDelete).toValue(true));
             }
@@ -84,7 +85,7 @@ public class SimpleSample extends CRUDTestCase {
         //执行事务
         database.runTransaction(new Transaction() {
             @Override
-            public boolean insideTransaction(Handle handle) throws WCDBException {
+            public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
                 //上面那些接口都能用，也可以用一些高阶接口，直接拼sql对象，来使用全部的sql能力
                 PreparedStatement insert = handle.getOrCreatePreparedStatement(new StatementInsert().insertInto("testTable").orReplace()
                         .columns(DBTestObject.allFields())

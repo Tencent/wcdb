@@ -25,44 +25,52 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class QualifiedTable extends Identifier {
     @Override
     protected int getType() {
         return CPPType.QualifiedTableName;
     }
 
-    public QualifiedTable(String tableName) {
+    public QualifiedTable(@NotNull String tableName) {
         cppObj = createCppObj(tableName);
     }
 
     private static native long createCppObj(String tableName);
 
-    public QualifiedTable of(String schema) {
+    @NotNull
+    public QualifiedTable of(@Nullable String schema) {
         schema(cppObj, CPPType.String, 0, schema);
         return this;
     }
 
-    public QualifiedTable of(Schema schema) {
+    @NotNull
+    public QualifiedTable of(@Nullable Schema schema) {
         schema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void schema(long self, int type, long object, String schemaName);
 
-    public QualifiedTable as(String alias) {
+    @NotNull
+    public QualifiedTable as(@Nullable String alias) {
         alias(cppObj, alias);
         return this;
     }
 
     private static native void alias(long self, String alias);
 
-    public QualifiedTable indexed(String indexName) {
+    @NotNull
+    public QualifiedTable indexed(@Nullable String indexName) {
         indexed(cppObj, indexName);
         return this;
     }
 
     private static native void indexed(long self, String indexName);
 
+    @NotNull
     public QualifiedTable notIndexed() {
         notIndexed(cppObj);
         return this;

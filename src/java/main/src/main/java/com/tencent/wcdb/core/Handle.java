@@ -26,6 +26,8 @@ import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.winq.Statement;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Handle extends HandleORMOperation implements AutoCloseable {
     private PreparedStatement mainStatement = null;
     private final Database database;
@@ -45,7 +47,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
     public long getCppHandle() throws WCDBException {
         if(cppObj == 0) {
             assert database != null;
-            cppObj = database.getHandle(CppObject.get(database), writeHint);
+            cppObj = Database.getHandle(CppObject.get(database), writeHint);
             if(cppObj == 0) {
                 throw database.createException();
             }
@@ -72,7 +74,8 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
      * @return A wrapper of {@code sqlite3_stmt}.
      * @throws WCDBException of any error occurs.
      */
-    public PreparedStatement getOrCreatePreparedStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public PreparedStatement getOrCreatePreparedStatement(@NotNull Statement statement) throws WCDBException {
         long cppPreparedStatement = getOrCreatePreparedStatement(getCppHandle(), CppObject.get(statement));
         if(cppPreparedStatement == 0) {
             throw createException();
@@ -90,7 +93,8 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
      * @return A wrapper of {@code sqlite3_stmt}.
      * @throws WCDBException of any error occurs.
      */
-    public PreparedStatement getOrCreatePreparedStatement(String sql) throws WCDBException {
+    @NotNull
+    public PreparedStatement getOrCreatePreparedStatement(@NotNull String sql) throws WCDBException {
         long cppPreparedStatement = getOrCreatePreparedStatementWithSQL(getCppHandle(), sql);
         if(cppPreparedStatement == 0) {
             throw createException();
@@ -108,7 +112,8 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
      * @return A wrapper of {@code sqlite3_stmt}.
      * @throws WCDBException of any error occurs.
      */
-    public PreparedStatement preparedWithMainStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public PreparedStatement preparedWithMainStatement(@NotNull Statement statement) throws WCDBException {
         if(mainStatement == null) {
             mainStatement = new PreparedStatement(getMainStatement(getCppHandle()));
             mainStatement.autoFinalize = true;
@@ -125,7 +130,8 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
      * @return A wrapper of {@code sqlite3_stmt}.
      * @throws WCDBException of any error occurs.
      */
-    public PreparedStatement preparedWithMainStatement(String sql) throws WCDBException {
+    @NotNull
+    public PreparedStatement preparedWithMainStatement(@NotNull String sql) throws WCDBException {
         if(mainStatement == null) {
             mainStatement = new PreparedStatement(getMainStatement(getCppHandle()));
             mainStatement.autoFinalize = true;
@@ -280,7 +286,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
      * @param signal A signal to cancel operation.
      * @throws WCDBException if any error occurs.
      */
-    public void attachCancellationSignal(CancellationSignal signal) throws WCDBException {
+    public void attachCancellationSignal(@NotNull CancellationSignal signal) throws WCDBException {
         attachCancellationSignal(getCppHandle(), CppObject.get(signal));
     }
 

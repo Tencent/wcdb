@@ -34,6 +34,8 @@ import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 
 import static org.junit.Assert.*;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.File;
@@ -63,7 +65,7 @@ public class MigrationTest extends BaseTestCase {
         final String targetTableName = "targetTable";
         targetDatabase.addMigrationSource(sourceDatabase.getPath(), sourceCipher, new Database.MigrationFilter() {
             @Override
-            public void filterMigrate(Database.MigrationInfo info) {
+            public void filterMigrate(@NotNull Database.MigrationInfo info) {
                 if(info.table.equals(targetTableName)) {
                     info.sourceTable = sourceTableName;
                     info.filterCondition = DBTestObject.id.gt(2);
@@ -93,7 +95,7 @@ public class MigrationTest extends BaseTestCase {
         final WrappedValue migrateTable = new WrappedValue();
         targetDatabase.setNotificationWhenMigrated(new Database.MigrationNotification() {
             @Override
-            public void onMigrated(Database database, Database.MigrationInfo info) {
+            public void onMigrated(@NotNull Database database, Database.MigrationInfo info) {
                 if(info != null && info.table.equals(targetTableName)) {
                     migrateTable.stringValue = info.sourceTable;
                 }

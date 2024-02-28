@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.Value;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Set;
 
@@ -32,10 +35,12 @@ import java.util.Set;
 
 public abstract class ExpressionOperable extends Identifier implements ExpressionConvertible{
 
+    @NotNull
     public Expression isNull() {
         return nullOperate(false);
     }
 
+    @NotNull
     public Expression notNull() {
         return nullOperate(true);
     }
@@ -44,459 +49,573 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         Binary operation
      */
 
-    public Expression or(ExpressionConvertible operand) {
+    @NotNull
+    public Expression or(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Or, false);
     }
 
-    public Expression and(ExpressionConvertible operand) {
+    @NotNull
+    public Expression and(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.And, false);
     }
 
-    public Expression multiply(ExpressionConvertible operand) {
+    @NotNull
+    public Expression multiply(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
+    @NotNull
     public Expression multiply(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
+    @NotNull
     public Expression multiply(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
+    @NotNull
     public Expression multiply(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
+    @NotNull
     public Expression multiply(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
+    @NotNull
     public Expression multiply(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
+    @NotNull
     public Expression multiply(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Multiply, false);
     }
 
-    public Expression divide(ExpressionConvertible operand) {
+    @NotNull
+    public Expression divide(@NotNull ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
+    @NotNull
     public Expression divide(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
+    @NotNull
     public Expression divide(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
+    @NotNull
     public Expression divide(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
+    @NotNull
     public Expression divide(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
+    @NotNull
     public Expression divide(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
+    @NotNull
     public Expression divide(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Divide, false);
     }
 
-    public Expression mod(ExpressionConvertible operand) {
+    @NotNull
+    public Expression mod(@NotNull ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
+    @NotNull
     public Expression mod(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
+    @NotNull
     public Expression mod(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
+    @NotNull
     public Expression mod(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
+    @NotNull
     public Expression mod(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
+    @NotNull
     public Expression mod(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
+    @NotNull
     public Expression mod(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Modulo, false);
     }
 
-    public Expression add(ExpressionConvertible operand) {
+    @NotNull
+    public Expression add(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
+    @NotNull
     public Expression add(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
+    @NotNull
     public Expression add(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
+    @NotNull
     public Expression add(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
+    @NotNull
     public Expression add(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
+    @NotNull
     public Expression add(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
+    @NotNull
     public Expression add(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Plus, false);
     }
 
-    public Expression minus(ExpressionConvertible operand) {
+    @NotNull
+    public Expression minus(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
+    @NotNull
     public Expression minus(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
+    @NotNull
     public Expression minus(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
+    @NotNull
     public Expression minus(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
+    @NotNull
     public Expression minus(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
+    @NotNull
     public Expression minus(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
+    @NotNull
     public Expression minus(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Minus, false);
     }
 
-    public Expression leftShift(ExpressionConvertible operand) {
+    @NotNull
+    public Expression leftShift(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
 
+    @NotNull
     public Expression leftShift(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
 
+    @NotNull
     public Expression leftShift(short operand) {
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
 
+    @NotNull
     public Expression leftShift(int operand) {
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
 
+    @NotNull
     public Expression leftShift(long operand) {
         return binaryOperate(operand, BinaryOperatorType.LeftShift, false);
     }
 
-    public Expression rightShift(ExpressionConvertible operand) {
+    @NotNull
+    public Expression rightShift(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.RightShift, false);
     }
 
+    @NotNull
     public Expression rightShift(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.RightShift, false);
     }
 
+    @NotNull
     public Expression rightShift(short operand) {
         return binaryOperate(operand, BinaryOperatorType.RightShift, false);
     }
 
+    @NotNull
     public Expression rightShift(int operand) {
         return binaryOperate(operand, BinaryOperatorType.RightShift, false);
     }
 
+    @NotNull
     public Expression rightShift(long operand) {
         return binaryOperate(operand, BinaryOperatorType.RightShift, false);
     }
 
-    public Expression bitAnd(ExpressionConvertible operand) {
+    @NotNull
+    public Expression bitAnd(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
 
+    @NotNull
     public Expression bitAnd(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
 
+    @NotNull
     public Expression bitAnd(short operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
 
+    @NotNull
     public Expression bitAnd(int operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
 
+    @NotNull
     public Expression bitAnd(long operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseAnd, false);
     }
 
-    public Expression bitOr(ExpressionConvertible operand) {
+    @NotNull
+    public Expression bitOr(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
 
+    @NotNull
     public Expression bitOr(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
 
+    @NotNull
     public Expression bitOr(short operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
 
+    @NotNull
     public Expression bitOr(int operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
 
+    @NotNull
     public Expression bitOr(long operand) {
         return binaryOperate(operand, BinaryOperatorType.BitwiseOr, false);
     }
 
-    public Expression lt(ExpressionConvertible operand) {
+    @NotNull
+    public Expression lt(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
+    @NotNull
     public Expression lt(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
+    @NotNull
     public Expression lt(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
+    @NotNull
     public Expression lt(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
+    @NotNull
     public Expression lt(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
+    @NotNull
     public Expression lt(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
-    public Expression lt(String operand) {
+    @NotNull
+    public Expression lt(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.Less, false);
     }
 
-    public Expression le(ExpressionConvertible operand) {
+    @NotNull
+    public Expression le(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
+    @NotNull
     public Expression le(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
+    @NotNull
     public Expression le(short operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
+    @NotNull
     public Expression le(int operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
+    @NotNull
     public Expression le(long operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
+    @NotNull
     public Expression le(float operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
+    @NotNull
     public Expression le(double operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
-    public Expression le(String operand) {
+    @NotNull
+    public Expression le(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.LessOrEqual, false);
     }
 
-    public Expression gt(ExpressionConvertible operand) {
+    @NotNull
+    public Expression gt(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
+    @NotNull
     public Expression gt(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
+    @NotNull
     public Expression gt(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
+    @NotNull
     public Expression gt(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
+    @NotNull
     public Expression gt(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
+    @NotNull
     public Expression gt(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
+    @NotNull
     public Expression gt(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
-    public Expression gt(String operand) {
+    @NotNull
+    public Expression gt(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.Greater, false);
     }
 
-    public Expression ge(ExpressionConvertible operand) {
+    @NotNull
+    public Expression ge(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
+    @NotNull
     public Expression ge(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
+    @NotNull
     public Expression ge(short operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
+    @NotNull
     public Expression ge(int operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
+    @NotNull
     public Expression ge(long operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
+    @NotNull
     public Expression ge(float operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
+    @NotNull
     public Expression ge(double operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
-    public Expression ge(String operand) {
+    @NotNull
+    public Expression ge(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.GreaterOrEqual, false);
     }
 
-    public Expression eq(ExpressionConvertible operand) {
+    @NotNull
+    public Expression eq(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(boolean operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
+    @NotNull
     public Expression eq(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
-    public Expression eq(String operand) {
+    @NotNull
+    public Expression eq(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.Equal, false);
     }
 
-    public Expression notEq(ExpressionConvertible operand) {
+    @NotNull
+    public Expression notEq(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(boolean operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(short operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(int operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(long operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(float operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression notEq(double operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
-    public Expression notEq(String operand) {
+    @NotNull
+    public Expression notEq(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.NotEqual, false);
     }
 
+    @NotNull
     public Expression concat(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
+    @NotNull
     public Expression concat(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
+    @NotNull
     public Expression concat(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
+    @NotNull
     public Expression concat(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
+    @NotNull
     public Expression concat(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
+    @NotNull
     public Expression concat(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
-    public Expression concat(String operand) {
+    @NotNull
+    public Expression concat(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
-    public Expression concat(ExpressionConvertible operand) {
+    @NotNull
+    public Expression concat(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Concatenate, false);
     }
 
@@ -504,41 +623,47 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         Between operation
      */
 
-    public Expression between(ExpressionConvertible begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression between(@Nullable ExpressionConvertible begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
-    public Expression between(ExpressionConvertible begin, long end) {
+    @NotNull
+    public Expression between(@Nullable ExpressionConvertible begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Int, end, 0, null,
                 false));
     }
 
-    public Expression between(ExpressionConvertible begin, double end) {
+    @NotNull
+    public Expression between(@Nullable ExpressionConvertible begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Double, 0, end, null,
                 false));
     }
 
-    public Expression between(ExpressionConvertible begin, String end) {
+    @NotNull
+    public Expression between(@Nullable ExpressionConvertible begin, String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.String, 0, 0, end,
                 false));
     }
 
-    public Expression between(long begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression between(long begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
+    @NotNull
     public Expression between(long begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
@@ -546,6 +671,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 false));
     }
 
+    @NotNull
     public Expression between(long begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
@@ -553,20 +679,23 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 false));
     }
 
-    public Expression between(long begin, String end) {
+    @NotNull
+    public Expression between(long begin, @Nullable String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
                 CPPType.String, 0, 0, end,
                 false));
     }
 
-    public Expression between(double begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression between(double begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
+    @NotNull
     public Expression between(double begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
@@ -574,6 +703,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 false));
     }
 
+    @NotNull
     public Expression between(double begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
@@ -581,76 +711,87 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 false));
     }
 
-    public Expression between(double begin, String end) {
+    @NotNull
+    public Expression between(double begin, @Nullable String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
                 CPPType.String, 0, 0, end,
                 false));
     }
 
-    public Expression between(String begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression between(@Nullable String begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 false));
     }
 
-    public Expression between(String begin, long end) {
+    @NotNull
+    public Expression between(@Nullable String begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 CPPType.Int, end, 0, null,
                 false));
     }
 
-    public Expression between(String begin, double end) {
+    @NotNull
+    public Expression between(@Nullable String begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 CPPType.Double, 0, end, null,
                 false));
     }
 
-    public Expression between(String begin, String end) {
+    @NotNull
+    public Expression between(@Nullable String begin, String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 CPPType.String, 0, 0, end,
                 false));
     }
 
-    public Expression notBetween(ExpressionConvertible begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression notBetween(@Nullable ExpressionConvertible begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
-    public Expression notBetween(ExpressionConvertible begin, long end) {
+    @NotNull
+    public Expression notBetween(@Nullable ExpressionConvertible begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Int, end, 0, null,
                 true));
     }
 
-    public Expression notBetween(ExpressionConvertible begin, double end) {
+    @NotNull
+    public Expression notBetween(@Nullable ExpressionConvertible begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.Double, 0, end, null,
                 true));
     }
 
-    public Expression notBetween(ExpressionConvertible begin, String end) {
+    @NotNull
+    public Expression notBetween(@Nullable ExpressionConvertible begin, @Nullable String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 Identifier.getCppType(begin), CppObject.get(begin), 0, null,
                 CPPType.String, 0, 0, end,
                 true));
     }
 
-    public Expression notBetween(long begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression notBetween(long begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
+    @NotNull
     public Expression notBetween(long begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
@@ -658,6 +799,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 true));
     }
 
+    @NotNull
     public Expression notBetween(long begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
@@ -665,20 +807,23 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 true));
     }
 
-    public Expression notBetween(long begin, String end) {
+    @NotNull
+    public Expression notBetween(long begin, @Nullable String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Int, begin, 0, null,
                 CPPType.String, 0, 0, end,
                 true));
     }
 
-    public Expression notBetween(double begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression notBetween(double begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
+    @NotNull
     public Expression notBetween(double begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
@@ -686,6 +831,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 true));
     }
 
+    @NotNull
     public Expression notBetween(double begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
@@ -693,35 +839,40 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 true));
     }
 
-    public Expression notBetween(double begin, String end) {
+    @NotNull
+    public Expression notBetween(double begin, @Nullable String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.Double, 0, begin, null,
                 CPPType.String, 0, 0, end,
                 true));
     }
 
-    public Expression notBetween(String begin, ExpressionConvertible end) {
+    @NotNull
+    public Expression notBetween(@Nullable String begin, @Nullable ExpressionConvertible end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 Identifier.getCppType(end), CppObject.get(end), 0, null,
                 true));
     }
 
-    public Expression notBetween(String begin, long end) {
+    @NotNull
+    public Expression notBetween(@Nullable String begin, long end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 CPPType.Int, end, 0, null,
                 true));
     }
 
-    public Expression notBetween(String begin, double end) {
+    @NotNull
+    public Expression notBetween(@Nullable String begin, double end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 CPPType.Double, 0, end, null,
                 true));
     }
 
-    public Expression notBetween(String begin, String end) {
+    @NotNull
+    public Expression notBetween(@Nullable String begin, @Nullable String end) {
         return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
                 CPPType.String, 0, 0, begin,
                 CPPType.String, 0, 0, end,
@@ -732,6 +883,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         In operation
      */
 
+    @NotNull
     public Expression in(short... operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -740,7 +892,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
-    public Expression in(Short[] operands) {
+    @NotNull
+    public Expression in(@NotNull Short[] operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -748,6 +901,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
+    @NotNull
     public Expression in(int... operands){
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -756,7 +910,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
-    public Expression in(Integer[] operands){
+    @NotNull
+    public Expression in(@NotNull Integer[] operands){
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -764,14 +919,17 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
+    @NotNull
     public Expression in(long... operands) {
         return in(operands, false);
     }
 
-    public Expression in(Long[] operands) {
+    @NotNull
+    public Expression in(@NotNull Long[] operands) {
         return in(operands, false);
     }
 
+    @NotNull
     public Expression in(float... operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -780,7 +938,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
-    public Expression in(Float[] operands) {
+    @NotNull
+    public Expression in(@NotNull Float[] operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -788,30 +947,37 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, false);
     }
 
+    @NotNull
     public Expression in(double... operands) {
         return in(operands, false);
     }
 
-    public Expression in(Double[] operands) {
+    @NotNull
+    public Expression in(@NotNull Double[] operands) {
         return in(operands, false);
     }
 
-    public Expression in(String... operands) {
+    @NotNull
+    public Expression in(@NotNull String... operands) {
         return in(operands, false);
     }
 
-    public Expression in(Value... operands) {
+    @NotNull
+    public Expression in(@NotNull Value... operands) {
         return in(operands, false);
     }
 
-    public <T> Expression in(Set<T> operands) {
+    @NotNull
+    public <T> Expression in(@NotNull Set<T> operands) {
         return in(operands.toArray(), false);
     }
 
-    public <T> Expression in(List<T> operands) {
+    @NotNull
+    public <T> Expression in(@NotNull List<T> operands) {
         return in(operands.toArray(), false);
     }
 
+    @NotNull
     public Expression notIn(short... operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -820,7 +986,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
-    public Expression notIn(Short[] operands) {
+    @NotNull
+    public Expression notIn(@NotNull Short[] operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -828,6 +995,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
+    @NotNull
     public Expression notIn(int... operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -836,7 +1004,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
-    public Expression notIn(Integer[] operands) {
+    @NotNull
+    public Expression notIn(@NotNull Integer[] operands) {
         long[] values = new long[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -844,14 +1013,17 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
+    @NotNull
     public Expression notIn(long... operands) {
         return in(operands, true);
     }
 
-    public Expression notIn(Long[] operands) {
+    @NotNull
+    public Expression notIn(@NotNull Long[] operands) {
         return in(operands, true);
     }
 
+    @NotNull
     public Expression notIn(float... operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
@@ -860,7 +1032,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
-    public Expression notIn(Float[] operands) {
+    @NotNull
+    public Expression notIn(@NotNull Float[] operands) {
         double[] values = new double[operands.length];
         for(int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
@@ -868,51 +1041,63 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         return in(values, true);
     }
 
+    @NotNull
     public Expression notIn(double... operands) {
         return in(operands, true);
     }
 
-    public Expression notIn(Double[] operands) {
+    @NotNull
+    public Expression notIn(@NotNull Double[] operands) {
         return in(operands, true);
     }
 
-    public Expression notIn(String... operands) {
+    @NotNull
+    public Expression notIn(@NotNull String... operands) {
         return in(operands, true);
     }
 
-    public Expression notIn(Value... operands) {
+    @NotNull
+    public Expression notIn(@NotNull Value... operands) {
         return in(operands, true);
     }
 
-    public <T> Expression notIn(Set<T> operands) {
+    @NotNull
+    public <T> Expression notIn(@NotNull Set<T> operands) {
         return in(operands.toArray(), true);
     }
 
-    public <T> Expression notIn(List<T> operands) {
+    @NotNull
+    public <T> Expression notIn(@NotNull List<T> operands) {
         return in(operands.toArray(), true);
     }
 
-    public Expression inTable(String table) {
+    @NotNull
+    public Expression inTable(@NotNull String table) {
         return inTable(table, false);
     }
 
-    public Expression notInTable(String table) {
+    @NotNull
+    public Expression notInTable(@NotNull String table) {
         return inTable(table, true);
     }
 
-    public Expression inFunction(String table) {
+    @NotNull
+    public Expression inFunction(@NotNull String table) {
         return inFunction(table, false);
     }
 
-    public Expression notInFunction(String table) {
+    @NotNull
+    public Expression notInFunction(@NotNull String table) {
         return inFunction(table, true);
     }
 
-    public Expression in(StatementSelect select) {
+    @NotNull
+    public Expression in(@NotNull StatementSelect select) {
         return in(select, false);
     }
 
-    public Expression notIn(StatementSelect select) {
+    @NotNull
+    public Expression notIn(@NotNull StatementSelect select) {
         return in(select, true);
     }
 
@@ -920,7 +1105,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         Collate
      */
 
-    public Expression collate(String collation) {
+    @NotNull
+    public Expression collate(@NotNull String collation) {
         return createExpression(collate(Identifier.getCppType(this), CppObject.get(this), collation));
     }
 
@@ -928,6 +1114,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
         Function
      */
 
+    @NotNull
     public Expression substr(short start, short length) {
         return Expression.function("SUBSTR")
                 .argument(this)
@@ -935,6 +1122,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 .argument(length);
     }
 
+    @NotNull
     public Expression substr(int start, int length) {
         return Expression.function("SUBSTR")
                 .argument(this)
@@ -942,6 +1130,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 .argument(length);
     }
 
+    @NotNull
     public Expression substr(long start, long length) {
         return Expression.function("SUBSTR")
                 .argument(this)
@@ -949,186 +1138,232 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
                 .argument(length);
     }
 
-    public Expression like(String content) {
+    @NotNull
+    public Expression like(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.Like, false);
     }
 
-    public Expression notLike(String content) {
+    @NotNull
+    public Expression notLike(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.Like, true);
     }
 
-    public Expression glob(String content) {
+    @NotNull
+    public Expression glob(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.GLOB, false);
     }
 
-    public Expression notGlob(String content) {
+    @NotNull
+    public Expression notGlob(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.GLOB, true);
     }
 
-    public Expression match(String content) {
+    @NotNull
+    public Expression match(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.Match, false);
     }
 
-    public Expression notMatch(String content) {
+    @NotNull
+    public Expression notMatch(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.Match, true);
     }
 
-    public Expression regexp(String content) {
+    @NotNull
+    public Expression regexp(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.RegExp, false);
     }
 
-    public Expression notRegexp(String content) {
+    @NotNull
+    public Expression notRegexp(@NotNull String content) {
         return binaryOperate(content, BinaryOperatorType.RegExp, true);
     }
 
+    @NotNull
     public Expression is(boolean operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression is(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression is(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression is(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression is(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression is(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression is(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
-    public Expression is(String operand) {
+    @NotNull
+    public Expression is(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
-    public Expression is(ExpressionConvertible operand) {
+    @NotNull
+    public Expression is(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, false);
     }
 
+    @NotNull
     public Expression isNot(boolean operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression isNot(byte operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression isNot(short operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression isNot(int operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression isNot(long operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression isNot(float operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression isNot(double operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
-    public Expression isNot(String operand) {
+    @NotNull
+    public Expression isNot(@Nullable String operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
-    public Expression isNot(ExpressionConvertible operand) {
+    @NotNull
+    public Expression isNot(@Nullable ExpressionConvertible operand) {
         return binaryOperate(operand, BinaryOperatorType.Is, true);
     }
 
+    @NotNull
     public Expression avg() {
         return Expression.function("AVG").argument(this);
     }
 
+    @NotNull
     public Expression count() {
         return Expression.function("COUNT").argument(this);
     }
 
+    @NotNull
     public Expression groupConcat() {
         return Expression.function("GROUP_CONCAT").argument(this);
     }
 
+    @NotNull
     public Expression groupConcat(String sperator) {
         return Expression.function("GROUP_CONCAT").argument(this).argument(sperator);
     }
 
+    @NotNull
     public Expression max() {
         return Expression.function("MAX").argument(this);
     }
 
+    @NotNull
     public Expression min() {
         return Expression.function("MIN").argument(this);
     }
 
+    @NotNull
     public Expression sum() {
         return Expression.function("SUM").argument(this);
     }
 
+    @NotNull
     public Expression total() {
         return Expression.function("TOTAL").argument(this);
     }
 
+    @NotNull
     public Expression abs() {
         return Expression.function("ABS").argument(this);
     }
 
+    @NotNull
     public Expression hex() {
         return Expression.function("HEX").argument(this);
     }
 
+    @NotNull
     public Expression length() {
         return Expression.function("LENGTH").argument(this);
     }
 
+    @NotNull
     public Expression lower() {
         return Expression.function("LOWER").argument(this);
     }
 
+    @NotNull
     public Expression upper() {
         return Expression.function("UPPER").argument(this);
     }
 
+    @NotNull
     public Expression round() {
         return Expression.function("ROUND").argument(this);
     }
 
+    @NotNull
     public Expression matchInfo() {
         return Expression.function("matchInfo").argument(this);
     }
 
+    @NotNull
     public Expression offsets() {
         return Expression.function("offsets").argument(this);
     }
 
+    @NotNull
     public Expression snippet() {
         return Expression.function("snippet").argument(this);
     }
 
+    @NotNull
     public Expression bm25() {
         return Expression.function("bm25").argument(this);
     }
 
+    @NotNull
     public Expression highlight() {
         return Expression.function("highlight").argument(this);
     }
 
+    @NotNull
     public Expression substringMatchInfo() {
         return Expression.function("substring_match_info").argument(this);
     }
@@ -1151,7 +1386,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
 
     private static native long nullOperate(int type, long operand, boolean isNot);
 
-    private class BinaryOperatorType {
+    private static class BinaryOperatorType {
         final static int Concatenate = 1;
         final static int Multiply = 2;
         final static int Divide = 3;

@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementCreateView extends Statement {
     @Override
     protected int getType() {
@@ -37,12 +40,14 @@ public class StatementCreateView extends Statement {
 
     private static native long createCppObj();
 
-    public StatementCreateView createView(String name) {
+    @NotNull
+    public StatementCreateView createView(@NotNull String name) {
         configView(cppObj, name);
         return this;
     }
 
-    public StatementCreateView createTempView(String name) {
+    @NotNull
+    public StatementCreateView createTempView(@NotNull String name) {
         configView(cppObj, name);
         configTemp(cppObj);
         return this;
@@ -52,18 +57,21 @@ public class StatementCreateView extends Statement {
 
     private static native void configTemp(long self);
 
-    public StatementCreateView of(String schemaName) {
+    @NotNull
+    public StatementCreateView of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementCreateView of(Schema schema) {
+    @NotNull
+    public StatementCreateView of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
+    @NotNull
     public StatementCreateView ifNotExist() {
         configIfNotExist(cppObj);
         return this;
@@ -71,18 +79,9 @@ public class StatementCreateView extends Statement {
 
     private static native void configIfNotExist(long self);
 
-    public StatementCreateView withColumn(Column column) {
-        configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
-        return this;
-    }
-
-    public StatementCreateView withColumn(String columnName) {
-        configColumns(cppObj, CPPType.String, null, new String[]{columnName});
-        return this;
-    }
-
-    public StatementCreateView withColumns(Column... columns) {
-        if(columns == null || columns.length == 0) {
+    @NotNull
+    public StatementCreateView withColumns(@NotNull Column... columns) {
+        if(columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
@@ -93,8 +92,9 @@ public class StatementCreateView extends Statement {
         return this;
     }
 
-    public StatementCreateView withColumns(String... columnNames) {
-        if(columnNames == null || columnNames.length == 0) {
+    @NotNull
+    public StatementCreateView withColumns(@NotNull String... columnNames) {
+        if(columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);
@@ -103,7 +103,8 @@ public class StatementCreateView extends Statement {
 
     private static native void configColumns(long self, int type, long[] objects, String[] columnNames);
 
-    public StatementCreateView as(StatementSelect select) {
+    @NotNull
+    public StatementCreateView as(@NotNull StatementSelect select) {
         configAs(cppObj, CppObject.get(select));
         return this;
     }

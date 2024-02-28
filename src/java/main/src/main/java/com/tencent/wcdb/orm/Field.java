@@ -25,6 +25,8 @@ package com.tencent.wcdb.orm;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Schema;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Field<T> extends Column {
     protected TableBinding<T> binding = null;
     public TableBinding<T> getTableBinding() { return binding; }
@@ -65,6 +67,7 @@ public class Field<T> extends Column {
         return field;
     }
 
+    @NotNull
     public Field<T> table(String tableName) {
         Field<T> field = copySelf();
         field.inTable(field.cppObj, tableName);
@@ -72,6 +75,7 @@ public class Field<T> extends Column {
     }
 
     @Override
+    @NotNull
     public Field<T> of(String schema) {
         Field<T> field = copySelf();
         field.ofSchema(schema);
@@ -79,28 +83,31 @@ public class Field<T> extends Column {
     }
 
     @Override
+    @NotNull
     public Field<T> of(Schema schema) {
         Field<T> field = copySelf();
         field.ofSchema(schema);
         return field;
     }
 
-    public static <T> TableBinding<T> getBinding(Field<T> field) {
-        assert field != null;
-        if(field != null) {
-            assert field.getTableBinding() != null;
-            return field.getTableBinding();
-        }
-        return null;
+    @NotNull
+    public static <T> TableBinding<T> getBinding(@NotNull Field<T> field) {
+        assert field.getTableBinding() != null;
+        return field.getTableBinding();
     }
 
-    public static <T> TableBinding<T> getBinding(Field<T>... fields) {
-        assert fields != null && fields.length > 0;
+    @SafeVarargs
+    @NotNull
+    public static <T> TableBinding<T> getBinding(@NotNull Field<T>... fields) {
+        assert fields.length > 0;
         Field<T> field = fields[0];
         return getBinding(field);
     }
 
-    public static <T> Class<T> getBindClass(Field<T>... fields) {
-        return (fields != null && fields.length > 0) ? fields[0].binding.bindingType() : null;
+    @SafeVarargs
+    @NotNull
+    public static <T> Class<T> getBindClass(@NotNull Field<T>... fields) {
+        assert fields.length > 0;
+        return fields[0].binding.bindingType();
     }
 }

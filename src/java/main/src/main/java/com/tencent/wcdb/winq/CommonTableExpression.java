@@ -25,26 +25,31 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class CommonTableExpression extends Identifier {
     @Override
     protected int getType() {
         return CPPType.CommonTableExpression;
     }
 
-    public CommonTableExpression(String tableName) {
+    public CommonTableExpression(@NotNull String tableName) {
         cppObj = createCPPObject(tableName);
     }
 
     private static native long createCPPObject(String tableName);
 
-    public CommonTableExpression column(Column column) {
+    @NotNull
+    public CommonTableExpression column(@Nullable Column column) {
         configColumn(cppObj, CppObject.get(column));
         return this;
     }
 
     private static native void configColumn(long self, long column);
 
-    public CommonTableExpression as(StatementSelect select) {
+    @NotNull
+    public CommonTableExpression as(@Nullable StatementSelect select) {
         configSelect(cppObj, CppObject.get(select));
         return this;
     }

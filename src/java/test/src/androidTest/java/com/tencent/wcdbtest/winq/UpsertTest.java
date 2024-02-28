@@ -46,17 +46,17 @@ public class UpsertTest {
                 "ON CONFLICT(column1) DO NOTHING");
         winqEqual(new Upsert().onConflict().indexedBy(column).where(column.eq(1)).doNoThing(),
                 "ON CONFLICT(column1) WHERE column1 == 1 DO NOTHING");
-        winqEqual(new Upsert().onConflict().doUpdate().setColumn(column).to((ExpressionConvertible) null),
+        winqEqual(new Upsert().onConflict().doUpdate().set(column).to((ExpressionConvertible) null),
                 "ON CONFLICT DO UPDATE SET column1 = NULL");
-        winqEqual(new Upsert().onConflict().doUpdate().setColumn(column).to(true),
+        winqEqual(new Upsert().onConflict().doUpdate().set(column).to(true),
                 "ON CONFLICT DO UPDATE SET column1 = TRUE");
-        winqEqual(new Upsert().onConflict().doUpdate().setColumn(column).to(1),
+        winqEqual(new Upsert().onConflict().doUpdate().set(column).to(1),
                 "ON CONFLICT DO UPDATE SET column1 = 1");
-        winqEqual(new Upsert().onConflict().doUpdate().setColumn(column).to("abc"),
+        winqEqual(new Upsert().onConflict().doUpdate().set(column).to("abc"),
                 "ON CONFLICT DO UPDATE SET column1 = 'abc'");
-        winqEqual(new Upsert().onConflict().doUpdate().setColumn(column).to(1).setColumns(columns).to(2),
+        winqEqual(new Upsert().onConflict().doUpdate().set(column).to(1).set(columns).to(2),
                 "ON CONFLICT DO UPDATE SET column1 = 1, (column2, column3) = 2");
-        winqEqual(new Upsert().onConflict().doUpdate().setColumn(column).to(1).where(column.eq(2)),
+        winqEqual(new Upsert().onConflict().doUpdate().set(column).to(1).where(column.eq(2)),
                 "ON CONFLICT DO UPDATE SET column1 = 1 WHERE column1 == 2");
     }
 }

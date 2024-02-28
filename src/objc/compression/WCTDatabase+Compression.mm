@@ -105,7 +105,7 @@
     WCDB::Core::shared().enableAutoCompress(_database, flag);
 }
 
-- (void)setNotificationWhenCompressd:(WCTCompressdNotificationBlock)onCompressd
+- (void)setNotificationWhenCompressed:(WCTCompressdNotificationBlock)onCompressd
 {
     WCDB::InnerDatabase::CompressedCallback callback = nullptr;
     if (onCompressd != nil) {

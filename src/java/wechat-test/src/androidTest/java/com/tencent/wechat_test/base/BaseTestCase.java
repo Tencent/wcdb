@@ -23,6 +23,8 @@
 
 package com.tencent.wechat_test.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 
@@ -41,7 +43,7 @@ public class BaseTestCase {
         Database.globalTraceSQL(null);
         Database.globalTraceException(new Database.ExceptionTracer() {
             @Override
-            public void onTrace(WCDBException exception) {
+            public void onTrace(@NotNull WCDBException exception) {
                 if(exception.level.ordinal() >= WCDBException.Level.Error.ordinal()) {
                     logError(exception.toString());
                 } else {

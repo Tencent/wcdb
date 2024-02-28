@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementDropIndex extends Statement {
     @Override
     protected int getType() {
@@ -37,25 +40,29 @@ public class StatementDropIndex extends Statement {
 
     private static native long createCppObj();
 
-    public StatementDropIndex dropIndex(String indexName) {
+    @NotNull
+    public StatementDropIndex dropIndex(@NotNull String indexName) {
         configIndex(cppObj, indexName);
         return this;
     }
 
     private static native void configIndex(long self, String indexName);
 
-    public StatementDropIndex of(String schemaName) {
+    @NotNull
+    public StatementDropIndex of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementDropIndex of(Schema schema) {
+    @NotNull
+    public StatementDropIndex of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
+    @NotNull
     public StatementDropIndex ifExist() {
         configIfExist(cppObj);
         return this;

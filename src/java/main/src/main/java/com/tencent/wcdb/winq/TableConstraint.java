@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class TableConstraint extends Identifier {
     @Override
     protected int getType() {
@@ -35,12 +38,13 @@ public class TableConstraint extends Identifier {
         cppObj = createCppObj(null);
     }
 
-    public TableConstraint(String name) {
+    public TableConstraint(@Nullable String name) {
         cppObj = createCppObj(name);
     }
 
     private static native long createCppObj(String name);
 
+    @NotNull
     public TableConstraint primaryKey() {
         configPrimaryKey(cppObj);
         return this;
@@ -48,6 +52,7 @@ public class TableConstraint extends Identifier {
 
     private static native void configPrimaryKey(long self);
 
+    @NotNull
     public TableConstraint unique() {
         configUnique(cppObj);
         return this;
@@ -55,16 +60,9 @@ public class TableConstraint extends Identifier {
 
     private static native void configUnique(long self);
 
-    public TableConstraint indexedBy(IndexedColumnConvertible indexedColumn) {
-        configIndexedColumn(
-                cppObj,
-                Identifier.getCppType(indexedColumn),
-                new long[] {CppObject.get(indexedColumn)}, null);
-        return this;
-    }
-
-    public TableConstraint indexedBy(IndexedColumnConvertible... indexedColumns) {
-        if(indexedColumns == null || indexedColumns.length == 0) {
+    @NotNull
+    public TableConstraint indexedBy(@NotNull IndexedColumnConvertible... indexedColumns) {
+        if(indexedColumns.length == 0) {
             return this;
         }
         long[] columns = new long[indexedColumns.length];
@@ -78,12 +76,8 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    public TableConstraint indexedBy(String indexedColumn) {
-        configIndexedColumn(cppObj, CPPType.String, null, new String[]{indexedColumn});
-        return this;
-    }
-
-    public TableConstraint indexedBy(String... indexedColumns) {
+    @NotNull
+    public TableConstraint indexedBy(@NotNull String... indexedColumns) {
         configIndexedColumn(cppObj, CPPType.String, null, indexedColumns);
         return this;
     }
@@ -93,6 +87,7 @@ public class TableConstraint extends Identifier {
                                             long[] columns,
                                             String[] columnNames);
 
+    @NotNull
     public TableConstraint onConflict(ConflictAction action) {
         configConfliction(cppObj, action.ordinal());
         return this;
@@ -100,14 +95,16 @@ public class TableConstraint extends Identifier {
 
     private static native void configConfliction(long self, int action);
 
-    public TableConstraint check(Expression expression) {
+    @NotNull
+    public TableConstraint check(@NotNull Expression expression) {
         configCheckExpression(cppObj, CppObject.get(expression));
         return this;
     }
 
     private static native void configCheckExpression(long self, long expression);
 
-    public TableConstraint foreignKey(ForeignKey foreignKey, String... columns) {
+    @NotNull
+    public TableConstraint foreignKey(@NotNull ForeignKey foreignKey, @NotNull String... columns) {
         configForeignKey(
                 cppObj,
                 CPPType.String,
@@ -117,7 +114,8 @@ public class TableConstraint extends Identifier {
         return this;
     }
 
-    public TableConstraint foreignKey(ForeignKey foreignKey, Column... columns) {
+    @NotNull
+    public TableConstraint foreignKey(@NotNull ForeignKey foreignKey, @NotNull Column... columns) {
         long[] cppObjs = new long[columns.length];
         for(int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);

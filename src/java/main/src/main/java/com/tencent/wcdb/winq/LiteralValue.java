@@ -23,12 +23,16 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class LiteralValue extends Identifier implements ExpressionConvertible {
     @Override
     protected int getType() {
         return CPPType.LiteralValue;
     }
 
+    @NotNull
     @Override
     public Identifier asIdentifier() {
         return this;
@@ -62,7 +66,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
         cppObj = createCppObj(CPPType.Bool, value ? 1 : 0, 0, null);
     }
 
-    public LiteralValue(String value) {
+    public LiteralValue(@Nullable String value) {
         if(value == null) {
             cppObj = createCppObj(CPPType.Null, 0, 0, null);
         } else {
@@ -75,6 +79,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
     private LiteralValue(){
     }
 
+    @NotNull
     public static LiteralValue currentTime() {
         LiteralValue ret = new LiteralValue();
         ret.cppObj = createCurrentTime();
@@ -83,6 +88,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
 
     private static native long createCurrentTime();
 
+    @NotNull
     public static LiteralValue currentDate() {
         LiteralValue ret = new LiteralValue();
         ret.cppObj = createCurrentDate();
@@ -91,6 +97,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
 
     private static native long createCurrentDate();
 
+    @NotNull
     public static LiteralValue currentTimeStamp() {
         LiteralValue ret = new LiteralValue();
         ret.cppObj = createCurrentTimeStamp();

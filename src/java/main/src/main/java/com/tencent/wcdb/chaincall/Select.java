@@ -32,12 +32,15 @@ import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementSelect;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class Select<T> extends ChainCall<StatementSelect> {
     private Field<T>[] fields = null;
 
-    public Select(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+    public Select(@NotNull Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
         super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementSelect();
     }
@@ -45,9 +48,11 @@ public class Select<T> extends ChainCall<StatementSelect> {
     /**
      * WINQ interface for SQL.
      * @param fields The column results to be selected.
-     * @return
+     * @return this
      */
-    public Select<T> select(Field<T>... fields) {
+    @SafeVarargs
+    @NotNull
+    public final Select<T> select(@NotNull Field<T>... fields) {
         this.fields = fields;
         statement.select(fields);
         return this;
@@ -58,7 +63,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param condition condition.
      * @return this.
      */
-    public Select<T> where(Expression condition) {
+    @NotNull
+    public Select<T> where(@Nullable Expression condition) {
         statement.where(condition);
         return this;
     }
@@ -68,7 +74,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param order order term.
      * @return this.
      */
-    public Select<T> orderBy(OrderingTerm order) {
+    @NotNull
+    public Select<T> orderBy(@Nullable OrderingTerm order) {
         statement.orderBy(order);
         return this;
     }
@@ -78,7 +85,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param orders order list.
      * @return this.
      */
-    public Select<T> orderBy(OrderingTerm... orders) {
+    @NotNull
+    public Select<T> orderBy(@Nullable OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }
@@ -88,6 +96,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param count limit count.
      * @return this.
      */
+    @NotNull
     public Select<T> limit(long count) {
         statement.limit(count);
         return this;
@@ -98,7 +107,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param count limit expression.
      * @return this.
      */
-    public Select<T> limit(ExpressionConvertible count) {
+    @NotNull
+    public Select<T> limit(@Nullable ExpressionConvertible count) {
         statement.limit(count);
         return this;
     }
@@ -108,6 +118,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param offset offset number.
      * @return this.
      */
+    @NotNull
     public Select<T> offset(long offset) {
         statement.offset(offset);
         return this;
@@ -118,7 +129,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param offset offset expression.
      * @return this.
      */
-    public Select<T> offset(ExpressionConvertible offset) {
+    @NotNull
+    public Select<T> offset(@Nullable ExpressionConvertible offset) {
         statement.offset(offset);
         return this;
     }
@@ -128,7 +140,8 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @param tableName The name of the table to query data from.
      * @return this.
      */
-    public Select<T> from(String tableName) {
+    @NotNull
+    public Select<T> from(@NotNull String tableName) {
         statement.from(tableName);
         return this;
     }
@@ -138,6 +151,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @return a selected object.
      * @throws WCDBException if any error occurs.
      */
+    @Nullable
     public T firstObject() throws WCDBException {
         return firstObject(Field.getBindClass(fields));
     }
@@ -148,6 +162,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @return The selected derived class object.
      * @throws WCDBException if any error occurs.
      */
+    @Nullable
     public <R extends T> R firstObject(Class<R> cls) throws WCDBException {
         R ret = null;
         PreparedStatement preparedStatement = null;
@@ -171,6 +186,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @return A list of objects.
      * @throws WCDBException if any error occurs.
      */
+    @NotNull
     public List<T> allObjects() throws WCDBException {
         return allObjects(Field.getBindClass(fields));
     }
@@ -181,6 +197,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
      * @return All selected derived class object.
      * @throws WCDBException if any error occurs.
      */
+    @NotNull
     public <R extends T> List<R> allObjects(Class<R> cls) throws WCDBException {
         List<R> ret;
         PreparedStatement preparedStatement = null;

@@ -30,8 +30,11 @@ import com.tencent.wcdb.winq.ExpressionConvertible;
 import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDelete;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class Delete extends ChainCall<StatementDelete>{
-    public Delete(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+    public Delete(@NotNull Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
         super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementDelete();
     }
@@ -41,7 +44,8 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param table The name of the table to delete data from.
      * @return this
      */
-    public Delete fromTable(String table) {
+    @NotNull
+    public Delete fromTable(@NotNull String table) {
         statement.deleteFrom(table);
         return this;
     }
@@ -51,7 +55,8 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param condition condition
      * @return this.
      */
-    public Delete where(Expression condition) {
+    @NotNull
+    public Delete where(@Nullable Expression condition) {
         statement.where(condition);
         return this;
     }
@@ -61,7 +66,8 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param orders order list
      * @return this.
      */
-    public Delete orderBy(OrderingTerm... orders) {
+    @NotNull
+    public Delete orderBy(@Nullable OrderingTerm... orders) {
         statement.orderBy(orders);
         return this;
     }
@@ -71,6 +77,7 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param count limit count.
      * @return this.
      */
+    @NotNull
     public Delete limit(long count) {
         statement.limit(count);
         return this;
@@ -81,7 +88,8 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param count limit expression.
      * @return this.
      */
-    public Delete limit(ExpressionConvertible count) {
+    @NotNull
+    public Delete limit(@NotNull ExpressionConvertible count) {
         statement.limit(count);
         return this;
     }
@@ -91,6 +99,7 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param offset offset number.
      * @return this.
      */
+    @NotNull
     public Delete offset(long offset) {
         statement.offset(offset);
         return this;
@@ -101,7 +110,8 @@ public class Delete extends ChainCall<StatementDelete>{
      * @param offset offset expression.
      * @return this.
      */
-    public Delete offset(ExpressionConvertible offset) {
+    @NotNull
+    public Delete offset(@Nullable ExpressionConvertible offset) {
         statement.offset(offset);
         return this;
     }
@@ -111,6 +121,7 @@ public class Delete extends ChainCall<StatementDelete>{
      * @return this.
      * @throws WCDBException if any error occurs.
      */
+    @NotNull
     public Delete execute() throws WCDBException {
         try {
             handle.execute(statement);

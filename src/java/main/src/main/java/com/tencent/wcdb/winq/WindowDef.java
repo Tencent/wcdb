@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 
 public class WindowDef extends Identifier {
@@ -39,22 +42,8 @@ public class WindowDef extends Identifier {
 
     private static native long createCppObj();
 
-    public WindowDef partitionBy(String columnName) {
-        assert columnName != null;
-        if(columnName == null) {
-            return this;
-        }
-        configPartitions(cppObj, new int[]{CPPType.String}, null, null, new String[]{columnName});
-        return this;
-    }
-
-    public WindowDef partitionBy(ExpressionConvertible expression) {
-        configPartitions(cppObj, new int[]{Identifier.getCppType(expression)},
-                new long[]{CppObject.get(expression)}, null, null);
-        return this;
-    }
-
-    public WindowDef partitionBy(String... columnNames) {
+    @NotNull
+    public WindowDef partitionBy(@Nullable String... columnNames) {
         if(columnNames == null || columnNames.length == 0){
             return this;
         }
@@ -64,7 +53,8 @@ public class WindowDef extends Identifier {
         return this;
     }
 
-    public WindowDef partitionBy(ExpressionConvertible... expressions) {
+    @NotNull
+    public WindowDef partitionBy(@Nullable ExpressionConvertible... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -80,12 +70,8 @@ public class WindowDef extends Identifier {
 
     private static native void configPartitions(long self, int[] types, long[] columns, double[] unused, String[] columnNames);
 
-    public WindowDef orderBy(OrderingTerm order) {
-        configOrders(cppObj, new long[]{CppObject.get(order)});
-        return this;
-    }
-
-    public WindowDef orderBy(OrderingTerm... orders) {
+    @NotNull
+    public WindowDef orderBy(@Nullable OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }
@@ -99,7 +85,8 @@ public class WindowDef extends Identifier {
 
     private static native void configOrders(long self, long[] orders);
 
-    public WindowDef frameSpec(FrameSpec frameSpec) {
+    @NotNull
+    public WindowDef frameSpec(@Nullable FrameSpec frameSpec) {
         configFrameSpec(cppObj, CppObject.get(frameSpec));
         return this;
     }

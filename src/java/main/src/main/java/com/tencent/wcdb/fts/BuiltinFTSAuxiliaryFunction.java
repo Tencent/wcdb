@@ -46,7 +46,6 @@ public class BuiltinFTSAuxiliaryFunction {
      *  The first part of the result "1,0" gives the hierarchical position of the matched content within matched column.
      *  The second part "广;州" is the original text of the matching content, you can use it for highlighting.
      *  The third part "3" is the byte offset of the matching content in the original text, you can use it to sort the results.
-     *
      *  Note that The search results may contain some empty strings, which are invalid results.
      *  This kind of results appear when the content of some rows contain the tokens you are searching for,
      *  but these tokens are located in different parts separated by separators.

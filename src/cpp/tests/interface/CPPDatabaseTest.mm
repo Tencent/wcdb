@@ -297,7 +297,7 @@
 
     bool tableCompressed = false;
     bool databaseCompressed = false;
-    self.database->setNotificationWhenCompressd([&](WCDB::Database& database, WCDB::Optional<WCDB::StringView> table) {
+    self.database->setNotificationWhenCompressed([&](WCDB::Database& database, WCDB::Optional<WCDB::StringView> table) {
         TestCaseAssertEqual(database.getTag(), self.database->getTag());
         TestCaseAssertCPPStringEqual(database.getPath().data(), self.database->getPath().data());
         if (table.hasValue()) {

@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementReindex extends Statement {
     @Override
     protected int getType() {
@@ -37,33 +40,38 @@ public class StatementReindex extends Statement {
 
     private static native long createCppObj();
 
-    public StatementReindex reindexCollation(String collation) {
+    @NotNull
+    public StatementReindex reindexCollation(@Nullable String collation) {
         configCollation(cppObj, collation);
         return this;
     }
 
     private static native void configCollation(long self, String collation);
 
-    public StatementReindex reindexTable(String table) {
+    @NotNull
+    public StatementReindex reindexTable(@NotNull String table) {
         configTable(cppObj, table);
         return this;
     }
 
     private static native void configTable(long self, String table);
 
-    public StatementReindex reindex(String index) {
+    @NotNull
+    public StatementReindex reindex(@NotNull String index) {
         configIndex(cppObj, index);
         return this;
     }
 
     private static native void configIndex(long self, String indexName);
 
-    public StatementReindex of(String schemaName) {
+    @NotNull
+    public StatementReindex of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementReindex of(Schema schema) {
+    @NotNull
+    public StatementReindex of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }

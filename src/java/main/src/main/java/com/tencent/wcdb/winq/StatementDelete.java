@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementDelete extends Statement {
     @Override
     protected int getType() {
@@ -37,10 +40,7 @@ public class StatementDelete extends Statement {
 
     private static native long createCppObj();
 
-    public StatementDelete with(CommonTableExpression expression) {
-        return with(new CommonTableExpression[]{expression});
-    }
-
+    @NotNull
     public StatementDelete with(CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
@@ -53,11 +53,8 @@ public class StatementDelete extends Statement {
         return this;
     }
 
-    public StatementDelete withRecursive(CommonTableExpression expression) {
-        return withRecursive(new CommonTableExpression[]{expression});
-    }
-
-    public StatementDelete withRecursive(CommonTableExpression... expressions) {
+    @NotNull
+    public StatementDelete withRecursive(@Nullable CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -74,31 +71,30 @@ public class StatementDelete extends Statement {
 
     private static native void configRecursive(long self);
 
-    public StatementDelete deleteFrom(String tableName) {
+    @NotNull
+    public StatementDelete deleteFrom(@NotNull String tableName) {
         configTable(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public StatementDelete deleteFrom(QualifiedTable table) {
+    @NotNull
+    public StatementDelete deleteFrom(@NotNull QualifiedTable table) {
         configTable(cppObj, Identifier.getCppType(table), CppObject.get(table), null);
         return this;
     }
 
     private static native void configTable(long self, int type, long table, String tableName);
 
-    public StatementDelete where(Expression condition) {
+    @NotNull
+    public StatementDelete where(@Nullable Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }
 
     private static native void configCondition(long self, long condition);
 
-    public StatementDelete orderBy(OrderingTerm order) {
-        configOrders(cppObj, new long[]{CppObject.get(order)});
-        return this;
-    }
-
-    public StatementDelete orderBy(OrderingTerm... orders) {
+    @NotNull
+    public StatementDelete orderBy(@Nullable OrderingTerm... orders) {
         if(orders == null || orders.length == 0) {
             return this;
         }
@@ -112,46 +108,54 @@ public class StatementDelete extends Statement {
 
     private static native void configOrders(long self, long[] orders);
 
+    @NotNull
     public StatementDelete limit(long from, long to) {
         configLimitRange(cppObj, CPPType.Int, from, CPPType.Int, to);
         return this;
     }
 
-    public StatementDelete limit(long from, ExpressionConvertible to) {
+    @NotNull
+    public StatementDelete limit(long from, @Nullable ExpressionConvertible to) {
         configLimitRange(cppObj, CPPType.Int, from, Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
-    public StatementDelete limit(ExpressionConvertible from, ExpressionConvertible to) {
+    @NotNull
+    public StatementDelete limit(@Nullable ExpressionConvertible from, @Nullable ExpressionConvertible to) {
         configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), Identifier.getCppType(to), CppObject.get(to));
         return this;
     }
 
-    public StatementDelete limit(ExpressionConvertible from, long to) {
+    @NotNull
+    public StatementDelete limit(@Nullable ExpressionConvertible from, long to) {
         configLimitRange(cppObj, Identifier.getCppType(from), CppObject.get(from), CPPType.Int, to);
         return this;
     }
 
     private static native void configLimitRange(long self, int fromType, long from, int toType, long to);
 
+    @NotNull
     public StatementDelete limit(long count) {
         configLimitCount(cppObj, CPPType.Int, count);
         return this;
     }
 
-    public StatementDelete limit(ExpressionConvertible count) {
+    @NotNull
+    public StatementDelete limit(@Nullable ExpressionConvertible count) {
         configLimitCount(cppObj, Identifier.getCppType(count), CppObject.get(count));
         return this;
     }
 
     private static native void configLimitCount(long self, int type, long count);
 
+    @NotNull
     public StatementDelete offset(long offset) {
         configOffset(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public StatementDelete offset(ExpressionConvertible offset) {
+    @NotNull
+    public StatementDelete offset(@Nullable ExpressionConvertible offset) {
         configOffset(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }

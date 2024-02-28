@@ -25,6 +25,8 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.WCDBException;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface PausableTransaction {
     /**
      * Triggered when a new transaction is begun successfully or the main thread isn't suspended due to the current transaction.
@@ -33,5 +35,5 @@ public interface PausableTransaction {
      * @return true to finish transaction.
      * @throws WCDBException if any error occurs.
      */
-    boolean insideTransaction(Handle handle, boolean isNewTransaction) throws WCDBException;
+    boolean insideTransaction(@NotNull Handle handle, boolean isNewTransaction) throws WCDBException;
 }

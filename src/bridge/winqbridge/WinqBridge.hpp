@@ -76,7 +76,7 @@ public:
             T* typedObjName
             = (T*) WCDB::ObjectBridge::extractOriginalCPPObject(item.innerValue);
             if (typedObjName == nullptr) {
-                return result;
+                continue;
             }
             result.push_back(*typedObjName);
         }

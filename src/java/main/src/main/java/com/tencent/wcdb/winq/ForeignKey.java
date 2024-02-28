@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class ForeignKey extends Identifier {
     @Override
     protected int getType() {
@@ -37,24 +40,28 @@ public class ForeignKey extends Identifier {
 
     private static native long createCPPObj();
 
-    public ForeignKey references(String table) {
+    @NotNull
+    public ForeignKey references(@Nullable String table) {
         configReference(cppObj, table);
         return this;
     }
 
     private static native void configReference(long self, String table);
 
-    public ForeignKey column(Column column) {
+    @NotNull
+    public ForeignKey column(@Nullable Column column) {
         configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
-    public ForeignKey column(String column) {
+    @NotNull
+    public ForeignKey column(@Nullable String column) {
         configColumns(cppObj, CPPType.String, null, new String[]{column});
         return this;
     }
 
-    public ForeignKey columns(Column... columns) {
+    @NotNull
+    public ForeignKey columns(@Nullable Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -66,7 +73,8 @@ public class ForeignKey extends Identifier {
         return this;
     }
 
-    public ForeignKey columns(String... columns) {
+    @NotNull
+    public ForeignKey columns(@Nullable String... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }
@@ -80,6 +88,7 @@ public class ForeignKey extends Identifier {
         SetNull, SetDefault, Cascade, Restrict, NoAction
     }
 
+    @NotNull
     public ForeignKey onDelete(Action action) {
         configOnDeleteAction(cppObj, action.ordinal());
         return this;
@@ -87,6 +96,7 @@ public class ForeignKey extends Identifier {
 
     private static native void configOnDeleteAction(long self, int action);
 
+    @NotNull
     public ForeignKey onUpdate(Action action) {
         configOnUpdateAction(cppObj, action.ordinal());
         return this;
@@ -98,6 +108,7 @@ public class ForeignKey extends Identifier {
         Simple, Full, Partial
     }
 
+    @NotNull
     public ForeignKey match(Match match) {
         configMatch(cppObj,match.ordinal() + 1);
         return this;
@@ -109,6 +120,7 @@ public class ForeignKey extends Identifier {
         Default, Deferred, Immediate
     }
 
+    @NotNull
     public ForeignKey deferrable(Initially initially) {
         configDeferrable(cppObj, initially.ordinal());
         return this;
@@ -116,6 +128,7 @@ public class ForeignKey extends Identifier {
 
     private static native void configDeferrable(long self, int type);
 
+    @NotNull
     public ForeignKey notDeferrable(Initially initially) {
         configNotDeferrable(cppObj, initially.ordinal());
         return this;

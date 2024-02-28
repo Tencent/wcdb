@@ -25,6 +25,8 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementDropTable extends Statement {
     @Override
     protected int getType() {
@@ -37,25 +39,29 @@ public class StatementDropTable extends Statement {
 
     private static native long createCppObj();
 
-    public StatementDropTable dropTable(String tableName) {
+    @NotNull
+    public StatementDropTable dropTable(@NotNull String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
     private static native void configTableName(long self, String tableName);
 
-    public StatementDropTable of(String schemaName) {
+    @NotNull
+    public StatementDropTable of(@NotNull String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementDropTable of(Schema schema) {
+    @NotNull
+    public StatementDropTable of(@NotNull Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long schema, String schemaName);
 
+    @NotNull
     public StatementDropTable ifExist() {
         configIfExist(cppObj);
         return this;

@@ -906,7 +906,7 @@ public:
      The callback will be called when each table completes the compression.
      @see   `Database::CompressedCallback`
      */
-    void setNotificationWhenCompressd(const CompressedCallback &onCompressd);
+    void setNotificationWhenCompressed(const CompressedCallback &onCompressd);
 
     /**
      @brief Check if all tables in the database has finished compression.

@@ -31,6 +31,9 @@ import com.tencent.wcdb.orm.Field;
 import com.tencent.wcdb.orm.TableBinding;
 import com.tencent.wcdb.winq.StatementInsert;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 
@@ -40,7 +43,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
     private Collection<T> values = null;
     private long lastInsertRowId = 0;
 
-    public Insert(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
+    public Insert(@NotNull Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
         super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementInsert();
     }
@@ -49,6 +52,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * WINQ interface for SQL.
      * @return this.
      */
+    @NotNull
     public Insert<T> orReplace() {
         hasConflictAction = true;
         statement.orReplace();
@@ -59,6 +63,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * WINQ interface for SQL.
      * @return this.
      */
+    @NotNull
     public Insert<T> orIgnore() {
         hasConflictAction = true;
         statement.orIgnore();
@@ -70,7 +75,8 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * @param table The name of the table to delete data from.
      * @return this
      */
-    public Insert<T> intoTable(String table) {
+    @NotNull
+    public Insert<T> intoTable(@NotNull String table) {
         statement.insertInto(table);
         return this;
     }
@@ -80,7 +86,9 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * @param fields Do a partial insertion with the specific fields.
      * @return this.
      */
-    public Insert<T> onFields(Field<T>... fields) {
+    @SafeVarargs
+    @NotNull
+    public final Insert<T> onFields(@NotNull Field<T>... fields) {
         this.fields = fields;
         statement.columns(fields).valuesWithBindParameters(fields.length);
         return this;
@@ -91,7 +99,8 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * @param object The object to be inserted into table.
      * @return this.
      */
-    public Insert<T> value(T object) {
+    @NotNull
+    public Insert<T> value(@Nullable T object) {
         values = Collections.singleton(object);
         return this;
     }
@@ -101,7 +110,8 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * @param objects Objects to be inserted into table.
      * @return this.
      */
-    public Insert<T> values(Collection<T> objects) {
+    @NotNull
+    public Insert<T> values(@NotNull Collection<T> objects) {
         values = objects;
         return this;
     }
@@ -113,8 +123,9 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * @return this.
      * @throws WCDBException if no error occurs.
      */
+    @NotNull
     public Insert<T> execute() throws WCDBException {
-        if(values == null || values.size() == 0) {
+        if(values.size() == 0) {
             return this;
         }
         assert fields != null && fields.length > 0;
@@ -122,7 +133,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
             if (values.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
-                    public boolean insideTransaction(Handle handle) throws WCDBException {
+                    public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
                         realExecute();
                         return true;
                     }
@@ -148,27 +159,25 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         TableBinding<T> binding = Field.getBinding(fields);
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
         lastInsertRowId = 0;
-        if(binding != null) {
-            for(T object : values) {
-                preparedStatement.reset();
-                int index = 1;
-                boolean isAutoIncrement = !hasConflictAction && binding.isAutoIncrement(object);
-                for (Field<T> field : fields) {
-                    if(isAutoIncrement && field.isAutoIncrement()) {
-                        preparedStatement.bindNull(index);
-                    }else {
-                        binding.bindField(object, field, index, preparedStatement);
-                    }
-                    index++;
+        for(T object : values) {
+            preparedStatement.reset();
+            int index = 1;
+            boolean isAutoIncrement = !hasConflictAction && binding.isAutoIncrement(object);
+            for (Field<T> field : fields) {
+                if(isAutoIncrement && field.isAutoIncrement()) {
+                    preparedStatement.bindNull(index);
+                }else {
+                    binding.bindField(object, field, index, preparedStatement);
                 }
-                preparedStatement.step();
-                if(isAutoIncrement) {
-                    binding.setLastInsertRowId(object, handle.getLastInsertedRowId());
-                }
+                index++;
             }
-            if(values.size() > 0) {
-                lastInsertRowId = handle.getLastInsertedRowId();
+            preparedStatement.step();
+            if(isAutoIncrement) {
+                binding.setLastInsertRowId(object, handle.getLastInsertedRowId());
             }
+        }
+        if(values.size() > 0) {
+            lastInsertRowId = handle.getLastInsertedRowId();
         }
         updateChanges();
         preparedStatement.finalizeStatement();

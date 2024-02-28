@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementDropView extends Statement {
     @Override
     protected int getType() {
@@ -37,25 +40,29 @@ public class StatementDropView extends Statement {
 
     private static native long createCppObj();
 
-    public StatementDropView dropView(String viewName) {
+    @NotNull
+    public StatementDropView dropView(@NotNull String viewName) {
         configView(cppObj, viewName);
         return this;
     }
 
     private static native void configView(long self, String viewName);
 
-    public StatementDropView of(String schemaName) {
+    @NotNull
+    public StatementDropView of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementDropView of(Schema schema) {
+    @NotNull
+    public StatementDropView of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
+    @NotNull
     public StatementDropView ifExist() {
         configIfExist(cppObj);
         return this;

@@ -34,6 +34,8 @@ import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 
 import static org.junit.Assert.*;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.util.List;
@@ -90,7 +92,7 @@ public class RepairTest extends TableTestCase {
 
         database.filterBackup(new Database.BackupFilter() {
             @Override
-            public boolean tableShouldBeBackup(String tableName) {
+            public boolean tableShouldBeBackup(@NotNull String tableName) {
                 return false;
             }
         });

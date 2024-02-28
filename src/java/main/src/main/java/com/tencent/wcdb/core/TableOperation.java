@@ -36,6 +36,9 @@ import com.tencent.wcdb.winq.StatementInsert;
 import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdb.winq.StatementUpdate;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +50,7 @@ public class TableOperation {
     /**
      * Get table name.
      */
+    @NotNull
     public String getTableName() {
         return tableName;
     }
@@ -54,6 +58,7 @@ public class TableOperation {
     /**
      * Get related database.
      */
+    @NotNull
     public Database getDatabase() {
         return database;
     }
@@ -64,7 +69,7 @@ public class TableOperation {
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
-    public void insertRow(Value[] row, Column[] columns) throws WCDBException {
+    public void insertRow(@NotNull Value[] row, @Nullable Column[] columns) throws WCDBException {
         insertRows(Collections.singleton(row), columns);
     }
 
@@ -77,7 +82,7 @@ public class TableOperation {
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
-    public void insertRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
+    public void insertRows(@NotNull Collection<Value[]> rows, @Nullable Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.None);
     }
 
@@ -88,7 +93,7 @@ public class TableOperation {
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
-    public void insertOrReplaceRow(Value[] row, Column[] columns) throws WCDBException {
+    public void insertOrReplaceRow(@NotNull Value[] row, @Nullable Column[] columns) throws WCDBException {
         insertOrReplaceRows(Collections.singleton(row), columns);
     }
 
@@ -102,7 +107,7 @@ public class TableOperation {
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
-    public void insertOrReplaceRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
+    public void insertOrReplaceRows(@NotNull Collection<Value[]> rows, @Nullable Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.Replace);
     }
 
@@ -113,7 +118,7 @@ public class TableOperation {
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
-    public void insertOrIgnoreRow(Value[] row, Column[] columns) throws WCDBException {
+    public void insertOrIgnoreRow(@NotNull Value[] row, @Nullable Column[] columns) throws WCDBException {
         insertOrIgnoreRows(Collections.singleton(row), columns);
     }
 
@@ -127,7 +132,7 @@ public class TableOperation {
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
-    public void insertOrIgnoreRows(Collection<Value[]> rows, Column[] columns) throws WCDBException {
+    public void insertOrIgnoreRows(@NotNull Collection<Value[]> rows, @Nullable Column[] columns) throws WCDBException {
         insertRows(rows, columns, ConflictAction.Ignore);
     }
 
@@ -143,7 +148,7 @@ public class TableOperation {
             if(rows.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
-                    public boolean insideTransaction(Handle handle) throws WCDBException {
+                    public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
                         insertRows(rows, insert, handle);
                         return true;
                     }
@@ -166,205 +171,205 @@ public class TableOperation {
         preparedStatement.finalizeStatement();
     }
 
-    public void updateValue(int value, Column column) throws WCDBException {
+    public void updateValue(int value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column});
     }
 
-    public void updateValue(int value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(int value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition);
     }
 
-    public void updateValue(int value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(int value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(int value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(int value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(int value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(int value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(int value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(int value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateValue(long value, Column column) throws WCDBException {
+    public void updateValue(long value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column});
     }
 
-    public void updateValue(long value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(long value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition);
     }
 
-    public void updateValue(long value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(long value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(long value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(long value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(long value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(long value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(long value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(long value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateValue(float value, Column column) throws WCDBException {
+    public void updateValue(float value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column});
     }
 
-    public void updateValue(float value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(float value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition);
     }
 
-    public void updateValue(float value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(float value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(float value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(float value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(float value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(float value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(float value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(float value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateValue(double value, Column column) throws WCDBException {
+    public void updateValue(double value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column});
     }
 
-    public void updateValue(double value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(double value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition);
     }
 
-    public void updateValue(double value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(double value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(double value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(double value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(double value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(double value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(double value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(double value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateValue(String value, Column column) throws WCDBException {
+    public void updateValue(@Nullable String value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column});
     }
 
-    public void updateValue(String value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(@Nullable String value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition);
     }
 
-    public void updateValue(String value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(@Nullable String value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(String value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(@Nullable String value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(String value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(@Nullable String value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(String value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(@Nullable String value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateValue(byte[] value, Column column) throws WCDBException {
+    public void updateValue(@Nullable byte[] value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column});
     }
 
-    public void updateValue(byte[] value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(@Nullable byte[] value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition);
     }
 
-    public void updateValue(byte[] value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(@Nullable byte[] value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(byte[] value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(@Nullable byte[] value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(byte[] value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(@Nullable byte[] value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(byte[] value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(@Nullable byte[] value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{new Value(value)}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateValue(Value value, Column column) throws WCDBException {
+    public void updateValue(@Nullable Value value, @NotNull Column column) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column});
     }
 
-    public void updateValue(Value value, Column column, Expression condition) throws WCDBException {
+    public void updateValue(@Nullable Value value, @NotNull Column column, @Nullable Expression condition) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, condition);
     }
 
-    public void updateValue(Value value, Column column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(@Nullable Value value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, condition, order, limit);
     }
 
-    public void updateValue(Value value, Column column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(@Nullable Value value, @NotNull Column column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, condition, order, limit, offset);
     }
 
-    public void updateValue(Value value, Column column, OrderingTerm order, int limit) throws WCDBException {
+    public void updateValue(@Nullable Value value, @NotNull Column column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, order, limit);
     }
 
-    public void updateValue(Value value, Column column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateValue(@Nullable Value value, @NotNull Column column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         updateRow(new Value[]{value}, new Column[]{column}, order, limit, offset);
     }
 
-    public void updateRow(Value[] row, Column[] columns) throws WCDBException {
+    public void updateRow(@NotNull Value[] row, @NotNull Column[] columns) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns);
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Column[] columns, Expression condition) throws WCDBException {
+    public void updateRow(@NotNull Value[] row, @NotNull Column[] columns, @Nullable Expression condition) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).where(condition);
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Column[] columns, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    public void updateRow(@NotNull Value[] row, @NotNull Column[] columns, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).where(condition).orderBy(order).limit(limit);
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Column[] columns, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateRow(@NotNull Value[] row, @NotNull Column[] columns, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).where(condition).orderBy(order).limit(limit).offset(offset);
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Column[] columns, OrderingTerm order, int limit) throws WCDBException {
+    public void updateRow(@NotNull Value[] row, @NotNull Column[] columns, @Nullable OrderingTerm order, int limit) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).orderBy(order).limit(limit);
         updateRow(row, update);
     }
 
-    public void updateRow(Value[] row, Column[] columns, OrderingTerm order, int limit, int offset) throws WCDBException {
+    public void updateRow(@NotNull Value[] row, @NotNull Column[] columns, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         StatementUpdate update = new StatementUpdate().update(tableName).setColumnsToBindParameters(columns).orderBy(order).limit(limit).offset(offset);
         updateRow(row, update);
     }
 
-    private void updateRow(Value[] row, StatementUpdate update) throws WCDBException {
+    private void updateRow(@NotNull Value[] row, StatementUpdate update) throws WCDBException {
         Handle handle = database.getHandle(true);
         PreparedStatement preparedStatement = null;
         try {
@@ -384,27 +389,27 @@ public class TableOperation {
         deleteValue(delete);
     }
 
-    public void deleteValue(Expression condition) throws WCDBException {
+    public void deleteValue(@Nullable Expression condition) throws WCDBException {
         StatementDelete delete = new StatementDelete().deleteFrom(tableName).where(condition);
         deleteValue(delete);
     }
 
-    public void deleteValue(Expression condition, OrderingTerm orderingTerm, int limit) throws WCDBException {
+    public void deleteValue(@Nullable Expression condition, @Nullable OrderingTerm orderingTerm, int limit) throws WCDBException {
         StatementDelete delete = new StatementDelete().deleteFrom(tableName).where(condition).orderBy(orderingTerm).limit(limit);
         deleteValue(delete);
     }
 
-    public void deleteValue(Expression condition, OrderingTerm orderingTerm, int limit, int offset) throws WCDBException {
+    public void deleteValue(@Nullable Expression condition, @Nullable OrderingTerm orderingTerm, int limit, int offset) throws WCDBException {
         StatementDelete delete = new StatementDelete().deleteFrom(tableName).where(condition).orderBy(orderingTerm).limit(limit).offset(offset);
         deleteValue(delete);
     }
 
-    public void deleteValue(OrderingTerm orderingTerm, int limit) throws WCDBException {
+    public void deleteValue(@Nullable OrderingTerm orderingTerm, int limit) throws WCDBException {
         StatementDelete delete = new StatementDelete().deleteFrom(tableName).orderBy(orderingTerm).limit(limit);
         deleteValue(delete);
     }
 
-    public void deleteValue(OrderingTerm orderingTerm, int limit, int offset) throws WCDBException {
+    public void deleteValue(@Nullable OrderingTerm orderingTerm, int limit, int offset) throws WCDBException {
         StatementDelete delete = new StatementDelete().deleteFrom(tableName).orderBy(orderingTerm).limit(limit).offset(offset);
         deleteValue(delete);
     }
@@ -418,311 +423,388 @@ public class TableOperation {
         }
     }
 
-    public Value getValue(ResultColumnConvertible column) throws WCDBException {
+    @Nullable
+    public Value getValue(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public Value getValue(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @Nullable
+    public Value getValue(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public Value getValue(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @Nullable
+    public Value getValue(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public Value getValue(ResultColumnConvertible column, Expression condition, OrderingTerm order, int offset) throws WCDBException {
+    @Nullable
+    public Value getValue(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int offset) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(1).offset(offset));
     }
 
-    public Value getValue(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @Nullable
+    public Value getValue(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public Value getValue(ResultColumnConvertible column, OrderingTerm order, int offset) throws WCDBException {
+    @Nullable
+    public Value getValue(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int offset) throws WCDBException {
         return getValueFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(1).offset(offset));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<Value> getOneColumn(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumn(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns) throws WCDBException {
+    @Nullable
+    public Value[] getOneRow(@NotNull ResultColumnConvertible[] columns) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, Expression condition) throws WCDBException {
+    @Nullable
+    public Value[] getOneRow(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).where(condition));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, Expression condition, OrderingTerm orderingTerm) throws WCDBException {
+    @Nullable
+    public Value[] getOneRow(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition, @Nullable OrderingTerm orderingTerm) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(orderingTerm));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, Expression condition, OrderingTerm orderingTerm, int offset) throws WCDBException {
+    @Nullable
+    public Value[] getOneRow(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition, @Nullable OrderingTerm orderingTerm, int offset) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(orderingTerm).limit(1).offset(offset));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, OrderingTerm orderingTerm) throws WCDBException {
+    @Nullable
+    public Value[] getOneRow(@NotNull ResultColumnConvertible[] columns, @Nullable OrderingTerm orderingTerm) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm));
     }
 
-    public Value[] getOneRow(ResultColumnConvertible[] columns, OrderingTerm orderingTerm, int offset) throws WCDBException {
+    @Nullable
+    public Value[] getOneRow(@NotNull ResultColumnConvertible[] columns, @Nullable OrderingTerm orderingTerm, int offset) throws WCDBException {
         return getOneRowFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(orderingTerm).limit(1).offset(offset));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<Integer> getOneColumnInt(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnInt(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnIntFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<Long> getOneColumnLong(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLong(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnLongFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<Float> getOneColumnFloat(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloat(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnFloatFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<Double> getOneColumnDouble(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDouble(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnDoubleFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<String> getOneColumnString(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnString(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnStringFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, Expression condition) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable Expression condition) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<byte[]> getOneColumnBLOB(ResultColumnConvertible column, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOB(@NotNull ResultColumnConvertible column, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getOneColumnBLOBFromStatement(new StatementSelect().select(column).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order).limit(limit));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, Expression condition, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable Expression condition, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable OrderingTerm order) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order, int limit) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable OrderingTerm order, int limit) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order).limit(limit));
     }
 
-    public List<Value[]> getAllRows(ResultColumnConvertible[] columns, OrderingTerm order, int limit, int offset) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRows(@NotNull ResultColumnConvertible[] columns, @Nullable OrderingTerm order, int limit, int offset) throws WCDBException {
         return getAllRowsFromStatement(new StatementSelect().select(columns).from(tableName).orderBy(order).limit(limit).offset(offset));
     }
 
-    public Value getValueFromStatement(Statement statement) throws WCDBException {
+    @Nullable
+    public Value getValueFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         Value ret = null;
         PreparedStatement preparedStatement = null;
@@ -741,7 +823,8 @@ public class TableOperation {
         return ret;
     }
 
-    public Value[] getOneRowFromStatement(Statement statement) throws WCDBException {
+    @Nullable
+    public Value[] getOneRowFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         Value[] ret = null;
         PreparedStatement preparedStatement = null;
@@ -760,7 +843,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<Value> getOneColumnFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<Value> getOneColumnFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<Value> ret;
         PreparedStatement preparedStatement = null;
@@ -775,7 +859,8 @@ public class TableOperation {
         }
         return ret;
     }
-    public List<Integer> getOneColumnIntFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<Integer> getOneColumnIntFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<Integer> ret;
         PreparedStatement preparedStatement = null;
@@ -791,7 +876,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<Long> getOneColumnLongFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<Long> getOneColumnLongFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<Long> ret;
         PreparedStatement preparedStatement = null;
@@ -807,7 +893,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<Float> getOneColumnFloatFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<Float> getOneColumnFloatFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<Float> ret;
         PreparedStatement preparedStatement = null;
@@ -823,7 +910,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<Double> getOneColumnDoubleFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<Double> getOneColumnDoubleFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<Double> ret;
         PreparedStatement preparedStatement = null;
@@ -839,7 +927,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<String> getOneColumnStringFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<String> getOneColumnStringFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<String> ret;
         PreparedStatement preparedStatement = null;
@@ -855,7 +944,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<byte[]> getOneColumnBLOBFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<byte[]> getOneColumnBLOBFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<byte[]> ret;
         PreparedStatement preparedStatement = null;
@@ -871,7 +961,8 @@ public class TableOperation {
         return ret;
     }
 
-    public List<Value[]> getAllRowsFromStatement(Statement statement) throws WCDBException {
+    @NotNull
+    public List<Value[]> getAllRowsFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
         List<Value[]> ret;
         PreparedStatement preparedStatement = null;

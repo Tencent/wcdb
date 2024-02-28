@@ -25,6 +25,8 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementAnalyze extends Statement {
     @Override
     protected int getType() {
@@ -37,6 +39,7 @@ public class StatementAnalyze extends Statement {
 
     private static native long createCppObj();
 
+    @NotNull
     public StatementAnalyze analyze() {
         configToAnalyze(cppObj);
         return this;
@@ -44,26 +47,30 @@ public class StatementAnalyze extends Statement {
 
     private static native void configToAnalyze(long self);
 
-    public StatementAnalyze schema(String schemaName) {
+    @NotNull
+    public StatementAnalyze schema(@NotNull String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementAnalyze schema(Schema schema) {
+    @NotNull
+    public StatementAnalyze schema(@NotNull Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String schemaName);
 
-    public StatementAnalyze table(String tableName) {
+    @NotNull
+    public StatementAnalyze table(@NotNull String tableName) {
         configTable(cppObj, tableName);
         return this;
     }
 
     private static native void configTable(long self, String tableName);
 
-    public StatementAnalyze index(String indexName) {
+    @NotNull
+    public StatementAnalyze index(@NotNull String indexName) {
         configIndex(cppObj, indexName);
         return this;
     }

@@ -23,12 +23,15 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+
 public class BindParameter extends Identifier implements ExpressionConvertible {
     @Override
     protected int getType() {
         return CPPType.BindParameter;
     }
 
+    @NotNull
     @Override
     public Identifier asIdentifier() {
         return this;
@@ -43,13 +46,13 @@ public class BindParameter extends Identifier implements ExpressionConvertible {
 
     private static native long createCppObj(int num);
 
-    public BindParameter(String name) {
+    public BindParameter(@NotNull String name) {
         cppObj = createCppObj(name);
     }
 
     private static native long createCppObj(String name);
 
-    public static BindParameter at(String name) {
+    public static BindParameter at(@NotNull String name) {
         BindParameter ret = new BindParameter();
         ret.cppObj = atBindParameter(name);
         return ret;
@@ -57,11 +60,11 @@ public class BindParameter extends Identifier implements ExpressionConvertible {
 
     private static native long atBindParameter(String name);
 
-    public static BindParameter colon(String name) {
+    public static BindParameter colon(@NotNull String name) {
         return new BindParameter(name);
     }
 
-    public static BindParameter dollar(String name) {
+    public static BindParameter dollar(@NotNull String name) {
         BindParameter ret = new BindParameter();
         ret.cppObj = dollarBindParameter(name);
         return ret;

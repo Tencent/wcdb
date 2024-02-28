@@ -31,6 +31,7 @@ import com.tencent.wcdb.winq.StatementSelect;
 import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.base.DatabaseTestCase;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -51,12 +52,12 @@ public class ConfigTest extends DatabaseTestCase {
         final WrappedValue uninvoked = new WrappedValue();
         database.setConfig(configName, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 handle.execute(setSecureDelete);
             }
         }, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 uninvoked.boolValue = true;
                 handle.execute(unsetSecureDelete);
             }
@@ -80,7 +81,7 @@ public class ConfigTest extends DatabaseTestCase {
     public void testConfigFail() {
         database.setConfig(configName, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 handle.execute(new StatementSelect().select("testColumn").from("testTable"));
             }
         });
@@ -91,11 +92,11 @@ public class ConfigTest extends DatabaseTestCase {
     public void tesUnInvokeFail() {
         database.setConfig(configName, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
             }
         }, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 handle.execute(new StatementSelect().select("testColumn").from("testTable"));
             }
         }, Database.ConfigPriority.low);
@@ -112,7 +113,7 @@ public class ConfigTest extends DatabaseTestCase {
         final WrappedValue step = new WrappedValue();
         database.setConfig(config1, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 assertEquals(step.intValue,1);
                 step.intValue++;
             }
@@ -120,7 +121,7 @@ public class ConfigTest extends DatabaseTestCase {
 
         database.setConfig(config2, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 assertEquals(step.intValue, 2);
                 step.intValue++;
             }
@@ -128,7 +129,7 @@ public class ConfigTest extends DatabaseTestCase {
 
         database.setConfig(config3, new Database.Config() {
             @Override
-            public void onInvocation(Handle handle) throws WCDBException {
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
                 assertEquals(step.intValue, 0);
                 step.intValue++;
             }

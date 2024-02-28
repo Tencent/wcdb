@@ -25,25 +25,30 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class OrderingTerm extends Identifier{
     @Override
     protected int getType() {
         return CPPType.OrderingTerm;
     }
 
-    public OrderingTerm(ExpressionConvertible expression) {
+    public OrderingTerm(@NotNull ExpressionConvertible expression) {
         cppObj = createCppObj(Identifier.getCppType(expression), CppObject.get(expression));
     }
 
     private static native long createCppObj(int type, long expression);
 
-    public OrderingTerm collate(String collation) {
+    @NotNull
+    public OrderingTerm collate(@Nullable String collation) {
         collate(cppObj, collation);
         return this;
     }
 
     private static native void collate(long orderingTerm, String collation);
 
+    @NotNull
     public OrderingTerm order(Order order) {
         order(cppObj, order.ordinal() + 1);
         return this;
@@ -51,10 +56,12 @@ public class OrderingTerm extends Identifier{
 
     private static native void order(long orderingTerm, int order);
 
+    @NotNull
     static public OrderingTerm ascendingRowid() {
         return Column.rowId().order(Order.Asc);
     }
 
+    @NotNull
     static public OrderingTerm descendingRowid() {
         return Column.rowId().order(Order.Desc);
     }

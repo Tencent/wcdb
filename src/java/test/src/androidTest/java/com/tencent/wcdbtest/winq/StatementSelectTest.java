@@ -54,8 +54,7 @@ public class StatementSelectTest {
         winqEqual(new StatementSelect().select(column1).from(table1, table2),
                 "SELECT column1 FROM table1, table2");
 
-        winqEqual(new StatementSelect().select(column1).from(new TableOrSubqueryConvertible[]{
-                new TableOrSubquery(table1), new TableOrSubquery(table2)}),
+        winqEqual(new StatementSelect().select(column1).from(new TableOrSubquery(table1), new TableOrSubquery(table2)),
                 "SELECT column1 FROM table1, table2");
 
         winqEqual(new StatementSelect().select(column1).from(table1, new TableOrSubquery(table2)),

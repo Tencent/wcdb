@@ -26,6 +26,8 @@ package com.tencent.wcdbtest.database;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
@@ -82,7 +84,7 @@ public class HandleTest extends TableTestCase {
         final WrappedValue maxHandleCount = new WrappedValue();
         Database.globalTraceDatabaseOperation(new Database.OperationTracer() {
             @Override
-            public void onTrace(Database database, Database.Operation operation, HashMap<String, Value> info) {
+            public void onTrace(@NotNull Database database, Database.Operation operation, @NotNull HashMap<String, Value> info) {
                 if(operation != Database.Operation.OpenHandle) {
                     return;
                 }
@@ -117,7 +119,7 @@ public class HandleTest extends TableTestCase {
                             case 3: {
                                 database.runTransaction(new Transaction() {
                                     @Override
-                                    public boolean insideTransaction(Handle handle) throws WCDBException {
+                                    public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
                                         table.updateValue("abc2", DBTestObject.content, DBTestObject.id.gt((finalI - 1) * 100).and(DBTestObject.id
                                                 .lt(finalI * 100)));
                                         return true;
@@ -139,7 +141,7 @@ public class HandleTest extends TableTestCase {
                             case 7: {
                                 database.runTransaction(new Transaction() {
                                     @Override
-                                    public boolean insideTransaction(Handle handle) throws WCDBException {
+                                    public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
                                         database.updateValue("abc2", DBTestObject.content, tableName, DBTestObject.id.gt((finalI - 1) * 100).and(DBTestObject.id
                                                 .lt(finalI * 100)));
                                         return true;
@@ -168,7 +170,7 @@ public class HandleTest extends TableTestCase {
         final WrappedValue maxHandleCount = new WrappedValue();
         Database.globalTraceDatabaseOperation(new Database.OperationTracer() {
             @Override
-            public void onTrace(Database database, Database.Operation operation, HashMap<String, Value> info) {
+            public void onTrace(@NotNull Database database, Database.Operation operation, @NotNull HashMap<String, Value> info) {
                 if(operation != Database.Operation.OpenHandle) {
                     return;
                 }
@@ -248,7 +250,7 @@ public class HandleTest extends TableTestCase {
         final WrappedValue maxHandleCount = new WrappedValue();
         Database.globalTraceDatabaseOperation(new Database.OperationTracer() {
             @Override
-            public void onTrace(Database database, Database.Operation operation, HashMap<String, Value> info) {
+            public void onTrace(@NotNull Database database, Database.Operation operation, @NotNull HashMap<String, Value> info) {
                 if(operation != Database.Operation.OpenHandle) {
                     return;
                 }

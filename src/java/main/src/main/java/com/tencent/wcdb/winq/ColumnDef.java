@@ -25,30 +25,34 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class ColumnDef extends Identifier{
     @Override
     protected int getType() {
         return CPPType.ColumnDef;
     }
 
-    public ColumnDef(String columnName) {
+    public ColumnDef(@NotNull String columnName) {
         cppObj = createCppObj(CPPType.String, 0, columnName, 0);
     }
 
-    public ColumnDef(Column column) {
+    public ColumnDef(@NotNull Column column) {
         cppObj = createCppObj(Identifier.getCppType(column), CppObject.get(column), null, 0);
     }
 
-    public ColumnDef(String columnName, ColumnType columnType) {
+    public ColumnDef(@NotNull String columnName, ColumnType columnType) {
         cppObj = createCppObj(CPPType.String, 0, columnName, columnType.ordinal());
     }
 
-    public ColumnDef(Column column, ColumnType columnType) {
+    public ColumnDef(@NotNull Column column, ColumnType columnType) {
         cppObj = createCppObj(Identifier.getCppType(column), CppObject.get(column), null, columnType.ordinal());
     }
 
     private static native long createCppObj(int type, long column, String columnName, int columnType);
 
+    @NotNull
     public ColumnDef constraint(ColumnConstraint constraint) {
         constraint(cppObj, CppObject.get(constraint));
         return this;
@@ -56,62 +60,77 @@ public class ColumnDef extends Identifier{
 
     private static native void constraint(long columnDef, long columnConstraint);
 
+    @NotNull
     public ColumnDef makePrimary() {
         return constraint(new ColumnConstraint().primaryKey());
     }
 
+    @NotNull
     public ColumnDef makePrimary(boolean isAutoIncrement) {
         return constraint(new ColumnConstraint().primaryKey().autoIncrement());
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(boolean value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(byte value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(short value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(int value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(long value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(float value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeDefaultTo(double value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
-    public ColumnDef makeDefaultTo(String value) {
+    @NotNull
+    public ColumnDef makeDefaultTo(@Nullable String value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
-    public ColumnDef makeDefaultTo(ExpressionConvertible value) {
+    @NotNull
+    public ColumnDef makeDefaultTo(@Nullable ExpressionConvertible value) {
         return constraint(new ColumnConstraint().defaultTo(value));
     }
 
+    @NotNull
     public ColumnDef makeUnique() {
         return constraint(new ColumnConstraint().unique());
     }
 
+    @NotNull
     public ColumnDef makeNotNull() {
         return constraint(new ColumnConstraint().notNull());
     }
 
-    public ColumnDef makeForeignKey(ForeignKey foreignKey) {
+    @NotNull
+    public ColumnDef makeForeignKey(@Nullable ForeignKey foreignKey) {
         return constraint(new ColumnConstraint().foreignKey(foreignKey));
     }
 
+    @NotNull
     public ColumnDef makeNotIndexed() {
         return constraint(new ColumnConstraint().unIndex());
     }

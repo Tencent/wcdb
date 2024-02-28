@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementCreateVirtualTable extends Statement {
     @Override
     protected int getType() {
@@ -37,25 +40,29 @@ public class StatementCreateVirtualTable extends Statement {
 
     private static native long createCppObj();
 
-    public StatementCreateVirtualTable createVirtualTable(String name) {
+    @NotNull
+    public StatementCreateVirtualTable createVirtualTable(@NotNull String name) {
         configTable(cppObj, name);
         return this;
     }
 
     private static native void configTable(long self, String name);
 
-    public StatementCreateVirtualTable of(String schemaName) {
+    @NotNull
+    public StatementCreateVirtualTable of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementCreateVirtualTable of(Schema schema) {
+    @NotNull
+    public StatementCreateVirtualTable of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
+    @NotNull
     public StatementCreateVirtualTable ifNotExist() {
         configIfNotExist(cppObj);
         return this;
@@ -63,14 +70,16 @@ public class StatementCreateVirtualTable extends Statement {
 
     private static native void configIfNotExist(long self);
 
-    public StatementCreateVirtualTable usingModule(String module) {
+    @NotNull
+    public StatementCreateVirtualTable usingModule(@Nullable String module) {
         configModule(cppObj, module);
         return this;
     }
 
     private static native void configModule(long self, String module);
 
-    public StatementCreateVirtualTable arguments(String... arguments) {
+    @NotNull
+    public StatementCreateVirtualTable arguments(@Nullable String... arguments) {
         configArguments(cppObj, arguments);
         return this;
     }

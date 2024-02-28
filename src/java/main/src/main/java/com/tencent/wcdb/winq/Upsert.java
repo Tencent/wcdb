@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class Upsert extends Identifier{
     @Override
     protected int getType() {
@@ -37,27 +40,20 @@ public class Upsert extends Identifier{
 
     private static native long createCppObj();
 
+    @NotNull
     public Upsert onConflict() {
         return this;
     }
 
-    public Upsert indexedBy(String columnName) {
-        configIndexedColumn(cppObj, CPPType.String, null, new String[]{columnName});
-        return this;
-    }
-
-    public Upsert indexedBy(IndexedColumnConvertible indexedColumn) {
-        configIndexedColumn(cppObj, Identifier.getCppType(indexedColumn), new long[]{CppObject.get(indexedColumn)}, null);
-        return this;
-    }
-
-    public Upsert indexedBy(String... columnNames) {
+    @NotNull
+    public Upsert indexedBy(@NotNull String... columnNames) {
         configIndexedColumn(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
-    public Upsert indexedBy(IndexedColumnConvertible... indexedColumns) {
-        if (indexedColumns == null || indexedColumns.length == 0) {
+    @NotNull
+    public Upsert indexedBy(@NotNull IndexedColumnConvertible... indexedColumns) {
+        if (indexedColumns.length == 0) {
             return this;
         }
 
@@ -72,13 +68,15 @@ public class Upsert extends Identifier{
 
     private static native void configIndexedColumn(long self, int type, long[] columns, String[] columnNames);
 
-    public Upsert where(Expression condition) {
+    @NotNull
+    public Upsert where(@Nullable Expression condition) {
         configWhere(cppObj, CppObject.get(condition));
         return this;
     }
 
     private static native void configWhere(long self, long condition);
 
+    @NotNull
     public Upsert doNoThing() {
         configDoNothing(cppObj);
         return this;
@@ -86,6 +84,7 @@ public class Upsert extends Identifier{
 
     private static native void configDoNothing(long self);
 
+    @NotNull
     public Upsert doUpdate() {
         configDoUpdate(cppObj);
         return this;
@@ -93,23 +92,15 @@ public class Upsert extends Identifier{
 
     private static native void configDoUpdate(long self);
 
-    public Upsert setColumn(String columnName) {
-        configSetColumns(cppObj, CPPType.String, null, new String[]{columnName});
-        return this;
-    }
-
-    public Upsert setColumn(Column column) {
-        configSetColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
-        return this;
-    }
-
-    public Upsert setColumns(String... columnNames) {
+    @NotNull
+    public Upsert set(@NotNull String... columnNames) {
         configSetColumns(cppObj, CPPType.String, null, columnNames);
         return this;
     }
 
-    public Upsert setColumns(Column... columns) {
-        if (columns == null || columns.length == 0) {
+    @NotNull
+    public Upsert set(@NotNull Column... columns) {
+        if (columns.length == 0) {
             return this;
         }
 
@@ -124,42 +115,50 @@ public class Upsert extends Identifier{
 
     private static native void configSetColumns(long self, int type, long[] columns, String[] columnNames);
 
+    @NotNull
     public Upsert to(boolean value) {
         configToValue(cppObj, CPPType.Bool, value ? 1 : 0, 0, null);
         return this;
     }
 
+    @NotNull
     public Upsert to(byte value) {
         configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
+    @NotNull
     public Upsert to(short value) {
         configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
+    @NotNull
     public Upsert to(int value) {
         configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
+    @NotNull
     public Upsert to(long value) {
         configToValue(cppObj, CPPType.Int, value, 0, null);
         return this;
     }
 
+    @NotNull
     public Upsert to(float value) {
         configToValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
+    @NotNull
     public Upsert to(double value) {
         configToValue(cppObj, CPPType.Double, 0, value, null);
         return this;
     }
 
-    public Upsert to(String value) {
+    @NotNull
+    public Upsert to(@Nullable String value) {
         if(value != null) {
             configToValue(cppObj, CPPType.String, 0, 0, value);
         }else{
@@ -168,7 +167,8 @@ public class Upsert extends Identifier{
         return this;
     }
 
-    public Upsert to(ExpressionConvertible value) {
+    @NotNull
+    public Upsert to(@Nullable ExpressionConvertible value) {
         configToValue(cppObj, Identifier.getCppType(value), CppObject.get(value), 0, null);
         return this;
     }
