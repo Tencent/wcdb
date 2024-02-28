@@ -23,6 +23,8 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementRollback extends Statement {
     @Override
     protected int getType() {
@@ -35,7 +37,8 @@ public class StatementRollback extends Statement {
 
     private static native long createCppObj();
 
-    public StatementRollback rollbackTo(String savepoint) {
+    @NotNull
+    public StatementRollback rollbackTo(@NotNull String savepoint) {
         configSavepoint(cppObj, savepoint);
         return this;
     }

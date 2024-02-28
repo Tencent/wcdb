@@ -27,6 +27,8 @@ import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.winq.Statement;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ChainCall<T extends Statement> {
     Handle handle;
     int changes = 0;
@@ -34,8 +36,7 @@ public class ChainCall<T extends Statement> {
     boolean needChanges = true;
     boolean autoInvalidateHandle = false;
 
-    public ChainCall(Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
-        assert handle != null;
+    public ChainCall(@NotNull Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
         this.handle = handle;
         this.needChanges = needChanges;
         this.autoInvalidateHandle = autoInvalidateHandle;
@@ -66,6 +67,7 @@ public class ChainCall<T extends Statement> {
      * You can customize this statement directly to implement the capabilities not provided by `ChainCall`.
      * @return the current statement.
      */
+    @NotNull
     public T getStatement() {
         return statement;
     }

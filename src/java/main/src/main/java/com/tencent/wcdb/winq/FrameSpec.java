@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class FrameSpec extends Identifier {
     @Override
     protected int getType() {
@@ -37,6 +40,7 @@ public class FrameSpec extends Identifier {
 
     private static native long createCppObj();
 
+    @NotNull
     public FrameSpec range() {
         configRange(cppObj);
         return this;
@@ -44,6 +48,7 @@ public class FrameSpec extends Identifier {
 
     private static native void configRange(long self);
 
+    @NotNull
     public FrameSpec rows() {
         configRows(cppObj);
         return this;
@@ -51,6 +56,7 @@ public class FrameSpec extends Identifier {
 
     private static native void configRows(long self);
 
+    @NotNull
     public FrameSpec unboundedPreceding() {
         configUnboundedPreceding(cppObj);
         return this;
@@ -58,18 +64,21 @@ public class FrameSpec extends Identifier {
 
     private static native void configUnboundedPreceding(long self);
 
+    @NotNull
     public FrameSpec preceding(long offset) {
         configPreceding(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public FrameSpec preceding(ExpressionConvertible offset) {
+    @NotNull
+    public FrameSpec preceding(@Nullable ExpressionConvertible offset) {
         configPreceding(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
     private static native void configPreceding(long self, int type, long expression);
 
+    @NotNull
     public FrameSpec currentRow() {
         configCurrentRow(cppObj);
         return this;
@@ -77,6 +86,7 @@ public class FrameSpec extends Identifier {
 
     private static native void configCurrentRow(long self);
 
+    @NotNull
     public FrameSpec betweenUnboundedPreceding() {
         configBetweenUnboundedPreceding(cppObj);
         return this;
@@ -84,18 +94,21 @@ public class FrameSpec extends Identifier {
 
     private static native void configBetweenUnboundedPreceding(long self);
 
+    @NotNull
     public FrameSpec betweenPreceding(long offset) {
         configBetweenPreceding(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public FrameSpec betweenPreceding(ExpressionConvertible offset) {
+    @NotNull
+    public FrameSpec betweenPreceding(@Nullable ExpressionConvertible offset) {
         configBetweenPreceding(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
     private static native void configBetweenPreceding(long self, int type, long expression);
 
+    @NotNull
     public FrameSpec betweenCurrentRow() {
         configBetweenCurrentRow(cppObj);
         return this;
@@ -103,18 +116,21 @@ public class FrameSpec extends Identifier {
 
     private static native void configBetweenCurrentRow(long self);
 
+    @NotNull
     public FrameSpec betweenFollowing(long offset) {
         configBetweenFollowing(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public FrameSpec betweenFollowing(ExpressionConvertible offset) {
+    @NotNull
+    public FrameSpec betweenFollowing(@Nullable ExpressionConvertible offset) {
         configBetweenFollowing(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
     private static native void configBetweenFollowing(long self, int type, long expression);
 
+    @NotNull
     public FrameSpec andCurrentRow() {
         configAndCurrentRow(cppObj);
         return this;
@@ -122,18 +138,21 @@ public class FrameSpec extends Identifier {
 
     private static native void configAndCurrentRow(long self);
 
+    @NotNull
     public FrameSpec andPreceding(long offset) {
         configAndPreceding(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public FrameSpec andPreceding(ExpressionConvertible offset) {
+    @NotNull
+    public FrameSpec andPreceding(@Nullable ExpressionConvertible offset) {
         configAndPreceding(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }
 
     private static native void configAndPreceding(long self, int type, long expression);
 
+    @NotNull
     public FrameSpec andUnboundedFollowing() {
         configAndUnboundedFollowing(cppObj);
         return this;
@@ -141,12 +160,14 @@ public class FrameSpec extends Identifier {
 
     private static native void configAndUnboundedFollowing(long self);
 
+    @NotNull
     public FrameSpec andFollowing(long offset) {
         configAndFollowing(cppObj, CPPType.Int, offset);
         return this;
     }
 
-    public FrameSpec andFollowing(ExpressionConvertible offset) {
+    @NotNull
+    public FrameSpec andFollowing(@Nullable ExpressionConvertible offset) {
         configAndFollowing(cppObj, Identifier.getCppType(offset), CppObject.get(offset));
         return this;
     }

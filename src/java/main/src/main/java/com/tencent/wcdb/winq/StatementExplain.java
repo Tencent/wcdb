@@ -25,6 +25,8 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementExplain extends Statement {
     @Override
     protected int getType() {
@@ -37,12 +39,14 @@ public class StatementExplain extends Statement {
 
     private static native long createCppObj();
 
-    public StatementExplain explain(Statement statement) {
+    @NotNull
+    public StatementExplain explain(@NotNull Statement statement) {
         explain(cppObj, CppObject.get(statement), false);
         return this;
     }
 
-    public StatementExplain explainQueryPlan(Statement statement) {
+    @NotNull
+    public StatementExplain explainQueryPlan(@NotNull Statement statement) {
         explain(cppObj, CppObject.get(statement), true);
         return this;
     }

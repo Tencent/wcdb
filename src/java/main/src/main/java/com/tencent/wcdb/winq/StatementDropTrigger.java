@@ -25,37 +25,44 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementDropTrigger extends Statement {
     @Override
     protected int getType() {
         return CPPType.DropTriggerSTMT;
     }
-
+    
     public StatementDropTrigger() {
         cppObj = createCppObj();
     }
 
     private static native long createCppObj();
 
-    public StatementDropTrigger dropTrigger(String triggerName) {
+    @NotNull
+    public StatementDropTrigger dropTrigger(@NotNull String triggerName) {
         configTrigger(cppObj, triggerName);
         return this;
     }
 
     private static native void configTrigger(long self, String triggerName);
 
-    public StatementDropTrigger of(String schemaName) {
+    @NotNull
+    public StatementDropTrigger of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementDropTrigger of(Schema schema) {
+    @NotNull
+    public StatementDropTrigger of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
+    @NotNull
     public StatementDropTrigger ifExist() {
         configIfExist(cppObj);
         return this;

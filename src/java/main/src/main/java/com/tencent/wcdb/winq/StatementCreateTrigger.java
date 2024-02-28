@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementCreateTrigger extends Statement {
     @Override
     protected int getType() {
@@ -37,12 +40,14 @@ public class StatementCreateTrigger extends Statement {
 
     private static native long createCppObj();
 
-    public StatementCreateTrigger createTrigger(String name) {
+    @NotNull
+    public StatementCreateTrigger createTrigger(@NotNull String name) {
         configTrigger(cppObj, name);
         return this;
     }
 
-    public StatementCreateTrigger createTempTrigger(String name) {
+    @NotNull
+    public StatementCreateTrigger createTempTrigger(@NotNull String name) {
         configTrigger(cppObj, name);
         configTemp(cppObj);
         return this;
@@ -52,18 +57,21 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configTemp(long self);
 
-    public StatementCreateTrigger ofSchema(String schemaName) {
+    @NotNull
+    public StatementCreateTrigger ofSchema(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementCreateTrigger ofSchema(Schema schema) {
+    @NotNull
+    public StatementCreateTrigger ofSchema(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String path);
 
+    @NotNull
     public StatementCreateTrigger ifNotExist() {
         configIfNotExist(cppObj);
         return this;
@@ -71,6 +79,7 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configIfNotExist(long self);
 
+    @NotNull
     public StatementCreateTrigger before() {
         configBefore(cppObj);
         return this;
@@ -78,6 +87,7 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configBefore(long self);
 
+    @NotNull
     public StatementCreateTrigger after() {
         configAfter(cppObj);
         return this;
@@ -85,6 +95,7 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configAfter(long self);
 
+    @NotNull
     public StatementCreateTrigger insteadOf() {
         configInsteadOf(cppObj);
         return this;
@@ -92,6 +103,7 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configInsteadOf(long self);
 
+    @NotNull
     public StatementCreateTrigger delete() {
         configDelete(cppObj);
         return this;
@@ -99,6 +111,7 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configDelete(long self);
 
+    @NotNull
     public StatementCreateTrigger insert() {
         configInsert(cppObj);
         return this;
@@ -106,6 +119,7 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configInsert(long self);
 
+    @NotNull
     public StatementCreateTrigger update() {
         configUpdate(cppObj);
         return this;
@@ -113,18 +127,9 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configUpdate(long self);
 
-    public StatementCreateTrigger ofColumn(Column column) {
-        configColumns(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
-        return this;
-    }
-
-    public StatementCreateTrigger ofColumn(String columnName) {
-        configColumns(cppObj, CPPType.String, null, new String[]{columnName});
-        return this;
-    }
-
-    public StatementCreateTrigger ofColumns(Column... columns) {
-        if(columns == null || columns.length == 0) {
+    @NotNull
+    public StatementCreateTrigger ofColumns(@NotNull Column... columns) {
+        if(columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
@@ -135,8 +140,9 @@ public class StatementCreateTrigger extends Statement {
         return this;
     }
 
-    public StatementCreateTrigger ofColumns(String... columnNames) {
-        if(columnNames == null || columnNames.length == 0) {
+    @NotNull
+    public StatementCreateTrigger ofColumns(@NotNull String... columnNames) {
+        if(columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);
@@ -145,13 +151,15 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configColumns(long self, int type, long[] objects, String[] columnNames);
 
-    public StatementCreateTrigger onTable(String tableName) {
+    @NotNull
+    public StatementCreateTrigger onTable(@NotNull String tableName) {
         configTable(cppObj, tableName);
         return this;
     }
 
     private static native void configTable(long self, String table);
 
+    @NotNull
     public StatementCreateTrigger forEachRow() {
         configForEachRow(cppObj);
         return this;
@@ -159,35 +167,40 @@ public class StatementCreateTrigger extends Statement {
 
     private static native void configForEachRow(long self);
 
-    public StatementCreateTrigger when(Expression condition) {
+    @NotNull
+    public StatementCreateTrigger when(@Nullable Expression condition) {
         configWhen(cppObj, CppObject.get(condition));
         return this;
     }
 
     private static native void configWhen(long self, long condition);
 
-    public StatementCreateTrigger execute(StatementInsert insert) {
+    @NotNull
+    public StatementCreateTrigger execute(@Nullable StatementInsert insert) {
         executeInsert(cppObj, CppObject.get(insert));
         return this;
     }
 
     private static native void executeInsert(long self, long insert);
 
-    public StatementCreateTrigger execute(StatementUpdate update) {
+    @NotNull
+    public StatementCreateTrigger execute(@Nullable StatementUpdate update) {
         executeUpdate(cppObj, CppObject.get(update));
         return this;
     }
 
     private static native void executeUpdate(long self, long insert);
 
-    public StatementCreateTrigger execute(StatementDelete delete) {
+    @NotNull
+    public StatementCreateTrigger execute(@Nullable StatementDelete delete) {
         executeDelete(cppObj, CppObject.get(delete));
         return this;
     }
 
     private static native void executeDelete(long self, long insert);
 
-    public StatementCreateTrigger execute(StatementSelect select) {
+    @NotNull
+    public StatementCreateTrigger execute(@Nullable StatementSelect select) {
         executeSelect(cppObj, CppObject.get(select));
         return this;
     }

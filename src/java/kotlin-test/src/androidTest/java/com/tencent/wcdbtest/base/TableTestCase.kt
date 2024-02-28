@@ -29,7 +29,7 @@ import com.tencent.wcdb.orm.TableBinding
 import org.junit.Assert
 import java.util.*
 
-typealias SelectingObjectOperation = () -> List<TestObject>
+typealias SelectingObjectOperation = () -> List<TestObject?>
 
 open class TableTestCase : DatabaseTestCase() {
     var tableName = "testTable"
@@ -120,7 +120,7 @@ open class TableTestCase : DatabaseTestCase() {
         sqls: Array<String>,
         operation: SelectingObjectOperation
     ) {
-        val selecting = mutableListOf<TestObject>()
+        val selecting = mutableListOf<TestObject?>()
         doTestSQLs(sqls) {
             selecting.addAll(operation())
         }

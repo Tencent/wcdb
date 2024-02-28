@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementCreateIndex extends Statement {
     @Override
     protected int getType() {
@@ -37,13 +40,15 @@ public class StatementCreateIndex extends Statement {
 
     private static native long createCppObj();
 
-    public StatementCreateIndex createIndex(String indexName) {
+    @NotNull
+    public StatementCreateIndex createIndex(@NotNull String indexName) {
         createIndex(cppObj, indexName);
         return this;
     }
 
     private static native void createIndex(long self, String indexName);
 
+    @NotNull
     public StatementCreateIndex unique() {
         configUnique(cppObj);
         return this;
@@ -51,6 +56,7 @@ public class StatementCreateIndex extends Statement {
 
     private static native void configUnique(long self);
 
+    @NotNull
     public StatementCreateIndex ifNotExist() {
         configIfNotExist(cppObj);
         return this;
@@ -58,27 +64,31 @@ public class StatementCreateIndex extends Statement {
 
     private static native void configIfNotExist(long self);
 
-    public StatementCreateIndex of(String schemaName) {
+    @NotNull
+    public StatementCreateIndex of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementCreateIndex of(Schema schema) {
+    @NotNull
+    public StatementCreateIndex of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long schema, String schemaName);
 
-    public StatementCreateIndex on(String tableName) {
+    @NotNull
+    public StatementCreateIndex on(@NotNull String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
     private static native void configTableName(long self, String tableName);
 
-    public StatementCreateIndex indexedBy(IndexedColumnConvertible... indexedColumnConvertible) {
-        if(indexedColumnConvertible == null || indexedColumnConvertible.length == 0) {
+    @NotNull
+    public StatementCreateIndex indexedBy(@NotNull IndexedColumnConvertible... indexedColumnConvertible) {
+        if(indexedColumnConvertible.length == 0) {
             return this;
         }
         long[] columns = new long[indexedColumnConvertible.length];
@@ -92,28 +102,16 @@ public class StatementCreateIndex extends Statement {
         return this;
     }
 
-    public StatementCreateIndex indexedBy(IndexedColumnConvertible indexedColumnConvertible) {
-        configIndexedColumns(
-                cppObj,
-                Identifier.getCppType(indexedColumnConvertible),
-                new long[]{CppObject.get(indexedColumnConvertible)},
-                null);
-        return this;
-    }
-
-    public StatementCreateIndex indexedBy(String... indexedColumnNames) {
+    @NotNull
+    public StatementCreateIndex indexedBy(@NotNull String... indexedColumnNames) {
         configIndexedColumns(cppObj, CPPType.String, null, indexedColumnNames);
-        return this;
-    }
-
-    public StatementCreateIndex indexedBy(String indexedColumnName) {
-        configIndexedColumns(cppObj, CPPType.String, null, new String[]{indexedColumnName});
         return this;
     }
 
     private static native void configIndexedColumns(long self, int type, long[] columns, String[] columnNames);
 
-    public StatementCreateIndex where(Expression condition) {
+    @NotNull
+    public StatementCreateIndex where(@Nullable Expression condition) {
         configCondition(cppObj, CppObject.get(condition));
         return this;
     }

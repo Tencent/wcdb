@@ -22,6 +22,9 @@
  */
 package com.tencent.wcdb.base;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -52,6 +55,7 @@ public class WCDBException extends RuntimeException {
             return Unknown;
         }
 
+        @NotNull
         @Override
         public String toString() {
             switch (this) {
@@ -488,14 +492,17 @@ public class WCDBException extends RuntimeException {
         return ExtendCode.Unknown;
     }
 
+    @Nullable
     public String message() {
         return (String) info.get(Key.message.getValue());
     }
 
+    @Nullable
     public String sql() {
         return (String) info.get(Key.SQL.getValue());
     }
 
+    @Nullable
     public String path() {
         return (String) info.get(Key.path.getValue());
     }
@@ -510,6 +517,7 @@ public class WCDBException extends RuntimeException {
         return sb.toString();
     }
 
+    @NotNull
     public String toStringForLog() {
         return "[WCDB] [" + level + "] " + getMessage();
     }

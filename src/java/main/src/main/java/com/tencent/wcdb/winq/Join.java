@@ -24,177 +24,208 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class Join extends Identifier implements TableOrSubqueryConvertible{
     @Override
     protected int getType() {
         return CPPType.JoinClause;
     }
 
-    public Join(String tableName) {
+    public Join(@NotNull String tableName) {
         cppObj = createCppObj(CPPType.String, 0, tableName);
     }
 
-    public Join(TableOrSubqueryConvertible tableOrSubquery) {
+    public Join(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         cppObj = createCppObj(Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
     }
 
     private static native long createCppObj(int type, long object, String tableName);
 
-    public Join with(String tableName) {
+    
+    @NotNull
+    public Join with(@NotNull String tableName) {
         configWith(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join with(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join with(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWith(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWith(long self, int type, long object, String tableName);
 
-    public Join join(String tableName) {
+    @NotNull
+    public Join join(@NotNull String tableName) {
         configJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join join(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join join(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configJoin(long self, int type, long object, String tableName);
 
-    public Join leftOuterJoin(String tableName) {
+    @NotNull
+    public Join leftOuterJoin(@NotNull String tableName) {
         configWithLeftOuterJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join leftOuterJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join leftOuterJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithLeftOuterJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithLeftOuterJoin(long self, int type, long object, String tableName);
 
-    public Join leftJoin(String tableName) {
+    @NotNull
+    public Join leftJoin(@NotNull String tableName) {
         configWithLeftJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join leftJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join leftJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithLeftJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithLeftJoin(long self, int type, long object, String tableName);
 
-    public Join innerJoin(String tableName) {
+    @NotNull
+    public Join innerJoin(@NotNull String tableName) {
         configWithInnerJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join innerJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join innerJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithInnerJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithInnerJoin(long self, int type, long object, String tableName);
 
-    public Join crossJoin(String tableName) {
+    @NotNull
+    public Join crossJoin(@NotNull String tableName) {
         configWithCrossJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join crossJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join crossJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithCrossJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithCrossJoin(long self, int type, long object, String tableName);
 
-    public Join naturalJoin(String tableName) {
+    @NotNull
+    public Join naturalJoin(@NotNull String tableName) {
         configWithNaturalJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join naturalJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join naturalJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithNaturalJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithNaturalJoin(long self, int type, long object, String tableName);
 
-    public Join naturalLeftOuterJoin(String tableName) {
+    @NotNull
+    public Join naturalLeftOuterJoin(@NotNull String tableName) {
         configWithNaturalLeftOuterJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join naturalLeftOuterJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join naturalLeftOuterJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithNaturalLeftOuterJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithNaturalLeftOuterJoin(long self, int type, long object, String tableName);
 
-    public Join naturalLeftJoin(String tableName) {
+    @NotNull
+    public Join naturalLeftJoin(@NotNull String tableName) {
         configWithNaturalLeftJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join naturalLeftJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join naturalLeftJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithNaturalLeftJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithNaturalLeftJoin(long self, int type, long object, String tableName);
 
-    public Join naturalInnerJoin(String tableName) {
+    @NotNull
+    public Join naturalInnerJoin(@NotNull String tableName) {
         configWithNaturalInnerJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join naturalInnerJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join naturalInnerJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithNaturalInnerJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithNaturalInnerJoin(long self, int type, long object, String tableName);
 
-    public Join naturalCrossJoin(String tableName) {
+    @NotNull
+    public Join naturalCrossJoin(@NotNull String tableName) {
         configWithNaturalCrossJoin(cppObj, CPPType.String, 0, tableName);
         return this;
     }
 
-    public Join naturalCrossJoin(TableOrSubqueryConvertible tableOrSubquery) {
+    @NotNull
+    public Join naturalCrossJoin(@NotNull TableOrSubqueryConvertible tableOrSubquery) {
         configWithNaturalCrossJoin(cppObj, Identifier.getCppType(tableOrSubquery), CppObject.get(tableOrSubquery), null);
         return this;
     }
 
     private static native void configWithNaturalCrossJoin(long self, int type, long object, String tableName);
 
-    public Join on(Expression expression) {
+    @NotNull
+    public Join on(@Nullable Expression expression) {
         configOn(cppObj, CppObject.get(expression));
         return this;
     }
 
     private static native void configOn(long self, long expression);
 
-    public Join using(String column) {
+    @NotNull
+    public Join using(@Nullable String column) {
         configUsingColumn(cppObj, CPPType.String, null, new String[]{column});
         return this;
     }
 
-    public Join using(Column column) {
+    @NotNull
+    public Join using(@Nullable Column column) {
         configUsingColumn(cppObj, Identifier.getCppType(column), new long[]{CppObject.get(column)}, null);
         return this;
     }
 
-    public Join using(String... columns) {
+    @NotNull
+    public Join using(@Nullable String... columns) {
         configUsingColumn(cppObj, CPPType.String, null, columns);
         return this;
     }
 
-    public Join using(Column... columns) {
+    @NotNull
+    public Join using(@Nullable Column... columns) {
         if(columns == null || columns.length == 0) {
             return this;
         }

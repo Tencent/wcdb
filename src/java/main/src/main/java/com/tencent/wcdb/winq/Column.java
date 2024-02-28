@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class Column extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
 
     @Override
@@ -32,7 +35,7 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
         return CPPType.Column;
     }
 
-    public Column(String name) {
+    public Column(@NotNull String name) {
         cppObj = createCppObj(name, 0);
     }
 
@@ -44,19 +47,22 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
 
     protected native long copy(long self);
 
-    public Column table(String table) {
+    @NotNull
+    public Column table(@Nullable String table) {
         inTable(cppObj, table);
         return this;
     }
 
     protected native void inTable(long column, String table);
 
-    public Column of(Schema schema) {
+    @NotNull
+    public Column of(@Nullable Schema schema) {
         ofSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
-    public Column of(String schema) {
+    @NotNull
+    public Column of(@Nullable String schema) {
         ofSchema(cppObj, CPPType.String, 0, schema);
         return this;
     }
@@ -71,7 +77,8 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
 
     protected native void ofSchema(long column, int type, long schema, String schemaName);
 
-    public ResultColumn as(String alias) {
+    @NotNull
+    public ResultColumn as(@Nullable String alias) {
         return new ResultColumn(configAlias(cppObj, alias));
     }
 
@@ -88,6 +95,7 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
 
     private static native long allColumn();
 
+    @NotNull
     public static Column rowId() {
         Column ret = new Column();
         ret.cppObj = rowidColumn();
@@ -96,10 +104,12 @@ public class Column extends ExpressionOperable implements IndexedColumnConvertib
 
     private static native long rowidColumn();
 
+    @NotNull
     public OrderingTerm order(Order order) {
         return new OrderingTerm(this).order(order);
     }
 
+    @NotNull
     public ColumnDef asDef(ColumnType columnType) {
         return new ColumnDef(this, columnType);
     }

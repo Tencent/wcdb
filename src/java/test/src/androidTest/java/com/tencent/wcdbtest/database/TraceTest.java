@@ -23,6 +23,7 @@
 
 package com.tencent.wcdbtest.database;
 
+import org.jetbrains.annotations.NotNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.tencent.wcdb.base.Value;
@@ -60,7 +61,7 @@ public class TraceTest extends TableTestCase {
         final WrappedValue tested = new WrappedValue();
         database.traceSQL(new Database.SQLTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql, String info) {
+            public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info) {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
                 if(sql.equals(statement.getDescription())) {
@@ -81,7 +82,7 @@ public class TraceTest extends TableTestCase {
         Database.globalTraceSQL(null);
         Database.globalTraceSQL(new Database.SQLTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql, String info) {
+            public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info) {
                 if(!database.getPath().equals(path)) {
                     return;
                 }
@@ -110,7 +111,7 @@ public class TraceTest extends TableTestCase {
         WrappedValue testCount = new WrappedValue();
         database.tracePerformance(new Database.PerformanceTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql, Database.PerformanceInfo info) {
+            public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull Database.PerformanceInfo info) {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
                 assertNotNull(info);
@@ -172,7 +173,7 @@ public class TraceTest extends TableTestCase {
         Database.globalTracePerformance(null);
         Database.globalTracePerformance(new Database.PerformanceTracer() {
             @Override
-            public void onTrace(long tag, String path, long handleId, String sql, Database.PerformanceInfo info) {
+            public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull Database.PerformanceInfo info) {
                 if(!database.getPath().equals(path)) {
                     return;
                 }
@@ -228,7 +229,7 @@ public class TraceTest extends TableTestCase {
         final WrappedValue tested = new WrappedValue();
         database.traceException(new Database.ExceptionTracer() {
             @Override
-            public void onTrace(WCDBException exception) {
+            public void onTrace(@NotNull WCDBException exception) {
                 if(exception.level == WCDBException.Level.Error &&
                         exception.path().equals(path) &&
                         exception.tag() == database.getTag() &&
@@ -255,7 +256,7 @@ public class TraceTest extends TableTestCase {
         Database.globalTraceException(null);
         Database.globalTraceException(new Database.ExceptionTracer() {
             @Override
-            public void onTrace(WCDBException exception) {
+            public void onTrace(@NotNull WCDBException exception) {
                 if(exception.level == WCDBException.Level.Error &&
                         exception.path().equals(path) &&
                         exception.tag() == database.getTag() &&
@@ -285,7 +286,7 @@ public class TraceTest extends TableTestCase {
         final WrappedValue indexCount = new WrappedValue();
         Database.globalTraceDatabaseOperation(new Database.OperationTracer() {
             @Override
-            public void onTrace(Database database, Database.Operation operation, HashMap<String, Value> infos) {
+            public void onTrace(@NotNull Database database, Database.Operation operation, @NotNull HashMap<String, Value> infos) {
                 switch (operation) {
                     case Create:
                         path.stringValue = database.getPath();
@@ -330,7 +331,7 @@ public class TraceTest extends TableTestCase {
         WrappedValue testTid = new WrappedValue();
         Database.globalTraceBusy(new Database.BusyTracer() {
             @Override
-            public void onTrace(long tag, String path, long tid, String sql) {
+            public void onTrace(long tag, @NotNull String path, long tid, @NotNull String sql) {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
                 assertEquals(sql, "INSERT INTO testTable(id, content) VALUES(?1, ?2)");

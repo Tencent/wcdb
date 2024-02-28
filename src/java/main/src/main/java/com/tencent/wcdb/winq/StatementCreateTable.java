@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementCreateTable extends Statement {
     @Override
     protected int getType() {
@@ -37,12 +40,14 @@ public class StatementCreateTable extends Statement {
 
     private static native long createCppObj();
 
-    public StatementCreateTable createTable(String tableName) {
+    @NotNull
+    public StatementCreateTable createTable(@NotNull String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
-    public StatementCreateTable createTempTable(String tableName) {
+    @NotNull
+    public StatementCreateTable createTempTable(@NotNull String tableName) {
         configTableName(cppObj, tableName);
         configTemp(cppObj);
         return this;
@@ -52,6 +57,7 @@ public class StatementCreateTable extends Statement {
 
     private static native void configTemp(long self);
 
+    @NotNull
     public StatementCreateTable ifNotExist() {
         configIfNotExist(cppObj);
         return this;
@@ -59,34 +65,39 @@ public class StatementCreateTable extends Statement {
 
     private static native void configIfNotExist(long self);
 
-    public StatementCreateTable of(String schemaName) {
+    @NotNull
+    public StatementCreateTable of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementCreateTable of(Schema schema) {
+    @NotNull
+    public StatementCreateTable of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long schema, String schemaName);
 
-    public StatementCreateTable as(StatementSelect select) {
+    @NotNull
+    public StatementCreateTable as(@NotNull StatementSelect select) {
         configAs(cppObj, CppObject.get(select));
         return this;
     }
 
     private static native void configAs(long self, long select);
 
-    public StatementCreateTable define(ColumnDef column) {
+    @NotNull
+    public StatementCreateTable define(@NotNull ColumnDef column) {
         configColumn(cppObj, CppObject.get(column));
         return this;
     }
 
     private static native void configColumn(long self, long column);
 
-    public StatementCreateTable define(ColumnDef... columns) {
-        if(columns == null || columns.length == 0) {
+    @NotNull
+    public StatementCreateTable define(@NotNull ColumnDef... columns) {
+        if(columns.length == 0) {
             return this;
         }
         long[] cppColumns = new long[columns.length];
@@ -99,7 +110,8 @@ public class StatementCreateTable extends Statement {
 
     private static native void configColumns(long self, long[] columns);
 
-    public StatementCreateTable constraint(TableConstraint... constraints) {
+    @NotNull
+    public StatementCreateTable constraint(@Nullable TableConstraint... constraints) {
         if(constraints == null || constraints.length == 0) {
             return this;
         }
@@ -111,13 +123,15 @@ public class StatementCreateTable extends Statement {
         return this;
     }
 
-    public StatementCreateTable constraint(TableConstraint constraint) {
+    @NotNull
+    public StatementCreateTable constraint(@Nullable TableConstraint constraint) {
         configConstraints(cppObj, new long[]{CppObject.get(constraint)});
         return this;
     }
 
     private static native void configConstraints(long self, long[] constraints);
 
+    @NotNull
     public StatementCreateTable withoutRowid() {
         configWithoutRowid(cppObj);
         return this;

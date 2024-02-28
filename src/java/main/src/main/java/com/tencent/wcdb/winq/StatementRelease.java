@@ -23,6 +23,8 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementRelease extends Statement {
     @Override
     protected int getType() {
@@ -35,7 +37,8 @@ public class StatementRelease extends Statement {
 
     private static native long createCppObj();
 
-    public StatementRelease release(String savepoint) {
+    @NotNull
+    public StatementRelease release(@NotNull String savepoint) {
         configSavepoint(cppObj, savepoint);
         return this;
     }

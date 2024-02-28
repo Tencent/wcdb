@@ -23,8 +23,10 @@
 
 package com.tencent.wcdb.winq;
 
+import org.jetbrains.annotations.NotNull;
+
 public class StatementBegin extends Statement {
-    class TransactionType {
+    static class TransactionType {
         final static int Deferred = 0;
         final static int Immediate = 1;
         final static int Exclusive = 2;
@@ -43,14 +45,17 @@ public class StatementBegin extends Statement {
         return CPPType.CommitSTMT;
     }
 
+    @NotNull
     public static StatementBegin beginDeferred() {
         return new StatementBegin(TransactionType.Deferred);
     }
 
+    @NotNull
     public static StatementBegin beginImmediate() {
         return new StatementBegin(TransactionType.Immediate);
     }
 
+    @NotNull
     public static StatementBegin beginExclusive() {
         return new StatementBegin(TransactionType.Exclusive);
     }

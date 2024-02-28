@@ -39,6 +39,9 @@ import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.orm.testclass.*;
 
 import static org.junit.Assert.*;
+
+import org.jetbrains.annotations.NotNull;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -358,7 +361,7 @@ public class ORMTest extends DatabaseTestCase {
         final WrappedValue added = new WrappedValue();
         database.traceException(new Database.ExceptionTracer() {
             @Override
-            public void onTrace(WCDBException exception) {
+            public void onTrace(@NotNull WCDBException exception) {
                 if(!exception.message().equals("Auto add column")) {
                     return;
                 }

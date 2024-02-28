@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementInsert extends Statement {
     @Override
     protected int getType() {
@@ -37,11 +40,8 @@ public class StatementInsert extends Statement {
 
     private static native long createCppObj();
 
-    public StatementInsert with(CommonTableExpression expression) {
-        return with(new CommonTableExpression[]{expression});
-    }
-
-    public StatementInsert with(CommonTableExpression... expressions) {
+    @NotNull
+    public StatementInsert with(@Nullable CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -53,11 +53,8 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    public StatementInsert withRecursive(CommonTableExpression expression) {
-        return withRecursive(new CommonTableExpression[]{expression});
-    }
-
-    public StatementInsert withRecursive(CommonTableExpression... expressions) {
+    @NotNull
+    public StatementInsert withRecursive(@Nullable CommonTableExpression... expressions) {
         if(expressions == null || expressions.length == 0) {
             return this;
         }
@@ -74,74 +71,70 @@ public class StatementInsert extends Statement {
 
     private static native void configRecursive(long self);
 
-    public StatementInsert insertInto(String tableName) {
+    @NotNull
+    public StatementInsert insertInto(@NotNull String tableName) {
         configTableName(cppObj, tableName);
         return this;
     }
 
     private static native void configTableName(long self, String tableName);
 
-    public StatementInsert of(String schemaName) {
+    @NotNull
+    public StatementInsert of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementInsert of(Schema schema) {
+    @NotNull
+    public StatementInsert of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long schema, String schemaName);
 
+    @NotNull
     public StatementInsert orReplace() {
         configConflictAction(cppObj, ConflictAction.Replace.ordinal());
         return this;
     }
 
+    @NotNull
     public StatementInsert orRollback() {
         configConflictAction(cppObj, ConflictAction.Rollback.ordinal());
         return this;
     }
 
+    @NotNull
     public StatementInsert orAbort() {
         configConflictAction(cppObj, ConflictAction.Abort.ordinal());
         return this;
     }
 
+    @NotNull
     public StatementInsert orFail() {
         configConflictAction(cppObj, ConflictAction.Fail.ordinal());
         return this;
     }
 
+    @NotNull
     public StatementInsert orIgnore() {
         configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
     private static native void configConflictAction(long self, int action);
 
-    public StatementInsert as(String alias) {
+    @NotNull
+    public StatementInsert as(@Nullable String alias) {
         configAlias(cppObj, alias);
         return this;
     }
 
     private static native void configAlias(long self, String alias);
 
-    public StatementInsert column(Column column) {
-        if(column == null) {
-            return this;
-        }
-        return columns(new Column[]{column});
-    }
-
-    public StatementInsert column(String columnName) {
-        if(columnName == null || columnName.length() == 0) {
-            return this;
-        }
-        return columns(new String[]{columnName});
-    }
-
-    public StatementInsert columns(Column... columns) {
-        if(columns == null || columns.length == 0) {
+    @NotNull
+    public StatementInsert columns(@NotNull Column... columns) {
+        if(columns.length == 0) {
             return this;
         }
         long[] cppColumns = new long[columns.length];
@@ -152,8 +145,9 @@ public class StatementInsert extends Statement {
         return this;
     }
 
-    public StatementInsert columns(String... columnNames) {
-        if(columnNames == null || columnNames.length == 0) {
+    @NotNull
+    public StatementInsert columns(@NotNull String... columnNames) {
+        if(columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);
@@ -162,6 +156,7 @@ public class StatementInsert extends Statement {
 
     private static native void configColumns(long self, int type, long[] columns, String[] columnNames);
 
+    @NotNull
     public StatementInsert valuesWithBindParameters(int parametersCount) {
         configValuesWithBindParameters(cppObj, parametersCount);
         return this;
@@ -169,11 +164,8 @@ public class StatementInsert extends Statement {
 
     private static native void configValuesWithBindParameters(long self, int parametersCount);
 
-    public StatementInsert value(Object value) {
-        return values(new Object[]{value});
-    }
-
-    public StatementInsert values(Object... values) {
+    @NotNull
+    public StatementInsert values(@Nullable Object... values) {
         if(values == null || values.length == 0) {
             return this;
         }
@@ -186,13 +178,15 @@ public class StatementInsert extends Statement {
 
     private static native void configValues(long self, int[] types, long[] longValues, double[] doubleValues, String[] stringValues);
 
-    public StatementInsert values(StatementSelect select) {
+    @NotNull
+    public StatementInsert values(@NotNull StatementSelect select) {
         configValues(cppObj, CppObject.get(select));
         return this;
     }
 
     private static native void configValues(long self, long select);
 
+    @NotNull
     public StatementInsert defaultValues() {
         configDefaultValues(cppObj);
         return this;
@@ -200,7 +194,8 @@ public class StatementInsert extends Statement {
 
     private static native void configDefaultValues(long self);
 
-    public StatementInsert upsert(Upsert upsert) {
+    @NotNull
+    public StatementInsert upsert(@Nullable Upsert upsert) {
         configUpsert(cppObj, CppObject.get(upsert));
         return this;
     }

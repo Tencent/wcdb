@@ -33,6 +33,9 @@ import com.tencent.wcdb.winq.OrderingTerm;
 import com.tencent.wcdb.winq.StatementDropIndex;
 import com.tencent.wcdb.winq.StatementDropTable;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -47,7 +50,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param binding ORM binding of table.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void createTable(String tableName, TableBinding<T> binding) throws WCDBException {
+    public <T> void createTable(@NotNull String tableName, @NotNull TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle(true);
         try {
             if(!binding.baseBinding().createTable(tableName, handle)) {
@@ -67,7 +70,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param binding ORM binding of table.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void createVirtualTable(String tableName, TableBinding<T> binding) throws WCDBException {
+    public <T> void createVirtualTable(@NotNull String tableName, @NotNull TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle(true);
         try {
             if(!binding.baseBinding().createVirtualTable(tableName, handle)) {
@@ -86,7 +89,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @return true if table exists.
      * @throws WCDBException if any error occurs.
      */
-    public boolean tableExist(String tableName) throws WCDBException {
+    public boolean tableExist(@NotNull String tableName) throws WCDBException {
         Handle handle = getHandle(false);
         int ret = Handle.tableExist(handle.cppObj, tableName);
         WCDBException exception = null;
@@ -108,7 +111,8 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param binding The ORM binding of table.
      * @return Table object.
      */
-    public <T> Table<T> getTable(String tableName, TableBinding<T> binding) {
+    @NotNull
+    public <T> Table<T> getTable(@NotNull String tableName, @NotNull TableBinding<T> binding) {
         return new Table<T>(tableName, binding, getDatabase());
     }
 
@@ -117,7 +121,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The name of the table to be dropped.
      * @throws WCDBException if any error occurs.
      */
-    public void dropTable(String tableName) throws WCDBException {
+    public void dropTable(@NotNull String tableName) throws WCDBException {
         execute(new StatementDropTable().dropTable(tableName).ifExist());
     }
 
@@ -126,7 +130,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param indexName The name of the index to be dropped.
      * @throws WCDBException if any error occurs.
      */
-    public void dropIndex(String indexName) throws WCDBException {
+    public void dropIndex(@NotNull String indexName) throws WCDBException {
         execute(new StatementDropIndex().dropIndex(indexName).ifExist());
     }
 
@@ -134,36 +138,36 @@ public abstract class HandleORMOperation extends HandleOperation{
      * Generate a {@link Insert} to do an insertion or replacement.
      * @return An {@link Insert} object.
      */
+    @NotNull
     public <T> Insert<T> prepareInsert() {
-        Insert<T> insert = new Insert<T>(getHandle(true), false, autoInvalidateHandle());
-        return insert;
+        return new Insert<T>(getHandle(true), false, autoInvalidateHandle());
     }
 
     /**
      * Generate a {@link Update} to do an update.
      * @return An {@link Update} object.
      */
+    @NotNull
     public <T> Update<T> prepareUpdate() {
-        Update<T> update = new Update<T>(getHandle(true), false, autoInvalidateHandle());
-        return update;
+        return new Update<T>(getHandle(true), false, autoInvalidateHandle());
     }
 
     /**
      * Generate a {@link Select} to do an object selection.
      * @return An {@link Select} object.
      */
+    @NotNull
     public <T> Select<T> prepareSelect() {
-        Select<T> select = new Select<T>(getHandle(false), false, autoInvalidateHandle());
-        return select;
+        return new Select<T>(getHandle(false), false, autoInvalidateHandle());
     }
 
     /**
      * Generate a {@link Delete} to do a deletion.
      * @return An {@link Delete} object.
      */
+    @NotNull
     public Delete prepareDelete() {
-        Delete delete = new Delete(getHandle(true), false, autoInvalidateHandle());
-        return delete;
+        return new Delete(getHandle(true), false, autoInvalidateHandle());
     }
 
     /**
@@ -173,7 +177,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void insertObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
@@ -185,7 +189,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void insertOrReplaceObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertOrReplaceObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
@@ -197,7 +201,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void insertOrIgnoreObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertOrIgnoreObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareInsert().orIgnore().intoTable(tableName).value(object).onFields(fields).execute();
     }
 
@@ -209,7 +213,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void insertObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertObjects(@NotNull Collection<T> objects, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareInsert().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
@@ -222,7 +226,7 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void insertOrReplaceObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertOrReplaceObjects(@NotNull Collection<T> objects, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareInsert().orReplace().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
@@ -235,177 +239,205 @@ public abstract class HandleORMOperation extends HandleOperation{
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
-    public <T> void insertOrIgnoreObjects(Collection<T> objects, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void insertOrIgnoreObjects(@NotNull Collection<T> objects, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareInsert().orIgnore().intoTable(tableName).values(objects).onFields(fields).execute();
     }
 
-    public void deleteObjects(String tableName) throws WCDBException {
+    public void deleteObjects(@NotNull String tableName) throws WCDBException {
         prepareDelete().fromTable(tableName).execute();
     }
 
-    public void deleteObjects(String tableName, Expression condition) throws WCDBException {
+    public void deleteObjects(@NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         prepareDelete().fromTable(tableName).where(condition).execute();
     }
 
-    public void deleteObjects(String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    public void deleteObjects(@NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         prepareDelete().fromTable(tableName).where(condition).orderBy(order).limit(limit).execute();
     }
 
-    public void deleteObjects(String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public void deleteObjects(@NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         prepareDelete().fromTable(tableName).where(condition).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public void deleteObjects(String tableName, OrderingTerm order, long limit) throws WCDBException {
+    public void deleteObjects(@NotNull String tableName, @Nullable OrderingTerm order, long limit) throws WCDBException {
         prepareDelete().fromTable(tableName).orderBy(order).limit(limit).execute();
     }
 
-    public void deleteObjects(String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public void deleteObjects(@NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         prepareDelete().fromTable(tableName).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field, String tableName) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T> field, @NotNull String tableName) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field, String tableName, Expression condition) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T> field, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).where(condition).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T> field, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).where(condition).orderBy(order).limit(limit).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T> field, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).where(condition).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field, String tableName, OrderingTerm order, long limit) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T> field, @NotNull String tableName, @Nullable OrderingTerm order, long limit) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).orderBy(order).limit(limit).execute();
     }
 
-    public <T> void updateObject(T object, Field<T> field, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T> field, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(field).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public <T> void updateObject(T object, Field<T>[] fields, String tableName) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).execute();
     }
 
-    public <T> void updateObject(T object, Field<T>[] fields, String tableName, Expression condition) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).where(condition).execute();
     }
 
-    public <T> void updateObject(T object, Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).where(condition).orderBy(order).limit(limit).execute();
     }
 
-    public <T> void updateObject(T object, Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).where(condition).orderBy(order).limit(limit).offset(offset).execute();
     }
 
-    public <T> void updateObject(T object, Field<T>[] fields, String tableName, OrderingTerm order, long limit) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).orderBy(order).limit(limit).execute();
     }
 
-    public <T> void updateObject(T object, Field<T>[] fields, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+    public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
     }
-
-    public <T> T getFirstObject(Field<T>[] fields, String tableName) throws WCDBException {
+    
+    @Nullable
+    public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).firstObject();
     }
-    public <T, R extends T> R getFirstObject(Field<T>[] fields, String tableName, Class<R> cls) throws WCDBException {
+    @Nullable
+    public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).firstObject(cls);
     }
-
-    public <T> T getFirstObject(Field<T>[] fields, String tableName, Expression condition) throws WCDBException {
+    
+    @Nullable
+    public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).firstObject();
     }
-    public <T, R extends T> R getFirstObject(Field<T>[] fields, String tableName, Expression condition, Class<R> cls) throws WCDBException {
+    @Nullable
+    public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).firstObject(cls);
     }
-
-    public <T> T getFirstObject(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+    
+    @Nullable
+    public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).firstObject();
     }
-    public <T, R extends T> R getFirstObject(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, Class<R> cls) throws WCDBException {
+    @Nullable
+    public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).firstObject(cls);
     }
-
-    public <T> T getFirstObject(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long offset) throws WCDBException {
+        
+    @Nullable
+    public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(1).offset(offset).firstObject();
     }
-    public <T, R extends T> R getFirstObject(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long offset, Class<R> cls) throws WCDBException {
+    @Nullable
+    public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(1).offset(offset).firstObject(cls);
     }
-
-    public <T> T getFirstObject(Field<T>[] fields, String tableName, OrderingTerm order) throws WCDBException {
+    
+    @Nullable
+    public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).firstObject();
     }
-    public <T, R extends T> R getFirstObject(Field<T>[] fields, String tableName, OrderingTerm order, Class<R> cls) throws WCDBException {
+    @Nullable
+    public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).firstObject(cls);
     }
-
-    public <T> T getFirstObject(Field<T>[] fields, String tableName, OrderingTerm order, long offset) throws WCDBException {
+    
+    @Nullable
+    public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(1).offset(offset).firstObject();
     }
-    public <T, R extends T> R getFirstObject(Field<T>[] fields, String tableName, OrderingTerm order, long offset, Class<R> cls) throws WCDBException {
+    @Nullable
+    public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(1).offset(offset).firstObject(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, Expression condition, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit, long offset) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, Expression condition, OrderingTerm order, long limit, long offset, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).allObjects(cls);
     }
 
-    public <T> List<T> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit, long offset) throws WCDBException {
+    @NotNull
+    public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).offset(offset).allObjects();
     }
-    public <T, R extends T> List<R> getAllObjects(Field<T>[] fields, String tableName, OrderingTerm order, long limit, long offset, Class<R> cls) throws WCDBException {
+    @NotNull
+    public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).offset(offset).allObjects(cls);
     }
 }

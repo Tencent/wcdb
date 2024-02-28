@@ -25,6 +25,8 @@ package com.tencent.wcdb.base;
 
 import com.tencent.wcdb.winq.ColumnType;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -58,20 +60,20 @@ public class Value {
         this.value = value;
     }
 
-    public Value(String value) {
+    public Value(@Nullable String value) {
         this.value = value;
     }
 
-    public Value(byte[] value) {
+    public Value(@Nullable byte[] value) {
         this.value = value;
     }
 
-    public Value(Object value) {
+    public Value(@Nullable Object value) {
         if (value == null) {
             this.value = null;
             return;
         }
-        Class cls = value.getClass();
+        Class<?> cls = value.getClass();
         if(cls == Long.class || cls == Double.class || cls == String.class || cls == byte[].class) {
             this.value = value;
         } else if (cls == Integer.class || cls == Short.class || cls == Byte.class) {
@@ -83,7 +85,7 @@ public class Value {
         }
     }
 
-    public Value(Value other) {
+    public Value(@Nullable Value other) {
         this(other == null ? null : other.value);
     }
 
@@ -135,12 +137,14 @@ public class Value {
         return 0.0;
     }
 
+    @Nullable
     public String getText() {
         if (value instanceof String) return (String) value;
         if (value instanceof byte[]) return new String((byte[]) value);
         return (value == null) ? null : value.toString();
     }
 
+    @Nullable
     public byte[] getBLOB() {
         if (value == null) return null;
         if (value instanceof byte[]) return (byte[]) value;

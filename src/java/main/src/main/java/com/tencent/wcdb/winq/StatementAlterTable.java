@@ -25,6 +25,9 @@ package com.tencent.wcdb.winq;
 
 import com.tencent.wcdb.base.CppObject;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StatementAlterTable extends Statement {
     @Override
     protected int getType() {
@@ -37,57 +40,66 @@ public class StatementAlterTable extends Statement {
 
     private static native long createCppObj();
 
-    public StatementAlterTable alterTable(String tableName) {
+    @NotNull
+    public StatementAlterTable alterTable(@NotNull String tableName) {
         configTable(cppObj, tableName);
         return this;
     }
 
     private static native void configTable(long self, String tableName);
 
-    public StatementAlterTable of(String schemaName) {
+    @NotNull
+    public StatementAlterTable of(@Nullable String schemaName) {
         configSchema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
-    public StatementAlterTable of(Schema schema) {
+    @NotNull
+    public StatementAlterTable of(@Nullable Schema schema) {
         configSchema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
 
     private static native void configSchema(long self, int type, long object, String schemaName);
 
-    public StatementAlterTable renameTo(String tableName) {
+    @NotNull
+    public StatementAlterTable renameTo(@NotNull String tableName) {
         configRenameToTable(cppObj, tableName);
         return this;
     }
 
     private static native void configRenameToTable(long self, String tableName);
 
-    public StatementAlterTable renameColumn(String columnName) {
+    @NotNull
+    public StatementAlterTable renameColumn(@NotNull String columnName) {
         configRenameColumn(cppObj, CPPType.String, 0, columnName);
         return this;
     }
 
-    public StatementAlterTable renameColumn(Column column) {
+    @NotNull
+    public StatementAlterTable renameColumn(@NotNull Column column) {
         configRenameColumn(cppObj, Identifier.getCppType(column), CppObject.get(column), null);
         return this;
     }
 
     private static native void configRenameColumn(long self, int type, long object, String schemaName);
 
-    public StatementAlterTable toColumn(String columnName) {
+    @NotNull
+    public StatementAlterTable toColumn(@NotNull String columnName) {
         configRenameToColumn(cppObj, CPPType.String, 0, columnName);
         return this;
     }
 
-    public StatementAlterTable toColumn(Column column) {
+    @NotNull
+    public StatementAlterTable toColumn(@NotNull Column column) {
         configRenameToColumn(cppObj, Identifier.getCppType(column), CppObject.get(column), null);
         return this;
     }
 
     private static native void configRenameToColumn(long self, int type, long object, String schemaName);
 
-    public StatementAlterTable addColumn(ColumnDef columnDef) {
+    @NotNull
+    public StatementAlterTable addColumn(@NotNull ColumnDef columnDef) {
         configAddColumn(cppObj, CppObject.get(columnDef));
         return this;
     }

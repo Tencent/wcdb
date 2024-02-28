@@ -23,6 +23,8 @@
 
 package com.tencent.wechat_test.base;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 
@@ -81,7 +83,7 @@ public class DatabaseTestCase extends BaseTestCase {
             final Thread thread = Thread.currentThread();
             database.traceSQL(new Database.SQLTracer() {
                 @Override
-                public void onTrace(long tag, String path, long handleId, String sql, String info) {
+                public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info) {
                     if(Thread.currentThread().getId() != thread.getId()) {
                         return;
                     }

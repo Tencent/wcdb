@@ -36,6 +36,7 @@ import com.tencent.wcdbtest.base.TableTestCase;
 import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,7 +55,7 @@ public class CompressionTest extends TableTestCase {
 
         database.setCompression(new Database.CompressionFilter() {
             @Override
-            public void filterCompress(Database.CompressionInfo info) {
+            public void filterCompress(@NotNull Database.CompressionInfo info) {
                 info.addZSTDNormalCompress(DBTestObject.content);
             }
         });
@@ -63,7 +64,7 @@ public class CompressionTest extends TableTestCase {
         WrappedValue databaseCompressed = new WrappedValue();
         database.setNotificationWhenCompressed(new Database.CompressionNotification() {
             @Override
-            public void onCompressed(Database notifiedDatabase, String table) {
+            public void onCompressed(@NotNull Database notifiedDatabase, String table) {
                 Assert.assertEquals(database.getTag(), notifiedDatabase.getTag());
                 Assert.assertEquals(database.getPath(), notifiedDatabase.getPath());
                 if(table != null) {
@@ -112,7 +113,7 @@ public class CompressionTest extends TableTestCase {
 
         database.setCompression(new Database.CompressionFilter() {
             @Override
-            public void filterCompress(Database.CompressionInfo info) {
+            public void filterCompress(@NotNull Database.CompressionInfo info) {
                 info.addZSTDDictCompress(DBTestObject.content, (byte)1);
             }
         });
@@ -168,7 +169,7 @@ public class CompressionTest extends TableTestCase {
 
         database.setCompression(new Database.CompressionFilter() {
             @Override
-            public void filterCompress(Database.CompressionInfo info) {
+            public void filterCompress(@NotNull Database.CompressionInfo info) {
                 info.addZSTDMultiDictCompress(DBTestObject.content, DBTestObject.id, new HashMap<Long, Byte>(){{
                     put(1L, (byte) 2);
                     put(2L, (byte) 3);

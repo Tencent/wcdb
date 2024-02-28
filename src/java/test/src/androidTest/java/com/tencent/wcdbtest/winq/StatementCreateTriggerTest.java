@@ -94,12 +94,12 @@ public class StatementCreateTriggerTest {
                 "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
-                        .before().update().ofColumn(column1).onTable(table).execute(update),
+                        .before().update().ofColumns(column1).onTable(table).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1 ON testTable " +
                 "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
-                        .before().update().ofColumn("column1").onTable(table).execute(update),
+                        .before().update().ofColumns("column1").onTable(table).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1 ON testTable " +
                         "BEGIN UPDATE testTable SET column1 = 2; END");
 

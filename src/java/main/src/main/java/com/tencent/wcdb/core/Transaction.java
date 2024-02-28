@@ -25,6 +25,8 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.WCDBException;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface Transaction {
     /**
      * Triggered when a new transaction is begun successfully.
@@ -32,5 +34,5 @@ public interface Transaction {
      * @return true to commit transaction.
      * @throws WCDBException if any error occurs.
      */
-    boolean insideTransaction(Handle handle) throws WCDBException;
+    boolean insideTransaction(@NotNull Handle handle) throws WCDBException;
 }
