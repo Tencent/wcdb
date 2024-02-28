@@ -18,6 +18,8 @@ import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.winq.StatementInsert;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
