@@ -31,5 +31,6 @@ WCDB_EXTERN_C_BEGIN
 CPPStatementVacuum WCDBStatementVacuumCreate(void);
 void WCDBStatementVacuumConfigAll(CPPStatementVacuum vacuum);
 void WCDBStatementVacuumConfigSchema(CPPStatementVacuum vacuum, CPPSchema schema);
+void WCDBStatementVacuumConfigSchema2(CPPStatementVacuum vacuum, CPPCommonValue schema);
 
 WCDB_EXTERN_C_END

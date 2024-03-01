@@ -22,9 +22,8 @@
  * limitations under the License.
  */
 
-#import "AllTypesObject+WCTTableCoding.h"
-#import "AllTypesObject.h"
 #import "BackupTestCase.h"
+#import "Random+RepairTestObject.h"
 #import "SizeBasedFactory.h"
 
 @interface RetrieveTests : BackupTestCase
@@ -45,20 +44,24 @@
 
 - (void)doTestObjectsRetrieved
 {
-    [self doTestObjects:self.objects
-                 andSQL:@"SELECT identifier, content FROM testTable ORDER BY rowid ASC"
-            bySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
-                return [self.table getObjects];
-            }];
+    XCTAssertTrue([[self.table getObjects] isEqualToArray:self.objects]);
 }
 
 - (void)doTestObjectsNotRetrieved
 {
-    [self doTestObjects:@[]
-                 andSQL:@"SELECT type, name, tbl_name, rootpage, sql FROM sqlite_master WHERE name == 'testTable' ORDER BY rowid ASC"
-            bySelecting:^NSArray<NSObject<WCTTableCoding>*>* {
-                return [self.database getObjectsOfClass:WCTMaster.class fromTable:WCTMaster.tableName where:WCTMaster.name == self.tableName];
-            }];
+    XCTAssertFalse([self.database tableExists:self.tableName]);
+}
+
+- (void)doBackupWithIncrementalMaterial
+{
+    XCTAssertTrue([self.database backup]);
+    NSArray* objects = [[Random shared] repairObjectsWithClass:self.testClass andCount:100 startingFromIdentifier:self.objects.lastObject.identifier + 1];
+    [self.objects addObjectsFromArray:objects];
+    XCTAssertTrue([self.table insertObjects:objects]);
+
+    XCTAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+    XCTAssertTrue([self.database backup]);
 }
 
 - (void)doTestRetrieve
@@ -72,6 +75,7 @@
             sanity = NO;
         }
         lastPercentage = percentage;
+        return true;
     }];
     TestCaseAssertTrue(sanity);
     TestCaseAssertEqual(score, 1.0);
@@ -89,10 +93,30 @@
             sanity = NO;
         }
         lastPercentage = percentage;
+        return true;
     }];
     TestCaseAssertTrue(sanity);
     TestCaseAssertNotEqual(score, 1.0);
     TestCaseAssertEqual(lastPercentage, 1.0);
+}
+
+- (void)doTestRetrieveInterrupt
+{
+    __block double lastPercentage = 0;
+    __block BOOL sanity = YES;
+    float interruptPoint = Random.shared.float_0_1;
+    double score = [self.database retrieve:^(double percentage, double increment) {
+        if (percentage - lastPercentage != increment
+            || increment <= 0) {
+            TestCaseFailure();
+            sanity = NO;
+        }
+        lastPercentage = percentage;
+        return percentage < interruptPoint;
+    }];
+    TestCaseAssertTrue(sanity);
+    TestCaseAssertEqual(score, -1);
+    TestCaseAssertTrue(lastPercentage >= interruptPoint && lastPercentage < 1 && lastPercentage < interruptPoint + [self.testClass hasRowid] ? 0.1 : 0.5);
 }
 
 #pragma mark - Non-Corrupted
@@ -100,10 +124,20 @@
 {
     [self
     executeTest:^{
-        TestCaseAssertTrue([self.database backup]);
+        [self doBackupWithIncrementalMaterial];
         TestCaseAssertTrue([self.database deposit]);
 
         [self doTestRetrieve];
+        [self doTestObjectsRetrieved];
+    }];
+}
+
+- (void)test_interrupt_retrieve_with_backup_and_deposit
+{
+    [self
+    executeTest:^{
+        [self doBackupWithIncrementalMaterial];
+        [self doTestRetrieveInterrupt];
         [self doTestObjectsRetrieved];
     }];
 }
@@ -150,7 +184,7 @@
     }];
     [self
     executeTest:^{
-        TestCaseAssertTrue([self.database backup]);
+        [self doBackupWithIncrementalMaterial];
 
         [self doTestRetrieve];
         [self doTestObjectsRetrieved];
@@ -197,7 +231,7 @@
 {
     [self
     executeTest:^{
-        TestCaseAssertTrue([self.database backup]);
+        [self doBackupWithIncrementalMaterial];
 
         TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
@@ -213,7 +247,7 @@
 {
     [self
     executeTest:^{
-        TestCaseAssertTrue([self.database backup]);
+        [self doBackupWithIncrementalMaterial];
 
         TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
@@ -237,96 +271,54 @@
     }];
 }
 
-- (void)test_retrieve_all_types
-{
-    Class oldClass = self.tableClass;
-    NSString* oldTableName = self.tableName;
-    [self
-    executeTest:^{
-        self.tableClass = AllTypesObject.class;
-        self.tableName = Random.shared.tableName;
-        TestCaseAssertTrue([self createTable]);
-
-        AllTypesObject* maxObject = [AllTypesObject maxObject];
-        TestCaseAssertTrue([self.table insertObject:maxObject]);
-
-        AllTypesObject* minObject = [AllTypesObject minObject];
-        TestCaseAssertTrue([self.table insertObject:minObject]);
-
-        AllTypesObject* emptyObject = [AllTypesObject emptyObject];
-        TestCaseAssertTrue([self.table insertObject:emptyObject]);
-
-        AllTypesObject* nilObject = [AllTypesObject nilObject];
-        TestCaseAssertTrue([self.table insertObject:nilObject]);
-
-        TestCaseAssertTrue([self.database retrieve:nil] == 1.0f);
-
-        AllTypesObject* selectedMaxObject = [self.table getObjectWhere:AllTypesObject.type == maxObject.type];
-        TestCaseAssertTrue([selectedMaxObject isEqual:maxObject]);
-
-        AllTypesObject* selectedMinObject = [self.table getObjectWhere:AllTypesObject.type == minObject.type];
-        TestCaseAssertTrue([selectedMinObject isEqual:minObject]);
-
-        AllTypesObject* selectedEmptyObject = [self.table getObjectWhere:AllTypesObject.type == emptyObject.type];
-        TestCaseAssertTrue([selectedEmptyObject isEqual:emptyObject]);
-
-        AllTypesObject* selectedNilObject = [self.table getObjectWhere:AllTypesObject.type == nilObject.type];
-        TestCaseAssertTrue([selectedNilObject isEqual:nilObject]);
-
-        self.tableClass = oldClass;
-        self.tableName = oldTableName;
-    }];
-}
-
 #ifndef WCDB_QUICK_TESTS
 - (void)test_backup_huge_database
 {
-    [self
-    executeTest:^{
-        SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
-        factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
-        factory.tolerance = 0.02;
+    self.skipDebugLog = YES;
+    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
+    factory.tolerance = 0.02;
+    [factory.database enableAutoBackup:YES];
 
-        [factory produce:self.path];
+    [factory produce:self.path];
 
-        TestCaseAssertTrue([self.database backup]);
+    TestCaseAssertTrue([self.database backup]);
 
-        TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
+    TestCaseAssertTrue([self.database corruptHeaderWithinCloseAfterTruncatedCheckpoint]);
 
-        __block double percentage = 0;
-        TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
-                                WCDB_UNUSED(increment);
-                                double newPercentage = progress * 100.0;
-                                if (newPercentage - percentage >= 1.0) {
-                                    TestCaseLog(@"Retrieving %.2f%%", newPercentage);
-                                    percentage = newPercentage;
-                                }
-                            }],
-                            1.0);
-    }];
+    __block double percentage = 0;
+    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
+                            WCDB_UNUSED(increment);
+                            double newPercentage = progress * 100.0;
+                            if (newPercentage - percentage >= 1.0) {
+                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
+                                percentage = newPercentage;
+                            }
+                        }],
+                        1.0);
 }
 
 - (void)test_retrieve_huge_database
 {
-    [self
-    executeTest:^{
-        SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
-        factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
-        factory.tolerance = 0.02;
+    self.skipDebugLog = YES;
+    SizeBasedFactory* factory = [[SizeBasedFactory alloc] initWithDirectory:self.class.cacheRoot];
+    factory.quality = 6LL * 1024 * 1024 * 1024; // 6GB > 4GB
+    [factory.database enableAutoBackup:YES];
+    factory.tolerance = 0.02;
 
-        [factory produce:self.path];
+    [factory produce:self.path];
 
-        __block double percentage = 0;
-        TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
-                                WCDB_UNUSED(increment);
-                                double newPercentage = progress * 100.0;
-                                if (newPercentage - percentage >= 1.0) {
-                                    TestCaseLog(@"Retrieving %.2f%%", newPercentage);
-                                    percentage = newPercentage;
-                                }
-                            }],
-                            1.0);
-    }];
+    __block double percentage = 0;
+    TestCaseAssertEqual([self.database retrieve:^(double progress, double increment) {
+                            WCDB_UNUSED(increment);
+                            double newPercentage = progress * 100.0;
+                            if (newPercentage - percentage >= 1.0) {
+                                TestCaseLog(@"Retrieving %.2f%%", newPercentage);
+                                percentage = newPercentage;
+                            }
+                            return true;
+                        }],
+                        1.0);
 }
 #endif
 

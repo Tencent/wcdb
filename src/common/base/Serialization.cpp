@@ -246,7 +246,8 @@ Data Serialization::finalize()
 Deserialization::Deserialization() = default;
 Deserialization::~Deserialization() = default;
 
-Deserialization::Deserialization(const UnsafeData &data) : m_data(data)
+Deserialization::Deserialization(const UnsafeData &data)
+: m_data(data), m_dataVersion(0)
 {
     static_assert(slot_2_0 == ((0x7f << 14) | (0x7f)), "");
     static_assert(slot_4_2_0 == ((0xfU << 28) | (0x7f << 14) | (0x7f)), "");
@@ -255,6 +256,16 @@ Deserialization::Deserialization(const UnsafeData &data) : m_data(data)
 const UnsafeData &Deserialization::data() const
 {
     return m_data;
+}
+
+uint32_t Deserialization::version() const
+{
+    return m_dataVersion;
+}
+
+void Deserialization::setDataVersion(uint32_t version)
+{
+    m_dataVersion = version;
 }
 
 void Deserialization::reset(const UnsafeData &data)
@@ -566,7 +577,7 @@ int64_t Deserialization::get8BytesInt(offset_t offset) const
 int64_t Deserialization::get6BytesInt(offset_t offset) const
 {
     WCTAssert(isEnough((size_t) offset + 6));
-    return get4BytesInt(offset + 2) + (((int64_t) 1) << 32) * get2BytesInt(offset);
+    return get4BytesUInt(offset + 2) + (((int64_t) 1) << 32) * get2BytesInt(offset);
 }
 
 int32_t Deserialization::get4BytesInt(offset_t offset) const

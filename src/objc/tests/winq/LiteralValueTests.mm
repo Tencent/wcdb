@@ -178,6 +178,15 @@
     TestCaseAssertSQLEqual(testingSQL, @"'test'");
 }
 
+- (void)test_date
+{
+    NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:100000];
+    auto testingSQL = WCDB::LiteralValue(date);
+    auto testingTypes = { WCDB::SQL::Type::LiteralValue };
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"100000");
+}
+
 - (void)test_null
 {
     auto testingSQL = WCDB::LiteralValue(nullptr);

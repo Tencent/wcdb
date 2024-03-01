@@ -47,7 +47,7 @@ public:
     bool isErrorCritial() const;
 
 protected:
-    static int errorSeverity(const Error &error);
+    int errorSeverity(const Error &error);
 
     int tryUpgradeError(const Error &newError);
     int tryUpgradeError(Error &&newError);

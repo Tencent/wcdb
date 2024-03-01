@@ -30,6 +30,8 @@ WCDB_EXTERN_C_BEGIN
 
 CPPStatementDropView WCDBStatementDropViewCreate(void);
 void WCDBStatementDropViewConfigSchema(CPPStatementDropView dropViewStatement, CPPSchema schema);
+void WCDBStatementDropViewConfigSchema2(CPPStatementDropView dropViewStatement,
+                                        CPPCommonValue schema);
 void WCDBStatementDropViewConfigView(CPPStatementDropView dropViewStatement,
                                      const char* _Nullable name);
 void WCDBStatementDropViewConfigIfExists(CPPStatementDropView dropViewStatement);

@@ -41,9 +41,10 @@
 - (void)test_default_constructible
 {
     WCDB::BindParameter constructible;
-    TestCaseAssertFalse(constructible.syntax().isValid());
-    TestCaseAssertIterateEqual(constructible, std::list<WCDB::Syntax::Identifier::Type>());
-    TestCaseAssertTrue(constructible.getDescription().empty());
+    TestCaseAssertTrue(constructible.syntax().isValid());
+    auto testingTypes = { WCDB::SQL::Type::BindParameter };
+    TestCaseAssertIterateEqual(constructible, testingTypes);
+    TestCaseAssertSQLEqual(constructible, @"?");
 }
 
 - (void)test_get_type

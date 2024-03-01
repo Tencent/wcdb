@@ -256,6 +256,7 @@ class Optional : public _OptionalMoveAssignBase<T> {
                   "instantiation of optional with a non-object type is undefined behavior");
 
 public:
+    typedef T ValueType;
 #pragma mark - Interface
 
     inline bool succeed() const
@@ -370,6 +371,66 @@ public:
         }
         return *this;
     }
+
+    bool operator==(const NullOpt_T&) const
+    {
+        return !this->m_hasValue;
+    }
+
+    bool operator!=(const NullOpt_T&) const
+    {
+        return this->m_hasValue;
+    }
+
+    template<typename U, typename Enable = typename std::enable_if<Constructable<U>::value>::type>
+    bool operator==(const Optional<U>& other) const
+    {
+        if (this->m_hasValue != other.m_hasValue) {
+            return false;
+        } else if (!this->m_hasValue) {
+            return true;
+        }
+        return this->m_value == other.m_value;
+    }
+
+    template<typename U, typename Enable = typename std::enable_if<Constructable<U>::value>::type>
+    bool operator!=(const Optional<U>& other) const
+    {
+        if (this->m_hasValue != other.m_hasValue) {
+            return true;
+        } else if (this->m_hasValue) {
+            return false;
+        }
+        return this->m_value != other.m_value;
+    }
+
+    inline constexpr const ValueType& operator*() const& noexcept
+    {
+        return this->m_value;
+    }
+
+    inline constexpr ValueType& operator*() & noexcept
+    {
+        return this->m_value;
+    }
+
+    inline constexpr ValueType&& operator*() && noexcept
+    {
+        return std::move(this->m_value);
+    }
+
+    inline constexpr const ValueType&& operator*() const&& noexcept
+    {
+        return std::move(this->m_value);
+    }
+};
+
+template<class T>
+struct IsWCDBOptional : std::false_type {
+};
+
+template<class T>
+struct IsWCDBOptional<Optional<T>> : std::true_type {
 };
 
 } // namespace WCDB

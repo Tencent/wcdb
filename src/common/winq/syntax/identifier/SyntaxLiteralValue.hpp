@@ -34,7 +34,7 @@ namespace Syntax {
 class WCDB_API LiteralValue final : public Identifier {
 #pragma mark - Lang
 public:
-    ~LiteralValue() override final;
+    ~LiteralValue() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(
     StringView, Null, Float, Integer, UnsignedInteger, Bool, CurrentTime, CurrentDate, CurrentTimestamp);

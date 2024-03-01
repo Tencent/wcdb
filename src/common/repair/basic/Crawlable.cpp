@@ -88,7 +88,7 @@ bool Crawlable::crawl(int rootpageno)
 
 void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, int height)
 {
-    if (m_suspend) {
+    if (m_suspend || !canCrawlPage(rootpageno)) {
         return;
     }
     Page rootpage(rootpageno, m_associatedPager);
@@ -96,24 +96,53 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
         markAsError();
         return;
     }
+    if (height == 1) {
+        m_isCrawlingIndexTable = rootpage.isIndexPage();
+    } else if (m_isCrawlingIndexTable != rootpage.isIndexPage()) {
+        markAsCorrupted(rootpageno, "Unmatched page type.");
+        return;
+    }
     if (!willCrawlPage(rootpage, height)) {
         return;
     }
+
+    if (crawledInteriorPages.find(rootpageno) != crawledInteriorPages.end()) {
+        //avoid dead loop
+        markAsCorrupted(rootpageno, "Page is already crawled.");
+        return;
+    }
+    crawledInteriorPages.emplace(rootpageno);
     switch (rootpage.getType()) {
     case Page::Type::InteriorTable:
-        if (crawledInteriorPages.find(rootpageno) != crawledInteriorPages.end()) {
-            //avoid dead loop
-            markAsCorrupted(rootpageno, "Page is already crawled.");
-            return;
-        }
-        crawledInteriorPages.emplace(rootpageno);
         for (int i = 0; i < rootpage.getNumberOfSubpages(); ++i) {
+            if (m_suspend) {
+                return;
+            }
             int pageno = rootpage.getSubpageno(i);
             safeCrawl(pageno, crawledInteriorPages, height + 1);
         }
         break;
-    case Page::Type::LeafTable:
+    case Page::Type::InteriorIndex:
         for (int i = 0; i < rootpage.getNumberOfCells(); ++i) {
+            if (m_suspend) {
+                return;
+            }
+            Cell cell = rootpage.getCell(i);
+            if (cell.initialize()) {
+                safeCrawl(cell.getLeftChild(), crawledInteriorPages, height + 1);
+                onCellCrawled(cell);
+            } else {
+                markAsError();
+            }
+        }
+        safeCrawl(rootpage.getRightMostPage(), crawledInteriorPages, height + 1);
+        break;
+    case Page::Type::LeafTable:
+    case Page::Type::LeafIndex:
+        for (int i = 0; i < rootpage.getNumberOfCells(); ++i) {
+            if (m_suspend) {
+                return;
+            }
             Cell cell = rootpage.getCell(i);
             if (cell.initialize()) {
                 onCellCrawled(cell);
@@ -132,6 +161,12 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
 void Crawlable::onCellCrawled(const Cell &cell)
 {
     WCDB_UNUSED(cell)
+}
+
+bool Crawlable::canCrawlPage(uint32_t pageno)
+{
+    WCDB_UNUSED(pageno);
+    return true;
 }
 
 bool Crawlable::willCrawlPage(const Page &page, int height)

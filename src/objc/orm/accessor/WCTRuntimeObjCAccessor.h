@@ -35,7 +35,7 @@ protected:
 public:
     WCTRuntimeObjCAccessor(Class instanceClass, const WCDB::UnsafeStringView &propertyName, Class propCls = nil) __attribute__((always_inline));
 
-    ~WCTRuntimeObjCAccessor() override final;
+    ~WCTRuntimeObjCAccessor() override;
 
     void setObject(InstanceType instance, OCType value) override final;
     OCType getObject(InstanceType instance) override final;

@@ -30,3 +30,6 @@
 #include "MemberPointer.hpp"
 #include "ResultField.hpp"
 #include "RunTimeAccessor.hpp"
+#include "STDOptionalAccessor.hpp"
+#include "SharedPtrAccessor.hpp"
+#include "WCDBOptionalAccessor.hpp"

@@ -151,7 +151,7 @@
 // For debugging only
 + (void)enableSQLTrace
 {
-    WCDB::Database::globalTraceSQL([](long, const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, const void *) {
+    WCDB::Database::globalTraceSQL([](long, const WCDB::UnsafeStringView &, const void *, const WCDB::UnsafeStringView &sql, const WCDB::UnsafeStringView &) {
         NSThread *currentThread = [NSThread currentThread];
         NSString *threadName = currentThread.name;
         if (threadName.length == 0) {
@@ -168,14 +168,14 @@
 
 + (void)enablePerformanceTrace
 {
-    WCDB::Database::globalTracePerformance([=](long, const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, double cost, const void *) {
+    WCDB::Database::globalTracePerformance([=](long, const WCDB::UnsafeStringView &, uint64_t, const WCDB::UnsafeStringView &sql, const WCDB::Database::PerformanceInfo &info) {
         NSThread *currentThread = [NSThread currentThread];
         NSString *threadName = currentThread.name;
         if (threadName.length == 0) {
             threadName = [NSString stringWithFormat:@"%p", currentThread];
         }
         NSString *description = [NSString stringWithFormat:@"%s", sql.data()];
-        TestCaseLog(@"%@ Thread %@: %@ %.2f", currentThread.isMainThread ? @"*" : @"-", threadName, description, cost);
+        TestCaseLog(@"%@ Thread %@: %@ %.2f", currentThread.isMainThread ? @"*" : @"-", threadName, description, ((double) info.costInNanoseconds) / 1E9);
     });
 }
 
@@ -195,7 +195,7 @@
         NSMutableArray<NSString *> *expectedSQLs = [NSMutableArray arrayWithArray:testSQLs];
         NSThread *tracedThread = [NSThread currentThread];
         __weak CPPDatabaseTestCase *weakSelf = self;
-        self.database->traceSQL([weakSelf, tracedThread, expectedSQLs, trace](long, const WCDB::UnsafeStringView &, const WCDB::UnsafeStringView &sql, const void *) {
+        self.database->traceSQL([weakSelf, tracedThread, expectedSQLs, trace](long, const WCDB::UnsafeStringView &, const void *, const WCDB::UnsafeStringView &sql, const WCDB::UnsafeStringView &) {
             CPPDatabaseTestCase *strongSelf = weakSelf;
             if (!strongSelf.expectSQLsInAllThreads && tracedThread != [NSThread currentThread]) {
                 // skip other thread sqls due to the setting

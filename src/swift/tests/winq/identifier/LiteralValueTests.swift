@@ -136,6 +136,8 @@ class LiteralValueTests: BaseTestCase {
 
         WINQAssertEqual(LiteralValue("test".data(using: .ascii)!), "'test'")
 
+        WINQAssertEqual(LiteralValue(Date.init(timeIntervalSince1970: 10000)), "10000")
+
         WINQAssertEqual(LiteralValue(nil), "NULL")
 
         WINQAssertEqual(LiteralValue(Int32LiteralValue(1)), "1")

@@ -31,7 +31,10 @@
 namespace WCDB {
 
 InnerHandle::InnerHandle()
-: m_writeHint(false), m_mainStatement(nullptr), m_transactionEvent(nullptr)
+: m_type(HandleType::Normal)
+, m_writeHint(false)
+, m_mainStatement(nullptr)
+, m_transactionEvent(nullptr)
 {
     m_mainStatement = getStatement();
 }
@@ -47,6 +50,9 @@ void InnerHandle::setType(HandleType type)
     case HandleType::Migrate:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMigrate);
         break;
+    case HandleType::Compress:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCompress);
+        break;
     case HandleType::BackupRead:
     case HandleType::BackupWrite:
     case HandleType::BackupCipher:
@@ -55,19 +61,22 @@ void InnerHandle::setType(HandleType type)
     case HandleType::Checkpoint:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCheckpoint);
         break;
-    case HandleType::Integrity:
+    case HandleType::IntegrityCheck:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeIntegrity);
         break;
-    case HandleType::Assemble:
-    case HandleType::AssembleBackupRead:
-    case HandleType::AssembleBackupWrite:
-    case HandleType::AssembleCipher:
-        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeAssemble);
+    case HandleType::MergeIndex:
+        m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeMergeIndex);
         break;
     default:
         m_error.infos.erase(ErrorStringKeyType);
         break;
     }
+    m_type = type;
+}
+
+HandleType InnerHandle::getType() const
+{
+    return m_type;
 }
 
 bool InnerHandle::getWriteHint()
@@ -78,15 +87,6 @@ bool InnerHandle::getWriteHint()
 void InnerHandle::setWriteHint(bool hint)
 {
     m_writeHint = hint;
-}
-
-void InnerHandle::setErrorType(const UnsafeStringView &type)
-{
-    if (!type.empty()) {
-        m_error.infos.insert_or_assign(ErrorStringKeyType, type);
-    } else {
-        m_error.infos.erase(ErrorStringKeyType);
-    }
 }
 
 #pragma mark - Config
@@ -137,6 +137,7 @@ bool InnerHandle::configure()
             m_invokeds.pop_back();
         }
         WCTAssert(m_invokeds.empty());
+        std::shared_ptr<Config> cipherConfig = nullptr;
         for (const auto &element : m_pendings) {
             if (!element.value()->invoke(this)) {
                 if (element.key().caseInsensitiveEqual(BasicConfigName)
@@ -151,21 +152,21 @@ bool InnerHandle::configure()
                 return false;
             }
             m_invokeds.insert(element.key(), element.value(), element.order());
+            if (element.key().compare(CipherConfigName) == 0) {
+                cipherConfig = element.value();
+            }
         }
         m_pendings = m_invokeds;
-    }
-    return true;
-}
-
-UnsafeData InnerHandle::getCipherKey()
-{
-    for (const auto &element : m_invokeds) {
-        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-            CipherConfig *config = dynamic_cast<CipherConfig *>(element.value().get());
-            return config->getCipherKey();
+        if (cipherConfig != nullptr) {
+            WCTAssert(dynamic_cast<CipherConfig *>(cipherConfig.get()) != nullptr);
+            CipherConfig *convertedConfig
+            = static_cast<CipherConfig *>(cipherConfig.get());
+            if (convertedConfig != nullptr) {
+                convertedConfig->trySaveRawKey(this);
+            }
         }
     }
-    return UnsafeData();
+    return true;
 }
 
 #pragma mark - Statement
@@ -198,7 +199,7 @@ bool InnerHandle::prepare(const Statement &statement)
 
 bool InnerHandle::prepare(const UnsafeStringView &sql)
 {
-    return m_mainStatement->prepare(sql);
+    return m_mainStatement->prepareSQL(sql);
 }
 
 bool InnerHandle::isPrepared()
@@ -209,6 +210,11 @@ bool InnerHandle::isPrepared()
 void InnerHandle::reset()
 {
     m_mainStatement->reset();
+}
+
+void InnerHandle::clearBindings()
+{
+    m_mainStatement->clearBindings();
 }
 
 bool InnerHandle::done()
@@ -241,7 +247,7 @@ const UnsafeStringView InnerHandle::getColumnTableName(int index)
     return m_mainStatement->getColumnTableName(index);
 }
 
-ColumnType InnerHandle::getType(int index)
+ColumnType InnerHandle::getColumnType(int index)
 {
     return m_mainStatement->getType(index);
 }
@@ -441,42 +447,6 @@ bool InnerHandle::runPausableTransactionWithOneLoop(const TransactionCallbackFor
 void InnerHandle::configTransactionEvent(TransactionEvent *event)
 {
     m_transactionEvent = event;
-}
-
-#pragma mark - Cipher
-bool InnerHandle::openPureCipherDB()
-{
-    bool succeed = false;
-    if (AbstractHandle::open()) {
-        succeed = true;
-        for (const auto &element : m_pendings) {
-            if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-                if ((succeed = element.value()->invoke(this))) {
-                    m_invokeds.insert(element.key(), element.value(), element.order());
-                }
-                break;
-            }
-        }
-        if (!succeed) {
-            close();
-        }
-    }
-    return succeed;
-}
-
-bool InnerHandle::isCipherDB() const
-{
-    for (const auto &element : m_pendings) {
-        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-            return true;
-        }
-    }
-    for (const auto &element : m_invokeds) {
-        if (element.key().caseInsensitiveEqual(CipherConfigName)) {
-            return true;
-        }
-    }
-    return false;
 }
 
 ConfiguredHandle::~ConfiguredHandle() = default;

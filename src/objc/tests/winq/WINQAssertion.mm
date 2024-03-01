@@ -137,8 +137,10 @@ NSString* getDescriptionOfType(WCDB::Syntax::Identifier::Type type)
 std::list<WCDB::Syntax::Identifier::Type> getTypesOfSQL(WCDB::SQL& sql)
 {
     std::list<WCDB::Syntax::Identifier::Type> types;
-    sql.iterate([&types](WCDB::Syntax::Identifier& identifier, bool& stop) {
-        WCDB_UNUSED(stop)
+    sql.iterate([&types](WCDB::Syntax::Identifier& identifier, bool begin, bool&) {
+        if (!begin) {
+            return;
+        }
         types.push_back(identifier.getType());
     });
     return types;

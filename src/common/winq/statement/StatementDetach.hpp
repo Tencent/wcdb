@@ -32,7 +32,7 @@ class WCDB_API StatementDetach final : public SpecifiedSyntax<Syntax::DetachSTMT
 public:
     using SpecifiedSyntax<Syntax::DetachSTMT, Statement>::SpecifiedSyntax;
     StatementDetach();
-    ~StatementDetach() override final;
+    ~StatementDetach() override;
 
     StatementDetach& detach(const Schema& schema);
 };

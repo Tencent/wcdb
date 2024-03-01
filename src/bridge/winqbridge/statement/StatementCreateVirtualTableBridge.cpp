@@ -48,6 +48,13 @@ void WCDBStatementCreateVirtualTableConfigSchema(CPPStatementCreateVirtualTable 
     cppCreateTable->schema(*cppSchema);
 }
 
+void WCDBStatementCreateVirtualTableConfigSchema2(CPPStatementCreateVirtualTable createTable,
+                                                  CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(createTable, WCDB::StatementCreateVirtualTable, cppCreateTable);
+    cppCreateTable->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementCreateVirtualTableConfigIfNotExist(CPPStatementCreateVirtualTable createTable)
 {
     WCDBGetObjectOrReturn(createTable, WCDB::StatementCreateVirtualTable, cppCreateTable);

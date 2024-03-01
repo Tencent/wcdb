@@ -45,32 +45,11 @@ protected:
 public:
     virtual ~Accessor() override = default;
     ColumnType getColumnType() const override final { return t; };
+
+    virtual bool isNull(const ORMType&) const = 0;
+    virtual void setNull(ORMType& instance) const = 0;
     virtual void setValue(ORMType& instance, const UnderlyingType& value) const = 0;
     virtual UnderlyingType getValue(const ORMType& instance) const = 0;
-};
-
-template<class ORMType, typename FieldType>
-class RuntimeGetterAccessor
-: public Accessor<ORMType, (ColumnType) ColumnInfo<FieldType>::type> {
-protected:
-    using Super = Accessor<ORMType, (ColumnType) ColumnInfo<FieldType>::type>;
-    using UnderlyingType = typename Super::UnderlyingType;
-
-    FieldType ORMType::*m_memberPointer;
-
-public:
-    RuntimeGetterAccessor(FieldType ORMType::*memberPointer)
-    : m_memberPointer(memberPointer)
-    {
-        static_assert(IsFieldMemberPointer<FieldType ORMType::*>::value,
-                      "Field should be initialize with a member field pointer, not a member function pointer");
-    }
-    virtual ~RuntimeGetterAccessor() override = default;
-
-    UnderlyingType getValue(const ORMType& instance) const override final
-    {
-        return (UnderlyingType) (instance.*m_memberPointer);
-    }
 };
 
 } // namespace WCDB

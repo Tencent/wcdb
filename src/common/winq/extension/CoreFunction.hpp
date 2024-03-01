@@ -83,6 +83,9 @@ public:
     static Expression unlikely(const Expression& expression);
     static Expression upper(const Expression& expression);
     static Expression zeroBLOB(const Expression& expression);
+
+protected:
+    static Expression decompress(const Expression& value, const Expression& compressionType);
 };
 
 class WCDB_API CoreFunctionOperable : virtual public ExpressionOperable {

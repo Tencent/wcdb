@@ -84,7 +84,7 @@ bool SelectSTMT::describle(std::ostream& stream) const
 
 void SelectSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     listIterate(commonTableExpressions, iterator, stop);
     recursiveIterate(select.getOrCreate(), iterator, stop);
     listIterate(cores, iterator, stop);
@@ -100,6 +100,7 @@ void SelectSTMT::iterate(const Iterator& iterator, bool& stop)
             break;
         }
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

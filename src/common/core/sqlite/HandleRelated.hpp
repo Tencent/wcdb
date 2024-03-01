@@ -37,14 +37,17 @@ public:
     virtual ~HandleRelated() = 0;
 
     AbstractHandle *getHandle() const;
+    sqlite3 *getRawHandle();
 
 protected:
-    sqlite3 *getRawHandle();
     bool APIExit(int rc);
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
     void cacheCurrentTransactionError();
     void resumeCacheTransactionError();
+    bool isBusyTraceEnable() const;
+    void setCurrentSQL(const UnsafeStringView &sql);
+    void resetCurrentSQL(const UnsafeStringView &sql);
 
 private:
     AbstractHandle *m_handle;

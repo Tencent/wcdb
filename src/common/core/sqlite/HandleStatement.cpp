@@ -27,11 +27,13 @@
 #include "Assertion.hpp"
 #include "BaseBinding.hpp"
 #include "Core.hpp"
+#include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
-#include "MigratingHandle.hpp"
+#include "MigratingHandleDecorator.hpp"
 #include "MigrationInfo.hpp"
 #include "SQLite.h"
 #include "WINQ.h"
+#include <iomanip>
 #include <string.h>
 
 namespace WCDB {
@@ -43,13 +45,23 @@ HandleStatement::HandleStatement(HandleStatement &&other)
 , m_newTable(other.m_newTable)
 , m_modifiedTable(other.m_modifiedTable)
 , m_needAutoAddColumn(other.m_needAutoAddColumn)
+, m_sql(other.m_sql)
+, m_fullTrace(other.m_fullTrace)
+, m_needReport(other.m_needReport)
+, m_stepCount(other.m_stepCount)
 {
     other.m_done = false;
     other.m_stmt = nullptr;
 }
 
 HandleStatement::HandleStatement(AbstractHandle *handle)
-: HandleRelated(handle), m_stmt(nullptr), m_done(false), m_needAutoAddColumn(false)
+: HandleRelated(handle)
+, m_stmt(nullptr)
+, m_done(false)
+, m_needAutoAddColumn(false)
+, m_fullTrace(handle->isFullSQLEnable())
+, m_needReport(false)
+, m_stepCount(0)
 {
 }
 
@@ -68,7 +80,7 @@ bool HandleStatement::prepare(const Statement &statement)
     if (m_needAutoAddColumn) {
         cacheCurrentTransactionError();
     }
-    if (prepare(sql)) {
+    if (prepareSQL(sql)) {
         return true;
     }
 
@@ -114,7 +126,7 @@ bool HandleStatement::prepare(const Statement &statement)
     }
 
     resumeCacheTransactionError();
-    return prepare(sql);
+    return prepareSQL(sql);
 }
 
 void HandleStatement::analysisStatement(const Statement &statement)
@@ -221,7 +233,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
                                    tableName.length() - prefixLength);
             schemaName = "";
             schemaSpecified = false;
-        } else if (schemaName.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        } else if (schemaName.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             schemaName = "";
             schemaSpecified = false;
         }
@@ -233,7 +245,10 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
     bool invalidStatement = false;
 
     copyStatement.syntax();
-    copyStatement.iterate([&](Syntax::Identifier &identifier, bool &stop) {
+    copyStatement.iterate([&](Syntax::Identifier &identifier, bool isBegin, bool &stop) {
+        if (!isBegin) {
+            return;
+        }
         StringView curTableName;
         Syntax::Schema curSchema;
         bool needCheckTable = false;
@@ -296,17 +311,20 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
                                       curTableName.length() - prefixLength);
             curSchema = Schema::main();
         }
-        if (curSchema.name.hasPrefix(MigrationInfo::getSchemaPrefix())) {
+        if (curSchema.name.hasPrefix(MigrationDatabaseInfo::getSchemaPrefix())) {
             curSchema = Schema::main();
         }
 
         if (!tableSpecified) {
             if (tableName.length() > 0 && tableName.compare(curTableName) != 0) {
-                MigratingHandle *migratingHandle
-                = dynamic_cast<MigratingHandle *>(getHandle());
-                if (migratingHandle != nullptr) {
-                    if (!migratingHandle->checkSourceTable(tableName, curTableName)
-                        && !migratingHandle->checkSourceTable(curTableName, tableName)) {
+                DecorativeHandle *decorativeHandle
+                = dynamic_cast<DecorativeHandle *>(getHandle());
+                if (decorativeHandle != nullptr
+                    && decorativeHandle->containDecorator(DecoratorMigratingHandle)) {
+                    MigratingHandleDecorator *migratingDecorator
+                    = decorativeHandle->getDecorator<MigratingHandleDecorator>(DecoratorMigratingHandle);
+                    if (!migratingDecorator->checkSourceTable(tableName, curTableName)
+                        && !migratingDecorator->checkSourceTable(curTableName, tableName)) {
                         invalidStatement = true;
                     }
                 } else {
@@ -334,7 +352,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
     return *binding != nullptr && findTable && !invalidStatement;
 }
 
-bool HandleStatement::prepare(const UnsafeStringView &sql)
+bool HandleStatement::prepareSQL(const UnsafeStringView &sql)
 {
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     WCTAssert(sql.length() > 0);
@@ -342,8 +360,16 @@ bool HandleStatement::prepare(const UnsafeStringView &sql)
     bool result = APIExit(
     sqlite3_prepare_v2(getRawHandle(), sql.data(), -1, &m_stmt, nullptr), sql);
     m_done = false;
+    m_fullTrace = getHandle()->isFullSQLEnable();
     if (!result) {
         m_stmt = nullptr;
+    } else {
+        if (m_fullTrace) {
+            clearReport();
+        }
+        if (isBusyTraceEnable()) {
+            m_sql = sql;
+        }
     }
     return result;
 }
@@ -351,7 +377,13 @@ bool HandleStatement::prepare(const UnsafeStringView &sql)
 void HandleStatement::reset()
 {
     WCTAssert(isPrepared());
+    tryReportSQL();
     APIExit(sqlite3_reset(m_stmt));
+}
+
+void HandleStatement::clearBindings() {
+    WCTAssert(isPrepared());
+    APIExit(sqlite3_clear_bindings(m_stmt));
 }
 
 bool HandleStatement::done()
@@ -363,12 +395,25 @@ bool HandleStatement::step()
 {
     WCTAssert(isPrepared());
 
+    if (isBusyTraceEnable()) {
+        setCurrentSQL(m_sql);
+    }
+
     int rc = sqlite3_step(m_stmt);
     m_done = rc == SQLITE_DONE;
 
-    if (done() && getHandle()->needMonitorTable()
-        && (!m_newTable.empty() || !m_modifiedTable.empty())) {
-        getHandle()->postTableNotification(m_newTable, m_modifiedTable);
+    if (m_fullTrace) {
+        m_needReport = true;
+    }
+
+    if (m_done) {
+        if (getHandle()->needMonitorTable()
+            && (!m_newTable.empty() || !m_modifiedTable.empty())) {
+            getHandle()->postTableNotification(m_newTable, m_modifiedTable);
+        }
+        tryReportSQL();
+    } else {
+        m_stepCount++;
     }
 
     const char *sql = nullptr;
@@ -382,9 +427,12 @@ bool HandleStatement::step()
 void HandleStatement::finalize()
 {
     if (m_stmt != nullptr) {
+        tryReportSQL();
         // no need to call APIExit since it returns old code only.
         sqlite3_finalize(m_stmt);
         m_stmt = nullptr;
+        resetCurrentSQL(m_sql);
+        m_sql.clear();
     }
 }
 
@@ -412,6 +460,12 @@ const UnsafeStringView HandleStatement::getColumnTableName(int index)
     return sqlite3_column_table_name(m_stmt, index);
 }
 
+int HandleStatement::getBindParameterCount()
+{
+    WCTAssert(isPrepared());
+    return sqlite3_bind_parameter_count(m_stmt);
+}
+
 ColumnType HandleStatement::getType(int index)
 {
     WCTAssert(isPrepared());
@@ -434,6 +488,9 @@ void HandleStatement::bindInteger(const Integer &value, int index)
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
     bool succeed = APIExit(sqlite3_bind_int64(m_stmt, index, value));
+    if (succeed && m_fullTrace) {
+        m_stream << index << ":" << value << ";";
+    }
     WCTAssert(succeed);
     WCDB_UNUSED(succeed);
 }
@@ -443,6 +500,9 @@ void HandleStatement::bindDouble(const Float &value, int index)
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
     bool succeed = APIExit(sqlite3_bind_double(m_stmt, index, value));
+    if (succeed && m_fullTrace) {
+        m_stream << index << ":" << value << ";";
+    }
     WCTAssert(succeed);
     WCDB_UNUSED(succeed);
 }
@@ -454,6 +514,35 @@ void HandleStatement::bindText(const Text &value, int index)
     // use SQLITE_STATIC if auto_commit?
     bool succeed = APIExit(sqlite3_bind_text(
     m_stmt, index, value.data(), (int) value.length(), SQLITE_TRANSIENT));
+    if (succeed && m_fullTrace) {
+        m_stream << index << ":";
+        if (value.length() < 20) {
+            m_stream << value;
+        } else {
+            m_stream << UnsafeStringView(value.data(), 20) << "...";
+        }
+        m_stream << ";";
+    }
+    WCTAssert(succeed);
+    WCDB_UNUSED(succeed);
+}
+
+void HandleStatement::bindText16(const char16_t *value, size_t valueLength, int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(!isBusy());
+    bool succeed = APIExit(sqlite3_bind_text16(
+    m_stmt, index, value, (int) valueLength * 2, SQLITE_TRANSIENT));
+    if (succeed && m_fullTrace) {
+        m_stream << index << ":";
+        char buffer[81];
+        m_stream << UnsafeStringView::createFromUTF16(
+        value, valueLength < 20 ? valueLength : 20, buffer);
+        if (valueLength > 20) {
+            m_stream << "...";
+        }
+        m_stream << ";";
+    }
     WCTAssert(succeed);
     WCDB_UNUSED(succeed);
 }
@@ -465,6 +554,21 @@ void HandleStatement::bindBLOB(const BLOB &value, int index)
     // TODO: use SQLITE_STATIC to get better performance?
     bool succeed = APIExit(sqlite3_bind_blob(
     m_stmt, index, value.buffer(), (int) value.size(), SQLITE_TRANSIENT));
+    if (succeed && m_fullTrace) {
+        m_stream << index << ":";
+        auto flags = m_stream.flags();
+        m_stream << std::hex << std::setfill('0');
+        size_t length = value.size() > 10 ? 10 : value.size();
+        for (int i = 0; i < length; i++) {
+            int c = value.buffer()[i];
+            m_stream << std::setw(2) << c;
+        }
+        m_stream.flags(flags);
+        if (value.size() > 10) {
+            m_stream << "...";
+        }
+        m_stream << ";";
+    }
     WCTAssert(succeed);
     WCDB_UNUSED(succeed);
 }
@@ -474,6 +578,10 @@ void HandleStatement::bindNull(int index)
     WCTAssert(isPrepared());
     WCTAssert(!isBusy());
     bool succeed = APIExit(sqlite3_bind_null(m_stmt, index));
+    if (succeed && m_fullTrace) {
+        m_stream << index << ":"
+                 << ";";
+    }
     WCTAssert(succeed);
     WCDB_UNUSED(succeed);
 }
@@ -517,6 +625,20 @@ HandleStatement::Text HandleStatement::getText(int index)
     return UnsafeStringView(
     reinterpret_cast<const char *>(sqlite3_column_text(m_stmt, index)),
     sqlite3_column_bytes(m_stmt, index));
+}
+
+const char16_t *HandleStatement::getText16(int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
+    return reinterpret_cast<const char16_t *>(sqlite3_column_text16(m_stmt, index));
+}
+
+size_t HandleStatement::getText16Length(int index)
+{
+    WCTAssert(isPrepared());
+    WCTAssert(isBusy());
+    return sqlite3_column_bytes16(m_stmt, index) / 2;
 }
 
 const HandleStatement::BLOB HandleStatement::getBLOB(int index)
@@ -636,6 +758,32 @@ bool HandleStatement::isReadOnly()
 bool HandleStatement::isPrepared()
 {
     return m_stmt != nullptr;
+}
+
+#pragma mark - Full trace sql
+void HandleStatement::tryReportSQL()
+{
+    if (!m_fullTrace || !m_needReport || !isPrepared()) {
+        return;
+    }
+    UnsafeStringView sql = sqlite3_sql(m_stmt);
+    if (sql.hasPrefix("SELECT")) {
+        m_stream << "RowCount:" << m_stepCount;
+    } else if (sql.hasPrefix("INSERT")) {
+        m_stream << "LastInsertedId:" << getHandle()->getLastInsertedRowID();
+    } else if (sql.hasPrefix("DELETE") || sql.hasPrefix("UPDATE")) {
+        m_stream << "Changes:" << getHandle()->getChanges();
+    }
+    getHandle()->postSQLNotification(sql, m_stream.str());
+    clearReport();
+}
+
+void HandleStatement::clearReport()
+{
+    m_stream.str("");
+    m_stream.clear();
+    m_needReport = false;
+    m_stepCount = 0;
 }
 
 } //namespace WCDB

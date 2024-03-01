@@ -40,7 +40,7 @@ class FactoryRenewer final : public FactoryRelated,
                              public BackupDelegateHolder {
 public:
     FactoryRenewer(const Factory &factory);
-    ~FactoryRenewer() override final;
+    ~FactoryRenewer() override;
 
     const StringView directory;
     const StringView database;
@@ -53,6 +53,7 @@ protected:
         Info();
         StringView sql;
         int64_t sequence;
+        std::list<StringView> associatedSQLs;
     };
     typedef struct Info Info;
 

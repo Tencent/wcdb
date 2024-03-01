@@ -24,10 +24,14 @@
 
 #include "BaseBinding.hpp"
 #include "Assertion.hpp"
+#include "CompressionConst.hpp"
+#include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
-#include "MigratingHandle.hpp"
+#include "MigratingHandleDecorator.hpp"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
+#include <algorithm>
+#include <string>
 
 namespace WCDB {
 
@@ -51,6 +55,181 @@ ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName)
     return columnDef;
 }
 
+const ColumnDef *BaseBinding::getColumnDef(const UnsafeStringView &columnName) const
+{
+    const ColumnDef *columnDef = nullptr;
+    auto iter = m_columnDefs.caseInsensitiveFind(columnName);
+    if (iter != m_columnDefs.end()) {
+        columnDef = &iter->second;
+    }
+    return columnDef;
+}
+
+void BaseBinding::enableAutoIncrementForExistingTable()
+{
+    m_enableAutoIncrementForExistingTable = true;
+}
+
+bool BaseBinding::configAutoincrementIfNeed(const UnsafeStringView &tableName,
+                                            InnerHandle *handle) const
+{
+    auto tableConfig = handle->getTableAttribute(Schema::main(), tableName);
+    if (!tableConfig.succeed()) {
+        return false;
+    }
+    if (tableConfig.value().autoincrement) {
+        return true;
+    }
+    if (tableConfig.value().withoutRowid) {
+        Error error(Error::Code::Error,
+                    Error::Level::Error,
+                    "Without rowid table can not be configed as autoincrement");
+        error.infos.insert_or_assign("Table", tableName);
+        error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
+        Notifier::shared().notify(error);
+        return false;
+    }
+    const StringView &integerPrimaryKey = tableConfig.value().integerPrimaryKey;
+    if (integerPrimaryKey.length() == 0) {
+        Error error(Error::Code::Error, Error::Level::Error, "No integer primary key found");
+        error.infos.insert_or_assign("Table", tableName);
+        error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
+        Notifier::shared().notify(error);
+        return false;
+    }
+    WCTAssert(m_columnDefs.caseInsensitiveFind(integerPrimaryKey)
+              != m_columnDefs.end());
+
+    bool ret
+    = handle->execute(StatementPragma().pragma(Pragma::writableSchema()).to(true));
+
+    ret = ret && updateMasterTable(tableName, handle);
+
+    ret = ret && updateSequeceTable(tableName, integerPrimaryKey, handle);
+
+    ret = ret && handle->configAutoIncrement(tableName);
+
+    handle->execute(StatementPragma().pragma(Pragma::writableSchema()).to(false));
+
+    return ret;
+}
+
+bool BaseBinding::updateMasterTable(const UnsafeStringView &tableName, InnerHandle *handle) const
+{
+    StatementSelect select
+    = StatementSelect()
+      .select(Column("sql"))
+      .from(Syntax::masterTable)
+      .where(Column("name") == tableName && Column("type") == "table");
+    auto sqls = handle->getValues(select, 0);
+    if (sqls.failed()) {
+        return false;
+    }
+    if (sqls.value().size() != 1) {
+        Error error(Error::Code::Error, Error::Level::Error, "Can not read sql");
+        error.infos.insert_or_assign("Table", tableName);
+        error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
+        Notifier::shared().notify(error);
+        return false;
+    }
+
+    std::string sql = *sqls.value().begin();
+    std::transform(sql.begin(), sql.end(), sql.begin(), ::toupper);
+
+    size_t startPos = sql.find(" PRIMARY ");
+    if (startPos == std::string::npos) {
+        reportSqlParseFail(*sqls.value().begin(), tableName, handle);
+        return false;
+    }
+
+    size_t endPos = sql.find(",", startPos);
+    if (endPos == std::string::npos) {
+        endPos = sql.find(")", startPos);
+    }
+    if (endPos == std::string::npos) {
+        reportSqlParseFail(*sqls.value().begin(), tableName, handle);
+        return false;
+    }
+
+    endPos = std::min(endPos, sql.find("NOT", startPos));
+    endPos = std::min(endPos, sql.find("UNIQUE", startPos));
+    endPos = std::min(endPos, sql.find("CHECK", startPos));
+    endPos = std::min(endPos, sql.find("DEFAULT", startPos));
+    endPos = std::min(endPos, sql.find("COLLATE", startPos));
+    endPos = std::min(endPos, sql.find("GENERATED", startPos));
+    endPos = std::min(endPos, sql.find("AS", startPos));
+
+    std::string originSql = *sqls.value().begin();
+    originSql.insert(endPos, " AUTOINCREMENT ");
+
+    ConfiguredHandle memoryHandle;
+    memoryHandle.setPath(":memory:");
+    if (!memoryHandle.open()) {
+        return false;
+    }
+    if (!memoryHandle.prepare(originSql)) {
+        reportSqlParseFail(*sqls.value().begin(), tableName, handle);
+        return false;
+    }
+    memoryHandle.finalize();
+    memoryHandle.close();
+
+    StatementUpdate update
+    = StatementUpdate()
+      .update(Syntax::masterTable)
+      .set(Column("sql"))
+      .to(originSql)
+      .where(Column("name") == tableName && Column("type") == "table");
+
+    return handle->execute(update);
+}
+
+void BaseBinding::reportSqlParseFail(const UnsafeStringView &sql,
+                                     const UnsafeStringView &tableName,
+                                     InnerHandle *handle) const
+{
+    Error error(Error::Code::Error, Error::Level::Error, "Can not parse create table sql");
+    error.infos.insert_or_assign("Table", tableName);
+    error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
+    error.infos.insert_or_assign(ErrorStringKeySQL, sql);
+    Notifier::shared().notify(error);
+}
+
+bool BaseBinding::updateSequeceTable(const UnsafeStringView &tableName,
+                                     const UnsafeStringView &integerPrimaryKey,
+                                     InnerHandle *handle) const
+{
+    StatementCreateTable createSeq
+    = StatementCreateTable().createTable(Syntax::sequenceTable).ifNotExists();
+    createSeq.define(ColumnDef("name"));
+    createSeq.define(ColumnDef("seq"));
+    if (!handle->execute(createSeq)) {
+        return false;
+    }
+    if (!handle->prepare(
+        StatementSelect().select(Column(integerPrimaryKey).max()).from(tableName))) {
+        return false;
+    }
+    if (!handle->step()) {
+        handle->finalize();
+        return false;
+    }
+    int64_t maxRowid = 0;
+    bool hasContent = false;
+    if (!handle->done()) {
+        maxRowid = handle->getInteger();
+        hasContent = true;
+    }
+    handle->finalize();
+    if (hasContent) {
+        StatementInsert insert = StatementInsert().insertIntoTable(Syntax::sequenceTable);
+        insert.column("name").column("seq");
+        insert.value(tableName).value(std::max(maxRowid, (int64_t) 0));
+        return handle->execute(insert);
+    }
+    return true;
+}
+
 #pragma mark - Table
 bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *handle) const
 {
@@ -62,11 +241,11 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
             return false;
         }
         if (exists.value()) {
-            auto optionalColumnNames = handle->getColumns(tableName);
+            auto optionalColumnNames = handle->getColumns(Schema::main(), tableName);
             if (!optionalColumnNames.succeed()) {
                 return false;
             }
-            std::set<StringView> &columnNames = optionalColumnNames.value();
+            StringViewSet &columnNames = optionalColumnNames.value();
             //Check whether the column names exists
             const auto &columnDefs = getColumnDefs();
             for (const auto &columnDef : columnDefs) {
@@ -81,11 +260,18 @@ bool BaseBinding::createTable(const UnsafeStringView &tableName, InnerHandle *ha
                 }
             }
             for (const auto &columnName : columnNames) {
+                if (columnName.hasPrefix(CompressionColumnTypePrefix)) {
+                    continue;
+                }
                 Error error(Error::Code::Mismatch, Error::Level::Notice, "Skip column");
                 error.infos.insert_or_assign("Table", StringView(tableName));
                 error.infos.insert_or_assign("Column", StringView(columnName));
                 error.infos.insert_or_assign(ErrorStringKeyPath, handle->getPath());
                 Notifier::shared().notify(error);
+            }
+            if (m_enableAutoIncrementForExistingTable
+                && !configAutoincrementIfNeed(tableName, handle)) {
+                return false;
             }
         } else {
             if (!handle->execute(generateCreateTableStatement(tableName))) {
@@ -140,7 +326,7 @@ BaseBinding::generateCreateVirtualTableStatement(const UnsafeStringView &tableNa
     for (const auto &iter : m_columnDefs) {
         if (isFTS5) {
             bool added = false;
-            for (auto constrain : iter.second.syntax().constraints) {
+            for (auto &constrain : iter.second.syntax().constraints) {
                 if (constrain.switcher == WCDB::Syntax::ColumnConstraint::Switch::UnIndexed) {
                     arguments.push_back(StringView().formatted(
                     "%s %s",
@@ -178,7 +364,7 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
     if (!optionalColumnNames.succeed()) {
         return false;
     }
-    std::set<StringView> &columnNames = optionalColumnNames.value();
+    StringViewSet &columnNames = optionalColumnNames.value();
 
     const auto &columnDefs = getColumnDefs();
     int matchCount = 0;
@@ -215,13 +401,16 @@ bool BaseBinding::tryRecoverColumn(const UnsafeStringView &columnName,
             return false;
         }
     }
-    MigratingHandle *migratingHandle = dynamic_cast<MigratingHandle *>(handle);
-    if (migratingHandle != nullptr) {
+    DecorativeHandle *decorativeHandle = dynamic_cast<DecorativeHandle *>(handle);
+    if (decorativeHandle != nullptr
+        && decorativeHandle->containDecorator(DecoratorMigratingHandle)) {
+        MigratingHandleDecorator *decorator
+        = decorativeHandle->getDecorator<MigratingHandleDecorator>(DecoratorMigratingHandle);
         Columns columns;
         for (const auto &columnDef : columnDefs) {
             columns.push_back(columnDef.second.syntax().column.getOrCreate().name);
         }
-        return migratingHandle->rebindUnionView(tableName, columns);
+        return decorator->rebindUnionView(tableName, columns);
     }
     return true;
 }
@@ -238,18 +427,48 @@ TableConstraint &BaseBinding::getOrCreateTableConstraint(const UnsafeStringView 
 
 #pragma mark - Index
 
-BaseBinding::Index::Index(const UnsafeStringView &suffix_)
-: suffix(suffix_), action(Action::Create)
+BaseBinding::Index::Index(const UnsafeStringView &suffix_, bool isFullName)
+: nameOrSuffix(suffix_), isFullName(isFullName), action(Action::Create)
 {
 }
 
-BaseBinding::Index &BaseBinding::getOrCreateIndex(const UnsafeStringView &suffix)
+StringView BaseBinding::Index::getIndexName(const UnsafeStringView &tableName)
 {
-    auto iter = m_indexes.find(suffix);
-    if (iter == m_indexes.end()) {
-        iter = m_indexes.emplace(suffix, Index(suffix)).first;
+    if (!isFullName) {
+        StringView closingQuotation;
+        if (tableName.length() > 2) {
+            if (tableName.hasPrefix("'") && tableName.hasSuffix("'")) {
+                closingQuotation = "'";
+            } else if (tableName.hasPrefix("\"") && tableName.hasSuffix("\"")) {
+                closingQuotation = "\"";
+            } else if (tableName.hasPrefix("[") && tableName.hasSuffix("]")) {
+                closingQuotation = "]";
+            } else if (tableName.hasPrefix("`") && tableName.hasSuffix("`")) {
+                closingQuotation = "`";
+            }
+        }
+        std::ostringstream stream;
+        if (closingQuotation.length() == 0) {
+            stream << tableName << nameOrSuffix;
+        } else {
+            stream << UnsafeStringView(tableName.data(), tableName.length() - 1);
+            stream << nameOrSuffix;
+            stream << closingQuotation;
+        }
+        return stream.str();
+    } else {
+        return nameOrSuffix;
     }
-    WCTAssert(iter->first == iter->second.suffix);
+}
+
+BaseBinding::Index &
+BaseBinding::getOrCreateIndex(const UnsafeStringView &nameOrSuffix, bool isFullName)
+{
+    auto iter = m_indexes.find(nameOrSuffix);
+    if (iter == m_indexes.end()) {
+        iter = m_indexes.emplace(nameOrSuffix, Index(nameOrSuffix, isFullName)).first;
+    }
+    WCTAssert(iter->first == iter->second.nameOrSuffix);
     return iter->second;
 }
 
@@ -257,21 +476,8 @@ std::pair<std::list<StatementCreateIndex>, std::list<StatementDropIndex>>
 BaseBinding::generateIndexStatements(const UnsafeStringView &tableName, bool isTableNewlyCreated) const
 {
     std::pair<std::list<StatementCreateIndex>, std::list<StatementDropIndex>> pairs;
-    StringView closingQuotation;
-    if (tableName.length() > 2) {
-        if (tableName.hasPrefix("'") && tableName.hasSuffix("'")) {
-            closingQuotation = "'";
-        } else if (tableName.hasPrefix("\"") && tableName.hasSuffix("\"")) {
-            closingQuotation = "\"";
-        } else if (tableName.hasPrefix("[") && tableName.hasSuffix("]")) {
-            closingQuotation = "]";
-        } else if (tableName.hasPrefix("`") && tableName.hasSuffix("`")) {
-            closingQuotation = "`";
-        }
-    }
-
     for (const auto &iter : m_indexes) {
-        WCTAssert(iter.first == iter.second.suffix);
+        WCTAssert(iter.first == iter.second.nameOrSuffix);
         Index index = iter.second;
         switch (index.action) {
         case Index::Action::CreateForNewlyCreatedTableOnly:
@@ -281,23 +487,13 @@ BaseBinding::generateIndexStatements(const UnsafeStringView &tableName, bool isT
             // fallthrough
         case Index::Action::Create: {
             StatementCreateIndex statement = index.statement;
-            std::ostringstream stream;
-            if (closingQuotation.length() == 0) {
-                stream << tableName << index.suffix;
-            } else {
-                stream << UnsafeStringView(tableName.data(), tableName.length() - 1);
-                stream << index.suffix;
-                stream << closingQuotation;
-            }
-            statement.createIndex(StringView(stream.str())).ifNotExists().table(tableName);
+            statement.createIndex(index.getIndexName(tableName)).ifNotExists().table(tableName);
             pairs.first.push_back(statement);
         } break;
         default:
             WCTAssert(index.action == Index::Action::Drop);
-            std::ostringstream stream;
-            stream << tableName << index.suffix;
             StatementDropIndex statement
-            = StatementDropIndex().dropIndex(StringView(stream.str())).ifExists();
+            = StatementDropIndex().dropIndex(index.getIndexName(tableName)).ifExists();
             pairs.second.push_back(statement);
             break;
         }

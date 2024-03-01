@@ -34,7 +34,7 @@ namespace Syntax {
 class WCDB_API AnalyzeSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~AnalyzeSTMT() override final;
+    ~AnalyzeSTMT() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(All, SchemaOrTableOrIndex);
     Schema schema;

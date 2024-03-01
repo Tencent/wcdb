@@ -9,6 +9,7 @@ showUsage() {
 """
 }
 wechat=false
+zstd=false
 enable_bitcode=false
 static_framework=false
 
@@ -48,7 +49,7 @@ version=`cat $root/VERSION`
 preprocessor="\$\(inherited\)"
 preprocessor+="\ WCDB_VERSION=\\\"\"${version}\\\"\""
 if $wechat; then
-    preprocessor+="\ WCDB_WECHAT=1"
+    preprocessor+="\ WCDB_WECHAT_IOS=1"
 fi
 preprocessor+="\ WCDB_BUILD=\\\"\"${timestamp}\\\"\""
 
@@ -56,7 +57,6 @@ settings=(ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= SKIP_
 if $wechat; then
     settings+=(DEPLOYMENT_POSTPROCESSING=NO)
 fi
-
 if $static_framework; then
     settings+=(MACH_O_TYPE=staticlib STRIP_STYLE=debugging LLVM_LTO=NO STRIP_INSTALLED_PRODUCT=NO DEPLOYMENT_POSTPROCESSING=NO)
 fi

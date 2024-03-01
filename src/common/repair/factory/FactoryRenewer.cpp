@@ -140,6 +140,9 @@ bool FactoryRenewer::prepare()
             setError(m_assembleDelegate->getAssembleError());
             break;
         }
+        for (const auto &iter : element.second.associatedSQLs) {
+            m_assembleDelegate->assembleSQL(iter);
+        }
     }
     if (!m_assembleDelegate->markAsAssembled()) {
         if (!succeed) {
@@ -161,6 +164,17 @@ bool FactoryRenewer::prepare()
         backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
         backup.setBackupSharedDelegate(m_sharedDelegate);
         backup.setCipherDelegate(m_cipherDelegate);
+        if (m_cipherDelegate->isCipherDB()) {
+            auto salt = m_cipherDelegate->tryGetSaltFromDatabase(tempDatabase);
+            if (!salt.succeed()) {
+                assignWithSharedThreadedError();
+                return false;
+            }
+            if (!m_cipherDelegate->switchCipherSalt(salt.value())) {
+                setError(m_cipherDelegate->getCipherError());
+                return false;
+            }
+        }
         if (!backup.work(tempDatabase)) {
             setError(backup.getError());
             return false;
@@ -208,11 +222,11 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
     for (const auto &materialPath : materialPaths) {
         Material material;
         bool succeed = false;
-        if (!m_sharedDelegate->isCipherDB()) {
+        if (!m_cipherDelegate->isCipherDB()) {
             succeed = material.deserialize(materialPath);
         } else {
             material.setCipherDelegate(m_cipherDelegate);
-            succeed = material.decryptedDeserialize(materialPath);
+            succeed = material.decryptedDeserialize(materialPath, true);
         }
         if (!succeed) {
             if (ThreadedErrors::shared().getThreadedError().isCorruption()) {
@@ -222,25 +236,26 @@ bool FactoryRenewer::resolveInfosForDatabase(StringViewMap<Info> &infos,
             }
         }
 
-        for (auto &element : material.contents) {
+        for (auto &element : material.contentsMap) {
             auto iter = infos.find(element.first);
             if (iter == infos.end()) {
                 iter = infos.emplace(std::move(element.first), Info()).first;
-                iter->second.sql = std::move(element.second.sql);
+                iter->second.sql = std::move(element.second->sql);
+                iter->second.associatedSQLs = std::move(element.second->associatedSQLs);
             } else {
-                if (iter->second.sql != element.second.sql) {
+                if (iter->second.sql != element.second->sql) {
                     Error error(Error::Code::Mismatch,
                                 Error::Level::Notice,
                                 "Different sqls is found in materials.");
                     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
                     error.infos.insert_or_assign("MaterialPaths", materialPath);
-                    error.infos.insert_or_assign("SQL1", element.second.sql);
+                    error.infos.insert_or_assign("SQL1", element.second->sql);
                     error.infos.insert_or_assign("SQL2", iter->second.sql);
                     Notifier::shared().notify(error);
                 }
             }
-            if (element.second.sequence > iter->second.sequence) {
-                iter->second.sequence = element.second.sequence;
+            if (element.second->sequence > iter->second.sequence) {
+                iter->second.sequence = element.second->sequence;
             }
         }
         return true;

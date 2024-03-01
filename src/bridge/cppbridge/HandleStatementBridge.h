@@ -43,9 +43,12 @@ CPPError WCDBHandleStatementGetError(CPPHandleStatement handleStatement);
 
 bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement,
                                 CPPObject* _Nonnull statement);
+bool WCDBHandleStatementPrepareSQL(CPPHandleStatement handleStatement,
+                                   const char* _Nonnull sql);
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement);
 bool WCDBHandleStatementStep(CPPHandleStatement handleStatement);
 void WCDBHandleStatementReset(CPPHandleStatement handleStatement);
+void WCDBHandleStatementClearBindings(CPPHandleStatement handleStatement);
 void WCDBHandleStatementFinalize(CPPHandleStatement handleStatement);
 bool WCDBHandleStatementIsDone(CPPHandleStatement handleStatement);
 
@@ -56,6 +59,10 @@ void WCDBHandleStatementBindDouble(CPPHandleStatement handleStatement, int index
 void WCDBHandleStatementBindText(CPPHandleStatement handleStatement,
                                  int index,
                                  const char* _Nonnull text);
+void WCDBHandleStatementBindText16(CPPHandleStatement handleStatement,
+                                   int index,
+                                   const short* _Nullable text,
+                                   int textLength);
 void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
                                  int index,
                                  const unsigned char* _Nonnull buffer,
@@ -63,7 +70,7 @@ void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
 void WCDBHandleStatementBindNull(CPPHandleStatement handleStatement, int index);
 
 int WCDBHandleStatementBindParameterIndex(CPPHandleStatement handleStatement,
-                                          const char* parameterName);
+                                          const char* _Nullable parameterName);
 
 enum WCDBColumnValueType
 WCDBHandleStatementGetColumnType(CPPHandleStatement handleStatement, int index);
@@ -71,6 +78,9 @@ signed long long
 WCDBHandleStatementGetInteger(CPPHandleStatement handleStatement, int index);
 double WCDBHandleStatementGetDouble(CPPHandleStatement handleStatement, int index);
 const char* _Nullable WCDBHandleStatementGetText(CPPHandleStatement handleStatement, int index);
+const short* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement,
+                                                    int index);
+int WCDBHandleStatementGetText16Length(CPPHandleStatement handleStatement, int index);
 const unsigned char* _Nullable WCDBHandleStatementGetBlob(CPPHandleStatement handleStatement,
                                                           int index);
 signed long long

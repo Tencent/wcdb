@@ -31,6 +31,7 @@
 #import "WCTDatabase+Private.h"
 #import "WCTError+Private.h"
 #import "WCTFoundation.h"
+#import "WCTPerformanceInfo+Private.h"
 
 namespace WCDB {
 
@@ -45,6 +46,7 @@ void Core::print(const UnsafeStringView& message)
 
 NSString* const WCTDatabaseMonitorInfoKeyHandleCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleCount];
 NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleOpenTime];
+NSString* const WCTDatabaseMonitorInfoKeyHandleOpenCPUTime = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleOpenCPUTime];
 NSString* const WCTDatabaseMonitorInfoKeySchemaUsage = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeySchemaUsage];
 NSString* const WCTDatabaseMonitorInfoKeyTableCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyTableCount];
 NSString* const WCTDatabaseMonitorInfoKeyIndexCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyIndexCount];
@@ -80,29 +82,20 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
 {
     WCDB::InnerHandle::PerformanceNotification callback = nullptr;
     if (trace != nil) {
-        callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
-            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
+        callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const void* handle, const WCDB::UnsafeStringView& sql, const WCDB::InnerHandle::PerformanceInfo& info) {
+            WCTPerformanceInfo* nsInfo = [[WCTPerformanceInfo alloc] initWithPerformanceInfo:info];
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], nsInfo);
         };
     }
     WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
 }
 
-+ (void)globalTraceSQL:(WCTSQLTraceBlock)trace
-{
-    WCDB::InnerHandle::SQLNotification callback = nullptr;
-    if (trace != nil) {
-        callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
-        };
-    }
-    WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
-}
-
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::InnerHandle::PerformanceNotification callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, double cost, const void* handle) {
-            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], cost);
+        WCDB::InnerHandle::PerformanceNotification callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const void* handle, const WCDB::UnsafeStringView& sql, const WCDB::InnerHandle::PerformanceInfo& info) {
+            WCTPerformanceInfo* nsInfo = [[WCTPerformanceInfo alloc] initWithPerformanceInfo:info];
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], nsInfo);
         };
         _database->setConfig(WCDB::PerformanceTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::PerformanceTraceConfig>(callback)),
@@ -115,8 +108,12 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
 - (void)traceSQL:(WCTSQLTraceBlock)trace
 {
     if (trace != nil) {
-        WCDB::InnerHandle::SQLNotification callback = [trace](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, const WCDB::UnsafeStringView& sql, const void* handle) {
-            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql]);
+        WCDB::InnerHandle::SQLNotification callback = [trace](const WCDB::Tag& tag,
+                                                              const WCDB::UnsafeStringView& path,
+                                                              const void* handle,
+                                                              const WCDB::UnsafeStringView& sql,
+                                                              const WCDB::UnsafeStringView& info) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql], info.length() > 0 ? [NSString stringWithView:info.data()] : nil);
         };
         _database->setConfig(WCDB::SQLTraceConfigName,
                              std::static_pointer_cast<WCDB::Config>(std::make_shared<WCDB::SQLTraceConfig>(callback)),
@@ -124,6 +121,26 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
     } else {
         _database->removeConfig(WCDB::SQLTraceConfigName);
     }
+}
+
++ (void)globalTraceSQL:(WCTSQLTraceBlock)trace
+{
+    WCDB::InnerHandle::SQLNotification callback = nullptr;
+    if (trace != nil) {
+        callback = [trace](const WCDB::Tag& tag,
+                           const WCDB::UnsafeStringView& path,
+                           const void* handle,
+                           const WCDB::UnsafeStringView& sql,
+                           const WCDB::UnsafeStringView& info) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql], info.length() > 0 ? [NSString stringWithView:info.data()] : nil);
+        };
+    }
+    WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
+}
+
+- (void)enableFullSQLTrace:(BOOL)enable
+{
+    _database->setFullSQLTraceEnable(enable);
 }
 
 + (void)globalTraceDatabaseOperation:(nullable WCDB_ESCAPE WCTDatabaseOperationTraceBlock)trace
@@ -156,6 +173,18 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
         });
     } else {
         WCDB::DBOperationNotifier::shared().setNotification(nil);
+    }
+}
+
++ (void)globalTraceBusy:(nullable WCDB_ESCAPE WCTDatabaseBusyTraceBlock)trace withTimeOut:(double)timeOut
+{
+    if (trace != nil && timeOut > 0) {
+        WCDB::Core::shared().setBusyMonitor([=](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, uint64_t tid, const WCDB::UnsafeStringView& sql) {
+            trace(tag, [NSString stringWithUTF8String:path.data()], tid, [NSString stringWithUTF8String:sql.data()]);
+        },
+                                            timeOut);
+    } else {
+        WCDB::Core::shared().setBusyMonitor(nullptr, 0);
     }
 }
 

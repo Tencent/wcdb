@@ -32,23 +32,26 @@
 namespace WCDB {
 
 class Handle;
+class HandleDecorator;
 
 HandleStatement *GetMainHandleStatement(InnerHandle *handle);
 
 class InnerHandle : public AbstractHandle {
     friend Handle;
     friend HandleStatement *GetMainHandleStatement(InnerHandle *handle);
+    friend HandleDecorator;
 #pragma mark - Initialize
 public:
     InnerHandle();
     virtual ~InnerHandle() override = 0;
 
     void setType(HandleType type);
+    HandleType getType() const;
     bool getWriteHint();
     void setWriteHint(bool hint);
-    void setErrorType(const UnsafeStringView &type);
 
 private:
+    HandleType m_type;
     bool m_writeHint;
 
 #pragma mark - Config
@@ -59,7 +62,6 @@ public:
 
 protected:
     bool configure();
-    UnsafeData getCipherKey();
 
 private:
     Configs m_invokeds;
@@ -67,7 +69,7 @@ private:
 
 #pragma mark - Statement
 public:
-    bool execute(const Statement &statement);
+    virtual bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
 
     bool prepare(const Statement &statement);
@@ -78,6 +80,7 @@ public:
     bool step();
     bool done();
     void reset();
+    void clearBindings();
 
     using Integer = HandleStatement::Integer;
     using Text = HandleStatement::Text;
@@ -109,12 +112,12 @@ public:
     const UnsafeStringView getColumnName(int index);
     const UnsafeStringView getColumnTableName(int index);
 
-    ColumnType getType(int index);
+    ColumnType getColumnType(int index);
     bool isStatementReadonly();
     int getNumberOfColumns();
 
 protected:
-    HandleStatement *m_mainStatement;
+    DecorativeHandleStatement *m_mainStatement;
 
 #pragma mark - Transaction
 public:
@@ -130,22 +133,15 @@ public:
     bool runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
 
     void configTransactionEvent(TransactionEvent *event);
-
-protected:
     bool commitTransaction() override;
 
 private:
     TransactionEvent *m_transactionEvent;
-
-#pragma mark - Cipher
-protected:
-    bool openPureCipherDB();
-    bool isCipherDB() const;
 };
 
 class ConfiguredHandle final : public InnerHandle {
 public:
-    ~ConfiguredHandle() override final;
+    ~ConfiguredHandle() override;
 };
 
 } //namespace WCDB

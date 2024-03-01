@@ -30,13 +30,17 @@
 namespace WCDB {
 
 class BaseBinding;
+class CompressionColumnInfo;
+class Column;
 
 namespace Syntax {
 
 class WCDB_API Column final : public Identifier {
+    friend CompressionColumnInfo;
+    friend Column;
 #pragma mark - Syntax
 public:
-    ~Column() override final;
+    ~Column() override;
 
     Schema schema;
     StringView table;
@@ -51,6 +55,13 @@ public:
     TableBindingRetirve tableBindingRetrive = nullptr;
     const BaseBinding* tableBinding = nullptr;
     const BaseBinding* getTableBinding() const;
+
+#pragma mark - Compression
+public:
+    CompressionColumnInfo* getCompressionInfo() const;
+
+protected:
+    mutable CompressionColumnInfo* m_compressionInfo = nullptr;
 
 #pragma mark - Identifier
 public:

@@ -46,7 +46,7 @@
     WCDB::Expressions expressions;
     WCDB::RaiseFunction raiseFunction;
     NSString* windowFunction;
-    WCDB::Filter filter;
+    WCDB::Expression filter;
     WCDB::WindowDef windowDef;
     NSString* window;
 }
@@ -74,7 +74,7 @@
     };
     raiseFunction = WCDB::RaiseFunction().ignore();
     windowFunction = @"testWindowFunction";
-    filter = WCDB::Filter().where(1);
+    filter = 1;
     windowDef = WCDB::WindowDef().partition(expressions);
     window = @"testWindow";
 }
@@ -201,6 +201,15 @@
     auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
     TestCaseAssertIterateEqual(testingSQL, testingTypes);
     TestCaseAssertSQLEqual(testingSQL, @"CAST(1 AS INTEGER)");
+}
+
+- (void)test_alias
+{
+    auto testingSQL = (WCDB::Column::rowid() + 1).as("rowidAddOne");
+    auto testingTypes = { WCDB::SQL::Type::ResultColumn, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column, WCDB::SQL::Type::Expression, WCDB::SQL::Type::LiteralValue };
+    auto types = WCDB::getTypesOfSQL(testingSQL);
+    TestCaseAssertIterateEqual(testingSQL, testingTypes);
+    TestCaseAssertSQLEqual(testingSQL, @"rowid + 1 AS rowidAddOne");
 }
 
 - (void)test_select

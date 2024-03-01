@@ -148,7 +148,7 @@
 
     if ([self isExpired]) {
         TestCaseLog(@"Prototype is expired");
-        [self removePrototype];
+        //        [self removePrototype];
 
         [self prepare];
     }
@@ -189,17 +189,19 @@
     TestCaseAssertNotNil(delegate);
     quality = [delegate qualityOfPrototype:self.database];
     while (quality < self.lowerQuality) {
-        [delegate preparePrototype:self.database currentQuality:quality];
-        quality = [delegate qualityOfPrototype:self.database];
+        @autoreleasepool {
+            [delegate preparePrototype:self.database currentQuality:quality];
+            quality = [delegate qualityOfPrototype:self.database];
 
-        // progress
-        double newProgress = quality / self.quality;
-        if (newProgress > 1.0f) {
-            newProgress = 1.0f;
-        }
-        if (newProgress - progress >= 0.01f) {
-            progress = newProgress;
-            TestCaseLog(@"Preparing %.2f%%", progress * 100.0f);
+            // progress
+            double newProgress = quality / self.quality;
+            if (newProgress > 1.0f) {
+                newProgress = 1.0f;
+            }
+            if (newProgress - progress >= 0.01f) {
+                progress = newProgress;
+                TestCaseLog(@"Preparing %.2f%%", progress * 100.0f);
+            }
         }
     }
 

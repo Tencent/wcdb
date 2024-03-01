@@ -65,6 +65,33 @@ OperationQueue::~OperationQueue()
     unregisterNotificationWhenMemoryWarning(m_observerForMemoryWarning);
 }
 
+void OperationQueue::stopAllDatabaseEvent(const UnsafeStringView& path)
+{
+    LockGuard lockGuard(m_lock);
+    Operation integerity(Operation::Type::Integrity, path);
+    m_timedQueue.remove(integerity);
+
+    Operation checkpoint(Operation::Type::Checkpoint, path);
+    m_timedQueue.remove(checkpoint);
+
+    Operation backup(Operation::Type::Backup, path);
+    m_timedQueue.remove(backup);
+
+    Operation migrate(Operation::Type::Migrate, path);
+    m_timedQueue.remove(migrate);
+
+    Operation compress(Operation::Type::Compress, path);
+    m_timedQueue.remove(compress);
+
+    Operation mergeIndex(Operation::Type::MergeIndex, path);
+    m_timedQueue.remove(mergeIndex);
+}
+
+void OperationQueue::stop()
+{
+    m_timedQueue.stop();
+}
+
 void OperationQueue::main()
 {
     m_timedQueue.loop(std::bind(
@@ -73,7 +100,7 @@ void OperationQueue::main()
 
 void OperationQueue::handleError(const Error& error)
 {
-    if (error.level < Error::Level::Error || !error.isCorruption() || isExiting()) {
+    if (error.level < Error::Level::Warning || !error.isCorruption() || isExiting()) {
         return;
     }
 
@@ -170,16 +197,22 @@ bool OperationQueue::Operation::operator==(const Operation& other) const
 }
 
 OperationQueue::Parameter::Parameter()
-: source(Source::Other), frames(0), numberOfFailures(0), identifier(0), numberOfFileDescriptors(0)
+: source(Source::Other), numberOfFailures(0), identifier(0), numberOfFileDescriptors(0)
 {
 }
 
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
 {
     void* context = operationStart();
+    if (operation.type != Operation::Type::NotifyCorruption) {
+        Core::shared().setThreadedErrorIgnorable(true);
+    }
     switch (operation.type) {
     case Operation::Type::Migrate:
         doMigrate(operation.path, parameter.numberOfFailures);
+        break;
+    case Operation::Type::Compress:
+        doCompress(operation.path, parameter.numberOfFailures);
         break;
     case Operation::Type::Checkpoint:
         doCheckpoint(operation.path);
@@ -197,10 +230,12 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
     case Operation::Type::MergeIndex:
         doMergeFTSIndex(operation.path, parameter.newTables, parameter.modifiedTables);
         break;
-    default:
-        WCTAssert(operation.type == Operation::Type::Backup);
+    case Operation::Type::Backup:
         doBackup(operation.path);
         break;
+    }
+    if (operation.type != Operation::Type::NotifyCorruption) {
+        Core::shared().setThreadedErrorIgnorable(false);
     }
     operationEnd(context);
 }
@@ -212,7 +247,10 @@ void OperationQueue::async(const Operation& operation, double delay, const Param
 
 #pragma mark - Record
 OperationQueue::Record::Record()
-: registeredForMigration(false), registeredForBackup(false), registeredForCheckpoint(false)
+: registeredForMigration(false)
+, registeredForCompression(false)
+, registeredForBackup(false)
+, registeredForCheckpoint(false)
 {
 }
 
@@ -288,6 +326,78 @@ void OperationQueue::doMigrate(const UnsafeStringView& path, int numberOfFailure
     }
 }
 
+#pragma mark - Compress
+void OperationQueue::registerAsRequiredCompression(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    LockGuard lockGuard(m_lock);
+    m_records[path].registeredForCompression = true;
+}
+
+void OperationQueue::registerAsNoCompressionRequired(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    LockGuard lockGuard(m_lock);
+    m_records[path].registeredForCompression = false;
+    Operation operation(Operation::Type::Compress, path);
+    m_timedQueue.remove(operation);
+}
+
+void OperationQueue::asyncCompress(const UnsafeStringView& path)
+{
+    asyncCompress(path, OperationQueueTimeIntervalForCompression, 0);
+}
+
+void OperationQueue::stopCompress(const UnsafeStringView& path)
+{
+    LockGuard lockGuard(m_lock);
+    Operation operation(Operation::Type::Compress, path);
+    m_timedQueue.remove(operation);
+}
+
+void OperationQueue::asyncCompress(const UnsafeStringView& path, double delay, int numberOfFailures)
+{
+    WCTAssert(!path.empty());
+    WCTAssert(numberOfFailures >= 0
+              && numberOfFailures < OperationQueueTolerableFailuresForCompression);
+
+    SharedLockGuard lockGuard(m_lock);
+    if (m_records[path].registeredForCompression) {
+        Operation operation(Operation::Type::Compress, path);
+        Parameter parameter;
+        parameter.numberOfFailures = numberOfFailures;
+        async(operation, delay, parameter);
+    }
+}
+
+void OperationQueue::doCompress(const UnsafeStringView& path, int numberOfFailures)
+{
+    WCTAssert(!path.empty());
+    WCTAssert(numberOfFailures >= 0
+              && numberOfFailures < OperationQueueTolerableFailuresForCompression);
+
+    auto done = m_event->compressionShouldBeOperated(path);
+    if (done.succeed()) {
+        if (!done.value()) {
+            asyncCompress(path, OperationQueueTimeIntervalForCompression, numberOfFailures);
+        }
+    } else {
+        if (numberOfFailures + 1 < OperationQueueTolerableFailuresForCompression) {
+            asyncCompress(
+            path, OperationQueueTimeIntervalForRetringAfterFailure, numberOfFailures + 1);
+        } else {
+            Error error(Error::Code::Notice,
+                        Error::Level::Notice,
+                        "Auto compression is stopped due to too many errors.");
+            error.infos.insert_or_assign(ErrorStringKeyPath, path);
+            error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCompress);
+            Notifier::shared().notify(error);
+        }
+    }
+}
+
 #pragma mark - Merge FTS Index
 void OperationQueue::registerAsRequiredMergeFTSIndex(const UnsafeStringView& path)
 {
@@ -331,6 +441,14 @@ void OperationQueue::doMergeFTSIndex(const UnsafeStringView& path,
 }
 
 #pragma mark - Backup
+bool OperationQueue::isAutoBackup(const UnsafeStringView& path)
+{
+    WCTAssert(!path.empty());
+
+    SharedLockGuard lockGuard(m_lock);
+    return m_records[path].registeredForBackup;
+}
+
 void OperationQueue::registerAsRequiredBackup(const UnsafeStringView& path)
 {
     WCTAssert(!path.empty());
@@ -349,14 +467,14 @@ void OperationQueue::registerAsNoBackupRequired(const UnsafeStringView& path)
     m_timedQueue.remove(operation);
 }
 
-void OperationQueue::asyncBackup(const UnsafeStringView& path)
+void OperationQueue::asyncBackup(const UnsafeStringView& path, bool incremental)
 {
     WCTAssert(!path.empty());
 
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_records.find(path);
     if (iter != m_records.end() && iter->second.registeredForBackup) {
-        asyncBackup(path, OperationQueueTimeIntervalForBackup);
+        asyncBackup(path, incremental ? 0 : OperationQueueTimeIntervalForBackup);
     }
 }
 
@@ -405,7 +523,13 @@ void OperationQueue::asyncCheckpoint(const UnsafeStringView& path)
     if (iter != m_records.end() && iter->second.registeredForCheckpoint) {
         Operation operation(Operation::Type::Checkpoint, path);
         Parameter parameter;
-        async(operation, OperationQueueTimeIntervalForCheckpoint, parameter, AsyncMode::ForwardOnly);
+        double checkPointInterval = OperationQueueTimeIntervalForCheckpoint;
+        auto config = Core::shared().getABTestConfig("clicfg_wcdb_checkpoint_interval");
+        if (config.hasValue() && config->length() > 0) {
+            checkPointInterval = std::max(checkPointInterval, atof(config->data()));
+            checkPointInterval = std::min(checkPointInterval, 600.0);
+        }
+        async(operation, checkPointInterval, parameter, AsyncMode::ForwardOnly);
     }
 }
 

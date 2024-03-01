@@ -1,0 +1,22 @@
+pluginManagement {
+    includeBuild 'builder'
+}
+
+rootProject.name = 'WCDB'
+
+include ':main'
+include ':compat'
+include ':test'
+include ':kotlin-test'
+
+includeBuild('annotation') {
+    dependencySubstitution {
+        substitute module('com.tencent.wcdb:annotation') using project(':')
+    }
+}
+
+includeBuild('builder') {
+    dependencySubstitution {
+        substitute module('com.tencent.wcdb:compiler') using project(':compiler')
+    }
+}

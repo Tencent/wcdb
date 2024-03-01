@@ -174,7 +174,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                         orderBy orderList: [OrderBy]? = nil,
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
-        let rowSelect = RowSelect(with: try getHandle(),
+        let rowSelect = RowSelect(with: try getHandle(writeHint: false),
                                   results: resultColumnConvertibleList,
                                   tables: [table],
                                   isDistinct: false)
@@ -201,7 +201,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                         limit: Limit? = nil,
                         offset: Offset? = nil) throws -> MultiRowsValue {
         return try getRows(
-            on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
+            on: resultColumnConvertibleList.isEmpty ? [Column.all()] : resultColumnConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
@@ -215,7 +215,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                        orderBy orderList: [OrderBy]? = nil,
                        offset: Offset? = nil) throws -> OneRowValue {
         return try getRow(
-            on: resultColumnConvertibleList.isEmpty ? [Column.all] : resultColumnConvertibleList,
+            on: resultColumnConvertibleList.isEmpty ? [Column.all()] : resultColumnConvertibleList,
             fromTable: table,
             where: condition,
             orderBy: orderList,
@@ -241,7 +241,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                           orderBy orderList: [OrderBy]? = nil,
                           limit: Limit? = nil,
                           offset: Offset? = nil) throws -> OneColumnValue {
-        let rowSelect = RowSelect(with: try getHandle(), results: [result], tables: [table], isDistinct: false)
+        let rowSelect = RowSelect(with: try getHandle(writeHint: false), results: [result], tables: [table], isDistinct: false)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -264,7 +264,7 @@ extension RowSelectInterface where Self: HandleRepresentable {
                                   orderBy orderList: [OrderBy]? = nil,
                                   limit: Limit? = nil,
                                   offset: Offset? = nil) throws -> OneColumnValue {
-        let rowSelect = RowSelect(with: try getHandle(), results: [result], tables: [table], isDistinct: true)
+        let rowSelect = RowSelect(with: try getHandle(writeHint: false), results: [result], tables: [table], isDistinct: true)
         if condition != nil {
             rowSelect.where(condition!)
         }
@@ -390,7 +390,7 @@ extension SelectInterface where Self: HandleRepresentable {
         orderBy orderList: [OrderBy]? = nil,
         limit: Limit? = nil,
         offset: Offset? = nil) throws -> [Object] {
-        let select = Select(with: try getHandle(), on: propertyConvertibleList, table: table, isDistinct: false)
+        let select = Select(with: try getHandle(writeHint: false), on: propertyConvertibleList, table: table, isDistinct: false)
         if condition != nil {
             select.where(condition!)
         }

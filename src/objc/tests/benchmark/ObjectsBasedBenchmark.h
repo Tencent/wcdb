@@ -44,4 +44,10 @@
 
 - (void)doTestBatchWrite;
 
+- (void)doTestRandomRead;
+
+- (void)doTestRandomUpdate;
+
+- (void)doTestRandomDelete;
+
 @end

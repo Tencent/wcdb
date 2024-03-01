@@ -35,15 +35,15 @@ public:
     Progress();
     virtual ~Progress() = 0;
 
-    typedef std::function<void(double progress, double increment)> ProgressUpdateCallback;
+    typedef std::function<bool(double progress, double increment)> ProgressUpdateCallback;
     void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
 
 protected:
-    void increaseProgress(double increment);
-    void finishProgress();
+    bool increaseProgress(double increment);
+    bool finishProgress();
 
 private:
-    void updateProgress(double progress);
+    bool updateProgress(double progress);
     double m_progress;
     ProgressUpdateCallback m_onProgressUpdated;
 };

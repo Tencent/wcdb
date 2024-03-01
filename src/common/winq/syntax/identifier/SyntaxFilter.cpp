@@ -50,8 +50,9 @@ bool Filter::describle(std::ostream& stream) const
 
 void Filter::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     expression.get()->iterate(iterator, stop);
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

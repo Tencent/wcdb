@@ -24,18 +24,20 @@
 
 #pragma once
 
+#include "AuxiliaryFunctionModule.hpp"
 #include "Config.hpp"
+#include "FunctionModules.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
 
-class AuxiliaryFunctionModules;
+typedef FunctionModules<FTS5AuxiliaryFunctionModule> AuxiliaryFunctionModules;
 
 class AuxiliaryFunctionConfig final : public Config {
 public:
     AuxiliaryFunctionConfig(const UnsafeStringView& name,
                             const std::shared_ptr<AuxiliaryFunctionModules>& modules);
-    ~AuxiliaryFunctionConfig() override final;
+    ~AuxiliaryFunctionConfig() override;
 
     StringView name;
 

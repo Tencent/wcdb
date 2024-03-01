@@ -24,7 +24,7 @@
 
 #import "CPPTestCase.h"
 
-@interface CPPDatabaseTests : CPPTableTestCase
+@interface CPPDatabaseTests : CPPCRUDTestCase
 
 @end
 
@@ -141,15 +141,15 @@
     TestCaseAssertFalse(self.database->isOpened());
 }
 
-- (void)testCheckpoint
+- (void)test_checkpoint
 {
-    WCDB::MultiRowsValue rows = [Random.shared autoIncrementTestCaseValuesWithCount:2000];
+    WCDB::MultiRowsValue rows = [Random.shared autoIncrementTestCaseValuesWithCount:100];
 
     TestCaseAssertTrue([self createValueTable]);
 
     unsigned long walFrameNum = 0;
     for (int i = 0; i < 100; i++) {
-        auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Expression::function("count").invokeAll()).from(self.tableName.UTF8String));
+        auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName.UTF8String));
         TestCaseAssertTrue(value.succeed() && value.value().intValue() == i);
         TestCaseAssertTrue(self.database->insertRows(rows[i], self.columns, self.tableName.UTF8String));
         self.database->passiveCheckpoint();
@@ -174,7 +174,7 @@
     }
 }
 
-- (void)testOpenFail
+- (void)test_open_fail
 {
     auto database = WCDB::Database(self.directory.UTF8String);
     TestCaseAssertFalse(database.canOpen());
@@ -184,6 +184,237 @@
     TestCaseAssertFalse(database.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
     WCDB::Table<CPPTestCaseObject> table = database.getTable<CPPTestCaseObject>(self.tableName.UTF8String);
     TestCaseAssertFalse(table.selectValue(WCDB::Column::all().count()).succeed());
+}
+
+- (void)test_backup
+{
+    [self insertPresetObjects];
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:[self firstMaterialPath]]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:[self lastMaterialPath]]);
+
+    TestCaseAssertTrue(self.database->backup());
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self firstMaterialPath]]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:[self lastMaterialPath]]);
+
+    TestCaseAssertTrue(self.database->backup());
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self firstMaterialPath]]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self lastMaterialPath]]);
+}
+
+- (void)test_retrive
+{
+    [self insertPresetObjects];
+    TestCaseAssertTrue(self.database->retrieve(nullptr) == 1);
+    [self check:CPPMultiRowValueExtract(self.objects)
+      isEqualTo:CPPMultiRowValueExtract([self getAllObjects])];
+}
+
+- (void)test_vacuum
+{
+    [self insertPresetObjects];
+    TestCaseAssertTrue(self.database->vacuum(nullptr));
+    [self check:CPPMultiRowValueExtract(self.objects)
+      isEqualTo:CPPMultiRowValueExtract([self getAllObjects])];
+}
+
+- (void)test_migration
+{
+    CPPTestCaseObject oldObject1 = CPPTestCaseObject(1, "a");
+    CPPTestCaseObject oldObject2 = CPPTestCaseObject(2, "b");
+    CPPTestCaseObject oldObject3 = CPPTestCaseObject(3, "c");
+
+    NSData* sourceCipher = [Random.shared dataWithLength:101];
+    NSData* targetCipher = [Random.shared dataWithLength:101];
+
+    WCDB::Database sourceDatabase([self.path stringByAppendingString:@"_source"].UTF8String);
+    sourceDatabase.setCipherKey(WCDB::UnsafeData((unsigned char*) sourceCipher.bytes, sourceCipher.length));
+
+    NSString* sourceTableName = @"sourceTable";
+    TestCaseAssertTrue(sourceDatabase.createTable<CPPTestCaseObject>(sourceTableName.UTF8String));
+    WCDB::Table<CPPTestCaseObject> sourceTable = sourceDatabase.getTable<CPPTestCaseObject>(sourceTableName.UTF8String);
+
+    TestCaseAssertTrue(sourceTable.insertObjects({ oldObject1, oldObject2, oldObject3 }));
+
+    WCDB::Database targetDatabase(self.path.UTF8String);
+    targetDatabase.setCipherKey(WCDB::UnsafeData((unsigned char*) targetCipher.bytes, targetCipher.length));
+
+    targetDatabase.addMigration(sourceDatabase.getPath(),
+                                WCDB::UnsafeData((unsigned char*) sourceCipher.bytes, sourceCipher.length),
+                                [=](WCDB::Database::MigrationInfo& info) {
+                                    if (info.table.compare(self.tableName.UTF8String) == 0) {
+                                        info.sourceTable = sourceTableName.UTF8String;
+                                        info.filterCondition = WCDB_FIELD(CPPTestCaseObject::identifier) > 2;
+                                    }
+                                });
+
+    TestCaseAssertTrue(targetDatabase.createTable<CPPTestCaseObject>(self.tableName.UTF8String));
+    WCDB::Table<CPPTestCaseObject> targetTable = targetDatabase.getTable<CPPTestCaseObject>(self.tableName.UTF8String);
+
+    TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 1);
+
+    TestCaseAssertTrue(targetTable.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) == 2));
+    TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 3);
+
+    TestCaseAssertTrue(targetTable.updateRow({ "newContent" }, WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 3));
+    TestCaseAssertCPPStringEqual(targetTable.selectValue(WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier) == 3).value().textValue().data(), "newContent");
+
+    TestCaseAssertTrue(targetTable.deleteObjects(WCDB_FIELD(CPPTestCaseObject::identifier) == 3));
+    TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 0);
+    TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 2);
+
+    TestCaseAssertTrue(targetTable.insertObjects(CPPTestCaseObject(4, "d")));
+    auto newObject = targetTable.getFirstObject(WCDB_FIELD(CPPTestCaseObject::identifier) == 4);
+    TestCaseAssertTrue(newObject.hasValue() && newObject.value().content.compare("d") == 0);
+    TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 2);
+    TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 1);
+
+    targetDatabase.close();
+    TestCaseAssertFalse(targetDatabase.isMigrated());
+
+    WCDB::StringView migratedTable;
+    targetDatabase.setNotificationWhenMigrated([&migratedTable, self](WCDB::Database&, WCDB::Optional<WCDB::Database::MigrationInfo> info) {
+        if (info.hasValue() && info.value().table.compare(self.tableName.UTF8String) == 0) {
+            migratedTable = info.value().sourceTable;
+        }
+    });
+    while (!targetDatabase.isMigrated()) {
+        TestCaseAssertTrue(targetDatabase.stepMigration());
+    }
+    TestCaseAssertCPPStringEqual(migratedTable.data(), sourceTableName.UTF8String);
+}
+
+- (void)test_normal_compress
+{
+    [[Random shared] setStringType:RandomStringType_English];
+    TestCaseAssertTrue([self createObjectTable]);
+    auto preInsertObjects = [[Random shared] testCaseObjectsWithCount:2 startingFromIdentifier:1];
+    auto newInsertObjects = [[Random shared] testCaseObjectsWithCount:2 startingFromIdentifier:3];
+    TestCaseAssertTrue(self.table.insertObjects(preInsertObjects));
+
+    self.database->setCompression([](WCDB::Database::CompressionInfo& info) {
+        info.addZSTDNormalCompressField(WCDB_FIELD(CPPTestCaseObject::content));
+    });
+
+    bool tableCompressed = false;
+    bool databaseCompressed = false;
+    self.database->setNotificationWhenCompressed([&](WCDB::Database& database, WCDB::Optional<WCDB::StringView> table) {
+        TestCaseAssertEqual(database.getTag(), self.database->getTag());
+        TestCaseAssertCPPStringEqual(database.getPath().data(), self.database->getPath().data());
+        if (table.hasValue()) {
+            if (table.value().equal(self.tableName.UTF8String)) {
+                tableCompressed = true;
+            }
+        } else {
+            databaseCompressed = true;
+        }
+    });
+
+    TestCaseAssertFalse(self.database->isCompressed());
+    TestCaseAssertTrue(self.database->stepCompression());
+    TestCaseAssertTrue(self.database->stepCompression());
+    TestCaseAssertTrue(self.database->isCompressed());
+    TestCaseAssertTrue(tableCompressed && databaseCompressed);
+
+    TestCaseAssertTrue(self.table.insertObjects(newInsertObjects));
+    auto count = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column().count()).from(self.tableName.UTF8String).where(WCDB::Column("WCDB_CT_content") == 4));
+    TestCaseAssertTrue(count.value() == 4);
+
+    preInsertObjects.insert(preInsertObjects.end(), newInsertObjects.begin(), newInsertObjects.end());
+
+    [self check:CPPMultiRowValueExtract(preInsertObjects)
+      isEqualTo:CPPMultiRowValueExtract([self getAllObjects])];
+
+    [[Random shared] setStringType:RandomStringType_Default];
+}
+
+- (void)test_dict_compress
+{
+    [[Random shared] setStringType:RandomStringType_English];
+    TestCaseAssertTrue([self createObjectTable]);
+    auto preInsertObjects = [[Random shared] testCaseObjectsWithCount:2 startingFromIdentifier:1];
+    auto newInsertObjects = [[Random shared] testCaseObjectsWithCount:2 startingFromIdentifier:3];
+    TestCaseAssertTrue(self.table.insertObjects(preInsertObjects));
+
+    std::vector<std::string> samples;
+    for (int i = 0; i < 1000; i++) {
+        samples.push_back(std::string([[Random shared] string].UTF8String));
+    }
+    auto dict = WCDB::Database::trainDict(samples, 1);
+    TestCaseAssertTrue(dict.succeed());
+    TestCaseAssertTrue(WCDB::Database::registerZSTDDict(dict.value(), 1));
+
+    self.database->setCompression([](WCDB::Database::CompressionInfo& info) {
+        info.addZSTDDictCompressProperty(WCDB_FIELD(CPPTestCaseObject::content), 1);
+    });
+
+    TestCaseAssertFalse(self.database->isCompressed());
+    TestCaseAssertTrue(self.database->stepCompression());
+    TestCaseAssertTrue(self.database->stepCompression());
+    TestCaseAssertTrue(self.database->isCompressed());
+
+    TestCaseAssertTrue(self.table.insertObjects(newInsertObjects));
+    auto count = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column().count()).from(self.tableName.UTF8String).where(WCDB::Column("WCDB_CT_content") == 2));
+    TestCaseAssertTrue(count.value() == 4);
+
+    preInsertObjects.insert(preInsertObjects.end(), newInsertObjects.begin(), newInsertObjects.end());
+
+    [self check:CPPMultiRowValueExtract(preInsertObjects)
+      isEqualTo:CPPMultiRowValueExtract([self getAllObjects])];
+
+    [[Random shared] setStringType:RandomStringType_Default];
+}
+
+- (void)test_multi_dict_compress
+{
+    [[Random shared] setStringType:RandomStringType_English];
+    TestCaseAssertTrue([self createObjectTable]);
+    auto preInsertObjects = [[Random shared] testCaseObjectsWithCount:2 startingFromIdentifier:1];
+    auto newInsertObjects = [[Random shared] testCaseObjectsWithCount:2 startingFromIdentifier:3];
+    TestCaseAssertTrue(self.table.insertObjects(preInsertObjects));
+
+    std::vector<std::string> samples;
+    for (int i = 0; i < 1000; i++) {
+        samples.push_back(std::string([[Random shared] string].UTF8String));
+    }
+    auto dict = WCDB::Database::trainDict(samples, 2);
+    TestCaseAssertTrue(dict.succeed());
+    TestCaseAssertTrue(WCDB::Database::registerZSTDDict(dict.value(), 2));
+
+    samples.clear();
+    for (int i = 0; i < 1000; i++) {
+        samples.push_back(std::string([[Random shared] string].UTF8String));
+    }
+    auto dict2 = WCDB::Database::trainDict(samples, 3);
+    TestCaseAssertTrue(dict2.succeed());
+    TestCaseAssertTrue(WCDB::Database::registerZSTDDict(dict2.value(), 3));
+
+    samples.clear();
+    for (int i = 0; i < 1000; i++) {
+        samples.push_back(std::string([[Random shared] string].UTF8String));
+    }
+    auto dict3 = WCDB::Database::trainDict(samples, 4);
+    TestCaseAssertTrue(dict3.succeed());
+    TestCaseAssertTrue(WCDB::Database::registerZSTDDict(dict3.value(), 4));
+
+    self.database->setCompression([](WCDB::Database::CompressionInfo& info) {
+        info.addZSTDDictCompressProperty(WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier), { { 1, 2 }, { 2, 3 }, { WCDB::Database::DictDefaultMatchValue, 4 } });
+    });
+
+    TestCaseAssertFalse(self.database->isCompressed());
+    TestCaseAssertTrue(self.database->stepCompression());
+    TestCaseAssertTrue(self.database->stepCompression());
+    TestCaseAssertTrue(self.database->isCompressed());
+
+    TestCaseAssertTrue(self.table.insertObjects(newInsertObjects));
+    auto count = self.database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column().count()).from(self.tableName.UTF8String).where(WCDB::Column("WCDB_CT_content") == 2));
+    TestCaseAssertTrue(count.value() == 4);
+
+    preInsertObjects.insert(preInsertObjects.end(), newInsertObjects.begin(), newInsertObjects.end());
+
+    [self check:CPPMultiRowValueExtract(preInsertObjects)
+      isEqualTo:CPPMultiRowValueExtract([self getAllObjects])];
+
+    [[Random shared] setStringType:RandomStringType_Default];
 }
 
 @end

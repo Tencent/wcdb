@@ -1,5 +1,5 @@
 //
-// Created by sanhuazhang on 2019/05/02
+// Created by 陈秋文 on 2023/7/23.
 //
 
 /*
@@ -22,29 +22,35 @@
  * limitations under the License.
  */
 
-#import "MigrationObject+WCTTableCoding.h"
-#import "MigrationObject.h"
-#import "Random+MigrationObject.h"
+#import "MigrationTestObject.h"
+#import "MigrationTestSourceObject.h"
 #import "TestCase.h"
 
 @interface MigrationTestCase : TableTestCase
 
-@property (assign, nonatomic) BOOL isCrossDatabaseMigration;
+@property (nonatomic, assign) BOOL startMigration;
+@property (nonatomic, assign) BOOL isCrossDatabaseMigration;
+@property (nonatomic, assign) BOOL needCipher;
+@property (nonatomic, assign) BOOL needFilter;
+@property (nonatomic, assign) int missColumnCount;
 
-@property (readonly, nonatomic) NSMutableDictionary<NSString*, NSString*>* toMigrate;
+@property (nonatomic, strong) Class<MigrationTestSourceObject> sourceClass;
+@property (nonatomic, strong) Class<MigrationTestObject> targetClass;
 
-@property (readonly, nonatomic) NSString* sourceTable;
+@property (nonatomic, readonly) NSString* schemaName;
+@property (nonatomic, readonly) NSString* sourceTableName;
+@property (nonatomic, readonly) NSString* sourcePath;
+@property (nonatomic, readonly) WCTDatabase* sourceDatabase;
+@property (nonatomic, readonly) WCTTable* sourceTable;
 
-@property (readonly, nonatomic) NSString* sourcePath;
+@property (readonly, nonatomic) NSArray<NSObject<MigrationTestSourceObject>*>* objects;
+@property (readonly, nonatomic) NSArray<NSObject<MigrationTestObject>*>* filterObjects;
 
-@property (assign, nonatomic) BOOL needCipher;
++ (NSArray<Class<MigrationTestObject>>*)allClasses;
++ (NSArray<Class<MigrationTestSourceObject>>*)allSourceClasses;
 
-@property (readonly, nonatomic) WCTDatabase* sourceDatabase;
-
-@property (readonly, nonatomic) NSArray<MigrationObject*>* objects;
-
-@property (nonatomic, assign) MigrationObjectORMMode mode;
-
-- (BOOL)isMigrating;
+- (void)createTables;
+- (void)configMigration;
+- (void)clearData;
 
 @end

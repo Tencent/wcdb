@@ -50,7 +50,7 @@ extension DeleteInterface where Self: HandleRepresentable {
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
                        offset: Offset? = nil) throws {
-        let delete = Delete(with: try getHandle(), andTableName: table)
+        let delete = Delete(with: try getHandle(writeHint: true), andTableName: table)
         if condition != nil {
             delete.where(condition!)
         }

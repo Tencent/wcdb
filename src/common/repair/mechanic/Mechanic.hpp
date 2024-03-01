@@ -39,7 +39,7 @@ class Mechanic final : public Repairman {
 #pragma mark - Initialize
 public:
     Mechanic(const UnsafeStringView &path);
-    ~Mechanic() override final;
+    ~Mechanic() override;
 
 #pragma mark - Mechanic
 public:
@@ -52,6 +52,7 @@ public:
 protected:
     const Material *m_material;
     uint32_t m_checksum;
+    bool m_withoutRowId;
 
 #pragma mark - Crawlable
 protected:

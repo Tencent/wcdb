@@ -35,7 +35,7 @@ namespace Syntax {
 class WCDB_API TableOrSubquery final : public Identifier {
 #pragma mark - Lang
 public:
-    ~TableOrSubquery() override final;
+    ~TableOrSubquery() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Table, Function, TableOrSubqueries, JoinClause, Select, );
 

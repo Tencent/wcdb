@@ -45,6 +45,7 @@
         [path stringByAppendingString:@"-wal"],
         [path stringByAppendingString:@"-first.material"],
         [path stringByAppendingString:@"-last.material"],
+        [path stringByAppendingString:@"-incremental.material"],
         [[path stringByAppendingString:@".factory"] stringByAppendingPathComponent:path.lastPathComponent],
         [path stringByAppendingString:@"-journal"],
         [path stringByAppendingString:@"-shm"],

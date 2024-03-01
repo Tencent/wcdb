@@ -39,6 +39,13 @@ void WCDBStatementDropIndexConfigSchema(CPPStatementDropIndex dropIndexStatement
     cppDropIndexStatement->schema(*cppSchema);
 }
 
+void WCDBStatementDropIndexConfigSchema2(CPPStatementDropIndex dropIndexStatement,
+                                         CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(dropIndexStatement, WCDB::StatementDropIndex, cppDropIndexStatement);
+    cppDropIndexStatement->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementDropIndexConfigIndex(CPPStatementDropIndex dropIndexStatement,
                                        const char* _Nullable name)
 {

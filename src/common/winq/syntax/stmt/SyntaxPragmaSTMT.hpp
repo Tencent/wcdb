@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API PragmaSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~PragmaSTMT() override final;
+    ~PragmaSTMT() override;
 
     Schema schema;
     Pragma pragma;

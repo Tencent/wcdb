@@ -72,7 +72,7 @@ enum WCDBSyntaxLimitParameterType {
 enum WCDBSyntaxMatchType {
     WCDBSyntaxMatchType_Simple = 1,
     WCDBSyntaxMatchType_Full,
-    WCDBSyntaxMatchType_Patial,
+    WCDBSyntaxMatchType_Partial,
 };
 
 enum WCDBSyntaxColumnType {
@@ -89,8 +89,7 @@ enum WCDBSyntaxTransactionType {
     WCDBSyntaxTransactionType_Exclusive,
 };
 
-WCDBDefineCPPBridgedType(CPPStatement);
-CPPStatement WCDBGetUnmangedStatement(CPPObject* _Nonnull statement);
+bool WCDBStatementNeedToWrite(CPPObject* _Nonnull statement);
 
 WCDBDefineCPPBridgedType(CPPBindParameter);
 WCDBDefineCPPBridgedType(CPPColumn);

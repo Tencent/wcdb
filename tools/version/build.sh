@@ -11,6 +11,9 @@ showUsage() {
        [--disable-bitcode]: Use bitcode if not specified.
        [--static-framework]: Produce dynamic framework if not specified.
        [--pretty]: Use \`xcpretty\` if available.
+       [--zstd]: Use Zstd
+       [--wechat]: For WeChat.
+       [--universal]: Build universal library for macOS.
 """
 }
 
@@ -25,6 +28,9 @@ static_framework=false
 configuration=Release
 pretty=false
 action=build
+zstd=0
+wechat=false
+universal=false
 
 while [[ $# -gt 0 ]]
 do
@@ -67,6 +73,18 @@ case "$key" in
     pretty=true
     shift
     ;;
+    --zstd)
+    zstd=1
+    shift
+    ;;
+    --wechat)
+    wechat=true
+    shift
+    ;;
+    --universal)
+    universal=true
+    shift
+    ;;
     -h|--help)
     showUsage
     exit 0
@@ -82,15 +100,22 @@ project="$root"/src/WCDB.xcodeproj
 derivedData="$destination"/derivedData
 products="$derivedData"/Build/Products
 
+if $universal; then
+    if [ "$platform" != "macOS" ]; then
+        echo 'Universal library is only supported with macOS.'
+        exit 1
+    fi
+fi
+
 declare settingsPrameter
 if $static_framework; then
     settingsPrameter+="--static-framework "
 fi
 if $enable_bitcode; then
-	settingsPrameter+="--enable-bitcode "
+    settingsPrameter+="--enable-bitcode "
 fi
 if $wechat; then
-	settingsPrameter+="--wechat "
+    settingsPrameter+="--wechat "
 fi
 
 settings=`bash $ScriptDir/settings.sh $settingsPrameter`
@@ -127,7 +152,11 @@ case "$platform" in
         platformBasedParameters+=('product="$products/$configuration-iphonesimulator/$target.framework" sdk=iphonesimulator arch=x86_64')
     ;;
     macOS)
-        platformBasedParameters+=('product="$products/$configuration/$target.framework" sdk=macosx arch=x86_64')
+        macosArchs='x86_64'
+        if $universal; then
+        	macosArchs='x86_64 -arch arm64'
+        fi
+        platformBasedParameters+=('product="$products/$configuration/$target.framework" sdk=macosx arch=$macosArchs')
     ;;
     watchOS)
         platformBasedParameters+=('product="$products/$configuration-watchos/$target.framework" sdk=watchos arch="armv7k -arch arm64_32"')
@@ -166,7 +195,17 @@ for platformBasedParameter in "${platformBasedParameters[@]}"; do
     if [ -z "$template" ]; then
         template="$product"
     fi
-    builder="xcrun xcodebuild -arch $arch -scheme $scheme -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk $settings $action"
+    builder="xcrun xcodebuild -arch $arch -scheme $scheme -project $project -configuration $configuration -derivedDataPath $derivedData -sdk $sdk WCDB_USE_ZSTD=$zstd $settings $action"
+    if { $static_framework && $wechat; } || !$zstd; then
+        # skip zstd
+        if [ "$platform" = "iOS" ]; then
+          builder+=" OTHER_LDFLAGS="-framework UIKit""
+        elif [ "$platform" = "macOS" ]; then
+          builder+=" OTHER_LDFLAGS="-framework Cocoa""
+        else
+          builder+=" OTHER_LDFLAGS="""
+        fi
+    fi
     if $pretty; then
         if type xcpretty > /dev/null; then
             builder+=" | xcpretty"

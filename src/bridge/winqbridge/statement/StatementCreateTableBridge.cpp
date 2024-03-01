@@ -49,6 +49,13 @@ void WCDBStatementCreateTableConfigSchema(CPPStatementCreateTable createTable, C
     cppCreateTable->schema(*cppSchema);
 }
 
+void WCDBStatementCreateTableConfigSchema2(CPPStatementCreateTable createTable,
+                                           CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(createTable, WCDB::StatementCreateTable, cppCreateTable);
+    cppCreateTable->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementCreateTableConfigTemp(CPPStatementCreateTable createTable)
 {
     WCDBGetObjectOrReturn(createTable, WCDB::StatementCreateTable, cppCreateTable);
@@ -77,6 +84,13 @@ void WCDBStatementCreateTableConfigColumns(CPPStatementCreateTable createTable,
     cppCreateTable->syntax().switcher
     = WCDB::StatementCreateTable::SyntaxType::Switch::ColumnDefs;
     cppCreateTable->syntax().columnDefs = cppColumns;
+}
+
+void WCDBStatementCreateTableConfigColumn(CPPStatementCreateTable createTable, CPPColumnDef column)
+{
+    WCDBGetObjectOrReturn(createTable, WCDB::StatementCreateTable, cppCreateTable);
+    WCDBGetObjectOrReturn(column, WCDB::ColumnDef, cppColumn);
+    cppCreateTable->define(*cppColumn);
 }
 
 void WCDBStatementCreateTableConfigTableConstraints(CPPStatementCreateTable createTable,

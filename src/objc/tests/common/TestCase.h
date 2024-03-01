@@ -30,6 +30,7 @@
 #import "Benchmark.h"
 #import "CRUDTestCase.h"
 #import "DatabaseTestCase.h"
+#import "RobustyTestCase.h"
 #import "TableTestCase.h"
 
 #import "Dispatch.h"
@@ -52,5 +53,5 @@
 #import "ObjectsBasedFactory.h"
 #import "TablesBasedFactory.h"
 
-#import "WCTDatabase+Test.h"
 #import "WCTDatabase+TestCase.h"
+#import <WCDB/WCTDatabase+Test.h>

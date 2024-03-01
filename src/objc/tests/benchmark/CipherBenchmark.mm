@@ -35,8 +35,8 @@
 - (void)setUp
 {
     [super setUp];
-
-    self.factory.cipher = self.cipher;
+    self.factory.category = @"cipher";
+    [self.factory.database setCipherKey:self.cipher];
 }
 
 - (NSData *)cipher
@@ -47,7 +47,6 @@
 - (void)setUpDatabase
 {
     [super setUpDatabase];
-
     [self.database setCipherKey:self.cipher];
 }
 

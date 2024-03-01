@@ -59,7 +59,7 @@ bool ReindexSTMT::describle(std::ostream& stream) const
 
 void ReindexSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::NotSet:
     case Switch::Collation:
@@ -68,6 +68,7 @@ void ReindexSTMT::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(schema, iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

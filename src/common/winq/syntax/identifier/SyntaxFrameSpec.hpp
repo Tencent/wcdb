@@ -36,7 +36,7 @@ class Expression;
 class WCDB_API FrameSpec final : public Identifier {
 #pragma mark - Lang
 public:
-    ~FrameSpec() override final;
+    ~FrameSpec() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Range, Rows, );
 

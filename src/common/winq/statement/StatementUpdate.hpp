@@ -32,7 +32,7 @@ class WCDB_API StatementUpdate final : public SpecifiedSyntax<Syntax::UpdateSTMT
 public:
     using SpecifiedSyntax<Syntax::UpdateSTMT, Statement>::SpecifiedSyntax;
     StatementUpdate();
-    ~StatementUpdate() override final;
+    ~StatementUpdate() override;
 
     StatementUpdate& with(const CommonTableExpressions& commonTableExpressions);
     StatementUpdate& recursive();

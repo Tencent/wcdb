@@ -23,7 +23,22 @@ xcuserdata/*
 DerivedData
 
 #CMake
-tools/version/build/
+src/build/
 
 # WCDB
 WCDB.framework
+
+# WeChat
+WeChat/conan/*
+
+# wconan
+WeChat/.wconan2/
+WeChat/wconan_build/
+WeChat/wconan_libs/
+WeChat/wconan_local_build/
+WeChat/wconan_package.lock
+WeChat/wconan_publish.py
+WeChat/cmake-build-*/
+WeChat/compile.log
+WeChat/apple_build/
+WeChat/export_headers/

@@ -41,7 +41,11 @@ class FullCrawler final : public Repairman, public MasterCrawlerDelegate, public
 #pragma mark - Initialize
 public:
     FullCrawler(const UnsafeStringView &source);
-    ~FullCrawler() override final;
+    ~FullCrawler() override;
+    void setPageCount(int64_t pageCount);
+
+private:
+    int64_t m_pageCount;
 
 #pragma mark - Repair
 public:

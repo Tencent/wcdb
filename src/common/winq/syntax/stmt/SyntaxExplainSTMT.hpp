@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API ExplainSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~ExplainSTMT() override final;
+    ~ExplainSTMT() override;
 
     bool queryPlan = false;
     Shadow<Identifier> stmt;

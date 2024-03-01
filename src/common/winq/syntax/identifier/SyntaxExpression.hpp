@@ -124,7 +124,7 @@ protected:
 
 class WCDB_API Expression final : public Identifier, public ExpressionUnionMember {
 public:
-    ~Expression() override final;
+    ~Expression() override;
 
     std::list<Expression> expressions;
 

@@ -33,12 +33,14 @@ WCDB_EXTERN_C_BEGIN
 WCDBDefineCPPBridgedType(CPPBinding)
 
 CPPBinding WCDBBindingCreate();
-void WCDBBindingAddColumnDef(CPPBinding binding, const char* _Nullable columnName, CPPColumnDef columnDef);
+void WCDBBindingAddColumnDef(CPPBinding binding, CPPColumnDef columnDef);
+void WCDBBindingEnableAutoIncrementForExistingTable(CPPBinding binding);
 void WCDBBindingAddColumnConstraint(CPPBinding binding,
                                     const char* _Nullable columnName,
                                     CPPColumnConstraint constraint);
 void WCDBBindingAddIndex(CPPBinding binding,
-                         const char* _Nullable indexSubfix,
+                         const char* _Nullable indexNameOrSuffix,
+                         bool isFullName,
                          CPPStatementCreateIndex createIndex);
 void WCDBBindingAddTableConstraint(CPPBinding binding, CPPTableConstraint tableConstraint);
 void WCDBBindingConfigVirtualModule(CPPBinding binding, const char* _Nullable moduleName);
@@ -49,6 +51,8 @@ bool WCDBBindingCreateTable(CPPBinding binding, const char* _Nullable tableName,
 bool WCDBBindingCreateVirtualTable(CPPBinding binding,
                                    const char* _Nullable tableName,
                                    CPPHandle handle);
+
+void WCDBBindingConfigWithoutRowId(CPPBinding binding);
 
 const void* _Nullable WCDBBindingGetBaseBinding(CPPBinding binding);
 

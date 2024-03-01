@@ -80,7 +80,7 @@ public protocol InsertChainCallInterface: AnyObject {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - table: Table name
     /// - Returns: `Insert`
-    func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
+    func prepareInsert(on propertyConvertibleList: [PropertyConvertible]?,
                        intoTable table: String) throws -> Insert
 
     /// Prepare chain call for inserting or replacing on specific properties
@@ -104,19 +104,19 @@ public protocol InsertChainCallInterface: AnyObject {
 
 extension InsertChainCallInterface where Self: HandleRepresentable {
     public func prepareInsert<Root: TableEncodable>(of cls: Root.Type, intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: cls.Properties.all)
+        return Insert(with: try getHandle(writeHint: true), named: table, on: cls.Properties.all)
     }
 
     public func prepareInsertOrReplace<Root: TableEncodable>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
-            return Insert(with: try getHandle(), named: table, on: cls.Properties.all, onConflict: .Replace)
+            return Insert(with: try getHandle(writeHint: true), named: table, on: cls.Properties.all, onConflict: .Replace)
     }
 
     public func prepareInsertOrIgnore<Root: TableEncodable>(
         of cls: Root.Type,
         intoTable table: String) throws -> Insert {
-            return Insert(with: try getHandle(), named: table, on: cls.Properties.all, onConflict: .Ignore)
+            return Insert(with: try getHandle(writeHint: true), named: table, on: cls.Properties.all, onConflict: .Ignore)
     }
 
     public func prepareInsert(on propertyConvertibleList: PropertyConvertible...,
@@ -134,19 +134,19 @@ extension InsertChainCallInterface where Self: HandleRepresentable {
         return try prepareInsertOrIgnore(on: propertyConvertibleList, intoTable: table)
     }
 
-    public func prepareInsert(on propertyConvertibleList: [PropertyConvertible],
+    public func prepareInsert(on propertyConvertibleList: [PropertyConvertible]?,
                               intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList)
+        return Insert(with: try getHandle(writeHint: true), named: table, on: propertyConvertibleList)
     }
 
     public func prepareInsertOrReplace(on propertyConvertibleList: [PropertyConvertible],
                                        intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Replace)
+        return Insert(with: try getHandle(writeHint: true), named: table, on: propertyConvertibleList, onConflict: .Replace)
     }
 
     public func prepareInsertOrIgnore(on propertyConvertibleList: [PropertyConvertible],
                                        intoTable table: String) throws -> Insert {
-        return Insert(with: try getHandle(), named: table, on: propertyConvertibleList, onConflict: .Ignore)
+        return Insert(with: try getHandle(writeHint: true), named: table, on: propertyConvertibleList, onConflict: .Ignore)
     }
 }
 
@@ -162,7 +162,7 @@ public protocol DeleteChainCallInterface: AnyObject {
 
 extension DeleteChainCallInterface where Self: HandleRepresentable {
     public func prepareDelete(fromTable table: String) throws -> Delete {
-        return Delete(with: try getHandle(), andTableName: table)
+        return Delete(with: try getHandle(writeHint: true), andTableName: table)
     }
 }
 
@@ -192,7 +192,7 @@ extension UpdateChainCallInterface where Self: HandleRepresentable {
     }
 
     public func prepareUpdate(table: String, on propertyConvertibleList: [PropertyConvertible]) throws -> Update {
-        return Update(with: try getHandle(), on: propertyConvertibleList, andTable: table)
+        return Update(with: try getHandle(writeHint: true), on: propertyConvertibleList, andTable: table)
     }
 }
 
@@ -249,7 +249,7 @@ extension RowSelectChainCallInterface where Self: HandleRepresentable {
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) throws -> RowSelect {
         return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
-                                    [Column.all] : resultColumnConvertibleList,
+                                    [Column.all()] : resultColumnConvertibleList,
                                     fromTables: tables,
                                     isDistinct: isDistinct)
     }
@@ -257,14 +257,14 @@ extension RowSelectChainCallInterface where Self: HandleRepresentable {
     public func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                                  fromTables tables: [String],
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return RowSelect(with: try getHandle(), results: resultColumnConvertibleList, tables: tables, isDistinct: isDistinct)
+        return RowSelect(with: try getHandle(writeHint: false), results: resultColumnConvertibleList, tables: tables, isDistinct: isDistinct)
     }
 
     public func prepareRowSelect(on resultColumnConvertibleList: ResultColumnConvertible...,
                                  fromTable table: String,
                                  isDistinct: Bool = false) throws -> RowSelect {
         return try prepareRowSelect(on: resultColumnConvertibleList.isEmpty ?
-                                    [Column.all] : resultColumnConvertibleList,
+                                    [Column.all()] : resultColumnConvertibleList,
                                     fromTable: table,
                                     isDistinct: isDistinct)
     }
@@ -272,7 +272,7 @@ extension RowSelectChainCallInterface where Self: HandleRepresentable {
     public func prepareRowSelect(on resultColumnConvertibleList: [ResultColumnConvertible],
                                  fromTable table: String,
                                  isDistinct: Bool = false) throws -> RowSelect {
-        return RowSelect(with: try getHandle(),
+        return RowSelect(with: try getHandle(writeHint: false),
                          results: resultColumnConvertibleList,
                          tables: [table],
                          isDistinct: isDistinct)
@@ -320,7 +320,7 @@ extension SelectChainCallInterface where Self: HandleRepresentable {
     public func prepareSelect<Root: TableDecodable>(of cls: Root.Type,
                                                     fromTable table: String,
                                                     isDistinct: Bool = false) throws -> Select {
-        return Select(with: try getHandle(), on: cls.Properties.all, table: table, isDistinct: isDistinct)
+        return Select(with: try getHandle(writeHint: false), on: cls.Properties.all, table: table, isDistinct: isDistinct)
     }
 
     public func prepareSelect(on propertyConvertibleList: PropertyConvertible...,
@@ -334,7 +334,7 @@ extension SelectChainCallInterface where Self: HandleRepresentable {
     public func prepareSelect(on propertyConvertibleList: [PropertyConvertible],
                               fromTable table: String,
                               isDistinct: Bool = false) throws -> Select {
-        return Select(with: try getHandle(), on: propertyConvertibleList, table: table, isDistinct: isDistinct)
+        return Select(with: try getHandle(writeHint: false), on: propertyConvertibleList, table: table, isDistinct: isDistinct)
     }
 }
 
@@ -368,6 +368,6 @@ extension MultiSelectChainCallInterface where Self: HandleRepresentable {
 
     public func prepareMultiSelect(on propertyConvertibleList: [PropertyConvertible],
                                    fromTables tables: [String]) throws -> MultiSelect {
-        return MultiSelect(with: try getHandle(), on: propertyConvertibleList, tables: tables)
+        return MultiSelect(with: try getHandle(writeHint: false), on: propertyConvertibleList, tables: tables)
     }
 }

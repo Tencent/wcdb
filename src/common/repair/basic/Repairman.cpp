@@ -49,15 +49,32 @@ const StringView &Repairman::getPath() const
     return m_pager.getPath();
 }
 
+int64_t Repairman::getTotalPageCount() const
+{
+    if (m_pageWeight.value() > 0) {
+        return (int64_t) (1.0 / m_pageWeight.value());
+    }
+    return 0;
+}
+
+int Repairman::getDisposedWalPageCount() const
+{
+    return m_pager.getDisposedWalPages();
+}
+
 bool Repairman::exit()
 {
-    finishProgress();
-    return !isErrorCritial();
+    if (!isErrorCritial()) {
+        return finishProgress();
+    }
+    return false;
 }
 
 bool Repairman::exit(bool result)
 {
-    finishProgress();
+    if (result) {
+        return finishProgress();
+    }
     return result;
 }
 
@@ -92,7 +109,7 @@ bool Repairman::markAsAssembling()
 void Repairman::markAsAssembled()
 {
     markAsMilestone();
-    if (!m_assembleDelegate->markAsAssembled()) {
+    if (!isErrorCritial() && !m_assembleDelegate->markAsAssembled()) {
         setCriticalError(m_assembleDelegate->getAssembleError());
     }
 }
@@ -178,7 +195,7 @@ int Repairman::tryUpgradeCrawlerError()
 int Repairman::tryUpgrateAssembleError()
 {
     Error error = m_assembleDelegate->getAssembleError();
-    if (error.code() == Error::Code::Constraint) {
+    if (error.code() == Error::Code::Constraint && !isErrorCritial()) {
         error.level = Error::Level::Notice;
     }
     return tryUpgradeError(std::move(error));
@@ -192,6 +209,9 @@ void Repairman::onErrorCritical()
 #pragma mark - Evaluation
 void Repairman::markCellAsCounted(const Cell &cell)
 {
+    if (cell.getPage().isIndexPage()) {
+        return;
+    }
     int numberOfCells = cell.getPage().getNumberOfCells();
     WCTAssert(numberOfCells != 0);
     if (numberOfCells > 0) {

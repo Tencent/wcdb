@@ -86,6 +86,11 @@ WCTBinding::WCTBinding(Class cls)
     if ([m_cls respondsToSelector:@selector(additionalObjectRelationalMapping:)]) {
         [m_cls additionalObjectRelationalMapping:*this];
     }
+
+#if WCDB_WECHAT_IOS
+    // 兼容微信
+    m_columnDefs.alphabeticallyCaseInsensitiveSort();
+#endif
 }
 
 WCTBinding::~WCTBinding() = default;

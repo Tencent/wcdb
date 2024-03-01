@@ -35,7 +35,7 @@ class PageBasedFileHandle final : public FileHandle {
 #pragma mark - PageBasedFileHandle
 public:
     PageBasedFileHandle(const UnsafeStringView& path);
-    ~PageBasedFileHandle() override final;
+    ~PageBasedFileHandle() override;
 
     MappedData
     mapPage(int pageno, offset_t offset, size_t size, SharedHighWater highWater = nullptr);
@@ -65,7 +65,7 @@ protected:
     class Cache final : protected LRUCache<Range, MappedData> {
     public:
         Cache(size_t maxAllowedMemory);
-        ~Cache() override final;
+        ~Cache() override;
 
         using Super = LRUCache<Range, MappedData>;
         using Location = Range::Location;

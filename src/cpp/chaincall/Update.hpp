@@ -118,6 +118,7 @@ public:
     Update<ObjectType> &toObject(const ObjectType &obj)
     {
         m_obj = obj;
+        m_objptr = &(m_obj.value());
         return *this;
     }
 
@@ -140,6 +141,7 @@ public:
     Update<ObjectType> &toRow(const OneRowValue &row)
     {
         m_row = row;
+        m_rowptr = &(m_row.value());
         return *this;
     }
 
@@ -150,16 +152,16 @@ public:
     bool execute()
     {
         bool result = true;
-        if (m_row.succeed() || m_obj.succeed()) {
+        if (m_objptr != nullptr || m_rowptr != nullptr) {
             if (!checkHandle(true)) {
                 return false;
             }
             result = false;
             if (m_handle->prepare(m_statement)) {
-                if (m_obj.succeed()) {
-                    m_handle->bindObject(m_obj.value(), m_fields);
+                if (m_objptr != nullptr) {
+                    m_handle->bindObject(*m_objptr, m_fields);
                 } else {
-                    m_handle->bindRow(m_row.value());
+                    m_handle->bindRow(*m_rowptr);
                 }
                 result = m_handle->step();
                 assignChanges();
@@ -176,10 +178,25 @@ protected:
     {
     }
 
+    Update<ObjectType> &toObject(const ObjectType *objptr)
+    {
+        m_objptr = objptr;
+        return *this;
+    }
+
+    Update<ObjectType> &toRow(const OneRowValue *rowptr)
+    {
+        m_rowptr = rowptr;
+        return *this;
+    }
+
 private:
     Fields m_fields;
     OptionalOneRow m_row;
+    const OneRowValue *m_rowptr = nullptr;
+
     Optional<ObjectType> m_obj;
+    const ObjectType *m_objptr = nullptr;
 };
 
 } //namespace WCDB

@@ -95,6 +95,19 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
     _database->removeConfig(name);
 }
 
++ (void)registerScalarFunction:(const WCDB::ScalarFunctionModule&)module named:(NSString*)name
+{
+    WCDB::Core::shared().registerScalarFunction(name, module);
+}
+
+- (void)addScalarFunction:(NSString*)scalarFunctionName
+{
+    WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::ScalarFunctionConfigPrefix.data(), scalarFunctionName.UTF8String);
+    _database->setConfig(configName,
+                         WCDB::Core::shared().scalarFunctionConfig(scalarFunctionName),
+                         WCDB::Configs::Priority::Higher);
+}
+
 + (void)setABTestConfigWithName:(NSString*)name
                        andValue:(NSString*)value
 {

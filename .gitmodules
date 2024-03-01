@@ -4,3 +4,6 @@
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/openssl/openssl.git
+[submodule "zstd"]
+	path = zstd
+	url = https://github.com/facebook/zstd.git

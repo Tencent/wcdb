@@ -347,6 +347,22 @@ Optional<bool> FileManager::fileExists(const UnsafeStringView &file)
     return NullOpt;
 }
 
+Optional<bool> FileManager::fileExistsAndNotEmpty(const UnsafeStringView &file)
+{
+    StatType s;
+    if (StatFunc(GetPathString(file), &s) == 0) {
+        if ((s.st_mode & S_IFMT) == S_IFDIR) {
+            return false;
+        } else {
+            return s.st_size > 0;
+        }
+    } else if (errno == ENOENT) {
+        return false;
+    }
+    setThreadedError(file);
+    return NullOpt;
+}
+
 Optional<bool> FileManager::directoryExists(const UnsafeStringView &directory)
 {
     auto result = itemExists(directory);
@@ -467,7 +483,7 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
 bool FileManager::createDirectoryWithIntermediateDirectories(const UnsafeStringView &directory)
 {
     if (directory.length() == 0) {
-        Error error(Error::Code::IOError, Error::Level::Error, "empty directory");
+        Error error(Error::Code::IOError, Error::Level::Error, "Empty directory");
         Notifier::shared().notify(error);
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;

@@ -29,6 +29,18 @@
 #include <iomanip>
 #include <sstream>
 
+#ifdef __APPLE__
+#include <mach/mach_init.h>
+#include <mach/thread_act.h>
+#include <mach/thread_info.h>
+#elif _WIN32
+#define NOMINMAX
+#include <windows.h>
+#else
+#include <pthread.h>
+#include <time.h>
+#endif
+
 namespace WCDB {
 
 Time::Time() = default;
@@ -59,6 +71,38 @@ Time::~Time() = default;
 Time Time::now()
 {
     return std::chrono::system_clock::now();
+}
+
+uint64_t Time::currentThreadCPUTimeInMicroseconds()
+{
+#ifdef __APPLE__
+    thread_basic_info_data_t basic_info;
+    mach_msg_type_number_t count = THREAD_BASIC_INFO_COUNT;
+    kern_return_t result = thread_info(
+    mach_thread_self(), THREAD_BASIC_INFO, (thread_info_t) &basic_info, &count);
+    if (result != KERN_SUCCESS) {
+        return 0;
+    }
+    return basic_info.user_time.seconds * 1000000 + basic_info.user_time.microseconds
+           + basic_info.system_time.seconds * 1000000 + basic_info.system_time.microseconds;
+#elif _WIN32
+    HANDLE currentThread = GetCurrentThread();
+    FILETIME creationTime, exitTime, kernelTime, userTime;
+    if (GetThreadTimes(currentThread, &creationTime, &exitTime, &kernelTime, &userTime)) {
+        uint64_t ret = ((uint64_t) kernelTime.dwHighDateTime << 32) + kernelTime.dwLowDateTime;
+        ret += ((uint64_t) userTime.dwHighDateTime << 32) + userTime.dwLowDateTime;
+        ret /= 10;
+        return ret;
+    }
+    return 0;
+#else
+    clockid_t cid;
+    struct timespec ts;
+    if (pthread_getcpuclockid(pthread_self(), &cid) == 0 && clock_gettime(cid, &ts) == 0) {
+        return ts.tv_sec * 1000000 + ts.tv_nsec / 1000;
+    }
+    return 0;
+#endif
 }
 
 std::time_t Time::seconds() const
@@ -123,7 +167,7 @@ SteadyClock SteadyClock::now()
 
 double SteadyClock::timeIntervalSinceSteadyClock(const SteadyClock &other) const
 {
-    return std::chrono::duration_cast<std::chrono::nanoseconds>((*this - other)).count() / 1E9;
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(*this - other).count() / 1E9;
 }
 
 double SteadyClock::timeIntervalSinceNow() const

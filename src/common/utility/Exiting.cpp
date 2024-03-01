@@ -23,6 +23,7 @@
  */
 
 #include "Exiting.hpp"
+#include "Core.hpp"
 #include "Macro.h"
 #include <atomic>
 #include <stdlib.h>
@@ -41,6 +42,8 @@ static std::atomic<bool>& exitingValue()
 static void exiting()
 {
     exitingValue().store(true);
+    // The queue needs to be terminated to exit the program normally in Windows.
+    Core::shared().stopQueue();
 }
 
 bool isExiting()

@@ -1,0 +1,15 @@
+{
+	global:
+		JNI_OnLoad;
+		JNI_OnUnload;
+		Java_*;
+		sqlcipher_*;
+		sqlite3_*;
+		sqlite3Codec;
+		sqliterk_*;
+		mm_backup_*;
+		mm_recover_*;
+		WX_BUILD_INFO;
+	local:
+		*;
+};

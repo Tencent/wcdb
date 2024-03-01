@@ -24,12 +24,15 @@
 
 #include "Database.hpp"
 #include "CipherConfig.hpp"
+#include "CompressionCenter.hpp"
+#include "CompressionConst.hpp"
 #include "Core.hpp"
+#include "CoreConst.h"
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
 #include "FileManager.hpp"
 #include "InnerDatabase.hpp"
-#include "Version.h"
+#include "WCDBVersion.h"
 #include <errno.h>
 #include <stdlib.h>
 #ifndef _WIN32
@@ -41,6 +44,8 @@
 
 namespace WCDB {
 
+#pragma mark - Basic
+
 Database::Database(const UnsafeStringView& path)
 {
     if (path.compare(":memory:") == 0) {
@@ -51,18 +56,20 @@ Database::Database(const UnsafeStringView& path)
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
+        Core::shared().setThreadedErrorPath(path);
         if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
             && FileManager::createFile(path)) {
             resolvePath = realpath(path.data(), nullptr);
             if (resolvePath == NULL) {
                 Error error;
-                error.level = Error::Level::Error;
+                error.level = Error::Level::Warning;
                 error.setSystemCode(errno, Error::Code::IOError);
                 error.infos.insert_or_assign(ErrorStringKeyPath, path);
                 Notifier::shared().notify(error);
             }
             FileManager::removeItem(path);
         }
+        Core::shared().setThreadedErrorPath(nullptr);
     }
     if (resolvePath != nullptr) {
         UnsafeStringView newPath = UnsafeStringView(resolvePath);
@@ -98,6 +105,11 @@ Database::Database(const Database&) = default;
 Database& Database::operator=(const Database&) = default;
 
 Database::~Database() = default;
+
+Database::Database(Recyclable<InnerDatabase*> database)
+: m_databaseHolder(database), m_innerDatabase(database.get())
+{
+}
 
 Database::Database(InnerDatabase* database) : m_innerDatabase(database)
 {
@@ -186,6 +198,8 @@ void Database::setUIThreadId(std::thread::id uiThreadId)
 }
 #endif
 
+#pragma mark - Monitor
+
 void Database::globalTraceError(Database::ErrorNotification trace)
 {
     Core::shared().setNotificationWhenErrorTraced(trace);
@@ -196,9 +210,45 @@ void Database::traceError(ErrorNotification trace)
     Core::shared().setNotificationWhenErrorTraced(getPath(), trace);
 }
 
+static_assert(sizeof(Database::PerformanceInfo) == sizeof(InnerHandle::PerformanceInfo), "");
+static_assert(offsetof(Database::PerformanceInfo, tablePageReadCount)
+              == offsetof(InnerHandle::PerformanceInfo, tablePageReadCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, tablePageWriteCount)
+              == offsetof(InnerHandle::PerformanceInfo, tablePageWriteCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, indexPageReadCount)
+              == offsetof(InnerHandle::PerformanceInfo, indexPageReadCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, indexPageWriteCount)
+              == offsetof(InnerHandle::PerformanceInfo, indexPageWriteCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, overflowPageReadCount)
+              == offsetof(InnerHandle::PerformanceInfo, overflowPageReadCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, overflowPageWriteCount)
+              == offsetof(InnerHandle::PerformanceInfo, overflowPageWriteCount),
+              "");
+static_assert(offsetof(Database::PerformanceInfo, costInNanoseconds)
+              == offsetof(InnerHandle::PerformanceInfo, costInNanoseconds),
+              "");
+
 void Database::globalTracePerformance(Database::PerformanceNotification trace)
 {
-    Core::shared().setNotificationWhenPerformanceGlobalTraced(trace);
+    if (trace != nullptr) {
+        Core::shared().setNotificationWhenPerformanceGlobalTraced(
+        [trace](long tag,
+                const UnsafeStringView& path,
+                const void* handleIdentifier,
+                const UnsafeStringView& sql,
+                const InnerHandle::PerformanceInfo& info) {
+            PerformanceInfo newInfo;
+            memcpy(&newInfo, &info, sizeof(info));
+            trace(tag, path, (uint64_t) handleIdentifier, sql, newInfo);
+        });
+    } else {
+        Core::shared().setNotificationWhenPerformanceGlobalTraced(nullptr);
+    }
 }
 
 void Database::tracePerformance(Database::PerformanceNotification trace)
@@ -206,7 +256,16 @@ void Database::tracePerformance(Database::PerformanceNotification trace)
     if (trace != nullptr) {
         m_innerDatabase->setConfig(
         PerformanceTraceConfigName,
-        std::static_pointer_cast<Config>(std::make_shared<PerformanceTraceConfig>(trace)),
+        std::static_pointer_cast<Config>(std::make_shared<PerformanceTraceConfig>(
+        [trace](long tag,
+                const UnsafeStringView& path,
+                const void* handleIdentifier,
+                const UnsafeStringView& sql,
+                const InnerHandle::PerformanceInfo& info) {
+            PerformanceInfo newInfo;
+            memcpy(&newInfo, &info, sizeof(info));
+            trace(tag, path, (uint64_t) handleIdentifier, sql, newInfo);
+        })),
         Configs::Priority::Highest);
     } else {
         m_innerDatabase->removeConfig(PerformanceTraceConfigName);
@@ -230,9 +289,16 @@ void Database::traceSQL(Database::SQLNotification trace)
     }
 }
 
+void Database::setFullSQLTraceEnable(bool enable)
+{
+    m_innerDatabase->setFullSQLTraceEnable(enable);
+}
+
 const StringView& Database::MonitorInfoKeyHandleCount = WCDB::MonitorInfoKeyHandleCount;
 const StringView& Database::MonitorInfoKeySchemaUsage = WCDB::MonitorInfoKeySchemaUsage;
 const StringView& Database::MonitorInfoKeyHandleOpenTime = WCDB::MonitorInfoKeyHandleOpenTime;
+const StringView& Database::MonitorInfoKeyHandleOpenCPUTime
+= WCDB::MonitorInfoKeyHandleOpenCPUTime;
 const StringView& Database::MonitorInfoKeyTableCount = WCDB::MonitorInfoKeyTableCount;
 const StringView& Database::MonitorInfoKeyIndexCount = WCDB::MonitorInfoKeyIndexCount;
 const StringView& Database::MonitorInfoKeyTriggerCount = WCDB::MonitorInfoKeyTriggerCount;
@@ -250,6 +316,13 @@ void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
         DBOperationNotifier::shared().setNotification(nullptr);
     }
 }
+
+void Database::globalTraceBusy(BusyTrace trace, double timeOut)
+{
+    Core::shared().setBusyMonitor(trace, timeOut);
+}
+
+#pragma mark - File
 
 bool Database::removeFiles()
 {
@@ -270,6 +343,8 @@ Optional<size_t> Database::getFilesSize() const
 {
     return m_innerDatabase->getFilesSize();
 }
+
+#pragma mark - FTS
 
 void Database::enableAutoMergeFTS5Index(bool flag)
 {
@@ -324,6 +399,8 @@ void Database::configTraditionalChineseConverter(TraditionalChineseConverter con
     FTSTokenizerUtil::configTraditionalChineseConverter(converter);
 }
 
+#pragma mark - Memory
+
 void Database::purge()
 {
     m_innerDatabase->purge();
@@ -333,6 +410,8 @@ void Database::purgeAll()
 {
     Core::shared().purgeDatabasePool();
 }
+
+#pragma mark - Repair
 
 void Database::setNotificationWhenCorrupted(Database::CorruptionNotification onCorrupted)
 {
@@ -389,6 +468,13 @@ double Database::retrieve(Database::ProgressUpdateCallback onProgressUpdated)
     return m_innerDatabase->retrieve(onProgressUpdated);
 }
 
+bool Database::vacuum(ProgressUpdateCallback onProgressUpdated)
+{
+    return m_innerDatabase->vacuum(onProgressUpdated);
+}
+
+#pragma mark - Config
+
 void Database::setCipherKey(const UnsafeData& cipherKey, int cipherPageSize, CipherVersion cipherVersion)
 {
     if (cipherKey.size() > 0) {
@@ -442,23 +528,41 @@ bool Database::setDefaultTemporaryDirectory(const UnsafeStringView& directory)
     return Core::shared().setDefaultTemporaryDirectory(directory);
 }
 
-void Database::filterMigration(MigrationFilter filter)
+void Database::registerScalarFunction(const ScalarFunctionModule& module,
+                                      const UnsafeStringView& name)
 {
-    InnerDatabase::MigrationFilter callback = nullptr;
+    Core::shared().registerScalarFunction(name, module);
+}
+
+void Database::addScalarFunction(const UnsafeStringView& name)
+{
+    WCDB::StringView configName = WCDB::StringView::formatted(
+    "%s%s", WCDB::ScalarFunctionConfigPrefix.data(), name.data());
+    m_innerDatabase->setConfig(configName,
+                               WCDB::Core::shared().scalarFunctionConfig(name),
+                               WCDB::Configs::Priority::Higher);
+}
+
+#pragma mark - Migration
+
+void Database::addMigration(const UnsafeStringView& sourcePath,
+                            const UnsafeData& sourceCipher,
+                            const TableFilter& filter)
+{
+    InnerDatabase::MigrationTableFilter callback = nullptr;
     if (filter != nullptr) {
         callback = [filter](MigrationUserInfo& userInfo) {
             MigrationInfo info;
             info.table = userInfo.getTable();
-            info.database = userInfo.getDatabase();
             info.sourceTable = userInfo.getSourceTable();
-            info.sourceDatabase = userInfo.getSourceDatabase();
             filter(info);
             if (info.sourceTable.length() > 0) {
-                userInfo.setSource(info.sourceTable, info.sourceDatabase);
+                userInfo.setSource(info.sourceTable);
+                userInfo.setFilter(info.filterCondition);
             }
         };
     }
-    m_innerDatabase->filterMigration(callback);
+    m_innerDatabase->addMigration(sourcePath, sourceCipher, callback);
 }
 
 bool Database::stepMigration()
@@ -469,7 +573,7 @@ bool Database::stepMigration()
 
 void Database::enableAutoMigration(bool flag)
 {
-    Core::shared().enableAutoMigration(m_innerDatabase, flag);
+    Core::shared().enableAutoMigrate(m_innerDatabase, flag);
 }
 
 void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated)
@@ -482,9 +586,7 @@ void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated
             if (baseInfo != nullptr) {
                 info = MigrationInfo();
                 info->table = baseInfo->getTable();
-                info->database = baseInfo->getDatabase();
                 info->sourceTable = baseInfo->getSourceTable();
-                info->sourceDatabase = baseInfo->getSourceDatabase();
             }
             Database database = Database(innerDatabase);
             onMigrated(database, info);
@@ -497,6 +599,137 @@ bool Database::isMigrated() const
 {
     return m_innerDatabase->isMigrated();
 }
+
+#pragma mark - Compression
+
+Database::CompressionInfo::CompressionInfo(void* innerInfo)
+: m_innerInfo(innerInfo)
+{
+}
+
+const StringView& Database::CompressionInfo::getTableName() const
+{
+    return ((CompressionTableInfo*) m_innerInfo)->getTable();
+}
+
+void Database::CompressionInfo::addZSTDNormalCompressField(const Field& field)
+{
+    CompressionColumnInfo columnInfo(field, CompressionType::Normal);
+    ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
+}
+
+void Database::CompressionInfo::addZSTDDictCompressProperty(const Field& field, DictId dictId)
+{
+    CompressionColumnInfo columnInfo(field, CompressionType::Dict);
+    columnInfo.setCommonDict(dictId);
+    ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
+}
+
+void Database::CompressionInfo::addZSTDDictCompressProperty(
+const Field& field, const Field& matchField, const std::map<int64_t, DictId>& dictIds)
+{
+    if (dictIds.empty()) {
+        return;
+    }
+    CompressionColumnInfo columnInfo(field, matchField);
+    for (const auto& iter : dictIds) {
+        if (iter.first == DictDefaultMatchValue) {
+            columnInfo.setCommonDict(iter.second);
+        } else {
+            columnInfo.addMatchDict(iter.first, iter.second);
+        }
+    }
+    ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
+}
+
+Optional<Data> Database::trainDict(const std::vector<std::string>& strings, DictId dictId)
+{
+    int index = 0;
+    return CompressionCenter::shared().trainDict(dictId, [&]() -> Optional<UnsafeData> {
+        if (index < strings.size()) {
+            const std::string& string = strings[index];
+            index++;
+            return UnsafeData((unsigned char*) string.data(), string.size());
+        } else {
+            return NullOpt;
+        }
+    });
+}
+
+Optional<Data> Database::trainDict(const std::vector<Data>& datas, DictId dictId)
+{
+    int index = 0;
+    return CompressionCenter::shared().trainDict(dictId, [&]() -> Optional<UnsafeData> {
+        if (index < datas.size()) {
+            const Data& data = datas[index];
+            index++;
+            return data;
+        } else {
+            return NullOpt;
+        }
+    });
+}
+
+bool Database::registerZSTDDict(const UnsafeData& dict, DictId dictId)
+{
+    return CompressionCenter::shared().registerDict(dictId, dict);
+}
+
+void Database::setCompression(const CompressionFilter& filter)
+{
+    InnerDatabase::CompressionTableFilter callback = nullptr;
+    if (filter != nullptr) {
+        callback = [filter](CompressionTableUserInfo& userInfo) {
+            CompressionInfo info(&userInfo);
+            filter(info);
+        };
+        StringView configName = StringView::formatted(
+        "%s%s", ScalarFunctionConfigPrefix.data(), DecompressFunctionName.data());
+        m_innerDatabase->setConfig(configName,
+                                   Core::shared().scalarFunctionConfig(DecompressFunctionName),
+                                   Configs::Priority::Higher);
+    }
+    m_innerDatabase->addCompression(callback);
+}
+
+void Database::disableCompresssNewData(bool disable)
+{
+    m_innerDatabase->setCanCompressNewData(!disable);
+}
+
+bool Database::stepCompression()
+{
+    return m_innerDatabase->stepCompression(false).succeed();
+}
+
+void Database::enableAutoCompression(bool flag)
+{
+    Core::shared().enableAutoCompress(m_innerDatabase, flag);
+}
+
+void Database::setNotificationWhenCompressed(const CompressedCallback& onCompressd)
+{
+    InnerDatabase::CompressedCallback callback = nullptr;
+    if (onCompressd != nullptr) {
+        callback = [onCompressd](InnerDatabase* innerDatabase,
+                                 const CompressionTableBaseInfo* info) {
+            Database database = Database(innerDatabase);
+            if (info != nullptr) {
+                onCompressd(database, info->getTable());
+            } else {
+                onCompressd(database, NullOpt);
+            }
+        };
+    }
+    m_innerDatabase->setNotificationWhenCompressed(callback);
+}
+
+bool Database::isCompressed() const
+{
+    return m_innerDatabase->isCompressed();
+}
+
+#pragma mark - Version
 
 const StringView Database::getVersion()
 {

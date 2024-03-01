@@ -33,7 +33,7 @@ class WCDB_API StatementDropTrigger final
 public:
     using SpecifiedSyntax<Syntax::DropTriggerSTMT, Statement>::SpecifiedSyntax;
     StatementDropTrigger();
-    ~StatementDropTrigger() override final;
+    ~StatementDropTrigger() override;
 
     StatementDropTrigger& dropTrigger(const UnsafeStringView& trigger);
     StatementDropTrigger& schema(const Schema& schema);

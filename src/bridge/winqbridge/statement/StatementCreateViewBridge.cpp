@@ -48,6 +48,12 @@ void WCDBStatementCreateViewConfigSchema(CPPStatementCreateView createView, CPPS
     cppCreateView->schema(*cppSchema);
 }
 
+void WCDBStatementCreateViewConfigSchema2(CPPStatementCreateView createView, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(createView, WCDB::StatementCreateView, cppCreateView);
+    cppCreateView->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementCreateViewConfigTemp(CPPStatementCreateView createView)
 {
     WCDBGetObjectOrReturn(createView, WCDB::StatementCreateView, cppCreateView);
@@ -73,5 +79,26 @@ void WCDBStatementCreateViewConfigColumns(CPPStatementCreateView createView,
 {
     WCDBGetObjectOrReturn(createView, WCDB::StatementCreateView, cppCreateView);
     WCDBGetCPPSyntaxListOrReturn(WCDB::Column, cppColumns, columns, columnNum);
+    cppCreateView->syntax().columns = cppColumns;
+}
+
+void WCDBStatementCreateViewConfigColumns2(CPPStatementCreateView createView, CPPCommonArray columns)
+{
+    WCDBGetObjectOrReturn(createView, WCDB::StatementCreateView, cppCreateView);
+    WCDB::Columns cppColumns;
+    for (int i = 0; i < columns.length; i++) {
+        switch (columns.type) {
+        case WCDBBridgedType_String:
+            cppColumns.emplace_back(WCDB::UnsafeStringView(
+            WCDBGetCommonArrayLiteralValue(const char*, columns, i)));
+            break;
+        case WCDBBridgedType_Column:
+            cppColumns.push_back(WCDBGetCommonArrayObject(WCDB::Column, columns, i));
+            break;
+        default:
+            assert(0);
+            break;
+        }
+    }
     cppCreateView->syntax().columns = cppColumns;
 }

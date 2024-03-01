@@ -25,30 +25,54 @@
 #pragma once
 
 #include "Config.hpp"
+#include "IncrementalMaterial.hpp"
+#include "Lock.hpp"
 #include "StringView.hpp"
 
 namespace WCDB {
 
+class AbstractHandle;
+
 class AutoBackupOperator {
 public:
     virtual ~AutoBackupOperator() = 0;
-
-    virtual void asyncBackup(const UnsafeStringView& path) = 0;
+    virtual void asyncBackup(const UnsafeStringView& path, bool incremental) = 0;
 };
 
 class AutoBackupConfig final : public Config {
 public:
     AutoBackupConfig(const std::shared_ptr<AutoBackupOperator>& operator_);
-    ~AutoBackupConfig() override final;
+    ~AutoBackupConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
     bool uninvoke(InnerHandle* handle) override final;
 
-protected:
-    const StringView m_identifier;
-    void onCheckpointed(const UnsafeStringView& path);
+    void tryRegisterIncrementalMaterial(const UnsafeStringView& path,
+                                        SharedIncrementalMaterial material);
+    SharedIncrementalMaterial tryGetIncrementalMaterial(const UnsafeStringView& path);
 
+private:
+    void onCheckpointBegin(AbstractHandle* handle,
+                           uint32_t nBackFill,
+                           uint32_t mxFrame,
+                           uint32_t salt1,
+                           uint32_t salt2);
+    void onCheckpointPage(AbstractHandle* handle, uint32_t pageNo, const UnsafeData& data);
+    void onCheckpointFinish(AbstractHandle* handle,
+                            uint32_t nBackFill,
+                            uint32_t mxFrame,
+                            uint32_t salt1,
+                            uint32_t salt2);
+
+    void clearMaterial(const UnsafeStringView& path);
+
+    mutable SharedLock m_lock;
+
+    const StringView m_identifier;
     std::shared_ptr<AutoBackupOperator> m_operator;
+    StringViewMap<SharedIncrementalMaterial> m_materials;
+    typedef Repair::IncrementalMaterial::Pages Pages;
+    StringViewMap<Pages> m_checkpointPages;
 };
 
 } //namespace WCDB

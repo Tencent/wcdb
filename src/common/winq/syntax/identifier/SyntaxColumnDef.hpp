@@ -34,7 +34,7 @@ namespace Syntax {
 class WCDB_API ColumnDef final : public Identifier {
 #pragma mark - Syntax
 public:
-    ~ColumnDef() override final;
+    ~ColumnDef() override;
 
     Optional<Column> column;
     WCDB_SYNTAX_ENUM_UNION(ColumnType, columnType);

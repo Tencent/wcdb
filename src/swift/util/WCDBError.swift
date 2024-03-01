@@ -21,69 +21,6 @@
 import Foundation
 import WCDB_Private
 
-public struct ErrorValue {
-    public enum ErrorValueType {
-        case int
-        case double
-        case string
-    }
-    private let value: Any
-    public let type: ErrorValueType
-
-    internal init(_ value: String) {
-        self.value = value
-        self.type = .string
-    }
-
-    internal init(_ value: Int) {
-        self.value = value
-        self.type = .int
-    }
-
-    internal init(_ value: Double) {
-        self.value = value
-        self.type = .double
-    }
-
-    public var intValue: Int {
-        switch type {
-        case .int:
-            return value as! Int
-        case .double:
-            let doubleValue = value as! Double
-            if doubleValue >= Double(Int.min) && doubleValue < Double(Int.max) {
-                return Int(doubleValue)
-            } else {
-                assert(false)
-                return 0
-            }
-        case .string:
-            return Int(value as! String) ?? 0
-        }
-    }
-
-    public var stringValue: String {
-        switch type {
-        case .int:
-            return String(value as! Int)
-        case .double:
-            return String(value as! Double)
-        case .string:
-            return value as! String
-        }
-    }
-    public var doubleValue: Double {
-        switch type {
-        case .int:
-            return Double(value as! Int)
-        case .double:
-            return value as! Double
-        case .string:
-            return Double(value as! String) ?? 0
-        }
-    }
-}
-
 public final class WCDBError: Swift.Error, CustomStringConvertible {
     public enum Code: Int {
         case OK = 0
@@ -184,28 +121,28 @@ public final class WCDBError: Swift.Error, CustomStringConvertible {
         case ConstraintRowID = 2579          // Code.Constraint | (10 << 8)
         case NoticeRecoverWal = 283          // Code.Notice | (1 << 8)
         case NoticeRecoverRollback = 539     // Code.Notice | (2 << 8)
-        case WarningAutoIndex = 284          // Code.Warning | (2 << 8)
-        case AuthorizationUser = 279         // Code.Authorization | (2 << 8)
-        case OKLoadPermanently = 256         // Code.OK | (2 << 8)
+        case WarningAutoIndex = 284          // Code.Warning | (1 << 8)
+        case AuthorizationUser = 279         // Code.Authorization | (1 << 8)
+        case OKLoadPermanently = 256         // Code.OK | (1 << 8)
     }
 
     public enum Level: Int, CustomStringConvertible {
         case Ignore = 1
         case Debug = 2
-        case Warning = 3
-        case Notice = 4
-        case Error = 5
-        case Fatal = 6
+        case Notice = 3
+        case Warning = 4
+        case Error = 5 // Only for the errors that will cause api to return false.
+        case Fatal = 6 // Application should abort.
         public var description: String {
             switch self {
             case .Ignore:
                 return "IGNORE"
             case .Debug:
                 return "DEBUG"
-            case .Warning:
-                return "WARNING"
             case .Notice:
                 return "NOTICE"
+            case .Warning:
+                return "WARNING"
             case .Error:
                 return "ERROR"
             case .Fatal:
@@ -269,10 +206,10 @@ public final class WCDBError: Swift.Error, CustomStringConvertible {
     public let level: WCDBError.Level
     public let code: WCDBError.Code
 
-    public typealias Infos = [WCDBError.Key: ErrorValue]
+    public typealias Infos = [WCDBError.Key: Value]
     public let infos: Infos
 
-    public typealias ExtInfos = [String: ErrorValue]
+    public typealias ExtInfos = [String: Value]
     public let extInfos: ExtInfos
 
     internal convenience init(level: WCDBError.Level, code: WCDBError.Code, infos: Infos) {
@@ -287,12 +224,12 @@ public final class WCDBError: Swift.Error, CustomStringConvertible {
     }
 
     public var tag: Tag? {
-        return infos[.tag]?.intValue ?? 0
+        return Tag(infos[.tag]?.intValue ?? 0)
     }
 
     public var extendedCode: WCDBError.ExtendCode? {
         if let code = infos[Key.extendedCode]?.intValue {
-            return ExtendCode(rawValue: code)
+            return ExtendCode(rawValue: Int(code))
         }
         return nil
     }

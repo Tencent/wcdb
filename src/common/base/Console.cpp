@@ -25,8 +25,8 @@
 #include "Console.hpp"
 #include "CoreConst.h"
 #include "Notifier.hpp"
-#include "Version.h"
 #include "WCDBError.hpp"
+#include "WCDBVersion.h"
 
 #if !defined(__ANDROID__) && !defined(_WIN32)
 #include <execinfo.h>

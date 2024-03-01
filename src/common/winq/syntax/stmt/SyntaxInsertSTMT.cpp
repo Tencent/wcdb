@@ -97,7 +97,7 @@ bool InsertSTMT::describle(std::ostream& stream) const
 
 void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     listIterate(commonTableExpressions, iterator, stop);
     recursiveIterate(schema, iterator, stop);
     listIterate(columns, iterator, stop);
@@ -117,13 +117,32 @@ void InsertSTMT::iterate(const Iterator& iterator, bool& stop)
     if (WCDB_SYNTAX_CHECK_OPTIONAL_VALID(upsertClause)) {
         recursiveIterate(upsertClause.value(), iterator, stop);
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 #pragma mark - Utility
 bool InsertSTMT::isMultiWrite() const
 {
-    return (switcher == Switch::Values && expressionsValues.size() > 1)
-           || switcher == Switch::Select;
+    if (switcher == Switch::Values && expressionsValues.size() > 1) {
+        return true;
+    }
+    if (switcher == Switch::Select) {
+        if (!select.hasValue()) {
+            return true;
+        }
+        auto& selectValue = select.value();
+        if (!selectValue.limit.hasValue()
+            || selectValue.limitParameterType == LimitParameterType::End
+            || selectValue.limit.value().switcher != Expression::Switch::LiteralValue) {
+            return true;
+        }
+        auto& literalValue = selectValue.limit.value().literalValue();
+        if (!literalValue.isValid() || literalValue.switcher != LiteralValue::Switch::Integer) {
+            return true;
+        }
+        return literalValue.integerValue != 1;
+    }
+    return false;
 }
 
 bool InsertSTMT::isTargetingSameTable(const InsertSTMT& other) const

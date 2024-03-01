@@ -33,7 +33,7 @@ class WCDB_API StatementCreateVirtualTable
 public:
     using SpecifiedSyntax<Syntax::CreateVirtualTableSTMT, Statement>::SpecifiedSyntax;
     StatementCreateVirtualTable();
-    ~StatementCreateVirtualTable() override final;
+    ~StatementCreateVirtualTable() override;
 
     StatementCreateVirtualTable& createVirtualTable(const UnsafeStringView& table);
     StatementCreateVirtualTable& schema(const Schema& schema);

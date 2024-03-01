@@ -51,10 +51,10 @@ public:
     enum class Level : int {
         Ignore = 1,
         Debug = 2,
-        Warning = 3,
-        Notice = 4,
-        Error = 5,
-        Fatal = 6,
+        Notice = 3,
+        Warning = 4,
+        Error = 5, // Only for the errors that will cause api to return false.
+        Fatal = 6, // Application should abort.
     };
     Level level;
     static constexpr const char *levelName(const Level &level)
@@ -64,10 +64,10 @@ public:
             return "IGNORE";
         case Level::Debug:
             return "DEBUG";
-        case Level::Warning:
-            return "WARNING";
         case Level::Notice:
             return "NOTICE";
+        case Level::Warning:
+            return "WARNING";
         case Level::Error:
             return "ERROR";
         case Level::Fatal:
@@ -110,6 +110,7 @@ public:
         Warning = 28,
         Row = 100,
         Done = 101,
+        ZstdError = 1000,
     };
     static Error::Code rc2c(int rc);
     static int c2rc(Error::Code code);
@@ -179,6 +180,8 @@ public:
             return "Row";
         case Code::Done:
             return "Done";
+        case Code::ZstdError:
+            return "ZstdError";
         }
     }
 

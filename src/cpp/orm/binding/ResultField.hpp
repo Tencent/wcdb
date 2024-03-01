@@ -39,7 +39,7 @@ public:
 
     ResultField(const Field& field);
     ResultField(const ResultColumn& resultColumn, const BaseAccessor* assessor);
-    ~ResultField() override final;
+    ~ResultField() override;
 
     template<class ORMType, typename FieldType>
     ResultField(FieldType ORMType::*memberPointer)
@@ -57,32 +57,47 @@ public:
     void setValue(ObjectType& obj, const Value& value) const
     {
         WCDB_CPP_ORM_STATIC_ASSERT_FOR_OBJECT_TYPE
+        bool notNull = !value.isNull();
         switch (m_accessor->getColumnType()) {
         case ColumnType::Integer: {
             auto intAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Integer>*>(m_accessor);
-            intAccessor->setValue(obj, value.intValue());
+            if (notNull) {
+                intAccessor->setValue(obj, value.intValue());
+            } else {
+                intAccessor->setNull(obj);
+            }
         } break;
         case ColumnType::Float: {
             auto floatAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Float>*>(m_accessor);
-            floatAccessor->setValue(obj, value.floatValue());
+            if (notNull) {
+                floatAccessor->setValue(obj, value.floatValue());
+            } else {
+                floatAccessor->setNull(obj);
+            }
         } break;
         case ColumnType::Text: {
             auto textAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::Text>*>(m_accessor);
-            textAccessor->setValue(obj, value.textValue());
+            if (notNull) {
+                textAccessor->setValue(obj, value.textValue());
+            } else {
+                textAccessor->setNull(obj);
+            }
         } break;
         case ColumnType::BLOB: {
             auto blobAccessor
             = static_cast<const Accessor<ObjectType, ColumnType::BLOB>*>(m_accessor);
-            blobAccessor->setValue(obj, value.blobValue());
+            if (notNull) {
+                blobAccessor->setValue(obj, value.blobValue());
+            } else {
+                blobAccessor->setNull(obj);
+            }
         } break;
-        case ColumnType::Null: {
-            auto nullAccessor
-            = static_cast<const Accessor<ObjectType, ColumnType::Null>*>(m_accessor);
-            nullAccessor->setValue(obj, nullptr);
-        } break;
+        default:
+            assert(0);
+            break;
         }
     }
 
@@ -98,7 +113,7 @@ template<>
 class WCDB_API SyntaxList<ResultField> final : public _SyntaxList<ResultField> {
 public:
     using _SyntaxList<ResultField>::_SyntaxList;
-    ~SyntaxList() override final;
+    ~SyntaxList() override;
 
     ResultFields
     resultColumnsByAddingNewResultColumns(const ResultFields& resultColumns) const;

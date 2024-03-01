@@ -86,7 +86,7 @@ bool TableOrSubquery::describle(std::ostream& stream) const
 
 void TableOrSubquery::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::Table:
         recursiveIterate(schema, iterator, stop);
@@ -105,6 +105,7 @@ void TableOrSubquery::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(*select.get(), iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

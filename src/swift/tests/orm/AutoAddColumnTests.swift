@@ -137,7 +137,7 @@ class AutoAddColumnTests: DatabaseTestCase {
         createTable.with(columns: columnDefs)
         XCTAssertNoThrow(try self.database.exec(createTable))
         var autoAdded = false
-        self.database.trace { error in
+        self.database.traceError { error in
             guard error.message == "Auto add column" else {
                 return
             }
@@ -153,6 +153,6 @@ class AutoAddColumnTests: DatabaseTestCase {
             XCTAssertEqual(autoAdded, false)
         }
         XCTAssertNoThrow(try self.database.drop(table: tableName))
-        self.database.trace(ofError: nil)
+        self.database.traceError(nil)
     }
 }

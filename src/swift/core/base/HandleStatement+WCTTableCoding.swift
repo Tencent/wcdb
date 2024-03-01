@@ -25,6 +25,7 @@
 #if WCDB_SWIFT_BRIDGE_OBJC
 
 import Foundation
+import WCDB_Private
 
 extension PreparedStatement: StatementInterfaceForObjc {}
 

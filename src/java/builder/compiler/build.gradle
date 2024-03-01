@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+apply from: rootProject.file('../gradle/WeChatPublish.gradle')
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.tencent.wcdb:annotation:${project.getFullVersion()}"
+    implementation 'com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6'
+}

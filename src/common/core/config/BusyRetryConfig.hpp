@@ -36,7 +36,7 @@ namespace WCDB {
 class BusyRetryConfig final : public Config {
 public:
     BusyRetryConfig();
-    ~BusyRetryConfig() override final;
+    ~BusyRetryConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
     bool uninvoke(InnerHandle* handle) override final;
@@ -47,6 +47,15 @@ protected:
     bool onBusy(const UnsafeStringView& path, int numberOfTimes);
 
     const StringView m_identifier;
+
+#pragma mark - Busy Moniter
+public:
+    typedef std::function<void(const UnsafeStringView& path, uint64_t tid)> BusyMonitor;
+    void setBusyMonitor(const BusyMonitor& monitor, double timeOut);
+
+private:
+    BusyMonitor m_busyMonitor;
+    double m_timeOut;
 
 #pragma mark - Lock Event
 protected:
@@ -95,20 +104,21 @@ protected:
         StringView m_path;
         bool checkMainThreadBusyRetry();
         bool checkHasBusyRetry();
+        void setBusyMonitor(const BusyMonitor& monitor, double timeOut);
 
     protected:
         bool shouldWait(const Expecting& expecting) const;
         bool localShouldWait(const Expecting& expecting) const;
         PagerLockType m_pagerType;
-        mutable ThreadLocal<PagerLockType> m_localPagerType;
+        uint64_t m_pagerChangeTid;
         struct ShmMask {
             ShmMask();
             int shared;
             int exclusive;
+            uint64_t tid;
         };
         typedef struct ShmMask ShmMask;
         std::map<void* /* identifier */, ShmMask> m_shmMasks;
-        mutable ThreadLocal<std::map<void* /* identifier */, ShmMask>> m_localShmMask;
 
         void tryNotify();
         std::mutex m_lock;
@@ -120,6 +130,9 @@ protected:
         };
         Trying* m_mainThreadBusyTrying;
         UniqueList<Thread, Expecting, Exclusivity> m_waitings;
+
+        BusyMonitor m_busyMonitor;
+        double m_timeOut;
     };
 
     State& getOrCreateState(const UnsafeStringView& path);

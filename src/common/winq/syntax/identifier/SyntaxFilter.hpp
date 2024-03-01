@@ -35,7 +35,7 @@ class Expression;
 class WCDB_API Filter final : public Identifier {
 #pragma mark - Lang
 public:
-    ~Filter() override final;
+    ~Filter() override;
 
     Shadow<Expression> expression;
     bool isValid() const override final;

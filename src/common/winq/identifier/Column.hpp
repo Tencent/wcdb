@@ -55,6 +55,8 @@ public:
     Column& table(const UnsafeStringView& table);
     Column& schema(const Schema& schema);
 
+    ResultColumn as(const UnsafeStringView& alias);
+
     IndexedColumn asIndex() const;
     IndexedColumn asIndex(const Order& order) const;
 

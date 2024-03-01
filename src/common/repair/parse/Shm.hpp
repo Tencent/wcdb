@@ -35,7 +35,7 @@ namespace Repair {
 class Shm final : public WalRelated, public Initializeable {
 public:
     Shm(Wal *wal);
-    ~Shm() override final;
+    ~Shm() override;
 
     const StringView &getPath() const;
 
@@ -47,6 +47,8 @@ protected:
 public:
     uint32_t getMaxFrame() const;
     uint32_t getBackfill() const;
+    typedef std::pair<uint32_t, uint32_t> Salt;
+    Salt getSalt() const;
 
 protected:
     struct Header {

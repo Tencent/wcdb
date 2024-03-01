@@ -68,17 +68,22 @@
 
 #define WCDBGetSwiftObject(typedObj) typedObj.innerValue.get()
 
-#define WCDBCreateSwiftBridgedClosure(objType, originObj)                      \
-    WCDB::ObjectBridge::createRecyclableSwiftClosure<objType##ClosureType>(originObj)
+#define WCDBGetBridgedData(type, data)                                         \
+    (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject((CPPObject*) data.intValue)))
 
-#define WCDBGetSwiftClosure(typedObj) typedObj.get()
-#define WCDBSwiftClosureCall(typedObj) WCDBGetSwiftClosure(typedObj)()
-#define WCDBSwiftClosureCallWithOneArgument(typedObj, argument)                \
-    WCDBGetSwiftClosure(typedObj)(argument)
-#define WCDBSwiftClosureCallWithMultiArgument(typedObj, firstArgument, ...)    \
-    WCDBGetSwiftClosure(typedObj)(firstArgument, nullptr, __VA_ARGS__)
+#define WCDBGetCommonArrayLiteralValue(type, array, i) ((type*) array.buffer)[i]
+
+#define WCDBGetCommonArrayObject(type, array, i)                               \
+    (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject(                   \
+    (CPPObject*) ((long long*) array.buffer)[i])))
+
+#define WCDBGetMultiTypeArrayObject(type, array, i)                            \
+    (*((type*) WCDB::ObjectBridge::extractOriginalCPPObject(                   \
+    (CPPObject*) (array.intValues[i]))))
 
 namespace WCDB {
+
+typedef Recyclable<void*> RecyclableContext;
 
 class ObjectBridge {
 public:
@@ -96,17 +101,7 @@ public:
         return ret;
     }
 
-    template<typename T>
-    static Recyclable<T> createRecyclableSwiftClosure(SwiftClosure* _Nullable obj)
-    {
-        return Recyclable<T>((T) obj, [](T obj) {
-            if (obj != nullptr) {
-                WCDBReleaseSwiftClosure((SwiftClosure*) obj);
-            }
-        });
-    }
-
-    static CPPObject* _Nonnull createUnmanagedCPPObject(void* _Nonnull obj);
+    static CPPObject* _Nullable createUnmanagedCPPObject(void* _Nullable obj);
 
     template<typename T>
     static CPPObject* _Nonnull copyCPPObject(T&& obj, bool isRecyclable = false)

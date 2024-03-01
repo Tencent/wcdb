@@ -57,6 +57,8 @@ public:
 
     UnsafeData &operator=(const UnsafeData &other);
     UnsafeData &operator=(UnsafeData &&other);
+    bool operator==(const UnsafeData &other) const;
+    bool operator!=(const UnsafeData &other) const;
 
     UnsafeData(unsigned char *buffer, size_t size);
 

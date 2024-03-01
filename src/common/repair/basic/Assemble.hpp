@@ -35,7 +35,7 @@ namespace Repair {
 
 class Cell;
 
-class AssembleDelegate : public CipherDelegate {
+class AssembleDelegate {
 public:
     AssembleDelegate();
     virtual ~AssembleDelegate() = 0;
@@ -50,21 +50,26 @@ public:
     virtual bool
     assembleTable(const UnsafeStringView &tableName, const UnsafeStringView &sql)
     = 0;
+    virtual bool isAssemblingTableWithoutRowid() const = 0;
     virtual bool assembleSequence(const UnsafeStringView &tableName, int64_t sequence) = 0;
     virtual bool assembleCell(const Cell &cell) = 0;
     void markDuplicatedAsIgnorable(bool ignorable);
+    virtual void markDuplicatedAsReplaceable(bool replaceable);
 
     virtual bool assembleSQL(const UnsafeStringView &sql) = 0;
 
     virtual const Error &getAssembleError() const = 0;
 
+    virtual void suspendAssemble() = 0;
     virtual void finishAssemble() = 0;
 
 protected:
     bool isDuplicatedIgnorable() const;
+    bool isDuplicatedReplaceable() const;
 
 private:
     bool m_duplicatedIgnorable;
+    bool m_duplicatedReplaceable;
 };
 
 class AssembleDelegateHolder {

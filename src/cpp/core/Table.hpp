@@ -50,7 +50,13 @@ public:
     const StringView &getTableName() const;
 
     /**
-     @brief Drop index with name tableName + subfix.
+     @brief Get the related database
+     */
+
+    Database getDatabase() const;
+
+    /**
+     @brief Drop index with name tableName + suffix.
      */
     bool dropIndexWithSuffix(const UnsafeStringView &suffix);
 
@@ -77,10 +83,6 @@ protected:
     }
 
 private:
-    const UnsafeStringView &getTableName() const override final
-    {
-        return m_tableName;
-    }
     RecyclableHandle getHandleHolder(bool writeHint) override final
     {
         return getHandle(writeHint);
@@ -95,6 +97,11 @@ public:
     Table(const Table &) = default;
     Table &operator=(const Table &) = default;
     ~Table() override final = default;
+
+    const StringView &getTableName() const override final
+    {
+        return BaseTable::getTableName();
+    }
 
     using ORMType = ObjectType;
 };

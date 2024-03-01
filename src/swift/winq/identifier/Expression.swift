@@ -122,6 +122,10 @@ public final class Expression: Identifier<CPPExpression> {
         return self
     }
 
+    public func `as`(_ alias: String) -> ResultColumn {
+        return ResultColumn(with: WCDBExpressionConfigAlias(cppObj, alias.cString))
+    }
+
     public static func `case`(_ expressionConvertible: ExpressionConvertible? = nil) -> Expression {
         if let expressionConvertible = expressionConvertible {
             let expression = expressionConvertible.asExpression()
@@ -175,8 +179,9 @@ public final class Expression: Identifier<CPPExpression> {
     }
 
     @discardableResult
-    public func filter(_ filter: Filter) -> Expression {
-        withExtendedLifetime(filter) {
+    public func filter(_ expressionConvertible: ExpressionConvertible) -> Expression {
+        let expression = expressionConvertible.asExpression()
+        withExtendedLifetime(expression) {
             WCDBExpressionFilter(cppObj, $0.cppObj)
         }
         return self

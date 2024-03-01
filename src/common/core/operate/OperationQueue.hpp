@@ -34,6 +34,7 @@
 
 #include "AutoBackupConfig.hpp"
 #include "AutoCheckpointConfig.hpp"
+#include "AutoCompressConfig.hpp"
 #include "AutoMergeFTSIndexConfig.hpp"
 #include "AutoMigrateConfig.hpp"
 #include "OperationQueueForMemory.hpp"
@@ -47,6 +48,7 @@ public:
 
 protected:
     virtual Optional<bool> migrationShouldBeOperated(const UnsafeStringView& path) = 0;
+    virtual Optional<bool> compressionShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void backupShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void checkpointShouldBeOperated(const UnsafeStringView& path) = 0;
     virtual void integrityShouldBeChecked(const UnsafeStringView& path) = 0;
@@ -63,12 +65,17 @@ protected:
 class OperationQueue final : public AsyncQueue,
                              public OperationQueueForMemory,
                              public AutoMigrateOperator,
+                             public AutoCompressOperator,
                              public AutoBackupOperator,
                              public AutoMergeFTSIndexOperator,
                              public AutoCheckpointOperator {
 public:
     OperationQueue(const UnsafeStringView& name, OperationEvent* event);
-    ~OperationQueue() override final;
+    ~OperationQueue() override;
+
+    void stopAllDatabaseEvent(const UnsafeStringView& path);
+
+    void stop();
 
 protected:
     void main() override final;
@@ -91,6 +98,7 @@ protected:
             Checkpoint,
             Backup,
             Migrate,
+            Compress,
             MergeIndex,
         };
 
@@ -114,8 +122,6 @@ protected:
             OutOfMaxAllowedFileDescriptors,
 #endif
         } source;
-
-        int frames;
         int numberOfFailures;
         uint32_t identifier;
         uint32_t numberOfFileDescriptors;
@@ -138,6 +144,7 @@ protected:
     struct Record {
         Record();
         bool registeredForMigration;
+        bool registeredForCompression;
         bool registeredForBackup;
         bool registeredForCheckpoint;
         bool registeredForMergeFTSIndex;
@@ -156,6 +163,17 @@ protected:
     void asyncMigrate(const UnsafeStringView& path, double delay, int numberOfFailures);
     void doMigrate(const UnsafeStringView& path, int numberOfFailures);
 
+#pragma mark - Compress
+public:
+    void registerAsRequiredCompression(const UnsafeStringView& path);
+    void registerAsNoCompressionRequired(const UnsafeStringView& path);
+    void asyncCompress(const UnsafeStringView& path) override final;
+    void stopCompress(const UnsafeStringView& path) override final;
+
+protected:
+    void asyncCompress(const UnsafeStringView& path, double delay, int numberOfFailures);
+    void doCompress(const UnsafeStringView& path, int numberOfFailures);
+
 #pragma mark - Merge FTS Index
 public:
     using TableArray = AutoMergeFTSIndexOperator::TableArray;
@@ -170,10 +188,11 @@ protected:
 
 #pragma mark - Backup
 public:
+    bool isAutoBackup(const UnsafeStringView& path);
     void registerAsRequiredBackup(const UnsafeStringView& path);
     void registerAsNoBackupRequired(const UnsafeStringView& path);
 
-    void asyncBackup(const UnsafeStringView& path) override final;
+    void asyncBackup(const UnsafeStringView& path, bool incremental) override final;
 
 protected:
     void asyncBackup(const UnsafeStringView& path, double delay);

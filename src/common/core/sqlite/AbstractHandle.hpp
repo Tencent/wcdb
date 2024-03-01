@@ -25,17 +25,21 @@
 #pragma once
 
 #include "ColumnMeta.hpp"
+#include "DecorativeHandleStatement.hpp"
 #include "ErrorProne.hpp"
 #include "HandleNotification.hpp"
-#include "HandleStatement.hpp"
 #include "StringView.hpp"
+#include "TableAttribute.hpp"
 #include "Tag.hpp"
 #include "WCDBOptional.hpp"
 #include "WINQ.h"
 #include <set>
+#include <tuple>
 #include <vector>
 
 namespace WCDB {
+
+class ScalarFunctionConfig;
 
 class AbstractHandle : public ErrorProne {
 #pragma mark - Initialize
@@ -47,6 +51,7 @@ public:
     virtual ~AbstractHandle() override = 0;
 
 private:
+    friend class ScalarFunctionConfig;
     friend class HandleRelated;
     sqlite3 *getRawHandle();
     sqlite3 *m_handle;
@@ -85,24 +90,27 @@ public:
     void setTag(Tag tag);
     Tag getTag();
 
-protected:
-    bool executeSQL(const UnsafeStringView &sql);
     bool executeStatement(const Statement &statement);
+    bool executeSQL(const UnsafeStringView &sql);
+
+protected:
     int m_customOpenFlag;
     Tag m_tag;
 
 #pragma mark - Statement
 public:
-    virtual HandleStatement *getStatement();
+    virtual DecorativeHandleStatement *
+    getStatement(const UnsafeStringView &skipDecorator = UnsafeStringView());
     virtual void returnStatement(HandleStatement *handleStatement);
     virtual void resetAllStatements();
     virtual void finalizeStatements();
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
-    virtual void returnAllPreparedStatement();
+    HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
 
 private:
-    std::list<HandleStatement> m_handleStatements;
-    StringViewMap<HandleStatement *> m_preparedStatements;
+    HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);
+    std::list<DecorativeHandleStatement> m_handleStatements;
+    StringViewMap<DecorativeHandleStatement *> m_preparedStatements;
 
 #pragma mark - Meta
 public:
@@ -114,13 +122,15 @@ public:
     virtual bool
     addColumn(const Schema &schema, const UnsafeStringView &table, const ColumnDef &column);
 
-    virtual Optional<std::set<StringView>>
+    virtual Optional<StringViewSet>
     getColumns(const Schema &schema, const UnsafeStringView &table);
-    Optional<std::set<StringView>> getColumns(const UnsafeStringView &table);
 
     Optional<std::vector<ColumnMeta>>
     getTableMeta(const Schema &schema, const UnsafeStringView &table);
-    Optional<std::set<StringView>> getValues(const Statement &statement, int index);
+    Optional<StringViewSet> getValues(const Statement &statement, int index);
+    Optional<TableAttribute>
+    getTableAttribute(const Schema &schema, const UnsafeStringView &tableName);
+    bool configAutoIncrement(const UnsafeStringView &tableName);
 
     bool getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount);
 
@@ -162,9 +172,11 @@ public:
     bool checkpoint(CheckpointMode mode);
     void disableCheckpointWhenClosing(bool disable);
     void setWALFilePersist(int persist);
+    bool setCheckPointLock(bool enable);
 
 #pragma mark - Notification
 public:
+    typedef HandleNotification::PerformanceInfo PerformanceInfo;
     typedef HandleNotification::PerformanceNotification PerformanceNotification;
     void setNotificationWhenPerformanceTraced(const UnsafeStringView &name,
                                               const PerformanceNotification &onTraced);
@@ -178,9 +190,9 @@ public:
                                       const UnsafeStringView &name,
                                       const CommittedNotification &onCommitted);
 
-    typedef HandleNotification::CheckpointedNotification CheckpointedNotification;
+    typedef HandleNotification::CheckPointNotification CheckPointNotification;
     void setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                         const CheckpointedNotification &checkpointed);
+                                         Optional<CheckPointNotification> notification);
     void unsetNotificationWhenCommitted(const UnsafeStringView &name);
 
     typedef HandleNotification::BusyNotification BusyNotification;
@@ -195,12 +207,35 @@ public:
     bool needMonitorTable();
     void setTableMonitorEnable(bool enable);
 
+    void setFullSQLTraceEnable(bool enable);
+    bool isFullSQLEnable();
+    void postSQLNotification(const UnsafeStringView &sql, const UnsafeStringView &info);
+
+    void setBusyTraceEnable(bool enable);
+    bool isBusyTraceEnable() const;
+    void setCurrentSQL(const UnsafeStringView &sql);
+    void resetCurrentSQL(const UnsafeStringView &sql);
+    StringView getCurrentSQL() const;
+    void setActiveThreadId(uint64_t tid);
+    bool isUsingInThread(uint64_t tid) const;
+
 private:
     HandleNotification m_notification;
     bool m_tableMonitorForbidden;
+    bool m_fullSQLTrace;
+    mutable std::mutex m_lock;
+    bool m_busyTrace;
+    StringView m_currentSQL;
+    uint64_t m_tid;
 
 #pragma mark - Error
 public:
+    void notifyError(Error::Code rc,
+                     const UnsafeStringView &sql,
+                     const UnsafeStringView &msg = UnsafeStringView());
+    void notifyError(int rc,
+                     const UnsafeStringView &sql,
+                     const UnsafeStringView &msg = UnsafeStringView());
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);
@@ -212,14 +247,14 @@ private:
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
 
-    void notifyError(int rc, const char *sql);
-
     std::vector<int> m_ignorableCodes;
 
 #pragma mark - Suspend
 public:
     void suspend(bool suspend);                     // thread-safe
     void markAsCanBeSuspended(bool canBeSuspended); // thread-safe, default to false
+    bool isSuspended() const;
+
 protected:
     virtual void doSuspend(bool suspend);
 
@@ -240,7 +275,9 @@ private:
 public:
     size_t getCipherPageSize();
     void *getCipherContext();
-    bool setCipherKey(const UnsafeData &data);
+    virtual bool setCipherKey(const UnsafeData &data);
+    Data getRawCipherKey(const Schema &schema = Schema::main());
+    bool hasCipher() const;
     bool setCipherPageSize(int pageSize);
     StringView getCipherSalt();
     bool setCipherSalt(const UnsafeStringView &salt);

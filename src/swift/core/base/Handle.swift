@@ -66,7 +66,7 @@ public final class Handle {
     /// You can prepare a new statement without finalizing the previous statements, so that you can save the time of analyzing SQL syntax.
     ///
     /// If you only need to use one statement, or you no longer need to use the previous statements when you use a new statement,
-    /// it is recomemded to use `exec(_:)` or `prepare(_:)`.
+    /// it is recommended to use `exec(_:)` or `prepare(_:)`.
     ///
     /// - Parameter statement: the statement to prepare.
     /// - Throws: `Error`
@@ -145,12 +145,13 @@ public final class Handle {
 }
 
 public protocol HandleRepresentable {
-    func getHandle() throws -> Handle
+
+    func getHandle(writeHint: Bool) throws -> Handle
     func getDatabase() -> Database
 }
 
 extension Handle: HandleRepresentable {
-    public func getHandle() throws -> Handle {
+    public func getHandle(writeHint: Bool) throws -> Handle {
         return self
     }
 

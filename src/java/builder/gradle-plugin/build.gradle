@@ -1,0 +1,41 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+}
+apply from: rootProject.file('../gradle/WeChatPublish.gradle')
+
+gradlePlugin {
+    automatedPublishing false
+    plugins {
+        wcdbPlugin {
+            id = 'com.tencent.wcdb.gradle'
+            implementationClass = 'com.tencent.wcdb.gradle.WCDBPlugin'
+        }
+    }
+}
+
+def genVersionTask = tasks.register('generateVersionProperties') {
+    def propFile = file("$buildDir/generated/wcdb-gradle-plugin.properties")
+    outputs.file propFile
+    outputs.upToDateWhen { false }
+    doLast {
+        mkdir propFile.parentFile
+        propFile.text = "version=${project.getFullVersion()}"
+    }
+}
+
+processResources {
+    from genVersionTask
+}
+
+dependencies {
+    implementation "com.tencent.wcdb:compiler:${project.getFullVersion()}"
+    compileOnly gradleApi()
+    compileOnly 'com.android.tools.build:gradle:8.1.2'
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('com.tencent.wcdb:compiler') using project(':compiler')
+    }
+}

@@ -38,3 +38,5 @@
 #import "Interface.h"
 #import "WCTBuiltin.h"
 #import "WINQ.h"
+
+#import "WCTDatabase+Test.h"

@@ -48,6 +48,11 @@ WCDB_API @interface WCTPreparedStatement : NSObject
 - (void)reset;
 
 /**
+ @brief The wrapper of `sqlite3_clear_bindings`.
+ */
+- (void)clearBindings;
+
+/**
  @brief Check if you can continue stepping.
  @return YES if you can continue stepping.
  */

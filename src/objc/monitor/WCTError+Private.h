@@ -70,6 +70,7 @@ static_assert((NSUInteger) WCTErrorCodeNotice == (NSUInteger) WCDB::Error::Code:
 static_assert((NSUInteger) WCTErrorCodeWarning == (NSUInteger) WCDB::Error::Code::Warning, "");
 static_assert((NSUInteger) WCTErrorCodeRow == (NSUInteger) WCDB::Error::Code::Row, "");
 static_assert((NSUInteger) WCTErrorCodeDone == (NSUInteger) WCDB::Error::Code::Done, "");
+static_assert((NSUInteger) WCTErrorCodeZstdError == (NSUInteger) WCDB::Error::Code::ZstdError, "");
 
 static_assert((NSUInteger) WCTErrorExtendedCodeErrorMissingCollseq == (NSUInteger) WCDB::Error::ExtCode::ErrorMissingCollseq, "");
 static_assert((NSUInteger) WCTErrorExtendedCodeErrorRetry == (NSUInteger) WCDB::Error::ExtCode::ErrorRetry, "");

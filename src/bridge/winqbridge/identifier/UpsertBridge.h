@@ -30,10 +30,13 @@ CPPUpsert WCDBUpsertCreate(void);
 void WCDBUpsertConfigIndexdColumn(CPPUpsert upsert,
                                   const CPPIndexedColumn* _Nullable columns,
                                   int colnum);
+void WCDBUpsertConfigIndexdColumn2(CPPUpsert upsert, CPPCommonArray columns);
 void WCDBUpsertConfigWhere(CPPUpsert upsert, CPPExpression expression);
 void WCDBUpsertConfigDoNothing(CPPUpsert upsert);
 void WCDBUpsertConfigDoUpdate(CPPUpsert upsert);
 void WCDBUpsertConfigSetColumns(CPPUpsert upsert, const CPPColumn* _Nullable columns, int colNum);
+void WCDBUpsertConfigSetColumns2(CPPUpsert upsert, CPPCommonArray columns);
 void WCDBUpsertConfigToValue(CPPUpsert upsert, CPPExpression expression);
+void WCDBUpsertConfigToValue2(CPPUpsert upsert, CPPCommonValue expression);
 
 WCDB_EXTERN_C_END

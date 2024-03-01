@@ -36,7 +36,7 @@ namespace Syntax {
 class WCDB_API ColumnConstraint final : public Identifier {
 #pragma mark - Lang
 public:
-    ~ColumnConstraint() override final;
+    ~ColumnConstraint() override;
 
     StringView name;
     WCDB_SYNTAX_MAIN_UNION_ENUM(PrimaryKey, NotNull, Unique, Check, Default, Collate, ForeignKey, UnIndexed, );

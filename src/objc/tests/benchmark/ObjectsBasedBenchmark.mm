@@ -149,4 +149,83 @@
     }];
 }
 
+- (void)doTestRandomRead
+{
+    __block NSMutableArray<TestCaseObject*>* result = [[NSMutableArray alloc] initWithCapacity:self.testQuality];
+    __block NSMutableArray<WCTValue*>* identifiers;
+    [self
+    doMeasure:^{
+        int index = 0;
+        for (int i = 1; i <= self.testQuality; i++) {
+            index = [[Random shared] uint32] % identifiers.count;
+
+            TestCaseObject* obj = [self.database getObjectOfClass:TestCaseObject.class fromTable:self.tableName where:TestCaseObject.identifier == identifiers[index].numberValue.intValue];
+            if (obj == nil) {
+                continue;
+                ;
+            }
+            [result addObject:obj];
+            [identifiers removeObjectAtIndex:index];
+        }
+    }
+    setUp:^{
+        [self setUpDatabase];
+        identifiers = (NSMutableArray<WCTValue*>*) [self.database getColumnOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+        result = [[NSMutableArray alloc] initWithCapacity:self.testQuality];
+    }
+    checkCorrectness:^{
+        TestCaseAssertEqual(result.count, self.testQuality);
+    }];
+}
+
+- (void)doTestRandomUpdate
+{
+    __block NSMutableArray<WCTValue*>* identifiers;
+    [self
+    doMeasure:^{
+        int index = 0;
+        for (int i = 1; i <= self.testQuality; i++) {
+            index = [[Random shared] uint32] % identifiers.count;
+            TestCaseAssertTrue([self.database updateTable:self.tableName setProperty:TestCaseObject.content toValue:Random.shared.string where:TestCaseObject.identifier == identifiers[index].numberValue.intValue]);
+            [identifiers removeObjectAtIndex:index];
+        }
+    }
+    setUp:^{
+        [self setUpDatabase];
+        identifiers = (NSMutableArray<WCTValue*>*) [self.database getColumnOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+    }
+    checkCorrectness:nil];
+}
+
+- (void)doTestRandomDelete
+{
+    __block NSMutableArray<WCTValue*>* identifiers;
+    [self
+    doMeasure:^{
+        int index = 0;
+        for (int i = 1; i <= self.testQuality; i++) {
+            index = [[Random shared] uint32] % identifiers.count;
+            TestCaseAssertTrue([self.database deleteFromTable:self.tableName where:TestCaseObject.identifier == identifiers[index].numberValue.intValue]);
+            [identifiers removeObjectAtIndex:index];
+        }
+    }
+    setUp:^{
+        [self setUpDatabase];
+        identifiers = (NSMutableArray<WCTValue*>*) [self.database getColumnOnResultColumn:TestCaseObject.identifier fromTable:self.tableName];
+    }
+    tearDown:^{
+        [self tearDownDatabase];
+    }
+    checkCorrectness:^{
+        WCTValue* count = [self.database getValueOnResultColumn:WCDB::Column::all().count() fromTable:self.tableName];
+        TestCaseAssertTrue(count.numberValue.intValue == self.factory.quality - self.testQuality);
+    }];
+}
+
 @end

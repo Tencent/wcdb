@@ -47,10 +47,6 @@ public:
     UnsafeStringView(const UnsafeStringView& other);
     UnsafeStringView(UnsafeStringView&& other);
 
-#ifdef _WIN32
-    std::wstring getWString() const;
-#endif
-
     UnsafeStringView& operator=(const UnsafeStringView& other);
     UnsafeStringView& operator=(UnsafeStringView&& other);
     bool operator==(const UnsafeStringView& other) const;
@@ -74,6 +70,17 @@ private:
     const char* m_data = "";
     size_t m_length = 0;
     std::atomic<int>* m_referenceCount = nullptr;
+
+#pragma mark - UTF16
+public:
+#ifdef _WIN32
+    std::wstring getWString() const;
+#endif
+    static UnsafeStringView
+    createFromUTF16(const char16_t* utf16Str, size_t length, char* buffer);
+
+protected:
+    static size_t changeToUTF8(const char16_t* utf16Str, size_t length, char* buffer);
 
 #pragma mark - UnsafeStringView - Comparison
 public:
@@ -100,7 +107,7 @@ public:
 protected:
     void ensureNewSpace(size_t newSize);
     void createNewSpace(size_t newSize);
-    void tryClearSpace();
+    void clearSpace();
 
 private:
 #pragma mark - UnsafeStringView - Convertible
@@ -116,6 +123,28 @@ public:
     {
         *this = Convertible<T>::asUnsafeStringView(t);
     }
+
+#ifdef __ANDROID__
+
+#pragma mark - UnsafeStringView - PreAllocMemory
+public:
+    static char** preAllocStringMemorySlot(int count);
+    static void allocStringMemory(char** slot, int size);
+    static void clearAllocatedMemory(int count);
+    static void clearAllPreAllocatedMemory();
+
+protected:
+    static bool tryRetrievePreAllocatedMemory(const char* string);
+
+private:
+    typedef struct PreAllocatedMemory {
+        char** memory;
+        int totalCount;
+        int usedCount;
+    } PreAllocatedMemory;
+    thread_local static PreAllocatedMemory g_preAllocatedMemory;
+
+#endif
 };
 
 class WCDB_API StringView final : public UnsafeStringView {
@@ -135,13 +164,17 @@ public:
     static StringView formatted(const char* format, ...);
     static StringView hexString(const UnsafeData& data);
     static StringView makeConstant(const char* string);
-    static StringView createConstant(const char* string);
+    static StringView createConstant(const char* string, size_t length = 0);
 #ifdef _WIN32
     static StringView createFromWString(const wchar_t* string);
 #endif
 
 protected:
     void assignString(const char* content, size_t length);
+
+#pragma mark - UTF16
+public:
+    static StringView createFromUTF16(const char16_t* utf16Str, size_t length);
 };
 
 struct WCDB_API StringViewComparator {

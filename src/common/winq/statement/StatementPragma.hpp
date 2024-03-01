@@ -32,7 +32,7 @@ class WCDB_API StatementPragma final : public SpecifiedSyntax<Syntax::PragmaSTMT
 public:
     using SpecifiedSyntax<Syntax::PragmaSTMT, Statement>::SpecifiedSyntax;
     StatementPragma();
-    ~StatementPragma() override final;
+    ~StatementPragma() override;
 
     StatementPragma& pragma(const Pragma& pragma);
     StatementPragma& schema(const Schema& Schema);

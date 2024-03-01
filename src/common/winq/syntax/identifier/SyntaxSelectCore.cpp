@@ -99,7 +99,7 @@ bool SelectCore::describle(std::ostream& stream) const
 
 void SelectCore::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::Select:
         listIterate(resultColumns, iterator, stop);
@@ -128,6 +128,7 @@ void SelectCore::iterate(const Iterator& iterator, bool& stop)
         }
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

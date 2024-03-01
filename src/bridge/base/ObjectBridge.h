@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 #ifndef WCDB_EXTERN
 #if defined(__cplusplus)
 #define WCDB_EXTERN extern "C"
@@ -38,11 +40,8 @@
 
 WCDB_EXTERN_C_BEGIN
 
-typedef struct SwiftObject SwiftObject;
+typedef void SwiftObject;
 extern void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj);
-
-typedef struct SwiftClosure SwiftClosure;
-extern void (*_Nullable WCDBReleaseSwiftClosure)(SwiftClosure* _Nonnull obj);
 
 typedef struct CPPObject {
     void* _Nonnull realValue;
@@ -51,30 +50,14 @@ typedef struct CPPObject {
 } CPPObject;
 void WCDBReleaseCPPObject(CPPObject* _Nonnull obj);
 
+typedef void (*WCDBContextDestructor)(void* _Nonnull context);
+
 #define WCDBDefineSwiftObjectBridgedType(typename)                             \
     typedef struct typename                                                    \
     {                                                                          \
         WCDB::Recyclable<SwiftObject*> innerValue;                             \
     }                                                                          \
     typename;
-
-#define WCDBDefineMultiArgumentSwiftClosureBridgedType(typename, returnType, firstArgType, ...) \
-    static_assert(!std::is_floating_point<firstArgType>::value,                                 \
-                  "First argument should not be float");                                        \
-    static_assert(sizeof(firstArgType) <= 8, "Size of first argument is limited to 8 byte");    \
-    typedef returnType (*typename##ClosureType)(firstArgType, void*, __VA_ARGS__);              \
-    typedef WCDB::Recyclable<typename##ClosureType> typename;
-
-#define WCDBDefineOneArgumentSwiftClosureBridgedType(typename, returnType, firstArgType)     \
-    static_assert(!std::is_floating_point<firstArgType>::value,                              \
-                  "First argument should no be float");                                      \
-    static_assert(sizeof(firstArgType) <= 8, "Size of first argument is limited to 8 byte"); \
-    typedef returnType (*typename##ClosureType)(firstArgType);                               \
-    typedef WCDB::Recyclable<typename##ClosureType> typename;
-
-#define WCDBDefineNoArgumentSwiftClosureBridgedType(typename, returnType)      \
-    typedef returnType (*typename##ClosureType)();                             \
-    typedef WCDB::Recyclable<typename##ClosureType> typename;
 
 #define WCDBDefineCPPBridgedType(typename)                                     \
     typedef struct typename                                                    \
@@ -91,5 +74,103 @@ void WCDBReleaseCPPObject(CPPObject* _Nonnull obj);
 
 WCDBDefineOptionalBridgedType(OptionalBool, bool)
 WCDBDefineOptionalBridgedType(OptionalUInt64, unsigned long long)
+
+enum WCDBBridgedType {
+    WCDBBridgedType_Invalid = 0,
+    WCDBBridgedType_Null,
+    WCDBBridgedType_Bool,
+    WCDBBridgedType_Int,
+    WCDBBridgedType_UInt,
+    WCDBBridgedType_Double,
+    WCDBBridgedType_String,
+
+    WCDBBridgedType_Column,
+    WCDBBridgedType_Schema,
+    WCDBBridgedType_ColumnDef,
+    WCDBBridgedType_ColumnConstraint,
+    WCDBBridgedType_Expression,
+    WCDBBridgedType_LiteralValue,
+    WCDBBridgedType_ForeignKeyClause,
+    WCDBBridgedType_BindParameter,
+    WCDBBridgedType_RaiseFunction,
+    WCDBBridgedType_WindowDef,
+    WCDBBridgedType_Filter,
+    WCDBBridgedType_IndexedColumn,
+    WCDBBridgedType_TableConstraint,
+    WCDBBridgedType_CommonTableExpression,
+    WCDBBridgedType_QualifiedTableName,
+    WCDBBridgedType_OrderingTerm,
+    WCDBBridgedType_UpsertClause,
+    WCDBBridgedType_Pragma,
+    WCDBBridgedType_JoinClause,
+    WCDBBridgedType_TableOrSubquery,
+    WCDBBridgedType_JoinConstraint,
+    WCDBBridgedType_SelectCore,
+    WCDBBridgedType_ResultColumn,
+    WCDBBridgedType_FrameSpec,
+
+    WCDBBridgedType_AlterTableSTMT,
+    WCDBBridgedType_AnalyzeSTMT,
+    WCDBBridgedType_AttachSTMT,
+    WCDBBridgedType_BeginSTMT,
+    WCDBBridgedType_CommitSTMT,
+    WCDBBridgedType_RollbackSTMT,
+    WCDBBridgedType_SavepointSTMT,
+    WCDBBridgedType_ReleaseSTMT,
+    WCDBBridgedType_CreateIndexSTMT,
+    WCDBBridgedType_CreateTableSTMT,
+    WCDBBridgedType_CreateTriggerSTMT,
+    WCDBBridgedType_SelectSTMT,
+    WCDBBridgedType_InsertSTMT,
+    WCDBBridgedType_DeleteSTMT,
+    WCDBBridgedType_UpdateSTMT,
+    WCDBBridgedType_CreateViewSTMT,
+    WCDBBridgedType_CreateVirtualTableSTMT,
+    WCDBBridgedType_DetachSTMT,
+    WCDBBridgedType_DropIndexSTMT,
+    WCDBBridgedType_DropTableSTMT,
+    WCDBBridgedType_DropTriggerSTMT,
+    WCDBBridgedType_DropViewSTMT,
+    WCDBBridgedType_PragmaSTMT,
+    WCDBBridgedType_ReindexSTMT,
+    WCDBBridgedType_VacuumSTMT,
+    WCDBBridgedType_ExplainSTMT,
+};
+
+typedef struct CPPData {
+    unsigned char* _Nullable buffer;
+    unsigned long long size;
+} CPPData;
+
+typedef struct CPPCommonValue {
+    enum WCDBBridgedType type;
+    union {
+        long long intValue;
+        double doubleValue;
+    };
+} CPPCommonValue;
+
+typedef struct CPPCommonArray {
+    enum WCDBBridgedType type;
+    int length;
+    const void* _Nonnull* _Nullable buffer;
+} CPPCommonArray;
+
+typedef struct CPPMultiTypeArray {
+    int totalLength;
+    const enum WCDBBridgedType* _Nullable types;
+    const long long* _Nullable intValues;
+    const double* _Nullable doubleValues;
+    const char* _Nonnull* _Nullable stringValues;
+} CPPMultiTypeArray;
+
+#ifdef __ANDROID__
+
+char* _Nullable* _Nullable WCDBPreAllocStringMemorySlot(int count);
+void WCDBAllocStringMemory(char* _Nullable* _Nullable slot, int size);
+void WCDBClearAllocatedMemory(int count);
+void WCDBClearAllPreAllocatedMemory();
+
+#endif
 
 WCDB_EXTERN_C_END

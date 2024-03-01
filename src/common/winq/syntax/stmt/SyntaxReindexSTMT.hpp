@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API ReindexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~ReindexSTMT() override final;
+    ~ReindexSTMT() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(NotSet, Collation, TableOrIndex, );
     StringView collationOrTableOrIndex;

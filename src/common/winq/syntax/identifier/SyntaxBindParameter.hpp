@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API BindParameter final : public Identifier {
 #pragma mark - Lang
 public:
-    ~BindParameter() override final;
+    ~BindParameter() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(QuestionSign, ColonSign, DollarSign, AtSign, );
     int n;

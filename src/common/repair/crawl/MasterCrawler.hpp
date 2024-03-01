@@ -40,7 +40,7 @@ public:
 protected:
     friend class MasterCrawler;
 
-    virtual void onMasterPageCrawled(const Page &page);
+    virtual void onMasterPageCrawled(const Page &page) = 0;
     virtual void onMasterCellCrawled(const Cell &cell, const MasterItem &master) = 0;
     virtual void onMasterCrawlerError() = 0;
 };
@@ -49,7 +49,7 @@ class MasterCrawler final : public Crawlable {
 #pragma mark - Initialize
 public:
     MasterCrawler();
-    ~MasterCrawler() override final;
+    ~MasterCrawler() override;
 
 #pragma mark - Master
 public:

@@ -28,6 +28,7 @@
 #include "FactoryDepositor.hpp"
 #include "FactoryRenewer.hpp"
 #include "FactoryRetriever.hpp"
+#include "FactoryVacuum.hpp"
 #include "StringView.hpp"
 #include "Time.hpp"
 #include "WCDBOptional.hpp"
@@ -50,20 +51,24 @@ public:
 
     static constexpr const char *restoreDirectoryName = "restore";
     static constexpr const char *renewDirectoryName = "renew";
+    static constexpr const char *vacuumDirectoryName = "vacuum";
     StringView getRestoreDirectory() const;
     StringView getRenewDirectory() const;
+    StringView getVacuumDirectory() const;
     StringView getDatabaseName() const;
     bool removeDirectoryIfEmpty() const;
     bool removeDeposited() const;
     Optional<std::list<StringView>> getWorkshopDirectories() const;
     Optional<StringView> getUniqueWorkshopDiectory() const;
     bool containsDeposited() const;
+    static bool isWorkshopDirectory(const UnsafeStringView &dir);
 
 #pragma mark - Factory Related
 public:
     friend class FactoryRelated;
     FactoryDepositor depositor() const;
     FactoryRetriever retriever() const;
+    FactoryVacuum vacuumer() const;
     FactoryBackup backup() const;
     FactoryRenewer renewer() const;
 
@@ -80,12 +85,14 @@ public:
     associatedPathsForDatabase(const UnsafeStringView &database);
     static std::list<StringView> databasePathsForDatabase(const UnsafeStringView &database);
 
+    static StringView incrementalMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView firstMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView lastMaterialPathForDatabase(const UnsafeStringView &database);
     static StringView factoryPathForDatabase(const UnsafeStringView &database);
 
     static Optional<StringView>
     materialForSerializingForDatabase(const UnsafeStringView &database);
+    static Optional<StringView> latestMaterialForDatabase(const UnsafeStringView &database);
     static Optional<std::list<StringView>>
     materialsForDeserializingForDatabase(const UnsafeStringView &database);
 

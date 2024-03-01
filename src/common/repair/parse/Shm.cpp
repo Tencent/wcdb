@@ -64,6 +64,16 @@ uint32_t Shm::getBackfill() const
     return m_checkpointInfo.backfill;
 }
 
+Shm::Salt Shm::getSalt() const
+{
+    Salt salt;
+    const unsigned char *p = (const unsigned char *) &(m_header.___salt[0]);
+    salt.first = (((uint32_t) p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
+    p = (const unsigned char *) &(m_header.___salt[1]);
+    salt.second = (((uint32_t) p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3]);
+    return salt;
+}
+
 void Shm::markAsCorrupted(const UnsafeStringView &message)
 {
     Error error(Error::Code::Corrupt, Error::Level::Notice, message);

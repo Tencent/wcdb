@@ -46,13 +46,6 @@
     return @"benchmark";
 }
 
-- (void)configurePrototype:(WCTDatabase*)prototype
-{
-    if (self.cipher.length > 0) {
-        [prototype setCipherKey:self.cipher];
-    }
-}
-
 - (void)preparePrototype:(WCTDatabase*)prototype currentQuality:(double)quality
 {
     int maxNumberOfObjects = (int) self.quality;
@@ -82,8 +75,8 @@
 
 - (NSString*)categoryOfPrototype
 {
-    if (self.cipher.length > 0) {
-        return @"cipher";
+    if (self.category.length > 0) {
+        return self.category;
     } else {
         return @"objects";
     }

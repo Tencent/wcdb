@@ -60,6 +60,11 @@ Column Column::rowid()
     return Column("rowid");
 }
 
+ResultColumn Column::as(const UnsafeStringView& alias)
+{
+    return ResultColumn(*this).as(alias);
+}
+
 IndexedColumn Column::asIndex() const
 {
     return IndexedColumn(*this);

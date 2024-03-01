@@ -42,7 +42,7 @@ class WCDB_API Expression final : public SpecifiedSyntax<Syntax::Expression, SQL
                                   public FTSFunctionOperable {
 public:
     using SpecifiedSyntax<Syntax::Expression, SQL>::SpecifiedSyntax;
-    ~Expression() override final;
+    ~Expression() override;
 
     template<typename T, typename Enable = typename std::enable_if<ExpressionConvertible<T>::value>::type>
     Expression(const T& t)
@@ -71,6 +71,8 @@ public:
     static Expression cast(const Expression& expression);
     Expression& as(const ColumnType& columnType);
 
+    ResultColumn as(const UnsafeStringView& alias);
+
     static Expression exists(const StatementSelect& select);
     static Expression notExists(const StatementSelect& select);
 
@@ -83,7 +85,7 @@ public:
     Expression& escape(const Expression& operand);
 
     static Expression windowFunction(const UnsafeStringView& function);
-    Expression& filter(const Filter& filter);
+    Expression& filter(const Expression& condition);
     Expression& over(const WindowDef& windowDef);
     Expression& over(const UnsafeStringView& window);
 

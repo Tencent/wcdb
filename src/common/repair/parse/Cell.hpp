@@ -38,7 +38,7 @@ class Page;
 class Cell final : public PagerRelated, public Initializeable {
 public:
     Cell(int pointer, Page *page, Pager *pager);
-    ~Cell() override final;
+    ~Cell() override;
 
     const Page &getPage() const;
 
@@ -49,6 +49,7 @@ public:
         Text = 3,
         BLOB = 4,
     };
+    uint32_t getLeftChild() const;
     int64_t getRowID() const;
     Type getValueType(int index) const;
     int getCount() const;
@@ -65,6 +66,7 @@ protected:
 
     Page *m_page;
 
+    uint32_t m_leftChild;
     int64_t m_rowid;
     int m_pointer;
 

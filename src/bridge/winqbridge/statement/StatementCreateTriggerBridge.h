@@ -33,12 +33,14 @@ void WCDBStatementCreateTriggerConfigTrigger(CPPStatementCreateTrigger createTri
                                              const char* _Nullable name);
 void WCDBStatementCreateTriggerConfigSchema(CPPStatementCreateTrigger createTrigger,
                                             CPPSchema schema);
+void WCDBStatementCreateTriggerConfigSchema2(CPPStatementCreateTrigger createTrigger,
+                                             CPPCommonValue schema);
 void WCDBStatementCreateTriggerConfigTemp(CPPStatementCreateTrigger createTrigger);
 void WCDBStatementCreateTriggerConfigIfNotExist(CPPStatementCreateTrigger createTrigger);
 
 void WCDBStatementCreateTriggerConfigBefore(CPPStatementCreateTrigger createTrigger);
 void WCDBStatementCreateTriggerConfigAfter(CPPStatementCreateTrigger createTrigger);
-void WCDBStatementCreateTriggerConfigInsteadof(CPPStatementCreateTrigger createTrigger);
+void WCDBStatementCreateTriggerConfigInsteadOf(CPPStatementCreateTrigger createTrigger);
 
 void WCDBStatementCreateTriggerConfigDelete(CPPStatementCreateTrigger createTrigger);
 void WCDBStatementCreateTriggerConfigInsert(CPPStatementCreateTrigger createTrigger);
@@ -47,6 +49,8 @@ void WCDBStatementCreateTriggerConfigUpdate(CPPStatementCreateTrigger createTrig
 void WCDBStatementCreateTriggerConfigColumns(CPPStatementCreateTrigger createTrigger,
                                              const CPPColumn* _Nullable columns,
                                              int colNum);
+void WCDBStatementCreateTriggerConfigColumns2(CPPStatementCreateTrigger createTrigger,
+                                              CPPCommonArray columns);
 void WCDBStatementCreateTriggerConfigTable(CPPStatementCreateTrigger createTrigger,
                                            const char* _Nullable name);
 void WCDBStatementCreateTriggerConfigForEachRow(CPPStatementCreateTrigger createTrigger);

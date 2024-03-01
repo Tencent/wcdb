@@ -28,7 +28,7 @@ import WCDB
 class AdvanceTests: CRUDTestCase {
 
     func testHandleStatement() {
-        let statement = StatementSelect().select(Column.all).from(Master.builtinTableName)
+        let statement = StatementSelect().select(Column.all()).from(Master.builtinTableName)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
 
         WCDBAssertNoThrowReturned(try handle.prepare(statement))
@@ -37,7 +37,7 @@ class AdvanceTests: CRUDTestCase {
 
     func testHandleStatementRead() {
         // Give
-        let statement = StatementSelect().select(Column.all).from(TestObject.name)
+        let statement = StatementSelect().select(Column.all()).from(TestObject.name)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
         XCTAssertNoThrow(try handle.prepare(statement))
 
@@ -155,7 +155,7 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertNoThrow(try database.create(table: tableName, of: HandleStatementTypedObject.self))
         XCTAssertNoThrow(try database.insert(HandleStatementTypedObject(), intoTable: tableName))
 
-        let statement = StatementSelect().select(Column.all).from(tableName)
+        let statement = StatementSelect().select(Column.all()).from(tableName)
         let handle = WCDBAssertNoThrowReturned(try database.getHandle())!
         XCTAssertNoThrow(try handle.prepare(statement))
         XCTAssertNoThrow(try handle.step())
@@ -279,7 +279,7 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testExecFailed() {
-        let statement = StatementSelect().select(Column.all).from("nonexistentTable")
+        let statement = StatementSelect().select(Column.all()).from("nonexistentTable")
         XCTAssertThrowsError(try database.exec(statement))
     }
 
@@ -452,7 +452,7 @@ class AdvanceTests: CRUDTestCase {
         // Give
         database.close()
         database.setConfig(named: "testConfigFailed", withInvocation: { (handle) throws in
-            try handle.exec(StatementSelect().select(Column.all).from("nonexistentTable"))
+            try handle.exec(StatementSelect().select(Column.all()).from("nonexistentTable"))
         })
         // When
         XCTAssertFalse(database.canOpen)
@@ -525,9 +525,6 @@ class AdvanceTests: CRUDTestCase {
             XCTAssertNoThrow(try self.database.begin())
             XCTAssertTrue(self.database.isInTransaction)
             let beginInterval = Date().timeIntervalSince(write2Begin)
-            if beginInterval >= 1 {
-
-            }
             XCTAssertTrue(beginInterval < 1)
             identifier += 1
             let obj = TestObject()
@@ -860,55 +857,70 @@ class AdvanceTests: CRUDTestCase {
     }
 
     func testMigration() {
-        let sourceDatabase = Database(at: recommendedPath)
-        XCTAssertNoThrow(try sourceDatabase.create(table: "sourceTable", of: TestObject.self))
-
         let oldObject1 = TestObject()
         oldObject1.variable1 = 1
         oldObject1.variable2 = "oldContent1"
         let oldObject2 = TestObject()
         oldObject2.variable1 = 2
         oldObject2.variable2 = "oldContent2"
-        XCTAssertNoThrow(try sourceDatabase.insert(oldObject1, oldObject2, intoTable: "sourceTable"))
+        let oldObject3 = TestObject()
+        oldObject3.variable1 = 3
+        oldObject3.variable2 = "oldContent3"
+
+        let sourceCipher = Random.data(withLength: 100)
+        let targetCipher = Random.data(withLength: 100, andSeed: 1)
+
+        let sourceDatabase = Database(at: recommendedDirectory.appendingPathComponent("sourceDB.sqlite3"))
+        sourceDatabase.setCipher(key: sourceCipher)
+
+        let sourceTableName = "sourceTable"
+        XCTAssertNoThrow(try sourceDatabase.create(table: sourceTableName, of: TestObject.self))
+        let sourceTable = sourceDatabase.getTable(named: sourceTableName, of: TestObject.self)
+
+        XCTAssertNoThrow(try sourceTable.insert(oldObject1, oldObject2, oldObject3))
 
         let targetDatabase = Database(at: recommendedDirectory.appendingPathComponent("targetDB.sqlite3"))
-        targetDatabase.filterMigration({ info in
-            if info.table == "targetTable" {
-                info.sourceDatabase = self.recommendedPath.path
-                info.sourceTable = "sourceTable"
+        targetDatabase.setCipher(key: targetCipher)
+        let targetTableName = "targetTable"
+
+        targetDatabase.addMigration(sourcePath: sourceDatabase.path, sourceCipher: sourceCipher) { info in
+            if info.table == targetTableName {
+                info.sourceTable = sourceTableName
+                info.filterCondition = TestObject.Properties.variable1 > 2
             }
-        })
+        }
 
-        XCTAssertNoThrow(try targetDatabase.create(table: "targetTable", of: TestObject.self))
+        XCTAssertNoThrow(try targetDatabase.create(table: targetTableName, of: TestObject.self))
+        let targetTable = targetDatabase.getTable(named: targetTableName, of: TestObject.self)
 
-        XCTAssertNoThrow(try targetDatabase.update(table: "targetTable", on: TestObject.Properties.variable2, with: "newContent2", where: TestObject.Properties.variable1 == 2))
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all().count()).int64Value, 1)
 
-        let objects: [TestObject] = WCDBAssertNoThrowReturned(try targetDatabase.getObjects(fromTable: "targetTable"))
-        XCTAssertEqual(objects.count, 2)
-        XCTAssertEqual(objects[1].variable2, "newContent2")
+        XCTAssertNoThrow(try targetTable.delete(where: TestObject.Properties.variable1 == 2))
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all().count()).int64Value, 3)
 
-        XCTAssertNoThrow(try targetDatabase.delete(fromTable: "targetTable", where: TestObject.Properties.variable1 == 2))
-        let count = WCDBAssertNoThrowReturned(try targetDatabase.getValue(on: TestObject.Properties.any.count(), fromTable: "targetTable"))
-        XCTAssertEqual(count?.int32Value ?? 0, 1)
+        XCTAssertNoThrow(try targetTable.update(on: TestObject.Properties.variable2, with: ["newContent"], where: TestObject.Properties.variable1 == 3))
+
+        XCTAssertEqual(try? targetTable.getValue(on: TestObject.Properties.variable2, where: TestObject.Properties.variable1 == 3).stringValue, "newContent")
+
+        XCTAssertNoThrow(try targetTable.delete(where: TestObject.Properties.variable1 == 3))
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all().count()).int64Value, 2)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all().count()).int64Value, 0)
 
         let newObject = TestObject()
-        newObject.variable1 = 3
-        newObject.variable2 = "newContent3"
-        XCTAssertNoThrow(try targetDatabase.insert(newObject, intoTable: "targetTable"))
+        newObject.variable1 = 4
+        newObject.variable2 = "d"
+        XCTAssertNoThrow(try targetTable.insert(newObject))
 
-        let constents: OneColumnValue = WCDBAssertNoThrowReturned(
-            try targetDatabase.getColumn(on: TestObject.Properties.variable2,
-                                         fromTable: "targetTable",
-                                         orderBy: [TestObject.Properties.variable1.order(.ascending)]))
-        XCTAssertEqual(constents.count, 2)
-        XCTAssertEqual(constents[0].stringValue, "oldContent1")
-        XCTAssertEqual(constents[1].stringValue, "newContent3")
+        let dbNewObject = WCDBAssertNoThrowReturned(try targetTable.getObject(on: TestObject.Properties.all, where: TestObject.Properties.variable1 == 4))
+        XCTAssertTrue(dbNewObject != nil && dbNewObject!.variable2 == "d")
+        XCTAssertEqual(try? sourceTable.getValue(on: Column.all().count()).int64Value, 2)
+        XCTAssertEqual(try? targetTable.getValue(on: Column.all().count()).int64Value, 1)
 
         targetDatabase.close()
         XCTAssertEqual(targetDatabase.isMigrated(), false)
 
         var migratedTable: String?
-        targetDatabase.setNotification { _, info in
+        targetDatabase.setNotificationWhenMigrated { _, info in
             if let sourceTable = info?.sourceTable {
                 migratedTable = sourceTable
             }
@@ -920,7 +932,7 @@ class AdvanceTests: CRUDTestCase {
 
         XCTAssertEqual(targetDatabase.isMigrated(), true)
 
-        XCTAssertEqual(migratedTable ?? "", "sourceTable")
+        XCTAssertEqual(migratedTable ?? "", sourceTableName)
     }
 
     func testDefaultTemporaryDirectory() {
@@ -936,5 +948,141 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertTrue(Database.setDefaultTemporaryDirectory(""))
         dir = WCDBAssertNoThrowReturned(try database.getValue(from: getDirStatement))
         XCTAssertTrue(dir != nil && dir!.stringValue == "")
+    }
+
+    func testNormalCompress() {
+        Random.useEnglishString = true
+        XCTAssertNoThrow(try table.delete())
+        var preInsertObjects = Random.testObjects(startWith: 1, count: 2)
+        XCTAssertNoThrow(try table.insert(preInsertObjects))
+
+        database.setCompression { info in
+            info.addZSTDNormalCompress(to: TestObject.Properties.variable2)
+        }
+        var tableCompressed = false
+        var databaseCompressed = false
+        database.setNotificationWhenCompressed { database, table in
+            XCTAssertEqual(database.tag, self.database.tag)
+            XCTAssertEqual(database.path, self.database.path)
+            if let table = table {
+                if table == self.table.name {
+                    tableCompressed = true
+                }
+            } else {
+                databaseCompressed = true
+            }
+        }
+
+        XCTAssertFalse(database.isCompressed())
+        XCTAssertNoThrow(try database.stepCompression())
+        XCTAssertNoThrow(try database.stepCompression())
+        XCTAssertTrue(database.isCompressed())
+        XCTAssertTrue(tableCompressed && databaseCompressed)
+
+        let newInsertObjects = Random.testObjects(startWith: 3, count: 2)
+        XCTAssertNoThrow(try table.insert(newInsertObjects))
+
+        let count = WCDBAssertNoThrowReturned(try database.getValue(from: StatementSelect().select(Column.all().count()).from(table.name).where(Column(named: "WCDB_CT_variable2") == 4)))
+        XCTAssertTrue(count != nil && count!.intValue == 4)
+
+        preInsertObjects.append(contentsOf: newInsertObjects)
+
+        let allObjects = WCDBAssertNoThrowReturned(try table.getObjects())
+        XCTAssertTrue(allObjects.elementsEqual(preInsertObjects))
+        Random.useEnglishString = false
+    }
+
+    func testDictCompress() {
+        Random.useEnglishString = true
+        XCTAssertNoThrow(try table.delete())
+        var preInsertObjects = Random.testObjects(startWith: 1, count: 2)
+        XCTAssertNoThrow(try table.insert(preInsertObjects))
+
+        var samples: [Data] = []
+        for _ in 0..<1000 {
+            samples.append(Random.englishString(withLength: 100).data(using: .utf8) ?? Data())
+        }
+        let dict = WCDBAssertNoThrowReturned(try Database.trainDict(with: samples, and: 1))
+        XCTAssertNotNil(dict)
+        XCTAssertNoThrow(try Database.register(dict: dict!, with: 1))
+
+        database.setCompression { info in
+            info.addZSTDDictCompress(to: TestObject.Properties.variable2, withDict: 1)
+        }
+
+        XCTAssertFalse(database.isCompressed())
+        XCTAssertNoThrow(try database.stepCompression())
+        XCTAssertNoThrow(try database.stepCompression())
+        XCTAssertTrue(database.isCompressed())
+
+        let newInsertObjects = Random.testObjects(startWith: 3, count: 2)
+        XCTAssertNoThrow(try table.insert(newInsertObjects))
+
+        let count = WCDBAssertNoThrowReturned(try database.getValue(from: StatementSelect().select(Column.all().count()).from(table.name).where(Column(named: "WCDB_CT_variable2") == 2)))
+        XCTAssertTrue(count != nil && count!.intValue == 4)
+
+        preInsertObjects.append(contentsOf: newInsertObjects)
+
+        let allObjects = WCDBAssertNoThrowReturned(try table.getObjects())
+        XCTAssertTrue(allObjects.elementsEqual(preInsertObjects))
+        Random.useEnglishString = false
+    }
+
+    func testMultiDictCompress() {
+        Random.useEnglishString = true
+        XCTAssertNoThrow(try table.delete())
+        var preInsertObjects = Random.testObjects(startWith: 1, count: 2)
+        XCTAssertNoThrow(try table.insert(preInsertObjects))
+
+        var samples: [String] = []
+        for _ in 0..<1000 {
+            samples.append(Random.englishString(withLength: 100))
+        }
+        let dict1 = WCDBAssertNoThrowReturned(try Database.trainDict(with: samples, and: 2))
+        XCTAssertNotNil(dict1)
+        XCTAssertNoThrow(try Database.register(dict: dict1!, with: 2))
+
+        samples.removeAll()
+        for _ in 0..<1000 {
+            samples.append(Random.englishString(withLength: 100))
+        }
+        let dict2 = WCDBAssertNoThrowReturned(try Database.trainDict(with: samples, and: 3))
+        XCTAssertNotNil(dict2)
+        XCTAssertNoThrow(try Database.register(dict: dict2!, with: 3))
+
+        samples.removeAll()
+        for _ in 0..<1000 {
+            samples.append(Random.englishString(withLength: 100))
+        }
+        let dict3 = WCDBAssertNoThrowReturned(try Database.trainDict(with: samples, and: 4))
+        XCTAssertNotNil(dict3)
+        XCTAssertNoThrow(try Database.register(dict: dict3!, with: 4))
+
+        database.setCompression { info in
+            info.addZSTDMultiDictCompress(to: TestObject.Properties.variable2,
+                                          withMatchProperty: TestObject.Properties.variable1,
+                                          andDicts: [
+                1: 2,
+                2: 3,
+                Database.DictDefaultMatchValue: 4
+            ])
+        }
+
+        XCTAssertFalse(database.isCompressed())
+        XCTAssertNoThrow(try database.stepCompression())
+        XCTAssertNoThrow(try database.stepCompression())
+        XCTAssertTrue(database.isCompressed())
+
+        let newInsertObjects = Random.testObjects(startWith: 3, count: 2)
+        XCTAssertNoThrow(try table.insert(newInsertObjects))
+
+        let count = WCDBAssertNoThrowReturned(try database.getValue(from: StatementSelect().select(Column.all().count()).from(table.name).where(Column(named: "WCDB_CT_variable2") == 2)))
+        XCTAssertTrue(count != nil && count!.intValue == 4)
+
+        preInsertObjects.append(contentsOf: newInsertObjects)
+
+        let allObjects = WCDBAssertNoThrowReturned(try table.getObjects())
+        XCTAssertTrue(allObjects.elementsEqual(preInsertObjects))
+        Random.useEnglishString = false
     }
 }

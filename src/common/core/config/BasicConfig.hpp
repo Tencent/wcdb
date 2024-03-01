@@ -32,7 +32,7 @@ namespace WCDB {
 class BasicConfig final : public Config {
 public:
     BasicConfig();
-    ~BasicConfig() override final;
+    ~BasicConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
 

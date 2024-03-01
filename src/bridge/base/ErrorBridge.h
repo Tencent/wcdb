@@ -24,23 +24,18 @@
 
 #pragma once
 
+#include "ContainerBridge.h"
 #include "ObjectBridge.h"
 
 WCDB_EXTERN_C_BEGIN
 
 WCDBDefineCPPBridgedType(CPPError)
 
-enum WCDBErrorValueType {
-    WCDBErrorValueTypeInterger = 1,
-    WCDBErrorValueTypeFloat,
-    WCDBErrorValueTypeString,
-};
-
 enum WCDBErrorLevel {
     WCDBErrorLevel_Ignore = 1,
     WCDBErrorLevel_Debug,
-    WCDBErrorLevel_Warming,
     WCDBErrorLevel_Notice,
+    WCDBErrorLevel_Warning,
     WCDBErrorLevel_Error,
     WCDBErrorLevel_Fatal,
 };
@@ -48,7 +43,11 @@ enum WCDBErrorLevel {
 long WCDBErrorGetLevel(CPPError obj);
 long WCDBErrorGetCode(CPPError obj);
 const char* _Nonnull WCDBErrorGetMsg(CPPError obj);
-void WCDBErrorEnumerateAllInfo(CPPError obj, SwiftClosure* _Nonnull callback);
+
+void WCDBErrorEnumerateAllInfo(CPPError error,
+                               void* _Nonnull context,
+                               StringViewMapEnumerator _Nonnull callback);
+
 void WCDBErrorReport(enum WCDBErrorLevel level,
                      long code,
                      const char* _Nullable content,

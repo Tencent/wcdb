@@ -201,7 +201,9 @@ class TableTests: DatabaseTestCase {
             case content
             static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(id, isNotIndexed: true)
-                BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming)
+                BindVirtualTable(withModule: .FTS5,
+                                 and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming,
+                                 withExternalContent: "contentTable")
             }
         }
     }
@@ -221,7 +223,7 @@ class TableTests: DatabaseTestCase {
             object.sql!,
             """
             CREATE VIRTUAL TABLE FTS5Object USING fts5\
-            (tokenize = 'wcdb_verbatim skip_stemming', id UNINDEXED, content)
+            (tokenize = 'wcdb_verbatim skip_stemming', content='contentTable', id UNINDEXED, content)
             """
         )
     }

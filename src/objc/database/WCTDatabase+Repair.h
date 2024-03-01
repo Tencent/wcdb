@@ -37,15 +37,15 @@ typedef void (^WCTCorruptedNotificationBlock)(WCTDatabase *);
 typedef BOOL (^WCTBackupFilterBlock)(NSString * /* table */);
 
 /**
- Triggered when repairment progresses.
+ Triggered when repairment/vacuum progresses.
  */
-typedef void (^WCTRetrieveProgressUpdateBlock)(double /* percentage */, double /* increment */);
+typedef bool /* continue or not */ (^WCTProgressUpdateBlock)(double /* percentage */, double /* increment */);
 
 WCDB_API @interface WCTDatabase(Repair)
 
 /**
  @brief Register database corruption notification callback.
- If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation, WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truely corrupted. Once confirmed, WCDB will notify you through the callback registered by this method. In the callback, you can delete the corrupted database or try to repair the database.
+ If the current database reports an error of `SQLITE_CORRUPT` or `SQLITE_NOTADB` during operation, WCDB will asynchronously use `PRAGMA integrity_check` to check whether this database is truly corrupted. Once confirmed, WCDB will notify you through the callback registered by this method. In the callback, you can delete the corrupted database or try to repair the database.
  @see   `-[WCTDatabase removeFiles]`
  @see   `-[WCTDatabase retrieve:]`
  @param onCorrupted The callback for database corruption.
@@ -117,10 +117,19 @@ WCDB_API @interface WCTDatabase(Repair)
  In the extreme case where this database is not backed up and the first page is corrupted, no data can be recovered.
  @warning Since repairing a database requires reading all uncorrupted data and writing them to a new database, it may take a lot of time to finish the job. During this period, you'd better display a loading view on the screen and present the processing percentage.
  @param onProgressUpdated block.
- @see   `WCTRetrieveProgressUpdateBlock`.
+ @see   `WCTProgressUpdateBlock`.
  @return Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
  */
-- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTRetrieveProgressUpdateBlock)onProgressUpdated;
+- (double)retrieve:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
+
+/**
+ @brief Vacuum current database.
+ It can be used to vacuum a database of any size with limited memory usage.
+ @param onProgressUpdated block.
+ @see   `WCTProgressUpdateBlock`.
+ @return YES if vacuum succeed.
+ */
+- (BOOL)vacuum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
 
 @end
 

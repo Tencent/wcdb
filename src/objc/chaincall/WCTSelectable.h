@@ -32,7 +32,7 @@ WCDB_API @interface WCTSelectable : WCTChainCall
 
 /**
  The statement will be executed.
- You can cunstomize this statement directly to implement the capabilities not provided by the following methods.
+ You can customize this statement directly to implement the capabilities not provided by the following methods.
  */
 - (WCDB::StatementSelect &)statement;
 

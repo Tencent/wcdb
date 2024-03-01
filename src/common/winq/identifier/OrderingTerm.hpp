@@ -32,7 +32,7 @@ class WCDB_API OrderingTerm final : public SpecifiedSyntax<Syntax::OrderingTerm,
 public:
     using SpecifiedSyntax<Syntax::OrderingTerm, SQL>::SpecifiedSyntax;
     OrderingTerm();
-    ~OrderingTerm() override final;
+    ~OrderingTerm() override;
 
     template<typename T, typename Enable = typename std::enable_if<OrderingTermConvertible<T>::value>::type>
     OrderingTerm(const T& t)

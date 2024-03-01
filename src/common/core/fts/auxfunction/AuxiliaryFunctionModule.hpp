@@ -25,43 +25,24 @@
 #pragma once
 
 #include "FTSError.hpp"
-#include "StringView.hpp"
+#include "ScalarFunctionModule.hpp"
 #include <functional>
 
-typedef struct FTS5AuxiliaryFunctionValue FTS5AuxiliaryFunctionValue;
 typedef struct FTS5AuxiliaryFunctionAPIPointer FTS5AuxiliaryFunctionAPIPointer;
 typedef struct FTS5AuxiliaryFunctionContext FTS5AuxiliaryFunctionContext;
-typedef struct FTS5SQLiteContext FTS5SQLiteContext;
 
 namespace WCDB {
 
 class AbstractFTS5AuxiliaryFunctionObject;
 
-class WCDB_API FTS5AuxiliaryFunctionAPI {
+template<typename AuxiliaryFunctionObject>
+class FTS5AuxiliaryFunctionTemplate;
+
+class WCDB_API FTS5AuxiliaryFunctionAPI : public ScalarFunctionAPI {
+    template<typename AuxiliaryFunctionObject>
+    friend class FTS5AuxiliaryFunctionTemplate;
+
 public:
-    FTS5AuxiliaryFunctionAPI(const FTS5AuxiliaryFunctionAPIPointer* ptr,
-                             FTS5SQLiteContext* sqliteContext,
-                             FTS5AuxiliaryFunctionContext* functionContext);
-
-    AbstractFTS5AuxiliaryFunctionObject*
-    getOrCreateFunctionObject(std::function<AbstractFTS5AuxiliaryFunctionObject*(void*)> createHandler,
-                              void (*freeHandler)(void*));
-
-    // Access value
-    const void* getBlobValue(FTS5AuxiliaryFunctionValue* value);
-    double getDoubleValue(FTS5AuxiliaryFunctionValue* value);
-    int64_t getIntValue(FTS5AuxiliaryFunctionValue* value);
-    const UnsafeStringView getTextValue(FTS5AuxiliaryFunctionValue* value);
-    int getBytesValue(FTS5AuxiliaryFunctionValue* value);
-
-    // Output result
-    void setBlobResult(const void* resultBufffer, int length, void (*freeHandler)(void*));
-    void setDoubleResult(double result);
-    void setIntResult(int64_t result);
-    void setNullResult();
-    void setTextResult(const UnsafeStringView& result);
-    void setErrorResult(const UnsafeStringView& msg, int code);
-
     // FTS5 Extension API
     int getColumnCount();
     int getRowCount(int64_t* rowCount);
@@ -78,7 +59,18 @@ public:
                  int (*tokenCallback)(void*, int, const char*, int, int, int));
     int queryPhrase(int phraseNum,
                     void* userData,
-                    int (*callback)(const FTS5AuxiliaryFunctionAPI*, void*));
+                    int (*callback)(FTS5AuxiliaryFunctionAPI&, void*));
+
+protected:
+    FTS5AuxiliaryFunctionAPI(const FTS5AuxiliaryFunctionAPIPointer* ptr,
+                             FTS5AuxiliaryFunctionContext* functionContext,
+                             SQLiteContext* sqliteContext,
+                             SQLiteValue** values,
+                             int valueNum);
+
+    AbstractFTS5AuxiliaryFunctionObject*
+    getOrCreateFunctionObject(std::function<AbstractFTS5AuxiliaryFunctionObject*(void*)> createHandler,
+                              void (*freeHandler)(void*));
 
 private:
     static int queryCallBack(const FTS5AuxiliaryFunctionAPIPointer* apiPointer,
@@ -86,29 +78,25 @@ private:
                              void* queryContext);
 
     const FTS5AuxiliaryFunctionAPIPointer* m_ptr;
-    FTS5SQLiteContext* m_sqliteContext;
     FTS5AuxiliaryFunctionContext* m_functionContext;
-    std::function<int(const FTS5AuxiliaryFunctionAPI*)> m_queryCallback;
+    std::function<int(FTS5AuxiliaryFunctionAPI&)> m_queryCallback;
 };
 
 class WCDB_API AbstractFTS5AuxiliaryFunctionObject {
 public:
-    AbstractFTS5AuxiliaryFunctionObject(int nVal,
-                                        FTS5AuxiliaryFunctionValue** apVal,
-                                        void* context,
-                                        FTS5AuxiliaryFunctionAPI* apiObj);
+    AbstractFTS5AuxiliaryFunctionObject(void* userContext, FTS5AuxiliaryFunctionAPI& apiObj);
     virtual ~AbstractFTS5AuxiliaryFunctionObject() = 0;
-    virtual void process(FTS5AuxiliaryFunctionAPI* apiObj) = 0;
+    virtual void process(FTS5AuxiliaryFunctionAPI& apiObj) = 0;
 };
 
 class WCDB_API FTS5AuxiliaryFunctionModule final {
 public:
     typedef void (*AuxiliaryFunction)(const FTS5AuxiliaryFunctionAPIPointer* pApi,
                                       FTS5AuxiliaryFunctionContext* pFts,
-                                      FTS5SQLiteContext* pCtx,
+                                      SQLiteContext* pCtx,
                                       int nVal,
-                                      FTS5AuxiliaryFunctionValue** apVal);
-    FTS5AuxiliaryFunctionModule();
+                                      SQLiteValue** apVal);
+    FTS5AuxiliaryFunctionModule() = delete;
     FTS5AuxiliaryFunctionModule(const AuxiliaryFunction& func, void* context = nullptr);
     AuxiliaryFunction getFunc() const;
     void* getContext() const;

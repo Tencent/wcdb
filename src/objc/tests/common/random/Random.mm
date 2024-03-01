@@ -43,6 +43,7 @@
     std::shared_ptr<std::uniform_int_distribution<unsigned char>> _uniformUChar;
     std::shared_ptr<std::uniform_int_distribution<int>> _uniformLength;
     BOOL _stable;
+    RandomStringType _stringType;
 }
 
 + (instancetype)shared
@@ -55,6 +56,13 @@
 {
     @synchronized(self) {
         _stable = stable;
+    }
+}
+
+- (void)setStringType:(RandomStringType)type
+{
+    @synchronized(self) {
+        _stringType = type;
     }
 }
 
@@ -247,7 +255,7 @@
 
 - (uint16_t)uint16
 {
-    return (*self.uniformUInt8.get())(*self.engine.get());
+    return (*self.uniformUInt16.get())(*self.engine.get());
 }
 
 - (int16_t)int16
@@ -305,7 +313,14 @@
 
 - (NSString *)string
 {
-    return [self stringWithLength:self.length];
+    switch (_stringType) {
+    case RandomStringType_Default:
+        return [self stringWithLength:self.length];
+    case RandomStringType_English:
+        return [self englishStringWithLength:100];
+    case RandomStringType_Chinese:
+        return [self chineseStringWithLength:self.length];
+    }
 }
 
 - (NSString *)stringWithLength:(UInt32)length
@@ -314,7 +329,7 @@
     "0123456789"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz";
-    char result[std::numeric_limits<uint8_t>::max() + 1];
+    char result[std::numeric_limits<uint16_t>::max() + 1];
     for (int i = 0; i < length; ++i) {
         result[i] = alphanum[self.uint8 % (sizeof(alphanum) - 1)];
     }
@@ -341,6 +356,54 @@
     return string;
 }
 
+- (NSString *)englishString
+{
+    return [self englishStringWithLength:100];
+}
+
+- (NSString *)englishStringWithLength:(UInt32)length
+{
+    static NSArray<NSString *> *g_wordArray;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary<NSString *, NSNumber *> *g_wordFrequency = @{
+            @"a" : @408,
+            @"he" : @121,
+            @"but" : @86,
+            @"my" : @58,
+            @"if" : @51,
+            @"just" : @44,
+            @"people" : @33,
+            @"think" : @28,
+            @"because" : @25,
+            @"two" : @21,
+            @"very" : @19,
+            @"should" : @17,
+            @"work" : @15,
+            @"day" : @14,
+            @"oh" : @13,
+            @"use" : @11,
+            @"lot" : @10,
+            @"mr" : @10,
+            @"part" : @9,
+            @"without" : @8,
+        };
+        NSMutableArray *wordArray = [[NSMutableArray alloc] initWithCapacity:1000];
+        [g_wordFrequency enumerateKeysAndObjectsUsingBlock:^(NSString *word, NSNumber *frequency, BOOL *) {
+            for (int i = 0; i < frequency.intValue; i++) {
+                [wordArray addObject:word];
+            }
+        }];
+        g_wordArray = wordArray;
+    });
+    NSMutableString *ret = [[NSMutableString alloc] init];
+    for (int i = 0; i < length; i++) {
+        [ret appendString:g_wordArray[self.uint16 % 1000]];
+        [ret appendString:@" "];
+    }
+    return ret;
+}
+
 - (NSData *)data
 {
     return [self dataWithLength:self.length];
@@ -364,6 +427,11 @@
         data = self.data;
     } while ([other isEqualToData:data]);
     return data;
+}
+
+- (NSDate *)date
+{
+    return [NSDate dateWithTimeIntervalSince1970:self.double_];
 }
 
 @end

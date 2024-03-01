@@ -39,6 +39,13 @@ void WCDBStatementDropTableConfigSchema(CPPStatementDropTable dropTableStatement
     cppDropTableStatement->schema(*cppSchema);
 }
 
+void WCDBStatementDropTableConfigSchema2(CPPStatementDropTable dropTableStatement,
+                                         CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(dropTableStatement, WCDB::StatementDropTable, cppDropTableStatement);
+    cppDropTableStatement->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
 void WCDBStatementDropTableConfigTable(CPPStatementDropTable dropTableStatement,
                                        const char* _Nullable name)
 {

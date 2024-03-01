@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API AlterTableSTMT final : public Identifier {
 #pragma mark - Syntax
 public:
-    ~AlterTableSTMT() override final;
+    ~AlterTableSTMT() override;
 
     Schema schema;
     StringView table;

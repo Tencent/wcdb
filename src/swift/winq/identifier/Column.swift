@@ -23,8 +23,13 @@ import WCDB_Private
 
 public final class Column: Identifier<CPPColumn> {
 
-    public static let all: Column = Column(with: WCDBColumnCreateAll())
-    public static let rowid: Column = Column(with: WCDBColumnCreateRowId())
+    public static func all() -> Column {
+        Column(with: WCDBColumnCreateAll())
+    }
+
+    public static func rowid() -> Column {
+        Column(with: WCDBColumnCreateRowId())
+    }
 
     public convenience init(named name: String) {
         self.init(named: name, binded: nil)
@@ -42,6 +47,10 @@ public final class Column: Identifier<CPPColumn> {
     public func `in`(table: String) -> Column {
         WCDBColumnInTable(cppObj, table.cString)
         return self
+    }
+
+    public func `as`(_ alias: String) -> ResultColumn {
+        return ResultColumn(with: WCDBColumnConfigAlias(cppObj, alias.cString))
     }
 
     @discardableResult

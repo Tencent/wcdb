@@ -26,7 +26,9 @@
 #include "Column.hpp"
 #include "Expression.hpp"
 #include "ObjectBridge.hpp"
+#include "ResultColumn.hpp"
 #include "Schema.hpp"
+#include "WinqBridge.hpp"
 
 CPPColumn WCDBColumnCreateAll()
 {
@@ -44,6 +46,26 @@ CPPColumn WCDBColumnCreateWithName(const char* _Nullable name, const void* _Null
     CPPColumn, WCDB::Column, name, static_cast<const WCDB::BaseBinding*>(binding));
 }
 
+CPPColumn WCDBColumnCopy(CPPColumn column)
+{
+    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPColumn());
+    return WCDBCreateCPPBridgedObjectByCopy(CPPColumn, *cppColumn);
+}
+
+CPPColumn WCDBColumnCreateWithName2(const char* _Nullable name, const void* _Nullable binding)
+{
+    if (binding == nullptr) {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumn, WCDB::Column, name, static_cast<const WCDB::BaseBinding*>(binding));
+    } else {
+        return WCDBCreateCPPBridgedObjectWithParameters(
+        CPPColumn,
+        WCDB::Column,
+        WCDB::StringView::createConstant(name),
+        static_cast<const WCDB::BaseBinding*>(binding));
+    }
+}
+
 void WCDBColumnInTable(CPPColumn column, const char* _Nullable table)
 {
     WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn);
@@ -55,6 +77,19 @@ void WCDBColumnOfSchema(CPPColumn column, CPPSchema schema)
     WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppColumn->schema(*cppSchema);
+}
+
+void WCDBColumnOfSchema2(CPPColumn column, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(column, WCDB::Column, cppColumn);
+    cppColumn->schema(WCDBCreateSchemaFromCommonValue(schema));
+}
+
+CPPResultColumn WCDBColumnConfigAlias(CPPColumn column, const char* _Nullable alias)
+{
+    WCDBGetObjectOrReturnValue(column, WCDB::Column, cppColumn, CPPResultColumn());
+    return WCDBCreateCPPBridgedObjectByCopy(
+    CPPResultColumn, cppColumn->as(WCDB::UnsafeStringView(alias)));
 }
 
 CPPExpression WCDBColumnAsExpressionOperand(CPPColumn column)

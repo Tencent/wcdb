@@ -102,10 +102,11 @@
     setUp:^{
         [self setUpDatabase];
         if (tableNames == nil) {
-            NSString* pattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix.data()];
+            NSString* sqlitePattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinTablePrefix.data()];
+            NSString* wcdbPattern = [NSString stringWithFormat:@"%s%%", WCDB::Syntax::builtinWCDBTablePrefix.data()];
 
             NSMutableArray<NSString*>* names = [NSMutableArray arrayWithCapacity:(NSUInteger) self.factory.quality];
-            for (WCTValue* value in [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(pattern))]) {
+            for (WCTValue* value in [self.database getColumnFromStatement:WCDB::StatementSelect().select(WCTMaster.name).from(WCTMaster.tableName).where(WCTMaster.name.notLike(sqlitePattern) && WCTMaster.name.notLike(wcdbPattern))]) {
                 [names addObject:value.stringValue];
             }
             tableNames = [NSArray arrayWithArray:names];

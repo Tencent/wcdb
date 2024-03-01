@@ -109,6 +109,17 @@ bool FactoryRetriever::work()
     backup.setBackupExclusiveDelegate(m_exclusiveDelegate);
     backup.setBackupSharedDelegate(m_sharedDelegate);
     backup.setCipherDelegate(m_cipherDelegate);
+    if (m_cipherDelegate->isCipherDB()) {
+        auto salt = m_cipherDelegate->tryGetSaltFromDatabase(database);
+        if (!salt.succeed()) {
+            setCriticalErrorWithSharedThreadedError();
+            return false;
+        }
+        if (!m_cipherDelegate->switchCipherSalt(salt.value())) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return false;
+        }
+    }
     if (!backup.work(database)) {
         setCriticalError(backup.getError());
         return exit(false);
@@ -148,7 +159,9 @@ bool FactoryRetriever::work()
 bool FactoryRetriever::exit(bool result)
 {
     factory.removeDirectoryIfEmpty();
-    finishProgress();
+    if (result) {
+        finishProgress();
+    }
     return result;
 }
 
@@ -169,11 +182,11 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
         Time materialTime;
         StringView path;
         for (const auto &materialPath : materialPaths) {
-            if (!m_sharedDelegate->isCipherDB()) {
+            if (!m_cipherDelegate->isCipherDB()) {
                 useMaterial = material.deserialize(materialPath);
             } else {
                 material.setCipherDelegate(m_cipherDelegate);
-                useMaterial = material.decryptedDeserialize(materialPath);
+                useMaterial = material.decryptedDeserialize(materialPath, true);
             }
 
             if (useMaterial) {
@@ -204,14 +217,13 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
             SteadyClock before = SteadyClock::now();
             bool result = mechanic.work();
             if (!result) {
-                WCTAssert(isErrorCritial());
                 setCriticalError(mechanic.getError());
                 return false;
             } else {
                 tryUpgradeError(mechanic.getError());
             }
             score = mechanic.getScore();
-            reportMechanic(mechanic.getScore(),
+            reportMechanic(mechanic,
                            databasePath,
                            SteadyClock::timeIntervalSinceSteadyClockToNow(before),
                            materialTime);
@@ -235,22 +247,21 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     fullCrawler.filter(factory.getFilter());
     fullCrawler.setCipherDelegate(m_cipherDelegate);
     if (!useMaterial) {
-        auto salt = tryGetCiperSaltFromPath(databasePath);
+        auto salt = m_cipherDelegate->tryGetSaltFromDatabase(databasePath);
         if (!salt.succeed()) {
+            setCriticalErrorWithSharedThreadedError();
             return false;
         }
-        if (salt->length() == 32) {
-            m_cipherDelegate->closeCipher();
-            m_cipherDelegate->openCipherInMemory();
-            m_cipherDelegate->setCipherSalt(salt.value());
+        if (!m_cipherDelegate->switchCipherSalt(salt.value())) {
+            setCriticalError(m_cipherDelegate->getCipherError());
+            return false;
         }
     }
 
     SteadyClock before = SteadyClock::now();
     if (fullCrawler.work()) {
-        reportFullCrawler(fullCrawler.getScore(),
-                          databasePath,
-                          SteadyClock::timeIntervalSinceSteadyClockToNow(before));
+        reportFullCrawler(
+        fullCrawler, databasePath, SteadyClock::timeIntervalSinceSteadyClockToNow(before));
         score = std::max(score, fullCrawler.getScore());
     } else if (!useMaterial) {
         setCriticalError(fullCrawler.getError());
@@ -262,33 +273,8 @@ bool FactoryRetriever::restore(const UnsafeStringView &databasePath)
     return true;
 }
 
-Optional<StringView>
-FactoryRetriever::tryGetCiperSaltFromPath(const UnsafeStringView &databasePath)
-{
-    int saltLength = 16;
-    auto size = FileManager::getFileSize(databasePath);
-    if (size.failed() || size.value() < saltLength) {
-        return StringView();
-    }
-    FileHandle handle(databasePath);
-    Optional<StringView> result;
-    if (!handle.open(FileHandle::Mode::ReadOnly)) {
-        setCriticalErrorWithSharedThreadedError();
-        return result;
-    }
-    Data saltData = handle.read(saltLength);
-    if (saltData.size() != saltLength) {
-        setCriticalErrorWithSharedThreadedError();
-        return result;
-    }
-    if (strncmp("SQLite format 3\000", (const char *) saltData.buffer(), saltLength) == 0) {
-        return StringView();
-    }
-    return StringView::hexString(saltData);
-}
-
 #pragma mark - Report
-void FactoryRetriever::reportMechanic(const Fraction &score,
+void FactoryRetriever::reportMechanic(const Mechanic &mechanic,
                                       const UnsafeStringView &path,
                                       double cost,
                                       const Time &material)
@@ -296,7 +282,10 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     Error error(Error::Code::Notice, Error::Level::Notice, "Mechanic Retrieve Report.");
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
-    error.infos.insert_or_assign("Score", score.value());
+    error.infos.insert_or_assign("Score", mechanic.getScore().value());
+    error.infos.insert_or_assign("TotalPageCount", mechanic.getTotalPageCount());
+    error.infos.insert_or_assign("DepositedWalPageCount",
+                                 mechanic.getDisposedWalPageCount());
     auto optionalMaterial = material.stringify();
     if (optionalMaterial.succeed()) {
         error.infos.insert_or_assign("Material", optionalMaterial.value());
@@ -307,7 +296,7 @@ void FactoryRetriever::reportMechanic(const Fraction &score,
     Notifier::shared().notify(error);
 }
 
-void FactoryRetriever::reportFullCrawler(const Fraction &score,
+void FactoryRetriever::reportFullCrawler(const FullCrawler &fullCrawler,
                                          const UnsafeStringView &path,
                                          double cost)
 {
@@ -315,7 +304,8 @@ void FactoryRetriever::reportFullCrawler(const Fraction &score,
     error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceRepair);
     error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
     error.infos.insert_or_assign(ErrorStringKeyPath, path);
-    error.infos.insert_or_assign("Score", score.value());
+    error.infos.insert_or_assign("Score", fullCrawler.getScore().value());
+    error.infos.insert_or_assign("TotalPageCount", fullCrawler.getTotalPageCount());
     finishReportOfPerformance(error, path, cost);
     error.infos.insert_or_assign(
     "Weight", StringView::formatted("%f%%", getWeight(path).value() * 100.0f));
@@ -390,7 +380,7 @@ Fraction FactoryRetriever::getWeight(const UnsafeStringView &databasePath)
     return Fraction(m_sizes[databasePath], m_totalSize > 0 ? m_totalSize : 1);
 }
 
-void FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
+bool FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
                                         bool useMaterial,
                                         double progress,
                                         double increment)
@@ -399,7 +389,11 @@ void FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
     if (useMaterial) {
         increment *= 0.5;
     }
-    Progress::increaseProgress(getWeight(databasePath).value() * increment);
+    if (!Progress::increaseProgress(getWeight(databasePath).value() * increment)) {
+        m_assembleDelegate->suspendAssemble();
+        return false;
+    }
+    return true;
 }
 
 void FactoryRetriever::increaseScore(const UnsafeStringView &databasePath,

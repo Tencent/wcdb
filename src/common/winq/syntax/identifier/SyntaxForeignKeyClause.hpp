@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API ForeignKeyClause final : public Identifier {
 #pragma mark - Lang
 public:
-    ~ForeignKeyClause() override final;
+    ~ForeignKeyClause() override;
 
     StringView foreignTable;
     std::list<Column> columns;

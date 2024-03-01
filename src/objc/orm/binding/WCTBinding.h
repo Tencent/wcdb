@@ -35,7 +35,7 @@ class WCDB_API WCTBinding final : public WCDB::BaseBinding {
 #pragma mark - Binding
 public:
     WCTBinding(Class cls);
-    ~WCTBinding() override final;
+    ~WCTBinding() override;
     static void assertNoInheritance(const WCTProperty &property, Class cls);
 
 private:

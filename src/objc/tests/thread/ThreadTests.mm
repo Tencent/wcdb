@@ -408,4 +408,17 @@
     [WCTDatabase globalTraceDatabaseOperation:nil];
 }
 
+- (void)test_multithread_with_error
+{
+    for (int i = 0; i < 10000; i++) {
+        [self.dispatch async:^{
+            [self.database execute:WCDB::StatementSelect().select(WCDB::Column::all()).from(@"abc")];
+            [self.database runTransaction:^BOOL(WCTHandle* handle) {
+                return [handle execute:WCDB::StatementSelect().select(WCDB::Column::all()).from(@"abc")];
+            }];
+        }];
+    }
+    [self.dispatch waitUntilDone];
+}
+
 @end

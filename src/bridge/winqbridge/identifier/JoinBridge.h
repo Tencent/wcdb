@@ -27,18 +27,31 @@
 WCDB_EXTERN_C_BEGIN
 
 CPPJoin WCDBJoinCreateWithTableOrSubquery(CPPTableOrSubquery query);
+CPPJoin WCDBJoinCreateWithTableOrSubquery2(CPPCommonValue query);
 void WCDBJoinWith(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWith2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithLeftOuterJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithLeftOuterJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithLeftJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithLeftJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithInnerJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithInnerJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithCrossJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithCrossJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithNaturalJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithNaturalJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithNaturalLeftOuterJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithNaturalLeftOuterJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithNaturalLeftJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithNaturalLeftJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithNaturalInnerJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithNaturalInnerJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinWithNaturalCrossJoin(CPPJoin join, CPPTableOrSubquery query);
+void WCDBJoinWithNaturalCrossJoin2(CPPJoin join, CPPCommonValue query);
 void WCDBJoinConfigOn(CPPJoin join, CPPExpression expression);
 void WCDBJoinConfigUsingColumn(CPPJoin join, const CPPColumn* columns, int columnNum);
+void WCDBJoinConfigUsingColumn2(CPPJoin join, CPPCommonArray columns);
 
 WCDB_EXTERN_C_END

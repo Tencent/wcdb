@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API SavepointSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~SavepointSTMT() override final;
+    ~SavepointSTMT() override;
 
     StringView savepoint;
 

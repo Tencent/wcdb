@@ -33,7 +33,8 @@
 
 #include "DatabasePool.hpp"
 
-#include "AuxiliaryFunctionModules.hpp"
+#include "AuxiliaryFunctionConfig.hpp"
+#include "ScalarFunctionConfig.hpp"
 #include "TokenizerModules.hpp"
 
 #include "Notifier.hpp"
@@ -45,7 +46,7 @@ class Core final : public DatabasePoolEvent, public OperationEvent {
 #pragma mark - Core
 public:
     static Core& shared();
-    ~Core() override final;
+    ~Core() override;
 
 protected:
     Core();
@@ -57,13 +58,34 @@ public:
     RecyclableDatabase getOrCreateDatabase(const UnsafeStringView& path);
 
     void purgeDatabasePool();
-    void setThreadedDatabase(const UnsafeStringView& path);
+    void releaseSQLiteMemory(int bytes);
+    void setSoftHeapLimit(int64_t limit);
+
+    void stopQueue();
+
+protected:
+    void databaseDidCreate(InnerDatabase* database) override final;
+    DatabasePool m_databasePool;
+
+#pragma mark - Error
+public:
+    void setThreadedErrorPath(const UnsafeStringView& path);
+    void setThreadedErrorIgnorable(bool ignorable);
 
 protected:
     void preprocessError(Error& error);
-    void databaseDidCreate(InnerDatabase* database) override final;
-    DatabasePool m_databasePool;
-    ThreadLocal<StringView> m_associateDatabases;
+    ThreadLocal<bool> m_errorIgnorable;
+    ThreadLocal<StringView> m_errorPath;
+
+#pragma mark - ScalarFunction
+public:
+    void registerScalarFunction(const UnsafeStringView& name,
+                                const ScalarFunctionModule& module);
+    std::shared_ptr<Config> scalarFunctionConfig(const UnsafeStringView& ScalarFunctionName);
+    bool scalarFunctionExists(const UnsafeStringView& name) const;
+
+protected:
+    std::shared_ptr<ScalarFunctionModules> m_scalarFunctionModules;
 
 #pragma mark - Tokenizer
 public:
@@ -87,6 +109,7 @@ protected:
 
 #pragma mark - Operation
 public:
+    void stopAllDatabaseEvent(const UnsafeStringView& path);
     typedef std::function<void(InnerDatabase*)> CorruptedNotification;
     bool isFileObservedCorrupted(const UnsafeStringView& path);
     void setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
@@ -94,6 +117,7 @@ public:
 
 protected:
     Optional<bool> migrationShouldBeOperated(const UnsafeStringView& path) override final;
+    Optional<bool> compressionShouldBeOperated(const UnsafeStringView& path) override final;
     void backupShouldBeOperated(const UnsafeStringView& path) override final;
     void checkpointShouldBeOperated(const UnsafeStringView& path) override final;
     void integrityShouldBeChecked(const UnsafeStringView& path) override final;
@@ -104,6 +128,7 @@ protected:
 #pragma mark - Checkpoint
 public:
     void enableAutoCheckpoint(InnerDatabase* database, bool enable);
+    void setCheckPointMinFrames(int frames);
 
 private:
     std::shared_ptr<Config> m_autoCheckpointConfig;
@@ -112,15 +137,26 @@ private:
 public:
     void enableAutoBackup(InnerDatabase* database, bool enable);
 
+    void tryRegisterIncrementalMaterial(const UnsafeStringView& path,
+                                        SharedIncrementalMaterial material);
+    SharedIncrementalMaterial tryGetIncrementalMaterial(const UnsafeStringView& path);
+
 protected:
     std::shared_ptr<Config> m_autoBackupConfig;
 
 #pragma mark - Migration
 public:
-    void enableAutoMigration(InnerDatabase* database, bool enable);
+    void enableAutoMigrate(InnerDatabase* database, bool enable);
 
 protected:
     std::shared_ptr<Config> m_autoMigrateConfig;
+
+#pragma mark - Compression
+public:
+    void enableAutoCompress(InnerDatabase* database, bool enable);
+
+protected:
+    std::shared_ptr<Config> m_autoCompressConfig;
 
 #pragma mark - Trace
 public:
@@ -139,6 +175,16 @@ protected:
 
     static void breakpoint() WCDB_USED WCDB_NO_INLINE;
     static void print(const UnsafeStringView& message);
+
+#pragma mark - Busy Retry
+public:
+    typedef std::function<void(const Tag&, const UnsafeStringView&, uint64_t, const UnsafeStringView)> BusyMonitor;
+    void setBusyMonitor(BusyMonitor monitor, double timeOut);
+    bool isBusyTraceEnable() const;
+
+protected:
+    std::shared_ptr<Config> m_globalBusyRetryConfig;
+    bool m_enableBusyTrace;
 
 #pragma mark - Merge FTS Index
 public:

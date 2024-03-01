@@ -33,7 +33,7 @@ class WCDB_API StatementSavepoint final
 public:
     using SpecifiedSyntax<Syntax::SavepointSTMT, Statement>::SpecifiedSyntax;
     StatementSavepoint();
-    ~StatementSavepoint() override final;
+    ~StatementSavepoint() override;
 
     StatementSavepoint& savepoint(const UnsafeStringView& savepoint);
 };

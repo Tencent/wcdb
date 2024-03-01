@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API RaiseFunction final : public Identifier {
 #pragma mark - Lang
 public:
-    ~RaiseFunction() override final;
+    ~RaiseFunction() override;
 
     WCDB_SYNTAX_MAIN_UNION_ENUM(Ignore, Rollback, Abort, Fail, );
     StringView errorMessage;

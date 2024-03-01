@@ -28,6 +28,15 @@
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
 #include <cstring>
+#if _WIN32
+#define NOMINMAX
+#include <windows.h>
+#else
+#include <unistd.h>
+#ifdef __linux__
+#include <sys/syscall.h>
+#endif
+#endif
 
 namespace WCDB {
 
@@ -105,6 +114,21 @@ void Thread::setUIThreadId(std::thread::id threadId)
     m_uiThreadId = threadId;
 }
 
+uint64_t Thread::getCurrentThreadId()
+{
+#ifdef __APPLE__
+    uint64_t tid = 0;
+    pthread_threadid_np(nullptr, &tid);
+    return tid;
+#elif _WIN32
+    return (uint64_t) GetCurrentThreadId();
+#elif __linux__
+    return (uint64_t) syscall(SYS_gettid);
+#else
+    return (uint64_t)::gettid();
+#endif
+}
+
 #pragma mark - Name
 constexpr int Thread::maxLengthOfAllowedThreadName()
 {
@@ -121,7 +145,7 @@ void Thread::setName(const UnsafeStringView& name)
     int ret = pthread_setname_np(buffer);
     if (ret != 0) {
         Error error;
-        error.level = Error::Level::Error;
+        error.level = Error::Level::Warning;
         error.setSystemCode(ret, Error::Code::Error);
         error.infos.insert_or_assign("Operation", "setThreadName");
         Notifier::shared().notify(error);

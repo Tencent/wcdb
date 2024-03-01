@@ -33,7 +33,7 @@ class WCDB_API Pragma final : public SpecifiedSyntax<Syntax::Pragma, SQL> {
 public:
     using SpecifiedSyntax<Syntax::Pragma, SQL>::SpecifiedSyntax;
     Pragma();
-    ~Pragma() override final;
+    ~Pragma() override;
 
     template<typename T, typename Enable = typename std::enable_if<ColumnIsTextType<T>::value>::type>
     Pragma(const T& t) : Pragma(ColumnIsTextType<T>::asUnderlyingType(t))

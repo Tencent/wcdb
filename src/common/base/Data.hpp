@@ -42,7 +42,7 @@ public:
     Data(const unsigned char* buffer, size_t size);
     Data(const unsigned char* buffer, size_t size, SharedHighWater highWater);
 
-    ~Data() override final;
+    ~Data() override;
 
     Data& operator=(const UnsafeData& other);
     Data& operator=(UnsafeData&& other);

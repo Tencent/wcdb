@@ -32,5 +32,20 @@ CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path);
 void WCDBCoreSetDefaultCipherConfig(int version);
 void WCDBCorePurgeAllDatabase(void);
 bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir);
+void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable);
+void WCDBCoreSetAutoCheckpointMinFrames(int frames);
+void WCDBCoreReleaseSQLiteMemory(int bytes);
+void WCDBCoreSetSoftHeapLimit(long long limit);
+CPPError WCDBCoreGetThreadedError();
+
+typedef void (*WCDBBusyTracer)(void* _Nullable context,
+                               long tag,
+                               const char* _Nonnull path,
+                               unsigned long long tid,
+                               const char* _Nonnull sql);
+void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,
+                             double timeOut,
+                             void* _Nullable context,
+                             WCDBContextDestructor _Nullable destructor);
 
 WCDB_EXTERN_C_END

@@ -32,7 +32,7 @@ class WCDB_API StatementDelete final : public SpecifiedSyntax<Syntax::DeleteSTMT
 public:
     using SpecifiedSyntax<Syntax::DeleteSTMT, Statement>::SpecifiedSyntax;
     StatementDelete();
-    ~StatementDelete() override final;
+    ~StatementDelete() override;
 
     StatementDelete& with(const CommonTableExpressions& commonTableExpressions);
     StatementDelete& recursive();

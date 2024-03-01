@@ -26,6 +26,7 @@
 #include "Expression.hpp"
 #include "FrameSpec.hpp"
 #include "ObjectBridge.hpp"
+#include "WinqBridge.hpp"
 
 CPPFrameSpec WCDBFrameSpecCreate()
 {
@@ -56,6 +57,12 @@ void WCDBFrameSpecConfigPreceding(CPPFrameSpec frameSpec, CPPExpression expressi
     cppFrameSpec->preceding(*cppExpression);
 }
 
+void WCDBFrameSpecConfigPreceding2(CPPFrameSpec frameSpec, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
+    cppFrameSpec->preceding(WCDBCreateExpressionFromCommonValue(expression));
+}
+
 void WCDBFrameSpecConfigCurrentRow(CPPFrameSpec frameSpec)
 {
     WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
@@ -75,6 +82,12 @@ void WCDBFrameSpecConfigBetweenPreceding(CPPFrameSpec frameSpec, CPPExpression e
     cppFrameSpec->betweenPreceding(*cppExpression);
 }
 
+void WCDBFrameSpecConfigBetweenPreceding2(CPPFrameSpec frameSpec, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
+    cppFrameSpec->betweenPreceding(WCDBCreateExpressionFromCommonValue(expression));
+}
+
 void WCDBFrameSpecConfigBetweenCurrentRow(CPPFrameSpec frameSpec)
 {
     WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
@@ -88,11 +101,23 @@ void WCDBFrameSpecConfigBetweenFollowing(CPPFrameSpec frameSpec, CPPExpression e
     cppFrameSpec->betweenFollowing(*cppExpression);
 }
 
+void WCDBFrameSpecConfigBetweenFollowing2(CPPFrameSpec frameSpec, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
+    cppFrameSpec->betweenFollowing(WCDBCreateExpressionFromCommonValue(expression));
+}
+
 void WCDBFrameSpecConfigAndPreceding(CPPFrameSpec frameSpec, CPPExpression expression)
 {
     WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     cppFrameSpec->andPreceding(*cppExpression);
+}
+
+void WCDBFrameSpecConfigAndPreceding2(CPPFrameSpec frameSpec, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
+    cppFrameSpec->andPreceding(WCDBCreateExpressionFromCommonValue(expression));
 }
 
 void WCDBFrameSpecConfigAndCurrentRow(CPPFrameSpec frameSpec)
@@ -106,6 +131,12 @@ void WCDBFrameSpecConfigAndFollowing(CPPFrameSpec frameSpec, CPPExpression expre
     WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
     WCDBGetObjectOrReturn(expression, WCDB::Expression, cppExpression);
     cppFrameSpec->andFollowing(*cppExpression);
+}
+
+void WCDBFrameSpecConfigAndFollowing2(CPPFrameSpec frameSpec, CPPCommonValue expression)
+{
+    WCDBGetObjectOrReturn(frameSpec, WCDB::FrameSpec, cppFrameSpec);
+    cppFrameSpec->andFollowing(WCDBCreateExpressionFromCommonValue(expression));
 }
 
 void WCDBFrameSpecConfigAndUnboundedFollowing(CPPFrameSpec frameSpec)

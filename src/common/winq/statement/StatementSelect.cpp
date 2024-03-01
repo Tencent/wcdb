@@ -109,6 +109,11 @@ StatementSelect& StatementSelect::as(const WindowDef& windowDef)
     return *this;
 }
 
+TableOrSubquery StatementSelect::as(const UnsafeStringView& alias)
+{
+    return TableOrSubquery(*this).as(alias);
+}
+
 StatementSelect& StatementSelect::value(const Expression& expression)
 {
     Syntax::SelectCore& core = currentCore();

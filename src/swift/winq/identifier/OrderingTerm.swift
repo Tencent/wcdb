@@ -45,11 +45,11 @@ public final class OrderingTerm: Identifier<CPPOrderingTerm> {
     }
 
     public static func ascendingRowid() -> OrderingTerm {
-        return Column.rowid.order(.ascending)
+        return Column.rowid().order(.ascending)
     }
 
     public static func descendingRowid() -> OrderingTerm {
-        return Column.rowid.order(.descending)
+        return Column.rowid().order(.descending)
     }
 }
 

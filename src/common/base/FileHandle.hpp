@@ -85,7 +85,7 @@ public:
 
 protected:
     //    void markAsMisuse(const char *message);
-    void setThreadedError();
+    void setThreadedError(const UnsafeStringView &message = "");
 };
 
 } //namespace WCDB

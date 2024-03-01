@@ -31,7 +31,7 @@ namespace WCDB {
 class WCDB_API Upsert final : public SpecifiedSyntax<Syntax::UpsertClause, SQL> {
 public:
     Upsert();
-    ~Upsert() override final;
+    ~Upsert() override;
 
     Upsert& onConflict();
     Upsert& indexed(const IndexedColumn& indexedColumn);

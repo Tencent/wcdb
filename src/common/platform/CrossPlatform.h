@@ -40,6 +40,11 @@
 #define EAUTH 1550442950 //0x5c69e1c6
 #endif
 
+#ifndef EDEVERR
+// Magic number, something unique to avoid being matched
+#define EDEVERR 1550442951 //0x5c69e1c7
+#endif
+
 #pragma mark - mman
 
 #if defined(__linux__) || defined(__ANDROID__)
@@ -84,7 +89,13 @@ WCDB_EXTERN_C_END
 #define st_ctimespec st_ctime
 #endif
 
-#pragma mark - uinstd
+#pragma mark - unistd
+
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
 
 #ifndef _WIN32
 #include <unistd.h>

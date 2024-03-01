@@ -41,20 +41,26 @@ class Page final : public PagerRelated, public Initializeable {
 public:
     Page(int number, Pager *pager);
     Page(int number, Pager *pager, const UnsafeData &data);
-    ~Page() override final;
+    ~Page() override;
 
     const int number;
 
-    enum class Type : int {
+    enum Type : char {
         Unknown = 0,
         InteriorIndex = 2,
         InteriorTable = 5,
         LeafIndex = 10,
         LeafTable = 13,
+        UnSet = INT8_MAX,
     };
 
+    static Type convertToPageType(int type);
     Optional<Type> acquireType();
     Type getType() const;
+    bool isInteriorPage() const;
+    bool isLeafPage() const;
+    bool isTablePage() const;
+    bool isIndexPage() const;
 
     const Data &getData() const;
 
@@ -67,6 +73,7 @@ protected:
 public:
     int getSubpageno(int index) const;
     int getNumberOfSubpages() const;
+    int getRightMostPage() const;
 
 protected:
     std::vector<int> m_subpagenos;

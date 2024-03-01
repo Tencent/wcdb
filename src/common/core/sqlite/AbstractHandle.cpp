@@ -42,6 +42,9 @@ AbstractHandle::AbstractHandle()
 , m_cacheTransactionError(TransactionError::Allowed)
 , m_notification(this)
 , m_tableMonitorForbidden(false)
+, m_fullSQLTrace(false)
+, m_busyTrace(false)
+, m_tid(0)
 , m_canBeSuspended(false)
 {
 }
@@ -147,7 +150,7 @@ bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
     // use seperated sqlite3_exec to get more information
     WCTAssert(isOpened());
     HandleStatement handleStatement(this);
-    bool succeed = handleStatement.prepare(sql);
+    bool succeed = handleStatement.prepareSQL(sql);
     if (succeed) {
         succeed = handleStatement.step();
         handleStatement.finalize();
@@ -157,7 +160,15 @@ bool AbstractHandle::executeSQL(const UnsafeStringView &sql)
 
 bool AbstractHandle::executeStatement(const Statement &statement)
 {
-    return executeSQL(statement.getDescription());
+    // use seperated sqlite3_exec to get more information
+    WCTAssert(isOpened());
+    HandleStatement handleStatement(this);
+    bool succeed = handleStatement.prepare(statement);
+    if (succeed) {
+        succeed = handleStatement.step();
+        handleStatement.finalize();
+    }
+    return succeed;
 }
 
 long long AbstractHandle::getLastInsertedRowID()
@@ -205,9 +216,9 @@ bool AbstractHandle::isInTransaction()
 }
 
 #pragma mark - Statement
-HandleStatement *AbstractHandle::getStatement()
+DecorativeHandleStatement *AbstractHandle::getStatement(const UnsafeStringView &)
 {
-    m_handleStatements.push_back(HandleStatement(this));
+    m_handleStatements.push_back(DecorativeHandleStatement(this));
     m_handleStatements.back().enableAutoAddColumn();
     return &m_handleStatements.back();
 }
@@ -235,6 +246,11 @@ void AbstractHandle::resetAllStatements()
 
 void AbstractHandle::finalizeStatements()
 {
+    for (const auto &iter : m_preparedStatements) {
+        iter.second->finalize();
+        returnStatement(iter.second);
+    }
+    m_preparedStatements.clear();
     for (auto &handleStatement : m_handleStatements) {
         handleStatement.finalize();
     }
@@ -243,34 +259,45 @@ void AbstractHandle::finalizeStatements()
 HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const Statement &statement)
 {
     const StringView &sql = statement.getDescription();
-    if (sql.length() == 0) {
-        m_error.setCode(Error::Code::Error, "invalid statement");
-        m_error.level = Error::Level::Error;
-        Notifier::shared().notify(m_error);
-        return nullptr;
-    }
-    auto iter = m_preparedStatements.find(sql);
-    HandleStatement *preparedStatement;
-    if (iter == m_preparedStatements.end()) {
-        preparedStatement = getStatement();
-        m_preparedStatements[sql] = preparedStatement;
-    } else {
-        preparedStatement = iter->second;
-    }
-    WCTAssert(preparedStatement != nullptr);
-    if (!preparedStatement->isPrepared() && !preparedStatement->prepare(statement)) {
+    HandleStatement *preparedStatement = getOrCreateStatement(sql);
+
+    if (preparedStatement == nullptr
+        || (!preparedStatement->isPrepared() && !preparedStatement->prepare(statement))) {
         return nullptr;
     }
     return preparedStatement;
 }
 
-void AbstractHandle::returnAllPreparedStatement()
+HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const UnsafeStringView &sql)
 {
-    for (const auto &iter : m_preparedStatements) {
-        iter.second->finalize();
-        returnStatement(iter.second);
+    HandleStatement *preparedStatement = getOrCreateStatement(sql);
+
+    if (preparedStatement == nullptr
+        || (!preparedStatement->isPrepared() && !preparedStatement->prepareSQL(sql))) {
+        return nullptr;
     }
-    m_preparedStatements.clear();
+    return preparedStatement;
+}
+
+HandleStatement *AbstractHandle::getOrCreateStatement(const UnsafeStringView &sql)
+{
+    if (sql.length() == 0) {
+        m_error.setCode(Error::Code::Error, "Invalid statement");
+        m_error.infos.erase(ErrorStringKeySQL);
+        m_error.level = Error::Level::Error;
+        Notifier::shared().notify(m_error);
+        return nullptr;
+    }
+    auto iter = m_preparedStatements.find(sql);
+    DecorativeHandleStatement *handleStatement;
+    if (iter == m_preparedStatements.end()) {
+        handleStatement = getStatement();
+        m_preparedStatements[sql] = handleStatement;
+    } else {
+        handleStatement = iter->second;
+    }
+    WCTAssert(handleStatement != nullptr);
+    return handleStatement;
 }
 
 #pragma mark - Meta
@@ -337,12 +364,7 @@ bool AbstractHandle::addColumn(const Schema &schema,
     return succeed;
 }
 
-Optional<std::set<StringView>> AbstractHandle::getColumns(const UnsafeStringView &table)
-{
-    return getColumns(Schema::main(), table);
-}
-
-Optional<std::set<StringView>>
+Optional<StringViewSet>
 AbstractHandle::getColumns(const Schema &schema, const UnsafeStringView &table)
 {
     WCDB::StatementPragma statement
@@ -375,13 +397,12 @@ AbstractHandle::getTableMeta(const Schema &schema, const UnsafeStringView &table
     return metas;
 }
 
-Optional<std::set<StringView>>
-AbstractHandle::getValues(const Statement &statement, int index)
+Optional<StringViewSet> AbstractHandle::getValues(const Statement &statement, int index)
 {
-    Optional<std::set<StringView>> values;
+    Optional<StringViewSet> values;
     HandleStatement handleStatement(this);
     if (handleStatement.prepare(statement)) {
-        std::set<StringView> rows;
+        StringViewSet rows;
         bool succeed = false;
         while ((succeed = handleStatement.step()) && !handleStatement.done()) {
             rows.emplace(handleStatement.getText(index));
@@ -392,6 +413,39 @@ AbstractHandle::getValues(const Statement &statement, int index)
         }
     }
     return values;
+}
+
+Optional<TableAttribute>
+AbstractHandle::getTableAttribute(const Schema &schema, const UnsafeStringView &tableName)
+{
+    int isAutoincrement = 0;
+    int isWithoutRowid = 0;
+    int isVirtual = 0;
+    const char *integerPrimaryKey = nullptr;
+    bool ret = APIExit(sqlite3_table_config(m_handle,
+                                            schema.syntax().name.data(),
+                                            tableName.data(),
+                                            &isAutoincrement,
+                                            &isWithoutRowid,
+                                            &isVirtual,
+                                            &integerPrimaryKey));
+    if (!ret) {
+        if (integerPrimaryKey != nullptr) {
+            free((void *) integerPrimaryKey);
+        }
+        return NullOpt;
+    }
+    TableAttribute config(
+    isAutoincrement > 0, isWithoutRowid > 0, isVirtual > 0, StringView(integerPrimaryKey));
+    if (integerPrimaryKey != nullptr) {
+        free((void *) integerPrimaryKey);
+    }
+    return config;
+}
+
+bool AbstractHandle::configAutoIncrement(const UnsafeStringView &tableName)
+{
+    return APIExit(sqlite3_table_config_auto_increment(m_handle, tableName.data()));
 }
 
 bool AbstractHandle::getSchemaInfo(int &memoryUsed, int &tableCount, int &indexCount, int &triggerCount)
@@ -405,9 +459,6 @@ bool AbstractHandle::getSchemaInfo(int &memoryUsed, int &tableCount, int &indexC
 #pragma mark - Transaction
 void AbstractHandle::markErrorNotAllowedWithinTransaction()
 {
-    WCTRemedialAssert(m_transactionLevel == 0 || m_transactionLevel == 1,
-                      "Transaction error state should be changed without nested.",
-                      return;);
     if (m_transactionError == TransactionError::Allowed) {
         m_transactionError = TransactionError::NotAllowed;
     }
@@ -585,6 +636,15 @@ void AbstractHandle::setWALFilePersist(int persist)
     m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_PERSIST_WAL, &persist));
 }
 
+bool AbstractHandle::setCheckPointLock(bool enable)
+{
+    if (m_path.compare(":memory:") == 0) {
+        return true;
+    }
+    WCTAssert(isOpened());
+    return APIExit(sqlite3_lock_checkpoint(m_handle, enable));
+}
+
 #pragma mark - Notification
 void AbstractHandle::setNotificationWhenSQLTraced(const UnsafeStringView &name,
                                                   const SQLNotification &onTraced)
@@ -615,10 +675,10 @@ void AbstractHandle::unsetNotificationWhenCommitted(const UnsafeStringView &name
 }
 
 void AbstractHandle::setNotificationWhenCheckpointed(const UnsafeStringView &name,
-                                                     const CheckpointedNotification &checkpointed)
+                                                     Optional<CheckPointNotification> notification)
 {
     WCTAssert(isOpened());
-    m_notification.setNotificationWhenCheckpointed(name, checkpointed);
+    m_notification.setNotificationWhenCheckpointed(name, notification);
 }
 
 void AbstractHandle::setNotificationWhenBusy(const BusyNotification &busyNotification)
@@ -649,6 +709,69 @@ void AbstractHandle::setTableMonitorEnable(bool enable)
     m_tableMonitorForbidden = !enable;
 }
 
+void AbstractHandle::setFullSQLTraceEnable(bool enable)
+{
+    m_fullSQLTrace = enable;
+    if (isOpened()) {
+        m_notification.setFullSQLTraceEnable(enable);
+    }
+}
+
+bool AbstractHandle::isFullSQLEnable()
+{
+    return m_fullSQLTrace;
+}
+
+void AbstractHandle::postSQLNotification(const UnsafeStringView &sql,
+                                         const UnsafeStringView &info)
+{
+    m_notification.postSQLTraceNotification(m_tag, m_path, m_handle, sql, info);
+}
+
+void AbstractHandle::setBusyTraceEnable(bool enable)
+{
+    m_busyTrace = enable;
+}
+
+bool AbstractHandle::isBusyTraceEnable() const
+{
+    return m_busyTrace;
+}
+
+void AbstractHandle::setCurrentSQL(const UnsafeStringView &sql)
+{
+    if (m_currentSQL.data() == sql.data()) {
+        return;
+    }
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    m_currentSQL = sql;
+}
+
+void AbstractHandle::resetCurrentSQL(const UnsafeStringView &sql)
+{
+    if (m_currentSQL.data() != sql.data()) {
+        return;
+    }
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    m_currentSQL.clear();
+}
+
+StringView AbstractHandle::getCurrentSQL() const
+{
+    std::unique_lock<std::mutex> lockGuard(m_lock);
+    return m_currentSQL;
+}
+
+void AbstractHandle::setActiveThreadId(uint64_t tid)
+{
+    m_tid = tid;
+}
+
+bool AbstractHandle::isUsingInThread(uint64_t tid) const
+{
+    return m_tid == tid;
+}
+
 #pragma mark - Error
 bool AbstractHandle::APIExit(int rc)
 {
@@ -670,25 +793,43 @@ bool AbstractHandle::APIExit(int rc, const char *sql)
     return result;
 }
 
-void AbstractHandle::notifyError(int rc, const char *sql)
+void AbstractHandle::notifyError(Error::Code rc, const UnsafeStringView &sql, const UnsafeStringView &msg)
+{
+    notifyError((int) rc, sql, msg);
+}
+
+void AbstractHandle::notifyError(int rc, const UnsafeStringView &sql, const UnsafeStringView &msg)
 {
     WCTAssert(Error::isError(rc));
-    if (Error::rc2c(rc) != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc) {
+    Error::Code code = Error::rc2c(rc);
+    if (code == Error::Code::ZstdError) {
+        m_error.setCode(code, !msg.empty() ? msg : sqlite3_errmsg(m_handle));
+        m_error.infos.insert_or_assign(ErrorStringKeySource, ErrorSourceZstd);
+    } else if (code != Error::Code::Misuse && sqlite3_errcode(m_handle) == rc
+               && msg.empty()) {
         m_error.setSQLiteCode(rc, sqlite3_errmsg(m_handle));
     } else {
         // extended error code/message will not be set in some case for misuse error
-        m_error.setSQLiteCode(rc);
+        m_error.setSQLiteCode(rc, msg);
     }
     if (std::find(m_ignorableCodes.begin(), m_ignorableCodes.end(), rc)
         == m_ignorableCodes.end()) {
         m_error.level = Error::Level::Error;
-        if (m_transactionError != TransactionError::Allowed) {
+        if (code == Error::Code::Warning) {
+            m_error.level = Error::Level::Warning;
+        } else if (code == Error::Code::Notice) {
+            m_error.level = Error::Level::Notice;
+        } else if (m_transactionError != TransactionError::Allowed) {
             m_transactionError = TransactionError::Fatal;
         }
     } else {
         m_error.level = Error::Level::Ignore;
     }
-    m_error.infos.insert_or_assign(ErrorStringKeySQL, sql);
+    if (!sql.empty()) {
+        m_error.infos.insert_or_assign(ErrorStringKeySQL, sql);
+    } else {
+        m_error.infos.erase(ErrorStringKeySQL);
+    }
     Notifier::shared().notify(m_error);
 }
 
@@ -713,6 +854,9 @@ void AbstractHandle::suspend(bool suspend)
 
 void AbstractHandle::markAsCanBeSuspended(bool canBeSuspended)
 {
+    if (canBeSuspended && !m_canBeSuspended) {
+        markErrorAsIgnorable(Error::Code::Interrupt);
+    }
     if (!(m_canBeSuspended = canBeSuspended)) {
         doSuspend(false);
     }
@@ -723,6 +867,11 @@ void AbstractHandle::doSuspend(bool suspend)
     if (isOpened()) {
         sqlite3_suspend(m_handle, suspend);
     }
+}
+
+bool AbstractHandle::isSuspended() const
+{
+    return sqlite3_is_suspended(m_handle);
 }
 
 #pragma mark - Cancellation Signal
@@ -774,6 +923,35 @@ bool AbstractHandle::setCipherKey(const UnsafeData &data)
 {
     WCTAssert(isOpened());
     return APIExit(sqlite3_key(m_handle, data.buffer(), (int) data.size()));
+}
+
+Data AbstractHandle::getRawCipherKey(const Schema &schema)
+{
+    WCTAssert(isOpened());
+    void *rawCipher = NULL;
+    int rawCipherSize = 0;
+    int index = sqlcipher_find_db_index(m_handle, schema.syntax().name.data());
+    sqlite3CodecGetKey(m_handle, index, &rawCipher, &rawCipherSize);
+
+    if (rawCipher == NULL || rawCipherSize == 0) {
+        return Data();
+    }
+    WCTAssert(rawCipherSize == 99);
+    return Data((unsigned char *) rawCipher, rawCipherSize);
+}
+
+bool AbstractHandle::hasCipher() const
+{
+    WCTAssert(isOpened());
+    void *rawCipher = NULL;
+    int rawCipherSize = 0;
+    int index = sqlcipher_find_db_index(m_handle, "main");
+    sqlite3CodecGetKey(m_handle, index, &rawCipher, &rawCipherSize);
+
+    if (rawCipher == NULL || rawCipherSize == 0) {
+        return false;
+    }
+    return true;
 }
 
 bool AbstractHandle::setCipherPageSize(int pageSize)

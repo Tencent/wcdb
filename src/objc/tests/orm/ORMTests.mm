@@ -34,6 +34,7 @@
 #import "ColumnConstraintCheck.h"
 #import "ColumnConstraintDefault+WCTTableCoding.h"
 #import "ColumnConstraintDefault.h"
+#import "ColumnConstraintEnablePrimaryAutoIncrement+WCTTableCoding.h"
 #import "ColumnConstraintNotNull+WCTTableCoding.h"
 #import "ColumnConstraintNotNull.h"
 #import "ColumnConstraintPrimary+WCTTableCoding.h"
@@ -105,7 +106,7 @@
 - (void)test_property
 {
     self.tableClass = PropertyObject.class;
-#ifndef WCDB_WECHAT
+#ifndef WCDB_WECHAT_IOS
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(property INTEGER, differentName INTEGER)" ];
 #else
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(differentName INTEGER, property INTEGER)" ];
@@ -116,7 +117,7 @@
 - (void)test_all_types
 {
     self.tableClass = AllTypesObject.class;
-#ifndef WCDB_WECHAT
+#ifndef WCDB_WECHAT_IOS
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(type TEXT PRIMARY KEY, enumNSValue INTEGER, optionNSValue INTEGER, enumValue INTEGER, enumClassValue INTEGER, literalEnumValue INTEGER, trueOrFalseValue INTEGER, yesOrNoValue INTEGER, intValue INTEGER, unsignedIntValue INTEGER, int32Value INTEGER, int64Value INTEGER, uint32Value INTEGER, uint64Value INTEGER, integerValue INTEGER, uintegerValue INTEGER, floatValue REAL, doubleValue REAL, numberValue REAL, dateValue REAL, stringValue TEXT, dataValue BLOB, codingValue BLOB, renamedGSValue INTEGER)" ];
 #else
     NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(codingValue BLOB, dataValue BLOB, dateValue REAL, doubleValue REAL, enumClassValue INTEGER, enumNSValue INTEGER, enumValue INTEGER, floatValue REAL, int32Value INTEGER, int64Value INTEGER, integerValue INTEGER, intValue INTEGER, literalEnumValue INTEGER, numberValue REAL, optionNSValue INTEGER, renamedGSValue INTEGER, stringValue TEXT, trueOrFalseValue INTEGER, type TEXT PRIMARY KEY, uint32Value INTEGER, uint64Value INTEGER, uintegerValue INTEGER, unsignedIntValue INTEGER, yesOrNoValue INTEGER)" ];
@@ -234,13 +235,101 @@
     [self doTestCreateTableAndIndexSQLsAsExpected:expected];
 }
 
+- (void)test_column_constraint_primary_enable_auto_increment_for_existing_table
+{
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(key integer primary key, content text)"
+                                 expecting:true];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(key integer primary key default 0, content text)"
+                                 expecting:true];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(content text, key integer primary key)"
+                                 expecting:true];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(content text, key integer primary key unique)"
+                                 expecting:true];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(content text, key integer, primary key(key))"
+                                 expecting:true];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(content text, key integer, primary key(key, content))"
+                                 expecting:false];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(content text, key int primary key)"
+                                 expecting:false];
+
+    [self doTestPrimaryEnableAutoIncrement:@"create table testTable(content text, key int primary key) without rowid"
+                                 expecting:false];
+}
+
+- (void)doTestPrimaryEnableAutoIncrement:(NSString*)sql expecting:(BOOL)result
+{
+    [self.database removeFiles];
+    TestCaseAssertTrue([self.database rawExecute:sql]);
+
+    ColumnConstraintEnablePrimaryAutoIncrement* obj = [[ColumnConstraintEnablePrimaryAutoIncrement alloc] init];
+    obj.isAutoIncrement = true;
+    if (![sql containsString:@"without rowid"]) {
+        TestCaseAssertTrue([self.database insertObject:obj intoTable:self.tableName]);
+        TestCaseAssertTrue(obj.lastInsertedRowID == 1);
+    }
+
+    TestCaseAssertEqual([self.database createTable:self.tableName withClass:ColumnConstraintEnablePrimaryAutoIncrement.class], result);
+
+    if (result) {
+        TestCaseAssertTrue([self.database updateTable:WCTSequence.tableName setProperty:WCTSequence.seq toValue:@100 where:WCTSequence.name == self.tableName]);
+        TestCaseAssertTrue([self.database insertObject:obj intoTable:self.tableName]);
+        TestCaseAssertEqual(obj.lastInsertedRowID, 101);
+
+        TestCaseAssertTrue([self.database deleteFromTable:self.tableName where:ColumnConstraintEnablePrimaryAutoIncrement.key == 101]);
+        TestCaseAssertTrue([self.database insertObject:obj intoTable:self.tableName]);
+        TestCaseAssertEqual(obj.lastInsertedRowID, 102);
+
+        TestCaseAssertTrue([self.database updateTable:WCTSequence.tableName setProperty:WCTSequence.seq toValue:@1000 where:WCTSequence.name == self.tableName]);
+
+        [self.database close];
+        TestCaseAssertTrue([self.database insertObject:obj intoTable:self.tableName]);
+        TestCaseAssertEqual(obj.lastInsertedRowID, 1001);
+    }
+}
+
+- (void)test_config_auto_increment_whilt_executing
+{
+    TestCaseAssertTrue([self.database rawExecute:@"create table testTable(key integer primary key, content text)"]);
+
+    WCDB::StatementInsert insert = WCDB::StatementInsert().insertIntoTable(self.tableName);
+    insert.column(ColumnConstraintEnablePrimaryAutoIncrement.content).value("abc");
+
+    WCTHandle* handle = [self.database getHandle];
+    WCTPreparedStatement* prepareStatement = [handle getOrCreatePreparedStatement:insert];
+    TestCaseAssertNotNil(prepareStatement);
+
+    [self.dispatch async:^{
+        WCTHandle* newHandle = [self.database getHandle];
+        WCTPreparedStatement* newPrepareStatement = [newHandle getOrCreatePreparedStatement:insert];
+        TestCaseAssertNotNil(newPrepareStatement);
+        TestCaseAssertNotEqual(prepareStatement, newPrepareStatement);
+        sleep(2);
+        TestCaseAssertTrue([newPrepareStatement step]);
+        TestCaseAssertTrue([newHandle getLastInsertedRowID] == 102);
+    }];
+    sleep(1);
+    TestCaseAssertTrue([self.database createTable:self.tableName withClass:ColumnConstraintEnablePrimaryAutoIncrement.class]);
+
+    TestCaseAssertTrue([self.database updateTable:WCTSequence.tableName setProperty:WCTSequence.seq toValue:@100 where:WCTSequence.name == self.tableName]);
+
+    TestCaseAssertTrue([prepareStatement step]);
+    TestCaseAssertTrue([handle getLastInsertedRowID] == 101);
+    [self.dispatch waitUntilDone];
+}
+
 #pragma mark - index
 - (void)test_index
 {
     self.tableClass = IndexObject.class;
     self.tableName = @"'test@Table'";
     NSArray<NSString*>* expected = @[
-#ifndef WCDB_WECHAT
+#ifndef WCDB_WECHAT_IOS
         @"CREATE TABLE IF NOT EXISTS 'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
 #else
         @"CREATE TABLE IF NOT EXISTS 'test@Table'(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
@@ -258,7 +347,7 @@
     [self dropTable];
     self.tableName = nil;
     expected = @[
-#ifndef WCDB_WECHAT
+#ifndef WCDB_WECHAT_IOS
         @"CREATE TABLE IF NOT EXISTS testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER)",
 #else
         @"CREATE TABLE IF NOT EXISTS testTable(index_ INTEGER, indexAsc INTEGER, indexDesc INTEGER, multiIndex INTEGER, multiIndexAsc INTEGER, multiIndexDesc INTEGER, uniqueIndex INTEGER, uniqueIndexAsc INTEGER, uniqueIndexDesc INTEGER)",
@@ -353,7 +442,7 @@
     TestCaseAssertTrue([self dropTable]);
     // newly create
     {
-#ifndef WCDB_WECHAT
+#ifndef WCDB_WECHAT_IOS
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(value INTEGER, newValue INTEGER)", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];
 #else
         NSArray<NSString*>* expected = @[ @"CREATE TABLE IF NOT EXISTS testTable(newValue INTEGER, value INTEGER)", @"CREATE INDEX IF NOT EXISTS testTable_index ON testTable(value)" ];

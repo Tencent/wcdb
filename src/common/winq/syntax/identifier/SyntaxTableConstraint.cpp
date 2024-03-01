@@ -68,7 +68,7 @@ bool TableConstraint::describle(std::ostream& stream) const
 
 void TableConstraint::iterate(const Iterator& iterator, bool& stop)
 {
-    Identifier::iterate(iterator, stop);
+    Identifier::iterate(iterator, true, stop);
     switch (switcher) {
     case Switch::PrimaryKey:
     case Switch::Unique:
@@ -82,6 +82,7 @@ void TableConstraint::iterate(const Iterator& iterator, bool& stop)
         recursiveIterate(foreignKeyClause.getOrCreate(), iterator, stop);
         break;
     }
+    Identifier::iterate(iterator, false, stop);
 }
 
 } // namespace Syntax

@@ -25,6 +25,13 @@
 import Foundation
 import WCDB_Private
 
+internal final class ValueWrap<T> {
+    var value: T
+    init(_ value: T) {
+        self.value = value
+    }
+}
+
 internal final class ObjectBridge {
 
     @discardableResult
@@ -35,22 +42,25 @@ internal final class ObjectBridge {
         })
     }
 
-    static func extractTypedSwiftObject<T>(_ obj: OpaquePointer?) -> T? {
+    static func extractTypedSwiftObject<T>(_ obj: UnsafeMutableRawPointer?) -> T? {
         guard let obj = obj else { return nil}
-        return Unmanaged<AnyObject>.fromOpaque(UnsafeRawPointer(obj)).takeUnretainedValue() as? T
+        return Unmanaged<AnyObject>.fromOpaque(obj).takeUnretainedValue() as? T
     }
 
-    static func getUntypeSwiftObject(_ obj: AnyObject) -> OpaquePointer {
-        return OpaquePointer(Unmanaged<AnyObject>.passRetained(obj).toOpaque())
+    static func getUntypeSwiftObject(_ obj: AnyObject) -> UnsafeMutableRawPointer {
+        return Unmanaged<AnyObject>.passRetained(obj).toOpaque()
+    }
+
+    static let objectDestructor: @convention(c) (UnsafeMutableRawPointer) -> Void = { obj in
+        Unmanaged<AnyObject>.fromOpaque(obj).release()
+    }
+
+    static func releaseSwiftObject(_ obj: UnsafeMutableRawPointer) {
+        Unmanaged<AnyObject>.fromOpaque(obj).release()
     }
 
     static func initializeCPPAPI() {
-        WCDBReleaseSwiftObject = { (obj: OpaquePointer) -> Void in
-            Unmanaged<AnyObject>.fromOpaque(UnsafeRawPointer(obj)).release()
-        }
-        WCDBReleaseSwiftClosure = { (closure: IMP) -> Void in
-            imp_removeBlock(closure)
-        }
+        WCDBReleaseSwiftObject = objectDestructor
     }
 
     static func extendLifetime<Result>(_ objList: Any..., execute body: @escaping () -> Result) -> Result {

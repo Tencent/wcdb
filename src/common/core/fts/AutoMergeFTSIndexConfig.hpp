@@ -41,7 +41,7 @@ public:
 class AutoMergeFTSIndexConfig final : public Config {
 public:
     AutoMergeFTSIndexConfig(const std::shared_ptr<AutoMergeFTSIndexOperator>& operator_);
-    ~AutoMergeFTSIndexConfig() override final;
+    ~AutoMergeFTSIndexConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
     bool uninvoke(InnerHandle* handle) override final;
@@ -57,8 +57,8 @@ protected:
     bool onCommitted(const UnsafeStringView& path, int pages);
 
     std::shared_ptr<AutoMergeFTSIndexOperator> m_operator;
-    StringViewMap<std::set<StringView>> m_newTables;
-    StringViewMap<std::set<StringView>> m_modifiedTables;
+    StringViewMap<StringViewSet> m_newTables;
+    StringViewMap<StringViewSet> m_modifiedTables;
     mutable SharedLock m_lock;
 };
 

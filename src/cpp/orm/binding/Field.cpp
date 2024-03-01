@@ -52,7 +52,7 @@ const BaseAccessor* Field::getAccessor() const
 void Field::configWithBinding(const Binding& binding, void* memberPointer)
 {
     syntax().name = binding.getColumnName(memberPointer);
-    syntax().tableBinding = dynamic_cast<const BaseBinding*>(&binding);
+    syntax().tableBinding = static_cast<const BaseBinding*>(&binding);
     m_accessor = binding.getAccessor(memberPointer);
 }
 
@@ -64,6 +64,11 @@ Field Field::table(const UnsafeStringView& table) const
 Field Field::schema(const Schema& schema) const
 {
     return Field(m_accessor, Column(*this).schema(schema));
+}
+
+ResultField Field::redirect(const ResultColumn& resultColumn) const
+{
+    return ResultField(resultColumn, m_accessor);
 }
 
 #pragma mark - Fields

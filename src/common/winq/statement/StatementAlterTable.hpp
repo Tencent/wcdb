@@ -33,7 +33,7 @@ class WCDB_API StatementAlterTable final
 public:
     using SpecifiedSyntax<Syntax::AlterTableSTMT, Statement>::SpecifiedSyntax;
     StatementAlterTable();
-    ~StatementAlterTable() override final;
+    ~StatementAlterTable() override;
 
     StatementAlterTable& alterTable(const UnsafeStringView& table);
     StatementAlterTable& schema(const Schema& schema);

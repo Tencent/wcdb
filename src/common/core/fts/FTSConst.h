@@ -28,7 +28,7 @@ namespace WCDB {
 
 namespace Module {
 /**
- The following three are different versions of the sqlite fts module. `Module::FTS5` is recomended. You can use `WCDB_CPP_VIRTUAL_TABLE_MODULE` to config fts module for a cpp ORM class.
+ The following three are different versions of the sqlite fts module. `Module::FTS5` is recommended. You can use `WCDB_CPP_VIRTUAL_TABLE_MODULE` to config fts module for a cpp ORM class.
  */
 static constexpr const char* FTS3 = "fts3";
 static constexpr const char* FTS4 = "fts4";
@@ -38,7 +38,7 @@ static constexpr const char* FTS5 = "fts5";
 
 namespace BuiltinTokenizer {
 /**
- The following four are sqlite built-in fts tokenizers. `WCDB::SimpleTokenizer` can be used in fts3/4 and the others can be used in fts3/4/5. You can use `WCDB_CPP_VIRTUAL_TABLE_TOKENIZE` to config fts tokenizer for a cpp ORM class.
+ The following four are sqlite built-in fts tokenizers. `WCDB::Simple` tokenizer can be used in fts3/4 and the others can be used in fts3/4/5. You can use `WCDB_CPP_VIRTUAL_TABLE_TOKENIZE` to config fts tokenizer for a cpp ORM class.
  */
 static constexpr const char* Simple = "simple";
 static constexpr const char* Porter = "porter";
@@ -81,15 +81,27 @@ namespace BuiltinAuxiliaryFunction {
 
 /**
  `BuiltinAuxiliaryFunction::SubstringMatchInfo` is a WCDB implemented auxiliary function for fts5.
- When you need to concat multiple contents together with multi-level separators and save them in a single column of the fts5 table, you can use this auxiliary function to improve the accuracy of searching for the contents of this column.
- Suppose you have a friend named 张三, whose address is 广州 and 上海, and phone number is 12345 and 67890. You can use semicolon and comma as two-level separators to concat your friend's information into "张三;广州,上海;12345,67890" and save it in a column named "friends" in an fts5 table. Then you can use following code to search your friend:
+ When you need to concat multiple contents together with multi-level separators and save them in a single column of the fts5 table, 
+ you can use this auxiliary function to improve the accuracy of searching for the contents of this column.
+ Suppose you have a friend named 张三, whose address is 广州 and 上海, and phone number is 12345 and 67890. 
+ You can use semicolon and comma as two-level separators to concat your friend's information into "张三;广州,上海;12345,67890" and save it in a column named "friends" in an fts5 table.
+ Then you can use following code to search your friend:
  
         fts5Table.selectOneColumn(WCDB::Column(fts5Table.tableName).substringMatchInfo(0, ";,"), WCDB::Column("friends").match("州"));
  
- The first argument of SubstringMatchInfo is a column named with table name. The second argument is the index of the colum you need to search. The index is are numbered starting from 0. The third parameter is the separator used when concating the content, which should be arranged according to their level.
- Then you will get this string result "1,0;广;州;3;". The result is made by concating a variety of information with the separator you passed in. The first part of the result "1,0" gives the hierarchical position of the matched content within matched column. The second part "广;州" is the original text of the matching content, you can use it for highlighting. The third part "3" is the byte offset of the matching content in the original text, you can use it to sort the results.
+ The first argument of SubstringMatchInfo is a column named with table name. 
+ The second argument is the index of the colum you need to search. The index is are numbered starting from 0. 
+ The third parameter is the separator used when concating the content, which should be arranged according to their level.
+ Then you will get this string result "1,0;广;州;3;". 
+ The result is made by concating a variety of information with the separator you passed in.
+ The first part of the result "1,0" gives the hierarchical position of the matched content within matched column.
+ The second part "广;州" is the original text of the matching content, you can use it for highlighting.
+ The third part "3" is the byte offset of the matching content in the original text, you can use it to sort the results.
  
- @warning The search results may contain some empty strings, which are invalid results. This kind of results appear when the content of some rows contain the tokens you are searching for, but these tokens are located in different parts separated by separators. You just need to ignore these results.
+ @warning The search results may contain some empty strings, which are invalid results. 
+ This kind of results appear when the content of some rows contain the tokens you are searching for,
+ but these tokens are located in different parts separated by separators.
+ You just need to ignore these results.
  */
 static constexpr const char* SubstringMatchInfo = "substring_match_info";
 

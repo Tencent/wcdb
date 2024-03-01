@@ -22,237 +22,290 @@
  * limitations under the License.
  */
 
+#include "CompressionConst.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
 
 Expression CoreFunction::abs(const Expression& expression)
 {
-    return Expression::function("abs").invoke().arguments(expression);
+    static const char* funcName = "abs";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::changes()
 {
-    return Expression::function("changes").invoke();
+    static const char* funcName = "changes";
+    return Expression::function(StringView::makeConstant(funcName)).invoke();
 }
 
 Expression CoreFunction::char_(const Expressions& expressions)
 {
-    return Expression::function("char").invoke().arguments(expressions);
+    static const char* funcName = "char";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expressions);
 }
 
 Expression CoreFunction::coalesce(const Expressions& expressions)
 {
-    return Expression::function("coalesce").invoke().arguments(expressions);
+    static const char* funcName = "coalesce";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expressions);
 }
 
 Expression CoreFunction::glob(const Expression& pattern, const Expression& string)
 {
-    return Expression::function("glob").invoke().arguments({ pattern, string });
+    static const char* funcName = "glob";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ pattern, string });
 }
 
 Expression CoreFunction::hex(const Expression& expression)
 {
-    return Expression::function("hex").invoke().arguments(expression);
+    static const char* funcName = "hex";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::ifNull(const Expression& expression1, const Expression& expression2)
 {
-    return Expression::function("ifnull").invoke().arguments({ expression1, expression2 });
+    static const char* funcName = "ifnull";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression1, expression2 });
 }
 
 Expression CoreFunction::instr(const Expression& string, const Expression& occurrence)
 {
-    return Expression::function("instr").invoke().arguments({ string, occurrence });
+    static const char* funcName = "instr";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ string, occurrence });
 }
 
 Expression CoreFunction::lastInsertRowID()
 {
-    return Expression::function("last_insert_rowid").invoke();
+    static const char* funcName = "last_insert_rowid";
+    return Expression::function(StringView::makeConstant(funcName)).invoke();
 }
 
 Expression CoreFunction::length(const Expression& expression)
 {
-    return Expression::function("length").invoke().arguments(expression);
+    static const char* funcName = "length";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::like(const Expression& origin, const Expression& pattern)
 {
-    return Expression::function("like").invoke().arguments({ origin, pattern });
+    static const char* funcName = "like";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ origin, pattern });
 }
 
 Expression
 CoreFunction::like(const Expression& origin, const Expression& pattern, const Expression& escape)
 {
-    return Expression::function("like").invoke().arguments({ origin, pattern, escape });
+    static const char* funcName = "like";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ origin, pattern, escape });
 }
 
 Expression CoreFunction::likelihood(const Expression& unchanged, const Expression& floating)
 {
-    return Expression::function("likelihood").invoke().arguments({ unchanged, floating });
+    static const char* funcName = "likelihood";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ unchanged, floating });
 }
 
 Expression CoreFunction::likely(const Expression& unchanged)
 {
-    return Expression::function("likely").invoke().arguments(unchanged);
+    static const char* funcName = "likely";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(unchanged);
 }
 
 Expression CoreFunction::lower(const Expression& expression)
 {
-    return Expression::function("lower").invoke().arguments(expression);
+    static const char* funcName = "lower";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::ltrim(const Expression& expression)
 {
-    return Expression::function("ltrim").invoke().arguments(expression);
+    static const char* funcName = "ltrim";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::ltrim(const Expression& expression, const Expression& removing)
 {
-    return Expression::function("ltrim").invoke().arguments({ expression, removing });
+    static const char* funcName = "ltrim";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression, removing });
 }
 
 Expression CoreFunction::max(const Expressions& expressions)
 {
-    return Expression::function("max").invoke().arguments(expressions);
+    static const char* funcName = "max";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expressions);
 }
 
 Expression CoreFunction::min(const Expressions& expressions)
 {
-    return Expression::function("min").invoke().arguments(expressions);
+    static const char* funcName = "min";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expressions);
 }
 
 Expression CoreFunction::nullIf(const Expression& expression1, const Expression& expression2)
 {
-    return Expression::function("nullif").invoke().arguments({ expression1, expression2 });
+    static const char* funcName = "nullif";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression1, expression2 });
 }
 
 Expression CoreFunction::printf(const Expressions& expressions)
 {
-    return Expression::function("printf").invoke().arguments(expressions);
+    static const char* funcName = "printf";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expressions);
 }
 
 Expression CoreFunction::quote(const Expression& expression)
 {
-    return Expression::function("quote").invoke().arguments(expression);
+    static const char* funcName = "quote";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::random()
 {
-    return Expression::function("random").invoke();
+    static const char* funcName = "random";
+    return Expression::function(StringView::makeConstant(funcName)).invoke();
 }
 
 Expression CoreFunction::randomBLOB(const Expression& n)
 {
-    return Expression::function("randomblob").invoke().arguments(n);
+    static const char* funcName = "randomblob";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(n);
 }
 
 Expression CoreFunction::replace(const Expression& origin,
                                  const Expression& target,
                                  const Expression& replacement)
 {
-    return Expression::function("replace").invoke().arguments({ origin, target, replacement });
+    static const char* funcName = "replace";
+    return Expression::function(StringView::makeConstant(funcName))
+    .invoke()
+    .arguments({ origin, target, replacement });
 }
 
 Expression CoreFunction::round(const Expression& expression)
 {
-    return Expression::function("round").invoke().arguments(expression);
+    static const char* funcName = "round";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::round(const Expression& expression, const Expression& digits)
 {
-    return Expression::function("round").invoke().arguments({ expression, digits });
+    static const char* funcName = "round";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression, digits });
 }
 
 Expression CoreFunction::rtrim(const Expression& expression)
 {
-    return Expression::function("rtrim").invoke().arguments(expression);
+    static const char* funcName = "rtrim";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::rtrim(const Expression& expression, const Expression& removing)
 {
-    return Expression::function("rtrim").invoke().arguments({ expression, removing });
+    static const char* funcName = "rtrim";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression, removing });
 }
 
 Expression CoreFunction::soundex(const Expression& expression)
 {
-    return Expression::function("soundex").invoke().arguments(expression);
+    static const char* funcName = "soundex";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::sqliteCompileOptionGet(const Expression& n)
 {
-    return Expression::function("sqlite_compileoption_get").invoke().arguments(n);
+    static const char* funcName = "sqlite_compileoption_get";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(n);
 }
 
 Expression CoreFunction::sqliteCompileOptionUsed(const Expression& name)
 {
-    return Expression::function("sqlite_compileoption_used").invoke().arguments(name);
+    static const char* funcName = "sqlite_compileoption_used";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(name);
 }
 
 Expression CoreFunction::sqliteOffset(const Expression& expression)
 {
-    return Expression::function("sqlite_offset").invoke().arguments(expression);
+    static const char* funcName = "sqlite_offset";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::sqliteSourceID()
 {
-    return Expression::function("sqlite_source_id").invoke();
+    static const char* funcName = "sqlite_source_id";
+    return Expression::function(StringView::makeConstant(funcName)).invoke();
 }
 
 Expression CoreFunction::sqliteVersion()
 {
-    return Expression::function("sqlite_version").invoke();
+    static const char* funcName = "sqlite_version";
+    return Expression::function(StringView::makeConstant(funcName)).invoke();
 }
 
 Expression CoreFunction::substr(const Expression& origin, const Expression& offset)
 {
-    return Expression::function("substr").invoke().arguments({ origin, offset });
+    static const char* funcName = "substr";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ origin, offset });
 }
 
 Expression
 CoreFunction::substr(const Expression& origin, const Expression& offset, const Expression& length)
 {
-    return Expression::function("substr").invoke().arguments({ origin, offset, length });
+    static const char* funcName = "substr";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ origin, offset, length });
 }
 
 Expression CoreFunction::totalChanges()
 {
-    return Expression::function("total_changes").invoke();
+    static const char* funcName = "total_changes";
+    return Expression::function(StringView::makeConstant(funcName)).invoke();
 }
 
 Expression CoreFunction::trim(const Expression& expression)
 {
-    return Expression::function("trim").invoke().arguments(expression);
+    static const char* funcName = "trim";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::trim(const Expression& expression, const Expression& removing)
 {
-    return Expression::function("trim").invoke().arguments({ expression, removing });
+    static const char* funcName = "trim";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments({ expression, removing });
 }
 
 Expression CoreFunction::typeof_(const Expression& expression)
 {
-    return Expression::function("typeof").invoke().arguments(expression);
+    static const char* funcName = "typeof";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::unicode(const Expression& expression)
 {
-    return Expression::function("unicode").invoke().arguments(expression);
+    static const char* funcName = "unicode";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::unlikely(const Expression& expression)
 {
-    return Expression::function("unlikely").invoke().arguments(expression);
+    static const char* funcName = "unlikely";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::upper(const Expression& expression)
 {
-    return Expression::function("upper").invoke().arguments(expression);
+    static const char* funcName = "upper";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
 }
 
 Expression CoreFunction::zeroBLOB(const Expression& expression)
 {
-    return Expression::function("zeroblob").invoke().arguments(expression);
+    static const char* funcName = "zeroblob";
+    return Expression::function(StringView::makeConstant(funcName)).invoke().arguments(expression);
+}
+
+Expression CoreFunction::decompress(const Expression& value, const Expression& compressionType)
+{
+    return Expression::function(DecompressFunctionName).invoke().arguments({ value, compressionType });
 }
 
 CoreFunctionOperable::~CoreFunctionOperable() = default;

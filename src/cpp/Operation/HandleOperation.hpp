@@ -97,7 +97,7 @@ public:
                               const Expression &offset = Expression());
 
     /**
-     @brief Get  one column of values by specific selecting.
+     @brief Get one column of values by specific selecting.
      */
     OptionalOneColumn selectOneColumn(const ResultColumn &column,
                                       const UnsafeStringView &table,
@@ -107,7 +107,7 @@ public:
                                       const Expression &offset = Expression());
 
     /**
-     @brief Get  one row of values by specific selecting.
+     @brief Get one row of values by specific selecting.
      */
     OptionalOneRow selectOneRow(const ResultColumns &columns,
                                 const UnsafeStringView &table,
@@ -116,7 +116,7 @@ public:
                                 const Expression &offset = Expression());
 
     /**
-     @brief Get  all row of values by specific selecting.
+     @brief Get all row of values by specific selecting.
      */
     OptionalMultiRows selectAllRow(const ResultColumns &columns,
                                    const UnsafeStringView &table,
@@ -183,8 +183,8 @@ public:
      Firstly, WCDB will begin a transaction and call the block. After the block is finished, WCDB will check whether the main thread is suspended due to the current transaction. If not, it will call the block again; if it is, it will temporarily commit the current transaction. Once database operations in main thread are finished, WCDB will rebegin a new transaction in the current thread and call the block. This process will be repeated until the second parameter of the block is specified as YES, or some error occurs during the transaction.
      You can use pausable transaction to do some long term database operations, such as data cleaning or data migration, and avoid to block the main thread.
      
-         database.runPausableTransactionWithOneLoop([&](Handle& handle, bool &stop, bool isNewTraction) {
-             if(isNewTraction) {
+         database.runPausableTransactionWithOneLoop([&](Handle& handle, bool &stop, bool isNewTransaction) {
+             if(isNewTransaction) {
                  // Do some initialization for new transaction.
              }
              

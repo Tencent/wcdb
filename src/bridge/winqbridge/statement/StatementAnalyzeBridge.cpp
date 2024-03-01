@@ -26,6 +26,7 @@
 #include "ObjectBridge.hpp"
 #include "Schema.hpp"
 #include "StatementAnalyze.hpp"
+#include "WinqBridge.hpp"
 
 CPPStatementAnalyze WCDBStatementAnalyzeCreate(void)
 {
@@ -43,6 +44,12 @@ void WCDBStatementAnalyzeConfigSchema(CPPStatementAnalyze analyze, CPPSchema sch
     WCDBGetObjectOrReturn(analyze, WCDB::StatementAnalyze, cppAnalyze);
     WCDBGetObjectOrReturn(schema, WCDB::Schema, cppSchema);
     cppAnalyze->schema(*cppSchema);
+}
+
+void WCDBStatementAnalyzeConfigSchema2(CPPStatementAnalyze analyze, CPPCommonValue schema)
+{
+    WCDBGetObjectOrReturn(analyze, WCDB::StatementAnalyze, cppAnalyze);
+    cppAnalyze->schema(WCDBCreateSchemaFromCommonValue(schema));
 }
 
 void WCDBStatementAnalyzeConfigTable(CPPStatementAnalyze analyze, const char* _Nullable table)

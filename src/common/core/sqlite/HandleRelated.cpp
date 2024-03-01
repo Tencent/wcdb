@@ -69,4 +69,19 @@ void HandleRelated::resumeCacheTransactionError()
     m_handle->resumeCacheTransactionError();
 }
 
+bool HandleRelated::isBusyTraceEnable() const
+{
+    return m_handle->isBusyTraceEnable();
+}
+
+void HandleRelated::setCurrentSQL(const UnsafeStringView &sql)
+{
+    m_handle->setCurrentSQL(sql);
+}
+
+void HandleRelated::resetCurrentSQL(const UnsafeStringView &sql)
+{
+    m_handle->resetCurrentSQL(sql);
+}
+
 } //namespace WCDB

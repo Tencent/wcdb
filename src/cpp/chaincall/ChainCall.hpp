@@ -69,7 +69,7 @@ class ChainCall : public BaseChainCall {
 public:
     /**
      @brief The statement that `ChainCall` will execute.
-     You can cunstomize this statement directly to implement the capabilities not provided by `ChainCall`.
+     You can customize this statement directly to implement the capabilities not provided by `ChainCall`.
      */
     StatementType &getStatement() { return m_statement; }
 

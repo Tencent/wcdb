@@ -49,6 +49,13 @@ bool WCDBHandleStatementPrepare(CPPHandleStatement handleStatement, CPPObject* s
     return cppHandleStatement->prepare(*cppStatement);
 }
 
+bool WCDBHandleStatementPrepareSQL(CPPHandleStatement handleStatement, const char* _Nonnull sql)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, false);
+    return cppHandleStatement->prepareSQL(WCDB::UnsafeStringView(sql));
+}
+
 bool WCDBHandleStatementCheckPrepared(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturnValue(
@@ -67,6 +74,12 @@ void WCDBHandleStatementReset(CPPHandleStatement handleStatement)
 {
     WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
     cppHandleStatement->reset();
+}
+
+void WCDBHandleStatementClearBindings(CPPHandleStatement handleStatement)
+{
+    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    cppHandleStatement->clearBindings();
 }
 
 void WCDBHandleStatementFinalize(CPPHandleStatement handleStatement)
@@ -100,6 +113,15 @@ void WCDBHandleStatementBindText(CPPHandleStatement handleStatement, int index, 
 {
     WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
     cppHandleStatement->bindText(WCDB::UnsafeStringView(text), index);
+}
+
+void WCDBHandleStatementBindText16(CPPHandleStatement handleStatement,
+                                   int index,
+                                   const short* _Nullable text,
+                                   int textLength)
+{
+    WCDBGetObjectOrReturn(handleStatement, WCDB::HandleStatement, cppHandleStatement);
+    cppHandleStatement->bindText16((const char16_t*) text, textLength, index);
 }
 
 void WCDBHandleStatementBindBlob(CPPHandleStatement handleStatement,
@@ -161,11 +183,23 @@ double WCDBHandleStatementGetDouble(CPPHandleStatement handleStatement, int inde
 
 const char* _Nullable WCDBHandleStatementGetText(CPPHandleStatement handleStatement, int index)
 {
-    {
-        WCDBGetObjectOrReturnValue(
-        handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
-        return cppHandleStatement->getText(index).data();
-    }
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    return cppHandleStatement->getText(index).data();
+}
+
+const short* _Nullable WCDBHandleStatementGetText16(CPPHandleStatement handleStatement, int index)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, nullptr);
+    return (const short*) cppHandleStatement->getText16(index);
+}
+
+int WCDBHandleStatementGetText16Length(CPPHandleStatement handleStatement, int index)
+{
+    WCDBGetObjectOrReturnValue(
+    handleStatement, WCDB::HandleStatement, cppHandleStatement, 0);
+    return (int) cppHandleStatement->getText16Length(index);
 }
 
 const unsigned char*

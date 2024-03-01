@@ -33,7 +33,7 @@ namespace Syntax {
 class WCDB_API DropIndexSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~DropIndexSTMT() override final;
+    ~DropIndexSTMT() override;
 
     bool ifExists = false;
     Schema schema;

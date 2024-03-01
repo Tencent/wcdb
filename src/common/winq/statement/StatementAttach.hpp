@@ -32,7 +32,7 @@ class WCDB_API StatementAttach final : public SpecifiedSyntax<Syntax::AttachSTMT
 public:
     using SpecifiedSyntax<Syntax::AttachSTMT, Statement>::SpecifiedSyntax;
     StatementAttach();
-    ~StatementAttach() override final;
+    ~StatementAttach() override;
 
     StatementAttach& attach(const Expression& expression);
     StatementAttach& as(const Schema& schema);

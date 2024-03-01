@@ -26,6 +26,7 @@
 
 #include "Config.hpp"
 #include "Data.hpp"
+#include "Lock.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
@@ -33,13 +34,15 @@ namespace WCDB {
 class CipherConfig final : public Config {
 public:
     CipherConfig(const UnsafeData &cipher, int pageSize, int cipherVersion);
-    ~CipherConfig() override final;
+    ~CipherConfig() override;
 
     bool invoke(InnerHandle *handle) override final;
-    UnsafeData getCipherKey();
+    void trySaveRawKey(InnerHandle *handle);
 
 protected:
-    const Data m_key;
+    Data m_key;
+    Data m_rawKey;
+    mutable SharedLock m_lock;
     const int m_pageSize;
     const int m_cipherVersion = 4;
 };

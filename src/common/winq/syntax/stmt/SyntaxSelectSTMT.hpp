@@ -38,7 +38,7 @@ class OrderingTerm;
 class WCDB_API SelectSTMT final : public Identifier {
 #pragma mark - Lang
 public:
-    ~SelectSTMT() override final;
+    ~SelectSTMT() override;
 
     bool recursive = false;
     std::list<CommonTableExpression> commonTableExpressions;

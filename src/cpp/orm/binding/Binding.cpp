@@ -33,6 +33,16 @@ Binding::Binding() : BaseBinding(){};
 
 Binding::~Binding(){};
 
+#pragma mark - Inherit
+void Binding::inherit(const Binding &binding)
+{
+    m_columnDefs.insert(
+    m_columnDefs.end(), binding.m_columnDefs.begin(), binding.m_columnDefs.end());
+    m_constraints.insert(binding.m_constraints.begin(), binding.m_constraints.end());
+    m_indexes.insert(binding.m_indexes.begin(), binding.m_indexes.end());
+    m_fields.insert(m_fields.end(), binding.m_fields.begin(), binding.m_fields.end());
+}
+
 #pragma mark - Field
 
 const Field &

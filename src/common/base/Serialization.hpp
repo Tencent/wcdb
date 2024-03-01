@@ -53,7 +53,7 @@ protected:
 class Serialization final : public SerializeIteration {
 #pragma mark - Serialization
 public:
-    ~Serialization() override final;
+    ~Serialization() override;
 
     Data finalize();
     bool resize(size_t size);
@@ -80,14 +80,17 @@ class Deserialization final : public SerializeIteration {
 public:
     Deserialization();
     Deserialization(const UnsafeData &data);
-    ~Deserialization() override final;
+    ~Deserialization() override;
 
     void reset(const UnsafeData &data);
 
     const UnsafeData &data() const override final;
+    uint32_t version() const;
+    void setDataVersion(uint32_t version);
 
 protected:
     UnsafeData m_data;
+    uint32_t m_dataVersion;
 
     static constexpr const uint32_t slot_2_0 = 0x001fc07f;
     static constexpr const uint32_t slot_4_2_0 = 0xf01fc07f;

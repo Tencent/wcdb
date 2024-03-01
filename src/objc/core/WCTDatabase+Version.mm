@@ -23,7 +23,7 @@
  */
 
 #import "Macro.h"
-#import "Version.h"
+#import "WCDBVersion.h"
 #import "WCTDatabase+Version.h"
 
 @implementation WCTDatabase (Version)
