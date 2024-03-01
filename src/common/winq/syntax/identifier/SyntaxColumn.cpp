@@ -52,11 +52,6 @@ const BaseBinding* Column::getTableBinding() const
     return nullptr;
 }
 
-CompressionColumnInfo* Column::getCompressionInfo() const
-{
-    return m_compressionInfo;
-}
-
 bool Column::describle(std::ostream& stream) const
 {
     if (!table.empty()) {

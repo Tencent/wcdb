@@ -46,8 +46,6 @@ CompressionColumnInfo::CompressionColumnInfo(const Column &column, CompressionTy
     stringStream << CompressionColumnTypePrefix << column.syntax().name;
     m_typeColumn = Column(StringView::createConstant(
     stringStream.str().data(), stringStream.str().length()));
-    column.syntax().m_compressionInfo = this;
-    m_column.syntax().m_compressionInfo = this;
 }
 
 CompressionColumnInfo::CompressionColumnInfo(const Column &column, const Column &matchColumn)
@@ -63,8 +61,6 @@ CompressionColumnInfo::CompressionColumnInfo(const Column &column, const Column 
     stringStream << CompressionColumnTypePrefix << column.syntax().name;
     m_typeColumn = Column(StringView::createConstant(
     stringStream.str().data(), stringStream.str().length()));
-    column.syntax().m_compressionInfo = this;
-    m_column.syntax().m_compressionInfo = this;
 }
 
 CompressionColumnInfo::CompressionColumnInfo(const CompressionColumnInfo &other)
