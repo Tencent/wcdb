@@ -1,3 +1,13 @@
+## v2.1.0
+
+* Add WCDB Java/Kotlin
+* Support data compression
+* Support incremental data backup
+* Support to configure a filter condition for data migration
+* Support to use std::optional and std::shared_ptr in C++ ORM
+* C++ ORM supports inheritance
+* Add more monitoring capabilities
+
 ## v2.0.4
 
 * Support to asynchronously interrupt database operations
