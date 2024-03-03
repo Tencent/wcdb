@@ -4,7 +4,7 @@
 # pod trunk push WCDB.cpp.podspec --verbose --skip-import-validation --allow-warnings
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB.cpp"
-  wcdb.version      = "2.0.4"
+  wcdb.version      = "2.1.0"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for C++. (If you want to use WCDB for Swift or Objective-C, see the "WCDB.swift" pod or "WCDB.objc" pod. If you want to use WCDB for C++/Objc/Swift in one project, see the "WCDB" pod)
@@ -33,7 +33,7 @@ Pod::Spec.new do |wcdb|
   wcdb.libraries = "z", "c++"
   wcdb.requires_arc = true
   wcdb.pod_target_xcconfig = { 
-    "GCC_PREPROCESSOR_DEFINITIONS" => "SQLITE_WCDB=1 SQLITE_WCDB_LOCK_HOOK=1 SQLITE_WCDB_CHECKPOINT_HANDLER=1 SQLITE_WCDB_SUSPEND=1 SQLITE_WCDB_IMPROVED_CHECKPOINT=1 SQLITE_HAS_CODEC SQLITE_DEFAULT_PAGE_SIZE=4096 SQLITE_MAX_VARIABLE_NUMBER=99 SQLITE_DEFAULT_SYNCHRONOUS=1 SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 SQLITE_DEFAULT_LOCKING_MODE=0 SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0",
+    "GCC_PREPROCESSOR_DEFINITIONS" => "SQLITE_WCDB=1 SQLITE_WCDB_LOCK_HOOK=1 SQLITE_WCDB_CHECKPOINT_HANDLER=1 SQLITE_WCDB_SUSPEND=1 SQLITE_WCDB_IMPROVED_CHECKPOINT=1 SQLITE_HAS_CODEC SQLITE_DEFAULT_PAGE_SIZE=4096 SQLITE_DEFAULT_SYNCHRONOUS=1 SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 SQLITE_DEFAULT_LOCKING_MODE=0 SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0",
     "HEADER_SEARCH_PATHS" => "${PODS_ROOT}/WCDB",
     "LIBRARY_SEARCH_PATHS[sdk=macosx*]" => "$(SDKROOT)/usr/lib/system",
     "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++14",
@@ -49,5 +49,5 @@ Pod::Spec.new do |wcdb|
     "VALID_ARCHS[sdk=watchos*]" => "arm64_32 armv7k",
   }
   wcdb.header_dir = "WCDB"
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.4.2'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.4.3'
 end
