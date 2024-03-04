@@ -75,7 +75,10 @@ data class FTSModuleInfo (
             return resolvedInfo
         }
 
-        fun resolve(ftsModule: FTSModule): FTSModuleInfo? {
+        fun resolve(ftsModule: FTSModule?): FTSModuleInfo? {
+            if(ftsModule == null){
+                return null
+            }
             val resolvedInfo = FTSModuleInfo()
             when (ftsModule.version) {
                 FTSVersion.NONE -> resolvedInfo.ftsVersion = ""

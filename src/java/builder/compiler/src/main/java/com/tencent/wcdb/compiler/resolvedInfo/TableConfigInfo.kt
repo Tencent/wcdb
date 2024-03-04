@@ -25,6 +25,7 @@ package com.tencent.wcdb.compiler.resolvedInfo
 
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotation
+import com.tencent.wcdb.FTSModule
 import com.tencent.wcdb.WCDBTableCoding
 
 data class TableConfigInfo(
@@ -93,7 +94,7 @@ data class TableConfigInfo(
             return resolvedAnnotation
         }
 
-        fun resolve(tableCoding: WCDBTableCoding): TableConfigInfo {
+        fun resolve(tableCoding: WCDBTableCoding, ftsModule: FTSModule?): TableConfigInfo {
             val resolvedAnnotation = TableConfigInfo()
             resolvedAnnotation.isWithoutRowId = tableCoding.isWithoutRowId
             for(multiIndexes in tableCoding.multiIndexes) {
@@ -105,7 +106,7 @@ data class TableConfigInfo(
             for(multiUnique in tableCoding.multiUnique) {
                 resolvedAnnotation.multiUnique.add(MultiUniqueInfo.resolve(multiUnique))
             }
-            resolvedAnnotation.ftsModule = FTSModuleInfo.resolve(tableCoding.ftsModule)
+            resolvedAnnotation.ftsModule = FTSModuleInfo.resolve(ftsModule)
             return resolvedAnnotation
         }
     }

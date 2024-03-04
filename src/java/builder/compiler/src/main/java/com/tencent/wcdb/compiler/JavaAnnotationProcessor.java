@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -36,8 +37,11 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
@@ -121,10 +125,11 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                 primaryKeyCount = 0;
                 WCDBTableCoding config = element.getAnnotation(WCDBTableCoding.class);
                 assert config != null;
-                if(!checkFTSModule(element, config.ftsModule())){
+                FTSModule ftsModule = getFTSModule(element, config);
+                if(!checkFTSModule(element, ftsModule)){
                     return false;
                 }
-                tableConstraintInfo = TableConfigInfo.Companion.resolve(config);
+                tableConstraintInfo = TableConfigInfo.Companion.resolve(config, ftsModule);
                 allFieldInfo = new ArrayList<>();
 
                 verboseLog("WCDB Processing: " + element);
@@ -193,7 +198,25 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
         return true;
     }
 
+    private FTSModule getFTSModule(Element element, WCDBTableCoding config) {
+        for (AnnotationMirror mirror : element.getAnnotationMirrors()) {
+            if (mirror.getAnnotationType().toString().equals(WCDBTableCoding.class.getName())) {
+                Map<? extends ExecutableElement, ? extends AnnotationValue> elementValues = mirror.getElementValues();
+                for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : elementValues.entrySet()) {
+                    if (entry.getKey().getSimpleName().toString().equals("ftsModule")) {
+                        return config.ftsModule();
+                    }
+                }
+
+            }
+        }
+        return null;
+    }
+
     private boolean checkFTSModule(Element element, FTSModule ftsModule) {
+        if(ftsModule == null){
+            return true;
+        }
         if(ftsModule.version() == FTSVersion.NONE) {
             if(!ftsModule.tokenizer().isEmpty() || ftsModule.tokenizerParameters().length > 0) {
                 msg.printMessage(Diagnostic.Kind.ERROR,
