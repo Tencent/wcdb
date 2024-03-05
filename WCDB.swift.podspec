@@ -53,5 +53,5 @@ Pod::Spec.new do |wcdb|
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
   wcdb.swift_versions = '5'
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '~> 1.4.3'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.3'
 end
