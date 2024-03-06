@@ -1,0 +1,1 @@
+..//tests/common/SwiftBridgeObjcTest-Bridging-Header.h

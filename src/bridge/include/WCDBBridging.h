@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-#include <Foundation/Foundation.h>
-
 #include "ObjectBridge.h"
 
 #include "BindingBridge.h"

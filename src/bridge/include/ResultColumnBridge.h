@@ -1,0 +1,1 @@
+..//winqbridge/identifier/ResultColumnBridge.h

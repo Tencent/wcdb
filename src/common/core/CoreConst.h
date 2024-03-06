@@ -78,7 +78,6 @@ WCDBLiteralStringDefine(BusyRetryConfigName, "com.Tencent.WCDB.Config.BusyRetry"
 static constexpr const double BusyRetryTimeOut = 10.0;
 #pragma mark - Config - Cipher
 WCDBLiteralStringDefine(CipherConfigName, "com.Tencent.WCDB.Config.Cipher");
-static constexpr const int CipherConfigDefaultPageSize = SQLITE_DEFAULT_PAGE_SIZE;
 #pragma mark - Config - Global SQL Trace
 WCDBLiteralStringDefine(GlobalSQLTraceConfigName, "com.Tencent.WCDB.Config.GlobalSQLTrace");
 #pragma mark - Config - Global Performance Trace

@@ -23,6 +23,7 @@
  */
 
 #include "ObjectBridge.hpp"
+#include "Assertion.hpp"
 
 void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj) = nullptr;
 

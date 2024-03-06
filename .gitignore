@@ -28,6 +28,10 @@ src/build/
 # WCDB
 WCDB.framework
 
+# SwiftPM
+/.build
+Package.resolved
+
 # WeChat
 WeChat/conan/*
 

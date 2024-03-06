@@ -24,7 +24,6 @@
 
 #pragma once
 
-#include "Assertion.hpp"
 #include "ObjectBridge.h"
 #include "Recyclable.hpp"
 #include <assert.h>
@@ -63,9 +62,6 @@
     WCDB::ObjectBridge::createCPPBridgedObject<objType>(                       \
     WCDB::ObjectBridge::createUnmanagedCPPObject((void*) originObj))
 
-#define WCDBCreateSwiftBridgedObject(objType, originObj)                       \
-    WCDB::ObjectBridge::createRecyclableSwiftObject<objType>(originObj)
-
 #define WCDBGetSwiftObject(typedObj) typedObj.innerValue.get()
 
 #define WCDBGetBridgedData(type, data)                                         \
@@ -87,20 +83,6 @@ typedef Recyclable<void*> RecyclableContext;
 
 class ObjectBridge {
 public:
-    template<typename T>
-    static T createRecyclableSwiftObject(SwiftObject* _Nonnull obj)
-    {
-        static_assert(offsetof(T, innerValue) == 0, "");
-
-        auto recylableObj = Recyclable<SwiftObject*>(obj, [](SwiftObject* obj) {
-            WCTAssert(WCDBReleaseSwiftObject != nullptr);
-            WCDBReleaseSwiftObject(obj);
-        });
-        T ret;
-        ret.innerValue = recylableObj;
-        return ret;
-    }
-
     static CPPObject* _Nullable createUnmanagedCPPObject(void* _Nullable obj);
 
     template<typename T>

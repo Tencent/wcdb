@@ -109,5 +109,5 @@ internal final class FTSBridge {
 
     private static var tokenizerTypes: [Any?] = [Any?](repeating: nil, count: Int(WCDBMaxSwiftTokenizerTypeId))
     private static var nextTypeId = 0
-    private static var mutex: RecursiveMutex = RecursiveMutex()
+    private static var mutex = Mutex()
 }

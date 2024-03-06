@@ -38,7 +38,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 - (void)setCipherKey:(NSData*)cipherKey
 {
-    [self setCipherKey:cipherKey andCipherPageSize:WCDB::CipherConfigDefaultPageSize];
+    [self setCipherKey:cipherKey andCipherPageSize:SQLITE_DEFAULT_PAGE_SIZE];
 }
 
 - (void)setCipherKey:(NSData*)cipherKey

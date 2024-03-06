@@ -683,7 +683,6 @@
 		03E1664627F42D6600D2C926 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E327F42D6500D2C926 /* Database.swift */; };
 		03E1664A27F42D6600D2C926 /* Recyclable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165E827F42D6500D2C926 /* Recyclable.swift */; };
 		03E1664C27F42D6600D2C926 /* WCDBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165EA27F42D6500D2C926 /* WCDBError.swift */; };
-		03E1665127F42D6600D2C926 /* WCDBBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EF27F42D6500D2C926 /* WCDBBridging.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		03E1665827F42D6600D2C926 /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165F627F42D6500D2C926 /* Optional.swift */; };
 		03E1665927F42D6600D2C926 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E165F727F42D6500D2C926 /* Convenience.swift */; };
 		03E1677327F434E900D2C926 /* TracerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E1672027F434E800D2C926 /* TracerTests.swift */; };
@@ -894,6 +893,7 @@
 		0DAD93C429FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DAD93C329FA2C4800E5788C /* TableChainCall+WCTTableCoding.swift */; };
 		0DAE11D428DC6CC6003FB63A /* WCDB.h in Headers */ = {isa = PBXBuildFile; fileRef = 0DAE11D328DC6CC6003FB63A /* WCDB.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0DAE11D528DC6D85003FB63A /* WCDBCpp.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E5CB0028A3513C005353D9 /* WCDBCpp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0DB806A32B972E2F00D5E86D /* WCTBridgeProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036E50C028116D7A007365CD /* WCTBridgeProperty.swift */; };
 		0DC98FD228E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
 		0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
 		0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
@@ -2812,7 +2812,6 @@
 		7521DD37291EA349009642EF /* ObjectBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E167B727F46C7100D2C926 /* ObjectBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD38291EA349009642EF /* StatementCreateTriggerBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75EB1A12287F10BF00AA62F7 /* StatementCreateTriggerBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD39291EA349009642EF /* UpsertBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AF02855C8BF00A7C43D /* UpsertBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		7521DD3A291EA349009642EF /* WCDBBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 03E165EF27F42D6500D2C926 /* WCDBBridging.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD3B291EA349009642EF /* FrameSpecBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 752594E4285226C00068A602 /* FrameSpecBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD3C291EA349009642EF /* PragmaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 75AF6AF92856303700A7C43D /* PragmaBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7521DD3E291EA349009642EF /* StatementInsertBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 03EE3DA9288165A700C8F0B3 /* StatementInsertBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -3218,6 +3217,8 @@
 		759362DF2B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
 		759362E02B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
 		759362E12B36D756000AF163 /* VacuumHandleOperator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */; };
+		759469342B98B03C00D8832B /* WCDBBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 759469332B98B03C00D8832B /* WCDBBridging.h */; };
+		759469352B98B03C00D8832B /* WCDBBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 759469332B98B03C00D8832B /* WCDBBridging.h */; };
 		7596162328BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7596162428BFB05100AE86BA /* CPPDeclaration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7596162228BFB05100AE86BA /* CPPDeclaration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		75A46C00284310CE00B58207 /* ColumnConstraintBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */; };
@@ -3821,7 +3822,6 @@
 		03E165E827F42D6500D2C926 /* Recyclable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recyclable.swift; sourceTree = "<group>"; };
 		03E165EA27F42D6500D2C926 /* WCDBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCDBError.swift; sourceTree = "<group>"; };
 		03E165EE27F42D6500D2C926 /* Lock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
-		03E165EF27F42D6500D2C926 /* WCDBBridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDBBridging.h; sourceTree = "<group>"; };
 		03E165F627F42D6500D2C926 /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		03E165F727F42D6500D2C926 /* Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		03E1670B27F434E800D2C926 /* InitializationBenchmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitializationBenchmark.swift; sourceTree = "<group>"; };
@@ -4992,6 +4992,7 @@
 		759362CE2B36D450000AF163 /* Vacuum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vacuum.hpp; sourceTree = "<group>"; };
 		759362D82B36D756000AF163 /* VacuumHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VacuumHandleOperator.cpp; sourceTree = "<group>"; };
 		759362D92B36D756000AF163 /* VacuumHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VacuumHandleOperator.hpp; sourceTree = "<group>"; };
+		759469332B98B03C00D8832B /* WCDBBridging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCDBBridging.h; sourceTree = "<group>"; };
 		7596162228BFB05100AE86BA /* CPPDeclaration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPPDeclaration.h; sourceTree = "<group>"; };
 		75A46BFE284310CE00B58207 /* ColumnConstraintBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ColumnConstraintBridge.cpp; sourceTree = "<group>"; };
 		75A46BFF284310CE00B58207 /* ColumnConstraintBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColumnConstraintBridge.h; sourceTree = "<group>"; };
@@ -5534,7 +5535,6 @@
 				036E50B628115AB8007365CD /* WCTBridgeProperty.h */,
 				036E50BA28115BA0007365CD /* WCTBridgeProperty+CPP.h */,
 				036E50B828115B1D007365CD /* WCTBridgeProperty.mm */,
-				036E50C028116D7A007365CD /* WCTBridgeProperty.swift */,
 				75CE3EFD2812D95100E132F6 /* WCTAPIBridge.h */,
 				75CE3EFF2812E1A400E132F6 /* WCTAPIBridge.mm */,
 			);
@@ -5585,7 +5585,6 @@
 				756A774227FAC1D900105B7C /* CoreBridge.cpp */,
 				750DC06A2913DE7300F19044 /* FTSBridge.h */,
 				750DC0692913DE7300F19044 /* FTSBridge.cpp */,
-				75E76AD329161EE400073CCA /* FTSBridge.swift */,
 				752CF3F7293A490F009ED8FB /* BindingBridge.h */,
 				752CF3F6293A490F009ED8FB /* BindingBridge.cpp */,
 			);
@@ -5960,7 +5959,7 @@
 		03E167B427F43CD900D2C926 /* bridge */ = {
 			isa = PBXGroup;
 			children = (
-				03E165EF27F42D6500D2C926 /* WCDBBridging.h */,
+				759469362B98B07900D8832B /* include */,
 				03E167B527F4446700D2C926 /* base */,
 				039760A927F5BB630071FA8F /* cppbridge */,
 				036E506728113C87007365CD /* objcbridge */,
@@ -5976,10 +5975,8 @@
 				03E167B727F46C7100D2C926 /* ObjectBridge.h */,
 				03E167B927F46E2E00D2C926 /* ObjectBridge.hpp */,
 				0397605727F54FA10071FA8F /* ObjectBridge.cpp */,
-				039760A727F563F00071FA8F /* ObjectBridge.swift */,
 				0393BEDB27F6ED860058B295 /* ErrorBridge.h */,
 				0393BEDF27F6EDAC0058B295 /* ErrorBridge.cpp */,
-				03C2EAEC27F8382200B41169 /* ErrorBridge.swift */,
 				75E0A5D52A7FE2A200D4FE9A /* ContainerBridge.h */,
 				75E0A5D42A7FE2A200D4FE9A /* ContainerBridge.cpp */,
 			);
@@ -6042,6 +6039,14 @@
 			path = integrity;
 			sourceTree = "<group>";
 		};
+		0D34967B2B9866DA0062B074 /* operationqueue */ = {
+			isa = PBXGroup;
+			children = (
+				232C6F00229C0A280046742F /* WCTOperationQueue.mm */,
+			);
+			path = operationqueue;
+			sourceTree = "<group>";
+		};
 		0D47A9742A6E27CF008E9E2C /* compatible */ = {
 			isa = PBXGroup;
 			children = (
@@ -6062,6 +6067,17 @@
 				0D5363EE290A75F20026A4DC /* Sequence.cpp */,
 			);
 			path = builtin;
+			sourceTree = "<group>";
+		};
+		0DB806A22B972E1A00D5E86D /* bridge */ = {
+			isa = PBXGroup;
+			children = (
+				039760A727F563F00071FA8F /* ObjectBridge.swift */,
+				03C2EAEC27F8382200B41169 /* ErrorBridge.swift */,
+				75E76AD329161EE400073CCA /* FTSBridge.swift */,
+				036E50C028116D7A007365CD /* WCTBridgeProperty.swift */,
+			);
+			path = bridge;
 			sourceTree = "<group>";
 		};
 		0DE08A1A29CBE79C009A7CA3 /* platform */ = {
@@ -6100,8 +6116,6 @@
 		232147001F6AAE6500BF7AF2 /* fts */ = {
 			isa = PBXGroup;
 			children = (
-				23577F771F74F4E800D31C05 /* WCTFTSTokenizerUtil.h */,
-				23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */,
 				2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */,
 				2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */,
 			);
@@ -6127,6 +6141,7 @@
 				757457022402D571005E3682 /* statement */,
 				758E7EC02B1B400F00319991 /* compression */,
 				236BACDF21BF9F5900C8B4D9 /* migration */,
+				0D34967B2B9866DA0062B074 /* operationqueue */,
 				234DBCFE2064DE04000E31E8 /* transaction */,
 				234DBCEB2064DD0B000E31E8 /* handle */,
 				232147001F6AAE6500BF7AF2 /* fts */,
@@ -6247,7 +6262,8 @@
 				23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */,
 				23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */,
 				2316D93521058B5500707AFC /* WCTFileManager.mm */,
-				232C6F00229C0A280046742F /* WCTOperationQueue.mm */,
+				23577F771F74F4E800D31C05 /* WCTFTSTokenizerUtil.h */,
+				23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */,
 				2370B1302191533C00D3227C /* WCTOptional.h */,
 				3995150622C2095B008394CC /* WCTOptional.mm */,
 				23F70F79209FF0EC00CCE3CD /* WCTValue.h */,
@@ -6402,7 +6418,6 @@
 			isa = PBXGroup;
 			children = (
 				234DBCFF2064DE04000E31E8 /* WCTDatabase+Transaction.h */,
-				234DBD002064DE04000E31E8 /* WCTDatabase+Transaction.mm */,
 				234DBD012064DE04000E31E8 /* WCTHandle+Transaction.h */,
 				234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */,
 				234DBD072064DE23000E31E8 /* WCTTransaction.h */,
@@ -6822,6 +6837,7 @@
 		234F074E227AAE7100DD65A2 /* swift */ = {
 			isa = PBXGroup;
 			children = (
+				0DB806A22B972E1A00D5E86D /* bridge */,
 				03E1670827F434E800D2C926 /* tests */,
 				03E1658E27F42D6500D2C926 /* winq */,
 				03E165BC27F42D6500D2C926 /* builtin */,
@@ -6863,6 +6879,7 @@
 		236BACDF21BF9F5900C8B4D9 /* migration */ = {
 			isa = PBXGroup;
 			children = (
+				234DBD002064DE04000E31E8 /* WCTDatabase+Transaction.mm */,
 				236BACE021BF9F6400C8B4D9 /* WCTDatabase+Migration.h */,
 				236BACE121BF9F6400C8B4D9 /* WCTDatabase+Migration.mm */,
 				236BACE421BF9FC900C8B4D9 /* WCTMigrationInfo.h */,
@@ -7834,6 +7851,14 @@
 			path = vacuum;
 			sourceTree = "<group>";
 		};
+		759469362B98B07900D8832B /* include */ = {
+			isa = PBXGroup;
+			children = (
+				759469332B98B03C00D8832B /* WCDBBridging.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		75B69889290AD0A9006E1F8F /* auxfunction */ = {
 			isa = PBXGroup;
 			children = (
@@ -8355,6 +8380,7 @@
 				2370B11F21914ED500D3227C /* NSObject+WCTColumnCoding.h in Headers */,
 				39579858227FBC8A0069F985 /* WCTDatabase+Test.h in Headers */,
 				391F7C84225DE8FD0095E82D /* Core.h in Headers */,
+				759469342B98B03C00D8832B /* WCDBBridging.h in Headers */,
 				2360A5FB20D78F1B00E4A311 /* HandleNotification.hpp in Headers */,
 				23EEDD36217DFADC006E9E73 /* SyntaxCreateTableSTMT.hpp in Headers */,
 				23EEDD46217DFADC006E9E73 /* SyntaxDropTriggerSTMT.hpp in Headers */,
@@ -8632,7 +8658,6 @@
 				03E167B827F46C7100D2C926 /* ObjectBridge.h in Headers */,
 				75EB1A14287F10BF00AA62F7 /* StatementCreateTriggerBridge.h in Headers */,
 				75AF6AF22855C8BF00A7C43D /* UpsertBridge.h in Headers */,
-				03E1665127F42D6600D2C926 /* WCDBBridging.h in Headers */,
 				752594E6285226C00068A602 /* FrameSpecBridge.h in Headers */,
 				75AF6AFB2856303700A7C43D /* PragmaBridge.h in Headers */,
 				75CE3EFE2812D95100E132F6 /* WCTAPIBridge.h in Headers */,
@@ -9200,6 +9225,7 @@
 				7521DC39291EA349009642EF /* Syntax.h in Headers */,
 				7521DC3A291EA349009642EF /* SyntaxAttachSTMT.hpp in Headers */,
 				0DE84AD52B03295400522A4E /* FunctionContainer.hpp in Headers */,
+				759469352B98B03C00D8832B /* WCDBBridging.h in Headers */,
 				7521DC3B291EA349009642EF /* CommonTableExpression.hpp in Headers */,
 				7521DC3C291EA349009642EF /* ValueArray.hpp in Headers */,
 				7521DC3E291EA349009642EF /* Console.hpp in Headers */,
@@ -9390,7 +9416,6 @@
 				7521DD37291EA349009642EF /* ObjectBridge.h in Headers */,
 				7521DD38291EA349009642EF /* StatementCreateTriggerBridge.h in Headers */,
 				7521DD39291EA349009642EF /* UpsertBridge.h in Headers */,
-				7521DD3A291EA349009642EF /* WCDBBridging.h in Headers */,
 				7521DD3B291EA349009642EF /* FrameSpecBridge.h in Headers */,
 				7521DD3C291EA349009642EF /* PragmaBridge.h in Headers */,
 				7521DD3E291EA349009642EF /* StatementInsertBridge.h in Headers */,
@@ -11843,6 +11868,7 @@
 				7521DB94291EA349009642EF /* StatementInterface.swift in Sources */,
 				7521DB95291EA349009642EF /* StatementAnalyze.swift in Sources */,
 				7521DB96291EA349009642EF /* StatementBegin.swift in Sources */,
+				0DB806A32B972E2F00D5E86D /* WCTBridgeProperty.swift in Sources */,
 				7521DB97291EA349009642EF /* StatementSavepointBridge.cpp in Sources */,
 				7521DB98291EA349009642EF /* Handle.swift in Sources */,
 				7521DB99291EA349009642EF /* Console.cpp in Sources */,

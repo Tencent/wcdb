@@ -23,6 +23,7 @@
  */
 
 #include "ErrorBridge.h"
+#include "Assertion.hpp"
 #include "CoreConst.h"
 #include "ErrorProne.hpp"
 #include "Notifier.hpp"

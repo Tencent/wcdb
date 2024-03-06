@@ -59,28 +59,29 @@ internal final class Mutex: Lockable {
     }
 }
 
-internal final class RecursiveMutex: Lockable {
-    private var mutex = pthread_mutex_t()
-
-    internal init() {
-        var attr = pthread_mutexattr_t()
-        pthread_mutexattr_init(&attr)
-        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE)
-        pthread_mutex_init(&mutex, &attr)
-    }
-
-    deinit {
-        pthread_mutex_destroy(&mutex)
-    }
-
-    internal func lock() {
-        pthread_mutex_lock(&mutex)
-    }
-
-    internal func unlock() {
-        pthread_mutex_unlock(&mutex)
-    }
-}
+// internal final class RecursiveMutex: Lockable {
+//    private var mutex = pthread_mutex_t()
+//
+//    internal init() {
+//        // No idea why this line can cause compile failure in SwiftPM.
+//        var attr = pthread_mutexattr_t()
+//        pthread_mutexattr_init(&attr)
+//        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE)
+//        pthread_mutex_init(&mutex, &attr)
+//    }
+//
+//    deinit {
+//        pthread_mutex_destroy(&mutex)
+//    }
+//
+//    internal func lock() {
+//        pthread_mutex_lock(&mutex)
+//    }
+//
+//    internal func unlock() {
+//        pthread_mutex_unlock(&mutex)
+//    }
+// }
 
 internal final class Spin: Lockable {
     private let locker: Lockable

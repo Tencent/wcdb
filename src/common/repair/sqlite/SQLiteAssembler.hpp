@@ -86,3 +86,5 @@ protected:
 } //namespace Repair
 
 } //namespace WCDB
+
+#endif /* WCDB_USE_BUILTIN_SQLITE_REPAIR */

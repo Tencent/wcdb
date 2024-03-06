@@ -26,7 +26,6 @@
 #include "Column.hpp"
 #include "Expression.hpp"
 #include "LiteralValue.hpp"
-#include "ObjectBridge.hpp"
 #include "Recyclable.hpp"
 #include "SQL.hpp"
 #include "Schema.hpp"
