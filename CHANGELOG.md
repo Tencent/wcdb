@@ -7,6 +7,7 @@
 * Support to use std::optional and std::shared_ptr in C++ ORM
 * C++ ORM supports inheritance
 * Add more monitoring capabilities
+* WCDB Swift supports Swift Package Manager
 
 ## v2.0.4
 
