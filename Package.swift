@@ -15,7 +15,7 @@ let package = Package(
         .library(name: "WCDBSwiftDynamic", type: .dynamic, targets: ["WCDBSwift"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Tencent/sqlcipher", revision: "d154965f2684332402ad49531c90ea9d3c21938d")
+        .package(url: "https://github.com/Tencent/sqlcipher", .exactItem("1.4.3"))
     ],
     targets: [
         .target(
