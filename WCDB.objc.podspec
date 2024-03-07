@@ -23,8 +23,6 @@ Pod::Spec.new do |wcdb|
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.public_header_files = [
   	"src/objc/WCDBObjc.h", 
-	"src/bridge/objcbridge/WCTBridgeProperty.h", 
-	"src/bridge/objcbridge/WCTBridgeProperty+Cpp.h", 
 	"src/objc/Interface.h", 
 	"src/objc/core/*.{h,hpp}", 
 	"src/objc/builtin/*.{h,hpp}", 
@@ -40,7 +38,6 @@ Pod::Spec.new do |wcdb|
 	"src/objc/fts/*.{h,hpp}", 
 	"src/objc/monitor/WCTError.h", 
 	"src/objc/monitor/WCTDatabase+Monitor.h", 
-	"src/objc/chaincall/WCTError.h", 
 	"src/objc/chaincall/WCTInsert.h", 
 	"src/objc/chaincall/WCTDelete.h", 
 	"src/objc/chaincall/WCTUpdate.h", 
@@ -51,14 +48,12 @@ Pod::Spec.new do |wcdb|
 	"src/objc/chaincall/WCTTable+ChainCall.h", 
 	"src/objc/chaincall/WCTDatabase+ChainCall.h", 
 	"src/objc/chaincall/WCTChainCall.h", 
-	"src/objc/chaincall/WCTTryDisposeGuard.h", 
 	"src/objc/convenient/*.{h,hpp}", 
 	"src/objc/database/WCTDatabase.h", 
 	"src/objc/database/WCTDatabase+File.h", 
 	"src/objc/database/WCTDatabase+Repair.h", 
 	"src/objc/database/WCTDatabase+Config.h", 
 	"src/objc/database/WCTDatabase+Memory.h", 
-	"src/objc/database/WCTTryDisposeGuard.h", 
 	"src/objc/orm/*.{h,hpp}", 
 	"src/objc/orm/**/*.{h,hpp}", 
 	"src/objc/table/WCTTable.h", 
@@ -66,6 +61,8 @@ Pod::Spec.new do |wcdb|
 	"src/objc/table/WCTTable+Table.h", 
 	"src/objc/table/WCTDatabase+Table.h", 
 	"src/objc/table/WCTHandle+Table.h", 
+	"src/objc/bridge/WCTBridgeProperty.h", 
+	"src/objc/bridge/WCTBridgeProperty+Cpp.h", 
 	"src/common/winq/*.{h,hpp}", 
 	"src/common/winq/**/*.{h,hpp}", 
 	"src/common/platform/SysTypes.h", 
@@ -96,9 +93,6 @@ Pod::Spec.new do |wcdb|
   wcdb.source_files  = [
   	"src/common/**/*.{h,hpp,c,cpp}", 
 	"src/objc/**/*.{h,hpp,c,cpp,m,mm}", 
-	"src/bridge/objcbridge/WCTBridgeProperty.mm", 
-	"src/bridge/objcbridge/WCTBridgeProperty.h", 
-	"src/bridge/objcbridge/WCTBridgeProperty+Cpp.h"
   ]
   wcdb.exclude_files = [
   	"src/common/platform/WCTFileManager.cpp", 

@@ -74,8 +74,6 @@ let package = Package(
             path: "src/bridge",
             exclude: [
                 "tests",
-                "objcbridge/WCTBridgeProperty+CPP.h",
-                "objcbridge/WCTBridgeProperty.mm"
             ],
             cSettings: [
                 .headerSearchPath("../**")

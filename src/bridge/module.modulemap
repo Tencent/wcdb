@@ -1,0 +1,5 @@
+module WCDB_Private {
+    requires objc
+    umbrella header "WCDBBridging.h"
+    export *
+}

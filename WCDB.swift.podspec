@@ -47,8 +47,6 @@ Pod::Spec.new do |wcdb|
 	"src/common/platform/WCTFileManager.cpp",
 	"src/common/platform/WCTOperationQueue.cpp",
 	"src/common/core/operate/OperationQueueForMemory.cpp",
-	"src/bridge/objcbridge/WCTBridgeProperty+CPP.h",
-	"src/bridge/objcbridge/WCTBridgeProperty.mm"
   ]
   wcdb.requires_arc = true
   wcdb.preserve_path = "src/support/WCDBSwift.modulemap"
