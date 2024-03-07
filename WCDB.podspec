@@ -71,6 +71,7 @@ Pod::Spec.new do |wcdb|
 	"src/common/utility/Macro.h", 
 	"src/common/utility/CaseInsensitiveList.hpp", 
 	"src/common/core/function/scalar/ScalarFunctionModule.hpp", 
+	"src/common/core/function/scalar/ScalarFunctionTemplate.hpp", 
 	"src/common/core/fts/FTSConst.h", 
 	"src/common/core/fts/tokenizer/TokenizerModule.hpp", 
 	"src/common/core/fts/tokenizer/TokenizerModuleTemplate.hpp", 
