@@ -7,7 +7,7 @@ framework module WCDB {
         requires cplusplus17
     }
 
-	module BridgeHeader [extern_c] {
+	module BridgeHeader {
         header "WCTBridgeMacro.h"
         header "WCTBridgeProperty.h"
         header "WCTDeclaration.h"
@@ -23,7 +23,7 @@ framework module WCDB {
 framework module WCDB_Private {
     requires objc
 
-    module BridgeHeader [extern_c] {
+    module BridgeHeader {
         umbrella header "WCDBBridging.h"
         export *
     }
