@@ -24,29 +24,30 @@ Pod::Spec.new do |wcdb|
   wcdb.private_header_files = "src/bridge/**/*.{h}"
   wcdb.source_files  = [
   	"src/swift/**/*.{swift}",
-	"src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}",
-	"src/common/**/*.{swift,h,hpp,c,cpp,m,mm}",
-	"src/objc/core/WCTFileManager.mm",
-	"src/objc/core/WCTFoundation.h",
-	"src/objc/core/WCTFoundation.mm",
-	"src/objc/core/WCTFTSTokenizerUtil.h",
-	"src/objc/core/WCTFTSTokenizerUtil.mm",
-	"src/objc/core/WCTDeclaration.h",
-	"src/objc/core/WCTValue.h",
-	"src/objc/orm/coding/WCTColumnCoding.h",
-	"src/objc/orm/macro/WCTPropertyMacro.h",
-	"src/objc/orm/coding/WCTTableCoding.h",
-	"src/objc/core/WCTConvertible.h",
-	"src/objc/core/WCTCommon.h",
-	"src/objc/core/WCTOptional.h",
-	"src/objc/core/WCTTag.h"
+  	"src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}",
+  	"src/common/**/*.{swift,h,hpp,c,cpp,m,mm}",
+  	"src/objc/core/WCTFileManager.mm",
+  	"src/objc/core/WCTFoundation.h",
+  	"src/objc/core/WCTFoundation.mm",
+  	"src/objc/core/WCTFTSTokenizerUtil.h",
+  	"src/objc/core/WCTFTSTokenizerUtil.mm",
+  	"src/objc/core/WCTDeclaration.h",
+  	"src/objc/core/WCTValue.h",
+  	"src/objc/orm/coding/WCTColumnCoding.h",
+  	"src/objc/orm/macro/WCTPropertyMacro.h",
+  	"src/objc/orm/coding/WCTTableCoding.h",
+  	"src/objc/core/WCTConvertible.h",
+  	"src/objc/core/WCTCommon.h",
+  	"src/objc/core/WCTOptional.h",
+  	"src/objc/core/WCTTag.h"
   ]
   wcdb.exclude_files = [
   	"src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
-	"src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
-	"src/common/platform/WCTFileManager.cpp",
-	"src/common/platform/WCTOperationQueue.cpp",
-	"src/common/core/operate/OperationQueueForMemory.cpp",
+  	"src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
+    "src/bridge/include/**/*.{swift,h,hpp,c,cpp,m,mm}",
+  	"src/common/platform/WCTFileManager.cpp",
+  	"src/common/platform/WCTOperationQueue.cpp",
+  	"src/common/core/operate/OperationQueueForMemory.cpp",
   ]
   wcdb.requires_arc = true
   wcdb.preserve_path = "src/support/WCDBSwift.modulemap"
@@ -56,9 +57,9 @@ Pod::Spec.new do |wcdb|
   wcdb.subspec 'no-arc' do |sna|
     sna.requires_arc = false
     sna.source_files = [
-    	"src/objc/core/WCTOperationQueue.mm", 
-		"src/common/core/operate/OperationQueueForMemory.cpp", 
-		"src/common/core/operate/OperationQueueForMemory.hpp"
+      "src/objc/operationqueue/WCTOperationQueue.mm", 
+      "src/common/core/operate/OperationQueueForMemory.cpp", 
+      "src/common/core/operate/OperationQueueForMemory.hpp"
     ]
   end
   wcdb.pod_target_xcconfig = { 
@@ -84,6 +85,7 @@ Pod::Spec.new do |wcdb|
     "VALID_ARCHS[sdk=watchos*]" => "arm64_32 arm64 x86_64",
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
+    "OTHER_SWIFT_FLAGS" => "-no-verify-emitted-module-interface",
   }
   wcdb.swift_versions = '5'
   wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.3'

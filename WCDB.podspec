@@ -118,12 +118,13 @@ Pod::Spec.new do |wcdb|
 	"src/cpp/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
 	"src/objc/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
 	"src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
-	"src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}"
+	"src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
+	"src/bridge/include/**/*.{swift,h,hpp,c,cpp,m,mm}",
   ]
   wcdb.subspec 'no-arc' do |sna|
     sna.requires_arc = false
     sna.source_files = [
-    	"src/objc/core/WCTOperationQueue.mm", 
+		"src/objc/operationqueue/WCTOperationQueue.mm", 
 		"src/common/core/operate/OperationQueueForMemory.cpp", 
 		"src/common/core/operate/OperationQueueForMemory.hpp"
     ]
@@ -156,6 +157,7 @@ Pod::Spec.new do |wcdb|
     "VALID_ARCHS[sdk=watchos*]" => "arm64_32 arm64 86_64",
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
+    "OTHER_SWIFT_FLAGS" => "-no-verify-emitted-module-interface",
     "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "WCDB_SWIFT_BRIDGE_OBJC",
   }
   wcdb.header_dir = "WCDB"

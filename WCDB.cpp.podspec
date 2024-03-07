@@ -61,16 +61,16 @@ Pod::Spec.new do |wcdb|
   ]
   wcdb.exclude_files = [
   	"src/cpp/tests/**/*.{h,hpp,c,cpp}",
-	"src/common/platform/WCTFileManager.cpp",
-	"src/common/platform/WCTOperationQueue.cpp",
-	"src/common/core/operate/OperationQueueForMemory.cpp"
+  	"src/common/platform/WCTFileManager.cpp",
+  	"src/common/platform/WCTOperationQueue.cpp",
+  	"src/common/core/operate/OperationQueueForMemory.cpp"
   ]
   wcdb.subspec 'no-arc' do |sna|
     sna.requires_arc = false
     sna.source_files = [
-    	"src/objc/core/WCTOperationQueue.mm", 
-		"src/common/core/operate/OperationQueueForMemory.cpp", 
-		"src/common/core/operate/OperationQueueForMemory.hpp"
+      "src/objc/operationqueue/WCTOperationQueue.mm", 
+      "src/common/core/operate/OperationQueueForMemory.cpp", 
+      "src/common/core/operate/OperationQueueForMemory.hpp"
     ]
   end
   wcdb.frameworks = "CoreFoundation", "Security", "Foundation"
