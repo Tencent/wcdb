@@ -1665,6 +1665,7 @@
 		750DC06E2913DE7300F19044 /* FTSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 750DC06A2913DE7300F19044 /* FTSBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		7511EA50293CDAFB00FB033B /* NewPropertyObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7511EA4F293CDAFB00FB033B /* NewPropertyObject.mm */; };
 		75195E812852454700EC8C1F /* FrameSpecTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75195E802852454700EC8C1F /* FrameSpecTests.swift */; };
+		751BFFCD2B9A31BD00B63FD3 /* WCTBridgeProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 036E50B828115B1D007365CD /* WCTBridgeProperty.mm */; };
 		751CA67728C64B7B00874A7A /* CPPAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 751CA67528C64B7B00874A7A /* CPPAllTypesObject.mm */; };
 		751FE4E72B1E10F200BFC7AD /* CompressingCRUDTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 751FE4E62B1E10F200BFC7AD /* CompressingCRUDTest.mm */; };
 		75204AE8283FD6DC0002E40C /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75204AE7283FD6DC0002E40C /* Schema.swift */; };
@@ -11382,6 +11383,7 @@
 				7521D778291E9ABB009642EF /* FactoryRetriever.cpp in Sources */,
 				7521D779291E9ABB009642EF /* WCTPreparedStatement.mm in Sources */,
 				7521D77B291E9ABB009642EF /* StatementRollback.cpp in Sources */,
+				751BFFCD2B9A31BD00B63FD3 /* WCTBridgeProperty.mm in Sources */,
 				0DE84C7E2B03886800522A4E /* DecorativeHandleStatement.cpp in Sources */,
 				7521D77C291E9ABB009642EF /* Exiting.cpp in Sources */,
 				7521D77E291E9ABB009642EF /* NSNull+WCTColumnCoding.mm in Sources */,
