@@ -22,8 +22,34 @@ Pod::Spec.new do |wcdb|
   wcdb.tvos.deployment_target = "12.4"
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
   wcdb.private_header_files = "src/bridge/**/*.{h}"
-  wcdb.source_files  = "src/swift/**/*.{swift}", "src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/objc/core/WCTFileManager.mm", "src/objc/core/WCTFoundation.h", "src/objc/core/WCTFoundation.mm", "src/objc/core/WCTFTSTokenizerUtil.h", "src/objc/core/WCTFTSTokenizerUtil.mm", "src/objc/core/WCTDeclaration.h", "src/objc/core/WCTValue.h", "src/objc/orm/coding/WCTColumnCoding.h", "src/objc/orm/macro/WCTPropertyMacro.h", "src/objc/orm/coding/WCTTableCoding.h", "src/objc/core/WCTConvertible.h", "src/objc/core/WCTCommon.h", "src/objc/core/WCTOptional.h", "src/objc/core/WCTTag.h"
-  wcdb.exclude_files = "src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}", "src/common/platform/WCTFileManager.cpp", "src/common/platform/WCTOperationQueue.cpp", "src/common/core/operate/OperationQueueForMemory.cpp", "src/bridge/objcbridge/WCTBridgeProperty+CPP.h", "src/bridge/objcbridge/WCTBridgeProperty.mm"
+  wcdb.source_files  = [
+  	"src/swift/**/*.{swift}",
+	"src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}",
+	"src/common/**/*.{swift,h,hpp,c,cpp,m,mm}",
+	"src/objc/core/WCTFileManager.mm",
+	"src/objc/core/WCTFoundation.h",
+	"src/objc/core/WCTFoundation.mm",
+	"src/objc/core/WCTFTSTokenizerUtil.h",
+	"src/objc/core/WCTFTSTokenizerUtil.mm",
+	"src/objc/core/WCTDeclaration.h",
+	"src/objc/core/WCTValue.h",
+	"src/objc/orm/coding/WCTColumnCoding.h",
+	"src/objc/orm/macro/WCTPropertyMacro.h",
+	"src/objc/orm/coding/WCTTableCoding.h",
+	"src/objc/core/WCTConvertible.h",
+	"src/objc/core/WCTCommon.h",
+	"src/objc/core/WCTOptional.h",
+	"src/objc/core/WCTTag.h"
+  ]
+  wcdb.exclude_files = [
+  	"src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
+	"src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
+	"src/common/platform/WCTFileManager.cpp",
+	"src/common/platform/WCTOperationQueue.cpp",
+	"src/common/core/operate/OperationQueueForMemory.cpp",
+	"src/bridge/objcbridge/WCTBridgeProperty+CPP.h",
+	"src/bridge/objcbridge/WCTBridgeProperty.mm"
+  ]
   wcdb.requires_arc = true
   wcdb.preserve_path = "src/support/WCDBSwift.modulemap"
   wcdb.module_map = "src/support/WCDBSwift.modulemap"
@@ -31,10 +57,24 @@ Pod::Spec.new do |wcdb|
   wcdb.libraries = "z", "c++"
   wcdb.subspec 'no-arc' do |sna|
     sna.requires_arc = false
-    sna.source_files = "src/objc/operationqueue/WCTOperationQueue.mm", "src/common/core/operate/OperationQueueForMemory.cpp", "src/common/core/operate/OperationQueueForMemory.hpp"
+    sna.source_files = [
+    	"src/objc/core/WCTOperationQueue.mm", 
+		"src/common/core/operate/OperationQueueForMemory.cpp", 
+		"src/common/core/operate/OperationQueueForMemory.hpp"
+    ]
   end
   wcdb.pod_target_xcconfig = { 
-    "GCC_PREPROCESSOR_DEFINITIONS" => "SQLITE_WCDB=1 SQLITE_WCDB_LOCK_HOOK=1 SQLITE_WCDB_CHECKPOINT_HANDLER=1 SQLITE_WCDB_SUSPEND=1 SQLITE_WCDB_IMPROVED_CHECKPOINT=1 SQLITE_HAS_CODEC SQLITE_DEFAULT_PAGE_SIZE=4096 SQLITE_DEFAULT_SYNCHRONOUS=1 SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 SQLITE_DEFAULT_LOCKING_MODE=0 SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0",
+    "GCC_PREPROCESSOR_DEFINITIONS" =>   "SQLITE_WCDB=1 " +
+										"SQLITE_WCDB_LOCK_HOOK=1 " +
+										"SQLITE_WCDB_CHECKPOINT_HANDLER=1 " +
+										"SQLITE_WCDB_SUSPEND=1 " +
+										"SQLITE_WCDB_IMPROVED_CHECKPOINT=1 " +
+										"SQLITE_HAS_CODEC " +
+										"SQLITE_DEFAULT_PAGE_SIZE=4096 " +
+										"SQLITE_DEFAULT_SYNCHRONOUS=1 " +
+										"SQLITE_DEFAULT_WAL_SYNCHRONOUS=1 " +
+										"SQLITE_DEFAULT_LOCKING_MODE=0 " +
+										"SQLITE_DEFAULT_WAL_AUTOCHECKPOINT=0",
     'SWIFT_WHOLE_MODULE_OPTIMIZATION' => 'YES',
     'APPLICATION_EXTENSION_API_ONLY' => 'YES',
     "HEADER_SEARCH_PATHS" => "${PODS_ROOT}/WCDBSwift",
