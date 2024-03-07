@@ -39,6 +39,7 @@ Pod::Spec.new do |wcdb|
 	"src/objc/fts/*.{h,hpp}", 
 	"src/objc/monitor/WCTError.h", 
 	"src/objc/monitor/WCTDatabase+Monitor.h", 
+	"src/objc/monitor/WCTPerformanceInfo.h", 
 	"src/objc/chaincall/WCTInsert.h", 
 	"src/objc/chaincall/WCTDelete.h", 
 	"src/objc/chaincall/WCTUpdate.h", 
