@@ -8,7 +8,7 @@
 
 中文版本请参看[这里][wcdb-wiki]
 
-WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework used in the WeChat application. It's based on SQLite and SQLCipher, and supports three languages: C++, Swift and Objective-C.
+WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framework used in the WeChat application. It's based on SQLite and SQLCipher, and supports five languages: C++, Java, Kotlin, Swift and Objective-C.
 
 # Feature
 
@@ -25,6 +25,22 @@ database.insertObjects<Sample>(Sample(1, "text"), myTable);
 database.updateRow("text2", WCDB_FIELD(Sample::content), myTable, WCDB_FIELD(Sample::id) == 1);
 auto objects = database.getAllObjects<Sample>(myTable, WCDB_FIELD(Sample::id) > 0);
 database.deleteObjects(myTable, WCDB_FIELD(Sample::id) == 1);
+```
+
+```java
+// Java
+database.insertObject(new Sample(1, "text"), DBSample.allFields(), myTable);
+database.updateValue("text2", DBSample.content, myTable, DBSample.id.eq(1));
+List<Sample> objects = database.getAllObjects(DBSample.allFields(), myTable, DBSample.id.gt(0));
+database.deleteObjects(myTable, DBSample.id.eq(1));
+```
+
+```kotlin
+// Kotlin
+database.insertObject<Sample>(Sample(1, "text"), DBSample.allFields(), myTable)
+database.updateValue("text2", DBSample.content, myTable, DBSample.id.eq(1))
+val objects = database.getAllObjects<Sample>(DBSample.allFields(), myTable, DBSample.id.gt(0))
+database.deleteObjects(myTable, DBSample.id.eq(1))
 ```
 
 ```swift
@@ -69,22 +85,22 @@ WCDB summarizes common problems in practice to provide a more complete developme
 * **Database model upgrade**: The database model is bound to the class definition, so that the addition, deletion and modification of database fields are consistent with the definition of class variables.
 * **Full-text search**: WCDB provides an easy-to-use full-text search interface and includes tokenizers for multiple languages.
 * **Data Migration**: WCDB supports to migrate data from one databasse to another with simple configuration. And developers don't need to care about the intermediate status and progress of the migration.
+* **Data Compression**: WCDB supports to compress content with Zstd within specific fields of a database table through a simple configuration. Once configed, the details of data compression and decompression become transparent to developers, and WCDB can automatically compress existing data.
 
 ## **Compatibility**
 
-WCDB has interfaces in three languages: C++, Swift, and Objc. Interfaces in different languages share the same underlying logic. The code structure of WCDB is shown in the figure below:
+WCDB has interfaces in three languages: C++, Java, Kotlin, Swift, and Objc. Interfaces in different languages share the same underlying logic. The code structure of WCDB is shown in the figure below:
 
 <div align=center><img style="display:inline-block" src="https://raw.githubusercontent.com/wiki/Tencent/wcdb/assets/common/CodeStructure-English.png" width = 600/></div>
 
 Under such architecture, WCDB in different languages can have the same interface structure and interface capabilities. In one project, you can write database code in different languages with one WCDB. Database logic in different languages will not conflict. Some global interfaces such as error monitoring can work on database logic in different languages at the same time. 
-
-We will add more language support to WCDB in the near future, such as **Java**, **Kotlin**, **Flutter**, so that WCDB can be applied to more platforms.
 
 # Build and Install
 
 Following wikies contain the detailed instructions about building and installing of WCDB.
 
 * [Building and Installing of WCDB C++][wcdb-cpp-build-and-install]
+* [Building and Installing of WCDB Java/Kotlin][wcdb-java-build-and-install]
 * [Building and Installing of WCDB Swift][wcdb-swift-build-and-install]
 * [Building and Installing of WCDB Objc][wcdb-objc-build-and-install]
 
@@ -93,6 +109,7 @@ Following wikies contain the detailed instructions about building and installing
 Tutorials of different languages can be found below:
 
 * [Tutorials for WCDB C++][wcdb-cpp-tutorials]
+* [Tutorials for WCDB Java/Kotlin][wcdb-java-tutorials]
 * [Tutorials for WCDB Swift][wcdb-swift-tutorials]
 * [Tutorials for WCDB Objc][wcdb-objc-tutorials]
 
@@ -111,9 +128,11 @@ If you are interested in contributing, check out the [CONTRIBUTING.md], also joi
 [room]: https://developer.android.com/topic/libraries/architecture/room
 [room-codelabs]: https://codelabs.developers.google.com/codelabs/android-room-with-a-view
 [wcdb-cpp-build-and-install]: https://github.com/Tencent/wcdb/wiki/C++-%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%BC%E5%AE%B9%E6%80%A7
+[wcdb-java-build-and-install]:https://github.com/Tencent/wcdb/wiki/Java%7CKotlin-%e5%ae%89%e8%a3%85%e4%b8%8e%e5%85%bc%e5%ae%b9%e6%80%a7
 [wcdb-objc-build-and-install]:https://github.com/Tencent/wcdb/wiki/Objc-%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%BC%E5%AE%B9%E6%80%A7
 [wcdb-swift-build-and-install]: https://github.com/Tencent/wcdb/wiki/Swift-%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%BC%E5%AE%B9%E6%80%A7
 [wcdb-cpp-tutorials]:https://github.com/Tencent/wcdb/wiki/C++-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8
+[wcdb-java-tutorials]:https://github.com/Tencent/wcdb/wiki/Java%7CKotlin-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8
 [wcdb-swift-tutorials]:https://github.com/Tencent/wcdb/wiki/Swift-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8
 [wcdb-objc-tutorials]:https://github.com/Tencent/wcdb/wiki/Objc-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8
 [Benchmark-iOS]: https://github.com/Tencent/wcdb/wiki/WCDB-iOS-benchmark
