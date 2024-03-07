@@ -14,7 +14,7 @@ WCDB is an **efficient**, **complete**, **easy-to-use** mobile database framewor
 
 ## **Easy-to-use**
 
-* **ORM** (Object Relational Mapping): WCDB provides a flexible, easy-to-use ORM for creating tables, indices and constraints, as well as CRUD through C++/Swift/Objc objects.
+* **ORM** (Object Relational Mapping): WCDB provides a flexible, easy-to-use ORM for creating tables, indices and constraints, as well as CRUD through C++/Java/Kotlin/Swift/Objc objects.
 * **WINQ** (WCDB language integrated query): WINQ is a native data querying capability which frees developers from writing glue code to concatenate SQL query strings.
 
 With ORM and WINQ, you can insert, update, query and delete objects from database in one line code: 
