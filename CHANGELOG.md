@@ -1,4 +1,4 @@
-## v2.1.0。5
+## v2.1.1
 
 * Some bugfix for WCDB C++ and WCDB Swift
 
