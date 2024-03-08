@@ -1,3 +1,7 @@
+## v2.1.0。5
+
+* Some bugfix for WCDB C++ and WCDB Swift
+
 ## v2.1.0
 
 * Add WCDB Java/Kotlin
