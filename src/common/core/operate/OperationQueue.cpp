@@ -203,7 +203,7 @@ OperationQueue::Parameter::Parameter()
 
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
 {
-    executeOperationWithAutoMemoryRelease([&](){
+    executeOperationWithAutoMemoryRelease([&]() {
         if (operation.type != Operation::Type::NotifyCorruption) {
             Core::shared().setThreadedErrorIgnorable(true);
         }
