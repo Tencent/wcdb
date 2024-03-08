@@ -69,7 +69,7 @@ public:
 
     virtual void reset();
     WCDBAssertFunctionTypeConsistent(HandleStatementDecorator, HandleStatement, reset);
-    
+
     virtual void clearBindings();
     WCDBAssertFunctionTypeConsistent(HandleStatementDecorator, HandleStatement, clearBindings);
 

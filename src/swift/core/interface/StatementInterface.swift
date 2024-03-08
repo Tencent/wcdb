@@ -38,7 +38,7 @@ public protocol StatementInterface: AnyObject {
 
     /// The wrapper of `sqlite3_reset`
     func reset() throws
-    
+
     /// The wrapper of `sqlite3_clear_bindings`
     func clearBindings() throws
 
@@ -228,7 +228,7 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
     public func reset() {
         WCDBHandleStatementReset(getRawStatement())
     }
-    
+
     public func clearBindings() {
         WCDBHandleStatementClearBindings(getRawStatement())
     }

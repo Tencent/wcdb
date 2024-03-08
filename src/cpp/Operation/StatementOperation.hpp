@@ -70,7 +70,7 @@ public:
      @brief The wrapper of `sqlite3_reset`.
      */
     void reset();
-    
+
     /**
      @brief The wrapper of `sqlite3_clear_bindings`.
      */

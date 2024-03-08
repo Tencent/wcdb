@@ -258,7 +258,7 @@ extension Table: UpdateTableInterface where Root: TableEncodable {
                           limit: limit,
                           offset: offset)
     }
-    
+
     /// Execute updating with row on specific(or all) properties.
     ///
     /// - Parameters:
@@ -282,7 +282,7 @@ extension Table: UpdateTableInterface where Root: TableEncodable {
                           limit: limit,
                           offset: offset)
     }
-    
+
     /// Execute updating with row on specific(or all) properties.
     ///
     /// - Parameters:
