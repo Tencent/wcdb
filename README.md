@@ -85,7 +85,7 @@ WCDB summarizes common problems in practice to provide a more complete developme
 * **Database model upgrade**: The database model is bound to the class definition, so that the addition, deletion and modification of database fields are consistent with the definition of class variables.
 * **Full-text search**: WCDB provides an easy-to-use full-text search interface and includes tokenizers for multiple languages.
 * **Data Migration**: WCDB supports to migrate data from one databasse to another with simple configuration. And developers don't need to care about the intermediate status and progress of the migration.
-* **Data Compression**: WCDB supports to compress content with Zstd within specific fields of a database table through a simple configuration. Once configed, the details of data compression and decompression become transparent to developers, and WCDB can automatically compress existing data.
+* **Data Compression**: WCDB supports to compress content via [Zstd][Zstd] within specific fields of a database table through a simple configuration. Once configed, the details of data compression and decompression become transparent to developers, and WCDB can automatically compress existing data.
 
 ## **Compatibility**
 
@@ -125,6 +125,8 @@ If you are interested in contributing, check out the [CONTRIBUTING.md], also joi
 
 [wcdb-wiki]: https://github.com/Tencent/wcdb/wiki
 [wcdb-docs-android]: https://tencent.github.io/wcdb/references/android/index.html
+[sqlcipher]:https://www.zetetic.net/sqlcipher/
+[Zstd]:https://github.com/facebook/zstd
 [room]: https://developer.android.com/topic/libraries/architecture/room
 [room-codelabs]: https://codelabs.developers.google.com/codelabs/android-room-with-a-view
 [wcdb-cpp-build-and-install]: https://github.com/Tencent/wcdb/wiki/C++-%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%BC%E5%AE%B9%E6%80%A7
