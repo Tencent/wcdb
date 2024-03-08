@@ -70,7 +70,7 @@ bool Delete::execute()
         return false;
     }
     bool result = m_handle->execute(m_statement);
-    assignChanges();
+    saveChangesAndError(result);
     m_handle->invalidate();
     return result;
 }

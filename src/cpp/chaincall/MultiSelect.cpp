@@ -91,12 +91,14 @@ OptionalMultiObject MultiSelect::firstMultiObject()
 {
     OptionalMultiObject object;
     WCTRemedialAssert(m_fields.size() != 0, "Result columns can't be empty.", return object;);
-    if (prepareStatement()) {
-        if (m_handle->step() && !m_handle->done()) {
+    bool succeed = false;
+    if ((succeed = prepareStatement())) {
+        if ((succeed = m_handle->step()) && !m_handle->done()) {
             object = m_handle->extractOneMultiObject(m_fields);
         }
         m_handle->finalize();
     }
+    saveChangesAndError(succeed);
     m_handle->invalidate();
     return object;
 }
@@ -110,6 +112,7 @@ OptionalMultiObjectArray MultiSelect::allMultiObjects()
         objects = m_handle->extractAllMultiObjects(m_fields);
         m_handle->finalize();
     }
+    saveChangesAndError(objects.succeed());
     m_handle->invalidate();
     return objects;
 }

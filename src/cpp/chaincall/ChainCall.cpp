@@ -53,7 +53,7 @@ BaseChainCall::~BaseChainCall() = default;
 
 const Error& BaseChainCall::getError() const
 {
-    return m_handle->getError();
+    return m_error;
 }
 
 int BaseChainCall::getChanges() const
@@ -66,9 +66,12 @@ bool BaseChainCall::checkHandle(bool writeHint)
     return m_handle->getOrGenerateHandle(writeHint) != nullptr;
 }
 
-void BaseChainCall::assignChanges()
+void BaseChainCall::saveChangesAndError(bool succeed)
 {
     m_changes = m_handle->getChanges();
+    if (!succeed) {
+        m_error = m_handle->getError();
+    }
 }
 
 void BaseChainCall::assertError(const UnsafeStringView& message)

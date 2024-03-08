@@ -118,6 +118,7 @@ public:
             } else {
                 succeed = realExecute();
             }
+            saveChangesAndError(succeed);
         }
         m_handle->invalidate();
         return succeed;
@@ -176,7 +177,6 @@ private:
             } else {
                 succeed = stepOneObject(*m_obj, autoIncrementsOfDefinitions);
             }
-            assignChanges();
             m_handle->finalize();
         }
         return succeed;

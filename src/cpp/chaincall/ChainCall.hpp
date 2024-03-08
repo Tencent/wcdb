@@ -55,11 +55,12 @@ public:
 
 protected:
     bool checkHandle(bool writeHint);
-    void assignChanges();
+    void saveChangesAndError(bool succeed);
     void assertError(const UnsafeStringView &message);
     BaseChainCall(Recyclable<InnerDatabase *> databaseHolder);
     std::shared_ptr<Handle> m_handle;
     int m_changes;
+    Error m_error;
 };
 
 template<class StatementType>

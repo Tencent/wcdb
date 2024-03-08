@@ -117,6 +117,7 @@ public:
             objects = m_handle->extractAllObjects<ObjectType>(m_fields);
             m_handle->finalize();
         }
+        saveChangesAndError(objects.succeed());
         m_handle->invalidate();
         return objects;
     }
@@ -127,12 +128,14 @@ public:
     Optional<ObjectType> firstObject()
     {
         Optional<ObjectType> object;
-        if (prepareStatement()) {
-            if (m_handle->step() && !m_handle->done()) {
+        bool succeed = false;
+        if ((succeed = prepareStatement())) {
+            if ((succeed = m_handle->step()) && !m_handle->done()) {
                 object = m_handle->extractOneObject<ObjectType>(m_fields);
             }
             m_handle->finalize();
         }
+        saveChangesAndError(succeed);
         m_handle->invalidate();
         return object;
     }

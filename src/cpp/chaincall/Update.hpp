@@ -164,9 +164,9 @@ public:
                     m_handle->bindRow(*m_rowptr);
                 }
                 result = m_handle->step();
-                assignChanges();
                 m_handle->finalize();
             }
+            saveChangesAndError(result);
         }
         m_handle->invalidate();
         return result;
