@@ -48,13 +48,25 @@ public protocol UpdateTableInterface: AnyObject {
                 limit: Limit?,
                 offset: Offset?) throws
     func update(on propertyConvertibleList: PropertyConvertible...,
-                with row: [ColumnEncodable],
+                with row: [ColumnEncodable?],
+                where condition: Condition?,
+                orderBy orderList: [OrderBy]?,
+                limit: Limit?,
+                offset: Offset?) throws
+    func update(on propertyConvertibleList: PropertyConvertible...,
+                with row: ColumnEncodable?...,
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,
                 offset: Offset?) throws
     func update(on propertyConvertibleList: [PropertyConvertible],
-                with row: [ColumnEncodable],
+                with row: ColumnEncodable?...,
+                where condition: Condition?,
+                orderBy orderList: [OrderBy]?,
+                limit: Limit?,
+                offset: Offset?) throws
+    func update(on propertyConvertibleList: [PropertyConvertible],
+                with row: [ColumnEncodable?],
                 where condition: Condition?,
                 orderBy orderList: [OrderBy]?,
                 limit: Limit?,

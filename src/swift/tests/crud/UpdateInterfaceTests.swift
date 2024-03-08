@@ -117,7 +117,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         object.variable2 = self.name
         // When
         XCTAssertNoThrow(
-            try database.update(table: TestObject.name, on: TestObject.Properties.variable2, with: [self.name])
+            try database.update(table: TestObject.name, on: TestObject.Properties.variable2, with: self.name)
         )
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(
@@ -137,7 +137,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         // When
         XCTAssertNoThrow(try database.update(table: TestObject.name,
                                              on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              where: TestObject.Properties.variable1 == 1))
         // Then
         let result: TestObject? = WCDBAssertNoThrowReturned(
@@ -155,7 +155,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         // When
         XCTAssertNoThrow(try database.update(table: TestObject.name,
                                              on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              orderBy: order,
                                              limit: 1))
         // Then
@@ -173,7 +173,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         // When
         XCTAssertNoThrow(try database.update(table: TestObject.name,
                                              on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              limit: 1))
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: TestObject.name))
@@ -188,7 +188,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         // When
         XCTAssertNoThrow(try database.update(table: TestObject.name,
                                              on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              limit: 1,
                                              offset: 1))
         // Then
@@ -280,7 +280,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         object.variable2 = self.name
         // When
         XCTAssertNoThrow(
-            try table.update(on: TestObject.Properties.variable2, with: [self.name])
+            try table.update(on: TestObject.Properties.variable2, with: self.name)
         )
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(
@@ -299,7 +299,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         object.variable2 = self.name
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              where: TestObject.Properties.variable1 == 1))
         // Then
         let result: TestObject? = WCDBAssertNoThrowReturned(
@@ -316,7 +316,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         let order = [TestObject.Properties.variable1.order(.descending)]
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              orderBy: order,
                                              limit: 1))
         // Then
@@ -333,7 +333,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         object.variable2 = self.name
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              limit: 1))
         // Then
         let results: [TestObject] = WCDBAssertNoThrowReturned(try database.getObjects(fromTable: TestObject.name))
@@ -347,7 +347,7 @@ class UpdateInterfaceTests: CRUDTestCase {
         object.variable2 = self.name
         // When
         XCTAssertNoThrow(try table.update(on: TestObject.Properties.variable2,
-                                             with: [self.name],
+                                             with: self.name,
                                              limit: 1,
                                              offset: 1))
         // Then

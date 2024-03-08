@@ -239,14 +239,62 @@ extension Table: UpdateTableInterface where Root: TableEncodable {
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
-    ///   - object: Table encodable object
+    ///   - row: a row of ColumnEncodable value
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
     public func update(on propertyConvertibleList: PropertyConvertible...,
-                       with row: [ColumnEncodable],
+                       with row: ColumnEncodable?...,
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        return try update(on: propertyConvertibleList,
+                          with: row,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+    
+    /// Execute updating with row on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - row: a row of ColumnEncodable value
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    public func update(on propertyConvertibleList: PropertyConvertible...,
+                       with row: [ColumnEncodable?],
+                       where condition: Condition? = nil,
+                       orderBy orderList: [OrderBy]? = nil,
+                       limit: Limit? = nil,
+                       offset: Offset? = nil) throws {
+        return try update(on: propertyConvertibleList,
+                          with: row,
+                          where: condition,
+                          orderBy: orderList,
+                          limit: limit,
+                          offset: offset)
+    }
+    
+    /// Execute updating with row on specific(or all) properties.
+    ///
+    /// - Parameters:
+    ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
+    ///   - row: a row of ColumnEncodable value
+    ///   - condition: Expression convertible
+    ///   - orderList: Order convertible list
+    ///   - limit: Expression convertible
+    ///   - offset: Expression convertible
+    /// - Throws: `Error`
+    public func update(on propertyConvertibleList: [PropertyConvertible],
+                       with row: ColumnEncodable?...,
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
@@ -263,14 +311,14 @@ extension Table: UpdateTableInterface where Root: TableEncodable {
     ///
     /// - Parameters:
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
-    ///   - object: Table encodable object
+    ///   - row: a row of ColumnEncodable value
     ///   - condition: Expression convertible
     ///   - orderList: Order convertible list
     ///   - limit: Expression convertible
     ///   - offset: Expression convertible
     /// - Throws: `Error`
     public func update(on propertyConvertibleList: [PropertyConvertible],
-                       with row: [ColumnEncodable],
+                       with row: [ColumnEncodable?],
                        where condition: Condition? = nil,
                        orderBy orderList: [OrderBy]? = nil,
                        limit: Limit? = nil,
