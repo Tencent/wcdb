@@ -99,18 +99,8 @@ Pod::Spec.new do |wcdb|
   wcdb.exclude_files = [
   	"src/common/platform/WCTFileManager.cpp", 
 	"src/common/platform/WCTOperationQueue.cpp", 
-	"src/objc/operationqueue/WCTOperationQueue.mm", 
-	"src/common/core/operate/OperationQueueForMemory.cpp", 
 	"src/objc/tests/**/*.{h,hpp,c,cpp,m,mm}"
   ]
-  wcdb.subspec 'no-arc' do |sna|
-    sna.requires_arc = false
-    sna.source_files = [
-    	"src/objc/operationqueue/WCTOperationQueue.mm", 
-		"src/common/core/operate/OperationQueueForMemory.cpp", 
-		"src/common/core/operate/OperationQueueForMemory.hpp"
-    ]
-  end
   wcdb.frameworks = "CoreFoundation", "Security", "Foundation"
   wcdb.ios.frameworks = "UIKit"
   wcdb.libraries = "z", "c++"

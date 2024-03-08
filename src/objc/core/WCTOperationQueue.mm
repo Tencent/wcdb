@@ -69,16 +69,11 @@ void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *)
 
 namespace WCDB {
 
-void *OperationQueueForMemory::operationStart()
+void OperationQueueForMemory::executeOperationWithAutoMemoryRelease(std::function<void(void)> operation)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    return (void *) pool;
-}
-
-void OperationQueueForMemory::operationEnd(void *context)
-{
-    NSAutoreleasePool *pool = (__bridge NSAutoreleasePool *) context;
-    [pool drain];
+    @autoreleasepool {
+        operation();
+    }
 }
 
 }

@@ -203,41 +203,41 @@ OperationQueue::Parameter::Parameter()
 
 void OperationQueue::onTimed(const Operation& operation, const Parameter& parameter)
 {
-    void* context = operationStart();
-    if (operation.type != Operation::Type::NotifyCorruption) {
-        Core::shared().setThreadedErrorIgnorable(true);
-    }
-    switch (operation.type) {
-    case Operation::Type::Migrate:
-        doMigrate(operation.path, parameter.numberOfFailures);
-        break;
-    case Operation::Type::Compress:
-        doCompress(operation.path, parameter.numberOfFailures);
-        break;
-    case Operation::Type::Checkpoint:
-        doCheckpoint(operation.path);
-        break;
-    case Operation::Type::Purge:
-        WCTAssert(operation.path.empty());
-        doPurge(parameter);
-        break;
-    case Operation::Type::Integrity:
-        doCheckIntegrity(operation.path);
-        break;
-    case Operation::Type::NotifyCorruption:
-        doNotifyCorruption(operation.path, parameter.identifier);
-        break;
-    case Operation::Type::MergeIndex:
-        doMergeFTSIndex(operation.path, parameter.newTables, parameter.modifiedTables);
-        break;
-    case Operation::Type::Backup:
-        doBackup(operation.path);
-        break;
-    }
-    if (operation.type != Operation::Type::NotifyCorruption) {
-        Core::shared().setThreadedErrorIgnorable(false);
-    }
-    operationEnd(context);
+    executeOperationWithAutoMemoryRelease([&](){
+        if (operation.type != Operation::Type::NotifyCorruption) {
+            Core::shared().setThreadedErrorIgnorable(true);
+        }
+        switch (operation.type) {
+        case Operation::Type::Migrate:
+            doMigrate(operation.path, parameter.numberOfFailures);
+            break;
+        case Operation::Type::Compress:
+            doCompress(operation.path, parameter.numberOfFailures);
+            break;
+        case Operation::Type::Checkpoint:
+            doCheckpoint(operation.path);
+            break;
+        case Operation::Type::Purge:
+            WCTAssert(operation.path.empty());
+            doPurge(parameter);
+            break;
+        case Operation::Type::Integrity:
+            doCheckIntegrity(operation.path);
+            break;
+        case Operation::Type::NotifyCorruption:
+            doNotifyCorruption(operation.path, parameter.identifier);
+            break;
+        case Operation::Type::MergeIndex:
+            doMergeFTSIndex(operation.path, parameter.newTables, parameter.modifiedTables);
+            break;
+        case Operation::Type::Backup:
+            doBackup(operation.path);
+            break;
+        }
+        if (operation.type != Operation::Type::NotifyCorruption) {
+            Core::shared().setThreadedErrorIgnorable(false);
+        }
+    });
 }
 
 void OperationQueue::async(const Operation& operation, double delay, const Parameter& parameter, AsyncMode mode)

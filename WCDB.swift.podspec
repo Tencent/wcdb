@@ -27,6 +27,7 @@ Pod::Spec.new do |wcdb|
   	"src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}",
   	"src/common/**/*.{swift,h,hpp,c,cpp,m,mm}",
   	"src/objc/core/WCTFileManager.mm",
+    "src/objc/core/WCTOperationQueue.mm", 
   	"src/objc/core/WCTFoundation.h",
   	"src/objc/core/WCTFoundation.mm",
   	"src/objc/core/WCTFTSTokenizerUtil.h",
@@ -47,21 +48,12 @@ Pod::Spec.new do |wcdb|
     "src/bridge/include/**/*.{swift,h,hpp,c,cpp,m,mm}",
   	"src/common/platform/WCTFileManager.cpp",
   	"src/common/platform/WCTOperationQueue.cpp",
-  	"src/common/core/operate/OperationQueueForMemory.cpp",
   ]
   wcdb.requires_arc = true
   wcdb.preserve_path = "src/support/WCDBSwift.modulemap"
   wcdb.module_map = "src/support/WCDBSwift.modulemap"
   wcdb.frameworks = "CoreFoundation", "Security", "Foundation"
   wcdb.libraries = "z", "c++"
-  wcdb.subspec 'no-arc' do |sna|
-    sna.requires_arc = false
-    sna.source_files = [
-      "src/objc/operationqueue/WCTOperationQueue.mm", 
-      "src/common/core/operate/OperationQueueForMemory.cpp", 
-      "src/common/core/operate/OperationQueueForMemory.hpp"
-    ]
-  end
   wcdb.pod_target_xcconfig = { 
     "GCC_PREPROCESSOR_DEFINITIONS" =>   "SQLITE_WCDB=1 " +
 										"SQLITE_WCDB_LOCK_HOOK=1 " +

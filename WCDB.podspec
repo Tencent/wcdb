@@ -115,22 +115,12 @@ Pod::Spec.new do |wcdb|
   wcdb.exclude_files = [
   	"src/common/platform/WCTFileManager.cpp",
 	"src/common/platform/WCTOperationQueue.cpp",
-	"src/objc/operationqueue/WCTOperationQueue.mm",
-	"src/common/core/operate/OperationQueueForMemory.cpp",
 	"src/cpp/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
 	"src/objc/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
 	"src/swift/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
 	"src/bridge/tests/**/*.{swift,h,hpp,c,cpp,m,mm}",
 	"src/bridge/include/**/*.{swift,h,hpp,c,cpp,m,mm}",
   ]
-  wcdb.subspec 'no-arc' do |sna|
-    sna.requires_arc = false
-    sna.source_files = [
-		"src/objc/operationqueue/WCTOperationQueue.mm", 
-		"src/common/core/operate/OperationQueueForMemory.cpp", 
-		"src/common/core/operate/OperationQueueForMemory.hpp"
-    ]
-  end
   wcdb.preserve_path = "src/support/WCDB.modulemap"
   wcdb.module_map = "src/support/WCDB.modulemap"
   wcdb.frameworks = "CoreFoundation", "Security", "Foundation"

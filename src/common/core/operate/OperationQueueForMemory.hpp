@@ -22,6 +22,10 @@
  * limitations under the License.
  */
 
+#pragma once
+
+#include <functional>
+
 namespace WCDB {
 
 class OperationQueueForMemory {
@@ -29,8 +33,7 @@ public:
     virtual ~OperationQueueForMemory() = 0;
     void* registerNotificationWhenMemoryWarning();
     void unregisterNotificationWhenMemoryWarning(void* observer);
-    void* operationStart();
-    void operationEnd(void* context);
+    void executeOperationWithAutoMemoryRelease(std::function<void(void)> operation);
     virtual void asyncPurgeWhenMemoryWarning() = 0;
 };
 

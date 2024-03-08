@@ -958,7 +958,7 @@
 		232741501F6FBD50004E96F7 /* WCTDatabase+FTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 2327414E1F6FBD50004E96F7 /* WCTDatabase+FTS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		232741521F6FBD50004E96F7 /* WCTDatabase+FTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2327414F1F6FBD50004E96F7 /* WCTDatabase+FTS.mm */; };
 		2327BC22220944D80078A85B /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2327BC21220944D80078A85B /* Config.cpp */; };
-		232C6F03229C0A280046742F /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		232C6F03229C0A280046742F /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; };
 		23301BF52298FE9A00A8AB5A /* AutoMigrateConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23301BF32298FE9A00A8AB5A /* AutoMigrateConfig.cpp */; };
 		23301BF72298FE9A00A8AB5A /* AutoMigrateConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23301BF42298FE9A00A8AB5A /* AutoMigrateConfig.hpp */; };
 		23301BFB229A851800A8AB5A /* AutoBackupConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 23301BF9229A851800A8AB5A /* AutoBackupConfig.hpp */; };
@@ -1628,7 +1628,7 @@
 		39C70CC72313E20F002D773C /* Assemble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39C70CC52313E20E002D773C /* Assemble.cpp */; };
 		39C70CC82313E20F002D773C /* Assemble.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 39C70CC62313E20F002D773C /* Assemble.hpp */; };
 		750080D92920DCFF009C0F38 /* WCTFileManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2316D93521058B5500707AFC /* WCTFileManager.mm */; };
-		750080DA2920DD1B009C0F38 /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		750080DA2920DD1B009C0F38 /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; };
 		750080E22920E4A1009C0F38 /* WCTFTSTokenizerUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */; };
 		750080EC2920EDA2009C0F38 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
 		750080EF2920EDC0009C0F38 /* WCDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; };
@@ -1672,7 +1672,7 @@
 		7521D6D9291E9ABB009642EF /* StatementDropView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDBD7217DFADC006E9E73 /* StatementDropView.cpp */; };
 		7521D6DA291E9ABB009642EF /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2327BC21220944D80078A85B /* Config.cpp */; };
 		7521D6DB291E9ABB009642EF /* WCTDatabase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 23DF0A072190275B00F0B2B6 /* WCTDatabase.mm */; };
-		7521D6DC291E9ABB009642EF /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		7521D6DC291E9ABB009642EF /* WCTOperationQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 232C6F00229C0A280046742F /* WCTOperationQueue.mm */; };
 		7521D6DD291E9ABB009642EF /* Tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23B4DC7C2111B39100954D71 /* Tag.cpp */; };
 		7521D6DE291E9ABB009642EF /* SyntaxSavepointSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC5B217DFADC006E9E73 /* SyntaxSavepointSTMT.cpp */; };
 		7521D6DF291E9ABB009642EF /* SyntaxDeleteSTMT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EEDC45217DFADC006E9E73 /* SyntaxDeleteSTMT.cpp */; };
@@ -5982,14 +5982,6 @@
 			path = integrity;
 			sourceTree = "<group>";
 		};
-		0D34967B2B9866DA0062B074 /* operationqueue */ = {
-			isa = PBXGroup;
-			children = (
-				232C6F00229C0A280046742F /* WCTOperationQueue.mm */,
-			);
-			path = operationqueue;
-			sourceTree = "<group>";
-		};
 		0D47A9742A6E27CF008E9E2C /* compatible */ = {
 			isa = PBXGroup;
 			children = (
@@ -6094,7 +6086,6 @@
 				757457022402D571005E3682 /* statement */,
 				758E7EC02B1B400F00319991 /* compression */,
 				236BACDF21BF9F5900C8B4D9 /* migration */,
-				0D34967B2B9866DA0062B074 /* operationqueue */,
 				234DBCFE2064DE04000E31E8 /* transaction */,
 				234DBCEB2064DD0B000E31E8 /* handle */,
 				232147001F6AAE6500BF7AF2 /* fts */,
@@ -6216,6 +6207,7 @@
 				23BBE2A5204955CD00C4CBB6 /* WCTCommon.h */,
 				23DF0A0D219028E900F0B2B6 /* WCTDeclaration.h */,
 				2316D93521058B5500707AFC /* WCTFileManager.mm */,
+				232C6F00229C0A280046742F /* WCTOperationQueue.mm */,
 				23577F771F74F4E800D31C05 /* WCTFTSTokenizerUtil.h */,
 				23577F781F74F4E800D31C05 /* WCTFTSTokenizerUtil.mm */,
 				2370B1302191533C00D3227C /* WCTOptional.h */,

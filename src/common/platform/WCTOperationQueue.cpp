@@ -38,14 +38,9 @@ void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *obse
     WCDB_UNUSED(observer)
 }
 
-void *OperationQueueForMemory::operationStart()
+void OperationQueueForMemory::executeOperationWithAutoMemoryRelease(std::function<void(void)> operation)
 {
-    return nullptr;
-}
-
-void OperationQueueForMemory::operationEnd(void *context)
-{
-    WCDB_UNUSED(context)
+    operation();
 }
 
 } // namespace WCDB

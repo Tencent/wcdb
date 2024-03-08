@@ -21,20 +21,10 @@ let package = Package(
         .target(
             name: "objc-core",
             path: "src/objc/core",
-            sources: ["WCTFileManager.mm", "WCTFoundation.mm", "WCTFTSTokenizerUtil.mm"],
+            sources: ["WCTFileManager.mm", "WCTFoundation.mm", "WCTFTSTokenizerUtil.mm", "WCTOperationQueue.mm"],
             publicHeadersPath:"",
             cSettings: [
                 .headerSearchPath("../../**"),
-            ]
-        ),
-        .target(
-            name: "objc-no-arc",
-            path: "src/objc/operationqueue",
-            sources: ["WCTOperationQueue.mm"],
-            publicHeadersPath:"",
-            cSettings: [
-                .headerSearchPath("../../**"),
-                .unsafeFlags(["-fno-objc-arc"])
             ],
             linkerSettings: [
                 .linkedFramework("UIKit", .when(platforms: [.iOS])),
@@ -42,7 +32,7 @@ let package = Package(
         ),
         .target(
             name: "common",
-            dependencies: ["sqlcipher", .target(name: "objc-core"), .target(name: "objc-no-arc")],
+            dependencies: ["sqlcipher", .target(name: "objc-core")],
             path: "src/common",
             exclude: [
                 "repair/sqlite",

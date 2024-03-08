@@ -51,12 +51,13 @@ Pod::Spec.new do |wcdb|
 	"src/common/base/WCDBError.hpp",
 	"src/common/base/Data.hpp",
 	"src/common/base/UnsafeData.hpp",
-	"src/common/base/MemberPointer.hpp"
+	"src/common/base/MemberPointer.hpp" 
   ]
   wcdb.source_files  = [
   	"src/common/**/*.{h,hpp,c,cpp}",
 	"src/cpp/**/*.{h,hpp,c,cpp}",
 	"src/objc/core/WCTFileManager.mm",
+  "src/objc/core/WCTOperationQueue.mm",
 	"src/objc/core/WCTFoundation.h",
 	"src/objc/core/WCTFoundation.mm"
   ]
@@ -64,16 +65,7 @@ Pod::Spec.new do |wcdb|
   	"src/cpp/tests/**/*.{h,hpp,c,cpp}",
   	"src/common/platform/WCTFileManager.cpp",
   	"src/common/platform/WCTOperationQueue.cpp",
-  	"src/common/core/operate/OperationQueueForMemory.cpp"
   ]
-  wcdb.subspec 'no-arc' do |sna|
-    sna.requires_arc = false
-    sna.source_files = [
-      "src/objc/operationqueue/WCTOperationQueue.mm", 
-      "src/common/core/operate/OperationQueueForMemory.cpp", 
-      "src/common/core/operate/OperationQueueForMemory.hpp"
-    ]
-  end
   wcdb.frameworks = "CoreFoundation", "Security", "Foundation"
   wcdb.ios.frameworks = "UIKit"
   wcdb.libraries = "z", "c++"
