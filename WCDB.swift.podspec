@@ -80,5 +80,5 @@ Pod::Spec.new do |wcdb|
     "OTHER_SWIFT_FLAGS" => "-no-verify-emitted-module-interface",
   }
   wcdb.swift_versions = '5'
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.3'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.4'
 end

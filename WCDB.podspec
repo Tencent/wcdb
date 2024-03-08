@@ -154,5 +154,5 @@ Pod::Spec.new do |wcdb|
   }
   wcdb.header_dir = "WCDB"
   wcdb.swift_versions = '5'
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.3'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.4'
 end

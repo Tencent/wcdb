@@ -1,6 +1,7 @@
 ## v2.1.1
 
 * Some bugfix for WCDB C++ and WCDB Swift
+* Fix compile error on Mac Catalyst
 
 ## v2.1.0
 

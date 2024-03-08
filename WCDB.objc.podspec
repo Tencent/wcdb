@@ -128,5 +128,5 @@ Pod::Spec.new do |wcdb|
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
   wcdb.header_dir = "WCDB"
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.3'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.4'
 end

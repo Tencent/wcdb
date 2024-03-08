@@ -97,5 +97,5 @@ Pod::Spec.new do |wcdb|
     "VALID_ARCHS[sdk=watchos*]" => "arm64_32 armv7k",
   }
   wcdb.header_dir = "WCDB"
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.3'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.4'
 end
