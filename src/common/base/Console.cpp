@@ -28,7 +28,7 @@
 #include "WCDBError.hpp"
 #include "WCDBVersion.h"
 
-#if !defined(__ANDROID__) && !defined(_WIN32)
+#if !defined(__OHOS__) && !defined(__ANDROID__) && !defined(_WIN32)
 #include <execinfo.h>
 #endif
 
@@ -73,7 +73,7 @@ void Console::fatal(const UnsafeStringView& message)
 
 Optional<StringView> Console::callstacks()
 {
-#if !defined(__ANDROID__) && !defined(_WIN32)
+#if !defined(__OHOS__) && !defined(__ANDROID__) && !defined(_WIN32)
     constexpr const int size = 100;
     void* buffer[size];
     int depth = backtrace(buffer, size);

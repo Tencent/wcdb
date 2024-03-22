@@ -281,6 +281,8 @@ elseif (WIN32)
         set(X86_ARCH "x86")
     endif ()
     message(STATUS "PLATFORM: Windows ${X86_ARCH}")
+elseif (OHOS)
+    message(STATUS "PLATFORM: OpenHarmony")
 elseif (UNIX)
     message(STATUS "PLATFORM: Linux ${CMAKE_SYSTEM_PROCESSOR}")
     set(LINUX TRUE)
@@ -435,7 +437,13 @@ else ()
             target_link_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../tools/prebuild/zlib/windows/win32)
             target_link_directories(sqlcipher PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../tools/prebuild/openssl/windows/win32)
         endif()
-
+    elseif(OHOS)
+        target_include_directories(sqlcipher PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../tools/prebuild/openssl/include)
+        if (${OHOS_ARCH} STREQUAL "arm64-v8a")
+            target_link_directories(sqlcipher PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../tools/prebuild/openssl/ohos/arm64-v8a)
+        elseif(${OHOS_ARCH} STREQUAL "x86_64")
+            target_link_directories(sqlcipher PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../tools/prebuild/openssl/ohos/x86_64)
+        endif()
     endif()
 endif ()
 
@@ -465,6 +473,13 @@ elseif (APPLE AND NOT WCONAN_MODE)
         MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
         PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
     )
+elseif (OHOS)
+    message(STATUS "---- BUILD FOR OPENHARMONY ----")
+    target_link_libraries(${TARGET_NAME} PUBLIC
+            ${LINK_LIBRARIES}
+            crypto
+            pthread
+            z)
 elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
     target_link_libraries(${TARGET_NAME} PUBLIC
