@@ -194,6 +194,21 @@ Compression::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView&
     return info;
 }
 
+bool Compression::tryFixCompressingColumn(InfoInitializer& initializer,
+                                          const UnsafeStringView& table)
+{
+    auto info = getInfo(table);
+    if (!info.succeed() || info.value() == nullptr) {
+        return false;
+    }
+    auto compressingInfo = info.value();
+    if (compressingInfo->needCheckColumns()) {
+        return false;
+    }
+    compressingInfo->setNeedCheckColumns(true);
+    return checkCompressingColumn(initializer, compressingInfo);
+}
+
 bool Compression::checkCompressingColumn(InfoInitializer& initializer,
                                          const CompressionTableInfo* info)
 {
@@ -204,14 +219,6 @@ bool Compression::checkCompressingColumn(InfoInitializer& initializer,
     auto addColumn = initializer.checkCompressingColumns(*info);
     if (addColumn.failed()) {
         return false;
-    } else if (addColumn.value() && !handle->isInTransaction()) {
-        bool ret = handle->runTransaction([&](InnerHandle*) {
-            addColumn = initializer.checkCompressingColumns(*info);
-            return addColumn.succeed();
-        });
-        if (!ret) {
-            return false;
-        }
     }
     info->setNeedCheckColumns(false);
     if (addColumn.value() && handle->isInTransaction()) {
@@ -320,9 +327,6 @@ Compression::InfoInitializer::checkCompressingColumns(const CompressionTableInfo
             columnIndex++;
         }
         if (!findTypeColumn) {
-            if (!handle->isInTransaction()) {
-                return true;
-            }
             if (!handle->addColumn(
                 Schema::main(),
                 tableName,
@@ -361,6 +365,11 @@ Optional<const CompressionTableInfo*>
 Compression::Binder::tryGetCompressionInfo(const UnsafeStringView& table)
 {
     return m_compression.getOrInitInfo(*this, table);
+}
+
+bool Compression::Binder::tryFixCompressingColumn(const UnsafeStringView& table)
+{
+    return m_compression.tryFixCompressingColumn(*this, table);
 }
 
 bool Compression::Binder::canCompressNewData() const

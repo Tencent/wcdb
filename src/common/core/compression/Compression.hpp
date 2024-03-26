@@ -83,6 +83,7 @@ protected:
     Optional<const CompressionTableInfo*> getInfo(const UnsafeStringView& table);
     Optional<const CompressionTableInfo*>
     getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& table);
+    bool tryFixCompressingColumn(InfoInitializer& initializer, const UnsafeStringView& table);
     bool checkCompressingColumn(InfoInitializer& initializer,
                                 const CompressionTableInfo* info);
     void notifyTransactionCommitted(bool committed);
@@ -111,6 +112,7 @@ public:
 
         Optional<const CompressionTableInfo*>
         tryGetCompressionInfo(const UnsafeStringView& table);
+        bool tryFixCompressingColumn(const UnsafeStringView& table);
         bool hintThatTableWillBeCreated(const UnsafeStringView& table);
         void notifyTransactionCommitted(bool committed);
         bool canCompressNewData() const;

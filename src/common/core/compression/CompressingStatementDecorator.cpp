@@ -577,13 +577,13 @@ bool CompressingStatementDecorator::processInsert(const StatementInsert& insert)
             return false;
         }
         if (needCompress) {
-            m_additionalStatements.emplace_back(getHandle());
-            if (!m_additionalStatements.back().prepare(
+            HandleStatement& selectUncompressRow = addNewHandleStatement();
+            if (!selectUncompressRow.prepare(
                 m_compressionTableInfo->getSelectUncompressRowStatement())) {
                 return false;
             }
-            m_additionalStatements.emplace_back(getHandle());
-            if (!m_additionalStatements.back().prepare(
+            HandleStatement& updateUncompressRow = addNewHandleStatement();
+            if (!updateUncompressRow.prepare(
                 m_compressionTableInfo->getUpdateUncompressRowStatement())) {
                 return false;
             }
@@ -736,8 +736,8 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
             //Rowid must be binded to the largest index
             newUpdate.where(Column::rowid() == BindParameter(++maxBindIndex));
 
-            m_additionalStatements.emplace_back(getHandle());
-            if (!m_additionalStatements.back().prepare(selectRowid)) {
+            HandleStatement& selectRowidSTMT = addNewHandleStatement();
+            if (!selectRowidSTMT.prepare(selectRowid)) {
                 return false;
             }
 
@@ -746,16 +746,14 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
             }
 
             if (!selectMatchType) {
-                m_additionalStatements.emplace_back(getHandle());
-                if (!m_additionalStatements.back().prepare(
-                    m_compressionTableInfo->getSelectUncompressRowStatement(
+                HandleStatement& selectUncompressRow = addNewHandleStatement();
+                if (!selectUncompressRow.prepare(m_compressionTableInfo->getSelectUncompressRowStatement(
                     &m_compressingUpdateColumns))) {
                     return false;
                 }
 
-                m_additionalStatements.emplace_back(getHandle());
-                if (!m_additionalStatements.back().prepare(
-                    m_compressionTableInfo->getUpdateUncompressRowStatement(
+                HandleStatement& updateUncompressRow = addNewHandleStatement();
+                if (!updateUncompressRow.prepare(m_compressionTableInfo->getUpdateUncompressRowStatement(
                     &m_compressingUpdateColumns))) {
                     return false;
                 }
@@ -818,6 +816,13 @@ CompressingStatementDecorator::getBindParameter(std::list<Syntax::Expression>& e
     }
 }
 
+HandleStatement& CompressingStatementDecorator::addNewHandleStatement()
+{
+    m_additionalStatements.emplace_back(getHandle());
+    m_additionalStatements.back().enableAutoAddColumn();
+    return m_additionalStatements.back();
+}
+
 bool CompressingStatementDecorator::processSelect(const StatementSelect& select)
 {
     StatementSelect newSelect = select;
@@ -867,8 +872,8 @@ bool CompressingStatementDecorator::processDropTable(const StatementDropTable& d
     if (!dropTable.syntax().schema.isMain()) {
         return true;
     }
-    m_additionalStatements.emplace_back(getHandle());
-    if (!m_additionalStatements.back().prepare(
+    HandleStatement& newStatement = addNewHandleStatement();
+    if (!newStatement.prepare(
         CompressionRecord::getDeleteRecordStatement(dropTable.syntax().table))) {
         if (getHandle()->getError().code() == Error::Code::Error
             && getHandle()->getError().getMessage().hasPrefix("no such table:")) {
@@ -908,10 +913,10 @@ bool CompressingStatementDecorator::processAlterTable(const StatementAlterTable&
         return false;
     }
 
-    m_additionalStatements.emplace_back(getHandle());
+    HandleStatement& newStatement = addNewHandleStatement();
     auto updateRecord = CompressionRecord::getUpdateRecordStatement(
     alterTable.syntax().table, alterTable.syntax().newTable);
-    if (!m_additionalStatements.back().prepare(updateRecord)) {
+    if (!newStatement.prepare(updateRecord)) {
         if (getHandle()->getError().getMessage().hasPrefix("no such table:")) {
             m_additionalStatements.clear();
             return true;

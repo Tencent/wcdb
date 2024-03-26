@@ -344,6 +344,7 @@ bool MigratingStatementDecorator::prepare(const Statement& statement)
     statements.pop_back();
     for (const auto& stmt : statements) {
         m_additionalStatements.emplace_back(getHandle());
+        m_additionalStatements.back().enableAutoAddColumn();
         if (!m_additionalStatements.back().prepare(stmt)) {
             getHandleStatement()->finalize();
             return false;

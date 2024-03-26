@@ -26,6 +26,8 @@
 #include "AbstractHandle.hpp"
 #include "Assertion.hpp"
 #include "BaseBinding.hpp"
+#include "CompressingHandleDecorator.hpp"
+#include "CompressionConst.hpp"
 #include "Core.hpp"
 #include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
@@ -119,10 +121,22 @@ bool HandleStatement::prepare(const Statement &statement)
     if (!tryExtractColumnInfo(statement, msg, columnName, tableName, schemaName, &binding)) {
         return false;
     }
-
-    WCTAssert(binding != nullptr);
-    if (!binding->tryRecoverColumn(columnName, tableName, schemaName, sql, innerHandle)) {
-        return false;
+    if (binding != nullptr) {
+        if (!binding->tryRecoverColumn(columnName, tableName, schemaName, sql, innerHandle)) {
+            return false;
+        }
+    } else {
+        WCTAssert(columnName.hasPrefix(CompressionColumnTypePrefix));
+        DecorativeHandle *decorativeHandle
+        = dynamic_cast<DecorativeHandle *>(getHandle());
+        if (decorativeHandle != nullptr
+            && decorativeHandle->containDecorator(DecoratorCompressingHandle)) {
+            CompressingHandleDecorator *compressingDecorator
+            = decorativeHandle->getDecorator<CompressingHandleDecorator>(DecoratorCompressingHandle);
+            if (!compressingDecorator->tryFixCompressingColumn(tableName)) {
+                return false;
+            }
+        }
     }
 
     resumeCacheTransactionError();
@@ -241,6 +255,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
 
     WCTAssert(tableSpecified || !schemaSpecified);
     bool findTable = !tableSpecified;
+    bool isCompressingColumn = columnName.hasPrefix(CompressionColumnTypePrefix);
     Statement copyStatement = statement;
     bool invalidStatement = false;
 
@@ -255,6 +270,9 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
         switch (identifier.getType()) {
         case Syntax::Identifier::Type::Column: {
             Syntax::Column &column = (Syntax::Column &) identifier;
+            if (isCompressingColumn) {
+                return;
+            }
             if (column.name.compare(columnName) != 0) {
                 return;
             }
@@ -349,7 +367,7 @@ bool HandleStatement::tryExtractColumnInfo(const Statement &statement,
             }
         }
     });
-    return *binding != nullptr && findTable && !invalidStatement;
+    return (*binding != nullptr || isCompressingColumn) && findTable && !invalidStatement;
 }
 
 bool HandleStatement::prepareSQL(const UnsafeStringView &sql)

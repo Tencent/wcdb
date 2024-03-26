@@ -88,6 +88,7 @@ protected:
     bool checkBindParametersExist(std::list<Syntax::Expression> &exps);
     Optional<int>
     getBindParameter(std::list<Syntax::Expression> &exps, std::pair<int, int> &index);
+    HandleStatement &addNewHandleStatement();
 
     void resetCompressionStatus();
 
