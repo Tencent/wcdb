@@ -837,6 +837,7 @@
 		0D32816A2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */; };
 		0D32816B2B04AC7A0027B973 /* FunctionContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D3281672B04AC7A0027B973 /* FunctionContainer.cpp */; };
 		0D3345912BB3FE2B004C84C5 /* WCTBridgeProperty+CPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50BA28115BA0007365CD /* WCTBridgeProperty+CPP.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D3345A52BB40C7F004C84C5 /* WCTBridgeProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 036E50B628115AB8007365CD /* WCTBridgeProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D36C0F72AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D36C0F82AF1E00C000BC0DD /* STDOptionalAccessor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D36C0F62AF1E00C000BC0DD /* STDOptionalAccessor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		0D36C0FB2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D36C0FA2AF1E3B1000BC0DD /* CPPSTDOptionalAllTypesObject.mm */; };
@@ -8801,6 +8802,7 @@
 				7521D8B3291E9ABB009642EF /* Recyclable.hpp in Headers */,
 				7521D8B4291E9ABB009642EF /* CoreConst.h in Headers */,
 				7521D8B5291E9ABB009642EF /* Cell.hpp in Headers */,
+				0D3345A52BB40C7F004C84C5 /* WCTBridgeProperty.h in Headers */,
 				7521D8B7291E9ABB009642EF /* BasicConfig.hpp in Headers */,
 				7521D8B8291E9ABB009642EF /* StatementDropIndex.hpp in Headers */,
 				7521D8B9291E9ABB009642EF /* Pager.hpp in Headers */,
