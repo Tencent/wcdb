@@ -6365,6 +6365,7 @@
 			children = (
 				234DBCFF2064DE04000E31E8 /* WCTDatabase+Transaction.h */,
 				234DBD012064DE04000E31E8 /* WCTHandle+Transaction.h */,
+				234DBD002064DE04000E31E8 /* WCTDatabase+Transaction.mm */,
 				234DBD022064DE04000E31E8 /* WCTHandle+Transaction.mm */,
 				234DBD072064DE23000E31E8 /* WCTTransaction.h */,
 			);
@@ -6825,7 +6826,6 @@
 		236BACDF21BF9F5900C8B4D9 /* migration */ = {
 			isa = PBXGroup;
 			children = (
-				234DBD002064DE04000E31E8 /* WCTDatabase+Transaction.mm */,
 				236BACE021BF9F6400C8B4D9 /* WCTDatabase+Migration.h */,
 				236BACE121BF9F6400C8B4D9 /* WCTDatabase+Migration.mm */,
 				236BACE421BF9FC900C8B4D9 /* WCTMigrationInfo.h */,
