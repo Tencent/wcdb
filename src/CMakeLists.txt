@@ -379,24 +379,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(${TARGET_NAME} ${WCDB_COMMON_SRC})
-target_link_libraries(${TARGET_NAME} PUBLIC sqlcipher)
+target_link_libraries(${TARGET_NAME} PRIVATE sqlcipher)
 target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_COMMON_INCLUDES})
 
 if (WCDB_ZSTD)
     include(zstd.cmake)
-    target_link_libraries(${TARGET_NAME} PUBLIC zstd)
+    target_link_libraries(${TARGET_NAME} PRIVATE zstd)
     target_compile_definitions(${TARGET_NAME} PRIVATE WCDB_ZSTD=1)
 endif ()
 
 target_compile_options(${TARGET_NAME} PRIVATE -fno-exceptions)
 
 if (WCDB_CPP)
-    target_sources(${TARGET_NAME} PUBLIC ${WCDB_CPP_SRC})
+    target_sources(${TARGET_NAME} PRIVATE ${WCDB_CPP_SRC})
     target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_CPP_INCLUDES})
 endif ()
 
 if (WCDB_BRIDGE)
-    target_sources(${TARGET_NAME} PUBLIC ${WCDB_BRIDGE_SRC})
+    target_sources(${TARGET_NAME} PRIVATE ${WCDB_BRIDGE_SRC})
     target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_BRIDGE_INCLUDES})
 endif ()
 
@@ -435,20 +435,31 @@ endif ()
 if (ANDROID)
     message(STATUS "---- BUILD FOR ANDROID ----")
     find_library(z-lib z)
-    target_link_libraries(${TARGET_NAME} PRIVATE
+    target_link_libraries(${TARGET_NAME} PUBLIC
             ${LINK_LIBRARIES}
             ${z-lib}
             crypto)
+elseif (APPLE AND NOT WCONAN_MODE)
+    message(STATUS "---- BUILD FOR APPLE ----")
+    find_library(SecurityFramework Security)
+    find_library(FoundationFrameWork Foundation)
+    find_library(z-lib z)
+    target_link_libraries(${TARGET_NAME} PUBLIC
+            ${LINK_LIBRARIES}
+            ${SecurityFramework}
+            ${FoundationFrameWork}
+            ${z-lib})
 elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
-    target_link_libraries(${TARGET_NAME} PRIVATE
+    target_link_libraries(${TARGET_NAME} PUBLIC
             ${LINK_LIBRARIES}
             crypto
             pthread
-            z)
+            z
+            dl)
 elseif (WIN32)
     message(STATUS "---- BUILD FOR WINDOWS ----")
-    target_link_libraries(${TARGET_NAME} PRIVATE
+    target_link_libraries(${TARGET_NAME} PUBLIC
             ${LINK_LIBRARIES}
             libcrypto
             zlibstatic
