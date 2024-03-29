@@ -378,7 +378,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(${TARGET_NAME} ${WCDB_COMMON_SRC})
+add_library(${TARGET_NAME})
+target_sources(${TARGET_NAME} PRIVATE ${WCDB_COMMON_SRC})
 target_link_libraries(${TARGET_NAME} PUBLIC sqlcipher)
 target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_COMMON_INCLUDES})
 
@@ -391,12 +392,12 @@ endif ()
 target_compile_options(${TARGET_NAME} PRIVATE -fno-exceptions)
 
 if (WCDB_CPP)
-    target_sources(${TARGET_NAME} PUBLIC ${WCDB_CPP_SRC})
+    target_sources(${TARGET_NAME} PRIVATE ${WCDB_CPP_SRC})
     target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_CPP_INCLUDES})
 endif ()
 
 if (WCDB_BRIDGE)
-    target_sources(${TARGET_NAME} PUBLIC ${WCDB_BRIDGE_SRC})
+    target_sources(${TARGET_NAME} PRIVATE ${WCDB_BRIDGE_SRC})
     target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_BRIDGE_INCLUDES})
 endif ()
 
