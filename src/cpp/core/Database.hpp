@@ -809,7 +809,7 @@ public:
         /**
          @brief Configure to compress all data in the specified column with a registered zstd dict.
          */
-        void addZSTDDictCompressProperty(const Field &field, DictId dictId);
+        void addZSTDDictCompressField(const Field &field, DictId dictId);
 
         /**
          @brief Configure to compress all data in the specified column with multi registered zstd dict.
@@ -817,10 +817,10 @@ public:
          @note You can use `DictDefaultMatchValue` to specify a default dict.
          @warning The matching column must be an integer column.
          */
-        void addZSTDDictCompressProperty(
-        const Field &field,
-        const Field &matchField,
-        const std::map<int64_t /* Value of match column */, DictId> &dictIds);
+        void
+        addZSTDDictCompressField(const Field &field,
+                                 const Field &matchField,
+                                 const std::map<int64_t /* Value of match column */, DictId> &dictIds);
 
     protected:
         friend class Database;

@@ -618,15 +618,16 @@ void Database::CompressionInfo::addZSTDNormalCompressField(const Field& field)
     ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
 }
 
-void Database::CompressionInfo::addZSTDDictCompressProperty(const Field& field, DictId dictId)
+void Database::CompressionInfo::addZSTDDictCompressField(const Field& field, DictId dictId)
 {
     CompressionColumnInfo columnInfo(field, CompressionType::Dict);
     columnInfo.setCommonDict(dictId);
     ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
 }
 
-void Database::CompressionInfo::addZSTDDictCompressProperty(
-const Field& field, const Field& matchField, const std::map<int64_t, DictId>& dictIds)
+void Database::CompressionInfo::addZSTDDictCompressField(const Field& field,
+                                                         const Field& matchField,
+                                                         const std::map<int64_t, DictId>& dictIds)
 {
     if (dictIds.empty()) {
         return;

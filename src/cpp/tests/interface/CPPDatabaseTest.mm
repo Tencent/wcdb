@@ -344,7 +344,7 @@
     TestCaseAssertTrue(WCDB::Database::registerZSTDDict(dict.value(), 1));
 
     self.database->setCompression([](WCDB::Database::CompressionInfo& info) {
-        info.addZSTDDictCompressProperty(WCDB_FIELD(CPPTestCaseObject::content), 1);
+        info.addZSTDDictCompressField(WCDB_FIELD(CPPTestCaseObject::content), 1);
     });
 
     TestCaseAssertFalse(self.database->isCompressed());
@@ -397,7 +397,7 @@
     TestCaseAssertTrue(WCDB::Database::registerZSTDDict(dict3.value(), 4));
 
     self.database->setCompression([](WCDB::Database::CompressionInfo& info) {
-        info.addZSTDDictCompressProperty(WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier), { { 1, 2 }, { 2, 3 }, { WCDB::Database::DictDefaultMatchValue, 4 } });
+        info.addZSTDDictCompressField(WCDB_FIELD(CPPTestCaseObject::content), WCDB_FIELD(CPPTestCaseObject::identifier), { { 1, 2 }, { 2, 3 }, { WCDB::Database::DictDefaultMatchValue, 4 } });
     });
 
     TestCaseAssertFalse(self.database->isCompressed());
