@@ -1,3 +1,9 @@
+## v2.1.2
+
+* Some bugfix for data compression
+* Fix compile error of WCDB Objc on Carthage
+* Fix compile error of WCDB C++ when built as a CMake submodule
+
 ## v2.1.1
 
 * Some bugfix for WCDB C++ and WCDB Swift
