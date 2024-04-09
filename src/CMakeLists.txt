@@ -449,17 +449,15 @@ elseif (APPLE AND NOT WCONAN_MODE)
             ${SecurityFramework}
             ${FoundationFrameWork}
             ${z-lib})
-    if (CMAKE_GENERATOR STREQUAL Xcode)
-        target_sources(${TARGET_NAME} PUBLIC ${WCDB_PUBLIC_HEADERS})
-        file(STRINGS "../VERSION" WCDB_VERSION)
-        message(STATUS "Xcode ${TARGET_NAME}.framework version ${WCDB_VERSION}")
-        set_target_properties(${TARGET_NAME} PROPERTIES
-            FRAMEWORK TRUE
-            FRAMEWORK_VERSION ${WCDB_VERSION}
-            MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
-            PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
-        )
-    endif ()
+    target_sources(${TARGET_NAME} PUBLIC ${WCDB_PUBLIC_HEADERS})
+    file(STRINGS "../VERSION" WCDB_VERSION)
+    message(STATUS "Xcode ${TARGET_NAME}.framework version ${WCDB_VERSION}")
+    set_target_properties(${TARGET_NAME} PROPERTIES
+        FRAMEWORK TRUE
+        FRAMEWORK_VERSION ${WCDB_VERSION}
+        MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
+        PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
+    )
 elseif (LINUX)
     message(STATUS "---- BUILD FOR LINUX ----")
     target_link_libraries(${TARGET_NAME} PUBLIC
