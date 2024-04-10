@@ -35,7 +35,7 @@ class Column;
 namespace Syntax {
 
 class WCDB_API Column final : public Identifier {
-    friend Column;
+    friend WCDB::Column;
 #pragma mark - Syntax
 public:
     ~Column() override;

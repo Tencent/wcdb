@@ -113,13 +113,13 @@ public:
     asUnderlyingType(const T &);
 };
 //Text
-template<typename T, typename Enable = void>
+template<typename T, typename Enable>
 struct ColumnIsTextType : public std::false_type {
 public:
     static ColumnTypeInfo<ColumnType::Text>::UnderlyingType asUnderlyingType(const T &);
 };
 //BLOB
-template<typename T, typename Enable = void>
+template<typename T, typename Enable>
 struct ColumnIsBLOBType : public std::false_type {
 public:
     static ColumnTypeInfo<ColumnType::BLOB>::UnderlyingType asUnderlyingType(const T &);
@@ -324,26 +324,6 @@ public:
         if (size > t.size()) {
             memset(target + t.size(), 0, size - t.size());
         }
-    }
-};
-
-template<typename T>
-struct UnsafeStringView::Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
-: public std::true_type {
-public:
-    static UnsafeStringView asUnsafeStringView(const T &t)
-    {
-        return ColumnIsTextType<T>::asUnderlyingType(t);
-    }
-};
-
-template<typename T>
-struct UnsafeData::Convertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-: public std::true_type {
-public:
-    static UnsafeData asUnsafeData(const T &t)
-    {
-        return ColumnIsBLOBType<T>::asUnderlyingType(t);
     }
 };
 

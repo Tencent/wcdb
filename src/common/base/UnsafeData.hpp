@@ -35,6 +35,9 @@
 
 namespace WCDB {
 
+template<typename T, typename Enable = void>
+struct ColumnIsBLOBType;
+
 class WCDB_API UnsafeData : protected SharedThreadedErrorProne {
 #pragma mark - Initialize
 public:
@@ -42,6 +45,16 @@ public:
     struct Convertible : public std::false_type {
     public:
         static UnsafeData asUnsafeData(const T &);
+    };
+
+    template<typename T>
+    struct Convertible<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
+    : public std::true_type {
+    public:
+        static UnsafeData asUnsafeData(const T &t)
+        {
+            return ColumnIsBLOBType<T>::asUnderlyingType(t);
+        }
     };
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>

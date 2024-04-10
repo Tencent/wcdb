@@ -36,6 +36,8 @@
 namespace WCDB {
 
 class UnsafeData;
+template<typename T, typename Enable = void>
+struct ColumnIsTextType;
 
 class WCDB_API UnsafeStringView {
 #pragma mark - UnsafeStringView - Constructor
@@ -116,6 +118,16 @@ public:
     struct Convertible : public std::false_type {
     public:
         static UnsafeStringView asUnsafeStringView(const T&);
+    };
+
+    template<typename T>
+    struct Convertible<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
+    : public std::true_type {
+    public:
+        static UnsafeStringView asUnsafeStringView(const T& t)
+        {
+            return ColumnIsTextType<T>::asUnderlyingType(t);
+        }
     };
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
