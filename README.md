@@ -84,7 +84,7 @@ WCDB summarizes common problems in practice to provide a more complete developme
 * **Database model upgrade**: The database model is bound to the class definition, so that the addition, deletion and modification of database fields are consistent with the definition of class variables.
 * **Full-text search**: WCDB provides an easy-to-use full-text search interface and includes tokenizers for multiple languages.
 * **Data Migration**: WCDB supports to migrate data from one databasse to another with simple configuration. And developers don't need to care about the intermediate status and progress of the migration.
-* **Data Compression**: WCDB supports to compress content via [Zstd][Zstd] within specific fields of a database table through a simple configuration. Once configed, the details of data compression and decompression become transparent to developers, and WCDB can automatically compress existing data.
+* **Data Compression**: WCDB supports to compress content via [Zstd][Zstd] within specific fields of a database table through a simple configuration. Once configured, the details of data compression and decompression become transparent to developers, and WCDB can automatically compress existing data.
 
 ## **Compatibility**
 
