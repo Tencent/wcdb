@@ -11993,7 +11993,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
-				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBCpp.modulemap";
 			};
 			name = Debug;
 		};
@@ -12001,7 +12000,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
-				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBCpp.modulemap";
 			};
 			name = Release;
 		};
