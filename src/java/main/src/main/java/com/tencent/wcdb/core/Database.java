@@ -403,7 +403,7 @@ public class Database extends HandleORMOperation {
      * @param unInvocation a config will be triggered when a handle is invalidated or closed.
      * @param priority priority of config. It determines the execute order of configs.
      */
-    public void setConfig(@NotNull String configName, @NotNull Config invocation, @Nullable Config unInvocation, ConfigPriority priority) {
+    public void setConfig(@NotNull String configName, @Nullable Config invocation, @Nullable Config unInvocation, ConfigPriority priority) {
         int cppPriority = 0;
         switch (priority) {
             case low:
@@ -426,7 +426,7 @@ public class Database extends HandleORMOperation {
      * @param invocation A config will be triggered when a handle is open or reuse.
      * @param priority Priority of config. It determines the execute order of configs.
      */
-    public void setConfig(@NotNull String configName, @NotNull Config invocation, ConfigPriority priority) {
+    public void setConfig(@NotNull String configName, @Nullable Config invocation, ConfigPriority priority) {
         setConfig(configName, invocation, null, priority);
     }
 
@@ -436,7 +436,7 @@ public class Database extends HandleORMOperation {
      * @param configName The name of config. It should be different from each other.
      * @param invocation A config will be triggered when a handle is open or reuse.
      */
-    public void setConfig(@NotNull String configName, @NotNull Config invocation) {
+    public void setConfig(@NotNull String configName, @Nullable Config invocation) {
         setConfig(configName, invocation, ConfigPriority.default_);
     }
 

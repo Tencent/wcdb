@@ -20,25 +20,37 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
-
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     sourceSets {
-        androidTest.kotlin.srcDirs += 'build/generated/ksp/debugAndroidTest/kotlin'
-        androidTest.kotlin.srcDirs += 'build/generated/ksp/debugAndroidTest/java'
+        release {
+            main.kotlin.srcDirs += 'build/generated/ksp/release/kotlin'
+            main.kotlin.srcDirs += 'build/generated/ksp/release/java'
+        }
+        debug {
+            main.kotlin.srcDirs += 'build/generated/ksp/debug/kotlin'
+            main.kotlin.srcDirs += 'build/generated/ksp/debug/java'
+            androidTest.kotlin.srcDirs += 'build/generated/ksp/debugAndroidTest/kotlin'
+            androidTest.kotlin.srcDirs += 'build/generated/ksp/debugAndroidTest/java'
+        }
     }
 }
 
 dependencies {
+    implementation 'androidx.activity:activity-compose:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation project(':main')
+
+    implementation project(':main')
     implementation "com.tencent.wcdb:annotation:${project.version}"
+    ksp "com.tencent.wcdb:compiler:${project.version}"
+
+    androidTestImplementation project(':main')
     kspAndroidTest "com.tencent.wcdb:compiler:${project.version}"
 }
