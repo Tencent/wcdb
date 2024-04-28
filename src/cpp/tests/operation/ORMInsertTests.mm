@@ -110,6 +110,27 @@
          }];
 }
 
+- (void)test_database_insert_objects_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_object3, &self->_object4 };
+             return self.database->insertObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String);
+         }];
+}
+
+- (void)test_database_insert_objects_shared_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->insertObjects<CPPTestCaseObject>({ std::make_shared<CPPTestCaseObject>(self->_object3), std::make_shared<CPPTestCaseObject>(self->_object4) }, self.tableName.UTF8String);
+         }];
+}
+
 #pragma mark - Database - Insert or Replace
 - (void)test_database_insert_or_replace_object
 {
@@ -128,6 +149,29 @@
            ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>({ self.renewedObject1, self.renewedObject2 }, self.tableName.UTF8String);
+         }];
+}
+
+- (void)test_database_insert_or_replace_objects_ptr
+{
+    [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             return self.database->insertOrReplaceObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String);
+         }];
+}
+
+- (void)test_database_insert_or_replace_objects_sharedPtr
+{
+    [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->insertOrReplaceObjects<CPPTestCaseObject>({ std::make_shared<CPPTestCaseObject>(self->_renewedObject1),
+                                                                               std::make_shared<CPPTestCaseObject>(self->_renewedObject2) },
+                                                                             self.tableName.UTF8String);
          }];
 }
 
@@ -152,6 +196,29 @@
          }];
 }
 
+- (void)test_database_insert_or_ignore_objects_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             return self.database->insertOrIgnoreObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String);
+         }];
+}
+
+- (void)test_database_insert_or_ignore_objects_shared_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.database->insertOrIgnoreObjects<CPPTestCaseObject>({ std::make_shared<CPPTestCaseObject>(self->_renewedObject1),
+                                                                              std::make_shared<CPPTestCaseObject>(self->_renewedObject2) },
+                                                                            self.tableName.UTF8String);
+         }];
+}
+
 #pragma mark - Database - Partial Insert
 - (void)test_database_insert_object_on_properties
 {
@@ -170,6 +237,30 @@
            ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
              return self.database->insertObjects<CPPTestCaseObject>({ self.object3, self.object4 }, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+- (void)test_database_insert_objects_ptr_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2, self.partialObject3, self.partialObject4 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_object3, &self->_object4 };
+             return self.database->insertObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
+         }];
+}
+
+- (void)test_database_insert_objects_shared_ptr_on_properties
+{
+    [self doTestObjects:{ self.object1, self.object2, self.partialObject3, self.partialObject4 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
+         afterInsertion:^BOOL {
+             return self.database->insertObjects<CPPTestCaseObject>({ std::make_shared<CPPTestCaseObject>(self->_object3),
+                                                                      std::make_shared<CPPTestCaseObject>(self->_object4) },
+                                                                    self.tableName.UTF8String,
+                                                                    WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
 }
 
@@ -236,6 +327,28 @@
          }];
 }
 
+- (void)test_table_insert_objects_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_object3, &self->_object4 };
+             return self.table.insertObjects(objects);
+         }];
+}
+
+- (void)test_table_insert_objects_shared_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2, self.object3, self.object4 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.table.insertObjects({ std::make_shared<CPPTestCaseObject>(self->_object3),
+                                               std::make_shared<CPPTestCaseObject>(self->_object4) });
+         }];
+}
+
 #pragma mark - Table - Insert or Replace
 - (void)test_table_insert_or_replace_object
 {
@@ -257,6 +370,28 @@
          }];
 }
 
+- (void)test_table_insert_or_replace_objects_ptr
+{
+    [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             return self.table.insertOrReplaceObjects(objects);
+         }];
+}
+
+- (void)test_table_insert_or_replace_objects_shared_ptr
+{
+    [self doTestObjects:{ self.renewedObject1, self.renewedObject2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.table.insertOrReplaceObjects({ std::make_shared<CPPTestCaseObject>(self->_renewedObject1),
+                                                        std::make_shared<CPPTestCaseObject>(self->_renewedObject2) });
+         }];
+}
+
 #pragma mark - Table - Insert or Ignore
 - (void)test_table_insert_or_ignore_object
 {
@@ -275,6 +410,28 @@
            ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
              return self.table.insertOrIgnoreObjects({ self.renewedObject1, self.renewedObject2 });
+         }];
+}
+
+- (void)test_table_insert_or_ignore_objects_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             return self.table.insertOrIgnoreObjects(objects);
+         }];
+}
+
+- (void)test_table_insert_or_ignore_objects_shared_ptr
+{
+    [self doTestObjects:{ self.object1, self.object2 }
+              andNumber:2
+           ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
+         afterInsertion:^BOOL {
+             return self.table.insertOrIgnoreObjects({ std::make_shared<CPPTestCaseObject>(self->_renewedObject1),
+                                                       std::make_shared<CPPTestCaseObject>(self->_renewedObject2) });
          }];
 }
 

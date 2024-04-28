@@ -92,7 +92,42 @@ public:
         if (objs.size() == 0) {
             return true;
         }
-        auto insert = prepareInsert().values(&objs);
+        auto insert = prepareInsert().values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertObjects(const ValueArray<ObjectType *> &objs, const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert = prepareInsert().values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertObjects(const ValueArray<std::shared_ptr<ObjectType>> &objs,
+                       const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert = prepareInsert().values(objs);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -106,7 +141,7 @@ public:
      */
     bool insertOrReplaceObject(const ObjectType &obj, const Fields &fields = Fields())
     {
-        auto insert = prepareInsert().orReplace().value(&obj);
+        auto insert = prepareInsert().orReplace().value(obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -125,7 +160,45 @@ public:
         if (objs.size() == 0) {
             return true;
         }
-        auto insert = prepareInsert().orReplace().values(&objs);
+        auto insert = prepareInsert().orReplace().values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will replace the original row while they have same primary key or row id.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertOrReplaceObjects(const ValueArray<ObjectType *> &objs,
+                                const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert = prepareInsert().orReplace().values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will replace the original row while they have same primary key or row id.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertOrReplaceObjects(const ValueArray<std::shared_ptr<ObjectType>> &objs,
+                                const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert = prepareInsert().orReplace().values(objs);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -158,7 +231,45 @@ public:
         if (objs.size() == 0) {
             return true;
         }
-        auto insert = prepareInsert().orIgnore().values(&objs);
+        auto insert = prepareInsert().orIgnore().values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will ignore the object while there already exists the same primary key or row id in current table.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertOrIgnoreObjects(const ValueArray<ObjectType *> &objs,
+                               const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert = prepareInsert().orIgnore().values(objs);
+        if (fields.size() > 0) {
+            insert.onFields(fields);
+        }
+        return insert.execute();
+    }
+
+    /**
+     @brief Execute inserting with multi objects on specific(or all) fields.
+     It will ignore the object while there already exists the same primary key or row id in current table.
+     @note  It will run embedded transaction while objs.size>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     @return True if no error occurs.
+     */
+    bool insertOrIgnoreObjects(const ValueArray<std::shared_ptr<ObjectType>> &objs,
+                               const Fields &fields = Fields())
+    {
+        if (objs.size() == 0) {
+            return true;
+        }
+        auto insert = prepareInsert().orIgnore().values(objs);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }

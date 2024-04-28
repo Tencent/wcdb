@@ -29,6 +29,8 @@
 #include "ChainCall.hpp"
 #include "ValueArray.hpp"
 #include <assert.h>
+#include <memory>
+#include <stdlib.h>
 
 namespace WCDB {
 
@@ -86,14 +88,54 @@ public:
     }
 
     /**
+     @brief Insert one object.
+     @param object Object to be inserted into table.
+     @warning You should hold the memory of this object before you execute insert.
+     @return this.
+     */
+    Insert<ObjectType>& value(const ObjectType& object)
+    {
+        m_obj = &object;
+        m_valueType = ValueType::SingleObject;
+        return *this;
+    }
+
+    /**
      @brief Insert an array of objects.
      @param objects Objects to be inserted into table.
+     @warning You should hold the memory of objects before you execute insert.
      @return this.
      */
     Insert<ObjectType>& values(const ValueArray<ObjectType>& objects)
     {
-        m_objs = objects;
-        m_objsptr = &m_objs;
+        m_objArr = &objects;
+        m_valueType = ValueType::ObjectArray;
+        return *this;
+    }
+
+    /**
+     @brief Insert an array of objects.
+     @param objects Objects to be inserted into table.
+     @warning You should hold the memory of objects before you execute insert.
+     @return this.
+     */
+    Insert<ObjectType>& values(const ValueArray<ObjectType*>& objects)
+    {
+        m_objPtrArr = &objects;
+        m_valueType = ValueType::ObjectPtrArray;
+        return *this;
+    }
+
+    /**
+     @brief Insert an array of objects.
+     @param objects Objects to be inserted into table.
+     @warning You should hold the memory of objects before you execute insert.
+     @return this.
+     */
+    Insert<ObjectType>& values(const ValueArray<std::shared_ptr<ObjectType>>& objects)
+    {
+        m_objSharedPtrArr = &objects;
+        m_valueType = ValueType::ObjectSharedPtrArray;
         return *this;
     }
 
@@ -106,11 +148,12 @@ public:
     bool execute()
     {
         bool succeed = true;
-        if (m_obj != nullptr || m_objsptr != nullptr) {
+        size_t count = getObjectCount();
+        if (count > 0) {
             if (!checkHandle(true)) {
                 return false;
             }
-            if (m_objsptr != nullptr && m_objsptr->size() > 1) {
+            if (count > 1) {
                 succeed = m_handle->runTransaction([&](Handle& handle) {
                     WCDB_UNUSED(handle);
                     return realExecute();
@@ -126,20 +169,8 @@ public:
 
 protected:
     Insert(Recyclable<InnerDatabase*> databaseHolder)
-    : ChainCall(databaseHolder)
+    : ChainCall(databaseHolder), m_valueType(ValueType::Invalid), m_obj(nullptr)
     {
-    }
-
-    Insert<ObjectType>& values(const ValueArray<ObjectType>* objects)
-    {
-        m_objsptr = objects;
-        return *this;
-    }
-
-    Insert<ObjectType>& value(const ObjectType* obj)
-    {
-        m_obj = obj;
-        return *this;
     }
 
 private:
@@ -168,14 +199,12 @@ private:
         bool succeed = false;
         if (m_handle->prepare(m_statement)) {
             succeed = true;
-            if (m_obj == nullptr) {
-                for (const ObjectType& obj : *m_objsptr) {
-                    if (!(succeed = stepOneObject(obj, autoIncrementsOfDefinitions))) {
-                        break;
-                    }
+            size_t count = getObjectCount();
+            for (int i = 0; i < count; i++) {
+                const ObjectType& obj = getObjectAtIndex(i);
+                if (!(succeed = stepOneObject(obj, autoIncrementsOfDefinitions))) {
+                    break;
                 }
-            } else {
-                succeed = stepOneObject(*m_obj, autoIncrementsOfDefinitions);
             }
             m_handle->finalize();
         }
@@ -203,10 +232,56 @@ private:
         return true;
     }
 
+    size_t getObjectCount() const
+    {
+        switch (m_valueType) {
+        case ValueType::SingleObject:
+            return 1;
+        case ValueType::ObjectArray:
+            return m_objArr->size();
+        case ValueType::ObjectPtrArray:
+            return m_objPtrArr->size();
+        case ValueType::ObjectSharedPtrArray:
+            return m_objSharedPtrArr->size();
+        default:
+            return 0;
+        }
+    }
+
+    const ObjectType& getObjectAtIndex(int index)
+    {
+        switch (m_valueType) {
+        case ValueType::SingleObject:
+            return *m_obj;
+        case ValueType::ObjectArray:
+            return (*m_objArr)[index];
+        case ValueType::ObjectPtrArray:
+            return *((*m_objPtrArr)[index]);
+        case ValueType::ObjectSharedPtrArray:
+            return *((*m_objSharedPtrArr)[index]);
+        default:
+            abort();
+            return *m_obj;
+        }
+    }
+
     Fields m_fields;
-    ValueArray<ObjectType> m_objs;
-    const ValueArray<ObjectType>* m_objsptr = nullptr;
-    const ObjectType* m_obj = nullptr;
+
+    enum class ValueType : signed char {
+        Invalid = 0,
+        SingleObject,
+        ObjectArray,
+        ObjectPtrArray,
+        ObjectSharedPtrArray,
+    };
+    ValueType m_valueType = ValueType::Invalid;
+
+    union {
+        const ObjectType* m_obj;
+        const ValueArray<ObjectType>* m_objArr;
+        const ValueArray<ObjectType*>* m_objPtrArr;
+        const ValueArray<std::shared_ptr<ObjectType>>* m_objSharedPtrArr;
+    };
 };
 
 } // namespace WCDB
