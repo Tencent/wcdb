@@ -45,6 +45,7 @@ AbstractHandle::AbstractHandle()
 , m_fullSQLTrace(false)
 , m_busyTrace(false)
 , m_tid(0)
+, m_threadErrorProne(nullptr)
 , m_canBeSuspended(false)
 {
 }
@@ -830,6 +831,9 @@ void AbstractHandle::notifyError(int rc, const UnsafeStringView &sql, const Unsa
     } else {
         m_error.infos.erase(ErrorStringKeySQL);
     }
+    if (m_error.level >= Error::Level::Error && m_threadErrorProne != nullptr) {
+        m_threadErrorProne->setThreadedError(m_error);
+    }
     Notifier::shared().notify(m_error);
 }
 
@@ -844,6 +848,11 @@ void AbstractHandle::markErrorAsUnignorable(int count)
         m_ignorableCodes.pop_back();
         --count;
     }
+}
+
+void AbstractHandle::setThreadedErrorProne(ThreadedErrorProne *threadedErrorProne)
+{
+    m_threadErrorProne = threadedErrorProne;
 }
 
 #pragma mark - Suspend

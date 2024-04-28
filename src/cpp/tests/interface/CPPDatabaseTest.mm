@@ -111,6 +111,13 @@
     }
 }
 
+- (void)test_get_error
+{
+    TestCaseAssertFalse(self.database->insertObject(CPPTestCaseObject(), "notExistTable"));
+    TestCaseAssertFalse(self.database->getError().isOK());
+    TestCaseAssertTrue(self.database->getError().getMessage().contain("notExistTable"));
+}
+
 - (void)test_feature_run_while_closing
 {
     TestCaseAssertTrue(self.database->canOpen());

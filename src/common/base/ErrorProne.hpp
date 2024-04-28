@@ -46,9 +46,9 @@ class ThreadedErrorProne {
 public:
     virtual ~ThreadedErrorProne() = 0;
     const Error &getThreadedError();
+    void setThreadedError(const Error &error);
 
 protected:
-    void setThreadedError(const Error &error);
     void setThreadedError(Error &&error);
     void assignWithSharedThreadedError();
 

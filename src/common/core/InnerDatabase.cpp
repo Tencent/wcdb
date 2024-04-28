@@ -351,6 +351,8 @@ std::shared_ptr<InnerHandle> InnerDatabase::generateSlotedHandle(HandleType type
         return nullptr;
     }
 
+    handle->setThreadedErrorProne(this);
+
     if (!setupHandle(type, handle.get())) {
         return nullptr;
     }

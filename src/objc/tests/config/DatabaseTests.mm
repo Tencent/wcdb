@@ -118,6 +118,13 @@
     }
 }
 
+- (void)test_get_error
+{
+    TestCaseAssertFalse([self.database insertObject:[[TestCaseObject alloc] init] intoTable:@"notExistTable"]);
+    TestCaseAssertFalse([[self.database error] isOK]);
+    TestCaseAssertTrue([self.database.error.message containsString:@"notExistTable"]);
+}
+
 - (void)test_feature_run_while_closing
 {
     TestCaseAssertTrue([self.database canOpen]);

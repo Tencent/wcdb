@@ -239,6 +239,7 @@ public:
     // call it as push/pop in stack structure.
     void markErrorAsIgnorable(Error::Code ignorableCode);
     void markErrorAsUnignorable(int count = 1);
+    void setThreadedErrorProne(ThreadedErrorProne *threadedErrorProne);
 
 private:
     // The level of error will be "Ignore" if it's marked as ignorable.
@@ -247,6 +248,7 @@ private:
     bool APIExit(int rc, const UnsafeStringView &sql);
     bool APIExit(int rc, const char *sql);
 
+    ThreadedErrorProne *m_threadErrorProne;
     std::vector<int> m_ignorableCodes;
 
 #pragma mark - Suspend
