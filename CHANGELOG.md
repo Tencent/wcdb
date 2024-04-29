@@ -1,3 +1,10 @@
+## v2.1.3
+
+* Add ProGuard config for WCDB Java/Kotlin
+* Support to build WCDB C++ as a framework on Apple platform with CMake
+* Support to insert an array of object pointers or object shared pointers in WCDB C++
+* Fix the bug that error cannot be obtained through database
+
 ## v2.1.2
 
 * Some bugfix for data compression

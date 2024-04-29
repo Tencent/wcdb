@@ -1,7 +1,7 @@
 # WCDB
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/wcdb/pulls)
-[![Release Version](https://img.shields.io/badge/Release-2.1.2-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
+[![Release Version](https://img.shields.io/badge/Release-2.1.3-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
 [![Platform](https://img.shields.io/badge/Platform-%20iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)
 [![Language](https://img.shields.io/badge/Language-%20C++%20%7C%20Java%20%7C%20Kotlin%20%7C%20Swift%20%7C%20Objc-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)
 
