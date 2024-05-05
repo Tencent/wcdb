@@ -122,8 +122,20 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
     }
 
     Optional<UnsafeData> data = dataEnummerator();
+    static const int64_t kMaxTrainDataSize = 4LL * 1024 * 1024 * 1024;
     while (data.hasValue()) {
         size_t dataSize = data.value().size();
+        if (dataSize == 0) {
+            continue;
+        }
+        if (totalSize + dataSize > kMaxTrainDataSize) {
+            Error error(Error::Code::ZstdError,
+                        Error::Level::Warning,
+                        "The size of the training data exceeds the maximum value of 4G");
+            Notifier::shared().notify(error);
+            SharedThreadedErrorProne::setThreadedError(std::move(error));
+            break;
+        }
         if (totalSize + dataSize > allData.size()) {
             size_t newSize = std::max(2 * allData.size(), allData.size() + dataSize);
             if (!allData.resize(newSize)) {
