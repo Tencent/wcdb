@@ -180,7 +180,11 @@ Optional<bool> CompressHandleOperator::compressRows(const CompressionTableInfo* 
     }
 
     m_performance.compressTime += Time::currentThreadCPUTimeInMicroseconds() - start;
-    tryReportPerformance();
+    if (m_performance.compressedCount + m_performance.uncompressedCount > CompressionUpdateRecordBatchCount
+        || (compressionFinish
+            && m_performance.compressedCount + m_performance.uncompressedCount > 0)) {
+        reportPerformance(info->getTable());
+    }
 
     return compressionFinish;
 }
@@ -422,13 +426,8 @@ bool CompressHandleOperator::updateCompressionRecord()
     return ret;
 }
 
-void CompressHandleOperator::tryReportPerformance()
+void CompressHandleOperator::reportPerformance(const UnsafeStringView& table)
 {
-    if (m_performance.compressedCount + m_performance.uncompressedCount
-        < CompressionUpdateRecordBatchCount) {
-        return;
-    }
-
     Error error(Error::Code::Notice, Error::Level::Notice, "Compression performance");
     error.infos.insert_or_assign(ErrorStringKeyPath, getHandle()->getPath());
     error.infos.insert_or_assign(ErrorIntKeyTag, (long) getHandle()->getTag());
@@ -438,6 +437,7 @@ void CompressHandleOperator::tryReportPerformance()
     error.infos.insert_or_assign("OriginalSize", m_performance.originalSize);
     error.infos.insert_or_assign("CompressedSize", m_performance.compressedSize);
     error.infos.insert_or_assign("TotalSize", m_performance.totalSize);
+    error.infos.insert_or_assign("Table", table);
 
     Notifier::shared().notify(error);
 

@@ -68,7 +68,7 @@ private:
     HandleStatement* m_updateRecordStatement;
 
     CompressionPerformance m_performance;
-    void tryReportPerformance();
+    void reportPerformance(const UnsafeStringView& table);
 
 #pragma mark - Info Initializer
 protected:
