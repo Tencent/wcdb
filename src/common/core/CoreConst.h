@@ -39,7 +39,7 @@ static constexpr double OperationQueueTimeIntervalForRetringAfterFailure = 5.0;
 static constexpr const double OperationQueueTimeIntervalForMigration = 2.0;
 static constexpr const int OperationQueueTolerableFailuresForMigration = 5;
 #pragma mark - Operation Queue - Compression
-static constexpr const double OperationQueueTimeIntervalForCompression = 2.0;
+static constexpr const double OperationQueueTimeIntervalForCompression = 0.2;
 static constexpr const int OperationQueueTolerableFailuresForCompression = 5;
 #pragma mark - Operation Queue - Purge
 static constexpr const double OperationQueueTimeIntervalForPurgingAgain = 30.0;
@@ -164,7 +164,7 @@ static constexpr const double MigrateMaxExpectingDuration = 0.01;
 static constexpr const double MigrateMaxInitializeDuration = 0.005;
 
 #pragma mark - Compression
-static constexpr const int CompressionBatchCount = 100;
+static constexpr const int CompressionBatchCount = 10;
 static constexpr const int CompressionUpdateRecordBatchCount = 1000;
 
 #pragma mark - Vacuum
