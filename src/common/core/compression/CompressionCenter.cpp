@@ -214,6 +214,13 @@ CompressionCenter::compressContent(const UnsafeData& data, DictId dictId, InnerH
             StringView::formatted("Can not find compress dict with id: %d", dictId));
             return NullOpt;
         }
+        if (!dict->tryMemoryVerification()) {
+            errorReportHandle->notifyError(
+            Error::Code::ZstdError,
+            nullptr,
+            StringView::formatted("Dict with id %d is corrupted", dictId));
+            return NullOpt;
+        }
         compressSize = ZSTD_compress_usingCDict((ZSTD_CCtx*) ctx.getOrCreateCCtx(),
                                                 buffer,
                                                 boundSize,

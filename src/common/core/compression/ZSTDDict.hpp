@@ -29,6 +29,7 @@
 #include "StringView.hpp"
 #include "UnsafeData.hpp"
 #include "WCDBOptional.hpp"
+#include <unordered_map>
 
 namespace WCDB {
 
@@ -57,6 +58,21 @@ private:
     DictId m_dictId;
     ZCDict* m_cDict;
     ZDDcit* m_dDict;
+
+#pragma mark - Memory verification
+public:
+    bool tryMemoryVerification() const;
+
+private:
+    static void* dictMemAlloc(void* opaque, size_t size);
+    static void dictMemFree(void* opaque, void* address);
+
+    void initializeMemoryVerification();
+
+    std::unordered_map<void*, std::pair<size_t, uint32_t>> m_memory;
+
+    static constexpr int kDictMaxUseCountBeforeCheck = 10;
+    mutable int m_dictUseCount;
 };
 
 } //namespace WCDB

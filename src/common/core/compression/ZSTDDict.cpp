@@ -26,23 +26,32 @@
 #include "Assertion.hpp"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
+#include <stdlib.h>
 #if defined(WCDB_ZSTD) && WCDB_ZSTD
+#define ZSTD_STATIC_LINKING_ONLY
 #include <zstd/zdict.h>
 #include <zstd/zstd.h>
 #endif
 
 namespace WCDB {
 
-ZSTDDict::ZSTDDict() : m_dictId(0), m_cDict(nullptr), m_dDict(nullptr)
+ZSTDDict::ZSTDDict()
+: m_dictId(0), m_cDict(nullptr), m_dDict(nullptr), m_dictUseCount(0)
 {
 }
 
 ZSTDDict::ZSTDDict(ZSTDDict&& dict)
-: m_dictId(dict.m_dictId), m_cDict(dict.m_cDict), m_dDict(dict.m_dDict)
+: m_dictId(dict.m_dictId)
+, m_cDict(dict.m_cDict)
+, m_dDict(dict.m_dDict)
+, m_memory(std::move(dict.m_memory))
+, m_dictUseCount(dict.m_dictUseCount)
 {
     dict.m_dictId = 0;
     dict.m_cDict = nullptr;
     dict.m_dDict = nullptr;
+    dict.m_memory.clear();
+    dict.m_dictUseCount = 0;
 }
 
 ZSTDDict& ZSTDDict::operator=(ZSTDDict&& other)
@@ -70,6 +79,7 @@ void ZSTDDict::clearDict()
 {
     ZSTD_freeCDict((ZSTD_CDict*) m_cDict);
     ZSTD_freeDDict((ZSTD_DDict*) m_dDict);
+    WCTAssert(m_memory.size() == 0);
 }
 
 bool ZSTDDict::loadData(const UnsafeData& data)
@@ -81,7 +91,19 @@ bool ZSTDDict::loadData(const UnsafeData& data)
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
     }
-    m_cDict = (ZCDict*) ZSTD_createCDict(data.buffer(), data.size(), ZSTD_CLEVEL_DEFAULT);
+
+    ZSTD_compressionParameters cparams
+    = ZSTD_getCParams(ZSTD_CLEVEL_DEFAULT, ZSTD_CONTENTSIZE_UNKNOWN, data.size());
+    m_cDict = (ZCDict*) ZSTD_createCDict_advanced(data.buffer(),
+                                                  data.size(),
+                                                  ZSTD_dlm_byCopy,
+                                                  ZSTD_dct_auto,
+                                                  cparams,
+                                                  {
+                                                  dictMemAlloc,
+                                                  dictMemFree,
+                                                  this,
+                                                  });
     if (m_cDict == nullptr) {
         Error error(Error::Code::ZstdError, Error::Level::Error, "Create compress dict failed!");
         error.infos.insert_or_assign("DictSize", data.size());
@@ -89,6 +111,8 @@ bool ZSTDDict::loadData(const UnsafeData& data)
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
     }
+    initializeMemoryVerification();
+
     m_dDict = (ZDDcit*) ZSTD_createDDict(data.buffer(), data.size());
     if (m_dDict == nullptr) {
         Error error(Error::Code::ZstdError, Error::Level::Error, "Create decompress dict failed!");
@@ -140,6 +164,55 @@ ZCDict* ZSTDDict::getCDict() const
 ZDDcit* ZSTDDict::getDDict() const
 {
     return m_dDict;
+}
+
+#pragma mark - Memory verification
+bool ZSTDDict::tryMemoryVerification() const
+{
+    if (++m_dictUseCount < kDictMaxUseCountBeforeCheck) {
+        return true;
+    }
+    for (const auto& iter : m_memory) {
+        UnsafeData dictMemory((unsigned char*) iter.first, iter.second.first);
+        if (dictMemory.hash() != iter.second.second) {
+            return false;
+        }
+    }
+    m_dictUseCount = 0;
+    return true;
+}
+
+void* ZSTDDict::dictMemAlloc(void* opaque, size_t size)
+{
+    ZSTDDict* dict = static_cast<ZSTDDict*>(opaque);
+    WCTAssert(dict != nullptr);
+    WCTAssert(dict->m_cDict == nullptr);
+    void* buffer = malloc(size);
+    if (buffer != nullptr) {
+        dict->m_memory[buffer] = std::make_pair(size, 0);
+    }
+    return buffer;
+}
+
+void ZSTDDict::dictMemFree(void* opaque, void* address)
+{
+    ZSTDDict* dict = static_cast<ZSTDDict*>(opaque);
+    WCTAssert(dict != nullptr);
+    WCTAssert(dict->m_cDict != nullptr);
+    WCTAssert(address != nullptr);
+    if (address == nullptr) {
+        return;
+    }
+    dict->m_memory.erase(address);
+    free(address);
+}
+
+void ZSTDDict::initializeMemoryVerification()
+{
+    for (auto& iter : m_memory) {
+        UnsafeData dictMemory((unsigned char*) iter.first, iter.second.first);
+        iter.second.second = dictMemory.hash();
+    }
 }
 
 } //namespace WCDB
