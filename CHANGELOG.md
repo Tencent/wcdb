@@ -1,3 +1,8 @@
+## v2.1.4
+
+* Fix the compile error of WCDB Java/Koltin caused by minifyEnabled flag
+* Add regular memory verification to Zstd dict
+
 ## v2.1.3
 
 * Add ProGuard config for WCDB Java/Kotlin
