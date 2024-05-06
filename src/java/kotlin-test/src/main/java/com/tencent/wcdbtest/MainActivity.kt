@@ -47,11 +47,11 @@ class MainActivity : ComponentActivity() {
         thread(start = true) {
             println("start test proguard")
             execute { testBusyRetry() }
-            execute { testZSTDNormalCompress() }
             execute { testReadOnly() }
             execute { testConfigFail() }
             execute { testGlobalTraceError() }
             execute { testGlobalTraceSQL() }
+            execute { testZSTDNormalCompress() }
             println("all proguard tests are finished!")
         }
     }
@@ -65,9 +65,9 @@ class MainActivity : ComponentActivity() {
     private fun testBusyRetry() {
         val testTid = WrappedValue()
         Database.globalTraceBusy({ tag, path, tid, sql ->
-            assert(tag == database?.tag)
-            assert(path == database?.path)
-            assert(sql == "INSERT INTO testTable(id, content) VALUES(?1, ?2)")
+            require(tag == database?.tag)
+            require(path == database?.path)
+            require(sql == "INSERT INTO testTable(id, content) VALUES(?1, ?2)")
             testTid.intValue = tid
         }, 0.1)
         val objects = RandomTool.autoIncrementTestCaseObjects(100000)
@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
         sleep(100)
         database?.insertObject( RandomTool.testObjectWithId(100001), DBTestObject.allFields(), tableName)
         thread.join()
-        assert(testTid.intValue != 0L && testTid.intValue == dispatchTid.intValue)
+        require(testTid.intValue != 0L && testTid.intValue == dispatchTid.intValue)
         Database.globalTraceBusy(null, 0.0)
     }
 
@@ -91,8 +91,8 @@ class MainActivity : ComponentActivity() {
         val tableCompressed = WrappedValue()
         val databaseCompressed = WrappedValue()
         database?.setNotificationWhenCompressed { notifiedDatabase, table ->
-            assert(database?.tag == notifiedDatabase.tag)
-            assert(database?.path == notifiedDatabase.path)
+            require(database?.tag == notifiedDatabase.tag)
+            require(database?.path == notifiedDatabase.path)
             if (table != null) {
                 if (table == tableName) {
                     tableCompressed.boolValue = true
@@ -101,11 +101,11 @@ class MainActivity : ComponentActivity() {
                 databaseCompressed.boolValue = true
             }
         }
-        assert(!database?.isCompressed!!)
+        require(!database?.isCompressed!!)
         database?.stepCompression()
         database?.stepCompression()
-        assert(database!!.isCompressed)
-        assert(tableCompressed.boolValue && databaseCompressed.boolValue)
+        require(database!!.isCompressed)
+        require(tableCompressed.boolValue && databaseCompressed.boolValue)
     }
 
     private fun testReadOnly() {
@@ -118,23 +118,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        assert(database!!.canOpen())
+        require(database!!.canOpen())
         val objects = table!!.allObjects
-        assert(objects.size == 1)
+        require(objects.size == 1)
         var failed = false
         try {
             table!!.insertObject(TestObject.createAutoIncrementObject(RandomTool.string()))
         } catch (e: WCDBException) {
             failed = true
         }
-        assert(failed)
+        require(failed)
     }
 
     private fun testConfigFail() {
         database!!.setConfig( "testConfig" ) {
                 handle -> handle.execute(StatementSelect().select("testColumn").from("testTable"))
         }
-        assert(!database!!.canOpen())
+        require(!database!!.canOpen())
         database!!.setConfig("testConfig", null)
     }
 
@@ -152,31 +152,32 @@ class MainActivity : ComponentActivity() {
                 tested.boolValue = true
             }
         }
-        assert(database!!.canOpen())
+        require(database!!.canOpen())
         try {
             database!!.execute(StatementSelect().select("1").from("dummy"))
         } catch (e: WCDBException) {
-            assert(tested.boolValue)
+            require(tested.boolValue)
         } finally {
-            assert(tested.boolValue)
+            require(tested.boolValue)
         }
     }
 
     private fun testGlobalTraceSQL() {
         val statement = StatementPragma().pragma(Pragma.userVersion)
         val tested = WrappedValue()
+        database!!.close();
         Database.globalTraceSQL(null)
         Database.globalTraceSQL(SQLTracer { tag, path, handleId, sql, info ->
             if (database!!.path != path) {
                 return@SQLTracer
             }
-            assert(tag == database!!.tag)
+            require(tag == database!!.tag)
             if (sql == statement.description) {
                 tested.boolValue = true
             }
         })
         database!!.execute(statement)
-        assert(tested.boolValue)
+        require(tested.boolValue)
         Database.globalTraceSQL(null)
     }
 }
