@@ -201,8 +201,7 @@ public:
                                const UnsafeStringView &table,
                                const Fields &fields = Fields())
     {
-        auto insert
-        = prepareInsert<ObjectType>().orReplace().intoTable(table).value(&obj);
+        auto insert = prepareInsert<ObjectType>().orReplace().intoTable(table).value(obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -285,8 +284,7 @@ public:
                               const UnsafeStringView &table,
                               const Fields &fields = Fields())
     {
-        auto insert
-        = prepareInsert<ObjectType>().orIgnore().intoTable(table).value(&obj);
+        auto insert = prepareInsert<ObjectType>().orIgnore().intoTable(table).value(obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
