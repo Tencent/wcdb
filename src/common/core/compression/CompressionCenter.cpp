@@ -294,10 +294,13 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
     }
 
     if (ZSTD_isError(decompressSize)) {
-        resultAPI.setErrorResult(
-        Error::Code::ZstdError,
-        StringView::formatted("Decompress fail: %s", ZSTD_getErrorName(decompressSize)));
-        return;
+        // The data is corrupted and not recoverable. Just ignore it.
+        Error error(Error::Code::ZstdError,
+                    Error::Level::Error,
+                    StringView::formatted("Decompress fail: %s",
+                                          ZSTD_getErrorName(decompressSize)));
+        Notifier::shared().notify(error);
+        decompressSize = 0;
     }
     if (originType == ColumnType::Text) {
         resultAPI.setTextResult(UnsafeStringView((char*) buffer, decompressSize));
