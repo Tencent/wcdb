@@ -153,7 +153,9 @@ void ScalarFunctionAPI::setErrorResult(Error::Code code, const UnsafeStringView 
     if (!m_sqliteContext) {
         return;
     }
-    sqlite3_result_error((sqlite3_context *) m_sqliteContext, msg.data(), (int) code);
+    sqlite3_result_error(
+    (sqlite3_context *) m_sqliteContext, msg.data(), (int) msg.length());
+    sqlite3_result_error_code((sqlite3_context *) m_sqliteContext, (int) code);
 }
 
 void ScalarFunctionAPI::setErrorResult(int code, const UnsafeStringView &msg)
@@ -161,7 +163,9 @@ void ScalarFunctionAPI::setErrorResult(int code, const UnsafeStringView &msg)
     if (!m_sqliteContext) {
         return;
     }
-    sqlite3_result_error((sqlite3_context *) m_sqliteContext, msg.data(), code);
+    sqlite3_result_error(
+    (sqlite3_context *) m_sqliteContext, msg.data(), (int) msg.length());
+    sqlite3_result_error_code((sqlite3_context *) m_sqliteContext, code);
 }
 
 void *ScalarFunctionAPI::getUserData() const
