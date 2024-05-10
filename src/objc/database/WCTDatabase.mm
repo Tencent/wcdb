@@ -99,6 +99,17 @@
     _database->close(callback);
 }
 
+- (BOOL)vacuum:(WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated
+{
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
+    if (onProgressUpdated != nil) {
+        callback = [onProgressUpdated](double percentage, double increment) {
+            return onProgressUpdated(percentage, increment);
+        };
+    }
+    return _database->vacuum(callback);
+}
+
 - (WCTError *)error
 {
     return [[WCTError alloc] initWithError:_database->getThreadedError()];

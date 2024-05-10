@@ -168,6 +168,19 @@ public:
      */
     bool passiveCheckpoint();
 
+    /**
+     Triggered when operation progresses, you can return false to stop the operation.
+     */
+    typedef std::function<bool /* continue flag */ (double progress /* percentage */, double increment /* increment */)> ProgressUpdateCallback;
+
+    /**
+     @brief Vacuum current database.
+     It can be used to vacuum a database of any size with limited memory usage.
+     @see   `Database::ProgressUpdateCallback`.
+     @return true if vacuum succeed.
+     */
+    bool vacuum(ProgressUpdateCallback onProgressUpdated);
+
 #if defined(_WIN32)
     /**
      @brief Config the id of UI thread.
@@ -609,11 +622,6 @@ public:
     bool containsDeposited() const;
 
     /**
-     Triggered when operation progresses, you can return false to stop the operation.
-     */
-    typedef std::function<bool /* continue flag */ (double progress /* percentage */, double increment /* increment */)> ProgressUpdateCallback;
-
-    /**
      @brief Recover data from a corruped db.
      If there is a valid backup of this database, most of the uncorrupted data can be recovered, 
      otherwise WCDB will try to read all the data that can still be accessed, starting from the first page of the database.
@@ -625,14 +633,6 @@ public:
      @return Percentage of repaired data. 0 or less then 0 means data recovery failed. 1 means data is fully recovered.
      */
     double retrieve(ProgressUpdateCallback onProgressUpdated);
-
-    /**
-     @brief Vacuum current database.
-     It can be used to vacuum a database of any size with limited memory usage.
-     @see   `Database::ProgressUpdateCallback`.
-     @return true if vacuum succeed.
-     */
-    bool vacuum(ProgressUpdateCallback onProgressUpdated);
 
 #pragma mark - Config
     enum CipherVersion : int {

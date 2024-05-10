@@ -243,6 +243,32 @@ public class Database {
         }
         return try getHandle(writeHint: hint).exec(statement)
     }
+
+    public typealias ProgressUpdate = (_ percentage: Double, _ increment: Double) -> Bool /* Continue or not */
+
+    /// Vacuum current database.
+    /// It can be used to vacuum a database of any size with limited memory usage.
+    public func vacuum(with progress: ProgressUpdate?) throws {
+        if let progress = progress {
+            let cppProgress: @convention(c) (UnsafeMutableRawPointer?, Double, Double) -> Bool = {
+                cppContext, percentage, increment in
+                let progressWrap: ValueWrap<ProgressUpdate>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let progressWrap = progressWrap else {
+                    return false
+                }
+                return progressWrap.value(percentage, increment)
+            }
+            let progressWrap = ValueWrap(progress)
+            let progressWrapPointer = ObjectBridge.getUntypeSwiftObject(progressWrap)
+            if !WCDBDatabaseVacuum(database, cppProgress, progressWrapPointer, ObjectBridge.objectDestructor) {
+                throw getError()
+            }
+        } else {
+            if !WCDBDatabaseVacuum(database, nil, nil, nil) {
+                throw getError()
+            }
+        }
+    }
 }
 
 // Config
@@ -842,8 +868,6 @@ public extension Database {
         }
     }
 
-    typealias ProgressUpdate = (_ percentage: Double, _ increment: Double) -> Bool /* Continue or not */
-
     /// Recover data from a corruped db.
     ///
     /// If there is a valid backup of this database, most of the uncorrupted data can be recovered,
@@ -897,30 +921,6 @@ public extension Database {
     func removeDepositedFiles() throws {
         if !WCDBDatabaseRemoveDepositedFiles(database) {
             throw getError()
-        }
-    }
-
-    /// Vacuum current database.
-    /// It can be used to vacuum a database of any size with limited memory usage.
-    func vacuum(with progress: ProgressUpdate?) throws {
-        if let progress = progress {
-            let cppProgress: @convention(c) (UnsafeMutableRawPointer?, Double, Double) -> Bool = {
-                cppContext, percentage, increment in
-                let progressWrap: ValueWrap<ProgressUpdate>? = ObjectBridge.extractTypedSwiftObject(cppContext)
-                guard let progressWrap = progressWrap else {
-                    return false
-                }
-                return progressWrap.value(percentage, increment)
-            }
-            let progressWrap = ValueWrap(progress)
-            let progressWrapPointer = ObjectBridge.getUntypeSwiftObject(progressWrap)
-            if !WCDBDatabaseVacuum(database, cppProgress, progressWrapPointer, ObjectBridge.objectDestructor) {
-                throw getError()
-            }
-        } else {
-            if !WCDBDatabaseVacuum(database, nil, nil, nil) {
-                throw getError()
-            }
         }
     }
 }

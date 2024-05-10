@@ -91,6 +91,15 @@ WCDB_API @interface WCTDatabase : NSObject
 - (void)close:(WCDB_NO_ESCAPE WCTCloseBlock)onClosed;
 
 /**
+ @brief Vacuum current database.
+ It can be used to vacuum a database of any size with limited memory usage.
+ @param onProgressUpdated block.
+ @see   `WCTProgressUpdateBlock`.
+ @return YES if vacuum succeed.
+ */
+- (BOOL)vacuum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
+
+/**
  @brief Get the most recent error for current database in the current thread.
         Since it is too cumbersome to get the error after every database operation, it‘s better to use monitoring interfaces to obtain database errors and print them to the log.
  @see   `[WCTDatabase globalTraceError:]`

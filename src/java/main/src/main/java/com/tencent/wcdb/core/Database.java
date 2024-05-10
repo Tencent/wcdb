@@ -243,6 +243,34 @@ public class Database extends HandleORMOperation {
      */
     public static native void setSoftHeapLimit(long limit);
 
+    public interface ProgressMonitor {
+        /**
+         * Triggered when operation progresses, you can return false to stop the operation.
+         * @param percentage The percentage of current status.
+         * @param increment The increment from last status.
+         * @return True to continue current operation.
+         */
+        boolean onProgressUpdate(double percentage, double increment);
+    }
+
+    private static boolean onProgressUpdate(ProgressMonitor progress, double percentage, double increment) {
+        return progress.onProgressUpdate(percentage, increment);
+    }
+
+    /**
+     * Vacuum current database.
+     * It can be used to vacuum a database of any size with limited memory usage.
+     * @param monitor A progress monitor.
+     * @throws WCDBException if any error occurs.
+     */
+    public void vacuum(@Nullable ProgressMonitor monitor) throws WCDBException {
+        if(!vacuum(cppObj, monitor)) {
+            throw createException();
+        }
+    }
+
+    private static native boolean vacuum(long self, ProgressMonitor monitor);
+
     WCDBException createException() {
         return WCDBException.createException(getError(cppObj));
     }
@@ -862,20 +890,6 @@ public class Database extends HandleORMOperation {
 
     private static native void filterBackup(long self, BackupFilter filter);
 
-    public interface ProgressMonitor {
-        /**
-         * Triggered when operation progresses, you can return false to stop the operation.
-         * @param percentage The percentage of current status.
-         * @param increment The increment from last status.
-         * @return True to continue current operation.
-         */
-        boolean onProgressUpdate(double percentage, double increment);
-    }
-
-    private static boolean onProgressUpdate(ProgressMonitor progress, double percentage, double increment) {
-        return progress.onProgressUpdate(percentage, increment);
-    }
-
     /**
      * Recover data from a corruped db.
      * If there is a valid backup of this database, most of the uncorrupted data can be recovered,
@@ -896,20 +910,6 @@ public class Database extends HandleORMOperation {
     }
 
     private static native double retrieve(long self, ProgressMonitor monitor);
-
-    /**
-     * Vacuum current database.
-     * It can be used to vacuum a database of any size with limited memory usage.
-     * @param monitor A progress monitor.
-     * @throws WCDBException if any error occurs.
-     */
-    public void vacuum(@Nullable ProgressMonitor monitor) throws WCDBException {
-        if(!vacuum(cppObj, monitor)) {
-            throw createException();
-        }
-    }
-
-    private static native boolean vacuum(long self, ProgressMonitor monitor);
 
     /**
      * Move the current database to a temporary directory and create a new database at current path.

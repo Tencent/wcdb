@@ -191,6 +191,11 @@ bool Database::passiveCheckpoint()
     return m_innerDatabase->checkpoint(false, InnerDatabase::CheckPointMode::Passive);
 }
 
+bool Database::vacuum(ProgressUpdateCallback onProgressUpdated)
+{
+    return m_innerDatabase->vacuum(onProgressUpdated);
+}
+
 #if defined(_WIN32)
 void Database::setUIThreadId(std::thread::id uiThreadId)
 {
@@ -466,11 +471,6 @@ bool Database::containsDeposited() const
 double Database::retrieve(Database::ProgressUpdateCallback onProgressUpdated)
 {
     return m_innerDatabase->retrieve(onProgressUpdated);
-}
-
-bool Database::vacuum(ProgressUpdateCallback onProgressUpdated)
-{
-    return m_innerDatabase->vacuum(onProgressUpdated);
 }
 
 #pragma mark - Config

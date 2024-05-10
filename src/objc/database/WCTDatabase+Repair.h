@@ -117,15 +117,6 @@ WCDB_API @interface WCTDatabase(Repair)
  */
 - (double)retrieve:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
 
-/**
- @brief Vacuum current database.
- It can be used to vacuum a database of any size with limited memory usage.
- @param onProgressUpdated block.
- @see   `WCTProgressUpdateBlock`.
- @return YES if vacuum succeed.
- */
-- (BOOL)vacuum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
-
 @end
 
 NS_ASSUME_NONNULL_END
