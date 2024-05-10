@@ -108,7 +108,7 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return NullOpt;
     }
-    size_t totalSize = 0;
+    int64_t totalSize = 0;
     std::vector<size_t> dataSizes;
 
     size_t dictSize = 100 * 1024;

@@ -118,12 +118,14 @@ void FileHandle::close()
     if (m_mapHandle != INVALID_HANDLE_VALUE) {
         bool ret = CloseHandle(m_mapHandle);
         WCTAssert(ret);
+        WCDB_UNUSED(ret);
         m_mapHandle = INVALID_HANDLE_VALUE;
     }
 #endif
     if (m_fd != -1) {
         int ret = ::close(m_fd);
         WCTAssert(ret == 0);
+        WCDB_UNUSED(ret);
         m_fd = -1;
     }
 }

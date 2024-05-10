@@ -37,6 +37,7 @@ void assertFirstBaseClass()
     int offsetOfBase = (char*) (Base*) (Derive*) 0x1000 - (char*) (Derive*) 0x1000;
     // Base must be the first base class of Derive
     assert(offsetOfBase == 0);
+    WCDB_UNUSED(offsetOfBase);
 }
 
 class WCDB_API Binding final : public BaseBinding {
