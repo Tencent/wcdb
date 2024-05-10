@@ -584,7 +584,7 @@ bool CompressingStatementDecorator::processInsert(const StatementInsert& insert)
             }
             HandleStatement& updateUncompressRow = addNewHandleStatement();
             if (!updateUncompressRow.prepare(
-                m_compressionTableInfo->getUpdateUncompressRowStatement())) {
+                m_compressionTableInfo->getUpdateCompressColumnStatement())) {
                 return false;
             }
         }
@@ -753,7 +753,7 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
                 }
 
                 HandleStatement& updateUncompressRow = addNewHandleStatement();
-                if (!updateUncompressRow.prepare(m_compressionTableInfo->getUpdateUncompressRowStatement(
+                if (!updateUncompressRow.prepare(m_compressionTableInfo->getUpdateCompressColumnStatement(
                     &m_compressingUpdateColumns))) {
                     return false;
                 }

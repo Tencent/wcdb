@@ -155,7 +155,7 @@ public:
     bool removeDeposited();
     bool containsDeposited() const;
 
-    typedef Repair::FactoryRetriever::ProgressUpdateCallback ProgressCallback;
+    typedef Progress::ProgressUpdateCallback ProgressCallback;
     double retrieve(const ProgressCallback &onProgressUpdated);
     bool vacuum(const ProgressCallback &onProgressUpdated);
 
@@ -199,6 +199,8 @@ public:
     Optional<bool> stepCompression(bool interruptible);
 
     bool isCompressed() const;
+
+    bool rollbackCompression(const ProgressCallback &callback);
 
 protected:
     void didCompress(const CompressionTableBaseInfo *info) override final;

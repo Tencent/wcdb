@@ -989,6 +989,9 @@ static const JNINativeMethod g_databaseMethods[] = {
       "(J" WCDBJNIDatabaseSignature "$CompressionNotification;)V",
       (void *) WCDBJNIDatabaseFuncName(setNotificationWhenCompressed) },
     { "isCompressed", "(J)Z", (void *) WCDBJNIDatabaseFuncName(isCompressed) },
+    { "rollbackCompression",
+      "(J" WCDBJNIDatabaseSignature "$ProgressMonitor;)Z",
+      (void *) WCDBJNIDatabaseFuncName(rollbackCompression) },
 };
 
 static const JNIBinding g_bindingInfo[] = {

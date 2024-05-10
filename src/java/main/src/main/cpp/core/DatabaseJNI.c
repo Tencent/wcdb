@@ -898,6 +898,18 @@ jboolean WCDBJNIDatabaseClassMethod(isCompressed, jlong self)
     return WCDBDatabaseIsCompressed(selfStruct);
 }
 
+jdouble WCDBJNIDatabaseClassMethod(rollbackCompression, jlong self, jobject onProgressUpdate)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNITryGetVM;
+    WCDBJNICreateGlobalRel(onProgressUpdate);
+    return WCDBDatabaseRollbackCompression(
+    selfStruct,
+    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBJNIDatabaseOnProgressUpdate : NULL,
+    onProgressUpdate,
+    WCDBJNIDestructContext);
+}
+
 jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);

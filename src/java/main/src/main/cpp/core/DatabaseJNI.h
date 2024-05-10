@@ -128,5 +128,6 @@ jboolean WCDBJNIDatabaseClassMethod(stepCompression, jlong self);
 void WCDBJNIDatabaseClassMethod(enableAutoCompression, jlong self, jboolean enable);
 void WCDBJNIDatabaseClassMethod(setNotificationWhenCompressed, jlong self, jobject onCompressed);
 jboolean WCDBJNIDatabaseClassMethod(isCompressed, jlong self);
+jdouble WCDBJNIDatabaseClassMethod(rollbackCompression, jlong self, jobject onProgressUpdate);
 
 jint WCDBJNIDatabaseClassMethod(getNumberOfAliveHandle, jlong self);

@@ -66,4 +66,9 @@ CompressionRecord::getUpdateRecordStatement(const UnsafeStringView &oldTable,
     return StatementUpdate().update(tableName).set(columnTable).to(newTable).where(Column(columnTable) == oldTable);
 }
 
+StatementDropTable CompressionRecord::getDropTableStatement()
+{
+    return StatementDropTable().dropTable(tableName).ifExists();
+}
+
 } //namespace WCDB

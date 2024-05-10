@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 typedef void (^WCTCloseBlock)(void);
 
+/**
+ Triggered when operation progresses.
+ */
+typedef bool /* continue or not */ (^WCTProgressUpdateBlock)(double /* percentage */, double /* increment */);
+
 WCDB_API @interface WCTDatabase : NSObject
 
 /**

@@ -480,8 +480,9 @@
 			baseConfigurationReference = 0DACF8CA2B2B06FA00CB0710 /* ZstdBase.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KJGS8FZF5Q;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -491,6 +492,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -504,8 +506,9 @@
 			baseConfigurationReference = 0DACF8CA2B2B06FA00CB0710 /* ZstdBase.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KJGS8FZF5Q;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -516,6 +519,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

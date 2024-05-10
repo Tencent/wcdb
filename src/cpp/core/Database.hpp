@@ -630,7 +630,7 @@ public:
      @brief Vacuum current database.
      It can be used to vacuum a database of any size with limited memory usage.
      @see   `Database::ProgressUpdateCallback`.
-     @return YES if vacuum succeed.
+     @return true if vacuum succeed.
      */
     bool vacuum(ProgressUpdateCallback onProgressUpdated);
 
@@ -914,6 +914,14 @@ public:
      @return true if all tables in the database has finished compression.
      */
     bool isCompressed() const;
+
+    /**
+     @brief Decompress all compressed data in the database and resave them.
+     @note  It will clear all compression status and progress, and disables automatic compression.
+     @warning If the rollback process is interrupted or failed, the data may be in a mixed state of compressed and uncompressed.
+     @return true if all operation succeed.
+     */
+    bool rollbackCompression(ProgressUpdateCallback onProgressUpdated);
 
 #pragma mark - Version
     /**

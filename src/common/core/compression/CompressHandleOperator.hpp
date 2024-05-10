@@ -40,6 +40,8 @@ public:
     Optional<StringViewSet> getAllTables() override final;
     bool filterComplessingTables(std::set<const CompressionTableInfo*>& allTableInfos) override final;
     Optional<bool> compressRows(const CompressionTableInfo* info) override final;
+    bool rollbackCompression(const CompressionTableInfo* info) override final;
+    bool deleteCompressionRecord() override final;
 
 private:
     typedef struct CompressionPerformance {
@@ -58,6 +60,16 @@ private:
     void resetCompressionStatements();
     void finalizeCompressionStatements();
     bool updateCompressionRecord();
+
+    Optional<int64_t>
+    batchRollbackCompression(const CompressionTableInfo* info,
+                             const std::list<const CompressionColumnInfo*>& compressedColumns,
+                             int64_t& maxRowId,
+                             int64_t curRowId);
+    bool execute(const Statement& statement);
+    Optional<std::list<const CompressionColumnInfo*>>
+    getCompressedColumns(const CompressionTableInfo* info);
+
     int m_compressedCount;
     const CompressionTableInfo* m_compressingTableInfo;
     size_t m_insertParameterCount;

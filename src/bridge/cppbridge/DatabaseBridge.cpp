@@ -748,6 +748,23 @@ void WCDBDatabaseSetNotificationWhenCompressed(CPPDatabase database,
     cppDatabase->setNotificationWhenCompressed(callback);
 }
 
+bool WCDBDatabaseRollbackCompression(CPPDatabase database,
+                                     WCDBProgressUpdate _Nullable monitor,
+                                     void* _Nullable context,
+                                     WCDBContextDestructor _Nullable destructor)
+{
+    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
+    if (monitor != nullptr) {
+        WCDB::RecyclableContext recyclableContext(context, destructor);
+        callback = [monitor, recyclableContext](double percentage, double increment) {
+            monitor(recyclableContext.get(), percentage, increment);
+            return true;
+        };
+    }
+    return cppDatabase->rollbackCompression(callback);
+}
+
 short WCDBDatabaseGetAliveHandleCount(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, 0);

@@ -29,7 +29,11 @@
 
 namespace WCDB {
 
+class CompressionTableInfo;
+
 class WCDB_API CoreFunction final {
+    friend CompressionTableInfo;
+
 public:
     CoreFunction() = delete;
     CoreFunction(const CoreFunction&) = delete;

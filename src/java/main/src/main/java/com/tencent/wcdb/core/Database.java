@@ -1321,6 +1321,21 @@ public class Database extends HandleORMOperation {
 
     private static native boolean isCompressed(long self);
 
+    /**
+     * Decompress all compressed data in the database and resave them.
+     * It will clear all compression status and progress, and disables automatic compression.
+     * If the rollback process is interrupted or failed, the data may be in a mixed state of compressed and uncompressed.
+     * @param monitor A progress monitor.
+     * @throws WCDBException if any error occurs.
+     */
+    public void rollbackCompression(@Nullable ProgressMonitor monitor) throws WCDBException {
+        if(!rollbackCompression(cppObj, monitor)) {
+            throw createException();
+        }
+    }
+
+    private static native boolean rollbackCompression(long self, ProgressMonitor monitor);
+
     @Override
     boolean autoInvalidateHandle() {
         return true;

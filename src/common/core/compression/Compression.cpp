@@ -419,6 +419,47 @@ Optional<bool> Compression::step(Compression::Stepper& stepper)
     return true;
 }
 
+bool Compression::rollbackCompression(Compression::Stepper& stepper)
+{
+    clearProgress();
+    auto worked = tryAcquireTables(stepper);
+    if (!worked.succeed()) {
+        return false;
+    }
+    std::set<const CompressionTableInfo*> needRevertInfos;
+    {
+        SharedLockGuard lockGuard(m_lock);
+        for (auto iter = m_filted.begin(); iter != m_filted.end(); iter++) {
+            if (iter->second == nullptr) {
+                continue;
+            }
+            needRevertInfos.insert(iter->second);
+        }
+    }
+    if (needRevertInfos.size() == 0) {
+        return stepper.deleteCompressionRecord();
+    }
+
+    double tableWeight = 1.0 / needRevertInfos.size();
+    double currentProgress = 0;
+    stepper.setProgressCallback([&](double progress, double) {
+        return updateProgress(currentProgress + tableWeight * progress);
+    });
+    for (auto& info : needRevertInfos) {
+        bool ret = stepper.rollbackCompression(info);
+        if (!ret) {
+            return false;
+        }
+        currentProgress += tableWeight;
+    }
+    bool ret = stepper.deleteCompressionRecord();
+    if (ret) {
+        finishProgress();
+        purge();
+    }
+    return ret;
+}
+
 Optional<bool> Compression::tryAcquireTables(Compression::Stepper& stepper)
 {
     {

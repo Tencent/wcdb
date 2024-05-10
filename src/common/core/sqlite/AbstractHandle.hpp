@@ -169,7 +169,7 @@ public:
         Restart,
         Truncate,
     };
-    bool checkpoint(CheckpointMode mode);
+    bool checkpoint(CheckpointMode mode = CheckpointMode::Passive);
     void disableCheckpointWhenClosing(bool disable);
     void setWALFilePersist(int persist);
     bool setCheckPointLock(bool enable);

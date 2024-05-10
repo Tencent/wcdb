@@ -130,7 +130,7 @@ public:
      WHERE rowid < ?
      (WCDB_CT_compressingColumnA IS NULL OR WCDB_CT_compressingColumnB IS NULL ...)
      ORDER BY rowid DESC
-     LIMIT 100
+     LIMIT 10
      */
     StatementSelect getSelectUncompressRowIdStatement() const;
 
@@ -165,9 +165,33 @@ public:
      WHERE rowid == ?1
      */
     StatementUpdate
-    getUpdateUncompressRowStatement(ColumnInfoPtrList *columnList = nullptr) const;
+    getUpdateCompressColumnStatement(ColumnInfoPtrList *columnList = nullptr) const;
 
     bool stepSelectAndUpdateUncompressRowStatement(HandleStatement *select,
+                                                   HandleStatement *update,
+                                                   int64_t rowid,
+                                                   ColumnInfoPtrList *columnList
+                                                   = nullptr) const;
+
+#pragma mark - Revert compression
+public:
+    /*
+     SELECT rowid FROM compressingTable
+     WHERE rowid < ? AND (WCDB_CT_compressingColumnA NOTNULL OR WCDB_CT_compressingColumnB NOTNULL ...)
+     ORDER BY rowid DESC
+     */
+    StatementSelect getSelectCompressedRowIdStatement(int64_t maxRowId) const;
+
+    /*
+     SELECT wcdb_decompress(compressingColumnA, WCDB_CT_compressingColumnA),
+     wcdb_decompress(compressingColumnB, WCDB_CT_compressingColumnB) ...
+     FROM compressingTable
+     WHERE rowid == ?
+     */
+    StatementSelect
+    getSelectCompressedRowStatement(ColumnInfoPtrList *columnList = nullptr) const;
+
+    bool stepSelectAndUpdateCompressedRowStatement(HandleStatement *select,
                                                    HandleStatement *update,
                                                    int64_t rowid,
                                                    ColumnInfoPtrList *columnList

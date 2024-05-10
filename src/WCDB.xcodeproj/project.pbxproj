@@ -6866,6 +6866,8 @@
 		23775B2E20AD666900E21AB0 /* base */ = {
 			isa = PBXGroup;
 			children = (
+				23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */,
+				23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */,
 				23F0FEB3215F5E9A008399FB /* Lock.cpp */,
 				23F0FEB1215F5E9A008399FB /* Lock.hpp */,
 				390E1C5A2296414C00C24598 /* Thread.cpp */,
@@ -7008,8 +7010,6 @@
 				23AD52F120DBAC4C00664B62 /* UpgradeableErrorProne.hpp */,
 				23EE0EB020B838E100C95998 /* Repairman.cpp */,
 				23EE0EB120B838E100C95998 /* Repairman.hpp */,
-				23A6D4BD20BFD7F9004F2DAA /* Progress.cpp */,
-				23A6D4BE20BFD7F9004F2DAA /* Progress.hpp */,
 				2376CB1920DA5D3B00A68DB5 /* Scoreable.cpp */,
 				2376CB1A20DA5D3B00A68DB5 /* Scoreable.hpp */,
 				23AD52D420DB4A3C00664B62 /* MasterItem.cpp */,

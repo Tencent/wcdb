@@ -360,6 +360,38 @@
     }];
 }
 
+- (void)testRollbackCompression
+{
+    for (int i = 0; i < 3; i++) {
+        self.compressionStatus = (CompressionStatus) i;
+        [self doTestCompress:^{
+            __block double lastPercentage = 0;
+            __block BOOL sanity = YES;
+            bool succeed = [self.database rollbackCompression:^(double percentage, double increment) {
+                if (percentage - lastPercentage != increment
+                    || increment <= 0) {
+                    TestCaseFailure();
+                    sanity = NO;
+                }
+                lastPercentage = percentage;
+                return true;
+            }];
+            TestCaseAssertTrue(sanity);
+            TestCaseAssertTrue(succeed);
+            TestCaseAssertEqual(lastPercentage, 1.0);
+            TestCaseAssertFalse(self.database.isCompressed);
+
+            WCTValue* compressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").notNull())];
+            TestCaseAssertTrue(compressedTextCount.numberValue.intValue == 0);
+            if (!self.compressTwoColumn) {
+                return;
+            }
+            WCTValue* compressedBlobCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_blob").notNull())];
+            TestCaseAssertTrue(compressedBlobCount.numberValue.intValue == 0);
+        }];
+    }
+}
+
 - (void)test_feature_closed_database_will_not_perform_auto_compress
 {
     [self doTestCompress:^{

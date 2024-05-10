@@ -1300,6 +1300,34 @@ public extension Database {
     func isCompressed() -> Bool {
         return WCDBDatabaseIsCompressed(database)
     }
+
+    /// Decompress all compressed data in the database and resave them.
+    ///
+    /// It will clear all compression status and progress, and disables automatic compression.
+    /// Note that if the rollback process is interrupted or failed, the data may be in a mixed state of compressed and uncompressed.
+    ///
+    /// - Returns: true if all operation succeed.
+    func rollbackCompression(with progress: ProgressUpdate?) throws {
+        if let progress = progress {
+            let cppProgress: @convention(c) (UnsafeMutableRawPointer?, Double, Double) -> Bool = {
+                cppContext, percentage, increment in
+                let progressWrap: ValueWrap<ProgressUpdate>? = ObjectBridge.extractTypedSwiftObject(cppContext)
+                guard let progressWrap = progressWrap else {
+                    return false
+                }
+                return progressWrap.value(percentage, increment)
+            }
+            let progressWrap = ValueWrap(progress)
+            let progressWrapPointer = ObjectBridge.getUntypeSwiftObject(progressWrap)
+            if !WCDBDatabaseRollbackCompression(database, cppProgress, progressWrapPointer, ObjectBridge.objectDestructor) {
+                throw getError()
+            }
+        } else {
+            if !WCDBDatabaseRollbackCompression(database, nil, nil, nil) {
+                throw getError()
+            }
+        }
+    }
 }
 
 // FTS

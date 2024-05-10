@@ -24,10 +24,9 @@
 
 #include "Progress.hpp"
 #include "Assertion.hpp"
+#include <algorithm>
 
 namespace WCDB {
-
-namespace Repair {
 
 Progress::Progress() : m_progress(0), m_onProgressUpdated(nullptr)
 {
@@ -35,22 +34,24 @@ Progress::Progress() : m_progress(0), m_onProgressUpdated(nullptr)
 
 Progress::~Progress() = default;
 
+void Progress::clearProgress()
+{
+    m_progress = 0;
+}
+
 bool Progress::increaseProgress(double increment)
 {
-    double progress = m_progress + increment;
-    return updateProgress(progress > 0.9999 ? 0.9999 : progress);
+    return updateProgress(m_progress + increment);
 }
 
-bool Progress::finishProgress()
+bool Progress::updateProgress(double progress, bool force)
 {
-    return updateProgress(1);
-}
-
-bool Progress::updateProgress(double progress)
-{
+    if (!force) {
+        progress = std::min(progress, 0.999);
+    }
     double increment = progress - m_progress;
     WCTAssert(increment >= 0);
-    if (increment > 0) {
+    if (increment > 0.001) {
         m_progress = progress;
         if (m_onProgressUpdated != nullptr) {
             return m_onProgressUpdated(m_progress, increment);
@@ -59,11 +60,14 @@ bool Progress::updateProgress(double progress)
     return true;
 }
 
+bool Progress::finishProgress()
+{
+    return updateProgress(1, true);
+}
+
 void Progress::setProgressCallback(const ProgressUpdateCallback &onProgressUpdated)
 {
     m_onProgressUpdated = onProgressUpdated;
 }
-
-} //namespace Repair
 
 } //namespace WCDB

@@ -238,6 +238,10 @@ void WCDBDatabaseSetNotificationWhenCompressed(CPPDatabase database,
                                                WCDBCompressdNotification _Nullable notification,
                                                void* _Nullable context,
                                                WCDBContextDestructor _Nullable destructor);
+bool WCDBDatabaseRollbackCompression(CPPDatabase database,
+                                     WCDBProgressUpdate _Nullable monitor,
+                                     void* _Nullable context,
+                                     WCDBContextDestructor _Nullable destructor);
 
 short WCDBDatabaseGetAliveHandleCount(CPPDatabase database);
 

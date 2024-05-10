@@ -449,4 +449,142 @@ InnerHandle* CompressHandleOperator::getCurrentHandle() const
     return getHandle();
 }
 
+bool CompressHandleOperator::rollbackCompression(const CompressionTableInfo* info)
+{
+    clearProgress();
+    auto compressedColumns = getCompressedColumns(info);
+    if (compressedColumns.failed()) {
+        return false;
+    }
+    if (compressedColumns.value().size() == 0) {
+        finishProgress();
+        return true;
+    }
+
+    int64_t maxRowId = 0;
+    int64_t curMaxRowid = std::numeric_limits<int64_t>::max();
+    bool succeed = true;
+    while (curMaxRowid > 0) {
+        auto nextMaxRowid = batchRollbackCompression(
+        info, compressedColumns.value(), maxRowId, curMaxRowid);
+        succeed = nextMaxRowid.succeed() && getHandle()->checkpoint();
+        if (!succeed) {
+            return false;
+        }
+        curMaxRowid = nextMaxRowid.value();
+    }
+    if (succeed) {
+        succeed
+        = execute(CompressionRecord::getDeleteRecordStatement(info->getTable()));
+        succeed = succeed && getHandle()->checkpoint();
+    }
+    if (succeed) {
+        finishProgress();
+    }
+    return succeed;
+}
+
+Optional<int64_t> CompressHandleOperator::batchRollbackCompression(
+const CompressionTableInfo* info,
+const std::list<const CompressionColumnInfo*>& compressedColumns,
+int64_t& maxRowId,
+int64_t curRowId)
+{
+    bool ret = getHandle()->runTransaction([&](InnerHandle*) {
+        HandleStatement* selectRowid = getHandle()->getStatement(DecoratorAllType);
+        HandleStatement* selectCompressedColumn
+        = getHandle()->getStatement(DecoratorAllType);
+        HandleStatement* updateCompressedColumn
+        = getHandle()->getStatement(DecoratorAllType);
+
+        bool succeed
+        = selectRowid->prepare(info->getSelectCompressedRowIdStatement(curRowId));
+        succeed = succeed
+                  && selectCompressedColumn->prepare(
+                  info->getSelectCompressedRowStatement(&compressedColumns));
+        succeed = succeed
+                  && updateCompressedColumn->prepare(
+                  info->getUpdateCompressColumnStatement(&compressedColumns));
+
+        int updatedRowCount = 0;
+        if (succeed) {
+            while ((succeed = selectRowid->step()) && !selectRowid->done()) {
+                curRowId = selectRowid->getInteger();
+                if (maxRowId == 0) {
+                    maxRowId = curRowId;
+                }
+
+                succeed = info->stepSelectAndUpdateCompressedRowStatement(
+                selectCompressedColumn, updateCompressedColumn, curRowId);
+                if (!succeed) {
+                    break;
+                }
+
+                if (maxRowId > 0 && !updateProgress(((double) maxRowId - curRowId) / maxRowId)) {
+                    succeed = false;
+                    break;
+                }
+
+                if (++updatedRowCount > 10 * CompressionBatchCount) {
+                    break;
+                }
+            }
+            if (selectRowid->done()) {
+                curRowId = 0;
+            }
+        }
+
+        selectRowid->finalize();
+        selectCompressedColumn->finalize();
+        updateCompressedColumn->finalize();
+        getHandle()->returnStatement(selectRowid);
+        getHandle()->returnStatement(selectCompressedColumn);
+        getHandle()->returnStatement(updateCompressedColumn);
+        return succeed;
+    });
+    if (ret) {
+        return curRowId;
+    } else {
+        return NullOpt;
+    }
+}
+
+bool CompressHandleOperator::deleteCompressionRecord()
+{
+    return execute(CompressionRecord::getDropTableStatement());
+}
+
+bool CompressHandleOperator::execute(const Statement& statement)
+{
+    HandleStatement* handleStatement = getHandle()->getStatement(DecoratorAllType);
+    bool succeed = handleStatement->prepare(statement) && handleStatement->step();
+    handleStatement->finalize();
+    getHandle()->returnStatement(handleStatement);
+    return succeed;
+}
+
+Optional<std::list<const CompressionColumnInfo*>>
+CompressHandleOperator::getCompressedColumns(const CompressionTableInfo* info)
+{
+    auto optionalMetas = getHandle()->getTableMeta(Schema::main(), info->getTable());
+    if (!optionalMetas.succeed()) {
+        return NullOpt;
+    }
+    auto& metas = optionalMetas.value();
+    std::list<StringView> curColumns;
+    for (const auto& meta : metas) {
+        curColumns.push_back(meta.name);
+    }
+
+    std::list<const CompressionColumnInfo*> compressedColumns;
+    for (auto& compressingColumn : info->getColumnInfos()) {
+        for (const auto& column : curColumns) {
+            if (column.equal(compressingColumn.getTypeColumn().syntax().name)) {
+                compressedColumns.push_back(&compressingColumn);
+            }
+        }
+    }
+    return compressedColumns;
+}
+
 } //namespace WCDB

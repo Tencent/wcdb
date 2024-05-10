@@ -291,7 +291,7 @@ CompressionTableInfo::getSelectUncompressRowStatement(ColumnInfoPtrList *columnL
 }
 
 StatementUpdate
-CompressionTableInfo::getUpdateUncompressRowStatement(ColumnInfoPtrList *columnList) const
+CompressionTableInfo::getUpdateCompressColumnStatement(ColumnInfoPtrList *columnList) const
 {
     StatementUpdate update
     = StatementUpdate().update(m_table).where(Column::rowid() == BindParameter(1));
@@ -395,6 +395,84 @@ HandleStatement *select, HandleStatement *update, int64_t rowid, ColumnInfoPtrLi
     if (!update->step()) {
         return false;
     }
+    return true;
+}
+
+StatementSelect CompressionTableInfo::getSelectCompressedRowIdStatement(int64_t maxRowId) const
+{
+    Expression condition;
+    for (auto &column : m_compressingColumns) {
+        if (condition.syntax().isValid()) {
+            condition = condition || column.getTypeColumn().notNull();
+        } else {
+            condition = column.getTypeColumn().notNull();
+        }
+    }
+    return StatementSelect()
+    .select(Column::rowid())
+    .from(m_table)
+    .where(condition && Column::rowid() < maxRowId)
+    .order(Column::rowid().asOrder(Order::DESC));
+}
+
+StatementSelect
+CompressionTableInfo::getSelectCompressedRowStatement(ColumnInfoPtrList *columnList) const
+{
+    ResultColumns resultColumns;
+    ColumnInfoIter columnIter(&m_compressingColumns, columnList);
+    const CompressionColumnInfo *column = nullptr;
+    while ((column = columnIter.nextInfo()) != nullptr) {
+        resultColumns.push_back(
+        CoreFunction::decompress(column->getColumn(), column->getTypeColumn()));
+    }
+    return StatementSelect().select(resultColumns).from(m_table).where(Column::rowid() == BindParameter());
+}
+
+bool CompressionTableInfo::stepSelectAndUpdateCompressedRowStatement(
+HandleStatement *select, HandleStatement *update, int64_t rowid, ColumnInfoPtrList *columnList) const
+{
+    select->bindInteger(rowid);
+    if (!select->step()) {
+        return false;
+    }
+    if (select->done()) {
+        return true;
+    }
+    update->bindInteger(rowid);
+
+    int columnIndex = 0;
+    ColumnInfoIter columnIter(&getColumnInfos(), columnList);
+    while (columnIter.nextInfo() != nullptr) {
+        int selectIndex = columnIndex;
+        int updateIndex = 2 * columnIndex + 2;
+        ColumnType valueType = select->getType(selectIndex);
+
+        switch (valueType) {
+        case ColumnType::Null:
+            update->bindNull(updateIndex);
+            break;
+        case ColumnType::Integer:
+            update->bindInteger(select->getInteger(selectIndex), updateIndex);
+            break;
+        case ColumnType::Float:
+            update->bindDouble(select->getDouble(selectIndex), updateIndex);
+            break;
+        case ColumnType::Text:
+            update->bindText(select->getText(selectIndex), updateIndex);
+            break;
+        case ColumnType::BLOB:
+            update->bindBLOB(select->getBLOB(selectIndex), updateIndex);
+            break;
+        }
+        update->bindNull(updateIndex + 1);
+        columnIndex++;
+    }
+    if (!update->step()) {
+        return false;
+    }
+
+    select->reset();
+    update->reset();
     return true;
 }
 

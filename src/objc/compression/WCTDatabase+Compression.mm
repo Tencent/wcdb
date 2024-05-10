@@ -127,4 +127,15 @@
     return _database->isCompressed();
 }
 
+- (BOOL)rollbackCompression:(WCTProgressUpdateBlock)onProgressUpdated
+{
+    WCDB::InnerDatabase::ProgressCallback callback = nullptr;
+    if (onProgressUpdated != nil) {
+        callback = [onProgressUpdated](double percentage, double increment) {
+            return onProgressUpdated(percentage, increment);
+        };
+    }
+    return _database->rollbackCompression(callback);
+}
+
 @end

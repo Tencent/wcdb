@@ -1118,6 +1118,34 @@ bool InnerDatabase::isCompressed() const
     return m_compression.isCompressed();
 }
 
+bool InnerDatabase::rollbackCompression(const ProgressCallback &callback)
+{
+    WCTRemedialAssert(
+    !isInTransaction(), "Can't revert compression in transaction.", return false;);
+
+    bool ret = false;
+    close([&]() {
+        InitializedGuard initializedGuard = initialize();
+        if (!initializedGuard.valid()) {
+            return; // mark as succeed if it's not an auto initialize action.
+        }
+
+        m_compression.setProgressCallback(callback);
+
+        RecyclableHandle handle = flowOut(HandleType::Compress);
+        if (handle != nullptr) {
+            CompressHandleOperator &compressOperator
+            = handle.getDecorative()->getOrCreateOperator<CompressHandleOperator>(OperatorCompress);
+
+            ret = m_compression.rollbackCompression(compressOperator);
+            if (ret) {
+                Core::shared().enableAutoCompress(this, false);
+            }
+        }
+    });
+    return ret;
+}
+
 #pragma mark - Checkpoint
 bool InnerDatabase::checkpoint(bool interruptible, CheckPointMode mode)
 {

@@ -730,6 +730,11 @@ bool Database::isCompressed() const
     return m_innerDatabase->isCompressed();
 }
 
+bool Database::rollbackCompression(ProgressUpdateCallback onProgressUpdated)
+{
+    return m_innerDatabase->rollbackCompression(onProgressUpdated);
+}
+
 #pragma mark - Version
 
 const StringView Database::getVersion()

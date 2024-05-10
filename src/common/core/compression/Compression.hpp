@@ -26,6 +26,7 @@
 
 #include "CompressionInfo.hpp"
 #include "Lock.hpp"
+#include "Progress.hpp"
 #include "ThreadLocal.hpp"
 #include <functional>
 #include <map>
@@ -45,7 +46,7 @@ protected:
     virtual void didCompress(const CompressionTableBaseInfo* info) = 0;
 };
 
-class Compression final {
+class Compression final : public Progress {
 #pragma mark - Initialize
 public:
     Compression(CompressionEvent* event);
@@ -129,7 +130,7 @@ private:
 
 #pragma mark - Step
 public:
-    class Stepper : public InfoInitializer {
+    class Stepper : public InfoInitializer, public Progress {
         friend class Compression;
 
     public:
@@ -141,9 +142,15 @@ public:
         filterComplessingTables(std::set<const CompressionTableInfo*>& allTableInfos)
         = 0;
         virtual Optional<bool> compressRows(const CompressionTableInfo* info) = 0;
+
+        typedef std::function<void(double)> ProgressCallback;
+        virtual bool rollbackCompression(const CompressionTableInfo* info) = 0;
+        virtual bool deleteCompressionRecord() = 0;
     };
 
     Optional<bool> step(Compression::Stepper& stepper);
+
+    bool rollbackCompression(Compression::Stepper& stepper);
 
 protected:
     // worked

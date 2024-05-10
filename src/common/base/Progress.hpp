@@ -28,8 +28,6 @@
 
 namespace WCDB {
 
-namespace Repair {
-
 class Progress {
 public:
     Progress();
@@ -39,15 +37,14 @@ public:
     void setProgressCallback(const ProgressUpdateCallback &onProgressUpdated);
 
 protected:
+    void clearProgress();
     bool increaseProgress(double increment);
+    bool updateProgress(double progress, bool force = false);
     bool finishProgress();
 
 private:
-    bool updateProgress(double progress);
     double m_progress;
     ProgressUpdateCallback m_onProgressUpdated;
 };
-
-} //namespace Repair
 
 } //namespace WCDB

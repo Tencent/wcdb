@@ -68,6 +68,11 @@ typedef struct CompressionRecord {
      */
     static StatementUpdate getUpdateRecordStatement(const UnsafeStringView& oldTable,
                                                     const UnsafeStringView& newTable);
+
+    /*
+     DROP TABLE IF EXIST wcdb_builtin_compression_record
+     */
+    static StatementDropTable getDropTableStatement();
 } CompressionRecord;
 
 } // namespace WCDB

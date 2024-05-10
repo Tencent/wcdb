@@ -115,6 +115,14 @@ WCDB_API @interface WCTDatabase(Compression)
  */
 - (BOOL)isCompressed;
 
+/**
+ @brief Decompress all compressed data in the database and resave them.
+ @note  It will clear all compression status and progress, and disables automatic compression.
+ @warning If the rollback process is interrupted or failed, the data may be in a mixed state of compressed and uncompressed.
+ @return YES if all operation succeed.
+ */
+- (BOOL)rollbackCompression:(nullable WCDB_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
+
 @end
 
 NS_ASSUME_NONNULL_END
