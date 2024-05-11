@@ -212,7 +212,7 @@
     TestCaseAssertTrue(WCDB::Database::setDefaultTemporaryDirectory(tempDir.UTF8String));
     WCDB::StatementPragma getDirStatement = WCDB::StatementPragma().pragma(WCDB::Pragma("temp_store_directory"));
     WCDB::OptionalValue dir = self.database->getValueFromStatement(getDirStatement);
-    TestCaseAssertTrue(dir.hasValue() && dir.value().textValue().compare(tempDir.UTF8String) == 0);
+    TestCaseAssertTrue(dir.valueOr("").textValue().compare(tempDir.UTF8String) == 0);
 
     TestCaseAssertTrue(WCDB::Database::setDefaultTemporaryDirectory(NULL));
     dir = self.database->getValueFromStatement(getDirStatement);

@@ -592,7 +592,7 @@
 {
     [self insertPresetObjects];
     auto object = self.table.getFirstObjectWithFields(WCDB_FIELD(CPPTestCaseObject::identifier).redirect(WCDB_FIELD(CPPTestCaseObject::identifier).max()));
-    XCTAssertTrue(object.hasValue() && object.value().identifier == self.objects[1].identifier);
+    XCTAssertTrue(object.valueOrDefault().identifier == self.objects[1].identifier);
 }
 
 #pragma mark - inherit

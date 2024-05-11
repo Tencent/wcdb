@@ -42,7 +42,7 @@ public:
 
     bool operator==(const CPPTestCaseObject &other);
 
-    int identifier;
+    int identifier = 0;
     std::string content;
 
     WCDB_CPP_ORM_DECLARATION(CPPTestCaseObject)

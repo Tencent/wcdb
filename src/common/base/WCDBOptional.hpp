@@ -126,6 +126,45 @@ public:
         return std::move(this->m_value);
     }
 
+    template<class U>
+    constexpr T valueOr(U&& v) const&
+    {
+        static_assert(std::is_copy_constructible<T>::value,
+                      "Optional<T>::valueOr: T must be copy constructible");
+        static_assert(std::is_convertible<U, T>::value,
+                      "Optional<T>::valueOr: U must be convertible to T");
+        return this->hasValue() ? this->value() : static_cast<T>(std::forward<U>(v));
+    }
+
+    template<class U>
+    constexpr T valueOr(U&& v) &&
+    {
+        static_assert(std::is_move_constructible<T>::value,
+                      "Optional<T>::valueOr: T must be copy constructible");
+        static_assert(std::is_convertible<U, T>::value,
+                      "Optional<T>::valueOr: U must be convertible to T");
+        return this->hasValue() ? std::move(this->value()) :
+                                  static_cast<T>(std::forward<U>(v));
+    }
+
+    constexpr T valueOrDefault() const&
+    {
+        static_assert(std::is_copy_constructible<T>::value,
+                      "Optional<T>::valueOrDefault: T must be copy constructible");
+        static_assert(std::is_default_constructible<T>::value,
+                      "Optional<T>::valueOrDefault: T must be have default constructor");
+        return this->hasValue() ? this->value() : T();
+    }
+
+    constexpr T valueOrDefault() &&
+    {
+        static_assert(std::is_move_constructible<T>::value,
+                      "Optional<T>::valueOrDefault: T must be copy constructible");
+        static_assert(std::is_default_constructible<T>::value,
+                      "Optional<T>::valueOrDefault: T must be have default constructor");
+        return this->hasValue() ? std::move(this->value()) : T();
+    }
+
 protected:
     template<class That>
     void construct(That&& value)

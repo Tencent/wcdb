@@ -63,7 +63,7 @@ MigratingHandleDecorator::getBindingInfo(const UnsafeStringView& table)
 
     result = bindTable(table);
 
-    bool needBinding = result.hasValue() && result.value() != nullptr;
+    bool needBinding = result.valueOr(nullptr) != nullptr;
 
     bool success = stopBinding(needBinding);
     if (needBinding && !success) {

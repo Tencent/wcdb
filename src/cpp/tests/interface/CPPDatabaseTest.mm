@@ -271,7 +271,7 @@
 
     TestCaseAssertTrue(targetTable.insertObjects(CPPTestCaseObject(4, "d")));
     auto newObject = targetTable.getFirstObject(WCDB_FIELD(CPPTestCaseObject::identifier) == 4);
-    TestCaseAssertTrue(newObject.hasValue() && newObject.value().content.compare("d") == 0);
+    TestCaseAssertTrue(newObject.valueOrDefault().content.compare("d") == 0);
     TestCaseAssertTrue(sourceTable.selectValue(WCDB::Column::all().count()).value() == 2);
     TestCaseAssertTrue(targetTable.selectValue(WCDB::Column::all().count()).value() == 1);
 
@@ -280,7 +280,7 @@
 
     WCDB::StringView migratedTable;
     targetDatabase.setNotificationWhenMigrated([&migratedTable, self](WCDB::Database&, WCDB::Optional<WCDB::Database::MigrationInfo> info) {
-        if (info.hasValue() && info.value().table.compare(self.tableName.UTF8String) == 0) {
+        if (info.valueOrDefault().table.compare(self.tableName.UTF8String) == 0) {
             migratedTable = info.value().sourceTable;
         }
     });

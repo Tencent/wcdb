@@ -187,7 +187,7 @@ Compression::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView&
     if (!info.succeed() && initInfo(initializer, table)) {
         info = getInfo(table);
     }
-    if (info.hasValue() && info.value() != nullptr
+    if (info.valueOr(nullptr) != nullptr
         && !checkCompressingColumn(initializer, info.value())) {
         return NullOpt;
     }

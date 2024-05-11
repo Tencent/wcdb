@@ -523,7 +523,7 @@ Migration::getOrInitInfo(InfoInitializer& initializer, const UnsafeStringView& t
     if (!info.succeed() && initInfo(initializer, table)) {
         info = getInfo(table);
     }
-    if (info.hasValue() && info.value().get() != nullptr
+    if (info.valueOr(nullptr) != nullptr
         && !tryUpdateSequence(initializer, *(info.value().get()))) {
         return NullOpt;
     }

@@ -128,23 +128,23 @@
             switch (i % 5) {
             case 0: {
                 auto ret = self.table.getAllObjects(WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
-                TestCaseAssertTrue(ret.hasValue() && ret.value().size() == 100);
+                TestCaseAssertTrue(ret.valueOrDefault().size() == 100);
             } break;
             case 1: {
                 auto value = self.database->getValueFromStatement(WCDB::StatementSelect().select(CPPTestCaseObject::allFields().count()).from(self.tableName.UTF8String));
-                TestCaseAssertTrue(value.hasValue() && value.value().intValue() == 32000);
+                TestCaseAssertTrue(value.valueOrDefault().intValue() == 32000);
             } break;
             case 2: {
                 auto column = self.table.selectOneColumn(WCDB_FIELD(CPPTestCaseObject::content), WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
-                TestCaseAssertTrue(column.hasValue() && column.value().size() == 100);
+                TestCaseAssertTrue(column.valueOrDefault().size() == 100);
             } break;
             case 3: {
                 auto rows = self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB::Expression(), WCDB::OrderingTerms(), 100, i * 100);
-                TestCaseAssertTrue(rows.hasValue() && rows.value().size() == 100);
+                TestCaseAssertTrue(rows.valueOrDefault().size() == 100);
             } break;
             case 4: {
                 auto row = self.table.selectOneRow(CPPTestCaseObject::allFields(), WCDB::Expression(), WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
-                TestCaseAssertTrue(row.hasValue() && row.value().size() == 2);
+                TestCaseAssertTrue(row.valueOrDefault().size() == 2);
             } break;
 
             default:
