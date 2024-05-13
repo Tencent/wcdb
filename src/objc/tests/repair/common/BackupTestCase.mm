@@ -55,6 +55,11 @@
     return m_objects;
 }
 
+- (void)setObjects:(NSMutableArray*)objects
+{
+    m_objects = (NSMutableArray<NSObject<RepairTestObject>*>*) objects;
+}
+
 - (void)executeTest:(void (^)())operation
 {
     for (int i = 0; i < 6; i++) {

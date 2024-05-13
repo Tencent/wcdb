@@ -23,6 +23,9 @@
  */
 
 #import "BackupTestCase.h"
+#import "FTS3Object+WCTTableCoding.h"
+#import "FTS3Object.h"
+#import "FTS5Object.h"
 #import "Random+RepairTestObject.h"
 #import "SizeBasedFactory.h"
 #import <Foundation/Foundation.h>
@@ -130,7 +133,6 @@
     }];
 }
 
-#pragma mark - Non-Corrupted
 - (void)test_interrupt_vacuum
 {
     [self
@@ -167,6 +169,57 @@
         [self doTestObjectsNoExist];
         [self doTestFactoryNotExist];
     }];
+}
+
+#pragma mark - FTS
+- (void)test_fts3
+{
+    self.tableClass = FTS3Object.class;
+    self.isVirtualTable = YES;
+    [self.database addTokenizer:WCTTokenizerOneOrBinary];
+    [WCTDatabase configTraditionalChineseDict:@{
+        @"們" : @"们",
+        @"員" : @"员",
+    }];
+    NSMutableArray<FTS3Object*>* objects = [[NSMutableArray alloc] init];
+    for (int i = 0; i < self.objectCount; i++) {
+        FTS3Object* object = [[FTS3Object alloc] init];
+        object.content = Random.shared.chineseString;
+        object.extension = Random.shared.englishString;
+        [objects addObject:object];
+    }
+    self.objects = objects;
+    TestCaseAssertTrue([self createTable]);
+    TestCaseAssertTrue([self.table insertObjects:objects]);
+    [self doTestVacuum];
+    [self doTestObjectsExist];
+    self.tableClass = nil;
+    self.isVirtualTable = NO;
+}
+
+- (void)test_fts5
+{
+    self.tableClass = FTS5Object.class;
+    self.isVirtualTable = YES;
+    [self.database addTokenizer:WCTTokenizerVerbatim];
+    [WCTDatabase configTraditionalChineseDict:@{
+        @"們" : @"们",
+        @"員" : @"员",
+    }];
+    NSMutableArray<FTS5Object*>* objects = [[NSMutableArray alloc] init];
+    for (int i = 0; i < self.objectCount; i++) {
+        FTS5Object* object = [[FTS5Object alloc] init];
+        object.content = Random.shared.chineseString;
+        object.extension = Random.shared.englishString;
+        [objects addObject:object];
+    }
+    self.objects = objects;
+    TestCaseAssertTrue([self createTable]);
+    TestCaseAssertTrue([self.table insertObjects:objects]);
+    [self doTestVacuum];
+    [self doTestObjectsExist];
+    self.tableClass = nil;
+    self.isVirtualTable = NO;
 }
 
 #ifndef WCDB_QUICK_TESTS

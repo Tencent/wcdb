@@ -34,6 +34,8 @@
 @property (nonatomic, assign) bool incrementalBackup;
 @property (nonatomic, assign) bool corruptHeader;
 
+- (void)setObjects:(NSMutableArray*)objects;
+
 - (void)executeTest:(void (^)())operation;
 
 - (void)executeFullTest:(void (^)())operation withCheck:(void (^)())check;
