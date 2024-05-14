@@ -91,6 +91,7 @@ bool VacuumHandleOperator::executeVacuum()
             return false;
         }
     }
+    handle->close();
     return finishProgress();
 }
 
