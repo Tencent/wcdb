@@ -1022,9 +1022,13 @@ Optional<bool> InnerDatabase::stepMigration(bool interruptible)
 
 void InnerDatabase::didMigrate(const MigrationBaseInfo *info)
 {
-    SharedLockGuard lockGuard(m_memory);
-    if (m_migratedCallback != nullptr) {
-        m_migratedCallback(this, info);
+    MigratedCallback callback = nullptr;
+    {
+        SharedLockGuard lockGuard(m_memory);
+        callback = m_migratedCallback;
+    }
+    if (callback != nullptr) {
+        callback(this, info);
     }
 }
 
@@ -1091,9 +1095,13 @@ Optional<bool> InnerDatabase::stepCompression(bool interruptible)
 
 void InnerDatabase::didCompress(const CompressionTableBaseInfo *info)
 {
-    SharedLockGuard lockGuard(m_memory);
-    if (m_compressedCallback != nullptr) {
-        m_compressedCallback(this, info);
+    CompressedCallback callback = nullptr;
+    {
+        SharedLockGuard lockGuard(m_memory);
+        callback = m_compressedCallback;
+    }
+    if (callback != nullptr) {
+        callback(this, info);
     }
 }
 
