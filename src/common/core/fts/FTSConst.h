@@ -54,6 +54,10 @@ static constexpr const char* OneOrBinary = "wcdb_one_or_binary";
 static constexpr const char* LegacyOneOrBinary
 = "WCDB"; // Same as OneOrBinary, just for compatibility with older versions
 
+#ifdef __ANDROID__
+static constexpr const char* MMICU = "mmicu";
+#endif
+
 /**
  The following two are WCDB implemented tokenizers for fts5.
  `BuiltinTokenizer::Verbatim` has the same tokenize rules as `BuiltinTokenizer::OneOrBinary` or `BuiltinTokenizer::LegacyOneOrBinary`.

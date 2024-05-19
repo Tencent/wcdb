@@ -47,6 +47,11 @@ public class BuiltinTokenizer {
     public final static String OneOrBinary = "wcdb_one_or_binary";
 
     /**
+     * Deprecated tokenizer for fts3/4.
+     */
+    public final static String MMICU = "mmicu";
+
+    /**
      * `Verbatim` is a WCDB implemented tokenizer for fts5.
      * It has the same tokenize rules as `OneOrBinary`.
      * You can use `com.tencent.wcdb.FTSModule annotation` to config fts tokenizer for a Java ORM class.

@@ -35,8 +35,10 @@ import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.TraditionalChineseObject;
 import com.tencent.wcdbtest.orm.testclass.DBFTS3TestObject;
 import com.tencent.wcdbtest.orm.testclass.DBFTS5TestObject;
+import com.tencent.wcdbtest.orm.testclass.DBMMICUTestObject;
 import com.tencent.wcdbtest.orm.testclass.FTS3TestObject;
 import com.tencent.wcdbtest.orm.testclass.FTS5TestObject;
+import com.tencent.wcdbtest.orm.testclass.MMICUTestObject;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -75,6 +77,34 @@ public class FTSTest extends DatabaseTestCase {
 
         // Symbolic
         List<FTS3TestObject> matchSymbolicObjects = table.getAllObjects(DBFTS3TestObject.content.match("def*"));
+        Assert.assertTrue(matchSymbolicObjects.size() == 1 && matchSymbolicObjects.get(0).content.equals(symbolicObject.content));
+    }
+
+    @Test
+    public void testMMICU() {
+        database.addTokenizer(BuiltinTokenizer.MMICU);
+        database.createVirtualTable(tableName, DBMMICUTestObject.INSTANCE);
+        Table<MMICUTestObject> table = database.getTable(tableName, DBMMICUTestObject.INSTANCE);
+        MMICUTestObject englishObject = new MMICUTestObject(1, "This is English test content");
+        MMICUTestObject chineseObject = new MMICUTestObject(2, "这是中文测试内容");
+        MMICUTestObject numericObject = new MMICUTestObject(1, "123456");
+        MMICUTestObject symbolicObject = new MMICUTestObject(1, "abc..def");
+        table.insertObjects(Arrays.asList(englishObject, chineseObject, numericObject, symbolicObject));
+
+        // English
+        List<MMICUTestObject> matchEnglishObjects = table.getAllObjects(DBMMICUTestObject.content.match("Engl*"));
+        Assert.assertTrue(matchEnglishObjects.size() == 1 && matchEnglishObjects.get(0).content.equals(englishObject.content));
+
+        // Chinese
+        List<MMICUTestObject> matchChineseObjects = table.getAllObjects(DBMMICUTestObject.content.match("中文"));
+        Assert.assertTrue(matchChineseObjects.size() == 1 && matchChineseObjects.get(0).content.equals(chineseObject.content));
+
+        // Numeric
+        List<MMICUTestObject> matchNumericObjects = table.getAllObjects(DBMMICUTestObject.content.match("123*"));
+        Assert.assertTrue(matchNumericObjects.size() == 1 && matchNumericObjects.get(0).content.equals(numericObject.content));
+
+        // Symbolic
+        List<MMICUTestObject> matchSymbolicObjects = table.getAllObjects(DBMMICUTestObject.content.match("def*"));
         Assert.assertTrue(matchSymbolicObjects.size() == 1 && matchSymbolicObjects.get(0).content.equals(symbolicObject.content));
     }
 

@@ -32,6 +32,7 @@ public class BuiltinTokenizer {
 
     // WCDB Builtin tokenizer
     public final static String OneOrBinary = "wcdb_one_or_binary";// Only for FTS3/4
+    public final static String MMICU = "mmicu";
     public final static String Verbatim = "wcdb_verbatim";// Only for FTS5
     public final static String Pinyin = "wcdb_pinyin";// Only for FTS5
 

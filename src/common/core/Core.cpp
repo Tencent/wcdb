@@ -39,6 +39,10 @@
 #include "StringView.hpp"
 #include "SubstringMatchInfo.hpp"
 
+#ifdef __ANDROID__
+#include "MMICUTokenizer.hpp"
+#endif
+
 namespace WCDB {
 
 #pragma mark - Core
@@ -102,6 +106,11 @@ Core::Core()
     registerTokenizer(
     BuiltinTokenizer::Pinyin,
     FTS5TokenizerModuleTemplate<PinyinTokenizer>::specializeWithContext(nullptr));
+
+#ifdef __ANDROID__
+    registerTokenizer(BuiltinTokenizer::MMICU,
+                      FTS3TokenizerModuleTemplate<MMICUTokenizer>::specialize());
+#endif
 
     registerAuxiliaryFunction(
     BuiltinAuxiliaryFunction::SubstringMatchInfo,
