@@ -1,3 +1,11 @@
+## v2.1.5
+
+* Support legacy mmicu tokenizer in WCDB Java/Kotlin
+* Support to rollback compression
+* Improve performance of vacuum
+* Add valueOr interface to Optional
+* Some bugfix for compression and vacuum
+
 ## v2.1.4
 
 * Fix the compile error of WCDB Java/Koltin caused by minifyEnabled flag
