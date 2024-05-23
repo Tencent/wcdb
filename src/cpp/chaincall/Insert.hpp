@@ -200,7 +200,7 @@ private:
         if (m_handle->prepare(m_statement)) {
             succeed = true;
             size_t count = getObjectCount();
-            for (int i = 0; i < count; i++) {
+            for (size_t i = 0; i < count; i++) {
                 const ObjectType& obj = getObjectAtIndex(i);
                 if (!(succeed = stepOneObject(obj, autoIncrementsOfDefinitions))) {
                     break;
@@ -248,7 +248,7 @@ private:
         }
     }
 
-    const ObjectType& getObjectAtIndex(int index)
+    const ObjectType& getObjectAtIndex(size_t index)
     {
         switch (m_valueType) {
         case ValueType::SingleObject:
