@@ -75,7 +75,7 @@ public:
      */
     bool insertObject(const ObjectType &obj, const Fields &fields = Fields())
     {
-        auto insert = prepareInsert().value(&obj);
+        auto insert = prepareInsert().value(obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
@@ -212,7 +212,7 @@ public:
      */
     bool insertOrIgnoreObject(const ObjectType &obj, const Fields &fields = Fields())
     {
-        auto insert = prepareInsert().orIgnore().value(&obj);
+        auto insert = prepareInsert().orIgnore().value(obj);
         if (fields.size() > 0) {
             insert.onFields(fields);
         }
