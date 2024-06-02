@@ -294,6 +294,7 @@
                                 TestCaseLog(@"Retrieving %.2f%%", newPercentage);
                                 percentage = newPercentage;
                             }
+                            return true;
                         }],
                         1.0);
 }
