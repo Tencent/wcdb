@@ -375,7 +375,7 @@ public:
     template<typename U, typename Enable = typename std::enable_if<Constructable<U>::value && std::is_move_constructible<U>::value>::type>
     Optional(U&& value)
     {
-        this->construct(std::move(value));
+        this->construct(std::forward<U>(value));
     }
 
 #pragma mark - Assignment
