@@ -27,6 +27,9 @@
 #include "Macro.h"
 #include <atomic>
 #include <stdlib.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace WCDB {
 
@@ -42,6 +45,20 @@ static std::atomic<bool>& exitingValue()
 static void exiting()
 {
     exitingValue().store(true);
+
+#ifdef _WIN32
+    /*
+     On Windows 7, the thread where the OperationQueue is located may have been released.
+     So it can't receive notifications from the condition variable.
+     */
+    OSVERSIONINFO osvi;
+    ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    if (GetVersionEx(&osvi) && osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 1) {
+        return;
+    }
+#endif
+
     // The queue needs to be terminated to exit the program normally in Windows.
     Core::shared().stopQueue();
 }
