@@ -22,8 +22,9 @@ import Foundation
 import WCDB_Private
 
 public class Selectable {
-    internal final var handle: Handle
     public final let statement: StatementSelect
+    private final var handle: Handle
+    private final var preparedStatement: PreparedStatement?
 
     init(with handle: Handle, statement: StatementSelect) {
         self.statement = statement
@@ -34,9 +35,12 @@ public class Selectable {
         handle.finalize()
     }
 
-    final func lazyPrepareStatement() throws {
-        if !handle.isPrepared {
-            try handle.prepare(statement)
+    final func getOrCreatePrepareStatement() throws -> PreparedStatement {
+        if preparedStatement == nil {
+            preparedStatement = try handle.getOrCreatePreparedStatement(with: statement)
+            return preparedStatement!
+        } else {
+            return preparedStatement!
         }
     }
 
@@ -44,9 +48,9 @@ public class Selectable {
     @discardableResult
     public final func next() throws -> Bool {
         do {
-            return try handle.step()
+            return try preparedStatement!.step()
         } catch let error {
-            handle.finalize()
+            preparedStatement?.finalize()
             throw error
         }
     }

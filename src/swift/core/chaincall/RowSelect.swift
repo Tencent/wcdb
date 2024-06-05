@@ -43,11 +43,11 @@ public final class RowSelect: Selectable {
     /// - Returns: Array with `Value`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextRow() throws -> OneRowValue? {
-        try lazyPrepareStatement()
+        let prepareStatement = try getOrCreatePrepareStatement()
         guard try next() else {
             return nil
         }
-        return handle.oneRowValue()
+        return prepareStatement.oneRowValue()
     }
 
     /// Get all selected row.
@@ -56,9 +56,9 @@ public final class RowSelect: Selectable {
     /// - Throws: `Error`
     public func allRows() throws -> MultiRowsValue {
         var rows: [[Value]] = []
-        try lazyPrepareStatement()
+        let prepareStatement = try getOrCreatePrepareStatement()
         while try next() {
-            rows.append(handle.oneRowValue())
+            rows.append(prepareStatement.oneRowValue())
         }
         return rows
     }
@@ -72,11 +72,11 @@ public final class RowSelect: Selectable {
     /// - Returns: `Value`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextValue() throws -> Value? {
-        try lazyPrepareStatement()
+        let prepareStatement = try getOrCreatePrepareStatement()
         guard try next() else {
             return nil
         }
-        return handle.value(atIndex: 0)
+        return prepareStatement.value(atIndex: 0)
     }
 
     /// Get all selected values.
@@ -84,7 +84,7 @@ public final class RowSelect: Selectable {
     /// - Returns: Array with `Value`.
     /// - Throws: `Error`
     public func allValues() throws -> OneColumnValue {
-        try lazyPrepareStatement()
-        return try handle.oneColumnValue(atIndex: 0)
+        let prepareStatement = try getOrCreatePrepareStatement()
+        return try prepareStatement.oneColumnValue(atIndex: 0)
     }
 }

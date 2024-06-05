@@ -47,18 +47,17 @@ public final class MultiSelect: Selectable {
             self.indexedKeys = [key.hashValue: index]
         }
     }
-    private lazy var generators: [String: Generator] = {
-        var mappedKeys: [String: TypedIndexedKeys] = [:]
-        if !handle.isPrepared {
-            do {
-                try handle.prepare(statement)
-            } catch let error {
-                assert(false,
-                       "It should not be failed. If you think it's a bug, please report an issue to us.")
-            }
+
+    private var generators: [String: Generator]?
+
+    private func getGenerators() throws -> [String: Generator] {
+        guard generators == nil else {
+            return generators!
         }
+        var mappedKeys: [String: TypedIndexedKeys] = [:]
+        let prepareStatement = try getOrCreatePrepareStatement()
         for (index, key) in keys.enumerated() {
-            let tableName = handle.columnTableName(atIndex: index)
+            let tableName = prepareStatement.columnTableName(atIndex: index)
             var typedIndexedKeys: TypedIndexedKeys! = mappedKeys[tableName]
             if typedIndexedKeys == nil {
                 let tableDecodableType = key.rootType as? TableDecodableBase.Type
@@ -70,32 +69,33 @@ public final class MultiSelect: Selectable {
             }
             mappedKeys[tableName] = typedIndexedKeys
         }
-        var generators: [String: Generator] = [:]
+        var tempGenerators: [String: Generator] = [:]
         for (tableName, typedIndexedKey) in mappedKeys {
-            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: handle)
+            let decoder = TableDecoder(typedIndexedKey.indexedKeys, on: prepareStatement)
             let type = typedIndexedKey.type
             let generator = { () throws -> TableDecodableBase in
                 return try type.init(from: decoder)
             }
-            generators[tableName] = generator
+            tempGenerators[tableName] = generator
         }
-        return generators
-    }()
+        generators = tempGenerators
+        return tempGenerators
+    }
 
     private func extractMultiObject() throws -> [String: Any] {
         var multiObject: [String: Any] = [:]
 #if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
-            for (tableName, generator) in generators {
+            for (tableName, generator) in try getGenerators() {
                 multiObject[tableName] = try generator()
             }
         } else {
-            try lazyPrepareStatement()
-            multiObject = WCTAPIBridge.extractMultiObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement())!
+            let prepareStatement = try getOrCreatePrepareStatement()
+            multiObject = WCTAPIBridge.extractMultiObject(onResultColumns: properties.asWCTBridgeProperties(), from: prepareStatement.getRawStatement())!
         }
 #else
         assert(properties[0].isSwiftProperty())
-        for (tableName, generator) in generators {
+        for (tableName, generator) in try getGenerators() {
             multiObject[tableName] = try generator()
         }
 #endif
@@ -113,7 +113,7 @@ public final class MultiSelect: Selectable {
     /// - Returns: Mapping from table name to object. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextMultiObject() throws -> [String: Any]? {
-        try lazyPrepareStatement()
+        _ = try getOrCreatePrepareStatement()
         guard try next() else {
             return nil
         }
@@ -126,7 +126,7 @@ public final class MultiSelect: Selectable {
     /// - Throws: `Error`
     public func allMultiObjects() throws -> [[String: Any]] {
         var multiObjects: [[String: Any]] = []
-        try lazyPrepareStatement()
+        _ = try getOrCreatePrepareStatement()
         while try next() {
             multiObjects.append(try extractMultiObject())
         }

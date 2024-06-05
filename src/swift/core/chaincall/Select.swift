@@ -27,7 +27,15 @@ public final class Select: Selectable {
         self.properties.asCodingTableKeys()
     }()
 
-    private lazy var decoder = TableDecoder(keys, on: handle)
+    private var decoder: TableDecoder?
+
+    private func getDecoder() throws -> TableDecoder {
+        guard decoder == nil else {
+            return decoder!
+        }
+        decoder = TableDecoder(keys, on: try getOrCreatePrepareStatement())
+        return decoder!
+    }
 
     init(with handle: Handle, on propertyConvertibleList: [PropertyConvertible], table: String, isDistinct: Bool) {
         // TODO: Use generic to check all coding table keys conform to same root type
@@ -42,7 +50,7 @@ public final class Select: Selectable {
     /// - Returns: Table decodable object according to the `CodingTableKey`. Nil means the end of iteration.
     /// - Throws: `Error`
     public func nextObject() throws -> Any? {
-        try lazyPrepareStatement()
+        let prepareStatement = try getOrCreatePrepareStatement()
 #if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
             guard try next() else {
@@ -50,12 +58,12 @@ public final class Select: Selectable {
             }
             let rootType = keys[0].rootType as? TableDecodableBase.Type
             assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
-            return try rootType!.init(from: decoder)
+            return try rootType!.init(from: try getDecoder())
         } else {
             guard try next() else {
                 return nil
             }
-            return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement())
+            return WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: prepareStatement.getRawStatement())
         }
 #else
         assert(properties[0].isSwiftProperty())
@@ -64,7 +72,7 @@ public final class Select: Selectable {
         guard try next() else {
             return nil
         }
-        return try rootType!.init(from: decoder)
+        return try rootType!.init(from: try getDecoder())
 #endif
     }
 
@@ -73,18 +81,18 @@ public final class Select: Selectable {
     /// - Returns: Table decodable objects according to the `CodingTableKey`
     /// - Throws: `Error`
     public func allObjects() throws -> [Any] {
-        try lazyPrepareStatement()
+        let prepareStatement = try getOrCreatePrepareStatement()
         var objects: [Any] = []
 #if WCDB_SWIFT_BRIDGE_OBJC
         if properties[0].isSwiftProperty() {
             let rootType = keys[0].rootType as? TableDecodableBase.Type
             assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
             while try next() {
-                objects.append(try rootType!.init(from: decoder))
+                objects.append(try rootType!.init(from: try getDecoder()))
             }
         } else {
             while try next() {
-                if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: handle.getRawStatement()) {
+                if let obj = WCTAPIBridge.extractObject(onResultColumns: properties.asWCTBridgeProperties(), from: prepareStatement.getRawStatement()) {
                     objects.append(obj)
                 }
             }
@@ -94,7 +102,7 @@ public final class Select: Selectable {
         let rootType = keys[0].rootType as? TableDecodableBase.Type
         assert(rootType != nil, "\(keys[0].rootType) must conform to TableDecodable protocol.")
         while try next() {
-            objects.append(try rootType!.init(from: decoder))
+            objects.append(try rootType!.init(from: try getDecoder()))
         }
 #endif
         return objects
@@ -107,11 +115,11 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func nextObject<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> Object? {
         assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
-        try lazyPrepareStatement()
+        let prepareStatement = try getOrCreatePrepareStatement()
         guard try next() else {
             return nil
         }
-        return try Object.init(from: decoder)
+        return try Object.init(from: try getDecoder())
     }
 
     /// Get all selected objects.
@@ -121,10 +129,10 @@ public final class Select: Selectable {
     /// - Throws: `Error`
     public func allObjects<Object: TableDecodable>(of type: Object.Type = Object.self) throws -> [Object] {
         assert(keys is [Object.CodingKeys], "Properties must belong to \(Object.self).CodingKeys.")
-        try lazyPrepareStatement()
+        _ = try getOrCreatePrepareStatement()
         var objects: [Object] = []
         while try next() {
-            objects.append(try Object.init(from: decoder))
+            objects.append(try Object.init(from: try getDecoder()))
         }
         return objects
     }
