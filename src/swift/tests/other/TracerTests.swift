@@ -187,7 +187,6 @@ class TracerTests: DatabaseTestCase {
         // Give
         let tableName = TracerObject.name
         let expectedTag = self.database.tag
-        let expectedPath = self.database.path
         var objects: [TestObject] = []
         for _ in (0..<1000) {
             let object = TestObject()
@@ -263,7 +262,6 @@ class TracerTests: DatabaseTestCase {
         // Give
         let tableName = TracerObject.name
         let expectedTag = self.database.tag
-        let expectedPath = self.database.path
         let expectedSQL = "INSERT INTO \(tableName)(variable) VALUES(?1)"
         let expectedRollback = "ROLLBACK"
 
@@ -323,8 +321,6 @@ class TracerTests: DatabaseTestCase {
                 XCTAssertEqual(info[Database.OperationInfoKeyTriggerCount]?.intValue, 0)
                 tableCount = info[Database.OperationInfoKeyTableCount]?.intValue ?? 0
                 indexCount = info[Database.OperationInfoKeyIndexCount]?.intValue ?? 0
-            @unknown default:
-                fatalError()
             }
         }
         let database = Database(at: "\(self.recommendedPath.path)_testOperation")
