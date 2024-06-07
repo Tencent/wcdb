@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #ifdef _WIN32
 #include <windows.h>
+#include <VersionHelpers.h>
 #endif
 
 namespace WCDB {
@@ -51,10 +52,7 @@ static void exiting()
      On Windows 7, the thread where the OperationQueue is located may have been released.
      So it can't receive notifications from the condition variable.
      */
-    OSVERSIONINFO osvi;
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if (GetVersionEx(&osvi) && osvi.dwMajorVersion == 6 && osvi.dwMinorVersion == 1) {
+    if (IsWindows7OrGreater() && !IsWindows8OrGreater()) {
         return;
     }
 #endif
