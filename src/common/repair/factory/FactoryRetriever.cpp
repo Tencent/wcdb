@@ -385,7 +385,7 @@ bool FactoryRetriever::increaseProgress(const UnsafeStringView &databasePath,
                                         double progress,
                                         double increment)
 {
-    WCDB_UNUSED(progress)
+    WCDB_UNUSED(progress);
     if (useMaterial) {
         increment *= 0.5;
     }

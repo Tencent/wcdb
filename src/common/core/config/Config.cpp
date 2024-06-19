@@ -31,7 +31,7 @@ Config::~Config() = default;
 
 bool Config::uninvoke(InnerHandle *handle)
 {
-    WCDB_UNUSED(handle)
+    WCDB_UNUSED(handle);
     return true;
 }
 

@@ -75,7 +75,7 @@ void PinyinTokenizer::loadInput(const char *pText, int nText, int flags)
 int PinyinTokenizer::nextToken(
 const char **ppToken, int *nToken, int *iStart, int *iEnd, int *tflags, int *iPosition)
 {
-    WCDB_UNUSED(iPosition)
+    WCDB_UNUSED(iPosition);
     if (m_flags & FTS5_TOKENIZE_QUERY || m_pinyinTokenArr.size() == m_pinyinTokenIndex) {
         while (true) {
             int ret = stepNextToken();

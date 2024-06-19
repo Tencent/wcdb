@@ -473,7 +473,7 @@ bool Backup::willCrawlPage(const Page &page, int height)
         markAsInterrupted();
         return false;
     }
-    WCDB_UNUSED(height)
+    WCDB_UNUSED(height);
     switch (page.getType()) {
     case Page::Type::InteriorTable:
         return true;
@@ -508,7 +508,7 @@ void Backup::onMasterPageCrawled(const Page &page)
 
 void Backup::onMasterCellCrawled(const Cell &cell, const MasterItem &master)
 {
-    WCDB_UNUSED(cell)
+    WCDB_UNUSED(cell);
     if (master.name == Syntax::sequenceTable) {
         m_material.info.seqTableRootPage = master.rootpage;
         SequenceCrawler crawler;
@@ -554,7 +554,7 @@ void Backup::onSequencePageCrawled(const Page &page)
 
 void Backup::onSequenceCellCrawled(const Cell &cell, const SequenceItem &sequence)
 {
-    WCDB_UNUSED(cell)
+    WCDB_UNUSED(cell);
     if (sequence.seq == 0) {
         return;
     }
