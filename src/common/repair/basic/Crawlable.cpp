@@ -160,7 +160,7 @@ void Crawlable::safeCrawl(int rootpageno, std::set<int> &crawledInteriorPages, i
 
 void Crawlable::onCellCrawled(const Cell &cell)
 {
-    WCDB_UNUSED(cell)
+    WCDB_UNUSED(cell);
 }
 
 bool Crawlable::canCrawlPage(uint32_t pageno)
@@ -171,8 +171,8 @@ bool Crawlable::canCrawlPage(uint32_t pageno)
 
 bool Crawlable::willCrawlPage(const Page &page, int height)
 {
-    WCDB_UNUSED(page)
-    WCDB_UNUSED(height)
+    WCDB_UNUSED(page);
+    WCDB_UNUSED(height);
     return true;
 }
 

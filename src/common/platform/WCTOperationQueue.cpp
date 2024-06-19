@@ -35,7 +35,7 @@ void *OperationQueueForMemory::registerNotificationWhenMemoryWarning()
 
 void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *observer)
 {
-    WCDB_UNUSED(observer)
+    WCDB_UNUSED(observer);
 }
 
 void OperationQueueForMemory::executeOperationWithAutoMemoryRelease(std::function<void(void)> operation)

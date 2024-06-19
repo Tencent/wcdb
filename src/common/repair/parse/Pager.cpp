@@ -394,7 +394,7 @@ bool Pager::Cache::shouldPurge() const
 
 void Pager::Cache::willPurge(const uint32_t& pageNum, const UnsafeData& data)
 {
-    WCDB_UNUSED(pageNum)
+    WCDB_UNUSED(pageNum);
     m_currentUsedMemery -= data.size();
 }
 

@@ -202,7 +202,8 @@ private:
             size_t count = getObjectCount();
             for (size_t i = 0; i < count; i++) {
                 const ObjectType& obj = getObjectAtIndex(i);
-                if (!(succeed = stepOneObject(obj, autoIncrementsOfDefinitions))) {
+                succeed = stepOneObject(obj, autoIncrementsOfDefinitions);
+                if (!(succeed)) {
                     break;
                 }
             }
@@ -261,7 +262,6 @@ private:
             return *((*m_objSharedPtrArr)[index]);
         default:
             abort();
-            return *m_obj;
         }
     }
 

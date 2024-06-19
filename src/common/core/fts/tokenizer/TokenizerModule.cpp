@@ -37,7 +37,9 @@ namespace WCDB {
 
 #pragma mark - AbstractFTS5Tokenizer
 AbstractFTSTokenizer::AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx){
-    WCDB_UNUSED(pCtx) WCDB_UNUSED(azArg) WCDB_UNUSED(nArg)
+    WCDB_UNUSED(pCtx);
+    WCDB_UNUSED(azArg);
+    WCDB_UNUSED(nArg);
 }
 
 AbstractFTSTokenizer::~AbstractFTSTokenizer()
