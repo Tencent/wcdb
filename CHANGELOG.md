@@ -1,3 +1,8 @@
+## v2.1.6
+
+* Some bugfix for data repair, Java/Kotlin ORM and Swift query
+* Fix some compile error and warning
+
 ## v2.1.5
 
 * Support legacy mmicu tokenizer in WCDB Java/Kotlin
