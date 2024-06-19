@@ -344,12 +344,13 @@ public:
     OptionalValueArray<ObjectType> extractAllObjects(const ResultFields& resultFields)
     {
         OptionalValueArray<ObjectType> result;
-        bool succeed = false;
-        while ((succeed = step()) && !done()) {
+        bool succeed = step();
+        while (succeed && !done()) {
             if (!result.succeed()) {
                 result = ValueArray<ObjectType>();
             }
             result->push_back(extractOneObject<ObjectType>(resultFields));
+            succeed = step();
         }
         if (!succeed) {
             return NullOpt;

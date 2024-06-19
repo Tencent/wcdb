@@ -260,6 +260,9 @@ public:
                         const ColumnTypeInfo<ColumnType::Text>::UnderlyingType &t);
 };
 
+template<typename T>
+struct ColumnIsTextType<T, std::enable_if_t<std::is_function<T>::value>> : public std::false_type {};
+
 //BLOB
 template<>
 struct WCDB_API ColumnIsBLOBType<std::vector<unsigned char>> : public std::true_type {

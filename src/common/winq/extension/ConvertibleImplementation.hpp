@@ -40,7 +40,7 @@ class LiteralValueConvertible<std::nullptr_t> final : public std::true_type {
 public:
     static LiteralValue asLiteralValue(const std::nullptr_t& t)
     {
-        WCDB_UNUSED(t)
+        WCDB_UNUSED(t);
         return nullptr;
     }
 };

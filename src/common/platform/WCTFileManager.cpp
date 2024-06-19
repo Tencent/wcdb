@@ -41,15 +41,15 @@ StringView FileManager::getTemporaryDirectory()
 bool FileManager::setFileProtection(const WCDB::UnsafeStringView &path,
                                     WCDB::FileProtection fileProtection)
 {
-    WCDB_UNUSED(path)
-    WCDB_UNUSED(fileProtection)
+    WCDB_UNUSED(path);
+    WCDB_UNUSED(fileProtection);
     return true;
 }
 
 Optional<WCDB::FileProtection>
 FileManager::getFileProtection(const WCDB::UnsafeStringView &path)
 {
-    WCDB_UNUSED(path)
+    WCDB_UNUSED(path);
     return WCDB::FileProtection::None;
 }
 

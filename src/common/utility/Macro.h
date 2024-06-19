@@ -116,7 +116,7 @@
 #if !defined(_WIN32)
 #define WCDB_UNUSED(variable) _Pragma(WCDB_STRINGIFY(unused(variable)))
 #else
-#define WCDB_UNUSED(variable)
+#define WCDB_UNUSED(variable) (void)(variable)
 #endif
 
 #ifdef __clang__

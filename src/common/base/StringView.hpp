@@ -95,7 +95,7 @@ public:
     int compare(const UnsafeStringView& other) const;
     bool equal(const UnsafeStringView& other) const;
 
-    static constexpr size_t npos = -1;
+    static constexpr size_t npos = std::numeric_limits<size_t>::max();
     size_t find(const UnsafeStringView& other) const;
 
 #pragma mark - UnsafeStringView - Operations
@@ -129,6 +129,10 @@ public:
             return ColumnIsTextType<T>::asUnderlyingType(t);
         }
     };
+
+    template<typename T>
+    struct Convertible<T, std::enable_if_t<std::is_function<T>::value>>
+    : public std::false_type {};
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
     UnsafeStringView(const T& t)
