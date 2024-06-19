@@ -40,8 +40,8 @@ class TableConstraintObject {
     @WCDBField
     var multiPrimary2 = 0
 
-    @WCDBField
-    var multiPrimary3 = 0
+    @WCDBField(columnName = "multiPrimary3")
+    var multiPrimary = 0
 
     @WCDBField
     var multiUnique1 = 0
@@ -49,8 +49,8 @@ class TableConstraintObject {
     @WCDBField
     var multiUnique2 = 0
 
-    @WCDBField
-    var multiUnique3 = 0
+    @WCDBField(columnName = "multiUnique3")
+    var multiUnique = 0
 
     @WCDBField
     var multiIndex1 = 0
@@ -58,6 +58,6 @@ class TableConstraintObject {
     @WCDBField
     var multiIndex2 = 0
 
-    @WCDBField
-    var multiIndex3 = 0
+    @WCDBField(columnName = "multiIndex3")
+    var multiIndex = 0
 }

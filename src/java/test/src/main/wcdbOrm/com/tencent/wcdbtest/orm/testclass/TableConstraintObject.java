@@ -38,18 +38,18 @@ public class TableConstraintObject {
     int multiPrimary1;
     @WCDBField
     int multiPrimary2;
-    @WCDBField
-    int multiPrimary3;
+    @WCDBField(columnName = "multiPrimary3")
+    int multiPrimary;
     @WCDBField
     int multiUnique1;
     @WCDBField
     int multiUnique2;
-    @WCDBField
-    int multiUnique3;
+    @WCDBField(columnName = "multiUnique3")
+    int multiUnique;
     @WCDBField
     int multiIndex1;
     @WCDBField
     int multiIndex2;
-    @WCDBField
-    int multiIndex3;
+    @WCDBField(columnName = "multiIndex3")
+    int multiIndex;
 }

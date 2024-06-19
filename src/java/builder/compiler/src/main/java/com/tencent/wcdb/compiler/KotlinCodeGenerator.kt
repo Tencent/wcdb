@@ -142,6 +142,10 @@ class KotlinCodeGenerator {
     }
 
     private fun generateTableConfig() {
+        val allColumns: MutableMap<String, ColumnInfo> = HashMap()
+        for (columnInfo in allColumnInfo) {
+            allColumns[columnInfo.columnName.ifEmpty { columnInfo.propertyName }] = columnInfo
+        }
         for ((name, columns) in tableConstraintInfo.multiIndexes) {
             var indexName = name
             var isFullName = true
@@ -151,21 +155,21 @@ class KotlinCodeGenerator {
             }
             builder.append("$TAB${TAB}baseBinding.addIndex(\"$indexName\", $isFullName, StatementCreateIndex().ifNotExist().indexedBy(\n$TAB$TAB$TAB")
             for (column in columns) {
-                builder.append(column).append(", ")
+                builder.append(allColumns[column]!!.propertyName).append(", ")
             }
             builder.append("\n$TAB$TAB))\n")
         }
         for ((columns) in tableConstraintInfo.multiPrimaries) {
             builder.append("$TAB${TAB}baseBinding.addTableConstraint(TableConstraint().primaryKey().indexedBy(\n$TAB$TAB$TAB")
             for (column in columns) {
-                builder.append(column).append(", ")
+                builder.append(allColumns[column]!!.propertyName).append(", ")
             }
             builder.append("\n$TAB$TAB))\n")
         }
         for ((columns) in tableConstraintInfo.multiUnique) {
             builder.append("$TAB${TAB}baseBinding.addTableConstraint(TableConstraint().unique().indexedBy(\n$TAB$TAB$TAB")
             for (column in columns) {
-                builder.append(column).append(", ")
+                builder.append(allColumns[column]!!.propertyName).append(", ")
             }
             builder.append("\n$TAB$TAB))\n")
         }

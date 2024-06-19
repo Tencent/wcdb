@@ -30,7 +30,10 @@ import com.tencent.wcdb.compiler.resolvedInfo.MultiPrimaryInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.MultiUniqueInfo;
 import com.tencent.wcdb.compiler.resolvedInfo.TableConfigInfo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 public class JavaCodeGenerator {
     public String packageName;
     public String className;
@@ -172,6 +175,11 @@ public class JavaCodeGenerator {
 
     private void generateTableConfig() {
 
+        Map<String, ColumnInfo> allColumns = new HashMap<>();
+        for(ColumnInfo columnInfo : allColumnInfo) {
+            allColumns.put(columnInfo.getColumnName().isEmpty() ? columnInfo.getPropertyName() : columnInfo.getColumnName(), columnInfo);
+        }
+
         for(MultiIndexesInfo indexes : tableConstraintInfo.getMultiIndexes()) {
             String indexName = indexes.getName();
             boolean isFullName = true;
@@ -182,7 +190,7 @@ public class JavaCodeGenerator {
             builder.append(TAB + TAB + "baseBinding.addIndex(\"").append(indexName).append("\", ").append(isFullName)
                     .append(", new StatementCreateIndex().ifNotExist().indexedBy(new Column[]{\n" + TAB + TAB + TAB);
             for(String column : indexes.getColumns()) {
-                builder.append(column).append(", ");
+                builder.append(allColumns.get(column).getPropertyName()).append(", ");
             }
             builder.append("\n" + TAB + TAB + "}));\n");
         }
@@ -190,7 +198,7 @@ public class JavaCodeGenerator {
         for(MultiPrimaryInfo primaries : tableConstraintInfo.getMultiPrimaries()) {
             builder.append(TAB + TAB + "baseBinding.addTableConstraint(new TableConstraint().primaryKey().indexedBy(new Column[]{\n" + TAB + TAB + TAB);
             for(String column : primaries.getColumns()) {
-                builder.append(column).append(", ");
+                builder.append(allColumns.get(column).getPropertyName()).append(", ");
             }
             builder.append("\n" + TAB + TAB + "}));\n");
         }
@@ -198,7 +206,7 @@ public class JavaCodeGenerator {
         for(MultiUniqueInfo uniques : tableConstraintInfo.getMultiUnique()) {
             builder.append(TAB + TAB + "baseBinding.addTableConstraint(new TableConstraint().unique().indexedBy(new Column[]{\n" + TAB + TAB + TAB);
             for(String column : uniques.getColumns()) {
-                builder.append(column).append(", ");
+                builder.append(allColumns.get(column).getPropertyName()).append(", ");
             }
             builder.append("\n" + TAB + TAB + "}));\n");
         }
