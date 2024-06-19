@@ -261,7 +261,9 @@ public:
 };
 
 template<typename T>
-struct ColumnIsTextType<T, std::enable_if_t<std::is_function<T>::value>> : public std::false_type {};
+struct ColumnIsTextType<T, std::enable_if_t<std::is_function<T>::value>>
+: public std::false_type {
+};
 
 //BLOB
 template<>

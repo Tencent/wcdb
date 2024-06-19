@@ -36,14 +36,14 @@ namespace WCDB {
 #endif
 
 #pragma mark - AbstractFTS5Tokenizer
-AbstractFTSTokenizer::AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx){
+AbstractFTSTokenizer::AbstractFTSTokenizer(const char *const *azArg, int nArg, void *pCtx)
+{
     WCDB_UNUSED(pCtx);
     WCDB_UNUSED(azArg);
     WCDB_UNUSED(nArg);
 }
 
-AbstractFTSTokenizer::~AbstractFTSTokenizer()
-= default;
+AbstractFTSTokenizer::~AbstractFTSTokenizer() = default;
 
 struct FTS3TokenizerWrap {
     sqlite3_tokenizer base;
