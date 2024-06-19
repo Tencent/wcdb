@@ -64,6 +64,18 @@ void Fraction::reduce()
     }
 }
 
+int64_t Fraction::limitNumber(int64_t a, int64_t b) const
+{
+    int64_t limit = 1;
+    a = std::abs(a);
+    b = std::abs(b);
+    int64_t max_b = std::numeric_limits<int64_t>::max() / a;
+    if (max_b < b) {
+        limit = b / max_b + (b % max_b > 0 ? 1 : 0);
+    }
+    return limit;
+}
+
 Fraction Fraction::operator+(const Fraction &operand) const
 {
     int64_t numerator, denominator;
@@ -72,9 +84,15 @@ Fraction Fraction::operator+(const Fraction &operand) const
         denominator = m_denominator;
     } else {
         int64_t gcd = euclidean(m_denominator, operand.m_denominator);
+
+        denominator = m_denominator / gcd;
+        int64_t limit = limitNumber(denominator, operand.m_denominator);
+        gcd *= limit;
+        denominator /= limit;
+
         numerator = (operand.m_denominator / gcd * m_numerator)
                     + (m_denominator / gcd * operand.m_numerator);
-        denominator = m_denominator / gcd * operand.m_denominator;
+        denominator = denominator * operand.m_denominator;
     }
     Fraction result(numerator, denominator);
     result.reduce();
@@ -85,8 +103,15 @@ Fraction Fraction::operator*(const Fraction &operand) const
 {
     int64_t gcd1 = euclidean(m_numerator, operand.m_denominator);
     int64_t gcd2 = euclidean(operand.m_numerator, m_denominator);
+
+    int64_t denominator1 = m_denominator / gcd2;
+    int64_t denominator2 = operand.m_denominator / gcd1;
+    int64_t limit = limitNumber(denominator1, denominator2);
+    gcd2 *= limit;
+    denominator1 /= limit;
+
     Fraction result(m_numerator / gcd1 * (operand.m_numerator / gcd2),
-                    m_denominator / gcd2 * (operand.m_denominator / gcd1));
+                    denominator1 * denominator2);
     return result;
 }
 
@@ -96,9 +121,15 @@ Fraction &Fraction::operator+=(const Fraction &operand)
         m_numerator += operand.m_numerator;
     } else {
         int64_t gcd = euclidean(m_denominator, operand.m_denominator);
+
+        int64_t denominator = operand.m_denominator / gcd;
+        int64_t limit = limitNumber(m_denominator, denominator);
+        gcd *= limit;
+        denominator /= limit;
+
         m_numerator = (operand.m_denominator / gcd * m_numerator)
                       + (m_denominator / gcd * operand.m_numerator);
-        m_denominator *= operand.m_denominator / gcd;
+        m_denominator *= denominator;
     }
     reduce();
     return *this;
