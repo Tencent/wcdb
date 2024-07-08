@@ -95,7 +95,7 @@
     if (_values.count > 0) {
         if (_values.count > 1) {
             succeed = [_handle lazyRunTransaction:^BOOL(WCTHandle *handle) {
-                WCDB_UNUSED(handle)
+                WCDB_UNUSED(handle);
                 return [self realExecute];
             }];
         } else {

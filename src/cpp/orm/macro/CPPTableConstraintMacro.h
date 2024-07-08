@@ -29,7 +29,7 @@
         WCDB::TableConstraint& tableConstraint                                 \
         = g_binding->getOrCreateTableConstraint(constraintName);               \
         auto temp_memory_point = &WCDBORMType::fieldName;                      \
-        WCDB_UNUSED(temp_memory_point)
+        WCDB_UNUSED(temp_memory_point);
 
 #define __WCDB_CPP_TABLE_CONSTRAINT_END(constraintName, fieldName) }
 

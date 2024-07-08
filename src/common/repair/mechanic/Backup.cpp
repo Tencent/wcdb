@@ -463,7 +463,7 @@ bool Backup::canCrawlPage(uint32_t pageno)
 
 void Backup::onCellCrawled(const Cell &cell)
 {
-    WCDB_UNUSED(cell)
+    WCDB_UNUSED(cell);
     WCTAssert(false);
 }
 
