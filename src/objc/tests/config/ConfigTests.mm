@@ -130,7 +130,7 @@
 
     [self.database
            setConfig:^BOOL(WCTHandle* handle) {
-               WCDB_UNUSED(handle)
+               WCDB_UNUSED(handle);
                ++step;
                return step == 2;
            }
@@ -140,7 +140,7 @@
 
     [self.database
            setConfig:^BOOL(WCTHandle* handle) {
-               WCDB_UNUSED(handle)
+               WCDB_UNUSED(handle);
                ++step;
                return step == 3;
            }
@@ -149,7 +149,7 @@
         withPriority:WCTConfigPriorityLow];
     [self.database
            setConfig:^BOOL(WCTHandle* handle) {
-               WCDB_UNUSED(handle)
+               WCDB_UNUSED(handle);
                ++step;
                return step == 1;
            }

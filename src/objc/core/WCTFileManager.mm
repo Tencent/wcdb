@@ -108,14 +108,14 @@ Optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &
 #else
 bool FileManager::setFileProtection(const UnsafeStringView &path, FileProtection fileProtection)
 {
-    WCDB_UNUSED(path)
-    WCDB_UNUSED(fileProtection)
+    WCDB_UNUSED(path);
+    WCDB_UNUSED(fileProtection);
     return true;
 }
 
 Optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &path)
 {
-    WCDB_UNUSED(path)
+    WCDB_UNUSED(path);
     return FileProtection::None;
 }
 #endif

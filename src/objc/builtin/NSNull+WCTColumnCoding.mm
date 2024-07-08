@@ -28,7 +28,7 @@
 
 + (instancetype)unarchiveWithWCTValue:(id)value
 {
-    WCDB_UNUSED(value)
+    WCDB_UNUSED(value);
     return [NSNull null];
 }
 
