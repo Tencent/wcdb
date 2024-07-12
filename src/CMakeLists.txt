@@ -391,7 +391,11 @@ if (WCDB_ZSTD)
     target_compile_definitions(${TARGET_NAME} PRIVATE WCDB_ZSTD=1)
 endif ()
 
-target_compile_options(${TARGET_NAME} PRIVATE -fno-exceptions)
+if (WIN32)
+    target_compile_options(${TARGET_NAME} PRIVATE /EHsc)
+else ()
+    target_compile_options(${TARGET_NAME} PRIVATE -fno-exceptions)
+endif()
 
 if (WCDB_CPP)
     target_sources(${TARGET_NAME} PRIVATE ${WCDB_CPP_SRC})
