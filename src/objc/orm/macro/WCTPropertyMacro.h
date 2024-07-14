@@ -52,7 +52,7 @@
     }                                                                                                                                                                                                           \
     +(const WCTProperty &) WCDB_ORM_UNIQUE(WCDB_ORM_TYPE_SYNTHESIZE)                                                                                                                                            \
     {                                                                                                                                                                                                           \
-        WCDB_UNUSED(binding);                                                                                                                                                                                    \
+        WCDB_UNUSED(binding);                                                                                                                                                                                   \
         return self.WINQName;                                                                                                                                                                                   \
     }                                                                                                                                                                                                           \
     +(WCTBridgeProperty *) swift_##WINQName                                                                                                                                                                     \

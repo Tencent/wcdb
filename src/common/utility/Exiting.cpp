@@ -28,8 +28,8 @@
 #include <atomic>
 #include <stdlib.h>
 #ifdef _WIN32
-#include <windows.h>
 #include <VersionHelpers.h>
+#include <windows.h>
 #endif
 
 namespace WCDB {
