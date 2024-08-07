@@ -27,6 +27,7 @@
 #include "Macro.h"
 #include "SysTypes.h"
 #include <atomic>
+#include <limits>
 #include <map>
 #include <memory>
 #include <set>
