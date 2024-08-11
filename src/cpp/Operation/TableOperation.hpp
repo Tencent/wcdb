@@ -118,7 +118,7 @@ public:
 public:
     /**
      @brief Get one value from specific statement.
-     @param statement The statement to excute.
+     @param statement The statement to execute.
      @param index The index of result column, starting from 0.
      @return A value.
      */
@@ -126,7 +126,7 @@ public:
 
     /**
      @brief Get one column of value from specific statement.
-     @param statement The statement to excute.
+     @param statement The statement to execute.
      @param index The index of result column, starting from 0.
      @return A value array.
      */
@@ -134,14 +134,14 @@ public:
 
     /**
      @brief Get one row of value from specific statement.
-     @param statement The statement to excute.
+     @param statement The statement to execute.
      @return A value array.
      */
     OptionalOneRow getOneRowFromStatement(const Statement &statement);
 
     /**
      @brief Get all rows of value from specific statement.
-     @param statement The statement to excute.
+     @param statement The statement to execute.
      @return Two-dimensional array of values.
      */
     OptionalMultiRows getAllRowsFromStatement(const Statement &statement);
