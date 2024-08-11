@@ -1215,6 +1215,12 @@ public extension Database {
             }
         }
 
+        /// Enable to replace original compression format.
+        /// After activation, you can use `Database.stepCompression()` or `Database.enableAutoCompression(_:)` to recompress the existing data with the new compression configuration.
+        public func enableReplaceCompression() {
+            WCDBDatabaseEnableReplaceCompresssion(cppInfo)
+        }
+
         internal init(with cppInfo: UnsafeMutableRawPointer, table name: String) {
             self.cppInfo = cppInfo
             self.tableName = name

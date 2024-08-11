@@ -62,6 +62,7 @@ typedef enum : NSUInteger {
 
 - (void)configCompression;
 - (void)configCompressFilter;
+- (void)reconfigCompressionFilter;
 - (void)clearData;
 - (void)doTestCompression:(void (^)(void))operation;
 - (void)executeModify:(BOOL (^)(WCTTable*))modify andSQLs:(NSArray<NSString*>*)sqls;

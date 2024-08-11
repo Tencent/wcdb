@@ -981,6 +981,7 @@ static const JNINativeMethod g_databaseMethods[] = {
     { "addZSTDNormalCompress", "(JJ)V", (void *) WCDBJNIDatabaseFuncName(addZSTDNormalCompress) },
     { "addZSTDDictCompress", "(JJB)V", (void *) WCDBJNIDatabaseFuncName(addZSTDDictCompress) },
     { "addZSTDMultiDictCompress", "(JJJ[J[B)V", (void *) WCDBJNIDatabaseFuncName(addZSTDMultiDictCompress) },
+    { "enableReplaceCompression", "(J)V", (void *) WCDBJNIDatabaseFuncName(enableReplaceCompression) },
     { "setCompression",
       "(J" WCDBJNIDatabaseSignature "$CompressionFilter;)V",
       (void *) WCDBJNIDatabaseFuncName(setCompression) },

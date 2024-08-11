@@ -662,6 +662,11 @@ void Database::CompressionInfo::addZSTDDictCompressField(const Field& field,
     ((CompressionTableUserInfo*) m_innerInfo)->addCompressingColumn(columnInfo);
 }
 
+void Database::CompressionInfo::enableReplaceCompresssion()
+{
+    ((CompressionTableUserInfo*) m_innerInfo)->enableReplaceCompresssion();
+}
+
 Optional<Data> Database::trainDict(const std::vector<std::string>& strings, DictId dictId)
 {
     int index = 0;

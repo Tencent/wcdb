@@ -131,6 +131,7 @@
     }
 
     [self configCompressFilter];
+    [self.database setNotificationWhenCompressed:nil];
 
     if (self.migrationStatus == MigrationStatus_startMigrate) {
         TestCaseAssertTrue([self.database stepMigration]);
@@ -188,6 +189,52 @@
     }
 }
 
+- (void)reconfigCompressionFilter
+{
+    switch (self.mode) {
+    case CompressionMode_Normal: {
+        [self.database setCompressionWithFilter:^(WCTCompressionUserInfo *info) {
+            if (![info.table isEqualToString:self.tableName] && ![info.table isEqualToString:self.anotherTable]) {
+                return;
+            }
+            [info addZSTDDictCompressProperty:CompressionTestObject.text withDictId:1];
+            if (self.compressTwoColumn) {
+                [info addZSTDDictCompressProperty:CompressionTestObject.blob withDictId:1];
+            }
+            [info enableReplaceCompression];
+        }];
+    } break;
+    case CompressionMode_Dict: {
+        [self.database setCompressionWithFilter:^(WCTCompressionUserInfo *info) {
+            if (![info.table isEqualToString:self.tableName] && ![info.table isEqualToString:self.anotherTable]) {
+                return;
+            }
+            [info addZSTDDictCompressProperty:CompressionTestObject.text
+                            withMatchProperty:CompressionTestObject.textMatchId
+                                andMatchDicts:[self matchDictForText]];
+            if (self.compressTwoColumn) {
+                [info addZSTDDictCompressProperty:CompressionTestObject.blob
+                                withMatchProperty:CompressionTestObject.blobMatchId
+                                    andMatchDicts:[self matchDictForBLOB]];
+            }
+            [info enableReplaceCompression];
+        }];
+    } break;
+    case CompressionMode_VariousDict: {
+        [self.database setCompressionWithFilter:^(WCTCompressionUserInfo *info) {
+            if (![info.table isEqualToString:self.tableName] && ![info.table isEqualToString:self.anotherTable]) {
+                return;
+            }
+            [info addZSTDNormalCompressProperty:CompressionTestObject.text];
+            if (self.compressTwoColumn) {
+                [info addZSTDNormalCompressProperty:CompressionTestObject.blob];
+            }
+            [info enableReplaceCompression];
+        }];
+    } break;
+    }
+}
+
 - (void)clearData
 {
     TestCaseAssertTrue([self.database removeFiles]);
@@ -212,7 +259,7 @@
         config /= 3;
         self.needCipher = (BOOL) (config % 2);
 
-        [self log:@"excute test %d: mode %d, two column %d, compression status %d, migration status %d, need cipher %d",
+        [self log:@"execute test %d: mode %d, two column %d, compression status %d, migration status %d, need cipher %d",
                   i,
                   self.mode,
                   self.compressTwoColumn,

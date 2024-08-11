@@ -842,6 +842,12 @@ public:
                                  const Field &matchField,
                                  const std::map<int64_t /* Value of match column */, DictId> &dictIds);
 
+        /**
+         @brief Enable to replace original compression format.
+         After activation, you can use `Database::stepCompression()` or `Database::enableAutoCompression()` to recompress the existing data with the new compression configuration.
+         */
+        void enableReplaceCompresssion();
+
     protected:
         friend class Database;
         CompressionInfo(void *innerInfo);

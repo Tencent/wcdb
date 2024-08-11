@@ -66,6 +66,7 @@ public:
     size_t size() const;
     bool empty() const;
     const char& at(offset_t off) const;
+    UnsafeStringView subStr(offset_t off, size_t length = 0) const;
 
 private:
     friend class StringView;
@@ -97,7 +98,7 @@ public:
     bool equal(const UnsafeStringView& other) const;
 
     static constexpr size_t npos = std::numeric_limits<size_t>::max();
-    size_t find(const UnsafeStringView& other) const;
+    size_t find(const UnsafeStringView& other, off_t off = 0) const;
 
 #pragma mark - UnsafeStringView - Operations
 public:

@@ -58,6 +58,8 @@ public:
                            bool usingDict,
                            ColumnType originType,
                            ScalarFunctionAPI& resultAPI);
+    Optional<UnsafeData>
+    decompressContent(const UnsafeData& data, bool usingDict, InnerHandle* handle);
 
     bool testContentCanBeDecompressed(const UnsafeData& data,
                                       bool usingDict,

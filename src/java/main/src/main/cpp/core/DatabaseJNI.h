@@ -124,6 +124,7 @@ void WCDBJNIDatabaseClassMethod(addZSTDMultiDictCompress,
                                 jlong matchColumn,
                                 jlongArray values,
                                 jbyteArray dictIds);
+void WCDBJNIDatabaseClassMethod(enableReplaceCompression, jlong info);
 void WCDBJNIDatabaseClassMethod(setCompression, jlong self, jobject filter);
 void WCDBJNIDatabaseClassMethod(disableCompressNewData, jlong self, jboolean disable);
 jboolean WCDBJNIDatabaseClassMethod(stepCompression, jlong self);

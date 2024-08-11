@@ -54,7 +54,7 @@
         self.compressTwoColumn = (bool) (i % 2);
         self.mode = (CompressionMode) (i / 2);
         [self configCompression];
-        [self log:@"excute compress test %d: mode %d, two column %d, compression status %d",
+        [self log:@"execute compress test %d: mode %d, two column %d, compression status %d",
                   i,
                   self.mode,
                   self.compressTwoColumn,
@@ -287,8 +287,8 @@
     self.compressionStatus = CompressionStatus_uncompressed;
     [self doTestCompress:^{
         TestCaseAssertFalse([self.database isCompressed]);
-        __block BOOL tableCompressed;
-        __block int databaseCompressed;
+        __block BOOL tableCompressed = NO;
+        __block int databaseCompressed = 0;
         NSString* expectedTableName = self.tableName;
         WCTTag tag = self.database.tag;
         [self.database setNotificationWhenCompressed:^(WCTDatabase* database, WCTCompressionBaseInfo* info) {
@@ -300,13 +300,97 @@
                 TestCaseAssertFalse(tableCompressed);
                 tableCompressed = YES;
             }
+        }];
+
+        BOOL succeed;
+        do {
+            succeed = [self.database stepCompression];
+        } while (succeed && ![self.database isCompressed]);
+        TestCaseAssertTrue(succeed);
+        TestCaseAssertTrue(self.database.isCompressed);
+
+        TestCaseAssertTrue(tableCompressed);
+        TestCaseAssertEqual(databaseCompressed, 1);
+
+        TestCaseAssertTrue([[self.table getObjects] isEqualToArray:[self.uncompressTable getObjects]]);
+
+        // Compression record
+        WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from(self->m_recordTable)];
+        TestCaseAssertTrue(record.count == 3);
+        TestCaseAssertTrue([record[0].stringValue isEqualToString:self.tableName]);
+        [self verifyCompressionDescription:record[1].stringValue];
+        TestCaseAssertTrue(record[2].numberValue.intValue == 0);
+
+        // Notification will receive multiple times.
+        succeed = [self.database stepCompression];
+        TestCaseAssertTrue(succeed);
+        TestCaseAssertTrue([self.database isCompressed]);
+        TestCaseAssertEqual(databaseCompressed, 2);
+    }];
+}
+
+- (void)verifyCompressionDescription:(NSString*)description
+{
+    if (self.compressTwoColumn) {
+        switch (self.mode) {
+        case CompressionMode_Normal:
+            TestCaseAssertTrue([description isEqualToString:@"blob,text"]);
+            break;
+        case CompressionMode_Dict:
+            TestCaseAssertTrue([description isEqualToString:@"blob:1,text:1"]);
+            break;
+        case CompressionMode_VariousDict:
+            TestCaseAssertTrue([description isEqualToString:@"blob:{0:1;1:2;2:3;9223372036854775807:4},text:{0:1;1:2;2:3;3:4;4:5;9223372036854775807:6}"]);
+            break;
+
+        default:
+            break;
+        }
+    } else {
+        switch (self.mode) {
+        case CompressionMode_Normal:
+            TestCaseAssertTrue([description isEqualToString:@"text"]);
+            break;
+        case CompressionMode_Dict:
+            TestCaseAssertTrue([description isEqualToString:@"text:1"]);
+            break;
+        case CompressionMode_VariousDict:
+            TestCaseAssertTrue([description isEqualToString:@"text:{0:1;1:2;2:3;3:4;4:5;9223372036854775807:6}"]);
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+- (void)testReplaceCompression
+{
+    for (int compressionStatus = 2; compressionStatus < 3; compressionStatus++) {
+        self.compressionStatus = (CompressionStatus) compressionStatus;
+        [self doTestCompress:^{
+            [self reconfigCompressionFilter];
+            TestCaseAssertFalse([self.database isCompressed]);
+            __block BOOL tableCompressed = NO;
+            __block int databaseCompressed = 0;
+            NSString* expectedTableName = self.tableName;
+            WCTTag tag = self.database.tag;
+            [self.database setNotificationWhenCompressed:^(WCTDatabase* database, WCTCompressionBaseInfo* info) {
+                TestCaseAssertEqual(tag, database.tag);
+                if (info == nil) {
+                    ++databaseCompressed;
+                    TestCaseAssertTrue(database.isCompressed);
+                } else if ([info.table isEqualToString:expectedTableName]) {
+                    TestCaseAssertFalse(tableCompressed);
+                    tableCompressed = YES;
+                }
+            }];
             BOOL succeed;
             do {
                 succeed = [self.database stepCompression];
             } while (succeed && ![self.database isCompressed]);
             TestCaseAssertTrue(succeed);
             TestCaseAssertTrue(self.database.isCompressed);
-
             TestCaseAssertTrue([[self.table getObjects] isEqualToArray:[self.uncompressTable getObjects]]);
 
             // Compression record
@@ -314,9 +398,35 @@
             TestCaseAssertTrue(record.count == 3);
             TestCaseAssertTrue([record[0].stringValue isEqualToString:self.tableName]);
             if (self.compressTwoColumn) {
-                TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text blob"]);
+                switch (self.mode) {
+                case CompressionMode_Normal:
+                    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"blob:1,text:1"]);
+                    break;
+                case CompressionMode_Dict:
+                    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"blob:{0:1;1:2;2:3;9223372036854775807:4},text:{0:1;1:2;2:3;3:4;4:5;9223372036854775807:6}"]);
+                    break;
+                case CompressionMode_VariousDict:
+                    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"blob,text"]);
+                    break;
+
+                default:
+                    break;
+                }
             } else {
-                TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text"]);
+                switch (self.mode) {
+                case CompressionMode_Normal:
+                    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text:1"]);
+                    break;
+                case CompressionMode_Dict:
+                    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text:{0:1;1:2;2:3;3:4;4:5;9223372036854775807:6}"]);
+                    break;
+                case CompressionMode_VariousDict:
+                    TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text"]);
+                    break;
+
+                default:
+                    break;
+                }
             }
             TestCaseAssertTrue(record[2].numberValue.intValue == 0);
 
@@ -329,7 +439,7 @@
             TestCaseAssertTrue([self.database isCompressed]);
             TestCaseAssertEqual(databaseCompressed, 2);
         }];
-    }];
+    }
 }
 
 - (void)testAutoCompress
@@ -504,14 +614,10 @@
     self.compressionStatus = CompressionStatus_finishCompressed;
     [self doTestCompress:^{
         [self.database retrieve:nil];
-        WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from(WCDB::CompressionRecord::tableName).where(WCDB::Column(WCDB::CompressionRecord::columnTable) == self.tableName)];
+        WCTOneRow* record = [self.database getRowFromStatement:WCDB::StatementSelect().select(WCDB::Column::all()).from("wcdb_builtin_compression_record").where(WCDB::Column("tableName") == self.tableName)];
 
         TestCaseAssertTrue(record != nil && record[2].numberValue.intValue == 0);
-        if (!self.compressTwoColumn) {
-            TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text"]);
-        } else {
-            TestCaseAssertTrue([record[1].stringValue isEqualToString:@"text blob"]);
-        }
+        [self verifyCompressionDescription:record[1].stringValue];
 
         NSArray* objects = [self.table getObjects];
         NSArray* originObjects = [self.uncompressTable getObjects];

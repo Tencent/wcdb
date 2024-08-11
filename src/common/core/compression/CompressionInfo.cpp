@@ -173,7 +173,7 @@ void CompressionColumnInfo::addMatchDict(const Integer &matchValue, DictId dictI
 
 #pragma mark - CompressionTableBaseInfo
 CompressionTableBaseInfo::CompressionTableBaseInfo(const UnsafeStringView &table)
-: m_table(table)
+: m_table(table), m_replaceCompression(false)
 {
 }
 
@@ -203,6 +203,11 @@ void CompressionTableUserInfo::addCompressingColumn(const CompressionColumnInfo 
         }
     }
     m_compressingColumns.push_back(info);
+}
+
+void CompressionTableUserInfo::enableReplaceCompresssion()
+{
+    m_replaceCompression = true;
 }
 
 #pragma mark - CompressionTableInfo
@@ -238,22 +243,73 @@ void CompressionTableInfo::setNeedCheckColumns(bool needCheck) const
     m_needCheckColumn = needCheck;
 }
 
+StringView CompressionTableInfo::getCompressionDescription() const
+{
+    StringViewMap<const CompressionColumnInfo *> orderedInfos;
+    for (const auto &info : m_compressingColumns) {
+        orderedInfos[info.getColumn().syntax().name] = &info;
+    }
+    std::ostringstream stream;
+    bool isFirst = true;
+    for (const auto &iter : orderedInfos) {
+        if (!isFirst) {
+            stream << ",";
+        } else {
+            isFirst = false;
+        }
+        stream << iter.first;
+        auto &compressionInfo = *iter.second;
+        switch (compressionInfo.getCompressionType()) {
+        case CompressionType::Dict:
+            stream << ":" << compressionInfo.getDictId();
+            break;
+        case CompressionType::VariousDict: {
+            stream << ":";
+            std::map<CompressionColumnInfo::Integer, CompressionColumnInfo::DictId> matchDicts;
+            for (const auto &dictIter : compressionInfo.m_matchDicts) {
+                matchDicts[dictIter.first] = dictIter.second;
+            }
+            stream << "{";
+            for (const auto &dictIter : matchDicts) {
+                stream << dictIter.first << ":" << dictIter.second;
+                stream << ";";
+            }
+            stream << INT64_MAX << ":" << compressionInfo.m_commonDictID;
+            stream << "}";
+        }
+        default:
+            break;
+        }
+    }
+    return stream.str();
+}
+
+bool CompressionTableInfo::shouldReplaceCompression() const
+{
+    return m_replaceCompression;
+}
+
 #pragma mark - Compress Statements
 
-StatementSelect CompressionTableInfo::getSelectUncompressRowIdStatement() const
+StatementSelect CompressionTableInfo::getSelectNeedCompressRowIdStatement() const
 {
     Expression condition;
-    for (auto &column : m_compressingColumns) {
-        if (condition.syntax().isValid()) {
-            condition = condition || column.getTypeColumn().isNull();
-        } else {
-            condition = column.getTypeColumn().isNull();
+    if (!m_replaceCompression) {
+        for (auto &column : m_compressingColumns) {
+            if (condition.syntax().isValid()) {
+                condition = condition || column.getTypeColumn().isNull();
+            } else {
+                condition = column.getTypeColumn().isNull();
+            }
         }
+        condition = condition && Column::rowid() < BindParameter();
+    } else {
+        condition = Column::rowid() < BindParameter();
     }
     return StatementSelect()
     .select(Column::rowid())
     .from(m_table)
-    .where(condition && Column::rowid() < BindParameter())
+    .where(condition)
     .order(Column::rowid().asOrder(Order::DESC))
     .limit(CompressionBatchCount);
 }

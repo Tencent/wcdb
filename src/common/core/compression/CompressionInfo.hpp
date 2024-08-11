@@ -36,6 +36,7 @@
 namespace WCDB {
 
 class HandleStatement;
+class CompressionTableInfo;
 
 enum class CompressionType {
     Normal,
@@ -44,6 +45,8 @@ enum class CompressionType {
 };
 
 class CompressionColumnInfo {
+    friend CompressionTableInfo;
+
 public:
     using DictId = ZSTDDict::DictId;
     using Integer = ColumnTypeInfo<ColumnType::Integer>::UnderlyingType;
@@ -94,12 +97,14 @@ public:
 protected:
     StringView m_table;
     std::list<CompressionColumnInfo> m_compressingColumns;
+    bool m_replaceCompression;
 };
 
 class CompressionTableUserInfo : public CompressionTableBaseInfo {
 public:
     CompressionTableUserInfo(const UnsafeStringView &table);
     void addCompressingColumn(const CompressionColumnInfo &info);
+    void enableReplaceCompresssion();
 };
 
 class CompressionTableInfo : public CompressionTableBaseInfo {
@@ -119,6 +124,9 @@ public:
     bool needCheckColumns() const;
     void setNeedCheckColumns(bool needCheck) const;
 
+    StringView getCompressionDescription() const;
+    bool shouldReplaceCompression() const;
+
 private:
     mutable int64_t m_minCompressedRowid;
     mutable bool m_needCheckColumn;
@@ -132,7 +140,7 @@ public:
      ORDER BY rowid DESC
      LIMIT 10
      */
-    StatementSelect getSelectUncompressRowIdStatement() const;
+    StatementSelect getSelectNeedCompressRowIdStatement() const;
 
     /*
      SELECT * FROM compressingTable WHERE rowid = ?

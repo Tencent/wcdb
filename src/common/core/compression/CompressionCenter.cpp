@@ -30,6 +30,7 @@
 #include "WCDBError.hpp"
 #include <string.h>
 #if defined(WCDB_ZSTD) && WCDB_ZSTD
+#define ZDICT_STATIC_LINKING_ONLY 1
 #include <zstd/zdict.h>
 #include <zstd/zstd.h>
 #endif
@@ -149,30 +150,21 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
         data = dataEnummerator();
     }
 
-    dictSize = ZDICT_trainFromBuffer(dict.buffer(),
-                                     dictSize,
-                                     allData.buffer(),
-                                     dataSizes.data(),
-                                     (unsigned int) dataSizes.size());
+    ZDICT_fastCover_params_t params;
+    memset(&params, 0, sizeof(params));
+    params.d = 8;
+    params.steps = 4;
+    params.zParams.dictID = dictId;
+    params.zParams.compressionLevel = ZSTD_CLEVEL_DEFAULT;
+    dictSize = ZDICT_optimizeTrainFromBuffer_fastCover(dict.buffer(),
+                                                       dictSize,
+                                                       allData.buffer(),
+                                                       dataSizes.data(),
+                                                       (unsigned) dataSizes.size(),
+                                                       &params,
+                                                       NULL);
     if (ZSTD_isError(dictSize)) {
         Error error(Error::Code::ZstdError, Error::Level::Error, "Train dict failed");
-        error.infos.insert_or_assign("ZSTDErrorCode", dictSize);
-        error.infos.insert_or_assign("ZSTDErrorName", ZSTD_getErrorName(dictSize));
-        Notifier::shared().notify(error);
-        SharedThreadedErrorProne::setThreadedError(std::move(error));
-        return NullOpt;
-    }
-
-    dictSize = ZDICT_finalizeDictionary(dict.buffer(),
-                                        dict.size(),
-                                        dict.buffer(),
-                                        dict.size(),
-                                        allData.buffer(),
-                                        dataSizes.data(),
-                                        (unsigned int) dataSizes.size(),
-                                        { ZSTD_CLEVEL_DEFAULT, 0, dictId });
-    if (ZSTD_isError(dictSize)) {
-        Error error(Error::Code::ZstdError, Error::Level::Error, "Finalize dict failed");
         error.infos.insert_or_assign("ZSTDErrorCode", dictSize);
         error.infos.insert_or_assign("ZSTDErrorName", ZSTD_getErrorName(dictSize));
         Notifier::shared().notify(error);
@@ -309,6 +301,64 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
     }
 }
 
+Optional<UnsafeData>
+CompressionCenter::decompressContent(const UnsafeData& data, bool usingDict, InnerHandle* handle)
+{
+    int64_t frameSize = ZSTD_getFrameContentSize(data.buffer(), data.size());
+    if (ZSTD_isError(frameSize)) {
+        handle->notifyError(Error::Code::ZstdError,
+                            nullptr,
+                            StringView::formatted("Get compress content frame size fail: %s",
+                                                  ZSTD_getErrorName(frameSize)));
+        return NullOpt;
+    }
+    ZSTDContext& ctx = m_ctxes.getOrCreate();
+    void* buffer = ctx.getOrCreateBuffer(frameSize);
+    if (buffer == nullptr) {
+        handle->notifyError(Error::Code::NoMemory, nullptr, "Decompress fail due to no memory");
+        return NullOpt;
+    }
+    int64_t decompressSize = 0;
+    if (usingDict) {
+        DictId dictId = ZSTD_getDictID_fromFrame(data.buffer(), data.size());
+        if (dictId == 0) {
+            handle->notifyError(Error::Code::ZstdError, nullptr, "Can not decode dictid");
+            return NullOpt;
+        }
+        ZSTDDict* dict = getDict(dictId);
+        if (dict == nullptr) {
+            handle->notifyError(
+            Error::Code::ZstdError,
+            nullptr,
+            StringView::formatted("Can not find decompress dict with id: %d", dictId));
+            return NullOpt;
+        }
+        decompressSize = ZSTD_decompress_usingDDict((ZSTD_DCtx*) ctx.getOrCreateDCtx(),
+                                                    buffer,
+                                                    frameSize,
+                                                    data.buffer(),
+                                                    data.size(),
+                                                    (ZSTD_DDict*) dict->getDDict());
+    } else {
+        decompressSize = ZSTD_decompressDCtx((ZSTD_DCtx*) ctx.getOrCreateDCtx(),
+                                             buffer,
+                                             frameSize,
+                                             data.buffer(),
+                                             data.size());
+    }
+
+    if (ZSTD_isError(decompressSize)) {
+        // The data is corrupted and not recoverable. Just ignore it.
+        Error error(Error::Code::ZstdError,
+                    Error::Level::Error,
+                    StringView::formatted("Decompress fail: %s",
+                                          ZSTD_getErrorName(decompressSize)));
+        Notifier::shared().notify(error);
+        decompressSize = 0;
+    }
+    return UnsafeData((unsigned char*) buffer, decompressSize);
+}
+
 bool CompressionCenter::testContentCanBeDecompressed(const UnsafeData& data,
                                                      bool usingDict,
                                                      InnerHandle* errorReportHandle)
@@ -381,6 +431,14 @@ Optional<UnsafeData>
 CompressionCenter::compressContent(const UnsafeData&, DictId, InnerHandle* errorReportHandle)
 {
     errorReportHandle->notifyError(
+    Error::Code::ZstdError, nullptr, "You need to build WCDB with WCDB_ZSTD macro");
+    return NullOpt;
+}
+
+Optional<UnsafeData>
+CompressionCenter::decompressContent(const UnsafeData& data, bool usingDict, InnerHandle* handle)
+{
+    handle->notifyError(
     Error::Code::ZstdError, nullptr, "You need to build WCDB with WCDB_ZSTD macro");
     return NullOpt;
 }

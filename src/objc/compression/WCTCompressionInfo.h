@@ -62,6 +62,11 @@ WCDB_API @interface WCTCompressionUserInfo : WCTCompressionBaseInfo
                   withMatchProperty:(const WCTProperty &)matchProperty
                       andMatchDicts:(NSDictionary<NSNumber * /* Value of match column */, NSNumber * /* ID of dict */> *)dictIds;
 
+/**
+ @brief Enable to replace original compression format.
+ After activation, you can use `-[WCTDatabase stepCompression]` or `-[WCTDatabase enableAutoCompression:]` to recompress the existing data with the new compression configuration.
+ */
+- (void)enableReplaceCompression;
 @end
 
 NS_ASSUME_NONNULL_END

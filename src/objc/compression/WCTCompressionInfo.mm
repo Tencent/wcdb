@@ -86,4 +86,9 @@
     m_userInfo->addCompressingColumn(columnInfo);
 }
 
+- (void)enableReplaceCompression
+{
+    m_userInfo->enableReplaceCompresssion();
+}
+
 @end

@@ -709,6 +709,12 @@ void WCDBDatabaseSetZSTDMultiDictCompress(void* _Nonnull context,
     userInfo->addCompressingColumn(columnInfo);
 }
 
+void WCDBDatabaseEnableReplaceCompresssion(void* _Nonnull context)
+{
+    WCDB::CompressionTableUserInfo* userInfo = (WCDB::CompressionTableUserInfo*) context;
+    userInfo->enableReplaceCompresssion();
+}
+
 void WCDBDatabaseSetCompression(CPPDatabase database,
                                 WCDBCompressionFilter _Nullable filter,
                                 void* _Nullable context,

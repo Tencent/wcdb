@@ -1208,6 +1208,15 @@ public class Database extends HandleORMOperation {
         }
 
         /**
+         * Enable to replace original compression format.
+         * After activation, you can use {@link Database#stepCompression()} and {@link Database#enableAutoCompression(boolean)}
+         * to recompress the existing data with the new compression configuration.
+         */
+        public <T> void enableReplaceCompression() {
+            Database.enableReplaceCompression(cppInfo);
+        }
+
+        /**
          * Configure to compress all data in the specified column with multi registered zstd dict.
          * Which dict to use when compressing is based on the value of the specified matching column.
          * Note that you can use {@code DictDefaultMatchValue} to specify a default dict.
@@ -1237,6 +1246,7 @@ public class Database extends HandleORMOperation {
     private static native void addZSTDNormalCompress(long cppInfo, long cppColumn);
     private static native void addZSTDDictCompress(long cppInfo, long cppColumn, byte dictId);
     private static native void addZSTDMultiDictCompress(long cppInfo, long cppColumn, long cppMatchColumn, long[] values, byte[] dictIds);
+    private static native void enableReplaceCompression(long cppInfo);
 
     public interface CompressionFilter {
         /**

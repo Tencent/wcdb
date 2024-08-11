@@ -222,6 +222,7 @@ void WCDBDatabaseSetZSTDMultiDictCompress(void* _Nonnull context,
                                           const long long* _Nullable values,
                                           const unsigned char* _Nullable dictIds,
                                           int dictCount);
+void WCDBDatabaseEnableReplaceCompresssion(void* _Nonnull context);
 typedef void (*WCDBCompressionFilter)(void* _Nonnull context,
                                       const char* _Nonnull table,
                                       void* _Nonnull info);

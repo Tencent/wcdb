@@ -44,6 +44,8 @@ public:
     bool deleteCompressionRecord() override final;
 
 private:
+    std::set<StringView> parseColumns(const StringView& compressRecord);
+
     typedef struct CompressionPerformance {
         int compressedCount = 0;
         int uncompressedCount = 0;

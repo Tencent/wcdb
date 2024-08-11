@@ -843,6 +843,11 @@ void WCDBJNIDatabaseClassMethod(addZSTDMultiDictCompress,
     WCDBJNIReleaseByteArray(dictIds);
 }
 
+void WCDBJNIDatabaseClassMethod(enableReplaceCompression, jlong info)
+{
+    WCDBDatabaseEnableReplaceCompresssion((void*) info);
+}
+
 void WCDBJNIDatabaseFilterCompress(jobject filter, const char* table, void* info)
 {
     WCDBJNITryGetEnvOr(return );

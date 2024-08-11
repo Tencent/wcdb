@@ -171,6 +171,20 @@ const char& UnsafeStringView::at(offset_t off) const
     return m_data[off];
 }
 
+UnsafeStringView UnsafeStringView::subStr(offset_t off, size_t length) const
+{
+    WCTRemedialAssert(off + length <= m_length, "invalid parameter", UnsafeStringView(););
+    if (length == 0) {
+        length = m_length - off;
+    }
+    UnsafeStringView ret(m_data + off, length);
+    ret.m_referenceCount = m_referenceCount;
+    if (((uint64_t) m_referenceCount > ConstanceReference)) {
+        (*m_referenceCount)++;
+    }
+    return ret;
+}
+
 #pragma mark - UTF16
 
 #ifdef _WIN32
@@ -344,16 +358,20 @@ int UnsafeStringView::compare(const UnsafeStringView& other) const
     }
 }
 
-size_t UnsafeStringView::find(const UnsafeStringView& other) const
+size_t UnsafeStringView::find(const UnsafeStringView& other, off_t off) const
 {
-    if (other.m_length > m_length || other.m_length == 0) {
+    if (off + other.m_length > m_length || other.m_length == 0 || off < 0) {
         return npos;
     }
-    const char* ret = strstr(m_data, other.m_data);
+    const char* ret = strstr(m_data + off, other.m_data);
     if (ret == nullptr) {
         return npos;
     }
-    return ret - m_data;
+    size_t pos = ret - m_data;
+    if (pos >= m_length) {
+        return npos;
+    }
+    return pos;
 }
 
 #pragma mark - UnsafeStringView - Memory Management
