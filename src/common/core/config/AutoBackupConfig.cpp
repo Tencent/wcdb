@@ -24,7 +24,7 @@
 
 #include "AutoBackupConfig.hpp"
 #include "Assertion.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "Factory.hpp"
 #include "FileManager.hpp"
 #include "InnerHandle.hpp"

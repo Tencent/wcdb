@@ -27,7 +27,7 @@
 #include "CompressionCenter.hpp"
 #include "CompressionConst.hpp"
 #include "CompressionRecord.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "InnerHandle.hpp"
 #include "StringView.hpp"
 #include "WINQ.h"

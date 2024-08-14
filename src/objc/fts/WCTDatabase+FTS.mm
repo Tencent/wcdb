@@ -50,20 +50,20 @@ NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUT
 
 - (void)enableAutoMergeFTS5Index:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoMergeFTSIndex(_database, flag);
+    WCDB::CommonCore::shared().enableAutoMergeFTSIndex(_database, flag);
 }
 
 - (void)addTokenizer:(NSString*)tokenizerName
 {
     WCTFTSTokenizerUtil::configDefaultSymbolDetectorAndUnicodeNormalizer();
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::TokenizeConfigPrefix.data(), tokenizerName.UTF8String);
-    _database->setConfig(configName, WCDB::Core::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
+    _database->setConfig(configName, WCDB::CommonCore::shared().tokenizerConfig(tokenizerName), WCDB::Configs::Priority::Higher);
 }
 
 + (void)registerTokenizer:(const WCDB::TokenizerModule&)module named:(NSString*)name
 {
     WCTRemedialAssert(name.length > 0, "Module name can't be nil.", return;);
-    WCDB::Core::shared().registerTokenizer(name, module);
+    WCDB::CommonCore::shared().registerTokenizer(name, module);
 }
 
 + (void)configPinYinDict:(NSDictionary<NSString*, NSArray<NSString*>*>*)pinyinDict
@@ -79,13 +79,13 @@ NSString* const WCTAuxiliaryFunction_SubstringMatchInfo = [NSString stringWithUT
 - (void)addAuxiliaryFunction:(NSString*)auxiliaryFunctionName
 {
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::AuxiliaryFunctionConfigPrefix.data(), auxiliaryFunctionName.UTF8String);
-    _database->setConfig(configName, WCDB::Core::shared().auxiliaryFunctionConfig(auxiliaryFunctionName), WCDB::Configs::Priority::Higher);
+    _database->setConfig(configName, WCDB::CommonCore::shared().auxiliaryFunctionConfig(auxiliaryFunctionName), WCDB::Configs::Priority::Higher);
 }
 
 + (void)registerAuxiliaryFunction:(const WCDB::FTS5AuxiliaryFunctionModule&)module named:(NSString*)name
 {
     WCTRemedialAssert(name.length > 0, "Module name can't be nil.", return;);
-    WCDB::Core::shared().registerAuxiliaryFunction(name, module);
+    WCDB::CommonCore::shared().registerAuxiliaryFunction(name, module);
 }
 
 @end

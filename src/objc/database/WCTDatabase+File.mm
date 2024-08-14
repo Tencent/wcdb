@@ -55,7 +55,7 @@
 
 + (BOOL)setDefaultTemporaryDatabaseFileDirectory:(NSString *_Nullable)directory
 {
-    return WCDB::Core::shared().setDefaultTemporaryDirectory(directory);
+    return WCDB::CommonCore::shared().setDefaultTemporaryDirectory(directory);
 }
 
 @end

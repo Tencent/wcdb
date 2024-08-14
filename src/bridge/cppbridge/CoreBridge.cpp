@@ -23,50 +23,50 @@
  */
 
 #include "CoreBridge.h"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "ObjectBridge.hpp"
 #include "ThreadedErrors.hpp"
 
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path)
 {
-    WCDB::RecyclableDatabase database = WCDB::Core::shared().getOrCreateDatabase(path);
+    WCDB::RecyclableDatabase database = WCDB::CommonCore::shared().getOrCreateDatabase(path);
     return WCDBCreateRecylableCPPObject(CPPDatabase, database);
 }
 
 void WCDBCoreSetDefaultCipherConfig(int version)
 {
-    WCDB::Core::shared().setDefaultCipherConfiguration(version);
+    WCDB::CommonCore::shared().setDefaultCipherConfiguration(version);
 }
 
 void WCDBCorePurgeAllDatabase(void)
 {
-    WCDB::Core::shared().purgeDatabasePool();
+    WCDB::CommonCore::shared().purgeDatabasePool();
 }
 
 bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir)
 {
-    return WCDB::Core::shared().setDefaultTemporaryDirectory(dir);
+    return WCDB::CommonCore::shared().setDefaultTemporaryDirectory(dir);
 }
 
 void WCDBCoreSetAutoCheckpointEnable(CPPDatabase database, bool enable)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::Core::shared().enableAutoCheckpoint(cppDatabase, enable);
+    WCDB::CommonCore::shared().enableAutoCheckpoint(cppDatabase, enable);
 }
 
 void WCDBCoreSetAutoCheckpointMinFrames(int frames)
 {
-    WCDB::Core::shared().setCheckPointMinFrames(frames);
+    WCDB::CommonCore::shared().setCheckPointMinFrames(frames);
 }
 
 void WCDBCoreReleaseSQLiteMemory(int bytes)
 {
-    WCDB::Core::shared().releaseSQLiteMemory(bytes);
+    WCDB::CommonCore::shared().releaseSQLiteMemory(bytes);
 }
 
 void WCDBCoreSetSoftHeapLimit(long long limit)
 {
-    WCDB::Core::shared().setSoftHeapLimit(limit);
+    WCDB::CommonCore::shared().setSoftHeapLimit(limit);
 }
 
 CPPError WCDBCoreGetThreadedError()
@@ -80,7 +80,7 @@ void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,
                              void* _Nullable context,
                              WCDBContextDestructor _Nullable destructor)
 {
-    WCDB::Core::BusyMonitor callback = nullptr;
+    WCDB::CommonCore::BusyMonitor callback = nullptr;
     if (tracer != nullptr) {
         WCDB::RecyclableContext recyclableContent(context, destructor);
         callback = [tracer, recyclableContent](const WCDB::Tag& tag,
@@ -90,5 +90,5 @@ void WCDBCoreGlobalTraceBusy(WCDBBusyTracer _Nullable tracer,
             tracer(recyclableContent.get(), tag, path.data(), tid, sql.data());
         };
     }
-    WCDB::Core::shared().setBusyMonitor(callback, timeOut);
+    WCDB::CommonCore::shared().setBusyMonitor(callback, timeOut);
 }

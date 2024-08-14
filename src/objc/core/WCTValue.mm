@@ -24,7 +24,7 @@
 
 #import "WCTValue.h"
 #import "Assertion.hpp"
-#import "Core.h"
+#import "CommonCore.h"
 
 @implementation NSNumber (WCTValue)
 

@@ -83,7 +83,7 @@
         };
         WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::ScalarFunctionConfigPrefix.data(), WCDB::DecompressFunctionName.data());
         _database->setConfig(configName,
-                             WCDB::Core::shared().scalarFunctionConfig(WCDB::DecompressFunctionName),
+                             WCDB::CommonCore::shared().scalarFunctionConfig(WCDB::DecompressFunctionName),
                              WCDB::Configs::Priority::Higher);
     }
     _database->addCompression(callback);
@@ -102,7 +102,7 @@
 
 - (void)enableAutoCompression:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoCompress(_database, flag);
+    WCDB::CommonCore::shared().enableAutoCompress(_database, flag);
 }
 
 - (void)setNotificationWhenCompressed:(WCTCompressdNotificationBlock)onCompressd

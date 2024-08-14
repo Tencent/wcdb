@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CoreConst.h"
 
 #include "AsyncQueue.hpp"

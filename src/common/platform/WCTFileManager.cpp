@@ -22,13 +22,13 @@
  * limitations under the License.
  */
 
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "FileManager.hpp"
 #include <stdio.h>
 
 namespace WCDB {
 
-void Core::print(const UnsafeStringView &message)
+void CommonCore::print(const UnsafeStringView &message)
 {
     printf("%s", message.data());
 }

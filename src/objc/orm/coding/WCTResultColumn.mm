@@ -23,7 +23,7 @@
  */
 
 #import "WCTResultColumn.h"
-#import "Core.h"
+#import "CommonCore.h"
 #import "WCTORM.h"
 #import "WCTProperty.h"
 

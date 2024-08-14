@@ -24,7 +24,7 @@
 
 #include "FTSBridge.h"
 #include "Assertion.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CustomConfig.hpp"
 #include "FTSConst.h"
 #include "InnerDatabase.hpp"
@@ -115,46 +115,46 @@ void WCDBCoreRegisterFTSTokenizer(const char* _Nullable name, int typeId, enum W
     switch (typeId) {
     case 0: {
         if (version == WCDBFTSVersion5) {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS5TokenizerModuleTemplate<WCDB::SwiftTokenizer<0>>::specializeWithContext(nullptr));
         } else {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS3TokenizerModuleTemplate<WCDB::SwiftTokenizer<0>>::specialize());
         }
     } break;
     case 1: {
         if (version == WCDBFTSVersion5) {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS5TokenizerModuleTemplate<WCDB::SwiftTokenizer<1>>::specializeWithContext(nullptr));
         } else {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS3TokenizerModuleTemplate<WCDB::SwiftTokenizer<1>>::specialize());
         }
     } break;
     case 2: {
         if (version == WCDBFTSVersion5) {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS5TokenizerModuleTemplate<WCDB::SwiftTokenizer<2>>::specializeWithContext(nullptr));
         } else {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS3TokenizerModuleTemplate<WCDB::SwiftTokenizer<2>>::specialize());
         }
     } break;
     case 3: {
         if (version == WCDBFTSVersion5) {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS5TokenizerModuleTemplate<WCDB::SwiftTokenizer<3>>::specializeWithContext(nullptr));
         } else {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS3TokenizerModuleTemplate<WCDB::SwiftTokenizer<3>>::specialize());
         }
     } break;
     case 4: {
         if (version == WCDBFTSVersion5) {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS5TokenizerModuleTemplate<WCDB::SwiftTokenizer<4>>::specializeWithContext(nullptr));
         } else {
-            WCDB::Core::shared().registerTokenizer(
+            WCDB::CommonCore::shared().registerTokenizer(
             name, WCDB::FTS3TokenizerModuleTemplate<WCDB::SwiftTokenizer<4>>::specialize());
         }
     } break;
@@ -167,7 +167,7 @@ void WCDBCoreRegisterFTSTokenizer(const char* _Nullable name, int typeId, enum W
 void WCDBDatabaseEnableAutoMergeFTS5Index(CPPDatabase database, bool enable)
 {
     WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
-    WCDB::Core::shared().enableAutoMergeFTSIndex(cppDatabase, enable);
+    WCDB::CommonCore::shared().enableAutoMergeFTSIndex(cppDatabase, enable);
 }
 
 const char* WCDBTokenizerSimple = WCDB::BuiltinTokenizer::Simple;
@@ -193,7 +193,7 @@ void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokeni
     WCDB::StringView configName = WCDB::StringView::formatted(
     "%s%s", WCDB::TokenizeConfigPrefix.data(), tokenizer);
     cppDatabase->setConfig(configName,
-                           WCDB::Core::shared().tokenizerConfig(tokenizer),
+                           WCDB::CommonCore::shared().tokenizerConfig(tokenizer),
                            WCDB::Configs::Priority::Higher);
 }
 
@@ -209,6 +209,6 @@ void WCDBDatabaseAddAuxiliaryFunction(CPPDatabase database, const char* _Nullabl
     WCDB::StringView configName = WCDB::StringView::formatted(
     "%s%s", WCDB::AuxiliaryFunctionConfigPrefix.data(), auxFunction);
     cppDatabase->setConfig(configName,
-                           WCDB::Core::shared().auxiliaryFunctionConfig(auxFunction),
+                           WCDB::CommonCore::shared().auxiliaryFunctionConfig(auxFunction),
                            WCDB::Configs::Priority::Higher);
 }

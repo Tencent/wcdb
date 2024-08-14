@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import "Core.h"
+#import "CommonCore.h"
 #import "WCTDatabase+Memory.h"
 #import "WCTDatabase+Private.h"
 
@@ -35,7 +35,7 @@
 
 + (void)purgeAll
 {
-    WCDB::Core::shared().purgeDatabasePool();
+    WCDB::CommonCore::shared().purgeDatabasePool();
 }
 
 @end

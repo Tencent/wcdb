@@ -24,7 +24,7 @@
 
 #include "MigratingStatementDecorator.hpp"
 #include "Assertion.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "SQLite.h"
 #include "StringView.hpp"
 #include "WINQ.h"

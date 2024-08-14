@@ -28,7 +28,7 @@
 #include "BaseBinding.hpp"
 #include "CompressingHandleDecorator.hpp"
 #include "CompressionConst.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "DecorativeHandle.hpp"
 #include "InnerHandle.hpp"
 #include "MigratingHandleDecorator.hpp"

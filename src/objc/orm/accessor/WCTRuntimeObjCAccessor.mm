@@ -24,7 +24,7 @@
 
 #import "WCTRuntimeObjCAccessor.h"
 #import "Assertion.hpp"
-#import "Core.h"
+#import "CommonCore.h"
 #import "Notifier.hpp"
 #import "StringView.hpp"
 #import "WCDBError.hpp"

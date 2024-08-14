@@ -25,7 +25,7 @@
 #import "WCTRuntimeBaseAccessor.h"
 #import "Assertion.hpp"
 #import "Console.hpp"
-#import "Core.h"
+#import "CommonCore.h"
 #import "StringView.hpp"
 #import <objc/runtime.h>
 

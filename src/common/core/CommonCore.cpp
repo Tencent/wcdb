@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#include "Core.h"
+#include "CommonCore.h"
 #include "AutoMigrateConfig.hpp"
 #include "BusyRetryConfig.hpp"
 #include "CompressionConst.hpp"
@@ -46,13 +46,13 @@
 namespace WCDB {
 
 #pragma mark - Core
-Core& Core::shared()
+CommonCore& CommonCore::shared()
 {
-    static Core* s_core = new Core;
+    static CommonCore* s_core = new CommonCore;
     return *s_core;
 }
 
-Core::Core()
+CommonCore::CommonCore()
 // Database
 : m_databasePool(this)
 , m_scalarFunctionModules(std::make_shared<ScalarFunctionModules>())
@@ -87,11 +87,11 @@ Core::Core()
 
     Global::shared().setNotificationForLog(
     NotifierLoggerName,
-    std::bind(&Core::globalLog, this, std::placeholders::_1, std::placeholders::_2));
+    std::bind(&CommonCore::globalLog, this, std::placeholders::_1, std::placeholders::_2));
 
     Notifier::shared().setNotificationForPreprocessing(
     NotifierPreprocessorName,
-    std::bind(&Core::preprocessError, this, std::placeholders::_1));
+    std::bind(&CommonCore::preprocessError, this, std::placeholders::_1));
 
     m_operationQueue->run();
 
@@ -119,39 +119,39 @@ Core::Core()
                            ScalarFunctionTemplate<DecompressFunction>::specialize(2));
 }
 
-Core::~Core()
+CommonCore::~CommonCore()
 {
     Global::shared().setNotificationForLog(NotifierLoggerName, nullptr);
     Notifier::shared().setNotificationForPreprocessing(NotifierPreprocessorName, nullptr);
 }
 
 #pragma mark - Database
-RecyclableDatabase Core::getOrCreateDatabase(const UnsafeStringView& path)
+RecyclableDatabase CommonCore::getOrCreateDatabase(const UnsafeStringView& path)
 {
     return m_databasePool.getOrCreate(path);
 }
 
-void Core::purgeDatabasePool()
+void CommonCore::purgeDatabasePool()
 {
     m_databasePool.purge();
 }
 
-void Core::releaseSQLiteMemory(int bytes)
+void CommonCore::releaseSQLiteMemory(int bytes)
 {
     sqlite3_release_memory(bytes);
 }
 
-void Core::setSoftHeapLimit(int64_t limit)
+void CommonCore::setSoftHeapLimit(int64_t limit)
 {
     sqlite3_soft_heap_limit64(limit);
 }
 
-void Core::stopQueue()
+void CommonCore::stopQueue()
 {
     m_operationQueue->stop();
 }
 
-void Core::databaseDidCreate(InnerDatabase* database)
+void CommonCore::databaseDidCreate(InnerDatabase* database)
 {
     WCTAssert(database != nullptr);
 
@@ -162,17 +162,17 @@ void Core::databaseDidCreate(InnerDatabase* database)
 
 #pragma mark - Error
 
-void Core::setThreadedErrorPath(const UnsafeStringView& path)
+void CommonCore::setThreadedErrorPath(const UnsafeStringView& path)
 {
     m_errorPath.getOrCreate() = path;
 }
 
-void Core::setThreadedErrorIgnorable(bool ignorable)
+void CommonCore::setThreadedErrorIgnorable(bool ignorable)
 {
     m_errorIgnorable.getOrCreate() = ignorable;
 }
 
-void Core::preprocessError(Error& error)
+void CommonCore::preprocessError(Error& error)
 {
     auto& infos = error.infos;
 
@@ -206,59 +206,59 @@ void Core::preprocessError(Error& error)
 }
 
 #pragma mark - ScalarFunction
-void Core::registerScalarFunction(const UnsafeStringView& name,
+void CommonCore::registerScalarFunction(const UnsafeStringView& name,
                                   const ScalarFunctionModule& module)
 {
     m_scalarFunctionModules->add(name, module);
 }
 
-bool Core::scalarFunctionExists(const UnsafeStringView& name) const
+bool CommonCore::scalarFunctionExists(const UnsafeStringView& name) const
 {
     return m_scalarFunctionModules->get(name) != nullptr;
 }
 
-std::shared_ptr<Config> Core::scalarFunctionConfig(const UnsafeStringView& scalarFunctionName)
+std::shared_ptr<Config> CommonCore::scalarFunctionConfig(const UnsafeStringView& scalarFunctionName)
 {
     return std::make_shared<ScalarFunctionConfig>(scalarFunctionName, m_scalarFunctionModules);
 }
 
 #pragma mark - Tokenizer
-void Core::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
+void CommonCore::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
 {
     m_tokenizerModules->add(name, module);
 }
 
-bool Core::tokenizerExists(const UnsafeStringView& name) const
+bool CommonCore::tokenizerExists(const UnsafeStringView& name) const
 {
     return m_tokenizerModules->get(name) != nullptr;
 }
 
-std::shared_ptr<Config> Core::tokenizerConfig(const UnsafeStringView& tokenizeName)
+std::shared_ptr<Config> CommonCore::tokenizerConfig(const UnsafeStringView& tokenizeName)
 {
     return std::make_shared<TokenizerConfig>(tokenizeName, m_tokenizerModules);
 }
 
 #pragma mark - AuxiliaryFunction
-void Core::registerAuxiliaryFunction(const UnsafeStringView& name,
+void CommonCore::registerAuxiliaryFunction(const UnsafeStringView& name,
                                      const FTS5AuxiliaryFunctionModule& module)
 {
     m_auxiliaryFunctionModules->add(name, module);
 }
 
-bool Core::auxiliaryFunctionExists(const UnsafeStringView& name) const
+bool CommonCore::auxiliaryFunctionExists(const UnsafeStringView& name) const
 {
     return m_auxiliaryFunctionModules->get(name) != nullptr;
 }
 
 std::shared_ptr<Config>
-Core::auxiliaryFunctionConfig(const UnsafeStringView& auxiliaryFunctionName)
+CommonCore::auxiliaryFunctionConfig(const UnsafeStringView& auxiliaryFunctionName)
 {
     return std::make_shared<AuxiliaryFunctionConfig>(
     auxiliaryFunctionName, m_auxiliaryFunctionModules);
 }
 
 #pragma mark - Operation
-Optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
+Optional<bool> CommonCore::migrationShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     Optional<bool> done = false; // mark as no error if database is not referenced.
@@ -268,7 +268,7 @@ Optional<bool> Core::migrationShouldBeOperated(const UnsafeStringView& path)
     return done;
 }
 
-Optional<bool> Core::compressionShouldBeOperated(const UnsafeStringView& path)
+Optional<bool> CommonCore::compressionShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     Optional<bool> done = false; // mark as no error if database is not referenced.
@@ -278,7 +278,7 @@ Optional<bool> Core::compressionShouldBeOperated(const UnsafeStringView& path)
     return done;
 }
 
-void Core::backupShouldBeOperated(const UnsafeStringView& path)
+void CommonCore::backupShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
@@ -286,7 +286,7 @@ void Core::backupShouldBeOperated(const UnsafeStringView& path)
     }
 }
 
-void Core::checkpointShouldBeOperated(const UnsafeStringView& path)
+void CommonCore::checkpointShouldBeOperated(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
@@ -294,7 +294,7 @@ void Core::checkpointShouldBeOperated(const UnsafeStringView& path)
     }
 }
 
-void Core::integrityShouldBeChecked(const UnsafeStringView& path)
+void CommonCore::integrityShouldBeChecked(const UnsafeStringView& path)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     if (database != nullptr) {
@@ -310,22 +310,22 @@ void Core::integrityShouldBeChecked(const UnsafeStringView& path)
     }
 }
 
-void Core::purgeShouldBeOperated()
+void CommonCore::purgeShouldBeOperated()
 {
     purgeDatabasePool();
 }
 
-void Core::stopAllDatabaseEvent(const UnsafeStringView& path)
+void CommonCore::stopAllDatabaseEvent(const UnsafeStringView& path)
 {
     m_operationQueue->stopAllDatabaseEvent(path);
 }
 
-bool Core::isFileObservedCorrupted(const UnsafeStringView& path)
+bool CommonCore::isFileObservedCorrupted(const UnsafeStringView& path)
 {
     return m_operationQueue->isFileObservedCorrupted(path);
 }
 
-void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
+void CommonCore::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
                                                 const CorruptedNotification& notification)
 {
     OperationQueue::CorruptionNotification underlyingNotification = nullptr;
@@ -365,7 +365,7 @@ void Core::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
 }
 
 #pragma mark - Checkpoint
-void Core::enableAutoCheckpoint(InnerDatabase* database, bool enable)
+void CommonCore::enableAutoCheckpoint(InnerDatabase* database, bool enable)
 {
     database->setAutoCheckpointEnable(enable);
     if (enable) {
@@ -378,7 +378,7 @@ void Core::enableAutoCheckpoint(InnerDatabase* database, bool enable)
     }
 }
 
-void Core::setCheckPointMinFrames(int frames)
+void CommonCore::setCheckPointMinFrames(int frames)
 {
     AutoCheckpointConfig* checkpointConfig
     = dynamic_cast<AutoCheckpointConfig*>(m_autoCheckpointConfig.get());
@@ -389,7 +389,7 @@ void Core::setCheckPointMinFrames(int frames)
 }
 
 #pragma mark - Backup
-void Core::enableAutoBackup(InnerDatabase* database, bool enable)
+void CommonCore::enableAutoBackup(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -403,7 +403,7 @@ void Core::enableAutoBackup(InnerDatabase* database, bool enable)
     }
 }
 
-void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
+void CommonCore::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
                                           SharedIncrementalMaterial material)
 {
     if (!m_operationQueue->isAutoBackup(path)) {
@@ -417,7 +417,7 @@ void Core::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
     }
 }
 
-SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView& path)
+SharedIncrementalMaterial CommonCore::tryGetIncrementalMaterial(const UnsafeStringView& path)
 {
     WCTAssert(dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get()) != nullptr);
     AutoBackupConfig* backupConfig
@@ -429,7 +429,7 @@ SharedIncrementalMaterial Core::tryGetIncrementalMaterial(const UnsafeStringView
 }
 
 #pragma mark - Migration
-void Core::enableAutoMigrate(InnerDatabase* database, bool enable)
+void CommonCore::enableAutoMigrate(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -444,7 +444,7 @@ void Core::enableAutoMigrate(InnerDatabase* database, bool enable)
 }
 
 #pragma mark - Compression
-void Core::enableAutoCompress(InnerDatabase* database, bool enable)
+void CommonCore::enableAutoCompress(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -459,7 +459,7 @@ void Core::enableAutoCompress(InnerDatabase* database, bool enable)
 }
 
 #pragma mark - Merge FTS Index
-void Core::enableAutoMergeFTSIndex(InnerDatabase* database, bool enable)
+void CommonCore::enableAutoMergeFTSIndex(InnerDatabase* database, bool enable)
 {
     WCTAssert(database != nullptr);
     if (enable) {
@@ -474,7 +474,7 @@ void Core::enableAutoMergeFTSIndex(InnerDatabase* database, bool enable)
     }
 }
 
-Optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
+Optional<bool> CommonCore::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
                                                    TableArray newTables,
                                                    TableArray modifiedTables)
 {
@@ -487,7 +487,7 @@ Optional<bool> Core::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
 }
 
 #pragma mark - Trace
-void Core::globalLog(int rc, const char* message)
+void CommonCore::globalLog(int rc, const char* message)
 {
     Error::Code code = Error::rc2c(rc);
     if (code == Error::Code::Warning || code == Error::Code::Corrupt) {
@@ -498,18 +498,18 @@ void Core::globalLog(int rc, const char* message)
     }
 }
 
-void Core::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification)
+void CommonCore::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig::Notification& notification)
 {
     static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get())->setNotification(notification);
 }
 
-void Core::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformanceTraceConfig::Notification& notification)
+void CommonCore::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformanceTraceConfig::Notification& notification)
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
 }
 
-void Core::setNotificationWhenErrorTraced(const Notifier::Callback& notification)
+void CommonCore::setNotificationWhenErrorTraced(const Notifier::Callback& notification)
 {
     if (notification != nullptr) {
         Notifier::shared().setNotification(
@@ -519,7 +519,7 @@ void Core::setNotificationWhenErrorTraced(const Notifier::Callback& notification
     }
 }
 
-void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
+void CommonCore::setNotificationWhenErrorTraced(const UnsafeStringView& path,
                                           const Notifier::Callback& notification)
 {
     StringView notifierKey
@@ -538,7 +538,7 @@ void Core::setNotificationWhenErrorTraced(const UnsafeStringView& path,
     }
 }
 
-void Core::setBusyMonitor(BusyMonitor monitor, double timeOut)
+void CommonCore::setBusyMonitor(BusyMonitor monitor, double timeOut)
 {
     if (monitor != nullptr && timeOut > 0) {
         m_enableBusyTrace = true;
@@ -559,32 +559,32 @@ void Core::setBusyMonitor(BusyMonitor monitor, double timeOut)
     }
 }
 
-bool Core::isBusyTraceEnable() const
+bool CommonCore::isBusyTraceEnable() const
 {
     return m_enableBusyTrace;
 }
 
 #pragma mark - Integrity
 
-void Core::skipIntegrityCheck(const UnsafeStringView& path)
+void CommonCore::skipIntegrityCheck(const UnsafeStringView& path)
 {
     m_operationQueue->skipIntegrityCheck(path);
 }
 
 #pragma mark - Config
-void Core::setABTestConfig(const UnsafeStringView& configName, const UnsafeStringView& configValue)
+void CommonCore::setABTestConfig(const UnsafeStringView& configName, const UnsafeStringView& configValue)
 {
     LockGuard memoryGuard(m_memory);
     m_abtestConfig[configName] = configValue;
 }
 
-void Core::removeABTestConfig(const UnsafeStringView& configName)
+void CommonCore::removeABTestConfig(const UnsafeStringView& configName)
 {
     LockGuard memoryGuard(m_memory);
     m_abtestConfig.erase(configName);
 }
 
-Optional<UnsafeStringView> Core::getABTestConfig(const UnsafeStringView& configName)
+Optional<UnsafeStringView> CommonCore::getABTestConfig(const UnsafeStringView& configName)
 {
     SharedLockGuard memoryGuard(m_memory);
     if (m_abtestConfig.find(configName) != m_abtestConfig.end()) {
@@ -593,7 +593,7 @@ Optional<UnsafeStringView> Core::getABTestConfig(const UnsafeStringView& configN
     return NullOpt;
 }
 
-void Core::setDefaultCipherConfiguration(int version)
+void CommonCore::setDefaultCipherConfiguration(int version)
 {
     switch (version) {
     case 1:
@@ -626,7 +626,7 @@ void Core::setDefaultCipherConfiguration(int version)
     }
 }
 
-bool Core::setDefaultTemporaryDirectory(const UnsafeStringView& dir)
+bool CommonCore::setDefaultTemporaryDirectory(const UnsafeStringView& dir)
 {
     if (dir.length() > 0) {
         if (!FileManager::createDirectoryWithIntermediateDirectories(dir)) {

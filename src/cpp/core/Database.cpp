@@ -26,7 +26,7 @@
 #include "CipherConfig.hpp"
 #include "CompressionCenter.hpp"
 #include "CompressionConst.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CoreConst.h"
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
@@ -49,14 +49,14 @@ namespace WCDB {
 Database::Database(const UnsafeStringView& path)
 {
     if (path.compare(":memory:") == 0) {
-        m_databaseHolder = Core::shared().getOrCreateDatabase(path);
+        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(path);
         m_innerDatabase = m_databaseHolder.get();
         return;
     }
 #ifndef _WIN32
     const char* resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
-        Core::shared().setThreadedErrorPath(path);
+        CommonCore::shared().setThreadedErrorPath(path);
         if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
             && FileManager::createFile(path)) {
             resolvePath = realpath(path.data(), nullptr);
@@ -69,7 +69,7 @@ Database::Database(const UnsafeStringView& path)
             }
             FileManager::removeItem(path);
         }
-        Core::shared().setThreadedErrorPath(nullptr);
+        CommonCore::shared().setThreadedErrorPath(nullptr);
     }
     if (resolvePath != nullptr) {
         UnsafeStringView newPath = UnsafeStringView(resolvePath);
@@ -84,7 +84,7 @@ Database::Database(const UnsafeStringView& path)
             newPath = UnsafeStringView(resolvePath + 8);
         }
 #endif
-        m_databaseHolder = Core::shared().getOrCreateDatabase(newPath);
+        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(newPath);
         free((void*) resolvePath);
     }
 #else
@@ -95,7 +95,7 @@ Database::Database(const UnsafeStringView& path)
     }
 #endif
     else {
-        m_databaseHolder = Core::shared().getOrCreateDatabase(path);
+        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(path);
     }
     m_innerDatabase = m_databaseHolder.get();
 }
@@ -207,12 +207,12 @@ void Database::setUIThreadId(std::thread::id uiThreadId)
 
 void Database::globalTraceError(Database::ErrorNotification trace)
 {
-    Core::shared().setNotificationWhenErrorTraced(trace);
+    CommonCore::shared().setNotificationWhenErrorTraced(trace);
 }
 
 void Database::traceError(ErrorNotification trace)
 {
-    Core::shared().setNotificationWhenErrorTraced(getPath(), trace);
+    CommonCore::shared().setNotificationWhenErrorTraced(getPath(), trace);
 }
 
 static_assert(sizeof(Database::PerformanceInfo) == sizeof(InnerHandle::PerformanceInfo), "");
@@ -241,7 +241,7 @@ static_assert(offsetof(Database::PerformanceInfo, costInNanoseconds)
 void Database::globalTracePerformance(Database::PerformanceNotification trace)
 {
     if (trace != nullptr) {
-        Core::shared().setNotificationWhenPerformanceGlobalTraced(
+        CommonCore::shared().setNotificationWhenPerformanceGlobalTraced(
         [trace](long tag,
                 const UnsafeStringView& path,
                 const void* handleIdentifier,
@@ -252,7 +252,7 @@ void Database::globalTracePerformance(Database::PerformanceNotification trace)
             trace(tag, path, (uint64_t) handleIdentifier, sql, newInfo);
         });
     } else {
-        Core::shared().setNotificationWhenPerformanceGlobalTraced(nullptr);
+        CommonCore::shared().setNotificationWhenPerformanceGlobalTraced(nullptr);
     }
 }
 
@@ -279,7 +279,7 @@ void Database::tracePerformance(Database::PerformanceNotification trace)
 
 void Database::globalTraceSQL(Database::SQLNotification trace)
 {
-    Core::shared().setNotificationForSQLGLobalTraced(trace);
+    CommonCore::shared().setNotificationForSQLGLobalTraced(trace);
 }
 
 void Database::traceSQL(Database::SQLNotification trace)
@@ -324,7 +324,7 @@ void Database::globalTraceDatabaseOperation(DBOperationTrace trace)
 
 void Database::globalTraceBusy(BusyTrace trace, double timeOut)
 {
-    Core::shared().setBusyMonitor(trace, timeOut);
+    CommonCore::shared().setBusyMonitor(trace, timeOut);
 }
 
 #pragma mark - File
@@ -353,7 +353,7 @@ Optional<size_t> Database::getFilesSize() const
 
 void Database::enableAutoMergeFTS5Index(bool flag)
 {
-    Core::shared().enableAutoMergeFTSIndex(m_innerDatabase, flag);
+    CommonCore::shared().enableAutoMergeFTSIndex(m_innerDatabase, flag);
 }
 
 void Database::addTokenizer(const UnsafeStringView& tokenize)
@@ -361,12 +361,12 @@ void Database::addTokenizer(const UnsafeStringView& tokenize)
     StringView configName
     = StringView::formatted("%s%s", TokenizeConfigPrefix.data(), tokenize.data());
     m_innerDatabase->setConfig(
-    configName, Core::shared().tokenizerConfig(tokenize), Configs::Priority::Higher);
+    configName, CommonCore::shared().tokenizerConfig(tokenize), Configs::Priority::Higher);
 }
 
 void Database::registerTokenizer(const UnsafeStringView& name, const TokenizerModule& module)
 {
-    Core::shared().registerTokenizer(name, module);
+    CommonCore::shared().registerTokenizer(name, module);
 }
 
 void Database::addAuxiliaryFunction(const UnsafeStringView& functionName)
@@ -374,14 +374,14 @@ void Database::addAuxiliaryFunction(const UnsafeStringView& functionName)
     StringView configName = StringView::formatted(
     "%s%s", AuxiliaryFunctionConfigPrefix.data(), functionName.data());
     m_innerDatabase->setConfig(configName,
-                               Core::shared().auxiliaryFunctionConfig(functionName),
+                               CommonCore::shared().auxiliaryFunctionConfig(functionName),
                                Configs::Priority::Higher);
 }
 
 void Database::registerAuxiliaryFunction(const UnsafeStringView& name,
                                          const FTS5AuxiliaryFunctionModule& module)
 {
-    Core::shared().registerAuxiliaryFunction(name, module);
+    CommonCore::shared().registerAuxiliaryFunction(name, module);
 }
 
 void Database::configSymbolDetector(SymbolDetector detector)
@@ -413,14 +413,14 @@ void Database::purge()
 
 void Database::purgeAll()
 {
-    Core::shared().purgeDatabasePool();
+    CommonCore::shared().purgeDatabasePool();
 }
 
 #pragma mark - Repair
 
 void Database::setNotificationWhenCorrupted(Database::CorruptionNotification onCorrupted)
 {
-    Core::shared().setNotificationWhenDatabaseCorrupted(
+    CommonCore::shared().setNotificationWhenDatabaseCorrupted(
     getPath(), [onCorrupted](InnerDatabase* innerDatabase) {
         Database database = Database(innerDatabase);
         onCorrupted(database);
@@ -435,12 +435,12 @@ bool Database::checkIfCorrupted()
 
 bool Database::isAlreadyCorrupted()
 {
-    return Core::shared().isFileObservedCorrupted(getPath());
+    return CommonCore::shared().isFileObservedCorrupted(getPath());
 }
 
 void Database::enableAutoBackup(bool flag)
 {
-    Core::shared().enableAutoBackup(m_innerDatabase, flag);
+    CommonCore::shared().enableAutoBackup(m_innerDatabase, flag);
 }
 
 bool Database::backup()
@@ -490,7 +490,7 @@ void Database::setCipherKey(const UnsafeData& cipherKey, int cipherPageSize, Cip
 
 void Database::setDefaultCipherConfiguration(CipherVersion version)
 {
-    Core::shared().setDefaultCipherConfiguration(version);
+    CommonCore::shared().setDefaultCipherConfiguration(version);
 }
 
 void Database::setConfig(const UnsafeStringView& name,
@@ -525,13 +525,13 @@ void Database::removeConfig(const UnsafeStringView& name)
 
 bool Database::setDefaultTemporaryDirectory(const UnsafeStringView& directory)
 {
-    return Core::shared().setDefaultTemporaryDirectory(directory);
+    return CommonCore::shared().setDefaultTemporaryDirectory(directory);
 }
 
 void Database::registerScalarFunction(const ScalarFunctionModule& module,
                                       const UnsafeStringView& name)
 {
-    Core::shared().registerScalarFunction(name, module);
+    CommonCore::shared().registerScalarFunction(name, module);
 }
 
 void Database::addScalarFunction(const UnsafeStringView& name)
@@ -539,7 +539,7 @@ void Database::addScalarFunction(const UnsafeStringView& name)
     WCDB::StringView configName = WCDB::StringView::formatted(
     "%s%s", WCDB::ScalarFunctionConfigPrefix.data(), name.data());
     m_innerDatabase->setConfig(configName,
-                               WCDB::Core::shared().scalarFunctionConfig(name),
+                               WCDB::CommonCore::shared().scalarFunctionConfig(name),
                                WCDB::Configs::Priority::Higher);
 }
 
@@ -573,7 +573,7 @@ bool Database::stepMigration()
 
 void Database::enableAutoMigration(bool flag)
 {
-    Core::shared().enableAutoMigrate(m_innerDatabase, flag);
+    CommonCore::shared().enableAutoMigrate(m_innerDatabase, flag);
 }
 
 void Database::setNotificationWhenMigrated(Database::MigratedCallback onMigrated)
@@ -687,7 +687,7 @@ void Database::setCompression(const CompressionFilter& filter)
         StringView configName = StringView::formatted(
         "%s%s", ScalarFunctionConfigPrefix.data(), DecompressFunctionName.data());
         m_innerDatabase->setConfig(configName,
-                                   Core::shared().scalarFunctionConfig(DecompressFunctionName),
+                                   CommonCore::shared().scalarFunctionConfig(DecompressFunctionName),
                                    Configs::Priority::Higher);
     }
     m_innerDatabase->addCompression(callback);
@@ -705,7 +705,7 @@ bool Database::stepCompression()
 
 void Database::enableAutoCompression(bool flag)
 {
-    Core::shared().enableAutoCompress(m_innerDatabase, flag);
+    CommonCore::shared().enableAutoCompress(m_innerDatabase, flag);
 }
 
 void Database::setNotificationWhenCompressed(const CompressedCallback& onCompressd)

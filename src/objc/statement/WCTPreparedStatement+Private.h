@@ -21,7 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#import "Core.h"
+#import "CommonCore.h"
 #import "WCTHandle.h"
 #import "WCTPreparedStatement.h"
 

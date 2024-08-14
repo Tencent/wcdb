@@ -24,7 +24,7 @@
 
 #include "MergeFTSIndexLogic.hpp"
 #include "Assertion.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CoreConst.h"
 #include "Notifier.hpp"
 #include "WCDBError.hpp"
@@ -156,7 +156,7 @@ MergeFTSIndexLogic::triggerMerge(InnerHandle &handle, TableArray newTables, Tabl
         return false;
     }
     OperationQueue::shared().async(handle.getPath(), [](const UnsafeStringView &path) {
-        RecyclableDatabase database = Core::shared().getOrCreateDatabase(path);
+        RecyclableDatabase database = CommonCore::shared().getOrCreateDatabase(path);
         if (database != nullptr) {
             database->proccessMerge();
         }
@@ -362,9 +362,9 @@ void MergeFTSIndexLogic::OperationQueue::main()
 void MergeFTSIndexLogic::OperationQueue::onTimed(const StringView &path,
                                                  const OperationCallBack &callback)
 {
-    Core::shared().setThreadedErrorIgnorable(true);
+    CommonCore::shared().setThreadedErrorIgnorable(true);
     callback(path);
-    Core::shared().setThreadedErrorIgnorable(false);
+    CommonCore::shared().setThreadedErrorIgnorable(false);
 }
 
 } // namespace WCDB

@@ -24,7 +24,7 @@
 
 #import "Assertion.hpp"
 #import "Console.hpp"
-#import "Core.hpp"
+#import "CommonCore.hpp"
 #import "DBOperationNotifier.hpp"
 #import "WCTConvertible.h"
 #import "WCTDatabase+Monitor.h"
@@ -35,7 +35,7 @@
 
 namespace WCDB {
 
-void Core::print(const UnsafeStringView& message)
+void CommonCore::print(const UnsafeStringView& message)
 {
 #if WCDB_DEBUG
     NSLog(@"%s", message.data());
@@ -57,24 +57,24 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
 + (void)globalTraceError:(WCTErrorTraceBlock)block
 {
     if (block != nil) {
-        WCDB::Core::shared().setNotificationWhenErrorTraced([block](const WCDB::Error& error) {
+        WCDB::CommonCore::shared().setNotificationWhenErrorTraced([block](const WCDB::Error& error) {
             WCTError* nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
         });
     } else {
-        WCDB::Core::shared().setNotificationWhenErrorTraced(nullptr);
+        WCDB::CommonCore::shared().setNotificationWhenErrorTraced(nullptr);
     }
 }
 
 - (void)traceError:(nullable WCDB_ESCAPE WCTErrorTraceBlock)block
 {
     if (block != nil) {
-        WCDB::Core::shared().setNotificationWhenErrorTraced(self.path, [block](const WCDB::Error& error) {
+        WCDB::CommonCore::shared().setNotificationWhenErrorTraced(self.path, [block](const WCDB::Error& error) {
             WCTError* nsError = [[WCTError alloc] initWithError:error];
             block(nsError);
         });
     } else {
-        WCDB::Core::shared().setNotificationWhenErrorTraced(self.path, nullptr);
+        WCDB::CommonCore::shared().setNotificationWhenErrorTraced(self.path, nullptr);
     }
 }
 
@@ -87,7 +87,7 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
             trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithUTF8String:sql.data()], nsInfo);
         };
     }
-    WCDB::Core::shared().setNotificationWhenPerformanceGlobalTraced(callback);
+    WCDB::CommonCore::shared().setNotificationWhenPerformanceGlobalTraced(callback);
 }
 
 - (void)tracePerformance:(WCTPerformanceTraceBlock)trace
@@ -135,7 +135,7 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
             trace(tag, [NSString stringWithUTF8String:path.data()], (uint64_t) handle, [NSString stringWithView:sql], info.length() > 0 ? [NSString stringWithView:info.data()] : nil);
         };
     }
-    WCDB::Core::shared().setNotificationForSQLGLobalTraced(callback);
+    WCDB::CommonCore::shared().setNotificationForSQLGLobalTraced(callback);
 }
 
 - (void)enableFullSQLTrace:(BOOL)enable
@@ -179,12 +179,12 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
 + (void)globalTraceBusy:(nullable WCDB_ESCAPE WCTDatabaseBusyTraceBlock)trace withTimeOut:(double)timeOut
 {
     if (trace != nil && timeOut > 0) {
-        WCDB::Core::shared().setBusyMonitor([=](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, uint64_t tid, const WCDB::UnsafeStringView& sql) {
+        WCDB::CommonCore::shared().setBusyMonitor([=](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, uint64_t tid, const WCDB::UnsafeStringView& sql) {
             trace(tag, [NSString stringWithUTF8String:path.data()], tid, [NSString stringWithUTF8String:sql.data()]);
         },
                                             timeOut);
     } else {
-        WCDB::Core::shared().setBusyMonitor(nullptr, 0);
+        WCDB::CommonCore::shared().setBusyMonitor(nullptr, 0);
     }
 }
 

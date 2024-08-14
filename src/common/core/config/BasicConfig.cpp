@@ -24,7 +24,7 @@
 
 #include "BasicConfig.hpp"
 #include "Assertion.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CoreConst.h"
 #include "InnerHandle.hpp"
 #include "Macro.h"

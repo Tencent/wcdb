@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import "Core.h"
+#import "CommonCore.h"
 #import "WCTDatabase.h"
 
 NS_ASSUME_NONNULL_BEGIN

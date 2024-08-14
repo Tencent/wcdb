@@ -22,7 +22,7 @@
  * limitations under the License.
  */
 
-#import "Core.hpp"
+#import "CommonCore.hpp"
 #import "CoreConst.h"
 #import "FileHandle.hpp"
 #import "Notifier.hpp"
@@ -74,7 +74,7 @@ static std::nullptr_t initialize()
 
 - (void)enableAutoCheckpoint:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoCheckpoint(_database, flag);
+    WCDB::CommonCore::shared().enableAutoCheckpoint(_database, flag);
 }
 
 - (BOOL)truncateCheckpoint

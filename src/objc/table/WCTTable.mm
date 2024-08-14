@@ -23,7 +23,7 @@
  */
 
 #import "Assertion.hpp"
-#import "Core.h"
+#import "CommonCore.h"
 #import "WCTDatabase.h"
 #import "WCTError+Private.h"
 #import "WCTTable+Private.h"

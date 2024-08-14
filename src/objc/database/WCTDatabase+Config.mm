@@ -23,7 +23,7 @@
  */
 
 #import "Assertion.hpp"
-#import "Core.h"
+#import "CommonCore.h"
 #import "SQLite.h"
 #import "WCTDatabase+Config.h"
 #import "WCTDatabase+Private.h"
@@ -62,7 +62,7 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 + (void)setDefaultCipherConfiguration:(WCTCipherVersion)version
 {
-    WCDB::Core::shared().setDefaultCipherConfiguration(version);
+    WCDB::CommonCore::shared().setDefaultCipherConfiguration(version);
 }
 
 - (void)setConfig:(WCTConfigBlock)nsInvocation
@@ -97,31 +97,31 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
 
 + (void)registerScalarFunction:(const WCDB::ScalarFunctionModule&)module named:(NSString*)name
 {
-    WCDB::Core::shared().registerScalarFunction(name, module);
+    WCDB::CommonCore::shared().registerScalarFunction(name, module);
 }
 
 - (void)addScalarFunction:(NSString*)scalarFunctionName
 {
     WCDB::StringView configName = WCDB::StringView::formatted("%s%s", WCDB::ScalarFunctionConfigPrefix.data(), scalarFunctionName.UTF8String);
     _database->setConfig(configName,
-                         WCDB::Core::shared().scalarFunctionConfig(scalarFunctionName),
+                         WCDB::CommonCore::shared().scalarFunctionConfig(scalarFunctionName),
                          WCDB::Configs::Priority::Higher);
 }
 
 + (void)setABTestConfigWithName:(NSString*)name
                        andValue:(NSString*)value
 {
-    WCDB::Core::shared().setABTestConfig(name, value);
+    WCDB::CommonCore::shared().setABTestConfig(name, value);
 }
 
 + (void)removeABTestConfigWithName:(NSString*)name
 {
-    WCDB::Core::shared().removeABTestConfig(name);
+    WCDB::CommonCore::shared().removeABTestConfig(name);
 }
 
 + (NSString*)getABTestConfigWithName:(NSString*)name
 {
-    WCDB::Optional<WCDB::StringView> value = WCDB::Core::shared().getABTestConfig(name);
+    WCDB::Optional<WCDB::StringView> value = WCDB::CommonCore::shared().getABTestConfig(name);
     if (value.succeed()) {
         return [NSString stringWithUTF8String:value->data()];
     } else {

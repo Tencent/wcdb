@@ -23,7 +23,7 @@
  */
 
 #import "Assertion.hpp"
-#import "Core.h"
+#import "CommonCore.h"
 #import "WCTCommon.h"
 #import "WCTDatabase+Private.h"
 #import "WCTDatabase+Repair.h"
@@ -33,13 +33,13 @@
 
 - (void)setNotificationWhenCorrupted:(WCTCorruptedNotificationBlock)onCorrupted
 {
-    WCDB::Core::CorruptedNotification notification = nullptr;
+    WCDB::CommonCore::CorruptedNotification notification = nullptr;
     if (onCorrupted != nil) {
         notification = [onCorrupted](WCDB::InnerDatabase *database) {
             onCorrupted([[WCTDatabase alloc] initWithUnsafeDatabase:database]);
         };
     }
-    WCDB::Core::shared().setNotificationWhenDatabaseCorrupted(self.path, notification);
+    WCDB::CommonCore::shared().setNotificationWhenDatabaseCorrupted(self.path, notification);
 }
 
 - (BOOL)checkIfCorrupted
@@ -50,7 +50,7 @@
 
 - (BOOL)isAlreadyCorrupted
 {
-    return WCDB::Core::shared().isFileObservedCorrupted(self.path);
+    return WCDB::CommonCore::shared().isFileObservedCorrupted(self.path);
 }
 
 - (void)filterBackup:(WCTBackupFilterBlock)tableShouldBeBackedUp
@@ -71,7 +71,7 @@
 
 - (void)enableAutoBackup:(BOOL)flag
 {
-    WCDB::Core::shared().enableAutoBackup(_database, flag);
+    WCDB::CommonCore::shared().enableAutoBackup(_database, flag);
 }
 
 - (BOOL)backup

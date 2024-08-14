@@ -24,7 +24,7 @@
 
 #include "OperationQueue.hpp"
 #include "Assertion.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CoreConst.h"
 #include "CrossPlatform.h"
 #include "FileManager.hpp"
@@ -205,7 +205,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
 {
     executeOperationWithAutoMemoryRelease([&]() {
         if (operation.type != Operation::Type::NotifyCorruption) {
-            Core::shared().setThreadedErrorIgnorable(true);
+            CommonCore::shared().setThreadedErrorIgnorable(true);
         }
         switch (operation.type) {
         case Operation::Type::Migrate:
@@ -235,7 +235,7 @@ void OperationQueue::onTimed(const Operation& operation, const Parameter& parame
             break;
         }
         if (operation.type != Operation::Type::NotifyCorruption) {
-            Core::shared().setThreadedErrorIgnorable(false);
+            CommonCore::shared().setThreadedErrorIgnorable(false);
         }
     });
 }
@@ -524,7 +524,7 @@ void OperationQueue::asyncCheckpoint(const UnsafeStringView& path)
         Operation operation(Operation::Type::Checkpoint, path);
         Parameter parameter;
         double checkPointInterval = OperationQueueTimeIntervalForCheckpoint;
-        auto config = Core::shared().getABTestConfig("clicfg_wcdb_checkpoint_interval");
+        auto config = CommonCore::shared().getABTestConfig("clicfg_wcdb_checkpoint_interval");
         if (config.valueOrDefault().length() > 0) {
             checkPointInterval = std::max(checkPointInterval, atof(config->data()));
             checkPointInterval = std::min(checkPointInterval, 600.0);

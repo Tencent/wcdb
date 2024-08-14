@@ -42,16 +42,16 @@
 namespace WCDB {
 
 // The order of member variables here is important.
-class Core final : public DatabasePoolEvent, public OperationEvent {
+class CommonCore final : public DatabasePoolEvent, public OperationEvent {
 #pragma mark - Core
 public:
-    static Core& shared();
-    ~Core() override;
+    static CommonCore& shared();
+    ~CommonCore() override;
 
 protected:
-    Core();
-    Core(const Core&) = delete;
-    Core& operator=(const Core&) = delete;
+    CommonCore();
+    CommonCore(const CommonCore&) = delete;
+    CommonCore& operator=(const CommonCore&) = delete;
 
 #pragma mark - Database
 public:

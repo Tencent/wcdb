@@ -43,7 +43,7 @@
 
 #include "BusyRetryConfig.hpp"
 #include "CipherHandle.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "DBOperationNotifier.hpp"
 #include "DecorativeHandle.hpp"
 #include "SQLite.h"
@@ -95,9 +95,9 @@ Tag InnerDatabase::getTag() const
 
 bool InnerDatabase::canOpen()
 {
-    Core::shared().skipIntegrityCheck(getPath());
+    CommonCore::shared().skipIntegrityCheck(getPath());
     auto handle = getHandle();
-    Core::shared().skipIntegrityCheck(nullptr);
+    CommonCore::shared().skipIntegrityCheck(nullptr);
     return handle != nullptr;
 }
 
@@ -144,7 +144,7 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
             handle->suspend(true);
         }
     }
-    Core::shared().stopAllDatabaseEvent(getPath());
+    CommonCore::shared().stopAllDatabaseEvent(getPath());
     drain(onClosed);
     --m_closing;
 }
@@ -176,7 +176,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             m_initialized = true;
             continue;
         }
-        Core::shared().setThreadedErrorPath(path);
+        CommonCore::shared().setThreadedErrorPath(path);
         if (!FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))) {
             assignWithSharedThreadedError();
             break;
@@ -207,7 +207,7 @@ InnerDatabase::InitializedGuard InnerDatabase::initialize()
             assignWithSharedThreadedError();
             break;
         }
-        Core::shared().setThreadedErrorPath(nullptr);
+        CommonCore::shared().setThreadedErrorPath(nullptr);
         m_initialized = true;
     } while (true);
     return nullptr;
@@ -371,7 +371,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     handle->setTag(getTag());
     handle->setType(type);
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
-    handle->setBusyTraceEnable(Core::shared().isBusyTraceEnable());
+    handle->setBusyTraceEnable(CommonCore::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
     handle->enableWriteMainDB(slot == HandleSlotAutoTask || slot == HandleSlotAssemble
                               || slot == HandleSlotVacuum);
@@ -632,7 +632,7 @@ void InnerDatabase::tryLoadIncremetalMaterial()
     if (!m_needLoadIncremetalMaterial) {
         return;
     }
-    auto config = Core::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
+    auto config = CommonCore::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
     if (config.failed() || config.value().length() == 0
         || atoi(config.value().data()) != 1) {
         m_needLoadIncremetalMaterial = false;
@@ -667,7 +667,7 @@ void InnerDatabase::tryLoadIncremetalMaterial()
     }
     if (useMaterial) {
         if (material->pages.size() < BackupMaxAllowIncrementalPageCount) {
-            Core::shared().tryRegisterIncrementalMaterial(getPath(), material);
+            CommonCore::shared().tryRegisterIncrementalMaterial(getPath(), material);
         } else {
             FileManager::removeItem(materialPath);
             Error error(Error::Code::Error, Error::Level::Warning, "Remove large incremental material");
@@ -730,7 +730,7 @@ bool InnerDatabase::backup(bool interruptible)
         }
     }
 
-    Core::shared().setThreadedErrorPath(path);
+    CommonCore::shared().setThreadedErrorPath(path);
 
     Repair::FactoryBackup backup = m_factory.backup();
     Repair::BackupHandleOperator &backupReadOperator
@@ -753,7 +753,7 @@ bool InnerDatabase::backup(bool interruptible)
             setThreadedError(backup.getError());
         }
     }
-    Core::shared().setThreadedErrorPath("");
+    CommonCore::shared().setThreadedErrorPath("");
     return succeed;
 }
 
@@ -796,7 +796,7 @@ bool InnerDatabase::deposit()
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
 
-        Core::shared().setThreadedErrorPath(path);
+        CommonCore::shared().setThreadedErrorPath(path);
 
         Repair::FactoryRenewer renewer = m_factory.renewer();
         Repair::BackupHandleOperator backupReadOperator(backupReadHandle.get());
@@ -810,7 +810,7 @@ bool InnerDatabase::deposit()
         // Prepare a new database from material at renew directory and wait for moving
         if (!renewer.prepare()) {
             setThreadedError(renewer.getError());
-            Core::shared().setThreadedErrorPath("");
+            CommonCore::shared().setThreadedErrorPath("");
             return;
         }
         Repair::FactoryDepositor depositor = m_factory.depositor();
@@ -822,13 +822,13 @@ bool InnerDatabase::deposit()
         // At next time this database launchs, the retrieveRenewed method will do the remaining work. So data will never lost.
         if (!renewer.work()) {
             setThreadedError(renewer.getError());
-            Core::shared().setThreadedErrorPath("");
+            CommonCore::shared().setThreadedErrorPath("");
         } else {
             result = true;
         }
         cipherHandle->close();
     });
-    Core::shared().setThreadedErrorPath("");
+    CommonCore::shared().setThreadedErrorPath("");
     return result;
 }
 
@@ -890,7 +890,7 @@ double InnerDatabase::retrieve(const ProgressCallback &onProgressUpdated)
         WCTAssert(!backupWriteHandle->isOpened());
         WCTAssert(!assemblerHandle->isOpened());
 
-        Core::shared().setThreadedErrorPath(path);
+        CommonCore::shared().setThreadedErrorPath(path);
 
         Repair::FactoryRetriever retriever = m_factory.retriever();
         Repair::BackupHandleOperator backupReadOperator(backupReadHandle.get());
@@ -906,7 +906,7 @@ double InnerDatabase::retrieve(const ProgressCallback &onProgressUpdated)
             result = retriever.getScore().value();
         }
         setThreadedError(retriever.getError()); // retriever may have non-critical error even if it succeeds.
-        Core::shared().setThreadedErrorPath("");
+        CommonCore::shared().setThreadedErrorPath("");
         cipherHandle->close();
     });
     return result;
@@ -929,7 +929,7 @@ bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
             return;
         }
 
-        Core::shared().setThreadedErrorPath(path);
+        CommonCore::shared().setThreadedErrorPath(path);
 
         Repair::FactoryVacuum vacuummer = m_factory.vacuumer();
         VacuumHandleOperator vacuumOperator(vacuumHandle.get());
@@ -938,16 +938,16 @@ bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
 
         if (!vacuummer.prepare()) {
             setThreadedError(vacuummer.getError());
-            Core::shared().setThreadedErrorPath("");
+            CommonCore::shared().setThreadedErrorPath("");
             return;
         }
 
         if (!vacuummer.work()) {
             setThreadedError(vacuummer.getError());
-            Core::shared().setThreadedErrorPath("");
+            CommonCore::shared().setThreadedErrorPath("");
             return;
         }
-        Core::shared().setThreadedErrorPath("");
+        CommonCore::shared().setThreadedErrorPath("");
         result = true;
     });
     return result;
@@ -1147,7 +1147,7 @@ bool InnerDatabase::rollbackCompression(const ProgressCallback &callback)
 
             ret = m_compression.rollbackCompression(compressOperator);
             if (ret) {
-                Core::shared().enableAutoCompress(this, false);
+                CommonCore::shared().enableAutoCompress(this, false);
             }
         }
     });

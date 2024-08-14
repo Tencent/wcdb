@@ -23,7 +23,7 @@
  */
 
 #include "Exiting.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "Macro.h"
 #include <atomic>
 #include <stdlib.h>
@@ -59,7 +59,7 @@ static void exiting()
 #endif
 
     // The queue needs to be terminated to exit the program normally in Windows.
-    Core::shared().stopQueue();
+    CommonCore::shared().stopQueue();
 }
 
 bool isExiting()

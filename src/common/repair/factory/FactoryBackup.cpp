@@ -23,7 +23,7 @@
  */
 
 #include "FactoryBackup.hpp"
-#include "Core.hpp"
+#include "CommonCore.hpp"
 #include "CoreConst.h"
 #include "Data.hpp"
 #include "Factory.hpp"
@@ -59,12 +59,12 @@ bool FactoryBackup::work(const UnsafeStringView& database, bool interruptible)
 bool FactoryBackup::doBackUp(const UnsafeStringView& database, bool interruptible)
 {
     Optional<size_t> incrementalMaterialSize = 0;
-    auto config = Core::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
+    auto config = CommonCore::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
     bool incrememtalBackupEnable = config.succeed() && config.value().length() > 0
                                    && atoi(config.value().data()) == 1;
     SharedIncrementalMaterial incrementalMaterial;
     if (incrememtalBackupEnable) {
-        incrementalMaterial = Core::shared().tryGetIncrementalMaterial(database);
+        incrementalMaterial = CommonCore::shared().tryGetIncrementalMaterial(database);
         if (interruptible && incrementalMaterial != nullptr) {
             incrementalMaterialSize = saveIncrementalMaterial(database, incrementalMaterial);
             if (!incrementalMaterialSize.hasValue()) {
@@ -107,7 +107,7 @@ bool FactoryBackup::doBackUp(const UnsafeStringView& database, bool interruptibl
         if (!saveIncrementalMaterial(database, newIncrementalMaterial).hasValue()) {
             return false;
         }
-        Core::shared().tryRegisterIncrementalMaterial(database, newIncrementalMaterial);
+        CommonCore::shared().tryRegisterIncrementalMaterial(database, newIncrementalMaterial);
     }
 
     if (interruptible) {

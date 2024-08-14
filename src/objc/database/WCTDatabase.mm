@@ -47,7 +47,7 @@
 {
     if (self = [super init]) {
         path = [path wcdb_stringByStandardizingPath];
-        _databaseHolder = WCDB::Core::shared().getOrCreateDatabase(path);
+        _databaseHolder = WCDB::CommonCore::shared().getOrCreateDatabase(path);
         WCTAssert(_databaseHolder != nullptr);
         _database = _databaseHolder.get();
         WCTAssert(_database != nullptr);
