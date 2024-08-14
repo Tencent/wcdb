@@ -28,8 +28,9 @@
 #include <atomic>
 #include <stdlib.h>
 #ifdef _WIN32
-#include <VersionHelpers.h>
 #include <windows.h>
+// VersionHelpers.h must be included after windows.h.
+#include <VersionHelpers.h>
 #endif
 
 namespace WCDB {
