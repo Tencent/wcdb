@@ -134,6 +134,12 @@ public:
      */
     const Error& getError();
 
+    /**
+     @brief Try to preload all database pages into memory.
+     This may help to improve read performance on some slow devices.
+     */
+    void tryPreloadAllPages();
+
 #pragma mark - Multi Statement
 public:
     /**

@@ -65,6 +65,7 @@
 {
     CPPTestCaseObject obj = CPPTestCaseObject::autoIncrementObject(self.string.UTF8String);
     obj.identifier = identifier;
+    obj.isAutoIncrement = true;
     return obj;
 }
 
@@ -81,7 +82,7 @@
 {
     WCDB::ValueArray<CPPTestCaseObject> result;
     for (NSUInteger i = 0; i < count; ++i) {
-        result.push_back([self testCaseObjectWithIdentifier:(int) i]);
+        result.push_back([self autoIncrementTestCaseObject]);
     }
     return result;
 }

@@ -177,4 +177,10 @@ void Handle::CancellationSignal::cancel()
     *m_signal = true;
 }
 
+void Handle::tryPreloadAllPages()
+{
+    GetInnerHandleOrReturn;
+    handle->tryPreloadAllPages();
+}
+
 } //namespace WCDB

@@ -283,6 +283,10 @@ public:
     bool setCipherPageSize(int pageSize);
     StringView getCipherSalt();
     bool setCipherSalt(const UnsafeStringView &salt);
+
+#pragma mark - Extra
+public:
+    void tryPreloadAllPages();
 };
 
 } //namespace WCDB

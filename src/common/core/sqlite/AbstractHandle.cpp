@@ -1002,4 +1002,9 @@ bool AbstractHandle::setCipherSalt(const UnsafeStringView &salt)
     return succeed;
 }
 
+void AbstractHandle::tryPreloadAllPages()
+{
+    sqlite3_preload_pages_to_cache(m_handle);
+}
+
 } //namespace WCDB

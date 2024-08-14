@@ -424,4 +424,47 @@
     [[Random shared] setStringType:RandomStringType_Default];
 }
 
+- (void)test_load_all_data
+{
+    TestCaseAssertTrue([self createObjectTable]);
+    int objectCount = 0;
+    size_t minDBSize = 20 * 1024 * 1024;
+    size_t curDBSize = 0;
+    int batchCount = 10000;
+    auto des = WCDB_FIELD(CPPTestCaseObject::content).substr(0, 1).getDescription();
+    do {
+        TestCaseAssertTrue(self.table.insertObjects([Random.shared autoIncrementTestCaseObjectsWithCount:batchCount]));
+        TestCaseAssertTrue(self.database->truncateCheckpoint());
+        curDBSize = [self.fileManager getFileSizeIfExists:[NSString stringWithCString:self.database->getPath().data() encoding:NSUTF8StringEncoding]];
+        objectCount += batchCount;
+    } while (curDBSize < minDBSize);
+
+    self.database->close();
+    WCDB::Database::purgeAll();
+    TestCaseAssertTrue(self.database->canOpen());
+
+    NSDate* start = [NSDate date];
+    auto contents = self.table.selectOneColumn(WCDB_FIELD(CPPTestCaseObject::content).substr(0, 0));
+    TestCaseAssertTrue(contents.hasValue() && contents.value().size() == objectCount);
+    double cost1 = [[NSDate date] timeIntervalSinceDate:start];
+
+    self.database->close();
+    WCDB::Database::purgeAll();
+
+    self.database->setConfig("LoadAllData", [](WCDB::Handle& handle) {
+        handle.tryPreloadAllPages();
+        return true;
+    });
+    TestCaseAssertTrue(self.database->canOpen());
+
+    start = [NSDate date];
+
+    contents = self.table.selectOneColumn(WCDB_FIELD(CPPTestCaseObject::content).substr(0, 0));
+    TestCaseAssertTrue(contents.hasValue() && contents.value().size() == objectCount);
+
+    double cost2 = [[NSDate date] timeIntervalSinceDate:start];
+
+    TestCaseAssertTrue(cost1 > cost2);
+}
+
 @end
