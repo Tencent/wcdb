@@ -91,7 +91,7 @@ Database::Database(const UnsafeStringView& path)
     wchar_t resolvePath[_MAX_PATH];
     if (::_wfullpath(resolvePath, GetPathString(path), _MAX_PATH) != NULL) {
         StringView newPath = StringView::createFromWString(resolvePath);
-        m_databaseHolder = Core::shared().getOrCreateDatabase(newPath);
+        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(newPath);
     }
 #endif
     else {
