@@ -37,19 +37,19 @@
 #define WCDB_CPP_ORM_DECLARATION(className)                                    \
 public:                                                                        \
     __WCDB_CPP_ORM_COMMON_DECLARATION(className)                               \
-    static const WCDB::Fields allFields();                                     \
+    static const WCDB::Fields &allFields();                                    \
     static const WCDB::Binding &getObjectRelationBinding();
 
 #define WCDB_CPP_ORM_DECLARE_AND_START_IMPLEMENT(className)                    \
 public:                                                                        \
     __WCDB_CPP_ORM_COMMON_DECLARATION(className)                               \
-    static const WCDB::Fields allFields()                                      \
+    static const WCDB::Fields &allFields()                                     \
     __WCDB_CPP_ORM_ALL_PROPERTIES_IMPLEMENTATION static const WCDB::Binding &  \
     getObjectRelationBinding() __WCDB_CPP_ORM_GET_BINDING_IMPLEMENTATIONP_START
 
 #define WCDB_CPP_ORM_IMPLEMENTATION_BEGIN(className)                                                                    \
     using _wcdb_orm_##className = className;                                                                            \
-    const WCDB::Fields _wcdb_orm_##className::allFields()                                                               \
+    const WCDB::Fields &_wcdb_orm_##className::allFields()                                                              \
     __WCDB_CPP_ORM_ALL_PROPERTIES_IMPLEMENTATION const WCDB::Binding &_wcdb_orm_##className::getObjectRelationBinding() \
     __WCDB_CPP_ORM_GET_BINDING_IMPLEMENTATIONP_START
 
