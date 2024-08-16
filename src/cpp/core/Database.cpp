@@ -24,9 +24,9 @@
 
 #include "Database.hpp"
 #include "CipherConfig.hpp"
+#include "CommonCore.hpp"
 #include "CompressionCenter.hpp"
 #include "CompressionConst.hpp"
-#include "CommonCore.hpp"
 #include "CoreConst.h"
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
@@ -686,9 +686,10 @@ void Database::setCompression(const CompressionFilter& filter)
         };
         StringView configName = StringView::formatted(
         "%s%s", ScalarFunctionConfigPrefix.data(), DecompressFunctionName.data());
-        m_innerDatabase->setConfig(configName,
-                                   CommonCore::shared().scalarFunctionConfig(DecompressFunctionName),
-                                   Configs::Priority::Higher);
+        m_innerDatabase->setConfig(
+        configName,
+        CommonCore::shared().scalarFunctionConfig(DecompressFunctionName),
+        Configs::Priority::Higher);
     }
     m_innerDatabase->addCompression(callback);
 }

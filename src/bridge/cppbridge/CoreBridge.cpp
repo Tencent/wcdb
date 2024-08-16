@@ -29,7 +29,8 @@
 
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path)
 {
-    WCDB::RecyclableDatabase database = WCDB::CommonCore::shared().getOrCreateDatabase(path);
+    WCDB::RecyclableDatabase database
+    = WCDB::CommonCore::shared().getOrCreateDatabase(path);
     return WCDBCreateRecylableCPPObject(CPPDatabase, database);
 }
 

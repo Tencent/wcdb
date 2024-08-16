@@ -207,7 +207,7 @@ void CommonCore::preprocessError(Error& error)
 
 #pragma mark - ScalarFunction
 void CommonCore::registerScalarFunction(const UnsafeStringView& name,
-                                  const ScalarFunctionModule& module)
+                                        const ScalarFunctionModule& module)
 {
     m_scalarFunctionModules->add(name, module);
 }
@@ -217,7 +217,8 @@ bool CommonCore::scalarFunctionExists(const UnsafeStringView& name) const
     return m_scalarFunctionModules->get(name) != nullptr;
 }
 
-std::shared_ptr<Config> CommonCore::scalarFunctionConfig(const UnsafeStringView& scalarFunctionName)
+std::shared_ptr<Config>
+CommonCore::scalarFunctionConfig(const UnsafeStringView& scalarFunctionName)
 {
     return std::make_shared<ScalarFunctionConfig>(scalarFunctionName, m_scalarFunctionModules);
 }
@@ -240,7 +241,7 @@ std::shared_ptr<Config> CommonCore::tokenizerConfig(const UnsafeStringView& toke
 
 #pragma mark - AuxiliaryFunction
 void CommonCore::registerAuxiliaryFunction(const UnsafeStringView& name,
-                                     const FTS5AuxiliaryFunctionModule& module)
+                                           const FTS5AuxiliaryFunctionModule& module)
 {
     m_auxiliaryFunctionModules->add(name, module);
 }
@@ -326,7 +327,7 @@ bool CommonCore::isFileObservedCorrupted(const UnsafeStringView& path)
 }
 
 void CommonCore::setNotificationWhenDatabaseCorrupted(const UnsafeStringView& path,
-                                                const CorruptedNotification& notification)
+                                                      const CorruptedNotification& notification)
 {
     OperationQueue::CorruptionNotification underlyingNotification = nullptr;
     if (notification != nullptr) {
@@ -404,7 +405,7 @@ void CommonCore::enableAutoBackup(InnerDatabase* database, bool enable)
 }
 
 void CommonCore::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
-                                          SharedIncrementalMaterial material)
+                                                SharedIncrementalMaterial material)
 {
     if (!m_operationQueue->isAutoBackup(path)) {
         return;
@@ -417,7 +418,8 @@ void CommonCore::tryRegisterIncrementalMaterial(const UnsafeStringView& path,
     }
 }
 
-SharedIncrementalMaterial CommonCore::tryGetIncrementalMaterial(const UnsafeStringView& path)
+SharedIncrementalMaterial
+CommonCore::tryGetIncrementalMaterial(const UnsafeStringView& path)
 {
     WCTAssert(dynamic_cast<AutoBackupConfig*>(m_autoBackupConfig.get()) != nullptr);
     AutoBackupConfig* backupConfig
@@ -475,8 +477,8 @@ void CommonCore::enableAutoMergeFTSIndex(InnerDatabase* database, bool enable)
 }
 
 Optional<bool> CommonCore::mergeFTSIndexShouldBeOperated(const UnsafeStringView& path,
-                                                   TableArray newTables,
-                                                   TableArray modifiedTables)
+                                                         TableArray newTables,
+                                                         TableArray modifiedTables)
 {
     RecyclableDatabase database = m_databasePool.getOrCreate(path);
     Optional<bool> done = false; // mark as no error if database is not referenced.
@@ -503,7 +505,8 @@ void CommonCore::setNotificationForSQLGLobalTraced(const ShareableSQLTraceConfig
     static_cast<ShareableSQLTraceConfig*>(m_globalSQLTraceConfig.get())->setNotification(notification);
 }
 
-void CommonCore::setNotificationWhenPerformanceGlobalTraced(const ShareablePerformanceTraceConfig::Notification& notification)
+void CommonCore::setNotificationWhenPerformanceGlobalTraced(
+const ShareablePerformanceTraceConfig::Notification& notification)
 {
     static_cast<ShareablePerformanceTraceConfig*>(m_globalPerformanceTraceConfig.get())
     ->setNotification(notification);
@@ -520,7 +523,7 @@ void CommonCore::setNotificationWhenErrorTraced(const Notifier::Callback& notifi
 }
 
 void CommonCore::setNotificationWhenErrorTraced(const UnsafeStringView& path,
-                                          const Notifier::Callback& notification)
+                                                const Notifier::Callback& notification)
 {
     StringView notifierKey
     = StringView::formatted("%s_%s", NotifierLoggerName.data(), path.data());
@@ -572,7 +575,8 @@ void CommonCore::skipIntegrityCheck(const UnsafeStringView& path)
 }
 
 #pragma mark - Config
-void CommonCore::setABTestConfig(const UnsafeStringView& configName, const UnsafeStringView& configValue)
+void CommonCore::setABTestConfig(const UnsafeStringView& configName,
+                                 const UnsafeStringView& configValue)
 {
     LockGuard memoryGuard(m_memory);
     m_abtestConfig[configName] = configValue;

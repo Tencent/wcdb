@@ -23,8 +23,8 @@
  */
 
 #import "Assertion.hpp"
-#import "Console.hpp"
 #import "CommonCore.hpp"
+#import "Console.hpp"
 #import "DBOperationNotifier.hpp"
 #import "WCTConvertible.h"
 #import "WCTDatabase+Monitor.h"
@@ -182,7 +182,7 @@ NSString* const WCTDatabaseMonitorInfoKeyTriggerCount = [NSString stringWithUTF8
         WCDB::CommonCore::shared().setBusyMonitor([=](const WCDB::Tag& tag, const WCDB::UnsafeStringView& path, uint64_t tid, const WCDB::UnsafeStringView& sql) {
             trace(tag, [NSString stringWithUTF8String:path.data()], tid, [NSString stringWithUTF8String:sql.data()]);
         },
-                                            timeOut);
+                                                  timeOut);
     } else {
         WCDB::CommonCore::shared().setBusyMonitor(nullptr, 0);
     }

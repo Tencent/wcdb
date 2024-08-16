@@ -24,9 +24,9 @@
 
 #include "DatabaseBridge.h"
 #include "CipherConfig.hpp"
+#include "CommonCore.hpp"
 #include "CompressionCenter.hpp"
 #include "CompressionConst.hpp"
-#include "CommonCore.hpp"
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
 #include "InnerDatabase.hpp"

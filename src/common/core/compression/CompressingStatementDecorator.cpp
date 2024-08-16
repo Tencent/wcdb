@@ -24,10 +24,10 @@
 
 #include "CompressingStatementDecorator.hpp"
 #include "Assertion.hpp"
+#include "CommonCore.hpp"
 #include "CompressionCenter.hpp"
 #include "CompressionConst.hpp"
 #include "CompressionRecord.hpp"
-#include "CommonCore.hpp"
 #include "InnerHandle.hpp"
 #include "StringView.hpp"
 #include "WINQ.h"
