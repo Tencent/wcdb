@@ -158,6 +158,8 @@ public:
      */
     void unblockade();
 
+#pragma mark - CheckPoint
+
     /**
      @brief Checkpoint the current database with truncate mode.
      */
@@ -167,6 +169,14 @@ public:
      @brief Checkpoint the current database with passive mode.
      */
     bool passiveCheckpoint();
+
+    /**
+     @brief Enable or disable auto-checkpoint for current database.
+     Note that auto-checkpoint is enabled by default.
+     */
+    void enableAutoCheckpoint(bool enable);
+
+#pragma mark - Vacuum
 
     /**
      Triggered when operation progresses, you can return false to stop the operation.

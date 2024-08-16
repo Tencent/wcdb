@@ -181,6 +181,8 @@ void Database::unblockade()
     m_innerDatabase->unblockade();
 }
 
+#pragma mark - CheckPoint
+
 bool Database::truncateCheckpoint()
 {
     return m_innerDatabase->checkpoint(false, InnerDatabase::CheckPointMode::Truncate);
@@ -190,6 +192,13 @@ bool Database::passiveCheckpoint()
 {
     return m_innerDatabase->checkpoint(false, InnerDatabase::CheckPointMode::Passive);
 }
+
+void Database::enableAutoCheckpoint(bool enable)
+{
+    CommonCore::shared().enableAutoCheckpoint(m_innerDatabase, enable);
+}
+
+#pragma mark - Vacuum
 
 bool Database::vacuum(ProgressUpdateCallback onProgressUpdated)
 {
