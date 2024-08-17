@@ -157,13 +157,18 @@ public:
 
     typedef Progress::ProgressUpdateCallback ProgressCallback;
     double retrieve(const ProgressCallback &onProgressUpdated);
-    bool vacuum(const ProgressCallback &onProgressUpdated);
 
     void checkIntegrity(bool interruptible);
 
 private:
     Repair::Factory m_factory;
     bool m_needLoadIncremetalMaterial;
+
+#pragma mark - Vacuum
+public:
+    bool vacuum(const ProgressCallback &onProgressUpdated);
+    void enableAutoVacuum(bool incremental);
+    bool incrementalVacuum(int pages);
 
 #pragma mark - Migration
 public:

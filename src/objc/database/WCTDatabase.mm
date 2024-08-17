@@ -110,6 +110,16 @@
     return _database->vacuum(callback);
 }
 
+- (void)enableAutoVacuum:(BOOL)incremental
+{
+    _database->enableAutoVacuum(incremental);
+}
+
+- (BOOL)incrementalVacuum:(int)pages
+{
+    return _database->incrementalVacuum(pages);
+}
+
 - (WCTError *)error
 {
     return [[WCTError alloc] initWithError:_database->getThreadedError()];

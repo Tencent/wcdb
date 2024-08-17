@@ -954,6 +954,8 @@ static const JNINativeMethod g_databaseMethods[] = {
     { "vacuum",
       "(J" WCDBJNIDatabaseSignature "$ProgressMonitor;)Z",
       (void *) WCDBJNIDatabaseFuncName(vacuum) },
+    { "enableAutoVacuum", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(enableAutoVacuum) },
+    { "incrementalVacuum", "(JI)Z", (void *) WCDBJNIDatabaseFuncName(incrementalVacuum) },
     { "deposit", "(J)Z", (void *) WCDBJNIDatabaseFuncName(deposit) },
     { "removeDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(removeDepositedFiles) },
     { "containDepositedFiles", "(J)Z", (void *) WCDBJNIDatabaseFuncName(containDepositedFiles) },

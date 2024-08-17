@@ -89,6 +89,8 @@ jboolean WCDBJNIDatabaseClassMethod(removeDepositedFiles, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(containDepositedFiles, jlong self);
 jdouble WCDBJNIDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate);
 jdouble WCDBJNIDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate);
+void WCDBJNIDatabaseClassMethod(enableAutoVacuum, jlong self, jboolean incremental);
+jboolean WCDBJNIDatabaseClassMethod(incrementalVacuum, jlong self, jint pageCount);
 
 jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self);
 jboolean WCDBJNIDatabaseClassMethod(truncateCheckpoint, jlong self);

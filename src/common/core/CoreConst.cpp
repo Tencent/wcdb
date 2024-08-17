@@ -60,6 +60,8 @@ WCDBLiteralStringImplement(AuxiliaryFunctionConfigPrefix);
 
 WCDBLiteralStringImplement(ScalarFunctionConfigPrefix);
 
+WCDBLiteralStringImplement(AutoVacuumConfigName);
+
 WCDBLiteralStringImplement(NotifierPreprocessorName);
 
 WCDBLiteralStringImplement(NotifierLoggerName);

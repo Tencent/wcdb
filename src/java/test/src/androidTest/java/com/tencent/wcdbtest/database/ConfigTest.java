@@ -22,12 +22,15 @@
  */
 package com.tencent.wcdbtest.database;
 
+import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.winq.Pragma;
 import com.tencent.wcdb.winq.StatementPragma;
 import com.tencent.wcdb.winq.StatementSelect;
+import com.tencent.wcdbtest.base.RandomTool;
+import com.tencent.wcdbtest.base.TableTestCase;
 import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.base.DatabaseTestCase;
 
@@ -36,7 +39,7 @@ import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-public class ConfigTest extends DatabaseTestCase {
+public class ConfigTest extends TableTestCase {
     String configName = "testConfig";
     @After
     public void teardown() {
@@ -184,5 +187,35 @@ public class ConfigTest extends DatabaseTestCase {
         assertFalse(database.canOpen());
         Database.setDefaultCipherVersion(Database.CipherVersion.version4);
         assertTrue(database.canOpen());
+    }
+
+    @Test
+    public void testAutoVacuum() throws WCDBException {
+        database.enableAutoVacuum(false);
+        Value vacuumMode = database.getValueFromStatement(new StatementPragma().pragma(Pragma.autoVacuum));
+        assertTrue(vacuumMode != null && vacuumMode.getInt() == 1);
+
+        database.enableAutoVacuum(true);
+        vacuumMode = database.getValueFromStatement(new StatementPragma().pragma(Pragma.autoVacuum));
+        assertTrue(vacuumMode != null && vacuumMode.getInt() == 2);
+    }
+
+    @Test
+    public void testIncrementalVacuum() throws WCDBException {
+        database.enableAutoVacuum(true);
+        createTable();
+        table.insertObjects(RandomTool.autoIncrementTestCaseObjects(2));
+        database.truncateCheckpoint();
+
+        database.dropTable(tableName);
+        database.truncateCheckpoint();
+
+        Value freelist = database.getValueFromStatement(new StatementPragma().pragma(Pragma.freelistCount));
+        assertTrue(freelist != null && freelist.getInt() > 0);
+
+        database.incrementalVacuum(0);
+
+        freelist = database.getValueFromStatement(new StatementPragma().pragma(Pragma.freelistCount));
+        assertTrue(freelist != null && freelist.getInt() == 0);
     }
 }

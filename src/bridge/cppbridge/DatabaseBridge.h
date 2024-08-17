@@ -173,6 +173,8 @@ bool WCDBDatabaseVacuum(CPPDatabase database,
                         WCDBProgressUpdate _Nullable monitor,
                         void* _Nullable context,
                         WCDBContextDestructor _Nullable destructor);
+void WCDBDatabaseEnableAutoVacuum(CPPDatabase database, bool incremental);
+bool WCDBDatabaseIncrementalVacuum(CPPDatabase database, int pages);
 
 bool WCDBDatabasePassiveCheckpoint(CPPDatabase database);
 bool WCDBDatabaseTruncateCheckpoint(CPPDatabase database);

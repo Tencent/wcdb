@@ -100,6 +100,16 @@ WCDB_API @interface WCTDatabase : NSObject
 - (BOOL)vacuum:(nullable WCDB_NO_ESCAPE WCTProgressUpdateBlock)onProgressUpdated;
 
 /**
+ @brief The wrapper of `PRAGMA auto_vacuum`
+ */
+- (void)enableAutoVacuum:(BOOL)incremental;
+
+/**
+ @brief The wrapper of `PRAGMA incremental_vacuum`
+ */
+- (BOOL)incrementalVacuum:(int)pages;
+
+/**
  @brief Get the most recent error for current database in the current thread.
         Since it is too cumbersome to get the error after every database operation, it‘s better to use monitoring interfaces to obtain database errors and print them to the log.
  @see   `[WCTDatabase globalTraceError:]`

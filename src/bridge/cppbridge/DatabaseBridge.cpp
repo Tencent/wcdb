@@ -522,6 +522,18 @@ bool WCDBDatabaseVacuum(CPPDatabase database,
     return cppDatabase->vacuum(callback);
 }
 
+void WCDBDatabaseEnableAutoVacuum(CPPDatabase database, bool incremental)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    cppDatabase->enableAutoVacuum(incremental);
+}
+
+bool WCDBDatabaseIncrementalVacuum(CPPDatabase database, int pages)
+{
+    WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);
+    return cppDatabase->incrementalVacuum(pages);
+}
+
 bool WCDBDatabasePassiveCheckpoint(CPPDatabase database)
 {
     WCDBGetObjectOrReturnValue(database, WCDB::InnerDatabase, cppDatabase, false);

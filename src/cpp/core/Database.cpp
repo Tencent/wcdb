@@ -205,6 +205,16 @@ bool Database::vacuum(ProgressUpdateCallback onProgressUpdated)
     return m_innerDatabase->vacuum(onProgressUpdated);
 }
 
+void Database::enableAutoVacuum(bool incremental)
+{
+    m_innerDatabase->enableAutoVacuum(incremental);
+}
+
+bool Database::incrementalVacuum(int pages)
+{
+    return m_innerDatabase->incrementalVacuum(pages);
+}
+
 #if defined(_WIN32)
 void Database::setUIThreadId(std::thread::id uiThreadId)
 {

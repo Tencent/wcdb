@@ -228,4 +228,34 @@ class RepairTests: DatabaseTestCase {
             doTestObjectsRetrieved(expecting: true)
         }
     }
+
+    func testAutoVacuum() {
+        database.enableAutoVacuum(incremental: false)
+        var vacuumMode = try? database.getValue(from: StatementPragma().pragma(.autoVacuum))
+        XCTAssertNotNil(vacuumMode)
+        XCTAssertEqual(vacuumMode!.intValue, 1)
+
+        database.enableAutoVacuum(incremental: true)
+        vacuumMode = try? database.getValue(from: StatementPragma().pragma(.autoVacuum))
+        XCTAssertNotNil(vacuumMode)
+        XCTAssertEqual(vacuumMode!.intValue, 2)
+    }
+
+    func testIncrementalVacuum() {
+        database.enableAutoVacuum(incremental: true)
+        XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
+        XCTAssertNoThrow(try database.insert(preInsertedObjects, intoTable: TestObject.name))
+        XCTAssertNoThrow(try database.truncateCheckpoint())
+
+        XCTAssertNoThrow(try database.drop(table: TestObject.name))
+        XCTAssertNoThrow(try database.truncateCheckpoint())
+        var freelist = try? database.getValue(from: StatementPragma().pragma(.freelistCount))
+        XCTAssertNotNil(freelist)
+        XCTAssertTrue(freelist!.intValue > 0)
+
+        XCTAssertNoThrow(try database.incrementalVacuum(pages: 0))
+        freelist = try? database.getValue(from: StatementPragma().pragma(.freelistCount))
+        XCTAssertNotNil(freelist)
+        XCTAssertTrue(freelist!.intValue == 0)
+    }
 }

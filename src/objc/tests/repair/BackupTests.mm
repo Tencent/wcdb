@@ -26,7 +26,6 @@
 #import "CoreConst.h"
 #import "NormalRepairTestObject.h"
 #import "Random+RepairTestObject.h"
-
 @interface BackupTests : BackupTestCase
 
 @end

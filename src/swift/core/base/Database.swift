@@ -28,10 +28,10 @@ public class Database {
         return recyclableDatabase.raw
     }
 
-    /// Init a database from path.  
+    /// Init a database from path.
     /// Note that all database objects with same path share the same core.
-    /// So you can create multiple database objects. WCDB will manage them automatically.  
-    /// Note that WCDB will not generate a sqlite handle until the first operation, 
+    /// So you can create multiple database objects. WCDB will manage them automatically.
+    /// Note that WCDB will not generate a sqlite handle until the first operation,
     /// which is also called as lazy initialization.
     ///
     /// - Parameter path: Path to your database
@@ -39,18 +39,18 @@ public class Database {
         self.init(at: URL(fileURLWithPath: path))
     }
 
-    /// Init a database from file url.  
-    /// Note that all database objects with same path share the same core. 
-    /// So you can create multiple database objects. WCDB will manage them automatically.  
-    /// Note that WCDB will not generate a sqlite handle until the first operation, 
+    /// Init a database from file url.
+    /// Note that all database objects with same path share the same core.
+    /// So you can create multiple database objects. WCDB will manage them automatically.
+    /// Note that WCDB will not generate a sqlite handle until the first operation,
     /// which is also called as lazy initialization.
     ///
     /// - Parameter url: File url to your database
     public convenience init(at url: URL) {
-        #if swift(>=5)
-        #else
-            WCDBError.fatalError("Swift 5 is required.")
-        #endif
+#if swift(>=5)
+#else
+        WCDBError.fatalError("Swift 5 is required.")
+#endif
         let database = WCDBCoreCreateDatabase(url.standardizedFileURL.path)
         self.init(with: database)
     }
@@ -95,9 +95,9 @@ public class Database {
         return ""
     }
 
-    /// Since WCDB is using lazy initialization, 
-    /// `init(withPath:)`, `init(withFileURL:)` never failed even the database can't open. 
-    /// So you can call this to check whether the database can be opened.  
+    /// Since WCDB is using lazy initialization,
+    /// `init(withPath:)`, `init(withFileURL:)` never failed even the database can't open.
+    /// So you can call this to check whether the database can be opened.
     /// Return false if an error occurs during sqlite handle initialization.
     public var canOpen: Bool {
         return WCDBDatabaseCanOpen(database)
@@ -110,26 +110,26 @@ public class Database {
 
     public typealias OnClosed = () throws -> Void
 
-    /// Close the database.  
-    ///     Since Multi-threaded operation is supported in WCDB, 
-    ///     other operations in different thread can open the closed database. 
-    ///     So this method can make sure database is closed in the `onClosed` block. 
+    /// Close the database.
+    ///     Since Multi-threaded operation is supported in WCDB,
+    ///     other operations in different thread can open the closed database.
+    ///     So this method can make sure database is closed in the `onClosed` block.
     ///     All other operations will be blocked until this method returns.
     ///
-    /// A close operation consists of 4 steps:  
-    ///     1. `blockade`, which blocks all other operations.  
-    ///     2. `close`, which waits until all sqlite handles return and closes them.  
-    ///     3. `onClosed`, which trigger the callback.  
-    ///     4. `unblokade`, which unblocks all other opreations.  
+    /// A close operation consists of 4 steps:
+    ///     1. `blockade`, which blocks all other operations.
+    ///     2. `close`, which waits until all sqlite handles return and closes them.
+    ///     3. `onClosed`, which trigger the callback.
+    ///     4. `unblokade`, which unblocks all other opreations.
     ///
-    /// You can simply call `close:` to do all steps above or call these separately.  
-    /// Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice. 
-    ///     The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:  
-    ///     1. You should not keep WCDB objects, including `Insert`, `Delete`, `Update`, `Select`, `RowSelect`, 
+    /// You can simply call `close:` to do all steps above or call these separately.
+    /// Since this method will wait until all sqlite handles return, it may lead to deadlock in some bad practice.
+    ///     The key to avoid deadlock is to make sure all WCDB objects in current thread is dealloced. In detail:
+    ///     1. You should not keep WCDB objects, including `Insert`, `Delete`, `Update`, `Select`, `RowSelect`,
     ///        `MultiSelect`, `Handle`, `PreparedStatement`. These objects should not be kept.
-    ///        You should get them, use them, then release them right away.  
-    ///     2. WCDB objects may not be out of its' scope.  
-    ///     The best practice is to call `close:` in sub-thread and display a loading animation in main thread.  
+    ///        You should get them, use them, then release them right away.
+    ///     2. WCDB objects may not be out of its' scope.
+    ///     The best practice is to call `close:` in sub-thread and display a loading animation in main thread.
     ///
     ///     //close directly
     ///     database.close(onClosed: { () throws -> Void in
@@ -191,16 +191,16 @@ public class Database {
         return WCDBDatabaseIsBlockaded(database)
     }
 
-    /// Purge all unused memory of this database.  
-    /// WCDB will cache and reuse some sqlite handles to improve performance.   
+    /// Purge all unused memory of this database.
+    /// WCDB will cache and reuse some sqlite handles to improve performance.
     /// The max count of free sqlite handles is same
-    /// as the number of concurrent threads supported by the hardware implementation.  
+    /// as the number of concurrent threads supported by the hardware implementation.
     /// You can call it to save some memory.
     public func purge() {
         WCDBDatabasePurge(database)
     }
 
-    /// Purge all unused memory of all databases.  
+    /// Purge all unused memory of all databases.
     /// Note that WCDB will call this interface automatically while it receives memory warning on iOS.
     public static func purge() {
         WCDBCorePurgeAllDatabase()
@@ -232,8 +232,8 @@ public class Database {
         return self
     }
 
-    /// Exec a specific sql.  
-    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer. 
+    /// Exec a specific sql.
+    /// Note that you can use this interface to execute a SQL that is not contained in the WCDB interface layer.
     ///
     /// - Parameter statement: WINQ statement
     /// - Throws: `Error`
@@ -245,10 +245,13 @@ public class Database {
     }
 
     public typealias ProgressUpdate = (_ percentage: Double, _ increment: Double) -> Bool /* Continue or not */
+}
 
+// Vacuum
+public extension Database {
     /// Vacuum current database.
     /// It can be used to vacuum a database of any size with limited memory usage.
-    public func vacuum(with progress: ProgressUpdate?) throws {
+    func vacuum(with progress: ProgressUpdate?) throws {
         if let progress = progress {
             let cppProgress: @convention(c) (UnsafeMutableRawPointer?, Double, Double) -> Bool = {
                 cppContext, percentage, increment in
@@ -267,6 +270,18 @@ public class Database {
             if !WCDBDatabaseVacuum(database, nil, nil, nil) {
                 throw getError()
             }
+        }
+    }
+
+    /// The wrapper of `PRAGMA auto_vacuum`
+    func enableAutoVacuum(incremental: Bool) {
+        WCDBDatabaseEnableAutoVacuum(database, incremental)
+    }
+
+    /// The wrapper of `PRAGMA incremental_vacuum`
+    func incrementalVacuum(pages: Int32) throws {
+        if !WCDBDatabaseIncrementalVacuum(database, pages) {
+            throw getError()
         }
     }
 }

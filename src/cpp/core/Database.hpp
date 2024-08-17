@@ -191,6 +191,16 @@ public:
      */
     bool vacuum(ProgressUpdateCallback onProgressUpdated);
 
+    /**
+     @brief The wrapper of `PRAGMA auto_vacuum`
+     */
+    void enableAutoVacuum(bool incremental);
+
+    /**
+     @brief The wrapper of `PRAGMA incremental_vacuum`
+     */
+    bool incrementalVacuum(int pages);
+
 #if defined(_WIN32)
     /**
      @brief Config the id of UI thread.

@@ -271,6 +271,26 @@ public class Database extends HandleORMOperation {
 
     private static native boolean vacuum(long self, ProgressMonitor monitor);
 
+    /**
+     * The wrapper of {@code PRAGMA auto_vacuum}
+     */
+    public void enableAutoVacuum(boolean incremental) {
+        enableAutoVacuum(cppObj, incremental);
+    }
+
+    private static native void enableAutoVacuum(long self, boolean incremental);
+
+    /**
+     * The wrapper of {@code PRAGMA incremental_vacuum}
+     */
+    public void incrementalVacuum(int pages) throws WCDBException {
+        if(!incrementalVacuum(cppObj, pages)){
+            throw createException();
+        }
+    }
+
+    private static native boolean incrementalVacuum(long self, int pages);
+
     WCDBException createException() {
         return WCDBException.createException(getError(cppObj));
     }

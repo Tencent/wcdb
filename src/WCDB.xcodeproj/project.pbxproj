@@ -901,6 +901,14 @@
 		0DC98FD328E46049007F3796 /* DBOperationNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */; };
 		0DC98FD428E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
 		0DC98FD528E46049007F3796 /* DBOperationNotifier.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */; };
+		0DCD2AC32C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DCD2AC12C6E210700C247EC /* AutoVacuumConfig.cpp */; };
+		0DCD2AC42C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DCD2AC12C6E210700C247EC /* AutoVacuumConfig.cpp */; };
+		0DCD2AC52C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DCD2AC12C6E210700C247EC /* AutoVacuumConfig.cpp */; };
+		0DCD2AC62C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DCD2AC12C6E210700C247EC /* AutoVacuumConfig.cpp */; };
+		0DCD2AC72C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DCD2AC22C6E210700C247EC /* AutoVacuumConfig.hpp */; };
+		0DCD2AC82C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DCD2AC22C6E210700C247EC /* AutoVacuumConfig.hpp */; };
+		0DCD2AC92C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DCD2AC22C6E210700C247EC /* AutoVacuumConfig.hpp */; };
+		0DCD2ACA2C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0DCD2AC22C6E210700C247EC /* AutoVacuumConfig.hpp */; };
 		0DD8D1172B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
 		0DD8D1182B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
 		0DD8D1192B074C47002C97D3 /* MigrateHandleOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */; };
@@ -3951,6 +3959,8 @@
 		0DAE11D328DC6CC6003FB63A /* WCDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCDB.h; sourceTree = "<group>"; };
 		0DC98FD028E46049007F3796 /* DBOperationNotifier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBOperationNotifier.cpp; sourceTree = "<group>"; };
 		0DC98FD128E46049007F3796 /* DBOperationNotifier.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBOperationNotifier.hpp; sourceTree = "<group>"; };
+		0DCD2AC12C6E210700C247EC /* AutoVacuumConfig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutoVacuumConfig.cpp; sourceTree = "<group>"; };
+		0DCD2AC22C6E210700C247EC /* AutoVacuumConfig.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutoVacuumConfig.hpp; sourceTree = "<group>"; };
 		0DD8D1152B074C47002C97D3 /* MigrateHandleOperator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MigrateHandleOperator.cpp; sourceTree = "<group>"; };
 		0DD8D1162B074C47002C97D3 /* MigrateHandleOperator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MigrateHandleOperator.hpp; sourceTree = "<group>"; };
 		0DDF54282B32D18900DB3D65 /* VacuumRobustyTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VacuumRobustyTests.mm; sourceTree = "<group>"; };
@@ -7491,6 +7501,8 @@
 				237A8D5E21EDBB2E003AF5BB /* BusyRetryConfig.hpp */,
 				23301BFA229A851800A8AB5A /* AutoBackupConfig.cpp */,
 				23301BF9229A851800A8AB5A /* AutoBackupConfig.hpp */,
+				0DCD2AC12C6E210700C247EC /* AutoVacuumConfig.cpp */,
+				0DCD2AC22C6E210700C247EC /* AutoVacuumConfig.hpp */,
 			);
 			path = config;
 			sourceTree = "<group>";
@@ -8053,6 +8065,7 @@
 				037C3AE32897E33600328EC8 /* StatementCreateIndex.hpp in Headers */,
 				037C3AE72897E33600328EC8 /* StringView.hpp in Headers */,
 				037C3AE82897E33600328EC8 /* RepairKit.h in Headers */,
+				0DCD2AC92C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */,
 				0D3281652B04A8E60027B973 /* DecorativeHandle.hpp in Headers */,
 				03E5CC7028A3BDF3005353D9 /* Value.hpp in Headers */,
 				037C3AEA2897E33600328EC8 /* OrderingTerm.hpp in Headers */,
@@ -8444,6 +8457,7 @@
 				23B35C7620BFE39500425033 /* Path.hpp in Headers */,
 				23A64D11214A4A7000ED28BB /* Migration.hpp in Headers */,
 				75F32F1A28BA083E00A72697 /* CPPIndexMacro.h in Headers */,
+				0DCD2AC72C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */,
 				23EEDD16217DFADC006E9E73 /* SyntaxRaiseFunction.hpp in Headers */,
 				23EEDCE2217DFADC006E9E73 /* StatementSelect.hpp in Headers */,
 				23EEDD44217DFADC006E9E73 /* SyntaxDropTableSTMT.hpp in Headers */,
@@ -9120,6 +9134,7 @@
 				7521DA2B291E9ABB009642EF /* Assemble.hpp in Headers */,
 				7521DA2C291E9ABB009642EF /* WCTDatabase+Transaction.h in Headers */,
 				7521DA2E291E9ABB009642EF /* SyntaxBindParameter.hpp in Headers */,
+				0DCD2AC82C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */,
 				75EF250F2AA42DD90009C99F /* EncryptedSerialization.hpp in Headers */,
 				7521DA2F291E9ABB009642EF /* Lock.hpp in Headers */,
 				7521DA30291E9ABB009642EF /* FactoryRetriever.hpp in Headers */,
@@ -9440,6 +9455,7 @@
 				752517622B12D43700485175 /* DecompressFunction.hpp in Headers */,
 				7521DD93291EA349009642EF /* SQLiteBase.hpp in Headers */,
 				7521DD94291EA349009642EF /* Expression.hpp in Headers */,
+				0DCD2ACA2C6E210700C247EC /* AutoVacuumConfig.hpp in Headers */,
 				7521DD96291EA349009642EF /* SyntaxPragmaSTMT.hpp in Headers */,
 				7521DD97291EA349009642EF /* Upsert.hpp in Headers */,
 				7521DD98291EA349009642EF /* AuxiliaryFunctionModule.hpp in Headers */,
@@ -10114,6 +10130,7 @@
 				037C39B52897E33600328EC8 /* SyntaxInsertSTMT.cpp in Sources */,
 				75D99B8328CA46A400BEC8B5 /* BaseOperation.cpp in Sources */,
 				037C39B82897E33600328EC8 /* Shm.cpp in Sources */,
+				0DCD2AC52C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */,
 				037C39B92897E33600328EC8 /* InnerDatabase.cpp in Sources */,
 				037C39BA2897E33600328EC8 /* Pragma.cpp in Sources */,
 				037C39BB2897E33600328EC8 /* UpgradeableErrorProne.cpp in Sources */,
@@ -10931,6 +10948,7 @@
 				03D3A2A928A6643E0064D4D4 /* PreparedStatement.cpp in Sources */,
 				03E1661C27F42D6500D2C926 /* StatementVacuum.swift in Sources */,
 				03E3181228A23CBC00540CB1 /* Handle.cpp in Sources */,
+				0DCD2AC32C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */,
 				754211F52B12359400A2FF4D /* ScalarFunctionConfig.cpp in Sources */,
 				2370B12521914ED500D3227C /* NSData+WCTColumnCoding.mm in Sources */,
 				23EEDD0B217DFADC006E9E73 /* SyntaxLiteralValue.cpp in Sources */,
@@ -11254,6 +11272,7 @@
 				7521D762291E9ABB009642EF /* Range.cpp in Sources */,
 				7521D763291E9ABB009642EF /* WCTHandle.mm in Sources */,
 				7521D764291E9ABB009642EF /* ThreadedErrors.cpp in Sources */,
+				0DCD2AC42C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */,
 				7521D769291E9ABB009642EF /* WCTObjCAccessor.mm in Sources */,
 				7529C7702ABC4D6600518293 /* CipherHandle.cpp in Sources */,
 				7521D76A291E9ABB009642EF /* StatementCreateTrigger.cpp in Sources */,
@@ -11632,6 +11651,7 @@
 				7521DB0A291EA349009642EF /* SelectInterface.swift in Sources */,
 				7521DB0B291EA349009642EF /* StatementDropTrigger.swift in Sources */,
 				7521DB0C291EA349009642EF /* SyntaxConst.swift in Sources */,
+				0DCD2AC62C6E210700C247EC /* AutoVacuumConfig.cpp in Sources */,
 				7521DB0D291EA349009642EF /* TokenizerConfig.cpp in Sources */,
 				7521DB0E291EA349009642EF /* FactoryRetriever.cpp in Sources */,
 				7521DB10291EA349009642EF /* StatementAttachBridge.cpp in Sources */,

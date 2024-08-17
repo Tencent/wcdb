@@ -587,6 +587,18 @@ jdouble WCDBJNIDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate)
     WCDBJNIDestructContext);
 }
 
+void WCDBJNIDatabaseClassMethod(enableAutoVacuum, jlong self, jboolean incremental)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseEnableAutoVacuum(selfStruct, incremental);
+}
+
+jboolean WCDBJNIDatabaseClassMethod(incrementalVacuum, jlong self, jint pageCount)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseIncrementalVacuum(selfStruct, pageCount);
+}
+
 jboolean WCDBJNIDatabaseClassMethod(passiveCheckpoint, jlong self)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);

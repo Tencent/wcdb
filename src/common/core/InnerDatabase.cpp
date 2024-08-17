@@ -41,6 +41,7 @@
 #include "CompressingHandleDecorator.hpp"
 #include "MigratingHandleDecorator.hpp"
 
+#include "AutoVacuumConfig.hpp"
 #include "BusyRetryConfig.hpp"
 #include "CipherHandle.hpp"
 #include "CommonCore.hpp"
@@ -912,6 +913,43 @@ double InnerDatabase::retrieve(const ProgressCallback &onProgressUpdated)
     return result;
 }
 
+bool InnerDatabase::removeMaterials()
+{
+    bool result = false;
+    close([&result, this]() {
+        result = FileManager::removeItems(
+        { Repair::Factory::incrementalMaterialPathForDatabase(path),
+          Repair::Factory::firstMaterialPathForDatabase(path),
+          Repair::Factory::lastMaterialPathForDatabase(path) });
+        if (!result) {
+            assignWithSharedThreadedError();
+        }
+    });
+    return result;
+}
+
+void InnerDatabase::checkIntegrity(bool interruptible)
+{
+    InitializedGuard initializedGuard = initialize();
+    if (!initializedGuard.valid()) {
+        return; // mark as succeed if it's not an auto initialize action.
+    }
+    RecyclableHandle handle = flowOut(HandleType::IntegrityCheck);
+    if (handle != nullptr) {
+        IntegerityHandleOperator &integerityOperator
+        = handle.getDecorative()->getOrCreateOperator<IntegerityHandleOperator>(OperatorCheckIntegrity);
+        if (interruptible) {
+            if (checkShouldInterruptWhenClosing(ErrorTypeIntegrity)) {
+                return;
+            }
+            handle->markAsCanBeSuspended(true);
+        }
+        integerityOperator.checkIntegrity();
+    }
+}
+
+#pragma mark - Vacuum
+
 bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
 {
     if (m_isInMemory) {
@@ -953,39 +991,30 @@ bool InnerDatabase::vacuum(const ProgressCallback &onProgressUpdated)
     return result;
 }
 
-bool InnerDatabase::removeMaterials()
+void InnerDatabase::enableAutoVacuum(bool incremental)
 {
-    bool result = false;
-    close([&result, this]() {
-        result = FileManager::removeItems(
-        { Repair::Factory::incrementalMaterialPathForDatabase(path),
-          Repair::Factory::firstMaterialPathForDatabase(path),
-          Repair::Factory::lastMaterialPathForDatabase(path) });
-        if (!result) {
-            assignWithSharedThreadedError();
-        }
-    });
-    return result;
+    setConfig(AutoVacuumConfigName,
+              std::static_pointer_cast<WCDB::Config>(
+              std::make_shared<WCDB::AutoVacuumConfig>(incremental)),
+              Configs::Priority::Highest);
 }
 
-void InnerDatabase::checkIntegrity(bool interruptible)
+bool InnerDatabase::incrementalVacuum(int pages)
 {
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
-        return; // mark as succeed if it's not an auto initialize action.
+        return false; // mark as succeed if it's not an auto initialize action.
     }
-    RecyclableHandle handle = flowOut(HandleType::IntegrityCheck);
-    if (handle != nullptr) {
-        IntegerityHandleOperator &integerityOperator
-        = handle.getDecorative()->getOrCreateOperator<IntegerityHandleOperator>(OperatorCheckIntegrity);
-        if (interruptible) {
-            if (checkShouldInterruptWhenClosing(ErrorTypeIntegrity)) {
-                return;
-            }
-            handle->markAsCanBeSuspended(true);
-        }
-        integerityOperator.checkIntegrity();
+    RecyclableHandle handle = flowOut(HandleType::AutoVacuum);
+    if (!handle->prepare(StatementPragma().pragma(Pragma::incrementalVacuum()).with(pages))) {
+        return false;
     }
+    bool succeed = false;
+    do {
+        succeed = handle->step();
+    } while (succeed && !handle->done());
+    handle->finalize();
+    return succeed;
 }
 
 #pragma mark - Migration

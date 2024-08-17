@@ -23,6 +23,7 @@
  */
 
 #import "BackupTestCase.h"
+#import "CoreConst.h"
 #import "FTS3Object+WCTTableCoding.h"
 #import "FTS3Object.h"
 #import "FTS5Object.h"
@@ -169,6 +170,64 @@
         [self doTestObjectsNoExist];
         [self doTestFactoryNotExist];
     }];
+}
+
+#pragma mark - auto vacuum
+- (void)test_auto_vacuum
+{
+    [self.database enableAutoVacuum:NO];
+    WCTValue* autoVaccum = [self.database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::autoVacuum())];
+    TestCaseAssertTrue(autoVaccum.numberValue.intValue == 1);
+
+    [self.database enableAutoVacuum:YES];
+    autoVaccum = [self.database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::autoVacuum())];
+    TestCaseAssertTrue(autoVaccum.numberValue.intValue == 2);
+}
+
+- (void)test_incremental_vacuum
+{
+    [self.database enableAutoVacuum:YES];
+    TestCaseAssertTrue([self createTable]);
+    TestCaseAssertTrue([self.table insertObjects:[[Random shared] autoIncrementTestCaseObjectsWithCount:1000]]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
+    TestCaseAssertTrue([self.database getNumberOfPages] > 3);
+
+    TestCaseAssertTrue([self.database dropTable:self.tableName]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
+    TestCaseAssertTrue([self.database getNumberOfPages] > 3);
+
+    TestCaseAssertTrue([self.database incrementalVacuum:0]);
+    TestCaseAssertTrue([self.database truncateCheckpoint]);
+    WCTValue* freelist = [self.database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::freelistCount())];
+    TestCaseAssertTrue(freelist != nil && freelist.numberValue.intValue == 0);
+    TestCaseAssertTrue([self.database getNumberOfPages] == 3);
+}
+
+- (void)test_backup_and_recover_with_incremental_vacuum
+{
+    [self.database enableAutoVacuum:NO];
+    [self.database enableAutoCheckpoint:NO];
+    [self.database enableAutoBackup:YES];
+    TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
+    XCTAssertTrue([self createTable]);
+    TestCaseAssertTrue([self.table insertObject:object]);
+
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.incrementalMaterialPath]);
+    TestCaseAssertTrue([self.database passiveCheckpoint]);
+    usleep(10000);
+
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:self.database.incrementalMaterialPath]);
+
+    [NSThread sleepForTimeInterval:WCDB::OperationQueueTimeIntervalForBackup + self.delayForTolerance];
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.firstMaterialPath]);
+    TestCaseAssertTrue([self.fileManager fileExistsAtPath:self.database.incrementalMaterialPath]);
+
+    TestCaseAssertTrue([self.database retrieve:nil] == 1);
+
+    WCTValue* autoVaccum = [self.database getValueFromStatement:WCDB::StatementPragma().pragma(WCDB::Pragma::autoVacuum())];
+    TestCaseAssertTrue(autoVaccum.numberValue.intValue == 1);
 }
 
 #pragma mark - FTS

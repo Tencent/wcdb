@@ -208,6 +208,15 @@
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self lastMaterialPath]]);
 }
 
+- (void)test_backup_other_db
+{
+    WCDB::Database db("/Volumes/diskOfQiuwenchen/下载/wcdb-test/sqlite3.db ");
+    db.enableAutoBackup(true);
+    TestCaseAssertTrue(db.execute(WCDB::StatementPragma().pragma(WCDB::Pragma().encoding()).to("UTF-8")));
+    TestCaseAssertTrue(db.insertOrReplaceRows({ "abc", 1, 2 }, { WCDB::Column("Name"), WCDB::Column("Version"), WCDB::Column("CompatibleVersion") }, "Module"));
+    sleep(12);
+}
+
 - (void)test_retrive
 {
     [self insertPresetObjects];
@@ -222,6 +231,33 @@
     TestCaseAssertTrue(self.database->vacuum(nullptr));
     [self check:CPPMultiRowValueExtract(self.objects)
       isEqualTo:CPPMultiRowValueExtract([self getAllObjects])];
+}
+
+- (void)test_auto_vacuum
+{
+    self.database->enableAutoVacuum(false);
+    auto autoVacuum = self.database->getValueFromStatement(WCDB::StatementPragma().pragma(WCDB::Pragma::autoVacuum()));
+    TestCaseAssertTrue(autoVacuum.succeed() && autoVacuum.value() == 1);
+
+    self.database->enableAutoVacuum(true);
+    autoVacuum = self.database->getValueFromStatement(WCDB::StatementPragma().pragma(WCDB::Pragma::autoVacuum()));
+    TestCaseAssertTrue(autoVacuum.succeed() && autoVacuum.value() == 2);
+}
+
+- (void)test_incremental_vacuum
+{
+    self.database->enableAutoVacuum(true);
+    [self insertPresetRows];
+    TestCaseAssertTrue(self.database->truncateCheckpoint());
+    TestCaseAssertTrue(self.database->dropTable(self.tableName.UTF8String));
+    TestCaseAssertTrue(self.database->truncateCheckpoint());
+    auto freelist = self.database->getValueFromStatement(WCDB::StatementPragma().pragma(WCDB::Pragma::freelistCount()));
+    TestCaseAssertTrue(freelist.succeed() && freelist.value().intValue() > 0);
+
+    TestCaseAssertTrue(self.database->incrementalVacuum(0));
+
+    freelist = self.database->getValueFromStatement(WCDB::StatementPragma().pragma(WCDB::Pragma::freelistCount()));
+    TestCaseAssertTrue(freelist.succeed() && freelist.value().intValue() == 0);
 }
 
 - (void)test_migration

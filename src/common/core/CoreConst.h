@@ -94,6 +94,8 @@ WCDBLiteralStringDefine(ScalarFunctionConfigPrefix, "com.Tencent.WCDB.Config.Sca
 #pragma mark - Config - AuxiliaryFunction
 WCDBLiteralStringDefine(AuxiliaryFunctionConfigPrefix,
                         "com.Tencent.WCDB.Config.AuxiliaryFunction.");
+#pragma mark - Config - AutoVaccum
+WCDBLiteralStringDefine(AutoVacuumConfigName, "com.Tencent.WCDB.Config.AutoVaccum");
 
 #pragma mark - Notifier
 WCDBLiteralStringDefine(NotifierPreprocessorName, "com.Tencent.WCDB.Notifier.PreprocessTag");
@@ -122,6 +124,7 @@ enum HandleCategory : unsigned char {
     HandleCategoryCheckpoint,
     HandleCategoryIntegrity,
     HandleCategoryMergeIndex,
+    HandleCategoryVacuum,
     HandleCategoryCount,
 };
 
@@ -138,7 +141,8 @@ enum class HandleType : unsigned int {
     AssembleCipher = (HandleCategoryCipher << 8) | HandleSlotCipher,
     AssembleBackupRead = (HandleCategoryBackupRead << 8) | HandleSlotAssemble,
     AssembleBackupWrite = (HandleCategoryBackupWrite << 8) | HandleSlotAssemble,
-    Vacuum = (HandleCategoryNormal << 8) | HandleSlotVacuum,
+    Vacuum = (HandleCategoryVacuum << 8) | HandleSlotVacuum,
+    AutoVacuum = (HandleCategoryVacuum << 8) | HandleSlotAutoTask,
     MergeIndex = (HandleCategoryMergeIndex << 8) | HandleSlotAutoTask,
 };
 static constexpr HandleSlot slotOfHandleType(HandleType type)
