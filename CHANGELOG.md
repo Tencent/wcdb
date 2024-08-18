@@ -1,3 +1,11 @@
+## v2.1.7
+
+* WCDB C++ supports OpenHarmony OS
+* Support to recompress existing data with new configuration
+* Support auto vacuum
+* Support Swift6
+* Fix some compile issues
+
 ## v2.1.6
 
 * Some bugfix for data repair, Java/Kotlin ORM and Swift query
