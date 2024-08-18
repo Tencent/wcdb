@@ -296,7 +296,7 @@ Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
 {
 #ifndef _WIN32
     StatType result;
-    if (StatFunc(path.data(), &result) == 0) {
+    if (StatFunc(GetPathString(path), &result) == 0) {
         constexpr int size = sizeof(result.st_dev) + sizeof(result.st_ino);
         unsigned char buffer[size];
         memcpy(buffer, &result.st_dev, sizeof(result.st_dev));
@@ -305,7 +305,34 @@ Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
     }
     return NullOpt;
 #else
-    return path.hash();
+    HANDLE hFile = CreateFileW(GetPathString(path),
+                               GENERIC_READ,
+                               FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                               NULL,
+                               OPEN_EXISTING,
+                               FILE_ATTRIBUTE_NORMAL,
+                               NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        setThreadedWinError(path);
+        return NullOpt;
+    }
+    FILE_ID_INFO fileIdInfo;
+    if (!GetFileInformationByHandleEx(hFile, FileIdInfo, &fileIdInfo, sizeof(fileIdInfo))) {
+        setThreadedWinError(path);
+        CloseHandle(hFile);
+        return NullOpt;
+    }
+    CloseHandle(hFile);
+
+    // Copy FileID and VolumeSerialNumber to a buffer
+    constexpr size_t size
+    = sizeof(fileIdInfo.FileId) + sizeof(fileIdInfo.VolumeSerialNumber);
+    unsigned char buffer[size];
+    memcpy(buffer, &fileIdInfo.FileId, sizeof(fileIdInfo.FileId));
+    memcpy(buffer + sizeof(fileIdInfo.FileId),
+           &fileIdInfo.VolumeSerialNumber,
+           sizeof(fileIdInfo.VolumeSerialNumber));
+    return UnsafeData(buffer, size).hash();
 #endif
 }
 
