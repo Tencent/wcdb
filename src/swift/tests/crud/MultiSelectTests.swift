@@ -86,7 +86,7 @@ class MultiSelectTests: CRUDTestCase {
             typealias Root = MultiSelectObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(.variable1, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }

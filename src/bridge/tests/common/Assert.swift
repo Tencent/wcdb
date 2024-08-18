@@ -42,7 +42,7 @@ func WINQAssertEqual<DescribableObject1, DescribableObject2>(
 }
 
 func WINQExpressionAssertEqual(
-    _ expression: @autoclosure () -> Expression,
+    _ expression: @autoclosure () -> WCDB.Expression,
     _ description: @autoclosure () -> String,
     file: StaticString = #file,
     line: UInt = #line) {

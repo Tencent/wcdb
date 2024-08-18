@@ -22,7 +22,7 @@ import Foundation
 import WCDB_Private
 
 public final class WCDBError: Swift.Error, CustomStringConvertible {
-    public enum Code: Int {
+    public enum Code: Int, Sendable {
         case OK = 0
         case Error = 1
         case Internal = 2
@@ -126,7 +126,7 @@ public final class WCDBError: Swift.Error, CustomStringConvertible {
         case OKLoadPermanently = 256         // Code.OK | (1 << 8)
     }
 
-    public enum Level: Int, CustomStringConvertible {
+    public enum Level: Int, CustomStringConvertible, Sendable {
         case Ignore = 1
         case Debug = 2
         case Notice = 3
@@ -151,7 +151,7 @@ public final class WCDBError: Swift.Error, CustomStringConvertible {
         }
     }
 
-    public enum Key: Int, CustomStringConvertible {
+    public enum Key: Int, CustomStringConvertible, Sendable {
         case tag = 1
         case path = 2
         case type = 3

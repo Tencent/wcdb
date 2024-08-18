@@ -25,7 +25,7 @@ import WCDBSwift
 import WCDB
 #endif
 
-class TracerTests: DatabaseTestCase {
+class TracerTests: DatabaseTestCase, @unchecked Sendable {
 
     func reset() {
         Database.globalTracePerformance(nil)
@@ -176,7 +176,7 @@ class TracerTests: DatabaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TracerObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(variable, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
@@ -345,6 +345,8 @@ class TracerTests: DatabaseTestCase {
         Database.globalTracePerformance(nil)
     }
 
+    var dispatchTid: UInt64 = 0
+    var objects: [TestObject] = []
     func testGlobalTraceDatabaseBusy() {
         var testTid: UInt64 = 0
         Database.globalTraceBusy({ tag, path, tid, sql in
@@ -355,17 +357,18 @@ class TracerTests: DatabaseTestCase {
         }, timeOut: 0.1)
 
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
-        let objects = Random.testObjects(startWith: 0, count: 50000)
         let group = DispatchGroup()
         let queue = DispatchQueue(label: String(recommendTag), attributes: .concurrent)
-        var dispatchTid: UInt64 = 0
+        objects = Random.testObjects(startWith: 0, count: 50000)
         queue.async(group: group, execute: {
-            pthread_threadid_np(nil, &dispatchTid)
-            try! self.database.insert(objects, intoTable: TestObject.name)
+            pthread_threadid_np(nil, &self.dispatchTid)
+            try! self.database.insert(self.objects, intoTable: TestObject.name)
         })
         usleep(10000)
         XCTAssertNoThrow(try database.insert(TestObject(variable1: 100001, variable2: "abdad"),
                                              intoTable: TestObject.name))
+
+        print("finish insert2")
         group.wait()
         XCTAssertTrue(testTid != 0 && testTid == dispatchTid)
         Database.globalTraceBusy(nil, timeOut: 0)

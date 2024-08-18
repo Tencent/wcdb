@@ -27,19 +27,24 @@
 
 WCDB_EXTERN_C_BEGIN
 
-extern SwiftObject* _Nullable (*_Nullable WCDBSwiftTokenizerCreate)(
+typedef SwiftObject* _Nullable (*WCDBSwiftTokenizerCreate)(
 int typeId, int argc, const char* _Nonnull const* _Nullable argv);
-extern void (*_Nullable WCDBSwiftTokenizerLoadInput)(SwiftObject* _Nonnull obj,
-                                                     const char* _Nullable input,
-                                                     int length,
-                                                     int flags);
-extern int (*_Nullable WCDBSwiftTokenizerNextToken)(SwiftObject* _Nonnull obj,
-                                                    const char* _Nullable* _Nonnull ppToken,
-                                                    int* _Nonnull nToken,
-                                                    int* _Nonnull iStart,
-                                                    int* _Nonnull iEnd,
-                                                    int* _Nullable tflags,
-                                                    int* _Nullable iPosition);
+void WCDBSwiftSetTokenizerCreateFunction(_Nonnull WCDBSwiftTokenizerCreate func);
+
+typedef void (*WCDBSwiftTokenizerLoadInput)(SwiftObject* _Nonnull obj,
+                                            const char* _Nullable input,
+                                            int length,
+                                            int flags);
+void WCDBSwiftSetTokenizerLoadInputFunction(_Nonnull WCDBSwiftTokenizerLoadInput func);
+
+typedef int (*WCDBSwiftTokenizerNextToken)(SwiftObject* _Nonnull obj,
+                                           const char* _Nullable* _Nonnull ppToken,
+                                           int* _Nonnull nToken,
+                                           int* _Nonnull iStart,
+                                           int* _Nonnull iEnd,
+                                           int* _Nullable tflags,
+                                           int* _Nullable iPosition);
+void WCDBSwiftSetTokenizerNextTokenFunction(_Nonnull WCDBSwiftTokenizerNextToken func);
 
 extern const int WCDBTokenizerErrorCodeOK;
 extern const int WCDBTokenizerErrorCodeDone;
@@ -57,20 +62,21 @@ void WCDBCoreRegisterFTSTokenizer(const char* _Nullable name, int typeId, enum W
 
 void WCDBDatabaseEnableAutoMergeFTS5Index(CPPDatabase database, bool enable);
 
-extern const char* _Nonnull WCDBTokenizerSimple;
-extern const char* _Nonnull WCDBTokenizerPorter;
-extern const char* _Nonnull WCDBTokenizerICU;
-extern const char* _Nonnull WCDBTokenizerUnicode61;
-extern const char* _Nonnull WCDBTokenizerOneOrBinary;
-extern const char* _Nonnull WCDBTokenizerLegacyOneOrBinary;
-extern const char* _Nonnull WCDBTokenizerVerbatim;
-extern const char* _Nonnull WCDBTokenizerPinyin;
-extern const char* _Nonnull WCDBTokenizerParameter_NeedSymbol;
-extern const char* _Nonnull WCDBTokenizerParameter_SimplifyChinese;
-extern const char* _Nonnull WCDBTokenizerParameter_SkipStemming;
+const char* _Nonnull WCDBTokenizerSimpleName();
+const char* _Nonnull WCDBTokenizerPorterName();
+const char* _Nonnull WCDBTokenizerICUName();
+const char* _Nonnull WCDBTokenizerUnicode61Name();
+const char* _Nonnull WCDBTokenizerOneOrBinaryName();
+const char* _Nonnull WCDBTokenizerLegacyOneOrBinaryName();
+const char* _Nonnull WCDBTokenizerVerbatimName();
+const char* _Nonnull WCDBTokenizerPinyinName();
+const char* _Nonnull WCDBTokenizerParameterNeedSymbolName();
+const char* _Nonnull WCDBTokenizerParameterSimplifyChineseName();
+const char* _Nonnull WCDBTokenizerParameterSkipStemmingName();
 void WCDBDatabaseAddTokenizer(CPPDatabase database, const char* _Nullable tokenizer);
 
-extern const char* _Nonnull WCDBAuxiliaryFunction_SubstringMatchInfo;
+const char* _Nonnull WCDBAuxiliaryFunctionSubstringMatchInfoName();
+
 void WCDBDatabaseAddAuxiliaryFunction(CPPDatabase database, const char* _Nullable auxFunction);
 
 WCDB_EXTERN_C_END

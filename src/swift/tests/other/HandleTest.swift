@@ -29,7 +29,7 @@ import WCDBSwift
 import WCDB
 #endif
 
-class HandleTests: DatabaseTestCase {
+class HandleTests: DatabaseTestCase, @unchecked Sendable {
 
     func testCancellationSignal() {
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))

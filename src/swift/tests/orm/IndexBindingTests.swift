@@ -32,7 +32,7 @@ class IndexBindingTests: ORMTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = BaselineTestObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindIndex(variable, namedWith: "_index")
             }
         }
@@ -43,7 +43,7 @@ class IndexBindingTests: ORMTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = UniqueTestObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindIndex(variable, namedWith: "_index", isUnique: true)
             }
         }
@@ -56,7 +56,7 @@ class IndexBindingTests: ORMTestCase {
             typealias Root = MultiIndexesTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindIndex(variable1, variable2, namedWith: "_index")
             }
         }

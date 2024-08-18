@@ -34,7 +34,7 @@ class VirtualTableBindingTests: ORMTestCase {
             typealias Root = FTS3TestObject
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindVirtualTable(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
                 BindColumnConstraint(id, isNotIndexed: true)
             }
@@ -59,7 +59,7 @@ class VirtualTableBindingTests: ORMTestCase {
             typealias Root = FTS5TestObject
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming, BuiltinTokenizer.Parameter.SimplifyChinese)
                 BindColumnConstraint(id, isNotIndexed: true)
             }

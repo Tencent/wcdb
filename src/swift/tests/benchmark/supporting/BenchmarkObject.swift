@@ -32,7 +32,7 @@ final class BenchmarkObject: TableCodable, Named {
         typealias Root = BenchmarkObject
         case key
         case value
-        static let objectRelationalMapping = TableBinding(CodingKeys.self)
+        nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
     }
     init(withKey key: Int, and data: Data) {
         self.key = key

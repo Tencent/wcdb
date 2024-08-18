@@ -72,7 +72,7 @@ class ExpresssionTests: BaseTestCase {
             typealias Root = OperableObject
             case left
             case right
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 

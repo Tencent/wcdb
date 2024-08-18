@@ -143,8 +143,8 @@ internal final class ConditionLock: Lockable {
 }
 
 internal extension DispatchQueue {
-    private static let spin = Spin()
-    private static var tracker: Set<String> = []
+    nonisolated(unsafe) private static let spin = Spin()
+    nonisolated(unsafe) private static var tracker: Set<String> = []
 
     static func once(name: String, _ block: () -> Void) {
         spin.lock(); defer { spin.unlock() }

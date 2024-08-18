@@ -100,7 +100,7 @@ public final class Handle {
         return WCDBHandleGetLastInsertedRowID(cppHandle)
     }
 
-    public final class CancellatiionSignal {
+    public final class CancellatiionSignal : @unchecked Sendable {
         private let m_signal: Recyclable<CPPCancellationSignal>
         public init() {
             m_signal = ObjectBridge.createRecyclableCPPObject(WCDBCancellationSignalCreate())

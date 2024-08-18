@@ -120,13 +120,13 @@ void WCDBDatabaseTraceError(CPPDatabase database,
                             WCDBContextDestructor _Nullable destructor);
 
 #ifndef __ANDROID__
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount;
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime;
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime;
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage;
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount;
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount;
-extern const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTriggerCount;
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTriggerCount();
 #endif
 
 typedef void (*WCDBOperationTracer)(void* _Nullable context,

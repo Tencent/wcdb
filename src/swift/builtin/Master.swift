@@ -39,7 +39,7 @@ public struct Master: TableCodable {
         case rootpage
         case sql
 
-        public static let objectRelationalMapping = TableBinding(Master.CodingKeys.self)
+        nonisolated(unsafe) public static let objectRelationalMapping = TableBinding(Master.CodingKeys.self)
     }
 
     public init() {}

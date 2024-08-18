@@ -89,7 +89,7 @@ class AdvanceCRUDTests: CRUDTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = EncodableObject
             case variable1
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 
@@ -99,7 +99,7 @@ class AdvanceCRUDTests: CRUDTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = DecodableObject
             case variable1
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 

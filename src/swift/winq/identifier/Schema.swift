@@ -30,8 +30,8 @@ public final class Schema: Identifier<CPPSchema> {
         self.init(with: WCDBSchemaCreateWithName(name.cString))
     }
 
-    public static let main: Schema = Schema(with: WCDBSchemaMain())
-    public static let temp: Schema = Schema(with: WCDBSchemaTemp())
+    nonisolated(unsafe) public static let main: Schema = Schema(with: WCDBSchemaMain())
+    nonisolated(unsafe) public static let temp: Schema = Schema(with: WCDBSchemaTemp())
 }
 
 extension Schema: SchemaConvertible {

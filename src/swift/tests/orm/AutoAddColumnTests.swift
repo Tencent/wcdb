@@ -49,7 +49,7 @@ class AutoAddColumnTests: DatabaseTestCase {
             case selectValue
             case multiSelectValue
             case deleteValue
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(.primaryValue, isPrimary: true)
                 BindColumnConstraint(.uniqueValue, isUnique: true)
             }

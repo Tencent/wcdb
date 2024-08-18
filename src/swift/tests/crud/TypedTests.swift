@@ -107,7 +107,7 @@ class TypedTests: CRUDTestCase {
             case array
             case dictionary
             case set = "db_set"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
         enum TestType {
@@ -290,7 +290,7 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case codable
             case bool
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
         enum TestType {
@@ -368,7 +368,7 @@ class TypedTests: CRUDTestCase {
             case int64Variable9 = "uint64"
             case doubleVariable0 = "float"
             case doubleVariable1 = "double"
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
         enum TestType {
@@ -458,7 +458,7 @@ class TypedTests: CRUDTestCase {
             case jsonCodable
             case codable
             case bool
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
 
         enum TestType {
@@ -745,7 +745,7 @@ class TypedTests: CRUDTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedMatchTable
             case variable1
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 
@@ -754,7 +754,7 @@ class TypedTests: CRUDTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TypedNoMatchTable
             case variable1
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 

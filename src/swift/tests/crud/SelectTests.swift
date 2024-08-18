@@ -146,7 +146,7 @@ class SelectTests: CRUDTestCase {
             typealias Root = WrongObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 

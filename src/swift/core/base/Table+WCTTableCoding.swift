@@ -30,7 +30,7 @@ import WCDB_Private
 /// Convenient table interface
 extension Table {
 
-    convenience init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) where Root: WCTTableCoding {
+    convenience init(withDatabase database: Database, named name: String, of type: Object.Type = Object.self) where Object: WCTTableCoding {
         self.init(withDatabase: database, named: name)
     }
 }
@@ -91,7 +91,7 @@ internal extension Table {
     }
 }
 
-extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
+extension Table: InsertTableInterfaceForObjc where Object: WCTTableCoding {
 
     /// Execute inserting with `WCTTableCoding` object on specific(or all) properties
     ///
@@ -182,7 +182,7 @@ extension Table: InsertTableInterfaceForObjc where Root: WCTTableCoding {
     }
 }
 
-extension Table: UpdateTableInterfaceForObjc where Root: WCTTableCoding {
+extension Table: UpdateTableInterfaceForObjc where Object: WCTTableCoding {
 
     /// Execute updating with `WCTTableCoding` object on specific(or all) properties.
     ///
@@ -280,7 +280,7 @@ extension Table: UpdateTableInterfaceForObjc where Root: WCTTableCoding {
     }
 }
 
-extension Table: SelectTableInterfaceForObjc where Root: WCTTableCoding {
+extension Table: SelectTableInterfaceForObjc where Object: WCTTableCoding {
 
     /// Get objects on specific(or all) properties
     ///

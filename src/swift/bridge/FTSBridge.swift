@@ -54,9 +54,8 @@ public protocol Tokenizer: AnyObject {
 }
 
 internal final class FTSBridge {
-
     static func initializeCPPAPI() {
-        WCDBSwiftTokenizerCreate = {
+        WCDBSwiftSetTokenizerCreateFunction({
             (typeId: Int32, argc: Int32, argv: UnsafePointer<UnsafePointer<Int8>>?) -> UnsafeMutableRawPointer? in
             let type = FTSBridge.getTokenizer(of: typeId)
             var args: [String] = []
@@ -67,16 +66,16 @@ internal final class FTSBridge {
             }
             let tokenizer = type.init(args: args)
             return ObjectBridge.getUntypeSwiftObject(tokenizer)
-        }
-        WCDBSwiftTokenizerLoadInput = {
+        })
+        WCDBSwiftSetTokenizerLoadInputFunction({
             (obj: UnsafeMutableRawPointer, input: UnsafePointer<Int8>?, length: Int32, flag: Int32) -> Void in
             let tokenizer: Tokenizer? = ObjectBridge.extractTypedSwiftObject(obj)
             guard let tokenizer = tokenizer else {
                 return
             }
             tokenizer.load(input: input, length: Int(length), flags: Int(flag))
-        }
-        WCDBSwiftTokenizerNextToken = {
+        })
+        WCDBSwiftSetTokenizerNextTokenFunction({
             (obj: UnsafeMutableRawPointer,
              ppToken: UnsafeMutablePointer<UnsafePointer<Int8>?>,
              pnBytes: UnsafeMutablePointer<Int32>,
@@ -89,7 +88,7 @@ internal final class FTSBridge {
                 return WCDBTokenizerErrorCodeNoMemory
             }
             return tokenizer.nextToken(ppToken: ppToken, pnBytes: pnBytes, piStart: piStart, piEnd: piEnd, pFlags: pFlags, piPosition: piPosition).cValue
-        }
+        })
     }
 
     static func getTokenizer(of typeId: Int32) -> Tokenizer.Type {
@@ -97,9 +96,7 @@ internal final class FTSBridge {
     }
 
     static func register<TokenizerType: Tokenizer>(tokenizer: TokenizerType.Type, of name: String, of version: FTSVersion) {
-        DispatchQueue.once(name: "Once.FTSBridge", {
-            FTSBridge.initializeCPPAPI()
-        })
+        FTSBridge.initializeCPPAPI()
         mutex.lock(); defer { mutex.unlock() }
         tokenizerTypes[nextTypeId] = TokenizerType.self
         WCDBCoreRegisterFTSTokenizer(name.cString, Int32(nextTypeId), version.cValue)
@@ -107,7 +104,7 @@ internal final class FTSBridge {
         assert(nextTypeId < WCDBMaxSwiftTokenizerTypeId, "The count of tokenizer exceeds the maximum allowed.")
     }
 
-    private static var tokenizerTypes: [Any?] = [Any?](repeating: nil, count: Int(WCDBMaxSwiftTokenizerTypeId))
-    private static var nextTypeId = 0
-    private static var mutex = Mutex()
+    nonisolated(unsafe) private static var tokenizerTypes: [Any?] = [Any?](repeating: nil, count: Int(WCDBMaxSwiftTokenizerTypeId))
+    nonisolated(unsafe) private static var nextTypeId = 0
+    nonisolated(unsafe) private static var mutex = Mutex()
 }

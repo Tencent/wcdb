@@ -629,13 +629,13 @@ public extension Database {
     }
 
     /// The following are the keys in the infos from the callback of database operation monitoring.
-    static let OperationInfoKeyHandleCount = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleCount)
-    static let OperationInfoKeyHandleOpenTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenTime)
-    static let OperationInfoKeyHandleOpenCPUTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime)
-    static let OperationInfoKeySchemaUsage = String(cString: WCDBDatabaseOperationTracerInfoKeySchemaUsage)
-    static let OperationInfoKeyTableCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTableCount)
-    static let OperationInfoKeyIndexCount = String(cString: WCDBDatabaseOperationTracerInfoKeyIndexCount)
-    static let OperationInfoKeyTriggerCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTriggerCount)
+    static let OperationInfoKeyHandleCount = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleCount())
+    static let OperationInfoKeyHandleOpenTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenTime())
+    static let OperationInfoKeyHandleOpenCPUTime = String(cString: WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime())
+    static let OperationInfoKeySchemaUsage = String(cString: WCDBDatabaseOperationTracerInfoKeySchemaUsage())
+    static let OperationInfoKeyTableCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTableCount())
+    static let OperationInfoKeyIndexCount = String(cString: WCDBDatabaseOperationTracerInfoKeyIndexCount())
+    static let OperationInfoKeyTriggerCount = String(cString: WCDBDatabaseOperationTracerInfoKeyTriggerCount())
 
     typealias OperationTracer = (Database, /* database */
                                  Database.Operation, /* type of operation*/
@@ -1349,10 +1349,10 @@ public extension Database {
 public struct BuiltinTokenizer {
     /// The following four are sqlite built-in fts tokenizers.
     /// `Simple` can be used in fts3/4 and the others can be used in fts3/4/5.
-    public static let Simple = String(cString: WCDBTokenizerSimple)
-    public static let Porter = String(cString: WCDBTokenizerPorter)
-    public static let ICU = String(cString: WCDBTokenizerICU)
-    public static let Unicode61 = String(cString: WCDBTokenizerUnicode61)
+    public static let Simple = String(cString: WCDBTokenizerSimpleName())
+    public static let Porter = String(cString: WCDBTokenizerPorterName())
+    public static let ICU = String(cString: WCDBTokenizerICUName())
+    public static let Unicode61 = String(cString: WCDBTokenizerUnicode61Name())
 
     /// `OneOrBinary`is WCDB implemented tokenizers for fts3/4.
     /// It's compatible with WCDB tokenizer of older versions.
@@ -1363,15 +1363,15 @@ public struct BuiltinTokenizer {
     /// For other Unicode characters, each character will be recognized as one token.
     ///
     /// For example, the sentence "The phone number of 张三 is 12345" will be split into these tokens: "the", "phone", "number", "of", "张", "三", "is", "12345".
-    public static let OneOrBinary = String(cString: WCDBTokenizerLegacyOneOrBinary)
+    public static let OneOrBinary = String(cString: WCDBTokenizerLegacyOneOrBinaryName())
 
     /// The following two are WCDB implemented tokenizers for fts5.
     ///
     /// `Verbatim` has the same tokenize rules as `OneOrBinary`.
     /// `Pinyin` is designed for pinyin search. You can use the simplified or full pinyin of Chinese characters to search for Chinese characters.
     /// Before using this tokenizer, you need to use `config(pinyinDict:)` to configure the mapping relationship between Chinese characters and their pinyin.
-    public static let Verbatim = String(cString: WCDBTokenizerVerbatim)
-    public static let Pinyin = String(cString: WCDBTokenizerPinyin)
+    public static let Verbatim = String(cString: WCDBTokenizerVerbatimName())
+    public static let Pinyin = String(cString: WCDBTokenizerPinyinName())
 
     public struct Parameter {
         /// The following three are optional parameters for WCDB implemented tokenizers.
@@ -1379,9 +1379,9 @@ public struct BuiltinTokenizer {
         /// Configuring `NeedSymbol` allows the tokenizer to recognize each symbol character as a token.
         /// Configuring `SimplifyChinese` enables the tokenizer to convert each traditional Chinese character into a simplified Chinese character, so that you can use Simplified Chinese characters to search Traditional Chinese characters. Note that you need to call `config(traditionalChineseDict:)` to configure the mapping relationship between traditional Chinese characters and simplified Chinese characters before using the tokenizer.
         /// Configuring `SkipStemming` will disable the stemming during tokenization.
-        public static let NeedSymbol = String(cString: WCDBTokenizerParameter_NeedSymbol)
-        public static let SimplifyChinese = String(cString: WCDBTokenizerParameter_SimplifyChinese)
-        public static let SkipStemming = String(cString: WCDBTokenizerParameter_SkipStemming)
+        public static let NeedSymbol = String(cString: WCDBTokenizerParameterNeedSymbolName())
+        public static let SimplifyChinese = String(cString: WCDBTokenizerParameterSimplifyChineseName())
+        public static let SkipStemming = String(cString: WCDBTokenizerParameterSkipStemmingName())
     }
 }
 
@@ -1409,7 +1409,7 @@ public struct BuiltinAuxiliaryFunction {
     /// The search results may contain some empty strings, which are invalid results.
     /// This kind of results appear when the content of some rows contain the tokens you are searching for,
     /// but these tokens are located in different parts separated by separators. You just need to ignore these results.
-    public static let SubstringMatchInfo = String(cString: WCDBAuxiliaryFunction_SubstringMatchInfo)
+    public static let SubstringMatchInfo = String(cString: WCDBAuxiliaryFunctionSubstringMatchInfoName())
 }
 
 public extension Database {

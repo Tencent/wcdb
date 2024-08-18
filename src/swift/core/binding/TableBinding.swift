@@ -131,7 +131,7 @@ public final class TableBinding<CodingTableKeyType: CodingTableKey>: TableBindin
     }()
 
     typealias TypedCodingTableKeyType = CodingTableKeyType
-    func property<CodingTableKeyType: CodingTableKey>(from codingTableKey: CodingTableKeyType) -> Property {
+    func property<KeyType: CodingTableKey>(from codingTableKey: KeyType) -> Property {
         let typedCodingTableKey = codingTableKey as? TypedCodingTableKeyType
         assert(typedCodingTableKey != nil, "[\(codingTableKey)] must conform to CodingTableKey protocol.")
         let typedProperty = properties[typedCodingTableKey!]

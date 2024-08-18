@@ -22,16 +22,16 @@ import Foundation
 import WCDB_Private
 
 /// Convenient table interface
-public final class Table<Root: Any> {
+public final class Table<Object: Any> : @unchecked Sendable {
     internal let database: Database
-    public typealias Object = Root
+    public typealias Object = Object
 
     /// Table name
     public let name: String
 
     /// Table related type
-    public var rootType: Root.Type {
-        return Root.self
+    public var rootType: Object.Type {
+        return Object.self
     }
 
     internal init(withDatabase database: Database, named name: String) {
@@ -39,11 +39,11 @@ public final class Table<Root: Any> {
         self.name = name
     }
 
-    convenience init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) where Root: TableCodable {
+    convenience init(withDatabase database: Database, named name: String, of type: Object.Type = Object.self) where Object: TableCodable {
         self.init(withDatabase: database, named: name)
     }
 
-    convenience init(withDatabase database: Database, named name: String, of type: Root.Type = Root.self) {
+    convenience init(withDatabase database: Database, named name: String, of type: Object.Type = Object.self) {
         fatalError("\(Object.self) must conform to TableCodable or WCTTableCoding")
     }
 }
@@ -104,7 +104,7 @@ internal extension Table {
     }
 }
 
-extension Table: InsertTableInterface where Root: TableCodable {
+extension Table: InsertTableInterface where Object: TableCodable {
 
     /// Execute inserting with `TableCodable` object on specific(or all) properties
     ///
@@ -195,7 +195,7 @@ extension Table: InsertTableInterface where Root: TableCodable {
     }
 }
 
-extension Table: UpdateTableInterface where Root: TableEncodable {
+extension Table: UpdateTableInterface where Object: TableEncodable {
 
     /// Execute updating with `TableCodable` object on specific(or all) properties. 
     ///
@@ -373,7 +373,7 @@ extension Table: DeleteTableInterface {
     }
 }
 
-extension Table: SelectTableInterface where Root: TableDecodable {
+extension Table: SelectTableInterface where Object: TableDecodable {
 
     /// Get objects on specific(or all) properties
     ///

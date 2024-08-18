@@ -34,7 +34,7 @@ class TableConstraintBindingTests: ORMTestCase {
             typealias Root = BaselineMultiPrimaryTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindMultiPrimary(variable1, variable2)
             }
         }
@@ -47,7 +47,7 @@ class TableConstraintBindingTests: ORMTestCase {
             typealias Root = MultiPrimaryConflictTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindMultiPrimary(variable1, variable2, onConflict: .Replace)
             }
         }
@@ -80,7 +80,7 @@ class TableConstraintBindingTests: ORMTestCase {
             typealias Root = BaselineMultiUniqueTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindMultiUnique(variable1, variable2)
             }
         }
@@ -93,7 +93,7 @@ class TableConstraintBindingTests: ORMTestCase {
             typealias Root = MultiUniqueConflictTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindMultiUnique(.variable1, .variable2, onConflict: .Replace)
             }
         }
@@ -127,7 +127,7 @@ class TableConstraintBindingTests: ORMTestCase {
             typealias Root = CheckTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindChecks {
                     variable1 > 1
                 }
@@ -153,7 +153,7 @@ class TableConstraintBindingTests: ORMTestCase {
             typealias Root = ForeignKeyTestObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindForeginKey(variable1, foreignKey: ForeignKey().references(with: ForeignKeyTestObject.name).columns(variable2))
             }
         }

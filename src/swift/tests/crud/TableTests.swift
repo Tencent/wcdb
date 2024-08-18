@@ -41,7 +41,7 @@ class TableTests: DatabaseTestCase {
             case aString
             case aData
             case aDouble
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(anInt32, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
@@ -81,7 +81,7 @@ class TableTests: DatabaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = SkipColumnObject
             case anInt32
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(anInt32, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }
@@ -103,7 +103,7 @@ class TableTests: DatabaseTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = IndexObject
             case variable
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindIndex(variable, namedWith: "_index")
             }
         }
@@ -131,7 +131,7 @@ class TableTests: DatabaseTestCase {
             typealias Root = ConstraintObject
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindMultiUnique(variable1, variable2)
             }
         }
@@ -164,7 +164,7 @@ class TableTests: DatabaseTestCase {
             typealias Root = FTS3Object
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(id, isNotIndexed: true)
                 BindVirtualTable(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary, BuiltinTokenizer.Parameter.NeedSymbol)
             }
@@ -199,7 +199,7 @@ class TableTests: DatabaseTestCase {
             typealias Root = FTS5Object
             case id
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(id, isNotIndexed: true)
                 BindVirtualTable(withModule: .FTS5,
                                  and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SkipStemming,
@@ -246,7 +246,7 @@ class TableTests: DatabaseTestCase {
             case aData
             case aDouble
             case newColumn
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindColumnConstraint(anInt32, isPrimary: true, orderBy: .ascending, isAutoIncrement: true)
             }
         }

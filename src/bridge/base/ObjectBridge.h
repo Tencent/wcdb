@@ -41,7 +41,10 @@
 WCDB_EXTERN_C_BEGIN
 
 typedef void SwiftObject;
-extern void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj);
+typedef void (*WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj);
+void WCDBSetReleaseSwiftObjectFunction(WCDBReleaseSwiftObject _Nonnull func);
+
+WCDBReleaseSwiftObject _Nonnull WCDBGetReleaseSwiftObjectFunction();
 
 typedef struct CPPObject {
     void* _Nonnull realValue;

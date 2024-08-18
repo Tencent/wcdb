@@ -60,7 +60,7 @@ internal final class ObjectBridge {
     }
 
     static func initializeCPPAPI() {
-        WCDBReleaseSwiftObject = objectDestructor
+        WCDBSetReleaseSwiftObjectFunction(objectDestructor)
     }
 
     static func extendLifetime<Result>(_ objList: Any..., execute body: @escaping () -> Result) -> Result {

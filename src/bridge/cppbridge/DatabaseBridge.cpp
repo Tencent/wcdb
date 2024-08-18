@@ -352,20 +352,40 @@ void WCDBDatabaseTraceError(CPPDatabase database,
 }
 
 #ifndef __ANDROID__
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount
-= WCDB::MonitorInfoKeyHandleCount.data();
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime
-= WCDB::MonitorInfoKeyHandleOpenTime.data();
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime
-= WCDB::MonitorInfoKeyHandleOpenCPUTime.data();
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage
-= WCDB::MonitorInfoKeySchemaUsage.data();
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount
-= WCDB::MonitorInfoKeyTableCount.data();
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount
-= WCDB::MonitorInfoKeyIndexCount.data();
-const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTriggerCount
-= WCDB::MonitorInfoKeyTriggerCount.data();
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleCount()
+{
+    return WCDB::MonitorInfoKeyHandleCount.data();
+}
+
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenTime()
+{
+    return WCDB::MonitorInfoKeyHandleOpenTime.data();
+}
+
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyHandleOpenCPUTime()
+{
+    return WCDB::MonitorInfoKeyHandleOpenCPUTime.data();
+}
+
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeySchemaUsage()
+{
+    return WCDB::MonitorInfoKeySchemaUsage.data();
+}
+
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTableCount()
+{
+    return WCDB::MonitorInfoKeyTableCount.data();
+}
+
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyIndexCount()
+{
+    return WCDB::MonitorInfoKeyIndexCount.data();
+}
+
+const char* _Nonnull WCDBDatabaseOperationTracerInfoKeyTriggerCount()
+{
+    return WCDB::MonitorInfoKeyTriggerCount.data();
+}
 #endif
 
 void WCDBDatabaseGlobalTraceOperation(WCDBOperationTracer _Nullable tracer,

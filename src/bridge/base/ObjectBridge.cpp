@@ -25,7 +25,17 @@
 #include "ObjectBridge.hpp"
 #include "Assertion.hpp"
 
-void (*_Nullable WCDBReleaseSwiftObject)(SwiftObject* _Nonnull obj) = nullptr;
+WCDBReleaseSwiftObject g_releaseSwiftObject = nullptr;
+
+void WCDBSetReleaseSwiftObjectFunction(WCDBReleaseSwiftObject _Nonnull func)
+{
+    g_releaseSwiftObject = func;
+}
+
+WCDBReleaseSwiftObject _Nonnull WCDBGetReleaseSwiftObjectFunction()
+{
+    return g_releaseSwiftObject;
+}
 
 void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
 {

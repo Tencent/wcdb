@@ -12160,7 +12160,6 @@
 				DEAD_CODE_STRIPPING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "debug-only";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -12176,7 +12175,6 @@
 				DEAD_CODE_STRIPPING = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = "debug-only";
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

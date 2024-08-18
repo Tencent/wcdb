@@ -84,7 +84,7 @@ class Random {
         return ret
     }
 
-    public static var useEnglishString = false
+    nonisolated(unsafe) public static var useEnglishString = false
 
     public static func testObjects(startWith id: Int, count: Int) -> [TestObject] {
         var objects: [TestObject] = []

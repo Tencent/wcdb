@@ -428,12 +428,13 @@ extension SelectInterface where Self: HandleRepresentable {
         where condition: Condition? = nil,
         orderBy orderList: [OrderBy]? = nil,
         offset: Offset? = nil) throws -> Object? {
-        return try getObjects(on: propertyConvertibleList,
-                              fromTable: table,
-                              where: condition,
-                              orderBy: orderList,
-                              limit: 1,
-                              offset: offset).first
+            let objects: [Object] = try getObjects(on: propertyConvertibleList,
+                                                   fromTable: table,
+                                                   where: condition,
+                                                   orderBy: orderList,
+                                                   limit: 1,
+                                                   offset: offset)
+            return objects.first
     }
 
     public func getObject<Object: TableDecodable>(

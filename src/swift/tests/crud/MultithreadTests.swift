@@ -32,7 +32,7 @@ func tick(_ block: () -> Void) -> TimeInterval {
     return after - before
 }
 
-class MultithreadTests: CRUDTestCase {
+class MultithreadTests: CRUDTestCase, @unchecked Sendable {
 
     var group: DispatchGroup!
     var queue: DispatchQueue!

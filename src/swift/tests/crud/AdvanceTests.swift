@@ -25,7 +25,7 @@ import WCDBSwift
 import WCDB
 #endif
 
-class AdvanceTests: CRUDTestCase {
+class AdvanceTests: CRUDTestCase, @unchecked Sendable {
 
     func testHandleStatement() {
         let statement = StatementSelect().select(Column.all()).from(Master.builtinTableName)
@@ -145,7 +145,7 @@ class AdvanceTests: CRUDTestCase {
             case double
             case string
             case data
-            static let objectRelationalMapping = TableBinding(CodingKeys.self)
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self)
         }
     }
 
@@ -476,11 +476,12 @@ class AdvanceTests: CRUDTestCase {
         XCTAssertEqual(optionalObject!.variable1, preInsertedObjects[0].variable1)
     }
 
+    var identifier = 0
+    var pauseTimes = -1
     func testPausableTransaction() {
         XCTAssertNoThrow(try database.drop(table: TestObject.name))
         XCTAssertNoThrow(try database.create(table: TestObject.name, of: TestObject.self))
-        var identifier = 0
-        var pauseTimes = -1
+
         let group = DispatchGroup()
         let queue = DispatchQueue(label: String(recommendTag), attributes: .concurrent)
         queue.async(group: group, execute: {
@@ -489,7 +490,7 @@ class AdvanceTests: CRUDTestCase {
             let transaction: TransactionInterface.PausableTransactionClosure = { handle, stop, isNewTransaction in
                 XCTAssertTrue(handle.isInTransaction)
                 if isNewTransaction {
-                    pauseTimes += 1
+                    self.pauseTimes += 1
                 }
                 let beginInterval = Date().timeIntervalSince(write1Begin)
                 XCTAssertTrue(beginInterval < 1)
@@ -497,9 +498,9 @@ class AdvanceTests: CRUDTestCase {
                 let handleStatement = WCDBAssertNoThrowReturned(try handle.getOrCreatePreparedStatement(with: StatementInsert().insert(intoTable: TestObject.name).columns(TestObject.Properties.all).values(BindParameter.bindParameters(TestObject.Properties.all.count))))
                 handleStatement!.reset()
 
-                identifier += 1
+                self.identifier += 1
                 let obj = TestObject()
-                obj.variable1 = identifier
+                obj.variable1 = self.identifier
                 obj.variable2 = "testObject"
                 XCTAssertNoThrow(try handleStatement!.bind(TestObject.Properties.all, of: obj))
                 XCTAssertNoThrow(try handleStatement!.step())
@@ -549,7 +550,7 @@ class AdvanceTests: CRUDTestCase {
             typealias Root = FTS3Object
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindVirtualTable(withModule: .FTS3, and: BuiltinTokenizer.OneOrBinary)
             }
         }
@@ -667,7 +668,7 @@ class AdvanceTests: CRUDTestCase {
             typealias Root = FTS5Object
             case variable1
             case variable2
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim)
             }
         }
@@ -783,7 +784,7 @@ class AdvanceTests: CRUDTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = PinyinObject
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Pinyin)
             }
         }
@@ -829,7 +830,7 @@ class AdvanceTests: CRUDTestCase {
         enum CodingKeys: String, CodingTableKey {
             typealias Root = TraditionalChineseObject
             case content
-            static let objectRelationalMapping = TableBinding(CodingKeys.self) {
+            nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
                 BindVirtualTable(withModule: .FTS5, and: BuiltinTokenizer.Verbatim, BuiltinTokenizer.Parameter.SimplifyChinese)
             }
         }
