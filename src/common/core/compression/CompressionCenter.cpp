@@ -161,8 +161,7 @@ Optional<Data> CompressionCenter::trainDict(DictId dictId, TrainDataEnumerator d
                                                        allData.buffer(),
                                                        dataSizes.data(),
                                                        (unsigned) dataSizes.size(),
-                                                       &params,
-                                                       NULL);
+                                                       &params);
     if (ZSTD_isError(dictSize)) {
         Error error(Error::Code::ZstdError, Error::Level::Error, "Train dict failed");
         error.infos.insert_or_assign("ZSTDErrorCode", dictSize);
