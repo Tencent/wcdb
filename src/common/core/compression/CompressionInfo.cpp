@@ -89,6 +89,34 @@ CompressionColumnInfo::CompressionColumnInfo(CompressionColumnInfo &&other)
 {
 }
 
+CompressionColumnInfo &CompressionColumnInfo::operator=(const CompressionColumnInfo &other)
+{
+    m_column = other.m_column;
+    m_columnIndex = other.m_columnIndex.load();
+    m_typeColumn = other.m_typeColumn;
+    m_typeColumnIndex = other.m_typeColumnIndex.load();
+    m_matchColumn = other.m_matchColumn;
+    m_matchColumnIndex = other.m_matchColumnIndex.load();
+    m_compressionType = other.m_compressionType;
+    m_commonDictID = other.m_commonDictID;
+    m_matchDicts = other.m_matchDicts;
+    return *this;
+}
+
+CompressionColumnInfo &CompressionColumnInfo::operator=(CompressionColumnInfo &&other)
+{
+    m_column = std::move(other.m_column);
+    m_columnIndex = other.m_columnIndex.load();
+    m_typeColumn = std::move(other.m_typeColumn);
+    m_typeColumnIndex = other.m_typeColumnIndex.load();
+    m_matchColumn = std::move(other.m_matchColumn);
+    m_matchColumnIndex = other.m_matchColumnIndex.load();
+    m_compressionType = other.m_compressionType;
+    m_commonDictID = other.m_commonDictID;
+    m_matchDicts = std::move(other.m_matchDicts);
+    return *this;
+}
+
 const Column &CompressionColumnInfo::getColumn() const
 {
     return m_column;
@@ -187,11 +215,23 @@ const StringView &CompressionTableBaseInfo::getTable() const
     return m_table;
 }
 
+CompressionTableInfo::ColumnInfoList &CompressionTableBaseInfo::getColumnInfos() const
+{
+    return m_compressingColumns;
+}
+
 #pragma mark - CompressionTableUserInfo
 
 CompressionTableUserInfo::CompressionTableUserInfo(const UnsafeStringView &table)
 : CompressionTableBaseInfo(table)
 {
+}
+
+CompressionTableUserInfo::CompressionTableUserInfo(const UnsafeStringView &table,
+                                                   const std::list<CompressionColumnInfo> &columns)
+: CompressionTableBaseInfo(table)
+{
+    m_compressingColumns = columns;
 }
 
 void CompressionTableUserInfo::addCompressingColumn(const CompressionColumnInfo &info)
@@ -216,11 +256,6 @@ CompressionTableInfo::CompressionTableInfo(const CompressionTableUserInfo &userI
 , m_minCompressedRowid(INT64_MAX)
 , m_needCheckColumn(true)
 {
-}
-
-CompressionTableInfo::ColumnInfoList &CompressionTableInfo::getColumnInfos() const
-{
-    return m_compressingColumns;
 }
 
 void CompressionTableInfo::setMinCompressedRowid(int64_t rowid) const

@@ -77,8 +77,9 @@ protected:
     };
 
     bool initInfo(InfoInitializer& initializer, const UnsafeStringView& table);
-    bool hintThatTableWillBeCreated(InfoInitializer& initializer,
-                                    const UnsafeStringView& table);
+    Optional<std::list<CompressionColumnInfo>>
+    tryGetCompressingColumnsForNewTable(InfoInitializer& initializer,
+                                        const UnsafeStringView& table);
     void markAsNoNeedToCompress(const UnsafeStringView& table);
     void markAsCompressed(const CompressionTableInfo* info);
     Optional<const CompressionTableInfo*> getInfo(const UnsafeStringView& table);
@@ -95,7 +96,7 @@ private:
     ThreadLocal<std::set<const CompressionTableInfo*>> m_commitingTables;
     std::set<const CompressionTableInfo*> m_compressings;
     StringViewMap<const CompressionTableInfo*> m_filted;
-    StringViewSet m_hints;
+    StringViewMap<CompressionTableUserInfo> m_hints;
     std::list<CompressionTableInfo> m_holder;
     mutable SharedLock m_lock;
 
@@ -114,7 +115,8 @@ public:
         Optional<const CompressionTableInfo*>
         tryGetCompressionInfo(const UnsafeStringView& table);
         bool tryFixCompressingColumn(const UnsafeStringView& table);
-        bool hintThatTableWillBeCreated(const UnsafeStringView& table);
+        Optional<std::list<CompressionColumnInfo>>
+        tryGetCompressingColumnsForNewTable(const UnsafeStringView& table);
         void notifyTransactionCommitted(bool committed);
         bool canCompressNewData() const;
 

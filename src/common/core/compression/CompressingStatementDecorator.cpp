@@ -849,10 +849,23 @@ bool CompressingStatementDecorator::processDelete(const StatementDelete& delete_
 
 bool CompressingStatementDecorator::processCreateTable(const StatementCreateTable& createTable)
 {
-    if (createTable.syntax().schema.isMain()) {
-        m_compressionBinder->hintThatTableWillBeCreated(createTable.syntax().table);
+    if (!createTable.syntax().schema.isMain()) {
+        return Super::prepare(createTable);
     }
-    return Super::prepare(createTable);
+    auto compressingColumns = m_compressionBinder->tryGetCompressingColumnsForNewTable(
+    createTable.syntax().table);
+    if (compressingColumns.failed()) {
+        return false;
+    }
+    if (compressingColumns.value().size() == 0) {
+        return Super::prepare(createTable);
+    }
+    StatementCreateTable newStatement = createTable;
+    for (auto columnInfo : compressingColumns.value()) {
+        newStatement.define(ColumnDef(columnInfo.getTypeColumn(), ColumnType::Integer)
+                            .constraint(ColumnConstraint().default_(nullptr)));
+    }
+    return Super::prepare(newStatement);
 }
 
 bool CompressingStatementDecorator::processCreateView(const StatementCreateView& createView)
