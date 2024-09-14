@@ -32,15 +32,8 @@
 #include "DBOperationNotifier.hpp"
 #include "FileManager.hpp"
 #include "InnerDatabase.hpp"
+#include "Path.hpp"
 #include "WCDBVersion.h"
-#include <errno.h>
-#include <stdlib.h>
-#ifndef _WIN32
-#include <unistd.h>
-#else
-#include <conio.h>
-#include <direct.h>
-#endif
 
 namespace WCDB {
 
@@ -48,55 +41,7 @@ namespace WCDB {
 
 Database::Database(const UnsafeStringView& path)
 {
-    if (path.compare(":memory:") == 0) {
-        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(path);
-        m_innerDatabase = m_databaseHolder.get();
-        return;
-    }
-#ifndef _WIN32
-    const char* resolvePath = realpath(path.data(), nullptr);
-    if (resolvePath == nullptr && errno == ENOENT) {
-        CommonCore::shared().setThreadedErrorPath(path);
-        if (FileManager::createDirectoryWithIntermediateDirectories(Path::getDirectory(path))
-            && FileManager::createFile(path)) {
-            resolvePath = realpath(path.data(), nullptr);
-            if (resolvePath == NULL) {
-                Error error;
-                error.level = Error::Level::Warning;
-                error.setSystemCode(errno, Error::Code::IOError);
-                error.infos.insert_or_assign(ErrorStringKeyPath, path);
-                Notifier::shared().notify(error);
-            }
-            FileManager::removeItem(path);
-        }
-        CommonCore::shared().setThreadedErrorPath(nullptr);
-    }
-    if (resolvePath != nullptr) {
-        UnsafeStringView newPath = UnsafeStringView(resolvePath);
-#ifdef __APPLE__
-        /*
-         /var is the symlink to /private/var.
-         In most cases, realpath will return the path with the /var prefix,
-         while in a small number of cases it will return the path with the /private/var prefix.
-         In order to avoid the inconsistency of the path of the same file, remove the /private prefix of path here
-         */
-        if (newPath.hasPrefix("/private")) {
-            newPath = UnsafeStringView(resolvePath + 8);
-        }
-#endif
-        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(newPath);
-        free((void*) resolvePath);
-    }
-#else
-    wchar_t resolvePath[_MAX_PATH];
-    if (::_wfullpath(resolvePath, GetPathString(path), _MAX_PATH) != NULL) {
-        StringView newPath = StringView::createFromWString(resolvePath);
-        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(newPath);
-    }
-#endif
-    else {
-        m_databaseHolder = CommonCore::shared().getOrCreateDatabase(path);
-    }
+    m_databaseHolder = CommonCore::shared().getOrCreateDatabase(Path::normalize(path));
     m_innerDatabase = m_databaseHolder.get();
 }
 

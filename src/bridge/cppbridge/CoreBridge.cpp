@@ -25,12 +25,13 @@
 #include "CoreBridge.h"
 #include "CommonCore.hpp"
 #include "ObjectBridge.hpp"
+#include "Path.hpp"
 #include "ThreadedErrors.hpp"
 
 CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path)
 {
     WCDB::RecyclableDatabase database
-    = WCDB::CommonCore::shared().getOrCreateDatabase(path);
+    = WCDB::CommonCore::shared().getOrCreateDatabase(WCDB::Path::normalize(path));
     return WCDBCreateRecylableCPPObject(CPPDatabase, database);
 }
 

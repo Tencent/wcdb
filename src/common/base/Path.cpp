@@ -24,8 +24,18 @@
 
 #include "Path.hpp"
 #include "Assertion.hpp"
+#include "CommonCore.hpp"
+#include "CrossPlatform.h"
+#include "FileManager.hpp"
 
-// TODO std::filesystem is supported since C++17 and Clang with Xcode 11
+#include <errno.h>
+#include <stdlib.h>
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <conio.h>
+#include <direct.h>
+#endif
 
 namespace WCDB {
 
@@ -72,29 +82,80 @@ StringView getDirectory(const UnsafeStringView &path)
 {
     const char *str = path.data();
     WCTAssert(str != nullptr);
-    for (int i = (int) path.length() - 2; i >= 0; i--) {
-        if (str[i] == kPathSeparator) {
+    bool foundName = false;
+    for (int i = (int) path.length() - 1; i >= 0; i--) {
+        if (str[i] != kPathSeparator) {
+            // Deal with the case /A/B//
+            foundName = true;
+        } else if (foundName) {
             return StringView(str, i + 1);
         }
     }
     return StringView();
 }
 
-StringView normalize(const UnsafeStringView &path)
+UnsafeStringView normalize(const UnsafeStringView &path)
 {
-    std::string normalized = path.data();
-    std::size_t found;
-#if defined _WIN32
-    const char *doublePathSeparator = "\\\\";
-    const char *singlePathSeparator = "\\";
-#else
-    const char *doublePathSeparator = "//";
-    const char *singlePathSeparator = "/";
-#endif
-    while ((found = normalized.find(doublePathSeparator)) != std::string::npos) {
-        normalized.replace(found, 2, singlePathSeparator);
+    if (path.equal(":memory:")) {
+        return path;
     }
-    return StringView(std::move(normalized));
+    std::string normalized;
+#ifndef _WIN32
+    const char *resolvePath = realpath(path.data(), nullptr);
+    if (resolvePath == nullptr && errno == ENOENT) {
+        CommonCore::shared().setThreadedErrorPath(path);
+        if (FileManager::createDirectoryWithIntermediateDirectories(getDirectory(path))
+            && FileManager::createFile(path)) {
+            resolvePath = realpath(path.data(), nullptr);
+            if (resolvePath == NULL) {
+                Error error;
+                error.level = Error::Level::Warning;
+                error.setSystemCode(errno, Error::Code::IOError);
+                error.infos.insert_or_assign(ErrorStringKeyPath, path);
+                Notifier::shared().notify(error);
+            }
+            FileManager::removeItem(path);
+        }
+        CommonCore::shared().setThreadedErrorPath(nullptr);
+    }
+    if (resolvePath != nullptr) {
+        UnsafeStringView newPath = UnsafeStringView(resolvePath);
+#ifdef __APPLE__
+        /*
+         /var is the symlink to /private/var.
+         In most cases, realpath will return the path with the /var prefix,
+         while in a small number of cases it will return the path with the /private/var prefix.
+         In order to avoid the inconsistency of the path of the same file, remove the /private prefix of path here
+         */
+        if (newPath.hasPrefix("/private")) {
+            newPath = UnsafeStringView(resolvePath + 8);
+        }
+#endif
+        normalized = newPath;
+        free((void *) resolvePath);
+    }
+#else
+    wchar_t resolvePath[_MAX_PATH];
+    if (::_wfullpath(resolvePath, GetPathString(path), _MAX_PATH) != NULL) {
+        normalized = StringView::createFromWString(resolvePath);
+    }
+#endif
+    if (normalized.length() > 0) {
+        std::size_t found;
+#if defined _WIN32
+        const char *doublePathSeparator = "\\\\";
+        const char *singlePathSeparator = "\\";
+#else
+        const char *doublePathSeparator = "//";
+        const char *singlePathSeparator = "/";
+#endif
+        while ((found = normalized.find(doublePathSeparator)) != std::string::npos) {
+            normalized.replace(found, 2, singlePathSeparator);
+        }
+        return StringView(std::move(normalized));
+    } else {
+        return path;
+    }
 }
 
 } //namespace Path

@@ -1071,12 +1071,16 @@ void InnerDatabase::addMigration(const UnsafeStringView &sourcePath,
                                  const UnsafeData &sourceCipher,
                                  const MigrationTableFilter &filter)
 {
-    StringView sourceDatabase;
-    if (sourcePath.compare(getPath()) != 0) {
-        sourceDatabase = sourcePath;
+    StringView sourceDatabase = Path::normalize(sourcePath);
+    if (sourceDatabase.compare(getPath()) != 0) {
+        close([=]() {
+            m_migration.addMigration(sourceDatabase, sourceCipher, filter);
+        });
+    } else {
+        close([=]() {
+            m_migration.addMigration(UnsafeStringView(), sourceCipher, filter);
+        });
     }
-    close(
-    [=]() { m_migration.addMigration(sourceDatabase, sourceCipher, filter); });
 }
 
 bool InnerDatabase::isMigrated() const

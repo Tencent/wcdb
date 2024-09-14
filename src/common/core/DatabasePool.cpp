@@ -37,21 +37,20 @@ DatabasePool::DatabasePool(DatabasePoolEvent *event) : m_event(event)
 
 RecyclableDatabase DatabasePool::getOrCreate(const UnsafeStringView &path)
 {
-    StringView normalized = Path::normalize(path);
     {
         SharedLockGuard lockGuard(m_lock);
-        auto iter = m_databases.find(normalized);
+        auto iter = m_databases.find(path);
         if (iter != m_databases.end()) {
             return get(iter);
         }
     }
     LockGuard lockGuard(m_lock);
-    auto iter = m_databases.find(normalized);
+    auto iter = m_databases.find(path);
     if (iter != m_databases.end()) {
         return get(iter);
     }
-    ReferencedDatabase referencedDatabase(std::make_shared<InnerDatabase>(normalized));
-    auto result = m_databases.emplace(normalized, std::move(referencedDatabase));
+    ReferencedDatabase referencedDatabase(std::make_shared<InnerDatabase>(path));
+    auto result = m_databases.emplace(path, std::move(referencedDatabase));
     WCTAssert(result.second);
     m_event->databaseDidCreate(result.first->second.database.get());
     return get(result.first);
@@ -59,9 +58,8 @@ RecyclableDatabase DatabasePool::getOrCreate(const UnsafeStringView &path)
 
 Tag DatabasePool::getTag(const UnsafeStringView &path)
 {
-    StringView normalized = Path::normalize(path);
     SharedLockGuard lockGuard(m_lock);
-    auto iter = m_databases.find(normalized);
+    auto iter = m_databases.find(path);
     if (iter != m_databases.end()) {
         return get(iter).get()->getTag();
     } else {

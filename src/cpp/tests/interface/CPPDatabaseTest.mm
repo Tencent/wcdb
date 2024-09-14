@@ -208,15 +208,6 @@
     TestCaseAssertTrue([self.fileManager fileExistsAtPath:[self lastMaterialPath]]);
 }
 
-- (void)test_backup_other_db
-{
-    WCDB::Database db("/Volumes/diskOfQiuwenchen/下载/wcdb-test/sqlite3.db ");
-    db.enableAutoBackup(true);
-    TestCaseAssertTrue(db.execute(WCDB::StatementPragma().pragma(WCDB::Pragma().encoding()).to("UTF-8")));
-    TestCaseAssertTrue(db.insertOrReplaceRows({ "abc", 1, 2 }, { WCDB::Column("Name"), WCDB::Column("Version"), WCDB::Column("CompatibleVersion") }, "Module"));
-    sleep(12);
-}
-
 - (void)test_retrive
 {
     [self insertPresetObjects];

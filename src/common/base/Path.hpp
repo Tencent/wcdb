@@ -37,7 +37,7 @@ StringView addComponent(const UnsafeStringView &base, const UnsafeStringView &co
 StringView getFileName(const UnsafeStringView &base);
 StringView getDirectory(const UnsafeStringView &base);
 
-StringView normalize(const UnsafeStringView &path);
+UnsafeStringView normalize(const UnsafeStringView &path);
 
 } //namespace Path
 
