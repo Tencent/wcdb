@@ -164,8 +164,7 @@ static constexpr const int BackupMaxIncrementalPageCount = 1000;
 static constexpr const int BackupMaxAllowIncrementalPageCount = 1000000;
 
 #pragma mark - Migrate
-static constexpr const double MigrateMaxExpectingDuration = 0.01;
-static constexpr const double MigrateMaxInitializeDuration = 0.005;
+static constexpr const int MigrationBatchCount = 100;
 
 #pragma mark - Compression
 static constexpr const int CompressionBatchCount = 10;
@@ -233,8 +232,5 @@ WCDBLiteralStringDefine(OperatorCheckIntegrity, "CheckIntegrity");
 
 #pragma mark - Tag
 static constexpr const int TagInvalidValue = 0;
-
-#pragma mark - Constraint
-static_assert(OperationQueueTimeIntervalForMigration > MigrateMaxExpectingDuration, "");
 
 } // namespace WCDB

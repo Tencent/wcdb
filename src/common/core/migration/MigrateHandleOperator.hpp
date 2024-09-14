@@ -66,22 +66,6 @@ private:
     HandleStatement* m_migrateStatement;
     HandleStatement* m_removeMigratedStatement;
 
-#pragma mark - Sample
-protected:
-    void addSample(double timeIntervalWithinTransaction, double timeIntervalForWholeTransaction);
-    double calculateTimeIntervalWithinTransaction() const;
-
-private:
-    static constexpr const int numberOfSamples = 10;
-    struct Sample {
-        Sample();
-        double timeIntervalWithinTransaction;
-        double timeIntervalWholeTransaction;
-    };
-    typedef struct Sample Sample;
-    std::array<Sample, numberOfSamples> m_samples; // FILO
-    int m_samplePointing;
-
 #pragma mark - Info Initializer
 protected:
     bool attachSourceDatabase(const MigrationUserInfo& userInfo) override final;

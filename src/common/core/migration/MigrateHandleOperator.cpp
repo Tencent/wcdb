@@ -35,7 +35,6 @@ MigrateHandleOperator::MigrateHandleOperator(InnerHandle* handle)
 , m_migratingInfo(nullptr)
 , m_migrateStatement(handle->getStatement(DecoratorMigratingHandleStatement))
 , m_removeMigratedStatement(handle->getStatement(DecoratorMigratingHandleStatement))
-, m_samplePointing(0)
 {
 }
 
@@ -177,25 +176,22 @@ Optional<bool> MigrateHandleOperator::migrateRows(const MigrationInfo* info)
         return NullOpt;
     }
 
-    double timeIntervalWithinTransaction = calculateTimeIntervalWithinTransaction();
-    SteadyClock beforeTransaction = SteadyClock::now();
     Optional<bool> migrated;
-    if (getHandle()->runTransaction(
-        [&migrated, &beforeTransaction, &timeIntervalWithinTransaction, this](InnerHandle*) -> bool {
-            double cost = 0;
+    if (getHandle()->runTransaction([&migrated, this](InnerHandle* handle) -> bool {
+            int migratedCount = 0;
             do {
                 migrated = migrateRow();
-                cost = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
-            } while (migrated.succeed() && !migrated.value()
-                     && cost < timeIntervalWithinTransaction);
-            timeIntervalWithinTransaction = cost;
+                migratedCount++;
+                if (handle->checkHasBusyRetry()) {
+                    handle->notifyError(
+                    Error::Code::Notice, "", "Interrupt compression due to busy");
+                    break;
+                } else if (migratedCount > MigrationBatchCount) {
+                    break;
+                }
+            } while (migrated.succeed() && !migrated.value());
             return migrated.succeed();
         })) {
-        // update only if succeed
-        double timeIntervalWholeTranscation
-        = SteadyClock::timeIntervalSinceSteadyClockToNow(beforeTransaction);
-        addSample(timeIntervalWithinTransaction, timeIntervalWholeTranscation);
-
         WCTAssert(migrated.succeed());
         return migrated;
     }
@@ -225,49 +221,6 @@ void MigrateHandleOperator::finalizeMigrationStatement()
 {
     m_migrateStatement->finalize();
     m_removeMigratedStatement->finalize();
-}
-
-#pragma mark - Sample
-MigrateHandleOperator::Sample::Sample()
-: timeIntervalWithinTransaction(0), timeIntervalWholeTransaction(0)
-{
-}
-
-void MigrateHandleOperator::addSample(double timeIntervalWithinTransaction,
-                                      double timeIntervalForWholeTransaction)
-{
-    WCTAssert(timeIntervalWithinTransaction > 0);
-    WCTAssert(timeIntervalForWholeTransaction > 0);
-    WCTAssert(m_samplePointing < numberOfSamples);
-    WCTAssert(timeIntervalForWholeTransaction > timeIntervalWithinTransaction);
-
-    Sample& sample = m_samples[m_samplePointing];
-    sample.timeIntervalWithinTransaction = timeIntervalWithinTransaction;
-    sample.timeIntervalWholeTransaction = timeIntervalForWholeTransaction;
-    ++m_samplePointing;
-    if (m_samplePointing >= numberOfSamples) {
-        m_samplePointing = 0;
-    }
-}
-
-double MigrateHandleOperator::calculateTimeIntervalWithinTransaction() const
-{
-    double totalTimeIntervalWithinTransaction = 0;
-    double totalTimeIntervalWholeTransaction = 0;
-    for (const auto& sample : m_samples) {
-        if (sample.timeIntervalWithinTransaction > 0
-            && sample.timeIntervalWholeTransaction > 0) {
-            totalTimeIntervalWithinTransaction += sample.timeIntervalWithinTransaction;
-            totalTimeIntervalWholeTransaction += sample.timeIntervalWholeTransaction;
-        }
-    }
-    double timeIntervalWithinTransaction = MigrateMaxExpectingDuration * totalTimeIntervalWithinTransaction
-                                           / totalTimeIntervalWholeTransaction;
-    if (timeIntervalWithinTransaction > MigrateMaxExpectingDuration
-        || timeIntervalWithinTransaction <= 0 || std::isnan(timeIntervalWithinTransaction)) {
-        timeIntervalWithinTransaction = MigrateMaxInitializeDuration;
-    }
-    return timeIntervalWithinTransaction;
 }
 
 #pragma mark - Info Initializer
