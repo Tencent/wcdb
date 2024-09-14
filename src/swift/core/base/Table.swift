@@ -22,7 +22,7 @@ import Foundation
 import WCDB_Private
 
 /// Convenient table interface
-public final class Table<Object: Any> : @unchecked Sendable {
+public final class Table<Object: Any>: @unchecked Sendable {
     internal let database: Database
     public typealias Object = Object
 
