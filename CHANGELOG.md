@@ -1,3 +1,8 @@
+## v2.1.8
+
+* Increase migration speed
+* Fix compile error of SwiftPM in Xcode 16
+
 ## v2.1.7
 
 * WCDB C++ supports OpenHarmony OS
