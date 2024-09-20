@@ -87,7 +87,7 @@ WCDB summarizes common problems in practice to provide a more complete developme
 
 ## **Compatibility**
 
-WCDB has interfaces in three languages: C++, Java, Kotlin, Swift, and Objc. Interfaces in different languages share the same underlying logic. The code structure of WCDB is shown in the figure below:
+WCDB has interfaces in five languages: C++, Java, Kotlin, Swift, and Objc. Interfaces in different languages share the same underlying logic. The code structure of WCDB is shown in the figure below:
 
 <div align=center><img style="display:inline-block" src="https://raw.githubusercontent.com/wiki/Tencent/wcdb/assets/common/CodeStructure-English.png" width = 600/></div>
 
