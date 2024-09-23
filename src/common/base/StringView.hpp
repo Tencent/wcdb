@@ -111,6 +111,7 @@ public:
 protected:
     void ensureNewSpace(size_t newSize);
     void createNewSpace(size_t newSize);
+    void tryClearSpace();
     void clearSpace();
 
 private:

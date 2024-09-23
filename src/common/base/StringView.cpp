@@ -83,16 +83,12 @@ UnsafeStringView::UnsafeStringView(UnsafeStringView&& other)
 
 UnsafeStringView::~UnsafeStringView()
 {
-    if ((uint64_t) m_referenceCount <= ConstanceReference) {
-        return;
-    }
-    if (--(*m_referenceCount) == 0) {
-        clearSpace();
-    }
+    tryClearSpace();
 };
 
 UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
 {
+    tryClearSpace();
     m_data = other.m_data;
     m_length = other.m_length;
     m_referenceCount = other.m_referenceCount;
@@ -104,6 +100,7 @@ UnsafeStringView& UnsafeStringView::operator=(const UnsafeStringView& other)
 
 UnsafeStringView& UnsafeStringView::operator=(UnsafeStringView&& other)
 {
+    tryClearSpace();
     m_data = other.m_data;
     m_length = other.m_length;
     m_referenceCount = other.m_referenceCount;
@@ -419,11 +416,23 @@ void UnsafeStringView::createNewSpace(size_t newSize)
     }
 }
 
+void UnsafeStringView::tryClearSpace()
+{
+    if ((uint64_t) m_referenceCount <= ConstanceReference) {
+        return;
+    }
+    if (--(*m_referenceCount) == 0) {
+        clearSpace();
+    }
+}
+
 void UnsafeStringView::clearSpace()
 {
     m_referenceCount->~atomic<int>();
     free(m_referenceCount);
     m_referenceCount = nullptr;
+    m_data = "";
+    m_length = 0;
 }
 
 #ifdef __ANDROID__

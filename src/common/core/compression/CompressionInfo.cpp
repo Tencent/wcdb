@@ -44,8 +44,7 @@ CompressionColumnInfo::CompressionColumnInfo(const Column &column, CompressionTy
 {
     std::ostringstream stringStream;
     stringStream << CompressionColumnTypePrefix << column.syntax().name;
-    m_typeColumn = Column(StringView::createConstant(
-    stringStream.str().data(), stringStream.str().length()));
+    m_typeColumn = Column(stringStream.str());
 }
 
 CompressionColumnInfo::CompressionColumnInfo(const Column &column, const Column &matchColumn)
@@ -59,8 +58,7 @@ CompressionColumnInfo::CompressionColumnInfo(const Column &column, const Column 
 {
     std::ostringstream stringStream;
     stringStream << CompressionColumnTypePrefix << column.syntax().name;
-    m_typeColumn = Column(StringView::createConstant(
-    stringStream.str().data(), stringStream.str().length()));
+    m_typeColumn = Column(stringStream.str());
 }
 
 CompressionColumnInfo::CompressionColumnInfo(const CompressionColumnInfo &other)
