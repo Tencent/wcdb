@@ -27,6 +27,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileTool {
     public static void createFile(String path) throws IOException {
@@ -39,6 +41,17 @@ public class FileTool {
             assertTrue(parentFile.mkdirs());
         }
         assertTrue(file.createNewFile());
+    }
+
+    public static String getRealPath(String path) {
+        try {
+            Path pathObj = Paths.get(path);
+            Path realPath = pathObj.toRealPath();
+            return realPath.toString();
+        } catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+            return null;
+        }
     }
 
     public static boolean fileExist(String path) {

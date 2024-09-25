@@ -126,8 +126,7 @@ public class FileTest extends DatabaseTestCase {
         String newPath = currentDirectory + "//directory//database";
         Database newDatabase = new Database(newPath);
         assertTrue(newDatabase.canOpen());
-        String normalizationPath = currentDirectory + File.separator + "directory" + File.separator + "database";
-        assertEquals(newDatabase.getPath(), normalizationPath);
+        assertEquals(newDatabase.getPath(), FileTool.getRealPath(newPath));
     }
 
 }

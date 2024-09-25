@@ -34,6 +34,7 @@ import com.tencent.wcdb.winq.Pragma;
 import com.tencent.wcdb.winq.StatementCreateIndex;
 import com.tencent.wcdb.winq.StatementPragma;
 import com.tencent.wcdb.winq.StatementSelect;
+import com.tencent.wcdbtest.base.FileTool;
 import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 import com.tencent.wcdbtest.base.DBTestObject;
@@ -231,7 +232,7 @@ public class TraceTest extends TableTestCase {
             @Override
             public void onTrace(@NotNull WCDBException exception) {
                 if(exception.level == WCDBException.Level.Error &&
-                        exception.path().equals(path) &&
+                        exception.path().equals(FileTool.getRealPath(path)) &&
                         exception.tag() == database.getTag() &&
                         exception.code == WCDBException.Code.Error &&
                         exception.sql().equals("SELECT 1 FROM dummy") &&
@@ -258,7 +259,7 @@ public class TraceTest extends TableTestCase {
             @Override
             public void onTrace(@NotNull WCDBException exception) {
                 if(exception.level == WCDBException.Level.Error &&
-                        exception.path().equals(path) &&
+                        exception.path().equals(FileTool.getRealPath(path)) &&
                         exception.tag() == database.getTag() &&
                         exception.code == WCDBException.Code.Error &&
                         exception.sql().equals("SELECT 1 FROM dummy") &&

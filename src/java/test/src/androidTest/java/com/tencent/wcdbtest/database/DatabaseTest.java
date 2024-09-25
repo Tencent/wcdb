@@ -54,7 +54,8 @@ public class DatabaseTest extends TableTestCase {
 
     @Test
     public void testPath() {
-        assertEquals(database.getPath(), path);
+        assertTrue(database.canOpen());
+        assertEquals(database.getPath(), FileTool.getRealPath(path));
     }
 
     @Test
@@ -220,7 +221,7 @@ public class DatabaseTest extends TableTestCase {
     @Test
     public void testOpenFail() {
         File folder = new File(currentDirectory);
-        assertTrue(folder.mkdirs());
+        assertTrue(folder.exists() || folder.mkdirs());
         Database newDatabase = new Database(currentDirectory);
         assertFalse(newDatabase.canOpen());
     }
