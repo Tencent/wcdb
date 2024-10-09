@@ -287,6 +287,7 @@ public:
 #pragma mark - Extra
 public:
     void tryPreloadAllPages();
+    void setFileThunkSize(int size);
 };
 
 } //namespace WCDB

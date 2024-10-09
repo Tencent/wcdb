@@ -140,6 +140,12 @@ public:
      */
     void tryPreloadAllPages();
 
+    /**
+     @brief The wrapper of `SQLITE_FCNTL_CHUNK_SIZE`
+     The db files will be extended and truncated in chunks of a size specified by the user.
+     */
+    void setFileThunkSize(size_t size);
+
 #pragma mark - Multi Statement
 public:
     /**

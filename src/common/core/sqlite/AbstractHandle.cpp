@@ -1007,4 +1007,15 @@ void AbstractHandle::tryPreloadAllPages()
     sqlite3_preload_pages_to_cache(m_handle);
 }
 
+void AbstractHandle::setFileThunkSize(int size)
+{
+    WCTAssert(isOpened());
+    if (size < SQLITE_DEFAULT_PAGE_SIZE) {
+        return;
+    }
+    size = size / SQLITE_DEFAULT_PAGE_SIZE * SQLITE_DEFAULT_PAGE_SIZE;
+    sqlite3_file_control(
+    m_handle, Syntax::mainSchema.data(), SQLITE_FCNTL_CHUNK_SIZE, &size);
+}
+
 } //namespace WCDB
