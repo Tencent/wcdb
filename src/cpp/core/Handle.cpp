@@ -183,10 +183,10 @@ void Handle::tryPreloadAllPages()
     handle->tryPreloadAllPages();
 }
 
-void Handle::setFileThunkSize(size_t size)
+void Handle::setFileChunkSize(size_t size)
 {
     GetInnerHandleOrReturn;
-    handle->setFileThunkSize((int) size);
+    handle->setFileChunkSize((int) size);
 }
 
 } //namespace WCDB

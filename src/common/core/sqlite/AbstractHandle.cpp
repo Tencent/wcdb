@@ -1007,7 +1007,7 @@ void AbstractHandle::tryPreloadAllPages()
     sqlite3_preload_pages_to_cache(m_handle);
 }
 
-void AbstractHandle::setFileThunkSize(int size)
+void AbstractHandle::setFileChunkSize(int size)
 {
     WCTAssert(isOpened());
     if (size < SQLITE_DEFAULT_PAGE_SIZE) {
