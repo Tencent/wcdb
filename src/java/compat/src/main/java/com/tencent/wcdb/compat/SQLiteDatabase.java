@@ -830,8 +830,10 @@ public final class SQLiteDatabase extends SQLiteClosable {
                 (!TextUtils.isEmpty(whereClause) ? " WHERE " + whereClause : "");
         try (Handle handle = mDB.getHandle(true)) {
             PreparedStatement stmt = handle.preparedWithMainStatement(sql);
-            for (int i = 0; i < whereArgs.length; ++i) {
-                stmt.bindText(whereArgs[i], i + 1);
+            if (whereArgs != null) {
+                for (int i = 0; i < whereArgs.length; ++i) {
+                    stmt.bindText(whereArgs[i], i + 1);
+                }
             }
             do {
                 stmt.step();
