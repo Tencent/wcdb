@@ -629,10 +629,11 @@ public final class SQLiteDatabase extends SQLiteClosable {
      */
     public Cursor rawQuery(String sql, Object[] selectionArgs,
                            CancellationSignal cancellationSignal) {
+        PreparedStatement stmt = null;
         try (Handle handle = mDB.getHandle(false)) {
             DatabaseUtils.bindCancellationSignal(handle, cancellationSignal);
 
-            PreparedStatement stmt = handle.preparedWithMainStatement(sql);
+            stmt = handle.preparedWithMainStatement(sql);
             if (selectionArgs != null) {
                 int nArgs = selectionArgs.length;
                 for (int i = 0; i < nArgs; ++i) {
@@ -646,10 +647,13 @@ public final class SQLiteDatabase extends SQLiteClosable {
             }
 
             List<Value[]> result = stmt.getMultiRows();
-            stmt.finalizeStatement();
             return new ValueCursor(result, columnNames);
         } catch (WCDBInterruptException e) {
             throw (OperationCanceledException) (new OperationCanceledException().initCause(e));
+        } finally {
+            if (stmt != null) {
+                stmt.finalizeStatement();
+            }
         }
     }
 
@@ -799,16 +803,20 @@ public final class SQLiteDatabase extends SQLiteClosable {
             case CONFLICT_REPLACE: insert.orReplace(); break;
         }
         insert.columns(columns).valuesWithBindParameters(bindArgs.length);
+        PreparedStatement stmt = null;
         try (Handle handle = mDB.getHandle(true)) {
-            PreparedStatement stmt = handle.preparedWithMainStatement(insert);
+            stmt = handle.preparedWithMainStatement(insert);
             for (int i = 0; i < bindArgs.length; ++i) {
                 stmt.bindValue(new Value(bindArgs[i]), i + 1);
             }
             do {
                 stmt.step();
             } while (!stmt.isDone());
-            stmt.finalizeStatement();
             return handle.getLastInsertedRowId();
+        } finally {
+            if (stmt != null) {
+                stmt.finalizeStatement();
+            }
         }
     }
 
@@ -828,8 +836,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
     public int delete(String table, String whereClause, String[] whereArgs) {
         String sql = "DELETE FROM " + table +
                 (!TextUtils.isEmpty(whereClause) ? " WHERE " + whereClause : "");
+        PreparedStatement stmt = null;
         try (Handle handle = mDB.getHandle(true)) {
-            PreparedStatement stmt = handle.preparedWithMainStatement(sql);
+            stmt = handle.preparedWithMainStatement(sql);
             if (whereArgs != null) {
                 for (int i = 0; i < whereArgs.length; ++i) {
                     stmt.bindText(whereArgs[i], i + 1);
@@ -838,8 +847,11 @@ public final class SQLiteDatabase extends SQLiteClosable {
             do {
                 stmt.step();
             } while (!stmt.isDone());
-            stmt.finalizeStatement();
             return handle.getChanges();
+        } finally {
+            if (stmt != null) {
+                stmt.finalizeStatement();
+            }
         }
     }
 
@@ -902,16 +914,20 @@ public final class SQLiteDatabase extends SQLiteClosable {
             sql.append(" WHERE ");
             sql.append(whereClause);
         }
+        PreparedStatement stmt = null;
         try (Handle handle = mDB.getHandle(true)) {
-            PreparedStatement stmt = handle.preparedWithMainStatement(sql.toString());
+            stmt = handle.preparedWithMainStatement(sql.toString());
             for (i = 0; i < bindArgsSize; ++i) {
                 stmt.bindValue(new Value(bindArgs[i]), i + 1);
             }
             do {
                 stmt.step();
             } while (!stmt.isDone());
-            stmt.finalizeStatement();
             return handle.getChanges();
+        } finally {
+            if (stmt != null) {
+                stmt.finalizeStatement();
+            }
         }
     }
 
