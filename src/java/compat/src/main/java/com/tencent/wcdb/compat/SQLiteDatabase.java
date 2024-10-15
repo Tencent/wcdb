@@ -321,7 +321,9 @@ public final class SQLiteDatabase extends SQLiteClosable {
         mTransactionStack.set(parent);
 
         if (parent != null) {
-            parent.childFailed = true;
+            if(!successful){
+                parent.childFailed = true;
+            }
         } else if (successful) {
             mDB.commitTransaction();
         } else {
