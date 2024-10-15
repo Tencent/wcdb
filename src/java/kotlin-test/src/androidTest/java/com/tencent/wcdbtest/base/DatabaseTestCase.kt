@@ -71,7 +71,7 @@ open class DatabaseTestCase : BaseTestCase() {
             trace.boolValue = false
             val expectedSQLs = mutableListOf(*sqls)
             val thread = Thread.currentThread()
-            database.traceSQL {_, _, _, sql, _ ->
+            database.traceSQL { _, _, _, sql, _ ->
                 if (Thread.currentThread().id != thread.id) {
                     return@traceSQL
                 }
@@ -111,6 +111,7 @@ open class DatabaseTestCase : BaseTestCase() {
                     Assert.assertEquals(expectedSQLs[0], sql)
                 }
             }
+
             Expect.FirstFewSQLs -> {
                 if (expectedSQLs.size > 0 && expectedSQLs[0] == sql) {
                     expectedSQLs.removeAt(0)
@@ -118,6 +119,7 @@ open class DatabaseTestCase : BaseTestCase() {
                     Assert.assertEquals(expectedSQLs[0], sql)
                 }
             }
+
             Expect.SomeSQLs -> {
                 var i = 0
                 while (i < expectedSQLs.size) {

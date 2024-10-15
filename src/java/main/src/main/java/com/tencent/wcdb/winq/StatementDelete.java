@@ -42,11 +42,11 @@ public class StatementDelete extends Statement {
 
     @NotNull
     public StatementDelete with(CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -55,11 +55,11 @@ public class StatementDelete extends Statement {
 
     @NotNull
     public StatementDelete withRecursive(@Nullable CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -95,11 +95,11 @@ public class StatementDelete extends Statement {
 
     @NotNull
     public StatementDelete orderBy(@Nullable OrderingTerm... orders) {
-        if(orders == null || orders.length == 0) {
+        if (orders == null || orders.length == 0) {
             return this;
         }
         long[] cppOrders = new long[orders.length];
-        for(int i = 0; i < orders.length; i++) {
+        for (int i = 0; i < orders.length; i++) {
             cppOrders[i] = CppObject.get(orders[i]);
         }
         configOrders(cppObj, cppOrders);

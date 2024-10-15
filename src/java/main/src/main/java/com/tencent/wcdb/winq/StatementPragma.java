@@ -34,14 +34,14 @@ public class StatementPragma extends Statement {
         return CPPType.PragmaSTMT;
     }
 
-    public StatementPragma(){
+    public StatementPragma() {
         cppObj = createCppObj();
     }
 
     private static native long createCppObj();
 
     @NotNull
-    public StatementPragma pragma(@NotNull Pragma pragma){
+    public StatementPragma pragma(@NotNull Pragma pragma) {
         configPragma(cppObj, CppObject.get(pragma));
         return this;
     }
@@ -106,7 +106,7 @@ public class StatementPragma extends Statement {
 
     @NotNull
     public StatementPragma withValue(@Nullable String value) {
-        if(value != null){
+        if (value != null) {
             configWithValue(cppObj, CPPType.String, 0, 0, value);
         } else {
             configWithValue(cppObj, CPPType.Null, 0, 0, null);
@@ -160,7 +160,7 @@ public class StatementPragma extends Statement {
 
     @NotNull
     public StatementPragma toValue(@Nullable String value) {
-        if(value != null){
+        if (value != null) {
             configToValue(cppObj, CPPType.String, 0, 0, value);
         } else {
             configToValue(cppObj, CPPType.Null, 0, 0, null);

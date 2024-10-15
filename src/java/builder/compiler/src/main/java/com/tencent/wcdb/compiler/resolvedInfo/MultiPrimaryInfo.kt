@@ -31,22 +31,25 @@ data class MultiPrimaryInfo(
     var columns: MutableList<String> = mutableListOf()
 ) {
     companion object {
-        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): MultiPrimaryInfo?{
-            if(annotation == null) {
+        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): MultiPrimaryInfo? {
+            if (annotation == null) {
                 return null
             }
             assert(annotation.shortName.asString() == "MultiPrimary")
             val resolvedInfo = MultiPrimaryInfo()
-            for(argument in annotation.arguments) {
+            for (argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "columns" -> {
-                        if(!resolveValueToList(value, String::class, resolvedInfo.columns)) {
-                            logger.error("Unresolved columns $value " +
-                                    "with type ${value::class.qualifiedName} in MultiPrimary")
+                        if (!resolveValueToList(value, String::class, resolvedInfo.columns)) {
+                            logger.error(
+                                "Unresolved columns $value " +
+                                        "with type ${value::class.qualifiedName} in MultiPrimary"
+                            )
                             return null
                         }
                     }
+
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in MultiPrimary")
                         return null

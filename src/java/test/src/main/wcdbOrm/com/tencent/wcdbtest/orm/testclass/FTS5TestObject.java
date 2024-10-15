@@ -43,6 +43,7 @@ public class FTS5TestObject {
         this.id = 0;
         this.content = "";
     }
+
     public FTS5TestObject(int id, String content) {
         this.id = id;
         this.content = content;

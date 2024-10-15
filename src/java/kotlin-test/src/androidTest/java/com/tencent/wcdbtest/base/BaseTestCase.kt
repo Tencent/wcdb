@@ -33,6 +33,7 @@ import java.io.File
 
 open class BaseTestCase {
     var currentDirectory: String? = null
+
     @Before
     @Throws(WCDBException::class)
     open fun setup() {

@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Transaction {
     /**
      * Triggered when a new transaction is begun successfully.
+     *
      * @param handle current handle of database.
      * @return true to commit transaction.
      * @throws WCDBException if any error occurs.

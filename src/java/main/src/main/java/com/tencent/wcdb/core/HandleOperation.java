@@ -50,8 +50,9 @@ public abstract class HandleOperation extends CppObject {
 
     /**
      * Execute inserting with one row of values.
-     * @param row One row of value.
-     * @param columns Corresponding column of values.
+     *
+     * @param row       One row of value.
+     * @param columns   Corresponding column of values.
      * @param tableName The table to insert value.
      * @throws WCDBException if any error occurs.
      */
@@ -64,8 +65,9 @@ public abstract class HandleOperation extends CppObject {
      * It will run embedded transaction while rows.size()>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction,
      * otherwise it will be executed within the existing transaction.
-     * @param rows Multi rows of value.
-     * @param columns Corresponding column of values.
+     *
+     * @param rows      Multi rows of value.
+     * @param columns   Corresponding column of values.
      * @param tableName The table to insert value.
      * @throws WCDBException if any error occurs.
      */
@@ -76,8 +78,9 @@ public abstract class HandleOperation extends CppObject {
     /**
      * Execute inserting with one row of values.
      * It will replace the original row while they have same primary key or row id.
-     * @param row One row of value.
-     * @param columns Corresponding column of values.
+     *
+     * @param row       One row of value.
+     * @param columns   Corresponding column of values.
      * @param tableName The table to insert value.
      * @throws WCDBException if any error occurs.
      */
@@ -91,8 +94,9 @@ public abstract class HandleOperation extends CppObject {
      * It will run embedded transaction while rows.size()>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction,
      * otherwise it will be executed within the existing transaction.
-     * @param rows Multi rows of value.
-     * @param columns Corresponding column of values.
+     *
+     * @param rows      Multi rows of value.
+     * @param columns   Corresponding column of values.
      * @param tableName The table to insert value.
      * @throws WCDBException if any error occurs.
      */
@@ -103,8 +107,9 @@ public abstract class HandleOperation extends CppObject {
     /**
      * Execute inserting with one row of values.
      * It will ignore the row while there already exists the same primary key or row id in current table.
-     * @param row One row of value.
-     * @param columns Corresponding column of values.
+     *
+     * @param row       One row of value.
+     * @param columns   Corresponding column of values.
      * @param tableName The table to insert value.
      * @throws WCDBException if any error occurs.
      */
@@ -118,8 +123,9 @@ public abstract class HandleOperation extends CppObject {
      * It will run embedded transaction while rows.size()>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction,
      * otherwise it will be executed within the existing transaction.
-     * @param rows Multi rows of value.
-     * @param columns Corresponding column of values.
+     *
+     * @param rows      Multi rows of value.
+     * @param columns   Corresponding column of values.
      * @param tableName The table to insert value.
      * @throws WCDBException if any error occurs.
      */
@@ -129,14 +135,14 @@ public abstract class HandleOperation extends CppObject {
 
     private void insertRows(final Collection<Value[]> rows, Column[] columns, String tableName, ConflictAction action) throws WCDBException {
         final StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
-        if(action == ConflictAction.Replace) {
+        if (action == ConflictAction.Replace) {
             insert.orReplace();
         } else if (action == ConflictAction.Ignore) {
             insert.orIgnore();
         }
         Handle handle = getHandle(true);
         try {
-            if(rows.size() > 1) {
+            if (rows.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
@@ -148,7 +154,7 @@ public abstract class HandleOperation extends CppObject {
                 insertRows(rows, insert, handle);
             }
         } finally {
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -156,7 +162,7 @@ public abstract class HandleOperation extends CppObject {
 
     private void insertRows(Collection<Value[]> rows, StatementInsert insert, Handle handle) throws WCDBException {
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(insert);
-        for(Value[] row : rows) {
+        for (Value[] row : rows) {
             preparedStatement.reset();
             preparedStatement.bindRow(row);
             preparedStatement.step();
@@ -261,21 +267,21 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void updateValue(@Nullable Value value, @NotNull Column column, @NotNull String tableName) throws WCDBException {
-        if(value == null) {
+        if (value == null) {
             value = new Value();
         }
         updateRow(new Value[]{value}, new Column[]{column}, tableName);
     }
 
     public void updateValue(@Nullable Value value, @NotNull Column column, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
-        if(value == null) {
+        if (value == null) {
             value = new Value();
         }
         updateRow(new Value[]{value}, new Column[]{column}, tableName, condition);
     }
 
     public void updateValue(@Nullable Value value, @NotNull Column column, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, int limit) throws WCDBException {
-        if(value == null) {
+        if (value == null) {
             value = new Value();
         }
         updateRow(new Value[]{value}, new Column[]{column}, tableName, condition, order, limit);
@@ -286,7 +292,7 @@ public abstract class HandleOperation extends CppObject {
     }
 
     public void updateValue(@Nullable Value value, @NotNull Column column, @NotNull String tableName, @Nullable OrderingTerm order, int limit) throws WCDBException {
-        if(value == null) {
+        if (value == null) {
             value = new Value();
         }
         updateRow(new Value[]{value}, new Column[]{column}, tableName, order, limit);
@@ -334,10 +340,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement.bindRow(row);
             preparedStatement.step();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -378,7 +384,7 @@ public abstract class HandleOperation extends CppObject {
         try {
             handle.execute(delete);
         } finally {
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -772,14 +778,14 @@ public abstract class HandleOperation extends CppObject {
         try {
             preparedStatement = handle.preparedWithMainStatement(statement);
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getValue(0);
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -794,14 +800,14 @@ public abstract class HandleOperation extends CppObject {
         try {
             preparedStatement = handle.preparedWithMainStatement(sql);
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getValue(0);
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -816,14 +822,14 @@ public abstract class HandleOperation extends CppObject {
         try {
             preparedStatement = handle.preparedWithMainStatement(statement);
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -838,14 +844,14 @@ public abstract class HandleOperation extends CppObject {
         try {
             preparedStatement = handle.preparedWithMainStatement(sql);
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -861,10 +867,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -880,10 +886,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnInt();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -899,10 +905,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnLong();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -918,10 +924,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnFloat();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -937,10 +943,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnDouble();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -956,10 +962,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnString();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -975,10 +981,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnBLOB();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -994,10 +1000,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(sql);
             ret = preparedStatement.getOneColumn();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -1013,10 +1019,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -1032,10 +1038,10 @@ public abstract class HandleOperation extends CppObject {
             preparedStatement = handle.preparedWithMainStatement(sql);
             ret = preparedStatement.getMultiRows();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
-            if(autoInvalidateHandle()) {
+            if (autoInvalidateHandle()) {
                 handle.invalidate();
             }
         }
@@ -1044,16 +1050,17 @@ public abstract class HandleOperation extends CppObject {
 
     /**
      * Execute a statement directly.
+     *
      * @param statement The statement to execute.
      * @throws WCDBException if any error occurs.
      */
     public void execute(@NotNull Statement statement) throws WCDBException {
         Handle handle = getHandle(statement.isWriteStatement());
         WCDBException exception = null;
-        if(!Handle.execute(handle.getCppHandle(), CppObject.get(statement))) {
+        if (!Handle.execute(handle.getCppHandle(), CppObject.get(statement))) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
         if (exception != null) {
@@ -1064,16 +1071,17 @@ public abstract class HandleOperation extends CppObject {
     /**
      * Execute a sql string directly.
      * Note that you should no execute sql string on a migrating or compressing table.
+     *
      * @param sql The sql string to execute.
      * @throws WCDBException if any error occurs.
      */
     public void execute(@NotNull String sql) throws WCDBException {
         Handle handle = getHandle(false);
         WCDBException exception = null;
-        if(!Handle.executeSQL(handle.getCppHandle(), sql)) {
+        if (!Handle.executeSQL(handle.getCppHandle(), sql)) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
         if (exception != null) {
@@ -1083,10 +1091,11 @@ public abstract class HandleOperation extends CppObject {
 
     /**
      * Check whether the current database has begun a transaction in the current thread with {@code sqlite3_get_autocommit}.
+     *
      * @return True if current database has begun a transaction in the current thread.
      * @throws WCDBException if any error occurs.
      */
-    public boolean isInTransaction() throws WCDBException{
+    public boolean isInTransaction() throws WCDBException {
         Handle handle = getHandle(false);
         return Handle.isInTransaction(handle.getCppHandle());
     }
@@ -1095,18 +1104,19 @@ public abstract class HandleOperation extends CppObject {
      * Begin a transaction.
      * Separate interface of {@link HandleOperation#runTransaction(Transaction)}
      * You should call {@link HandleOperation#beginTransaction()}, {@link HandleOperation#commitTransaction()}, {@link HandleOperation#rollbackTransaction()} and all other operations in same thread.
+     *
      * @throws WCDBException if any error occurs.
      */
     public void beginTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
-        if(!Handle.beginTransaction(handle.getCppHandle())) {
+        if (!Handle.beginTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
-        if(exception != null) {
+        if (exception != null) {
             throw exception;
         }
     }
@@ -1115,18 +1125,19 @@ public abstract class HandleOperation extends CppObject {
      * Commit current transaction.
      * Separate interface of {@link HandleOperation#runTransaction(Transaction)}
      * You should call {@link HandleOperation#beginTransaction()}, {@link HandleOperation#commitTransaction()}, {@link HandleOperation#rollbackTransaction()} and all other operations in same thread.
+     *
      * @throws WCDBException if any error occurs.
      */
     public void commitTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
-        if(!Handle.commitTransaction(handle.getCppHandle())) {
+        if (!Handle.commitTransaction(handle.getCppHandle())) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
-        if(exception != null) {
+        if (exception != null) {
             throw exception;
         }
     }
@@ -1135,31 +1146,33 @@ public abstract class HandleOperation extends CppObject {
      * Rollback current transaction.
      * Separate interface of {@link HandleOperation#runTransaction(Transaction)}
      * You should call {@link HandleOperation#beginTransaction()}, {@link HandleOperation#commitTransaction()}, {@link HandleOperation#rollbackTransaction()} and all other operations in same thread.
+     *
      * @throws WCDBException if any error occurs.
      */
     public void rollbackTransaction() throws WCDBException {
         Handle handle = getHandle(true);
         Handle.rollbackTransaction(handle.getCppHandle());
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
     }
 
     /**
      * Run a transaction in a closure. Transaction supports nesting.
+     *
      * @param transaction The operation inside transaction.
      * @throws WCDBException if any error occurs.
      */
     public void runTransaction(@NotNull Transaction transaction) throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
-        if(!handle.runTransaction(handle.getCppHandle(), transaction)) {
+        if (!handle.runTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
-        if(exception != null) {
+        if (exception != null) {
             throw exception;
         }
     }
@@ -1191,19 +1204,20 @@ public abstract class HandleOperation extends CppObject {
      *         });
      *     </code>
      * </pre>
+     *
      * @param transaction The operation inside transaction.
      * @throws WCDBException if any error occurs.
      */
     public void runPausableTransaction(@NotNull PausableTransaction transaction) throws WCDBException {
         Handle handle = getHandle(true);
         WCDBException exception = null;
-        if(!handle.runPausableTransaction(handle.getCppHandle(), transaction)) {
+        if (!handle.runPausableTransaction(handle.getCppHandle(), transaction)) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
-        if(exception != null) {
+        if (exception != null) {
             throw exception;
         }
     }

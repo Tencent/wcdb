@@ -24,12 +24,25 @@
 package com.tencent.wcdb.winq;
 
 public class ColumnDef {
-    public ColumnDef(String columnName) { throw new UnsatisfiedLinkError(); }
-    public ColumnDef(Column column) { throw new UnsatisfiedLinkError(); }
-    public ColumnDef(String columnName, ColumnType columnType) { throw new UnsatisfiedLinkError(); }
-    public ColumnDef(Column column, ColumnType columnType) { throw new UnsatisfiedLinkError(); }
+    public ColumnDef(String columnName) {
+        throw new UnsatisfiedLinkError();
+    }
 
-    public ColumnDef constraint(ColumnConstraint constraint) { throw new UnsatisfiedLinkError(); }
+    public ColumnDef(Column column) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnDef(String columnName, ColumnType columnType) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnDef(Column column, ColumnType columnType) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnDef constraint(ColumnConstraint constraint) {
+        throw new UnsatisfiedLinkError();
+    }
 //    public ColumnDef makePrimary() { throw new UnsatisfiedLinkError(); }
 //    public ColumnDef makePrimary(boolean isAutoIncrement) { throw new UnsatisfiedLinkError(); }
 //    public ColumnDef makeDefaultTo(boolean value) { throw new UnsatisfiedLinkError(); }

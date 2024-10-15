@@ -38,11 +38,11 @@ public class BuiltinTokenizer {
 
     /**
      * `OneOrBinary` is a WCDB implemented tokenizer for fts3/4.
-     *  Consecutive English letters will be recognized as an English token, and this token will be stemmed using the porter stemming algorithm.
-     *  Continuous Arabic numerals will be recognized as a single numeric token.
-     *  For other Unicode characters, each character will be recognized as one token.
-     *  For example, the sentence "The phone number of 张三 is 12345" will be split into these tokens: "the", "phone", "number", "of", "张", "三", "is", "12345".
-     *  You can use `com.tencent.wcdb.FTSModule` annotation to config fts tokenizer for a Java ORM class.
+     * Consecutive English letters will be recognized as an English token, and this token will be stemmed using the porter stemming algorithm.
+     * Continuous Arabic numerals will be recognized as a single numeric token.
+     * For other Unicode characters, each character will be recognized as one token.
+     * For example, the sentence "The phone number of 张三 is 12345" will be split into these tokens: "the", "phone", "number", "of", "张", "三", "is", "12345".
+     * You can use `com.tencent.wcdb.FTSModule` annotation to config fts tokenizer for a Java ORM class.
      */
     public final static String OneOrBinary = "wcdb_one_or_binary";
 
@@ -55,6 +55,7 @@ public class BuiltinTokenizer {
      * `Verbatim` is a WCDB implemented tokenizer for fts5.
      * It has the same tokenize rules as `OneOrBinary`.
      * You can use `com.tencent.wcdb.FTSModule annotation` to config fts tokenizer for a Java ORM class.
+     *
      * @see #OneOrBinary
      */
     public final static String Verbatim = "wcdb_verbatim";
@@ -65,7 +66,8 @@ public class BuiltinTokenizer {
      * You can use the simplified or full pinyin of Chinese characters to search for Chinese characters.
      * Before using this tokenizer, you need to use `Database.configPinyinDict()` to configure the mapping relationship between Chinese characters and their pinyin.
      * You can use `com.tencent.wcdb.FTSModule annotation` to config fts tokenizer for a Java ORM class.
-     * @see com.tencent.wcdb.core.Database#configPinyinDict(Map) 
+     *
+     * @see com.tencent.wcdb.core.Database#configPinyinDict(Map)
      */
     public final static String Pinyin = "wcdb_pinyin";
 
@@ -78,7 +80,8 @@ public class BuiltinTokenizer {
          * `SimplifyChinese` enables the tokenizer to convert each traditional Chinese character into a simplified Chinese character,
          * so that you can use Simplified Chinese characters to search Traditional Chinese characters.
          * Note that you need to use `Database.configTraditionalChineseDict()` to config the mapping relationship between traditional Chinese characters and simplified Chinese characters.
-         * @see com.tencent.wcdb.core.Database#configTraditionalChineseDict(Map) 
+         *
+         * @see com.tencent.wcdb.core.Database#configTraditionalChineseDict(Map)
          */
         public final static String SimplifyChinese = "chinese_traditional_to_simplified";
 

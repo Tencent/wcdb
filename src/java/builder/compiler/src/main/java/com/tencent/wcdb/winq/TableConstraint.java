@@ -24,16 +24,48 @@
 package com.tencent.wcdb.winq;
 
 public class TableConstraint extends Identifier {
-    public TableConstraint() { throw new UnsatisfiedLinkError(); }
-    public TableConstraint(String name){ throw new UnsatisfiedLinkError(); }
-    public TableConstraint primaryKey() { throw new UnsatisfiedLinkError(); }
-    public TableConstraint unique() { throw new UnsatisfiedLinkError(); }
-    public TableConstraint indexedBy(IndexedColumnConvertible indexedColumn) { throw new UnsatisfiedLinkError(); }
-    public TableConstraint indexedBy(IndexedColumnConvertible... indexedColumns) { throw new UnsatisfiedLinkError(); }
-    public TableConstraint indexedBy(String indexedColumn) { throw new UnsatisfiedLinkError(); }
-    public TableConstraint indexedBy(String... indexedColumns) { throw new UnsatisfiedLinkError(); }
-    public TableConstraint onConflict(ConflictAction action) { throw new UnsatisfiedLinkError(); }
-//    public TableConstraint check(Expression expression) { throw new UnsatisfiedLinkError(); }
-    public TableConstraint foreignKey(ForeignKey foreignKey, String... columns) { throw new UnsatisfiedLinkError(); }
-    public TableConstraint foreignKey(ForeignKey foreignKey, Column... columns) { throw new UnsatisfiedLinkError(); }
+    public TableConstraint() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint(String name) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint primaryKey() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint unique() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint indexedBy(IndexedColumnConvertible indexedColumn) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint indexedBy(IndexedColumnConvertible... indexedColumns) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint indexedBy(String indexedColumn) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint indexedBy(String... indexedColumns) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint onConflict(ConflictAction action) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    //    public TableConstraint check(Expression expression) { throw new UnsatisfiedLinkError(); }
+    public TableConstraint foreignKey(ForeignKey foreignKey, String... columns) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public TableConstraint foreignKey(ForeignKey foreignKey, Column... columns) {
+        throw new UnsatisfiedLinkError();
+    }
 }

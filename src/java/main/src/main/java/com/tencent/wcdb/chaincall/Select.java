@@ -47,6 +47,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param fields The column results to be selected.
      * @return this
      */
@@ -60,6 +61,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param condition condition.
      * @return this.
      */
@@ -71,6 +73,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param order order term.
      * @return this.
      */
@@ -82,6 +85,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param orders order list.
      * @return this.
      */
@@ -93,6 +97,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit count.
      * @return this.
      */
@@ -104,6 +109,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit expression.
      * @return this.
      */
@@ -115,6 +121,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset number.
      * @return this.
      */
@@ -126,6 +133,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset expression.
      * @return this.
      */
@@ -137,6 +145,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param tableName The name of the table to query data from.
      * @return this.
      */
@@ -148,6 +157,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * Get first selected object.
+     *
      * @return a selected object.
      * @throws WCDBException if any error occurs.
      */
@@ -158,6 +168,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * Get first selected object.
+     *
      * @param cls A derived class of java orm class.
      * @return The selected derived class object.
      * @throws WCDBException if any error occurs.
@@ -169,11 +180,11 @@ public class Select<T> extends ChainCall<StatementSelect> {
         try {
             preparedStatement = prepareStatement();
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneObject(fields, cls);
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             invalidateHandle();
@@ -183,6 +194,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * Get all selected objects.
+     *
      * @return A list of objects.
      * @throws WCDBException if any error occurs.
      */
@@ -193,6 +205,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
 
     /**
      * Get all selected objects.
+     *
      * @param cls A derived class of java orm class.
      * @return All selected derived class object.
      * @throws WCDBException if any error occurs.
@@ -205,7 +218,7 @@ public class Select<T> extends ChainCall<StatementSelect> {
             preparedStatement = prepareStatement();
             ret = preparedStatement.getAllObjects(fields, cls);
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             invalidateHandle();

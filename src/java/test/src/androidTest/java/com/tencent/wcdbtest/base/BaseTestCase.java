@@ -37,6 +37,7 @@ import java.io.File;
 
 public class BaseTestCase {
     public String currentDirectory;
+
     @BeforeClass
     public static void globalSetUp() {
         Database.globalTracePerformance(null);
@@ -44,7 +45,7 @@ public class BaseTestCase {
         Database.globalTraceException(new Database.ExceptionTracer() {
             @Override
             public void onTrace(@NotNull WCDBException exception) {
-                if(exception.level.ordinal() >= WCDBException.Level.Error.ordinal()) {
+                if (exception.level.ordinal() >= WCDBException.Level.Error.ordinal()) {
                     logError(exception.toString());
                 } else {
                     logInfo(exception.toString());
@@ -62,7 +63,7 @@ public class BaseTestCase {
 
     public static void logInfo(String msg, Object... args) {
         String log = msg;
-        if(args != null && args.length > 0) {
+        if (args != null && args.length > 0) {
             log = String.format(msg, args);
         }
         System.out.println(log);
@@ -70,7 +71,7 @@ public class BaseTestCase {
 
     public static void logError(String msg, Object... args) {
         String log = msg;
-        if(args != null && args.length > 0) {
+        if (args != null && args.length > 0) {
             log = String.format(msg, args);
         }
         System.err.println(log);

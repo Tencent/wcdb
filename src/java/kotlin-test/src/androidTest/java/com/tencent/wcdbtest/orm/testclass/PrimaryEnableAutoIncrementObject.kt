@@ -22,6 +22,7 @@
  */
 
 package com.tencent.wcdbtest.orm.testclass
+
 import com.tencent.wcdb.WCDBField
 import com.tencent.wcdb.WCDBTableCoding
 

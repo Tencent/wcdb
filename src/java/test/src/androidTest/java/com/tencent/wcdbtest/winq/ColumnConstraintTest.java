@@ -26,6 +26,7 @@ package com.tencent.wcdbtest.winq;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -51,7 +52,7 @@ public class ColumnConstraintTest {
         winqEqual(new ColumnConstraint().defaultTo(1), "DEFAULT 1");
         winqEqual(new ColumnConstraint().defaultTo(false), "DEFAULT FALSE");
         winqEqual(new ColumnConstraint().defaultTo("abc"), "DEFAULT 'abc'");
-        winqEqual(new ColumnConstraint().defaultTo((ExpressionConvertible)null), "DEFAULT NULL");
+        winqEqual(new ColumnConstraint().defaultTo((ExpressionConvertible) null), "DEFAULT NULL");
         winqEqual(new ColumnConstraint().collate("BINARY"), "COLLATE BINARY");
     }
 }

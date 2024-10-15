@@ -42,11 +42,11 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate with(@Nullable CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -55,11 +55,11 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate withRecursive(@Nullable CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -114,15 +114,16 @@ public class StatementUpdate extends Statement {
         configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
+
     private static native void configConflictAction(long self, int action);
 
     @NotNull
     public StatementUpdate setColumnsToBindParameters(@NotNull Column... columns) {
-        if(columns.length == 0) {
+        if (columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumnsToBindParameters(cppObj, CPPType.Column, cppObjs, null);
@@ -131,7 +132,7 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate setColumnsToBindParameters(@NotNull String... columnNames) {
-        if(columnNames.length == 0) {
+        if (columnNames.length == 0) {
             return this;
         }
         configColumnsToBindParameters(cppObj, CPPType.String, null, columnNames);
@@ -142,12 +143,12 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate setColumnsToValues(@NotNull Column[] columns, @NotNull Object[] values) {
-        if(columns.length == 0 || values.length == 0) {
+        if (columns.length == 0 || values.length == 0) {
             return this;
         }
 
         long[] cppColumns = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppColumns[i] = CppObject.get(columns[i]);
         }
 
@@ -161,7 +162,7 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate setColumnsToValues(@NotNull String[] columnNames, @NotNull Object[] values) {
-        if(columnNames.length == 0 || values.length == 0) {
+        if (columnNames.length == 0 || values.length == 0) {
             return this;
         }
 
@@ -174,21 +175,21 @@ public class StatementUpdate extends Statement {
     }
 
     private static native void configColumnsToValues(long self,
-                                              int columnType,
-                                              long[] columns,
-                                              String[] columnNames,
-                                              int[] valueTypes,
-                                              long[] longValues,
-                                              double[] doubleValues,
-                                              String[] stringValues);
+                                                     int columnType,
+                                                     long[] columns,
+                                                     String[] columnNames,
+                                                     int[] valueTypes,
+                                                     long[] longValues,
+                                                     double[] doubleValues,
+                                                     String[] stringValues);
 
     @NotNull
     public StatementUpdate set(@NotNull Column... columns) {
-        if(columns.length == 0) {
+        if (columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column, cppObjs, null);
@@ -197,7 +198,7 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate set(@NotNull String... columnNames) {
-        if(columnNames.length == 0) {
+        if (columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);
@@ -250,7 +251,7 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate to(@Nullable String arg) {
-        if(arg != null) {
+        if (arg != null) {
             configToValue(cppObj, CPPType.String, 0, 0, arg);
         } else {
             configToValue(cppObj, CPPType.Null, 0, 0, null);
@@ -276,11 +277,11 @@ public class StatementUpdate extends Statement {
 
     @NotNull
     public StatementUpdate orderBy(@Nullable OrderingTerm... orders) {
-        if(orders == null || orders.length == 0) {
+        if (orders == null || orders.length == 0) {
             return this;
         }
         long[] cppOrders = new long[orders.length];
-        for(int i = 0; i < orders.length; i++) {
+        for (int i = 0; i < orders.length; i++) {
             cppOrders[i] = CppObject.get(orders[i]);
         }
         configOrders(cppObj, cppOrders);

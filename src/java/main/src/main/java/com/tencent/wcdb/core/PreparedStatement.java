@@ -40,6 +40,7 @@ import java.util.List;
 public class PreparedStatement extends CppObject {
     boolean autoFinalize = false;
     int columnCount = -1;
+
     PreparedStatement(long cppObj) {
         this.cppObj = cppObj;
     }
@@ -51,7 +52,7 @@ public class PreparedStatement extends CppObject {
     private static native long getError(long self);
 
     void prepare(Statement statement) throws WCDBException {
-        if(!prepare(cppObj, CppObject.get(statement))) {
+        if (!prepare(cppObj, CppObject.get(statement))) {
             throw createException();
         }
     }
@@ -59,7 +60,7 @@ public class PreparedStatement extends CppObject {
     private static native boolean prepare(long self, long statement);
 
     void prepare(String sql) throws WCDBException {
-        if(!prepareSQL(cppObj, sql)) {
+        if (!prepareSQL(cppObj, sql)) {
             throw createException();
         }
     }
@@ -68,6 +69,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Check if there is a statement previously prepared.
+     *
      * @return True if there is a prepared statement.
      */
     public boolean checkPrepared() {
@@ -78,11 +80,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * It is a wrapper for {@code sqlite3_step}.
+     *
      * @throws WCDBException if any error occurs.
      */
     public void step() throws WCDBException {
-        if(!step(cppObj)) {
-            if(autoFinalize) {
+        if (!step(cppObj)) {
+            if (autoFinalize) {
                 finalizeStatement();
             }
             throw createException();
@@ -120,6 +123,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Check if you can continue stepping.
+     *
      * @return true if you can continue stepping.
      */
     public boolean isDone() {
@@ -262,7 +266,7 @@ public class PreparedStatement extends CppObject {
      * The wrapper of {@code sqlite3_bind_text}.
      */
     public void bindText(@Nullable String value, int index) {
-        if(value == null) {
+        if (value == null) {
             bindNull(index);
             return;
         }
@@ -275,7 +279,7 @@ public class PreparedStatement extends CppObject {
      * The wrapper of {@code sqlite3_bind_blob}.
      */
     public void bindBLOB(@Nullable byte[] value, int index) {
-        if(value == null) {
+        if (value == null) {
             bindNull(index);
             return;
         }
@@ -298,7 +302,7 @@ public class PreparedStatement extends CppObject {
      * It will call the appropriate routine according to the column type returned by {@code value.getType()}.
      */
     public void bindValue(@Nullable Value value, int index) {
-        if(value == null) {
+        if (value == null) {
             bindNull(index);
             return;
         }
@@ -323,11 +327,12 @@ public class PreparedStatement extends CppObject {
     /**
      * The wrapper of {@code sqlite3_bind_*} for binding an array of value.
      * It will call the appropriate routine according to the column type returned by {@code value.getType()}.
+     *
      * @param row An array of value.
      */
     public void bindRow(@NotNull Value[] row) {
         int index = 1;
-        for(Value value : row) {
+        for (Value value : row) {
             bindValue(value, index);
             index++;
         }
@@ -336,15 +341,16 @@ public class PreparedStatement extends CppObject {
     /**
      * The wrapper of {@code sqlite3_bind_*} for binding all fields of object.
      * It will call the appropriate routine according to the data type of field.
-     * @param obj the object to bind.
+     *
+     * @param obj     the object to bind.
      * @param binding ORM binding info of the object.
      */
     public <T> void bindObject(@Nullable T obj, @NotNull TableBinding<T> binding) {
-        if(obj == null){
+        if (obj == null) {
             return;
         }
         int index = 1;
-        for(Field<T> field : binding.allBindingFields()) {
+        for (Field<T> field : binding.allBindingFields()) {
             binding.bindField(obj, field, index, this);
             index++;
         }
@@ -353,11 +359,12 @@ public class PreparedStatement extends CppObject {
     /**
      * The wrapper of {@code sqlite3_bind_*} for binding field of object to index.
      * It will call the appropriate routine according to the data type of field.
-     * @param obj the object to bind.
+     *
+     * @param obj   the object to bind.
      * @param field the specific field to bind.
      */
     public <T> void bindObject(@Nullable T obj, @NotNull Field<T> field, int index) {
-        if(obj == null){
+        if (obj == null) {
             bindNull(index);
             return;
         }
@@ -369,17 +376,18 @@ public class PreparedStatement extends CppObject {
     /**
      * The wrapper of {@code sqlite3_bind_*} for binding the specified properties of object.
      * It will call the appropriate routine according to the data type of properties.
-     * @param obj the object to bind.
+     *
+     * @param obj    the object to bind.
      * @param fields the specific fields to bind.
      */
     public <T> void bindObject(@Nullable T obj, @NotNull Field<T>[] fields) {
-        if(obj == null || fields.length == 0){
+        if (obj == null || fields.length == 0) {
             return;
         }
         int index = 1;
         TableBinding<T> binding = fields[0].getTableBinding();
         assert binding != null;
-        for(Field<T> field : fields) {
+        for (Field<T> field : fields) {
             binding.bindField(obj, field, index, this);
             index++;
         }
@@ -497,16 +505,17 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all values of current row.
+     *
      * @return An array of value.
      */
     @NotNull
     public Value[] getOneRow() {
         int count = getColumnCount();
-        if(count == 0) {
+        if (count == 0) {
             return new Value[]{};
         }
         Value[] row = new Value[count];
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             row[i] = getValue(i);
         }
         return row;
@@ -514,11 +523,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of Value.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<Value> getOneColumn() throws WCDBException{
+    public List<Value> getOneColumn() throws WCDBException {
         List<Value> column = new ArrayList<Value>();
         step();
         while (!isDone(cppObj)) {
@@ -530,11 +540,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of Integer.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<Integer> getOneColumnInt() throws WCDBException{
+    public List<Integer> getOneColumnInt() throws WCDBException {
         List<Integer> column = new ArrayList<Integer>();
         step();
         while (!isDone(cppObj)) {
@@ -546,11 +557,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of Long.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<Long> getOneColumnLong() throws WCDBException{
+    public List<Long> getOneColumnLong() throws WCDBException {
         List<Long> column = new ArrayList<Long>();
         step();
         while (!isDone(cppObj)) {
@@ -562,15 +574,16 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of Float.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<Float> getOneColumnFloat() throws WCDBException{
+    public List<Float> getOneColumnFloat() throws WCDBException {
         List<Float> column = new ArrayList<Float>();
         step();
         while (!isDone(cppObj)) {
-            column.add((float)getDouble(0));
+            column.add((float) getDouble(0));
             step();
         }
         return column;
@@ -578,11 +591,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of Double.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<Double> getOneColumnDouble() throws WCDBException{
+    public List<Double> getOneColumnDouble() throws WCDBException {
         List<Double> column = new ArrayList<Double>();
         step();
         while (!isDone(cppObj)) {
@@ -594,11 +608,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of String.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<String> getOneColumnString() throws WCDBException{
+    public List<String> getOneColumnString() throws WCDBException {
         List<String> column = new ArrayList<String>();
         step();
         while (!isDone(cppObj)) {
@@ -610,11 +625,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values of the column of index in the result.
+     *
      * @return An list of Data.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<byte[]> getOneColumnBLOB() throws WCDBException{
+    public List<byte[]> getOneColumnBLOB() throws WCDBException {
         List<byte[]> column = new ArrayList<byte[]>();
         step();
         while (!isDone(cppObj)) {
@@ -626,11 +642,12 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract all the values in the result.
+     *
      * @return A two-dimensional array of value.
      * @throws WCDBException if any error occurs.
      */
     @NotNull
-    public List<Value[]> getMultiRows() throws WCDBException{
+    public List<Value[]> getMultiRows() throws WCDBException {
         List<Value[]> rows = new ArrayList<Value[]>();
         step();
         while (!isDone(cppObj)) {
@@ -642,6 +659,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract the values of the current row and assign them into the specified fields of a new object.
+     *
      * @param fields the specified fields.
      * @return an object.
      */
@@ -652,8 +670,9 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract the values of the current row and assign them into the specified fields of a new object.
+     *
      * @param fields the specified fields.
-     * @param cls derived class of orm class.
+     * @param cls    derived class of orm class.
      * @return an object of derived classes of orm class.
      */
     @NotNull
@@ -669,6 +688,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract the values of all rows in the result and assign them into the specified fields of new objects.
+     *
      * @param fields the specified fields.
      * @return an list of objects.
      * @throws WCDBException if any error occurs.
@@ -680,8 +700,9 @@ public class PreparedStatement extends CppObject {
 
     /**
      * Extract the values of all rows in the result and assign them into the specified fields of new objects.
+     *
      * @param fields the specified fields.
-     * @param cls derived class of orm class.
+     * @param cls    derived class of orm class.
      * @return a list of objects of derived class of orm class.
      * @throws WCDBException if any error occurs.
      */
@@ -705,6 +726,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * The wrapper of {@code sqlite3_column_count}.
+     *
      * @return number of columns.
      */
     public int getColumnCount() {
@@ -718,6 +740,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * The wrapper of {@code sqlite3_column_name}.
+     *
      * @param index of column.
      * @return name of column.
      */
@@ -730,6 +753,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * The wrapper of {@code sqlite3_column_origin_name}.
+     *
      * @param index of column.
      * @return name of column.
      */
@@ -742,6 +766,7 @@ public class PreparedStatement extends CppObject {
 
     /**
      * The wrapper of {@code sqlite3_column_table_name}.
+     *
      * @param index of column.
      * @return table name.
      */

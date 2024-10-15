@@ -24,6 +24,7 @@
 package com.tencent.wcdbtest.database;
 
 import org.jetbrains.annotations.NotNull;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.tencent.wcdb.base.Value;
@@ -65,7 +66,7 @@ public class TraceTest extends TableTestCase {
             public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info) {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
-                if(sql.equals(statement.getDescription())) {
+                if (sql.equals(statement.getDescription())) {
                     tested.boolValue = true;
                 }
             }
@@ -84,11 +85,11 @@ public class TraceTest extends TableTestCase {
         Database.globalTraceSQL(new Database.SQLTracer() {
             @Override
             public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info) {
-                if(!database.getPath().equals(path)) {
+                if (!database.getPath().equals(path)) {
                     return;
                 }
                 assertEquals(tag, database.getTag());
-                if(sql.equals(statement.getDescription())) {
+                if (sql.equals(statement.getDescription())) {
                     tested.boolValue = true;
                 }
             }
@@ -104,7 +105,7 @@ public class TraceTest extends TableTestCase {
         createTable();
         database.tracePerformance(null);
         ArrayList<TestObject> objects = new ArrayList<>();
-        for(int i = 0; i < 1000; i++){
+        for (int i = 0; i < 1000; i++) {
             TestObject object = new TestObject();
             object.content = RandomTool.string(4096);
             objects.add(object);
@@ -116,7 +117,7 @@ public class TraceTest extends TableTestCase {
                 assertEquals(tag, database.getTag());
                 assertEquals(path, database.getPath());
                 assertNotNull(info);
-                if(sql.startsWith("COMMIT")) {
+                if (sql.startsWith("COMMIT")) {
                     assertTrue(info.costInNanoseconds > 0);
                     assertTrue(info.tablePageWriteCount > 0);
                     assertEquals(0, info.indexPageWriteCount);
@@ -125,7 +126,7 @@ public class TraceTest extends TableTestCase {
                     assertEquals(0, info.indexPageReadCount);
                     assertEquals(0, info.overflowPageReadCount);
                     testCount.intValue++;
-                } else if(sql.startsWith("CREATE INDEX")) {
+                } else if (sql.startsWith("CREATE INDEX")) {
                     assertTrue(info.costInNanoseconds > 0);
                     assertEquals(1, info.tablePageWriteCount);
                     assertTrue(info.indexPageWriteCount > 0);
@@ -134,17 +135,17 @@ public class TraceTest extends TableTestCase {
                     assertTrue(info.indexPageReadCount >= 0);
                     assertTrue(info.overflowPageReadCount > objects.size() / 2);
                     testCount.intValue++;
-                } else if(sql.startsWith("SELECT")) {
+                } else if (sql.startsWith("SELECT")) {
                     assertTrue(info.costInNanoseconds > 0);
                     assertEquals(0, info.tablePageWriteCount);
                     assertEquals(0, info.indexPageWriteCount);
                     assertEquals(0, info.overflowPageWriteCount);
                     testCount.intValue++;
-                    if(sql.endsWith("ORDER BY content DESC")){
+                    if (sql.endsWith("ORDER BY content DESC")) {
                         assertEquals(0, info.tablePageReadCount);
                         assertTrue(info.indexPageReadCount > 0);
                         assertEquals(info.overflowPageReadCount, objects.size());
-                    }else{
+                    } else {
                         assertTrue(info.tablePageReadCount > 0);
                         assertEquals(0, info.indexPageReadCount);
                         assertEquals(info.overflowPageReadCount, objects.size());
@@ -164,7 +165,7 @@ public class TraceTest extends TableTestCase {
     public void testGlobalTracePerformance() throws WCDBException {
         database.removeFiles();
         ArrayList<TestObject> objects = new ArrayList<>();
-        for(int i = 0; i < 1000; i++){
+        for (int i = 0; i < 1000; i++) {
             TestObject object = new TestObject();
             object.content = RandomTool.string(4096);
             objects.add(object);
@@ -175,11 +176,11 @@ public class TraceTest extends TableTestCase {
         Database.globalTracePerformance(new Database.PerformanceTracer() {
             @Override
             public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull Database.PerformanceInfo info) {
-                if(!database.getPath().equals(path)) {
+                if (!database.getPath().equals(path)) {
                     return;
                 }
                 assertEquals(tag, database.getTag());
-                if(sql.startsWith("COMMIT") && lastSQLIsInsert.boolValue) {
+                if (sql.startsWith("COMMIT") && lastSQLIsInsert.boolValue) {
                     assertTrue(info.costInNanoseconds > 0);
                     assertTrue(info.tablePageWriteCount > 0);
                     assertEquals(0, info.indexPageWriteCount);
@@ -188,7 +189,7 @@ public class TraceTest extends TableTestCase {
                     assertEquals(0, info.indexPageReadCount);
                     assertEquals(0, info.overflowPageReadCount);
                     testCount.intValue++;
-                } else if(sql.startsWith("CREATE INDEX")) {
+                } else if (sql.startsWith("CREATE INDEX")) {
                     assertTrue(info.costInNanoseconds > 0);
                     assertEquals(1, info.tablePageWriteCount);
                     assertTrue(info.indexPageWriteCount > 0);
@@ -197,17 +198,17 @@ public class TraceTest extends TableTestCase {
                     assertTrue(info.indexPageReadCount >= 0);
                     assertTrue(info.overflowPageReadCount > objects.size() / 2);
                     testCount.intValue++;
-                } else if(sql.startsWith("SELECT")) {
+                } else if (sql.startsWith("SELECT")) {
                     assertTrue(info.costInNanoseconds > 0);
                     assertEquals(0, info.tablePageWriteCount);
                     assertEquals(0, info.indexPageWriteCount);
                     assertEquals(0, info.overflowPageWriteCount);
                     testCount.intValue++;
-                    if(sql.endsWith("ORDER BY content DESC")){
+                    if (sql.endsWith("ORDER BY content DESC")) {
                         assertEquals(0, info.tablePageReadCount);
                         assertTrue(info.indexPageReadCount > 0);
                         assertEquals(info.overflowPageReadCount, objects.size());
-                    }else{
+                    } else {
                         assertTrue(info.tablePageReadCount > 0);
                         assertEquals(0, info.indexPageReadCount);
                         assertEquals(info.overflowPageReadCount, objects.size());
@@ -231,7 +232,7 @@ public class TraceTest extends TableTestCase {
         database.traceException(new Database.ExceptionTracer() {
             @Override
             public void onTrace(@NotNull WCDBException exception) {
-                if(exception.level == WCDBException.Level.Error &&
+                if (exception.level == WCDBException.Level.Error &&
                         exception.path().equals(FileTool.getRealPath(path)) &&
                         exception.tag() == database.getTag() &&
                         exception.code == WCDBException.Code.Error &&
@@ -258,7 +259,7 @@ public class TraceTest extends TableTestCase {
         Database.globalTraceException(new Database.ExceptionTracer() {
             @Override
             public void onTrace(@NotNull WCDBException exception) {
-                if(exception.level == WCDBException.Level.Error &&
+                if (exception.level == WCDBException.Level.Error &&
                         exception.path().equals(FileTool.getRealPath(path)) &&
                         exception.tag() == database.getTag() &&
                         exception.code == WCDBException.Code.Error &&

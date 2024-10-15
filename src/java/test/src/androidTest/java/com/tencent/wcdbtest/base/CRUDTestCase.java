@@ -61,7 +61,7 @@ public class CRUDTestCase extends TableTestCase {
 
     @After
     public void teardown() {
-        if(handle != null) {
+        if (handle != null) {
             handle.invalidate();
             handle = null;
         }

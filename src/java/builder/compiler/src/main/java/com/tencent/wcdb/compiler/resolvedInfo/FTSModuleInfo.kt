@@ -29,25 +29,25 @@ import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeParameter
 import com.tencent.wcdb.*
 
-data class FTSModuleInfo (
+data class FTSModuleInfo(
     var ftsVersion: String = "",
     var tokenizer: String = "",
     var tokenizerParameters: MutableList<String> = mutableListOf(),
     var externalTable: String = "",
 ) {
     companion object {
-        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): FTSModuleInfo?{
-            if(annotation == null) {
+        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): FTSModuleInfo? {
+            if (annotation == null) {
                 return null
             }
             assert(annotation.shortName.asString() == "FTSModule")
             val resolvedInfo = FTSModuleInfo()
-            for(argument in annotation.arguments) {
+            for (argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "version" -> {
                         when ((value as KSType).declaration.toString()) {
-                            FTSVersion.NONE.name-> resolvedInfo.ftsVersion = ""
+                            FTSVersion.NONE.name -> resolvedInfo.ftsVersion = ""
                             FTSVersion.FTS3.name -> resolvedInfo.ftsVersion = "fts3"
                             FTSVersion.FTS4.name -> resolvedInfo.ftsVersion = "fts4"
                             FTSVersion.FTS5.name -> resolvedInfo.ftsVersion = "fts5"
@@ -57,14 +57,23 @@ data class FTSModuleInfo (
                             }
                         }
                     }
+
                     "tokenizer" -> resolvedInfo.tokenizer = value as String
                     "tokenizerParameters" -> {
-                        if(!resolveValueToList(value, String::class, resolvedInfo.tokenizerParameters)) {
-                            logger.error("Unresolved tokenizerParameters $value " +
-                                    "with type ${value::class.qualifiedName} in FTSModule")
+                        if (!resolveValueToList(
+                                value,
+                                String::class,
+                                resolvedInfo.tokenizerParameters
+                            )
+                        ) {
+                            logger.error(
+                                "Unresolved tokenizerParameters $value " +
+                                        "with type ${value::class.qualifiedName} in FTSModule"
+                            )
                             return null
                         }
                     }
+
                     "externalTable" -> resolvedInfo.externalTable = value as String
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in FTSModule")
@@ -76,7 +85,7 @@ data class FTSModuleInfo (
         }
 
         fun resolve(ftsModule: FTSModule?): FTSModuleInfo? {
-            if(ftsModule == null){
+            if (ftsModule == null) {
                 return null
             }
             val resolvedInfo = FTSModuleInfo()

@@ -48,22 +48,28 @@ data class ColumnInfo(
     var indexIsUnique: Boolean = false,
 ) {
     companion object {
-        fun resolve(propertyDeclaration: KSPropertyDeclaration,
-                    fieldAnnotation: KSAnnotation,
-                    indexAnnotation: KSAnnotation?,
-                    defaultValueAnnotation: KSAnnotation?,
-                    logger: KSPLogger): ColumnInfo?{
+        fun resolve(
+            propertyDeclaration: KSPropertyDeclaration,
+            fieldAnnotation: KSAnnotation,
+            indexAnnotation: KSAnnotation?,
+            defaultValueAnnotation: KSAnnotation?,
+            logger: KSPLogger
+        ): ColumnInfo? {
             val resolvedInfo = ColumnInfo()
             resolvedInfo.propertyName = propertyDeclaration.simpleName.asString()
-            resolvedInfo.propertyType = propertyDeclaration.type.resolve().declaration.qualifiedName!!.asString()
-            resolvedInfo.nullable = propertyDeclaration.type.resolve().nullability == Nullability.NULLABLE
-            for(argument in fieldAnnotation.arguments) {
+            resolvedInfo.propertyType =
+                propertyDeclaration.type.resolve().declaration.qualifiedName!!.asString()
+            resolvedInfo.nullable =
+                propertyDeclaration.type.resolve().nullability == Nullability.NULLABLE
+            for (argument in fieldAnnotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "columnName" -> resolvedInfo.columnName = value as String
                     "isPrimary" -> resolvedInfo.isPrimary = value as Boolean
                     "isAutoIncrement" -> resolvedInfo.isAutoIncrement = value as Boolean
-                    "enableAutoIncrementForExistingTable" -> resolvedInfo.enableAutoIncrementForExistingTable = value as Boolean
+                    "enableAutoIncrementForExistingTable" -> resolvedInfo.enableAutoIncrementForExistingTable =
+                        value as Boolean
+
                     "isUnique" -> resolvedInfo.isUnique = value as Boolean
                     "isNotNull" -> resolvedInfo.isNotNull = value as Boolean
                     "isNotIndexed" -> resolvedInfo.isNotIndexed = value as Boolean
@@ -73,9 +79,9 @@ data class ColumnInfo(
                     }
                 }
             }
-            if(indexAnnotation != null) {
+            if (indexAnnotation != null) {
                 resolvedInfo.hasIndex = true
-                for(argument in indexAnnotation.arguments) {
+                for (argument in indexAnnotation.arguments) {
                     val value = argument.value ?: continue
                     when (argument.name?.asString()) {
                         "name" -> resolvedInfo.indexName = value as String
@@ -87,25 +93,32 @@ data class ColumnInfo(
                     }
                 }
             }
-            if(defaultValueAnnotation != null) {
-                resolvedInfo.defaultValue = DefaultValueInfo.resolve(defaultValueAnnotation, logger);
+            if (defaultValueAnnotation != null) {
+                resolvedInfo.defaultValue =
+                    DefaultValueInfo.resolve(defaultValueAnnotation, logger);
             }
 
             return resolvedInfo
         }
 
-        fun resolve(fieldElement: Element, fieldAnnotation: WCDBField, indexAnnotation: WCDBIndex?, defaultValue: WCDBDefault?): ColumnInfo {
+        fun resolve(
+            fieldElement: Element,
+            fieldAnnotation: WCDBField,
+            indexAnnotation: WCDBIndex?,
+            defaultValue: WCDBDefault?
+        ): ColumnInfo {
             val resolvedInfo = ColumnInfo()
             resolvedInfo.propertyName = fieldElement.toString()
             resolvedInfo.propertyType = fieldElement.asType().toString()
             resolvedInfo.columnName = fieldAnnotation.columnName
             resolvedInfo.isPrimary = fieldAnnotation.isPrimary
             resolvedInfo.isAutoIncrement = fieldAnnotation.isAutoIncrement
-            resolvedInfo.enableAutoIncrementForExistingTable = fieldAnnotation.enableAutoIncrementForExistingTable
+            resolvedInfo.enableAutoIncrementForExistingTable =
+                fieldAnnotation.enableAutoIncrementForExistingTable
             resolvedInfo.isUnique = fieldAnnotation.isUnique
             resolvedInfo.isNotNull = fieldAnnotation.isNotNull
             resolvedInfo.isNotIndexed = fieldAnnotation.isNotIndexed
-            if(indexAnnotation != null) {
+            if (indexAnnotation != null) {
                 resolvedInfo.hasIndex = true
                 resolvedInfo.indexName = indexAnnotation.name
                 resolvedInfo.indexIsUnique = indexAnnotation.isUnique

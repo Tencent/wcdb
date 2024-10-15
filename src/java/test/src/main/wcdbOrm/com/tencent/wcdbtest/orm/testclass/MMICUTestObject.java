@@ -32,18 +32,19 @@ import com.tencent.wcdb.fts.*;
         )
 )
 public class MMICUTestObject {
-        public MMICUTestObject() {
-                this.id = 0;
-                this.content = "";
-        }
-        public MMICUTestObject(int id, String content) {
-                this.id = id;
-                this.content = content;
-        }
+    public MMICUTestObject() {
+        this.id = 0;
+        this.content = "";
+    }
 
-        @WCDBField(isNotIndexed = true)
-        public int id;
-        @WCDBField
-        public
-        String content;
+    public MMICUTestObject(int id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
+    @WCDBField(isNotIndexed = true)
+    public int id;
+    @WCDBField
+    public
+    String content;
 }

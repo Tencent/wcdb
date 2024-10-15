@@ -33,11 +33,11 @@ import java.nio.file.Paths;
 public class FileTool {
     public static void createFile(String path) throws IOException {
         File file = new File(path);
-        if(file.exists()) {
+        if (file.exists()) {
             return;
         }
         File parentFile = file.getParentFile();
-        if(parentFile != null && !parentFile.exists()) {
+        if (parentFile != null && !parentFile.exists()) {
             assertTrue(parentFile.mkdirs());
         }
         assertTrue(file.createNewFile());
@@ -61,7 +61,7 @@ public class FileTool {
 
     public static long getFileSize(String path) {
         File file = new File(path);
-        if(file.exists()) {
+        if (file.exists()) {
             return file.length();
         } else {
             return 0;

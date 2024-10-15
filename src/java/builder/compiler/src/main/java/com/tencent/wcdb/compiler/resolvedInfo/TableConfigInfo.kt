@@ -37,54 +37,69 @@ data class TableConfigInfo(
 ) {
     companion object {
         fun resolve(annotation: KSAnnotation?, logger: KSPLogger): TableConfigInfo? {
-            if(annotation == null) {
+            if (annotation == null) {
                 return null
             }
             val resolvedAnnotation = TableConfigInfo()
-            for(argument in annotation.arguments) {
+            for (argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 val annotationList = mutableListOf<KSAnnotation>()
                 when (argument.name?.asString()) {
                     "multiIndexes" -> {
-                        if(!resolveValueToList(value, KSAnnotation::class, annotationList)) {
-                            logger.error("Unresolved multiIndexes $value " +
-                                    "with type ${value::class.qualifiedName} in WCDBTableCoding")
+                        if (!resolveValueToList(value, KSAnnotation::class, annotationList)) {
+                            logger.error(
+                                "Unresolved multiIndexes $value " +
+                                        "with type ${value::class.qualifiedName} in WCDBTableCoding"
+                            )
                             return null
                         }
-                        for(subAnnotation in annotationList) {
-                            val multiIndexes = MultiIndexesInfo.resolve(subAnnotation, logger) ?: return null
+                        for (subAnnotation in annotationList) {
+                            val multiIndexes =
+                                MultiIndexesInfo.resolve(subAnnotation, logger) ?: return null
                             resolvedAnnotation.multiIndexes.add(multiIndexes)
                         }
                     }
+
                     "multiPrimaries" -> {
-                        if(!resolveValueToList(value, KSAnnotation::class, annotationList)) {
-                            logger.error("Unresolved multiPrimaries $value " +
-                                    "with type ${value::class.qualifiedName} in WCDBTableCoding")
+                        if (!resolveValueToList(value, KSAnnotation::class, annotationList)) {
+                            logger.error(
+                                "Unresolved multiPrimaries $value " +
+                                        "with type ${value::class.qualifiedName} in WCDBTableCoding"
+                            )
                             return null
                         }
-                        for(subAnnotation in annotationList) {
-                            val multiPrimaries = MultiPrimaryInfo.resolve(subAnnotation, logger) ?: return null
+                        for (subAnnotation in annotationList) {
+                            val multiPrimaries =
+                                MultiPrimaryInfo.resolve(subAnnotation, logger) ?: return null
                             resolvedAnnotation.multiPrimaries.add(multiPrimaries)
                         }
                     }
+
                     "multiUnique" -> {
-                        if(!resolveValueToList(value, KSAnnotation::class, annotationList)) {
-                            logger.error("Unresolved multiUnique $value " +
-                                    "with type ${value::class.qualifiedName} in WCDBTableCoding")
+                        if (!resolveValueToList(value, KSAnnotation::class, annotationList)) {
+                            logger.error(
+                                "Unresolved multiUnique $value " +
+                                        "with type ${value::class.qualifiedName} in WCDBTableCoding"
+                            )
                             return null
                         }
-                        for(subAnnotation in annotationList) {
-                            val multiUnique = MultiUniqueInfo.resolve(subAnnotation, logger) ?: return null
+                        for (subAnnotation in annotationList) {
+                            val multiUnique =
+                                MultiUniqueInfo.resolve(subAnnotation, logger) ?: return null
                             resolvedAnnotation.multiUnique.add(multiUnique)
                         }
                     }
+
                     "isWithoutRowId" -> {
                         resolvedAnnotation.isWithoutRowId = value as Boolean
                     }
+
                     "ftsModule" -> {
                         val ftsModuleAnnotation = value as KSAnnotation
-                        resolvedAnnotation.ftsModule = FTSModuleInfo.resolve(ftsModuleAnnotation, logger)
+                        resolvedAnnotation.ftsModule =
+                            FTSModuleInfo.resolve(ftsModuleAnnotation, logger)
                     }
+
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in WCDBTableCoding")
                         return null
@@ -97,13 +112,13 @@ data class TableConfigInfo(
         fun resolve(tableCoding: WCDBTableCoding, ftsModule: FTSModule?): TableConfigInfo {
             val resolvedAnnotation = TableConfigInfo()
             resolvedAnnotation.isWithoutRowId = tableCoding.isWithoutRowId
-            for(multiIndexes in tableCoding.multiIndexes) {
+            for (multiIndexes in tableCoding.multiIndexes) {
                 resolvedAnnotation.multiIndexes.add(MultiIndexesInfo.resolve(multiIndexes))
             }
-            for(multiPrimary in tableCoding.multiPrimaries) {
+            for (multiPrimary in tableCoding.multiPrimaries) {
                 resolvedAnnotation.multiPrimaries.add(MultiPrimaryInfo.resolve(multiPrimary))
             }
-            for(multiUnique in tableCoding.multiUnique) {
+            for (multiUnique in tableCoding.multiUnique) {
                 resolvedAnnotation.multiUnique.add(MultiUniqueInfo.resolve(multiUnique))
             }
             resolvedAnnotation.ftsModule = FTSModuleInfo.resolve(ftsModule)

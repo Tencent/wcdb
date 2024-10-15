@@ -27,7 +27,7 @@ import com.tencent.wcdb.WCDBIndex
 import com.tencent.wcdb.WCDBTableCoding
 
 @WCDBTableCoding
-class IndexObject{
+class IndexObject {
     @WCDBField
     @WCDBIndex
     var index_: Int = 0

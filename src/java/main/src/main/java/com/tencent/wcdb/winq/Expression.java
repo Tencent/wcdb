@@ -27,13 +27,13 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Expression extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
+public class Expression extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible {
     @Override
     protected int getType() {
         return CPPType.Expression;
     }
 
-    Expression(){
+    Expression() {
     }
 
     public Expression(@Nullable LiteralValue value) {
@@ -62,7 +62,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
     private static native long createWithFunction(String func);
 
     @NotNull
-    public Expression schema(@Nullable  String schema) {
+    public Expression schema(@Nullable String schema) {
         schema(cppObj, CPPType.String, 0, schema);
         return this;
     }
@@ -143,9 +143,9 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     @NotNull
     public Expression argument(@Nullable String arg) {
-        if(arg != null) {
+        if (arg != null) {
             argument(cppObj, CPPType.String, 0, 0, arg);
-        }else{
+        } else {
             argument(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
@@ -185,7 +185,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     private static native long createWithNotExistStatement(long select);
 
-    
+
     @NotNull
     public static Expression cast(@NotNull String columnName) {
         Expression ret = new Expression();
@@ -226,7 +226,7 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     @NotNull
     public static Expression case_(@Nullable String columnName) {
-        if(columnName == null) {
+        if (columnName == null) {
             return case_();
         }
         Expression ret = new Expression();
@@ -288,9 +288,9 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     @NotNull
     public Expression when(@Nullable String arg) {
-        if(arg != null) {
+        if (arg != null) {
             setWithWhenExp(cppObj, CPPType.String, 0, 0, arg);
-        }else{
+        } else {
             setWithWhenExp(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
@@ -348,9 +348,9 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     @NotNull
     public Expression then(@Nullable String arg) {
-        if(arg != null) {
+        if (arg != null) {
             setWithThenExp(cppObj, CPPType.String, 0, 0, arg);
-        }else{
+        } else {
             setWithThenExp(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;
@@ -409,9 +409,9 @@ public class Expression extends ExpressionOperable implements IndexedColumnConve
 
     @NotNull
     public Expression else_(@Nullable String arg) {
-        if(arg != null) {
+        if (arg != null) {
             setWithElseExp(cppObj, CPPType.String, 0, 0, arg);
-        }else{
+        } else {
             setWithElseExp(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;

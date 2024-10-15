@@ -25,8 +25,11 @@
 package com.tencent.wcdbtest.winq;
 
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.tencent.wcdb.winq.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

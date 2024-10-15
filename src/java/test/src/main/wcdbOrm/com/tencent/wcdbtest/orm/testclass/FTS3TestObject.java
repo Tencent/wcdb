@@ -38,6 +38,7 @@ public class FTS3TestObject {
         this.id = 0;
         this.content = "";
     }
+
     public FTS3TestObject(int id, String content) {
         this.id = id;
         this.content = content;

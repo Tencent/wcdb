@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 public final class JavaFieldORMInfo {
-    public static final HashMap<String, JavaFieldORMInfo> allInfo = new HashMap<String, JavaFieldORMInfo>(){
+    public static final HashMap<String, JavaFieldORMInfo> allInfo = new HashMap<String, JavaFieldORMInfo>() {
         {
             put("boolean", new JavaFieldORMInfo("Integer", false, "bindBool", "preparedStatement.getBool"));
             put("java.lang.Boolean", new JavaFieldORMInfo("Integer", true, "bindBool", "preparedStatement.getBool"));
@@ -37,8 +37,8 @@ public final class JavaFieldORMInfo {
             put("java.lang.Short", new JavaFieldORMInfo("Integer", true, "bindInteger", "preparedStatement.getShort"));
             put("int", new JavaFieldORMInfo("Integer", false, "bindInteger", "preparedStatement.getInt"));
             put("java.lang.Integer", new JavaFieldORMInfo("Integer", true, "bindInteger", "preparedStatement.getInt"));
-            put("long", new JavaFieldORMInfo("Integer", false,  "bindInteger", "preparedStatement.getLong"));
-            put("java.lang.Long", new JavaFieldORMInfo("Integer", true,"bindInteger", "preparedStatement.getLong"));
+            put("long", new JavaFieldORMInfo("Integer", false, "bindInteger", "preparedStatement.getLong"));
+            put("java.lang.Long", new JavaFieldORMInfo("Integer", true, "bindInteger", "preparedStatement.getLong"));
             put("float", new JavaFieldORMInfo("Float", false, "bindDouble", "preparedStatement.getFloat"));
             put("java.lang.Float", new JavaFieldORMInfo("Float", true, "bindDouble", "preparedStatement.getFloat"));
             put("double", new JavaFieldORMInfo("Float", false, "bindDouble", "preparedStatement.getDouble"));
@@ -56,6 +56,7 @@ public final class JavaFieldORMInfo {
         this.fieldGetter = getter;
         this.fieldSetter = setter;
     }
+
     String columnType;
     boolean nullable;
     String fieldGetter;

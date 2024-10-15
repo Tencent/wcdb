@@ -50,7 +50,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateValueWhere() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 "UPDATE testTable SET id = ?1 WHERE content == 'newContent'"
         }, new TestOperation() {
@@ -66,7 +66,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateValueWhereOrderLimit() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1"
         }, new TestOperation() {
@@ -82,7 +82,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateValueWhereOrderLimitOffset() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1 OFFSET 1"
         }, new TestOperation() {
@@ -109,7 +109,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testDatabaseUpdateRowWhereOrderLimit() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1",
         }, new TestOperation() {
@@ -120,14 +120,14 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
-                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId + 1)).getLong() >= 1);
         assertTrue(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
                 database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
     public void testDatabaseUpdateRowWhereOrderLimitOffset() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1 OFFSET 1",
         }, new TestOperation() {
@@ -138,7 +138,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertTrue(database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
-                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+                database.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId + 1)).getLong() >= 1);
         assertTrue(database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
                 database.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
@@ -156,7 +156,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateValueWhere() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 "UPDATE testTable SET id = ?1 WHERE content == 'newContent'"
         }, new TestOperation() {
@@ -172,7 +172,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateValueWhereOrderLimit() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1"
         }, new TestOperation() {
@@ -188,7 +188,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateValueWhereOrderLimitOffset() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1 OFFSET 1"
         }, new TestOperation() {
@@ -215,7 +215,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testTableUpdateRowWhereOrderLimit() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1",
         }, new TestOperation() {
@@ -226,14 +226,14 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getLong() +
-                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId + 1)).getLong() >= 1);
         assertTrue(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getLong() +
                 table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
     public void testTableUpdateRowWhereOrderLimitOffset() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1 OFFSET 1",
         }, new TestOperation() {
@@ -244,7 +244,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertTrue(table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId)).getLong() +
-                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+                table.getValue(DBTestObject.content.count(), DBTestObject.id.eq(nextId + 1)).getLong() >= 1);
         assertTrue(table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent")).getLong() +
                 table.getValue(DBTestObject.id.count(), DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
@@ -262,7 +262,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateValueWhere() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id == 1",
                 "UPDATE testTable SET id = ?1 WHERE content == 'newContent'"
         }, new TestOperation() {
@@ -278,7 +278,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateValueWhereOrderLimit() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1"
         }, new TestOperation() {
@@ -294,7 +294,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateValueWhereOrderLimitOffset() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET content = ?1 WHERE id > 0 ORDER BY id ASC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1 ORDER BY content ASC LIMIT 1 OFFSET 1"
         }, new TestOperation() {
@@ -321,7 +321,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
 
     @Test
     public void testHandleUpdateRowWhereOrderLimit() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1",
         }, new TestOperation() {
@@ -332,14 +332,14 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
-                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId + 1)).getLong() >= 1);
         assertTrue(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
                 handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }
 
     @Test
     public void testHandleUpdateRowWhereOrderLimitOffset() throws WCDBException {
-        doTestSQLs(new String[] {
+        doTestSQLs(new String[]{
                 "UPDATE testTable SET id = ?1, content = ?2 WHERE id < 3 ORDER BY id DESC LIMIT 1 OFFSET 1",
                 "UPDATE testTable SET id = ?1, content = ?2 ORDER BY content DESC LIMIT 1 OFFSET 1",
         }, new TestOperation() {
@@ -350,7 +350,7 @@ public class ValueUpdateWithFieldTest extends ObjectCRUDTestCase {
             }
         });
         assertTrue(handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId)).getLong() +
-                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId+1)).getLong() >= 1);
+                handle.getValue(DBTestObject.content.count(), tableName, DBTestObject.id.eq(nextId + 1)).getLong() >= 1);
         assertTrue(handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent")).getLong() +
                 handle.getValue(DBTestObject.id.count(), tableName, DBTestObject.content.eq("newContent2")).getLong() >= 1);
     }

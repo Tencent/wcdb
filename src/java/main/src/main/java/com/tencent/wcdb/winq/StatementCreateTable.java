@@ -97,11 +97,11 @@ public class StatementCreateTable extends Statement {
 
     @NotNull
     public StatementCreateTable define(@NotNull ColumnDef... columns) {
-        if(columns.length == 0) {
+        if (columns.length == 0) {
             return this;
         }
         long[] cppColumns = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppColumns[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, cppColumns);
@@ -112,11 +112,11 @@ public class StatementCreateTable extends Statement {
 
     @NotNull
     public StatementCreateTable constraint(@Nullable TableConstraint... constraints) {
-        if(constraints == null || constraints.length == 0) {
+        if (constraints == null || constraints.length == 0) {
             return this;
         }
         long[] cppConstraints = new long[constraints.length];
-        for(int i = 0; i < constraints.length; i++) {
+        for (int i = 0; i < constraints.length; i++) {
             cppConstraints[i] = CppObject.get(constraints[i]);
         }
         configConstraints(cppObj, cppConstraints);

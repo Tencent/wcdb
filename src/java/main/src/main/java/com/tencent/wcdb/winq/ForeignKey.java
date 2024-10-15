@@ -62,11 +62,11 @@ public class ForeignKey extends Identifier {
 
     @NotNull
     public ForeignKey columns(@Nullable Column... columns) {
-        if(columns == null || columns.length == 0) {
+        if (columns == null || columns.length == 0) {
             return this;
         }
         long[] objects = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             objects[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column, objects, null);
@@ -75,7 +75,7 @@ public class ForeignKey extends Identifier {
 
     @NotNull
     public ForeignKey columns(@Nullable String... columns) {
-        if(columns == null || columns.length == 0) {
+        if (columns == null || columns.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columns);
@@ -110,7 +110,7 @@ public class ForeignKey extends Identifier {
 
     @NotNull
     public ForeignKey match(Match match) {
-        configMatch(cppObj,match.ordinal() + 1);
+        configMatch(cppObj, match.ordinal() + 1);
         return this;
     }
 

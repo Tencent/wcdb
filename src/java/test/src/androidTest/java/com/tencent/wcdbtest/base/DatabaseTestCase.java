@@ -44,6 +44,7 @@ public class DatabaseTestCase extends BaseTestCase {
     public enum Expect {
         AllSQLs, FirstFewSQLs, SomeSQLs
     }
+
     public String path;
     public String fileName;
     public Database database;
@@ -69,7 +70,7 @@ public class DatabaseTestCase extends BaseTestCase {
         void execute() throws WCDBException;
     }
 
-    public void doTestSQL(String sql, TestOperation operation){
+    public void doTestSQL(String sql, TestOperation operation) {
         doTestSQLs(new String[]{sql}, operation);
     }
 
@@ -84,17 +85,17 @@ public class DatabaseTestCase extends BaseTestCase {
             database.traceSQL(new Database.SQLTracer() {
                 @Override
                 public void onTrace(long tag, @NotNull String path, long handleId, @NotNull String sql, @NotNull String info) {
-                    if(Thread.currentThread().getId() != thread.getId()) {
+                    if (Thread.currentThread().getId() != thread.getId()) {
                         return;
                     }
-                    if(!trace.boolValue) {
+                    if (!trace.boolValue) {
                         return;
                     }
                     doTestSQLAsExpected(expectedSQLs, sql);
                 }
             });
-            if(expectMode != Expect.SomeSQLs) {
-                if( !database.canOpen()) {
+            if (expectMode != Expect.SomeSQLs) {
+                if (!database.canOpen()) {
                     Assert.fail();
                     break;
                 }
@@ -106,7 +107,7 @@ public class DatabaseTestCase extends BaseTestCase {
                 throw new RuntimeException(e);
             }
 
-            if(expectedSQLs.size() != 0) {
+            if (expectedSQLs.size() != 0) {
                 logError("Reminding: " + expectedSQLs);
                 Assert.fail();
                 break;
@@ -118,74 +119,68 @@ public class DatabaseTestCase extends BaseTestCase {
 
     private void doTestSQLAsExpected(List<String> expectedSQLs, String sql) {
         switch (expectMode) {
-            case AllSQLs:{
-                if(expectedSQLs.get(0).equals(sql)) {
+            case AllSQLs: {
+                if (expectedSQLs.get(0).equals(sql)) {
                     expectedSQLs.remove(0);
                 } else {
                     Assert.assertEquals(expectedSQLs.get(0), sql);
                 }
-            }break;
-            case FirstFewSQLs:{
+            }
+            break;
+            case FirstFewSQLs: {
 
-                if(expectedSQLs.size() > 0 && expectedSQLs.get(0).equals(sql)) {
+                if (expectedSQLs.size() > 0 && expectedSQLs.get(0).equals(sql)) {
                     expectedSQLs.remove(0);
-                } else if(expectedSQLs.size() != 0){
+                } else if (expectedSQLs.size() != 0) {
                     Assert.assertEquals(expectedSQLs.get(0), sql);
                 }
-            }break;
-            case SomeSQLs:{
-                for(int i = 0; i < expectedSQLs.size(); i++) {
-                    if(expectedSQLs.get(i).equals(sql)) {
+            }
+            break;
+            case SomeSQLs: {
+                for (int i = 0; i < expectedSQLs.size(); i++) {
+                    if (expectedSQLs.get(i).equals(sql)) {
                         expectedSQLs.remove(i);
                         break;
                     }
                 }
-            }break;
+            }
+            break;
         }
     }
 
-    public int headerSize()
-    {
+    public int headerSize() {
         return 100;
     }
 
-    public int pageSize()
-    {
+    public int pageSize() {
         return 4096;
     }
 
-    public int walHeaderSize()
-    {
+    public int walHeaderSize() {
         return 32;
     }
 
-    public int walFrameHeaderSize()
-    {
+    public int walFrameHeaderSize() {
         return 24;
     }
 
-    public int walFrameSize()
-    {
+    public int walFrameSize() {
         return walFrameHeaderSize() + pageSize();
     }
 
-    public String walPath()
-    {
+    public String walPath() {
         return path + "-wal";
     }
 
-    public String firstMaterialPath()
-    {
+    public String firstMaterialPath() {
         return path + "-first.material";
     }
 
-    public String lastMaterialPath()
-    {
+    public String lastMaterialPath() {
         return path + "-last.material";
     }
 
-    public String factoryPath()
-    {
+    public String factoryPath() {
         return path + ".factory";
     }
 

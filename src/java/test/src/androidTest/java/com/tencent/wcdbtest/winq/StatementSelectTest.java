@@ -24,7 +24,9 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -64,7 +66,7 @@ public class StatementSelectTest {
                 "SELECT column1 FROM table1 WHERE column1 > 1");
 
         winqEqual(new StatementSelect().select(column1).from(table1)
-                .orderBy(column1.order(Order.Asc), column2.order(Order.Desc)),
+                        .orderBy(column1.order(Order.Asc), column2.order(Order.Desc)),
                 "SELECT column1 FROM table1 ORDER BY column1 ASC, column2 DESC");
 
         winqEqual(new StatementSelect().select(column1).from(table1).limit(1),
@@ -87,7 +89,7 @@ public class StatementSelectTest {
                 "SELECT column1 FROM table1 GROUP BY column1, column2 HAVING column1 > 1");
 
         winqEqual(new StatementSelect().select(column1).from(
-                new StatementSelect().select(new Column[]{column1, column2}).from(table2)),
+                        new StatementSelect().select(new Column[]{column1, column2}).from(table2)),
                 "SELECT column1 FROM (SELECT column1, column2 FROM table2)");
 
         winqEqual(new StatementSelect().select(column1).from(table1).union().select(column2).from(table2),

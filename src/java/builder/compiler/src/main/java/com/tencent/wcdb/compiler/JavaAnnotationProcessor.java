@@ -126,7 +126,7 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                 WCDBTableCoding config = element.getAnnotation(WCDBTableCoding.class);
                 assert config != null;
                 FTSModule ftsModule = getFTSModule(element, config);
-                if(!checkFTSModule(element, ftsModule)){
+                if (!checkFTSModule(element, ftsModule)) {
                     return false;
                 }
                 tableConstraintInfo = TableConfigInfo.Companion.resolve(config, ftsModule);
@@ -134,12 +134,12 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
 
                 verboseLog("WCDB Processing: " + element);
 
-                for(Element enclosedElement : element.getEnclosedElements()) {
-                    if(enclosedElement.getKind() != ElementKind.FIELD) {
+                for (Element enclosedElement : element.getEnclosedElements()) {
+                    if (enclosedElement.getKind() != ElementKind.FIELD) {
                         continue;
                     }
                     WCDBField fieldAnnotation = enclosedElement.getAnnotation(WCDBField.class);
-                    if(fieldAnnotation == null) {
+                    if (fieldAnnotation == null) {
                         continue;
                     }
                     WCDBDefault defaultValueAnnotation = enclosedElement.getAnnotation(WCDBDefault.class);
@@ -153,11 +153,11 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                     allFieldInfo.add(ColumnInfo.Companion.resolve(enclosedElement, fieldAnnotation, indexAnnotation, defaultValueAnnotation));
                 }
 
-                if(!checkColumnInTableConstraint(element)) {
+                if (!checkColumnInTableConstraint(element)) {
                     return false;
                 }
 
-                if(allFieldInfo.size() > 0) {
+                if (allFieldInfo.size() > 0) {
                     createORMFile((TypeElement) element);
                 }
             }
@@ -173,24 +173,24 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
     }
 
     private void verboseLog(String content) {
-        if(verbose) {
+        if (verbose) {
             msg.printMessage(Diagnostic.Kind.NOTE, content);
         }
     }
 
     private boolean checkClassElement(Element element) {
-        if(element.getKind() != ElementKind.CLASS) {
+        if (element.getKind() != ElementKind.CLASS) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "@WCDBTableCoding is only valid for classes", element);
             return false;
         }
         Set<Modifier> modifiers = element.getModifiers();
-        if(modifiers.contains(Modifier.PRIVATE) || modifiers.contains(Modifier.PROTECTED)) {
+        if (modifiers.contains(Modifier.PRIVATE) || modifiers.contains(Modifier.PROTECTED)) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "The class with annotation @WCDBTableCoding can not be private or protected", element);
             return false;
         }
-        if(modifiers.contains(Modifier.ABSTRACT)) {
+        if (modifiers.contains(Modifier.ABSTRACT)) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "The class with annotation @WCDBTableCoding can not be abstract", element);
             return false;
@@ -214,18 +214,18 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
     }
 
     private boolean checkFTSModule(Element element, FTSModule ftsModule) {
-        if(ftsModule == null){
+        if (ftsModule == null) {
             return true;
         }
-        if(ftsModule.version() == FTSVersion.NONE) {
-            if(!ftsModule.tokenizer().isEmpty() || ftsModule.tokenizerParameters().length > 0) {
+        if (ftsModule.version() == FTSVersion.NONE) {
+            if (!ftsModule.tokenizer().isEmpty() || ftsModule.tokenizerParameters().length > 0) {
                 msg.printMessage(Diagnostic.Kind.ERROR,
                         "You need to config fts version in @FTSModule", element);
                 return false;
             }
             return true;
         }
-        if(ftsModule.tokenizer().isEmpty()) {
+        if (ftsModule.tokenizer().isEmpty()) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "You need to config a tokenizer in @FTSModule", element);
             return false;
@@ -234,29 +234,29 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
     }
 
     private boolean checkFieldElement(Element element, WCDBField fieldAnnotation, WCDBIndex indexAnnotation, WCDBDefault defaultValueAnnotation) {
-        if(element.getModifiers().contains(Modifier.PRIVATE) || element.getModifiers().contains(Modifier.PROTECTED)) {
+        if (element.getModifiers().contains(Modifier.PRIVATE) || element.getModifiers().contains(Modifier.PROTECTED)) {
             msg.printMessage(Diagnostic.Kind.ERROR,
                     "The field with annotation @WCDBField can not be private or protected", element);
             return false;
         }
         String type = element.asType().toString();
-        if(!JavaFieldORMInfo.allTypes.contains(type)) {
-            String info = "The type " + type + " of field " +  element.toString() +
+        if (!JavaFieldORMInfo.allTypes.contains(type)) {
+            String info = "The type " + type + " of field " + element.toString() +
                     " in " + element.getEnclosingElement().getSimpleName() + " is Unsupported!\n"
                     + "WCDB only supports Java basic types and byte[].";
             msg.printMessage(Diagnostic.Kind.ERROR, info, element);
             return false;
         }
-        if(fieldAnnotation.isPrimary()) {
+        if (fieldAnnotation.isPrimary()) {
             primaryKeyCount++;
-            if(primaryKeyCount > 1) {
+            if (primaryKeyCount > 1) {
                 String info = "@WCDBField can only configure one primary key in " + element.getEnclosingElement().getSimpleName()
                         + ". If multiple primary keys are required, configure multiPrimaries in @WCDBTableCoding. ";
                 msg.printMessage(Diagnostic.Kind.ERROR, info, element);
                 return false;
             }
-            if(fieldAnnotation.isAutoIncrement()) {
-                if(!JavaFieldORMInfo.allInfo.get(type).columnType.equals("Integer")) {
+            if (fieldAnnotation.isAutoIncrement()) {
+                if (!JavaFieldORMInfo.allInfo.get(type).columnType.equals("Integer")) {
                     String info = "Auto-increment field must be integer";
                     msg.printMessage(Diagnostic.Kind.ERROR, info, element);
                     return false;
@@ -299,7 +299,7 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
                 msg.printMessage(Diagnostic.Kind.ERROR, "Only one default value can be configured for a field", element);
                 return false;
             } else if (typeMissMatch) {
-                if (columnType.equals("BLOB") ) {
+                if (columnType.equals("BLOB")) {
                     msg.printMessage(Diagnostic.Kind.ERROR, "Assigning a default value to BLOB is unsupported", element);
                 } else {
                     msg.printMessage(Diagnostic.Kind.ERROR, "Default value should be a " + columnType, element);
@@ -317,32 +317,32 @@ public class JavaAnnotationProcessor extends AbstractProcessor {
             return true;
         }
         Set<String> allColumns = new HashSet<>();
-        for(ColumnInfo columnInfo : allFieldInfo) {
+        for (ColumnInfo columnInfo : allFieldInfo) {
             allColumns.add(columnInfo.getColumnName().isEmpty() ? columnInfo.getPropertyName() : columnInfo.getColumnName());
         }
 
-        for(MultiIndexesInfo multiIndexes : tableConstraintInfo.getMultiIndexes()) {
-            for(String column : multiIndexes.getColumns()) {
+        for (MultiIndexesInfo multiIndexes : tableConstraintInfo.getMultiIndexes()) {
+            for (String column : multiIndexes.getColumns()) {
                 if (!allColumns.contains(column)) {
-                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \""+ column + "\" in class orm config.", element);
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \"" + column + "\" in class orm config.", element);
                     return false;
                 }
             }
         }
 
-        for(MultiPrimaryInfo multiPrimary : tableConstraintInfo.getMultiPrimaries()) {
-            for(String column : multiPrimary.getColumns()) {
+        for (MultiPrimaryInfo multiPrimary : tableConstraintInfo.getMultiPrimaries()) {
+            for (String column : multiPrimary.getColumns()) {
                 if (!allColumns.contains(column)) {
-                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \""+ column + "\" in class orm config.", element);
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \"" + column + "\" in class orm config.", element);
                     return false;
                 }
             }
         }
 
-        for(MultiUniqueInfo multiUnique : tableConstraintInfo.getMultiUnique()) {
-            for(String column : multiUnique.getColumns()) {
+        for (MultiUniqueInfo multiUnique : tableConstraintInfo.getMultiUnique()) {
+            for (String column : multiUnique.getColumns()) {
                 if (!allColumns.contains(column)) {
-                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \""+ column + "\" in class orm config.", element);
+                    msg.printMessage(Diagnostic.Kind.ERROR, "Can't find column \"" + column + "\" in class orm config.", element);
                     return false;
                 }
             }

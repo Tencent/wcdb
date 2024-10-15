@@ -48,6 +48,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param table The name of the table to update content.
      * @return this.
      */
@@ -59,6 +60,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param fields The fields used to specify the columns where data is updated.
      * @return this.
      */
@@ -72,6 +74,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param object The object to be updated into table.
      * @return this.
      */
@@ -83,6 +86,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Value to be updated into table.
      * @return this.
      */
@@ -93,6 +97,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Byte value to be updated into table.
      * @return this.
      */
@@ -103,6 +108,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Short value to be updated into table.
      * @return this.
      */
@@ -113,6 +119,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Int value to be updated into table.
      * @return this.
      */
@@ -123,6 +130,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Long value to be updated into table.
      * @return this.
      */
@@ -133,6 +141,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value String value to be updated into table.
      * @return this.
      */
@@ -144,6 +153,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Byte[] value to be updated into table.
      * @return this.
      */
@@ -154,6 +164,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Float value to be updated into table.
      * @return this.
      */
@@ -164,6 +175,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param value Double value to be updated into table.
      * @return this.
      */
@@ -174,6 +186,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param row The row to be updated into table.
      * @return this.
      */
@@ -185,6 +198,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param condition condition.
      * @return this.
      */
@@ -196,6 +210,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param order order term.
      * @return this.
      */
@@ -207,6 +222,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param orders Order list.
      * @return this.
      */
@@ -218,6 +234,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit count.
      * @return this.
      */
@@ -229,6 +246,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit count.
      * @return this.
      */
@@ -240,6 +258,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit count.
      * @return this.
      */
@@ -251,6 +270,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit expression.
      * @return this.
      */
@@ -262,6 +282,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset number.
      * @return this.
      */
@@ -273,6 +294,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset number.
      * @return this.
      */
@@ -284,6 +306,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset number.
      * @return this.
      */
@@ -295,6 +318,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset expression.
      * @return this.
      */
@@ -306,6 +330,7 @@ public class Update<T> extends ChainCall<StatementUpdate> {
 
     /**
      * Execute the update statement.
+     *
      * @return this.
      * @throws WCDBException if any error occurs.
      */
@@ -315,15 +340,15 @@ public class Update<T> extends ChainCall<StatementUpdate> {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = handle.preparedWithMainStatement(statement);
-            if(object != null) {
+            if (object != null) {
                 preparedStatement.bindObject(object, fields);
-            }else if(row != null) {
+            } else if (row != null) {
                 preparedStatement.bindRow(row);
             }
             preparedStatement.step();
             updateChanges();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             invalidateHandle();

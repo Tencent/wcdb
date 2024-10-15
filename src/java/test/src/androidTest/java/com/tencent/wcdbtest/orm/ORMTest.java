@@ -51,6 +51,7 @@ import java.util.ArrayList;
 
 public class ORMTest extends DatabaseTestCase {
     String tableName = "testTable";
+
     @Before
     public void setup() throws WCDBException {
         super.setup();
@@ -350,8 +351,8 @@ public class ORMTest extends DatabaseTestCase {
         final String columnName = removeField.getName();
         final StatementCreateTable createTable = new StatementCreateTable().createTable(tableName);
         List<ColumnDef> columnDefs = new ArrayList<ColumnDef>();
-        for(Field<AutoAddColumnObject> field: DBAutoAddColumnObject.allFields()) {
-            if(!field.getDescription().equals(columnName)) {
+        for (Field<AutoAddColumnObject> field : DBAutoAddColumnObject.allFields()) {
+            if (!field.getDescription().equals(columnName)) {
                 columnDefs.add(new ColumnDef(field, ColumnType.Integer));
             }
         }
@@ -362,7 +363,7 @@ public class ORMTest extends DatabaseTestCase {
         database.traceException(new Database.ExceptionTracer() {
             @Override
             public void onTrace(@NotNull WCDBException exception) {
-                if(!exception.message().equals("Auto add column")) {
+                if (!exception.message().equals("Auto add column")) {
                     return;
                 }
                 added.boolValue = true;
@@ -377,7 +378,7 @@ public class ORMTest extends DatabaseTestCase {
             hasError = true;
         }
         assertEquals(succeed, !hasError);
-        assertEquals(succeed,  added.boolValue);
+        assertEquals(succeed, added.boolValue);
         database.dropTable(tableName);
         database.traceException(null);
     }

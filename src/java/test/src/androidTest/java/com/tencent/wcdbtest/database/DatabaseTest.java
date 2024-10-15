@@ -37,6 +37,7 @@ import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -117,9 +118,9 @@ public class DatabaseTest extends TableTestCase {
         database.close(new Database.CloseCallBack() {
             @Override
             public void onClose() throws WCDBException {
-                for(String path: database.getPaths()) {
+                for (String path : database.getPaths()) {
                     File file = new File(path);
-                    if(file.exists()) {
+                    if (file.exists()) {
                         assertTrue(file.setReadOnly());
                     }
                 }
@@ -136,9 +137,9 @@ public class DatabaseTest extends TableTestCase {
             failed = true;
         }
         assertTrue(failed);
-        for(String path: database.getPaths()) {
+        for (String path : database.getPaths()) {
             File file = new File(path);
-            if(file.exists()) {
+            if (file.exists()) {
                 assertTrue(file.setReadOnly());
             }
         }
@@ -178,23 +179,23 @@ public class DatabaseTest extends TableTestCase {
         createTable();
         List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(100);
         final WrappedValue walFrameNum = new WrappedValue();
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             assertEquals(table.getValue(Column.all().count()).getLong(), i);
             table.insertObject(objects.get(i));
             database.passiveCheckpoint();
             database.close(new Database.CloseCallBack() {
                 @Override
                 public void onClose() throws WCDBException {
-                    if( walFrameNum.intValue != 0 ) {
+                    if (walFrameNum.intValue != 0) {
                         assertEquals(walFrameNum.intValue, getNumberOfWalFrames());
                     } else {
                         walFrameNum.intValue = getNumberOfWalFrames();
                     }
                     assertTrue(walFrameNum.intValue > 0);
-                    for( String path: database.getPaths() ) {
-                        if( path.endsWith("wal") ) {
+                    for (String path : database.getPaths()) {
+                        if (path.endsWith("wal")) {
                             assertTrue(FileTool.getFileSize(path) > 32);
-                        } else if( path.endsWith("shm") ) {
+                        } else if (path.endsWith("shm")) {
                             assertTrue(FileTool.getFileSize(path) >= 32 * 1024);
                         }
                     }
@@ -208,7 +209,7 @@ public class DatabaseTest extends TableTestCase {
         createTable();
         List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(101);
         Database.setAutoCheckpointMinFrames(100);
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             assertEquals(table.getValue(Column.all().count()).getLong(), i);
             table.insertObject(objects.get(i));
         }
@@ -228,7 +229,7 @@ public class DatabaseTest extends TableTestCase {
 
     private int getNumberOfWalFrames() {
         long size = FileTool.getFileSize(walPath());
-        if(size > walHeaderSize() && (size - walHeaderSize()) % walFrameSize() == 0) {
+        if (size > walHeaderSize() && (size - walHeaderSize()) % walFrameSize() == 0) {
             return (int) ((size - walHeaderSize()) / walFrameSize());
         }
         return 0;

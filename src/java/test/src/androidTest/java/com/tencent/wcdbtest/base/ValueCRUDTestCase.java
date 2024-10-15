@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.WCDBException;
 
 import org.junit.Before;
 
-public class ValueCRUDTestCase extends CRUDTestCase{
+public class ValueCRUDTestCase extends CRUDTestCase {
     @Before
     public void setup() throws WCDBException {
         super.setup();

@@ -47,8 +47,8 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         super.setup();
         partialObject1 = TestObject.createPartialObject(1);
         partialObject2 = TestObject.createPartialObject(2);
-        partialObjects = Arrays.asList( partialObject1, partialObject2 );
-}
+        partialObjects = Arrays.asList(partialObject1, partialObject2);
+    }
 
     @Test
     public void testDatabaseGetObject() {
@@ -195,7 +195,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)database.getFirstObject(new Field[]{DBTestObject.id}, tableName));
+                return Collections.singletonList((TestObject) database.getFirstObject(new Field[]{DBTestObject.id}, tableName));
             }
         });
     }
@@ -205,7 +205,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id == 2", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(2)));
+                return Collections.singletonList((TestObject) database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(2)));
             }
         });
     }
@@ -215,7 +215,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
+                return Collections.singletonList((TestObject) database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -225,7 +225,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
+                return Collections.singletonList((TestObject) database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -235,7 +235,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc)));
+                return Collections.singletonList((TestObject) database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -245,7 +245,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1));
+                return Collections.singletonList((TestObject) database.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -895,7 +895,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)handle.getFirstObject(new Field[]{DBTestObject.id}, tableName));
+                return Collections.singletonList((TestObject) handle.getFirstObject(new Field[]{DBTestObject.id}, tableName));
             }
         });
     }
@@ -905,7 +905,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id == 2", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(2)));
+                return Collections.singletonList((TestObject) handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.eq(2)));
             }
         });
     }
@@ -915,7 +915,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
+                return Collections.singletonList((TestObject) handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -925,7 +925,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable WHERE id > 0 ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
+                return Collections.singletonList((TestObject) handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.gt(0), DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }
@@ -935,7 +935,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject2, "SELECT id FROM testTable ORDER BY id DESC", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc)));
+                return Collections.singletonList((TestObject) handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc)));
             }
         });
     }
@@ -945,7 +945,7 @@ public class ObjectSelectTest extends ObjectCRUDTestCase {
         doTestObjectBySelecting(partialObject1, "SELECT id FROM testTable ORDER BY id DESC LIMIT 1 OFFSET 1", new SelectingObjectOperation() {
             @Override
             public List<TestObject> execute() throws WCDBException {
-                return Collections.singletonList((TestObject)handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1));
+                return Collections.singletonList((TestObject) handle.getFirstObject(new Field[]{DBTestObject.id}, tableName, DBTestObject.id.order(Order.Desc), 1));
             }
         });
     }

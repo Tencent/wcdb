@@ -44,7 +44,7 @@ public class WindowDef extends Identifier {
 
     @NotNull
     public WindowDef partitionBy(@Nullable String... columnNames) {
-        if(columnNames == null || columnNames.length == 0){
+        if (columnNames == null || columnNames.length == 0) {
             return this;
         }
         int[] types = new int[columnNames.length];
@@ -55,12 +55,12 @@ public class WindowDef extends Identifier {
 
     @NotNull
     public WindowDef partitionBy(@Nullable ExpressionConvertible... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         int[] types = new int[expressions.length];
         long[] cppObjs = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             types[i] = Identifier.getCppType(expressions[i]);
             cppObjs[i] = CppObject.get(expressions[i]);
         }
@@ -72,11 +72,11 @@ public class WindowDef extends Identifier {
 
     @NotNull
     public WindowDef orderBy(@Nullable OrderingTerm... orders) {
-        if(orders == null || orders.length == 0) {
+        if (orders == null || orders.length == 0) {
             return this;
         }
         long[] cppOrders = new long[orders.length];
-        for(int i = 0; i < orders.length; i++) {
+        for (int i = 0; i < orders.length; i++) {
             cppOrders[i] = CppObject.get(orders[i]);
         }
         configOrders(cppObj, cppOrders);

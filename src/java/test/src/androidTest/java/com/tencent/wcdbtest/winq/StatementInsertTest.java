@@ -27,6 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -52,11 +53,11 @@ public class StatementInsertTest {
                 "INSERT INTO testTable VALUES(NULL, 1, 1.1000000000000001, 'value')");
 
         winqEqual(new StatementInsert().insertInto("testTable")
-                .of(new Schema("testSchema")).values(1, "value"),
+                        .of(new Schema("testSchema")).values(1, "value"),
                 "INSERT INTO testSchema.testTable VALUES(1, 'value')");
 
         winqEqual(new StatementInsert().insertInto("testTable").of("testSchema")
-                .as("newTable").valuesWithBindParameters(2),
+                        .as("newTable").valuesWithBindParameters(2),
                 "INSERT INTO testSchema.testTable AS newTable VALUES(?1, ?2)");
 
         winqEqual(new StatementInsert().insertInto("testTable")
@@ -80,7 +81,7 @@ public class StatementInsertTest {
                 "INSERT INTO testTable(testColumn) DEFAULT VALUES");
 
         winqEqual(new StatementInsert().insertInto("testTable").columns(new Column("testColumn")).values(1)
-                .upsert(new Upsert().onConflict().doNoThing()),
+                        .upsert(new Upsert().onConflict().doNoThing()),
                 "INSERT INTO testTable(testColumn) VALUES(1) ON CONFLICT DO NOTHING");
     }
 }

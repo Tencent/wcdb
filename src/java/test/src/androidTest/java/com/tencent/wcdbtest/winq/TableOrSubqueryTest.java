@@ -24,7 +24,9 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -41,7 +43,7 @@ public class TableOrSubqueryTest {
         winqEqual(new TableOrSubquery("testTable").as("testAliasTable"), "testTable AS testAliasTable");
         winqEqual(TableOrSubquery.function("testFunction"), "testFunction()");
         winqEqual(TableOrSubquery.function("testFunction")
-                .argument(1).argument("abc").argument((ExpressionConvertible)null).argument(new BindParameter(1)),
+                        .argument(1).argument("abc").argument((ExpressionConvertible) null).argument(new BindParameter(1)),
                 "testFunction(1, 'abc', NULL, ?1)");
         winqEqual(TableOrSubquery.function("testFunction").as("testAliasTable"), "testFunction() AS testAliasTable");
         winqEqual(new TableOrSubquery(new String[]{"testTable1, testTable2"}), "(testTable1, testTable2)");

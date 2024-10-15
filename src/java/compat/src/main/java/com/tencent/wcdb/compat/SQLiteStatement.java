@@ -61,7 +61,7 @@ public final class SQLiteStatement extends SQLiteClosable {
      * CREATE / DROP table, view, trigger, index etc.
      *
      * @throws android.database.SQLException If the SQL string is invalid for
-     *         some reason
+     *                                       some reason
      */
     public void execute() {
         execute(null);
@@ -79,7 +79,7 @@ public final class SQLiteStatement extends SQLiteClosable {
      *
      * @return the number of rows affected by this SQL statement execution.
      * @throws android.database.SQLException If the SQL string is invalid for
-     *         some reason
+     *                                       some reason
      */
     public int executeUpdateDelete() {
         return executeUpdateDelete(null);
@@ -97,9 +97,8 @@ public final class SQLiteStatement extends SQLiteClosable {
      * The SQL statement should be an INSERT for this to be a useful call.
      *
      * @return the row ID of the last row inserted, if this insert is successful. -1 otherwise.
-     *
      * @throws android.database.SQLException If the SQL string is invalid for
-     *         some reason
+     *                                       some reason
      */
     public long executeInsert() {
         return executeInsert(null);
@@ -117,7 +116,6 @@ public final class SQLiteStatement extends SQLiteClosable {
      * For example, SELECT COUNT(*) FROM table;
      *
      * @return The result of the query.
-     *
      * @throws android.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public long simpleQueryForLong() {
@@ -135,7 +133,6 @@ public final class SQLiteStatement extends SQLiteClosable {
      * For example, SELECT COUNT(*) FROM table;
      *
      * @return The result of the query.
-     *
      * @throws android.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public String simpleQueryForString() {
@@ -161,7 +158,8 @@ public final class SQLiteStatement extends SQLiteClosable {
     /**
      * Bind a long value to this statement. The value remains bound until
      * {@link #clearBindings} is called.
-     *addToBindArgs
+     * addToBindArgs
+     *
      * @param index The 1-based index to the parameter to bind
      * @param value The value to bind
      */

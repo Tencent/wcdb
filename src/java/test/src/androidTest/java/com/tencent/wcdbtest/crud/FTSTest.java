@@ -185,7 +185,7 @@ public class FTSTest extends DatabaseTestCase {
 
     @Test
     public void testTraditionalChinese() {
-        Database.configTraditionalChineseDict(new HashMap<String, String>(){{
+        Database.configTraditionalChineseDict(new HashMap<String, String>() {{
             put("們", "们");
             put("員", "员");
         }});

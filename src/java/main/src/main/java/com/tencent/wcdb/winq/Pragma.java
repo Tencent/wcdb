@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Pragma extends Identifier{
+public class Pragma extends Identifier {
     @Override
     protected int getType() {
         return CPPType.Pragma;

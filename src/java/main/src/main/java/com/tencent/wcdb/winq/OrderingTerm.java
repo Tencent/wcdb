@@ -28,7 +28,7 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class OrderingTerm extends Identifier{
+public class OrderingTerm extends Identifier {
     @Override
     protected int getType() {
         return CPPType.OrderingTerm;

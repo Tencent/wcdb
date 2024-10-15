@@ -5,7 +5,8 @@ import android.os.CancellationSignal;
 import com.tencent.wcdb.core.Handle;
 
 public final class DatabaseUtils {
-    private DatabaseUtils() {}
+    private DatabaseUtils() {
+    }
 
     public static long longForQuery(SQLiteDatabase db, String sql, Object[] selectionArgs) {
         try (SQLiteStatement stmt = db.compileStatement(sql)) {
@@ -31,7 +32,7 @@ public final class DatabaseUtils {
                 cs.cancel();
             }
         });
-        
+
         if (cancellationSignal.isCanceled()) {
             cs.cancel();
         }

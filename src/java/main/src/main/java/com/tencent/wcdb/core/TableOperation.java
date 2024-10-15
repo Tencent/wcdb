@@ -65,7 +65,8 @@ public class TableOperation {
 
     /**
      * Execute inserting with one row of values.
-     * @param row One row of value.
+     *
+     * @param row     One row of value.
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
@@ -78,7 +79,8 @@ public class TableOperation {
      * It will run embedded transaction while rows.size()>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction,
      * otherwise it will be executed within the existing transaction.
-     * @param rows Multi rows of value.
+     *
+     * @param rows    Multi rows of value.
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
@@ -89,7 +91,8 @@ public class TableOperation {
     /**
      * Execute inserting with one row of values.
      * It will replace the original row while they have same primary key or row id.
-     * @param row One row of value.
+     *
+     * @param row     One row of value.
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
@@ -103,7 +106,8 @@ public class TableOperation {
      * It will run embedded transaction while rows.size()>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction,
      * otherwise it will be executed within the existing transaction.
-     * @param rows Multi rows of value.
+     *
+     * @param rows    Multi rows of value.
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
@@ -114,7 +118,8 @@ public class TableOperation {
     /**
      * Execute inserting with one row of values.
      * It will ignore the row while there already exists the same primary key or row id in current table.
-     * @param row One row of value.
+     *
+     * @param row     One row of value.
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
@@ -128,7 +133,8 @@ public class TableOperation {
      * It will run embedded transaction while rows.size()>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction,
      * otherwise it will be executed within the existing transaction.
-     * @param rows Multi rows of value.
+     *
+     * @param rows    Multi rows of value.
      * @param columns Corresponding column of values.
      * @throws WCDBException if any error occurs.
      */
@@ -138,14 +144,14 @@ public class TableOperation {
 
     private void insertRows(final Collection<Value[]> rows, Column[] columns, ConflictAction action) throws WCDBException {
         final StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
-        if(action == ConflictAction.Replace) {
+        if (action == ConflictAction.Replace) {
             insert.orReplace();
         } else if (action == ConflictAction.Ignore) {
             insert.orIgnore();
         }
         Handle handle = database.getHandle(true);
         try {
-            if(rows.size() > 1) {
+            if (rows.size() > 1) {
                 handle.runTransaction(new Transaction() {
                     @Override
                     public boolean insideTransaction(@NotNull Handle handle) throws WCDBException {
@@ -163,7 +169,7 @@ public class TableOperation {
 
     private void insertRows(Collection<Value[]> rows, StatementInsert insert, Handle handle) throws WCDBException {
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(insert);
-        for(Value[] row : rows) {
+        for (Value[] row : rows) {
             preparedStatement.reset();
             preparedStatement.bindRow(row);
             preparedStatement.step();
@@ -377,7 +383,7 @@ public class TableOperation {
             preparedStatement.bindRow(row);
             preparedStatement.step();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -811,11 +817,11 @@ public class TableOperation {
         try {
             preparedStatement = handle.preparedWithMainStatement(statement);
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getValue(0);
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -831,11 +837,11 @@ public class TableOperation {
         try {
             preparedStatement = handle.preparedWithMainStatement(statement);
             preparedStatement.step();
-            if(!preparedStatement.isDone()) {
+            if (!preparedStatement.isDone()) {
                 ret = preparedStatement.getOneRow();
             }
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -852,13 +858,14 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumn();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
         }
         return ret;
     }
+
     @NotNull
     public List<Integer> getOneColumnIntFromStatement(@NotNull Statement statement) throws WCDBException {
         Handle handle = database.getHandle(false);
@@ -868,7 +875,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnInt();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -885,7 +892,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnLong();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -902,7 +909,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnFloat();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -919,7 +926,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnDouble();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -936,7 +943,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnString();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -953,7 +960,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getOneColumnBLOB();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();
@@ -970,7 +977,7 @@ public class TableOperation {
             preparedStatement = handle.preparedWithMainStatement(statement);
             ret = preparedStatement.getMultiRows();
         } finally {
-            if(preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.finalizeStatement();
             }
             handle.invalidate();

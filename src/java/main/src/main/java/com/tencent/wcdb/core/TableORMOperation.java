@@ -55,6 +55,7 @@ public class TableORMOperation<T> extends TableOperation {
 
     /**
      * Generate a {@link Insert} to do an insertion or replacement.
+     *
      * @return An {@link Insert} object.
      */
     @NotNull
@@ -66,6 +67,7 @@ public class TableORMOperation<T> extends TableOperation {
 
     /**
      * Generate a {@link Update} to do an update.
+     *
      * @return An {@link Update} object.
      */
     @NotNull
@@ -77,6 +79,7 @@ public class TableORMOperation<T> extends TableOperation {
 
     /**
      * Generate a {@link Select} to do an object selection.
+     *
      * @return An {@link Select} object.
      */
     @NotNull
@@ -88,6 +91,7 @@ public class TableORMOperation<T> extends TableOperation {
 
     /**
      * Generate a {@link Delete} to do a deletion.
+     *
      * @return An {@link Delete} object.
      */
     @NotNull
@@ -99,6 +103,7 @@ public class TableORMOperation<T> extends TableOperation {
 
     /**
      * Execute inserting with one object on all fields.
+     *
      * @param object The object to insert..
      * @throws WCDBException if any error occurs.
      */
@@ -108,6 +113,7 @@ public class TableORMOperation<T> extends TableOperation {
 
     /**
      * Execute inserting with one object on specific(or all) fields.
+     *
      * @param object The object to insert.
      * @param fields specific(or all) fields.
      * @throws WCDBException if any error occurs.
@@ -119,6 +125,7 @@ public class TableORMOperation<T> extends TableOperation {
     /**
      * Execute inserting with one object on all fields.
      * It will replace the original row while they have same primary key or row id.
+     *
      * @param object The object to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -129,6 +136,7 @@ public class TableORMOperation<T> extends TableOperation {
     /**
      * Execute inserting with one object on specific(or all) fields.
      * It will replace the original row while they have same primary key or row id.
+     *
      * @param object The object to insert.
      * @param fields specific(or all) fields.
      * @throws WCDBException if any error occurs.
@@ -140,6 +148,7 @@ public class TableORMOperation<T> extends TableOperation {
     /**
      * Execute inserting with one object on all fields.
      * It will ignore the object while there already exists the same primary key or row id in current table.
+     *
      * @param object The object to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -150,6 +159,7 @@ public class TableORMOperation<T> extends TableOperation {
     /**
      * Execute inserting with one object on specific(or all) fields.
      * It will ignore the object while there already exists the same primary key or row id in current table.
+     *
      * @param object The object to insert.
      * @param fields specific(or all) fields.
      * @throws WCDBException if any error occurs.
@@ -161,6 +171,7 @@ public class TableORMOperation<T> extends TableOperation {
     /**
      * Execute inserting with multi objects on all fields.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param objects The objects to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -171,8 +182,9 @@ public class TableORMOperation<T> extends TableOperation {
     /**
      * Execute inserting with multi objects on specific(or all) fields.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param objects The objects to insert.
-     * @param fields specific(or all) fields.
+     * @param fields  specific(or all) fields.
      * @throws WCDBException if any error occurs.
      */
     public void insertObjects(@NotNull Collection<T> objects, @NotNull Field<T>[] fields) throws WCDBException {
@@ -183,6 +195,7 @@ public class TableORMOperation<T> extends TableOperation {
      * Execute inserting with multi objects on all fields.
      * It will replace the original row while they have same primary key or row id.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param objects The objects to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -194,8 +207,9 @@ public class TableORMOperation<T> extends TableOperation {
      * Execute inserting with multi objects on specific(or all) fields.
      * It will replace the original row while they have same primary key or row id.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param objects The objects to insert.
-     * @param fields specific(or all) fields.
+     * @param fields  specific(or all) fields.
      * @throws WCDBException if any error occurs.
      */
     public void insertOrReplaceObjects(@NotNull Collection<T> objects, @NotNull Field<T>[] fields) throws WCDBException {
@@ -206,6 +220,7 @@ public class TableORMOperation<T> extends TableOperation {
      * Execute inserting with multi objects on all fields.
      * It will ignore the object while there already exists the same primary key or row id in current table.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param objects The objects to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -217,8 +232,9 @@ public class TableORMOperation<T> extends TableOperation {
      * Execute inserting with multi objects on specific(or all) fields.
      * It will ignore the object while there already exists the same primary key or row id in current table.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param objects The objects to insert.
-     * @param fields specific(or all) fields.
+     * @param fields  specific(or all) fields.
      * @throws WCDBException if any error occurs.
      */
     public void insertOrIgnoreObjects(@NotNull Collection<T> objects, @NotNull Field<T>[] fields) throws WCDBException {
@@ -325,6 +341,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject() throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).firstObject(cls);
@@ -334,6 +351,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@Nullable Expression condition) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).firstObject(cls);
@@ -343,6 +361,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).firstObject(cls);
@@ -352,6 +371,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@Nullable Expression condition, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).limit(1).offset(offset).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).limit(1).offset(offset).firstObject(cls);
@@ -361,6 +381,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).firstObject(cls);
@@ -370,6 +391,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@Nullable OrderingTerm order, long offset) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).limit(1).offset(offset).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).limit(1).offset(offset).firstObject(cls);
@@ -379,6 +401,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@NotNull Field<T>[] fields) throws WCDBException {
         return prepareSelect().select(fields).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).firstObject(cls);
@@ -388,6 +411,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@NotNull Field<T>[] fields, @Nullable Expression condition) throws WCDBException {
         return prepareSelect().select(fields).where(condition).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Field<T>[] fields, @Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).firstObject(cls);
@@ -397,6 +421,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).firstObject(cls);
@@ -406,6 +431,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).limit(1).offset(offset).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).limit(1).offset(offset).firstObject(cls);
@@ -415,6 +441,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@NotNull Field<T>[] fields, @Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).firstObject(cls);
@@ -424,6 +451,7 @@ public class TableORMOperation<T> extends TableOperation {
     public T getFirstObject(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).limit(1).offset(offset).firstObject();
     }
+
     @Nullable
     public <R extends T> R getFirstObject(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).limit(1).offset(offset).firstObject(cls);
@@ -433,6 +461,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects() throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).allObjects(cls);
@@ -442,6 +471,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable Expression condition) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).allObjects(cls);
@@ -451,6 +481,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).allObjects(cls);
@@ -460,6 +491,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).limit(limit).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).limit(limit).allObjects(cls);
@@ -469,6 +501,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).limit(limit).offset(offset).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).where(condition).orderBy(order).limit(limit).offset(offset).allObjects(cls);
@@ -478,6 +511,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).allObjects(cls);
@@ -487,6 +521,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable OrderingTerm order, long limit) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).limit(limit).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).limit(limit).allObjects(cls);
@@ -496,6 +531,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).limit(limit).offset(offset).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(binding.allBindingFields()).orderBy(order).limit(limit).offset(offset).allObjects(cls);
@@ -505,6 +541,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields) throws WCDBException {
         return prepareSelect().select(fields).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).allObjects(cls);
@@ -514,6 +551,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition) throws WCDBException {
         return prepareSelect().select(fields).where(condition).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).allObjects(cls);
@@ -523,6 +561,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).allObjects(cls);
@@ -532,6 +571,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).limit(limit).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).limit(limit).allObjects(cls);
@@ -541,6 +581,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).limit(limit).offset(offset).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).where(condition).orderBy(order).limit(limit).offset(offset).allObjects(cls);
@@ -550,6 +591,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).allObjects(cls);
@@ -559,6 +601,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).limit(limit).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).limit(limit).allObjects(cls);
@@ -568,6 +611,7 @@ public class TableORMOperation<T> extends TableOperation {
     public List<T> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).limit(limit).offset(offset).allObjects();
     }
+
     @NotNull
     public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return prepareSelect().select(fields).orderBy(order).limit(limit).offset(offset).allObjects(cls);

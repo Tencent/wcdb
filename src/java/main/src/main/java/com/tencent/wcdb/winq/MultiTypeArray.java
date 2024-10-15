@@ -52,7 +52,7 @@ class MultiTypeArray {
     double[] doubleValues;
     String[] stringValues;
 
-    MultiTypeArray(Object [] values) {
+    MultiTypeArray(Object[] values) {
         int valueCount = values.length;
         types = new int[valueCount];
         longValues = new long[valueCount];
@@ -62,7 +62,7 @@ class MultiTypeArray {
         int doubleIndex = 0;
         int stringIndex = 0;
 
-        for(int i = 0; i < valueCount; i++) {
+        for (int i = 0; i < valueCount; i++) {
             Object obj = values[i];
             int valueType = getObjectType(obj);
             switch (valueType) {
@@ -72,27 +72,27 @@ class MultiTypeArray {
                     break;
                 case ObjectType.Bool:
                     types[i] = CPPType.Bool;
-                    longValues[longIndex] = (Boolean)obj ? 1 : 0;
+                    longValues[longIndex] = (Boolean) obj ? 1 : 0;
                     longIndex++;
                     break;
                 case ObjectType.Byte:
                     types[i] = CPPType.Int;
-                    longValues[longIndex] = (Byte)obj;
+                    longValues[longIndex] = (Byte) obj;
                     longIndex++;
                     break;
                 case ObjectType.Char:
                     types[i] = CPPType.Int;
-                    longValues[longIndex] = (Character)obj;
+                    longValues[longIndex] = (Character) obj;
                     longIndex++;
                     break;
                 case ObjectType.Short:
                     types[i] = CPPType.Int;
-                    longValues[longIndex] = (Short)obj;
+                    longValues[longIndex] = (Short) obj;
                     longIndex++;
                     break;
                 case ObjectType.Int:
                     types[i] = CPPType.Int;
-                    longValues[longIndex] = (Integer)obj;
+                    longValues[longIndex] = (Integer) obj;
                     longIndex++;
                     break;
                 case ObjectType.Long:
@@ -116,7 +116,7 @@ class MultiTypeArray {
                     stringIndex++;
                     break;
                 case ObjectType.Identifier:
-                    Identifier identifier = (Identifier)obj;
+                    Identifier identifier = (Identifier) obj;
                     types[i] = Identifier.getCppType(identifier);
                     longValues[longIndex] = CppObject.get(identifier);
                     longIndex++;
@@ -147,8 +147,8 @@ class MultiTypeArray {
                     break;
             }
         }
-        if(stringValues.length * 0.75 > stringIndex) {
-            if(stringIndex == 0) {
+        if (stringValues.length * 0.75 > stringIndex) {
+            if (stringIndex == 0) {
                 stringValues = null;
             } else {
                 stringValues = Arrays.copyOf(stringValues, stringIndex);
@@ -163,7 +163,7 @@ class MultiTypeArray {
             return ObjectType.Identifier;
         }
         Class cls = obj.getClass();
-        if(cls == String.class) {
+        if (cls == String.class) {
             return ObjectType.String;
         } else if (cls == Integer.class) {
             return ObjectType.Int;

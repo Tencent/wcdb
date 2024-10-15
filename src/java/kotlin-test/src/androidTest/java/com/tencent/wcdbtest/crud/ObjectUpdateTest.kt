@@ -36,6 +36,7 @@ class ObjectUpdateTest : ObjectCRUDTestCase() {
     private lateinit var renewObject: TestObject
     private lateinit var renewedObject1: TestObject
     private lateinit var renewedObject2: TestObject
+
     @Before
     @Throws(WCDBException::class)
     override fun setup() {

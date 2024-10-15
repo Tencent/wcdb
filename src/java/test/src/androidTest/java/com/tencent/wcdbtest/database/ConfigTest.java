@@ -36,11 +36,14 @@ import com.tencent.wcdbtest.base.DatabaseTestCase;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
+
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class ConfigTest extends TableTestCase {
     String configName = "testConfig";
+
     @After
     public void teardown() {
         database.setConfig(configName, null);
@@ -117,7 +120,7 @@ public class ConfigTest extends TableTestCase {
         database.setConfig(config1, new Database.Config() {
             @Override
             public void onInvocation(@NotNull Handle handle) throws WCDBException {
-                assertEquals(step.intValue,1);
+                assertEquals(step.intValue, 1);
                 step.intValue++;
             }
         });

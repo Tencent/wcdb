@@ -32,7 +32,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface FTSModule {
     FTSVersion version() default FTSVersion.NONE;
+
     String tokenizer() default "";
+
     String[] tokenizerParameters() default {};
+
     String externalTable() default "";
 }

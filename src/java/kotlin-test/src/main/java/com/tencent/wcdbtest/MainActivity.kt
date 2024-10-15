@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun execute(test: ()-> Unit) {
+    private fun execute(test: () -> Unit) {
         database?.removeFiles()
         database?.createTable(tableName, DBTestObject)
         test()
@@ -78,7 +78,11 @@ class MainActivity : ComponentActivity() {
         }
         thread.start()
         sleep(100)
-        database?.insertObject( RandomTool.testObjectWithId(100001), DBTestObject.allFields(), tableName)
+        database?.insertObject(
+            RandomTool.testObjectWithId(100001),
+            DBTestObject.allFields(),
+            tableName
+        )
         thread.join()
         require(testTid.intValue != 0L && testTid.intValue == dispatchTid.intValue)
         Database.globalTraceBusy(null, 0.0)
@@ -131,8 +135,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun testConfigFail() {
-        database!!.setConfig( "testConfig" ) {
-                handle -> handle.execute(StatementSelect().select("testColumn").from("testTable"))
+        database!!.setConfig("testConfig") { handle ->
+            handle.execute(StatementSelect().select("testColumn").from("testTable"))
         }
         require(!database!!.canOpen())
         database!!.setConfig("testConfig", null)

@@ -37,15 +37,15 @@ public class Value {
     }
 
     public Value(boolean value) {
-        this.value = (long)(value ? 1 : 0);
+        this.value = (long) (value ? 1 : 0);
     }
 
     public Value(byte value) {
-        this.value = (long)value;
+        this.value = (long) value;
     }
 
     public Value(int value) {
-        this.value = (long)value;
+        this.value = (long) value;
     }
 
     public Value(long value) {
@@ -53,7 +53,7 @@ public class Value {
     }
 
     public Value(float value) {
-        this.value = (double)value;
+        this.value = (double) value;
     }
 
     public Value(double value) {
@@ -74,11 +74,11 @@ public class Value {
             return;
         }
         Class<?> cls = value.getClass();
-        if(cls == Long.class || cls == Double.class || cls == String.class || cls == byte[].class) {
+        if (cls == Long.class || cls == Double.class || cls == String.class || cls == byte[].class) {
             this.value = value;
         } else if (cls == Integer.class || cls == Short.class || cls == Byte.class) {
             this.value = ((Number) value).longValue();
-        }else if(cls == Float.class) {
+        } else if (cls == Float.class) {
             this.value = ((Number) value).doubleValue();
         } else {
             this.value = value.toString();
@@ -119,7 +119,10 @@ public class Value {
         if (value instanceof Long) return (Long) value;
         if (value instanceof Double) return (long) value;
         if (value instanceof String) {
-            try { return Long.parseLong((String) value); } catch (NumberFormatException e) {}
+            try {
+                return Long.parseLong((String) value);
+            } catch (NumberFormatException e) {
+            }
         }
         return 0L;
     }
@@ -132,7 +135,10 @@ public class Value {
         if (value instanceof Double) return (Double) value;
         if (value instanceof Long) return (double) value;
         if (value instanceof String) {
-            try { return Double.parseDouble((String) value); } catch (NumberFormatException e) {}
+            try {
+                return Double.parseDouble((String) value);
+            } catch (NumberFormatException e) {
+            }
         }
         return 0.0;
     }
@@ -157,11 +163,16 @@ public class Value {
         if (obj instanceof Value) {
             Value v2 = (Value) obj;
             switch (getType()) {
-                case Null: return v2.getLong() == 0L;
-                case Integer: return ((Long) value) == v2.getLong();
-                case Float: return ((Double) value) == v2.getDouble();
-                case Text: return value.equals(v2.getText());
-                case BLOB: return Arrays.equals((byte[]) value, v2.getBLOB());
+                case Null:
+                    return v2.getLong() == 0L;
+                case Integer:
+                    return ((Long) value) == v2.getLong();
+                case Float:
+                    return ((Double) value) == v2.getDouble();
+                case Text:
+                    return value.equals(v2.getText());
+                case BLOB:
+                    return Arrays.equals((byte[]) value, v2.getBLOB());
             }
             assert false;
         }

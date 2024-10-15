@@ -50,6 +50,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @return this.
      */
     @NotNull
@@ -61,6 +62,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @return this.
      */
     @NotNull
@@ -72,6 +74,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param table The name of the table to delete data from.
      * @return this
      */
@@ -83,6 +86,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * WINQ interface for SQL.
+     *
      * @param fields Do a partial insertion with the specific fields.
      * @return this.
      */
@@ -96,6 +100,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * Insert an object.
+     *
      * @param object The object to be inserted into table.
      * @return this.
      */
@@ -107,6 +112,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * Insert a batch of objects
+     *
      * @param objects Objects to be inserted into table.
      * @return this.
      */
@@ -120,12 +126,13 @@ public class Insert<T> extends ChainCall<StatementInsert> {
      * Execute the insert statement.
      * Note that it will run embedded transaction while values.count>1.
      * The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @return this.
      * @throws WCDBException if no error occurs.
      */
     @NotNull
     public Insert<T> execute() throws WCDBException {
-        if(values.size() == 0) {
+        if (values.size() == 0) {
             return this;
         }
         assert fields != null && fields.length > 0;
@@ -149,6 +156,7 @@ public class Insert<T> extends ChainCall<StatementInsert> {
 
     /**
      * Get the rowid of the last inserted object.
+     *
      * @return rowid.
      */
     public long getLastInsertRowId() {
@@ -159,24 +167,24 @@ public class Insert<T> extends ChainCall<StatementInsert> {
         TableBinding<T> binding = Field.getBinding(fields);
         PreparedStatement preparedStatement = handle.preparedWithMainStatement(statement);
         lastInsertRowId = 0;
-        for(T object : values) {
+        for (T object : values) {
             preparedStatement.reset();
             int index = 1;
             boolean isAutoIncrement = !hasConflictAction && binding.isAutoIncrement(object);
             for (Field<T> field : fields) {
-                if(isAutoIncrement && field.isAutoIncrement()) {
+                if (isAutoIncrement && field.isAutoIncrement()) {
                     preparedStatement.bindNull(index);
-                }else {
+                } else {
                     binding.bindField(object, field, index, preparedStatement);
                 }
                 index++;
             }
             preparedStatement.step();
-            if(isAutoIncrement) {
+            if (isAutoIncrement) {
                 binding.setLastInsertRowId(object, handle.getLastInsertedRowId());
             }
         }
-        if(values.size() > 0) {
+        if (values.size() > 0) {
             lastInsertRowId = handle.getLastInsertedRowId();
         }
         updateChanges();

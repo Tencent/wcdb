@@ -24,7 +24,9 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -61,7 +63,7 @@ public class StatementCreateTableTest {
                 "CREATE TABLE IF NOT EXISTS table1(column1 INTEGER, column2 TEXT)");
 
         winqEqual(new StatementCreateTable().createTable(table1).define(def1, def2)
-                .constraint(constraint1, constraint2),
+                        .constraint(constraint1, constraint2),
                 "CREATE TABLE table1(column1 INTEGER, column2 TEXT, " +
                         "CONSTRAINT constraint1 PRIMARY KEY(column1), " +
                         "CONSTRAINT constraint2 UNIQUE(column2))");

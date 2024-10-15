@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 
-
-public abstract class ExpressionOperable extends Identifier implements ExpressionConvertible{
+public abstract class ExpressionOperable extends Identifier implements ExpressionConvertible {
 
     @NotNull
     public Expression isNull() {
@@ -886,7 +885,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression in(short... operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, false);
@@ -895,25 +894,25 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression in(@NotNull Short[] operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, false);
     }
 
     @NotNull
-    public Expression in(int... operands){
+    public Expression in(int... operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, false);
     }
 
     @NotNull
-    public Expression in(@NotNull Integer[] operands){
+    public Expression in(@NotNull Integer[] operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, false);
@@ -932,7 +931,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression in(float... operands) {
         double[] values = new double[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, false);
@@ -941,7 +940,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression in(@NotNull Float[] operands) {
         double[] values = new double[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, false);
@@ -980,7 +979,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression notIn(short... operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, true);
@@ -989,7 +988,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression notIn(@NotNull Short[] operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, true);
@@ -998,7 +997,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression notIn(int... operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, true);
@@ -1007,7 +1006,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression notIn(@NotNull Integer[] operands) {
         long[] values = new long[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, true);
@@ -1026,7 +1025,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression notIn(float... operands) {
         double[] values = new double[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, true);
@@ -1035,7 +1034,7 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     @NotNull
     public Expression notIn(@NotNull Float[] operands) {
         double[] values = new double[operands.length];
-        for(int i = 0; i < operands.length; i++) {
+        for (int i = 0; i < operands.length; i++) {
             values[i] = operands[i];
         }
         return in(values, true);
@@ -1468,14 +1467,14 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     }
 
     private static native long binaryOperate(int leftType, long left,
-                                      int rightType, long right_long, double right_double, String right_string,
-                                      int operatorType,
-                                      boolean isNot);
+                                             int rightType, long right_long, double right_double, String right_string,
+                                             int operatorType,
+                                             boolean isNot);
 
     private static native long betweenOperate(int operandType, long operand,
-                                       int leftType, long left_long, double left_double, String left_string,
-                                       int rightType, long right_long, double right_double, String right_string,
-                                       boolean isNot);
+                                              int leftType, long left_long, double left_double, String left_string,
+                                              int rightType, long right_long, double right_double, String right_string,
+                                              boolean isNot);
 
     private Expression in(long[] operands, boolean isNot) {
         return createExpression(in(Identifier.getCppType(this),
@@ -1520,14 +1519,14 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
     private static native long in(int operandType, long operand, int type, long[] longArray, double[] doubleArray, String[] stringArray, boolean isNot);
 
     private Expression in(Object[] operands, boolean isNot) {
-        if(operands == null || operands.length == 0) {
+        if (operands == null || operands.length == 0) {
             return in((long[]) null, isNot);
         }
 
         int dataType = MultiTypeArray.getObjectType(operands[0]);
-        if(dataType == ObjectType.Identifier) {
+        if (dataType == ObjectType.Identifier) {
             long[] cppObjs = new long[operands.length];
-            for(int i = 0; i < operands.length; i++) {
+            for (int i = 0; i < operands.length; i++) {
                 cppObjs[i] = CppObject.get((Identifier) operands[i]);
             }
             return in(Identifier.getCppType((Identifier) operands[0]), cppObjs, isNot);
@@ -1535,57 +1534,57 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
             switch (((Value) operands[0]).getType()) {
                 case Integer:
                     long[] intArray = new long[operands.length];
-                    for(int i = 0; i < operands.length; i++) {
+                    for (int i = 0; i < operands.length; i++) {
                         intArray[i] = ((Value) operands[i]).getLong();
                     }
                     return in(intArray, isNot);
                 case Float:
                     double[] doubleArray = new double[operands.length];
-                    for(int i = 0; i < operands.length; i++) {
+                    for (int i = 0; i < operands.length; i++) {
                         doubleArray[i] = ((Value) operands[i]).getDouble();
                     }
                     return in(doubleArray, isNot);
                 case Text:
                     String[] textArray = new String[operands.length];
-                    for(int i = 0; i < operands.length; i++) {
+                    for (int i = 0; i < operands.length; i++) {
                         textArray[i] = ((Value) operands[i]).getText();
                     }
                     return in(textArray, isNot);
             }
-            if(operands instanceof String[]) {
-                return in((String[])operands, isNot);
-            }else {
+            if (operands instanceof String[]) {
+                return in((String[]) operands, isNot);
+            } else {
                 String[] stringArray = new String[operands.length];
-                for(int i = 0; i < stringArray.length; i++) {
+                for (int i = 0; i < stringArray.length; i++) {
                     stringArray[i] = (String) operands[i];
                 }
                 return in(stringArray, isNot);
             }
         } else if (dataType == ObjectType.String) {
-            if(operands instanceof String[]) {
-                return in((String[])operands, isNot);
-            }else {
+            if (operands instanceof String[]) {
+                return in((String[]) operands, isNot);
+            } else {
                 String[] stringArray = new String[operands.length];
-                for(int i = 0; i < stringArray.length; i++) {
+                for (int i = 0; i < stringArray.length; i++) {
                     stringArray[i] = (String) operands[i];
                 }
                 return in(stringArray, isNot);
             }
         } else if (dataType < ObjectType.Float) {
             long[] values = new long[operands.length];
-            for(int i = 0; i < operands.length; i++) {
+            for (int i = 0; i < operands.length; i++) {
                 switch (dataType) {
                     case ObjectType.Null:
                         values[i] = 0;
                         break;
                     case ObjectType.Bool:
-                        values[i] = (Boolean)operands[i] ? 1 : 0;
+                        values[i] = (Boolean) operands[i] ? 1 : 0;
                         break;
                     case ObjectType.Char:
-                        values[i] = (Character)operands[i];
+                        values[i] = (Character) operands[i];
                         break;
                     case ObjectType.Short:
-                        values[i] = (Short)operands[i];
+                        values[i] = (Short) operands[i];
                         break;
                     case ObjectType.Int:
                         values[i] = (Integer) operands[i];
@@ -1598,8 +1597,8 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
             return in(values, isNot);
         } else if (dataType != ObjectType.Unknown) {
             double[] values = new double[operands.length];
-            for(int i = 0; i < operands.length; i++) {
-                if(dataType == ObjectType.Float) {
+            for (int i = 0; i < operands.length; i++) {
+                if (dataType == ObjectType.Float) {
                     values[i] = (Float) operands[i];
                 } else {
                     values[i] = (Double) operands[i];

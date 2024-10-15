@@ -21,6 +21,7 @@
  * limitations under the License.
  */
 package com.tencent.wcdbtest.orm.testclass;
+
 import com.tencent.wcdb.*;
 
 @WCDBTableCoding

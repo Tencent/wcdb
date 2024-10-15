@@ -37,12 +37,12 @@ public class TestObject {
     public boolean equals(Object obj) {
         if (obj instanceof TestObject) {
             TestObject testObject = (TestObject) obj;
-            if(testObject.id != id) {
+            if (testObject.id != id) {
                 return false;
             }
-            if(content == null) {
+            if (content == null) {
                 return testObject.content == null || testObject.content.length() <= 0;
-            } else if(testObject.content == null) {
+            } else if (testObject.content == null) {
                 return content.length() <= 0;
             }
             return testObject.content.equals(content);

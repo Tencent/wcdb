@@ -21,6 +21,7 @@
  * limitations under the License.
  */
 package com.tencent.wcdbtest.base;
+
 import com.tencent.wcdb.*;
 import com.tencent.wcdb.fts.BuiltinTokenizer;
 

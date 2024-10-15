@@ -43,6 +43,7 @@ import java.util.*
 
 class ORMTest : DatabaseTestCase() {
     private var tableName = "testTable"
+
     @Before
     @Throws(WCDBException::class)
     override fun setup() {
@@ -50,7 +51,10 @@ class ORMTest : DatabaseTestCase() {
         expectMode = Expect.SomeSQLs
     }
 
-    private fun doTestCreateTableAndIndexSQLsAsExpected(sqls: Array<String>, operation: TestOperation) {
+    private fun doTestCreateTableAndIndexSQLsAsExpected(
+        sqls: Array<String>,
+        operation: TestOperation
+    ) {
         Assert.assertNotNull(sqls)
         Assert.assertNotNull(operation)
         val newSqls: MutableList<String> = ArrayList()
@@ -106,20 +110,35 @@ class ORMTest : DatabaseTestCase() {
         val empty = AllTypeObject.emptyObject()
         table.insertObjects(listOf(max, min, random, empty))
         Assert.assertTrue(
-            max == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(max.type))
+            max == table.getFirstObject(
+                DBAllTypeObject.allFields(),
+                DBAllTypeObject.type.eq(max.type)
+            )
         )
         Assert.assertTrue(
-            min == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(min.type))
+            min == table.getFirstObject(
+                DBAllTypeObject.allFields(),
+                DBAllTypeObject.type.eq(min.type)
+            )
         )
         Assert.assertTrue(
-            empty == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(empty.type))
+            empty == table.getFirstObject(
+                DBAllTypeObject.allFields(),
+                DBAllTypeObject.type.eq(empty.type)
+            )
         )
         Assert.assertTrue(
-            random == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq(random.type))
+            random == table.getFirstObject(
+                DBAllTypeObject.allFields(),
+                DBAllTypeObject.type.eq(random.type)
+            )
         )
         table.insertRow(arrayOf(Value("null")), arrayOf(DBAllTypeObject.type))
         Assert.assertTrue(
-            empty == table.getFirstObject(DBAllTypeObject.allFields(), DBAllTypeObject.type.eq("null"))
+            empty == table.getFirstObject(
+                DBAllTypeObject.allFields(),
+                DBAllTypeObject.type.eq("null")
+            )
         )
     }
 

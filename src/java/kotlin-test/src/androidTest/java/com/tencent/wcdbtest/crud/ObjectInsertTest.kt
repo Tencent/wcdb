@@ -41,6 +41,7 @@ class ObjectInsertTest : ObjectCRUDTestCase() {
     private lateinit var object4: TestObject
     private lateinit var partialObject3: TestObject
     private lateinit var partialObject4: TestObject
+
     @Before
     @Throws(WCDBException::class)
     override fun setup() {

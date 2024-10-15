@@ -24,7 +24,7 @@
 package com.tencent.wcdb.base;
 
 public class WCDBCorruptOrIOException extends WCDBException {
-    WCDBCorruptOrIOException (Level level, Code code, long cppObj) {
+    WCDBCorruptOrIOException(Level level, Code code, long cppObj) {
         super(level, code, cppObj);
     }
 }

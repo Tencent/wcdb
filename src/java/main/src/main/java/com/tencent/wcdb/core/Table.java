@@ -25,8 +25,8 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.orm.TableBinding;
 
-public class Table <T> extends TableORMOperation<T>{
-    Table(String tableName, TableBinding<T> binding, Database database)  {
+public class Table<T> extends TableORMOperation<T> {
+    Table(String tableName, TableBinding<T> binding, Database database) {
         super();
         this.tableName = tableName;
         this.binding = binding;

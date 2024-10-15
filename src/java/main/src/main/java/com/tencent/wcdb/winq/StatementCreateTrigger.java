@@ -129,11 +129,11 @@ public class StatementCreateTrigger extends Statement {
 
     @NotNull
     public StatementCreateTrigger ofColumns(@NotNull Column... columns) {
-        if(columns.length == 0) {
+        if (columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column, cppObjs, null);
@@ -142,7 +142,7 @@ public class StatementCreateTrigger extends Statement {
 
     @NotNull
     public StatementCreateTrigger ofColumns(@NotNull String... columnNames) {
-        if(columnNames.length == 0) {
+        if (columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);

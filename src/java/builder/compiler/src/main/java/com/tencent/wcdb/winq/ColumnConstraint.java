@@ -23,21 +23,65 @@
 package com.tencent.wcdb.winq;
 
 public class ColumnConstraint extends Identifier {
-    public ColumnConstraint() { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint(String columnName) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint primaryKey() { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint order(Order order) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint conflict(ConflictAction action) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint autoIncrement() { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint notNull() { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint unique() { throw new UnsatisfiedLinkError(); }
-//    public ColumnConstraint check(Expression expression) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint defaultTo(boolean value) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint defaultTo(long value) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint defaultTo(double value) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint defaultTo(String value) { throw new UnsatisfiedLinkError(); }
-//    public ColumnConstraint defaultTo(ExpressionConvertible value) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint collate(String collation) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint foreignKey(ForeignKey foreignKey) { throw new UnsatisfiedLinkError(); }
-    public ColumnConstraint unIndex() { throw new UnsatisfiedLinkError(); }
+    public ColumnConstraint() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint(String columnName) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint primaryKey() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint order(Order order) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint conflict(ConflictAction action) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint autoIncrement() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint notNull() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint unique() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    //    public ColumnConstraint check(Expression expression) { throw new UnsatisfiedLinkError(); }
+    public ColumnConstraint defaultTo(boolean value) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint defaultTo(long value) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint defaultTo(double value) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint defaultTo(String value) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    //    public ColumnConstraint defaultTo(ExpressionConvertible value) { throw new UnsatisfiedLinkError(); }
+    public ColumnConstraint collate(String collation) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint foreignKey(ForeignKey foreignKey) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public ColumnConstraint unIndex() {
+        throw new UnsatisfiedLinkError();
+    }
 }

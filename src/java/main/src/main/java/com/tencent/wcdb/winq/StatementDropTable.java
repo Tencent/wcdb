@@ -33,7 +33,7 @@ public class StatementDropTable extends Statement {
         return CPPType.DropTableSTMT;
     }
 
-    public StatementDropTable(){
+    public StatementDropTable() {
         cppObj = createCppObj();
     }
 

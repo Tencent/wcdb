@@ -25,10 +25,15 @@ package com.tencent.wcdb.orm;
 import com.tencent.wcdb.winq.Column;
 
 public class Field<T> extends Column {
-//    public TableBinding<T> getTableBinding() { throw new UnsatisfiedLinkError(); }
-    public int getFieldId() { throw new UnsatisfiedLinkError(); }
-//    public boolean isAutoIncrement() { throw new UnsatisfiedLinkError(); }
-    public Field(String name, TableBinding<T> binding, int fieldId, boolean isAutoIncrement) { throw new UnsatisfiedLinkError(); }
+    //    public TableBinding<T> getTableBinding() { throw new UnsatisfiedLinkError(); }
+    public int getFieldId() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    //    public boolean isAutoIncrement() { throw new UnsatisfiedLinkError(); }
+    public Field(String name, TableBinding<T> binding, int fieldId, boolean isAutoIncrement) {
+        throw new UnsatisfiedLinkError();
+    }
 //    public String getName() { throw new UnsatisfiedLinkError(); }
 //    public Field<T> table(String tableName) { throw new UnsatisfiedLinkError(); }
 
