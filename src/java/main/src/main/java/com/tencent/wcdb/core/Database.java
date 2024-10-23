@@ -522,6 +522,21 @@ public class Database extends HandleORMOperation {
 
     private static native void setConfig(long self, String configName, Config invocation, Config unInvocation, int priority);
 
+    /**
+     * Enable/Disable Lite mode.
+     * Lite mode is disabled by default.
+     * In lite mode, the journal mode and synchronous flag of current database will be set to `OFF`,
+     * which will significantly reduces IO, improve performance, and also increase the probability of data corruption.
+     * Note that you can not rollback transaction or backup data in lite mode.
+     *
+     * @param enable A flag to enable lite mode
+     */
+    public void enableLiteMode(boolean enable) {
+        enableLiteMode(cppObj, enable);
+    }
+
+    private static native void enableLiteMode(long self, boolean enable);
+
     public static class PerformanceInfo {
         public int tablePageReadCount;
         public int tablePageWriteCount;

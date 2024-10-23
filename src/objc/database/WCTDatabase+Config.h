@@ -113,6 +113,15 @@ WCDB_API @interface WCTDatabase(Config)
 - (void)removeConfigForName:(NSString*)name;
 
 /**
+ @brief Enable/Disable Lite mode.
+ Lite mode is disabled by default.
+ In lite mode, the journal mode and synchronous flag of current database will be set to `OFF`,
+ which will significantly reduces IO, improve performance, and also increase the probability of data corruption.
+ @warning You can not rollback transaction or backup data in lite mode.
+ */
+- (void)enableLiteMode:(BOOL)enable;
+
+/**
  @brief Register custom scalar function.
  @Note  The custom scalar function needs to inherit `WCDB::AbstractScalarFunctionObject`.
  @param module Scalar function module. You can use `WCDB::ScalarFunctionTemplate` to construct your custom scalar function as scalar function module.

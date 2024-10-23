@@ -37,6 +37,7 @@ AbstractHandle::AbstractHandle()
 : m_handle(nullptr)
 , m_customOpenFlag(0)
 , m_tag(Tag::invalid())
+, m_hasJournal(true)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_cacheTransactionError(TransactionError::Allowed)
@@ -196,6 +197,11 @@ void AbstractHandle::enableWriteMainDB(bool enable)
 bool AbstractHandle::canWriteMainDB()
 {
     return m_customOpenFlag & SQLITE_OPEN_READWRITE;
+}
+
+void AbstractHandle::setHasJournal(bool hasJournal)
+{
+    m_hasJournal = hasJournal;
 }
 
 int AbstractHandle::getChanges()
@@ -567,6 +573,11 @@ bool AbstractHandle::commitTransaction()
 
 void AbstractHandle::rollbackTransaction()
 {
+    if (!m_hasJournal) {
+        notifyError(Error::Code::Misuse, "", "Can not execute rollback in a database without rollback journal.");
+        commitTransaction();
+        return;
+    }
     bool succeed = true;
     if (m_transactionLevel > 1) {
         if (m_transactionError == TransactionError::Allowed && isInTransaction()) {

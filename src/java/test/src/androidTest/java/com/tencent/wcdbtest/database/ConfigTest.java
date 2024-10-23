@@ -26,13 +26,17 @@ import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.core.Handle;
+import com.tencent.wcdb.core.Table;
+import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Pragma;
 import com.tencent.wcdb.winq.StatementPragma;
 import com.tencent.wcdb.winq.StatementSelect;
+import com.tencent.wcdbtest.base.DBTestObject;
+import com.tencent.wcdbtest.base.FileTool;
 import com.tencent.wcdbtest.base.RandomTool;
 import com.tencent.wcdbtest.base.TableTestCase;
+import com.tencent.wcdbtest.base.TestObject;
 import com.tencent.wcdbtest.base.WrappedValue;
-import com.tencent.wcdbtest.base.DatabaseTestCase;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
@@ -40,6 +44,10 @@ import org.junit.After;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConfigTest extends TableTestCase {
     String configName = "testConfig";
@@ -220,5 +228,35 @@ public class ConfigTest extends TableTestCase {
 
         freelist = database.getValueFromStatement(new StatementPragma().pragma(Pragma.freelistCount));
         assertTrue(freelist != null && freelist.getInt() == 0);
+    }
+
+    @Test
+    public void testLiteMode() throws WCDBException {
+        database.enableLiteMode(true);
+        database.createTable("testTable", DBTestObject.INSTANCE);
+        Table<TestObject> table = database.getTable("testTable", DBTestObject.INSTANCE);
+        int numberOfTasks = 300;
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfTasks);
+        CountDownLatch latch = new CountDownLatch(numberOfTasks);
+
+        for (int i = 0; i < numberOfTasks; i++) {
+            executorService.submit(() -> {
+                try {
+                    table.insertObjects(RandomTool.autoIncrementTestCaseObjects(100));
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            assertEquals(table.getValue(Column.all().count()).getInt(), 30000);
+            assertFalse(FileTool.fileExist(walPath()));
+            executorService.shutdown();
+        }
     }
 }

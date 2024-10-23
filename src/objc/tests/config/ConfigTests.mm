@@ -268,4 +268,21 @@
     TestCaseAssertTrue(dir != nil && [dir.stringValue isEqualToString:@""]);
 }
 
+- (void)test_lite_mode
+{
+    [self.database enableLiteMode:YES];
+    NSString* testTable = @"testTable";
+    TestCaseAssertTrue([self.database createTable:testTable withClass:TestCaseObject.class]);
+    WCTTable* table = [self.database getTable:testTable withClass:TestCaseObject.class];
+    for (int i = 0; i < 300; i++) {
+        [self.dispatch async:^{
+            TestCaseAssertTrue([table insertObjects:[[Random shared] autoIncrementTestCaseObjectsWithCount:100]]);
+        }];
+    }
+    [self.dispatch waitUntilDone];
+    WCTValue* count = [table getValueOnResultColumn:TestCaseObject.allProperties.count()];
+    TestCaseAssertTrue(count.numberValue.intValue == 30000);
+    TestCaseAssertFalse([self.fileManager fileExistsAtPath:[self.database walPath]]);
+}
+
 @end

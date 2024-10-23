@@ -77,6 +77,7 @@ public:
 
     void enableWriteMainDB(bool enable);
     bool canWriteMainDB();
+    void setHasJournal(bool hasJournal);
 
     long long getLastInsertedRowID();
     //    const char *getErrorMessage();
@@ -96,6 +97,7 @@ public:
 protected:
     int m_customOpenFlag;
     Tag m_tag;
+    bool m_hasJournal = true;
 
 #pragma mark - Statement
 public:

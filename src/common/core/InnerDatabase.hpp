@@ -105,12 +105,13 @@ public:
                    int priority = Configs::Priority::Default);
     void removeConfig(const UnsafeStringView &name);
     void setFullSQLTraceEnable(bool enable);
-    void setAutoCheckpointEnable(bool enable);
+    void setLiteModeEnable(bool enable);
+    bool liteModeEnable();
 
 private:
     Configs m_configs;
     bool m_fullSQLTrace = false;
-    bool m_autoCheckpoint;
+    bool m_liteModeEnable = false;
 
 #pragma mark - Threaded
 private:

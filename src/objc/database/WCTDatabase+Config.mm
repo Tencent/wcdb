@@ -95,6 +95,11 @@ static_assert((int) WCTConfigPriorityLow == (int) WCDB::Configs::Priority::Low, 
     _database->removeConfig(name);
 }
 
+- (void)enableLiteMode:(BOOL)enable
+{
+    _database->setLiteModeEnable(enable);
+}
+
 + (void)registerScalarFunction:(const WCDB::ScalarFunctionModule&)module named:(NSString*)name
 {
     WCDB::CommonCore::shared().registerScalarFunction(name, module);
