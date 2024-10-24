@@ -645,12 +645,6 @@ void InnerDatabase::tryLoadIncremetalMaterial()
     if (!m_needLoadIncremetalMaterial) {
         return;
     }
-    auto config = CommonCore::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
-    if (config.failed() || config.value().length() == 0
-        || atoi(config.value().data()) != 1) {
-        m_needLoadIncremetalMaterial = false;
-        return;
-    }
 
     const StringView &databasePath = getPath();
     StringView materialPath
