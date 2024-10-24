@@ -33,7 +33,6 @@ namespace WCDB {
 
 BasicConfig::BasicConfig()
 : Config()
-, m_liteModeEnable(false)
 , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
 , m_enableCheckPointFullfsync(
   StatementPragma().pragma(Pragma::checkpointFullfsync()).to(true))
@@ -56,7 +55,7 @@ bool BasicConfig::invoke(InnerHandle* handle)
     if (!handle->isReadonly()) {
         handle->setWALFilePersist(true);
         succeed = lazySetJournalMode(handle);
-        if (!m_liteModeEnable) {
+        if (!handle->liteModeEnable()) {
             succeed = succeed && handle->execute(m_enableCheckPointFullfsync);
         } else {
             succeed = succeed && handle->execute(m_disableFullSync);
@@ -66,11 +65,6 @@ bool BasicConfig::invoke(InnerHandle* handle)
 #endif
     }
     return succeed;
-}
-
-void BasicConfig::setLiteModeEnable(bool enable)
-{
-    m_liteModeEnable = enable;
 }
 
 #pragma mark - Journal Mode
@@ -85,7 +79,7 @@ bool BasicConfig::lazySetJournalMode(InnerHandle* handle)
             continue;
         }
         succeed = true;
-        if (!m_liteModeEnable) {
+        if (!handle->liteModeEnable()) {
             if (!journalMode.value().caseInsensitiveEqual("WAL")) {
                 if (!handle->canWriteMainDB()) {
                     succeed = false;

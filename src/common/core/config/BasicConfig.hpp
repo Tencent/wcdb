@@ -35,7 +35,6 @@ public:
     ~BasicConfig() override;
 
     bool invoke(InnerHandle* handle) override final;
-    void setLiteModeEnable(bool enable);
 
 #pragma mark - Journal Mode
 protected:
@@ -46,7 +45,6 @@ private:
     bool setJournalMode(InnerHandle* handle, const UnsafeStringView& mode);
 
 private:
-    bool m_liteModeEnable = false;
     const StatementPragma m_getJournalMode;
 
 #pragma mark - FullFsync

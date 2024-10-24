@@ -247,11 +247,6 @@ void InnerDatabase::setLiteModeEnable(bool enable)
         close([&] {
             m_liteModeEnable = enable;
             CommonCore::shared().enableAutoCheckpoint(this, !m_liteModeEnable);
-            auto config = m_configs.find(BasicConfigName);
-            WCTAssert(config != m_configs.end());
-            BasicConfig *basicConfig
-            = static_cast<BasicConfig *>(config->value().get());
-            basicConfig->setLiteModeEnable(m_liteModeEnable);
         });
     }
 }
@@ -387,7 +382,7 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 
     handle->setTag(getTag());
     handle->setType(type);
-    handle->setHasJournal(!m_liteModeEnable);
+    handle->setLiteModeEnable(m_liteModeEnable);
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
     handle->setBusyTraceEnable(CommonCore::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
