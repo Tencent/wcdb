@@ -326,21 +326,14 @@ if (WIN32)
     if (BUILD_SHARED_LIBS) 
         set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
         #add_definitions(-DWCDB_DLL -DWCDB_BUILD_DLL)
-
-        add_compile_options(
-            $<$<CONFIG:>:/MD> #---------|
-            $<$<CONFIG:Debug>:/MDd> #---|-- Dynamically link the runtime libraries
-            $<$<CONFIG:Release>:/MD> #--|
-        )
-    else ()
-        add_compile_options(
-            $<$<CONFIG:>:/MT> #---------|
-            $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-            $<$<CONFIG:Release>:/MT> #--|
-            $<$<CONFIG:RelWithDebInfo>:/MT>
-        )
     endif ()
-
+    
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+        $<$<CONFIG:RelWithDebInfo>:/MT>
+    )
     
     add_compile_options(/MP)
     add_compile_options(/wd4068)  # Disable unknown pragma warnings
