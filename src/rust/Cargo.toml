@@ -1,0 +1,12 @@
+[package]
+name = "wcdb_rust"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+num_cpus = "1.16.0"
+cmake = "0.1.51"
+
+[[example]]
+name = "demo"
+path = "example/main.rs"
