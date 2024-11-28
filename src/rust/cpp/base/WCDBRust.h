@@ -1,3 +1,23 @@
+/*
+* Tencent is pleased to support the open source community by making
+* WCDB available.
+*
+* Copyright (C) 2017 THL A29 Limited, a Tencent company.
+* All rights reserved.
+*
+* Licensed under the BSD 3-Clause License (the "License"); you may not use
+* this file except in compliance with the License. You may obtain a copy of
+* the License at
+*
+*       https://opensource.org/licenses/BSD-3-Clause
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 #pragma once
 
 #include "Macro.h"
@@ -7,13 +27,13 @@
 #define WCDBRust(className, funcName) WCDBRust##className##_##funcName
 
 #define WCDBRustObjectMethodWithNoArg(className, funcName)                      \
-    WCDBRust(className, funcName)(RustEnv * env, jobject object)
+    WCDBRust(className, funcName)()
 
 #define WCDBRustObjectMethod(className, funcName, ...)                          \
-    WCDBRust(className, funcName)(RustEnv * env, jobject obj, __VA_ARGS__)
+    WCDBRust(className, funcName)(__VA_ARGS__)
 
 #define WCDBRustClassMethodWithNoArg(className, funcName)                       \
-    WCDBRust(className, funcName)(RustEnv * env, jclass classType)
+    WCDBRust(className, funcName)()
 
 #define WCDBRustClassMethod(className, funcName, ...)                           \
     WCDBRust(className, funcName)(__VA_ARGS__)
@@ -339,12 +359,12 @@
 //        (*g_vm)->DetachCurrentThread(g_vm);                                    \
 //    }
 //
-//WCDB_EXTERN_C_BEGIN
+WCDB_EXTERN_C_BEGIN
 //
 //void WCDBRustDestructContext(jobject config);
-//
-//void WCDBRustClassMethod(Base, releaseObject, long long cppObject);
-//
+
+void WCDBRustClassMethod(Base, releaseObject, void* cppObject);
+
 //void WCDBRustInitJClasses(RustEnv *env);
 //
 //jclass WCDBRustGetDatabaseClass();
@@ -355,5 +375,5 @@
 //RustEnv *env, jstring value, char **utf8String, const jchar **utf16String, bool critical);
 //void WCDBRustGetUTF8StringArray(RustEnv *env, jobjectArray value, char ***stringArray, int *length);
 //jstring WCDBRustCreateJString(RustEnv *env, const char *utf8String);
-//
-//WCDB_EXTERN_C_END
+
+WCDB_EXTERN_C_END

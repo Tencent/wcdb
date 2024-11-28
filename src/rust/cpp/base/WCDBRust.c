@@ -1,3 +1,23 @@
+/*
+* Tencent is pleased to support the open source community by making
+* WCDB available.
+*
+* Copyright (C) 2017 THL A29 Limited, a Tencent company.
+* All rights reserved.
+*
+* Licensed under the BSD 3-Clause License (the "License"); you may not use
+* this file except in compliance with the License. You may obtain a copy of
+* the License at
+*
+*       https://opensource.org/licenses/BSD-3-Clause
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 #include "ObjectBridge.h"
 #include "WCDBRust.h"
 #include "assert.h"
@@ -8,48 +28,48 @@
 //
 //JavaVM* g_vm = NULL;
 //
-//void WCDBJNIDestructContext(jobject config)
+//void WCDBRustDestructContext(jobject config)
 //{
-//    WCDBJNITryGetEnvOr(return );
+//    WCDBRustTryGetEnvOr(return );
 //    (*env)->DeleteGlobalRef(env, config);
-//    WCDBJNITryDetach;
+//    WCDBRustTryDetach;
 //}
-//
-//void WCDBJNIClassMethod(Base, releaseObject, long long cppObject)
-//{
-//    WCDBReleaseCPPObject((CPPObject*) cppObject);
-//}
-//
+
+void WCDBRustBase_releaseObject(void* cppObject)
+{
+    WCDBReleaseCPPObject((CPPObject*) cppObject);
+}
+
 //jclass g_databaseClass = NULL;
 //jclass g_handleClass = NULL;
 //jclass g_exceptionClass = NULL;
 //
-//void WCDBJNIInitJClasses(JNIEnv* env)
+//void WCDBRustInitJClasses(JNIEnv* env)
 //{
 //    g_databaseClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Database");
-//    WCDBJNICreateGlobalRel(g_databaseClass);
+//    WCDBRustCreateGlobalRel(g_databaseClass);
 //    assert(g_databaseClass != NULL);
 //
 //    g_handleClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Handle");
-//    WCDBJNICreateGlobalRel(g_handleClass);
+//    WCDBRustCreateGlobalRel(g_handleClass);
 //    assert(g_handleClass != NULL);
 //
 //    g_exceptionClass = (*env)->FindClass(env, "com/tencent/wcdb/base/WCDBException");
-//    WCDBJNICreateGlobalRel(g_exceptionClass);
+//    WCDBRustCreateGlobalRel(g_exceptionClass);
 //    assert(g_exceptionClass != NULL);
 //}
 //
-//jclass WCDBJNIGetDatabaseClass()
+//jclass WCDBRustGetDatabaseClass()
 //{
 //    return g_databaseClass;
 //}
 //
-//jclass WCDBJNIGetHandleClass()
+//jclass WCDBRustGetHandleClass()
 //{
 //    return g_handleClass;
 //}
 //
-//jclass WCDBJNIGetExceptionClass()
+//jclass WCDBRustGetExceptionClass()
 //{
 //    return g_exceptionClass;
 //}
@@ -59,7 +79,7 @@
 //static jsize utf8_to_utf16_length(const char* u8str, jsize u8len);
 //static jchar* utf8_to_utf16(const char* u8str, jsize u8len, jchar* u16str, jsize u16len);
 //
-//void WCDBJNIGetUTF8String(JNIEnv* env, jstring value, char** utf8String, const jchar** utf16String, bool critical)
+//void WCDBRustGetUTF8String(JNIEnv* env, jstring value, char** utf8String, const jchar** utf16String, bool critical)
 //{
 //    if (UNLIKELY(value == NULL)) {
 //        *utf8String = NULL;
@@ -90,7 +110,7 @@
 //    utf16_to_utf8(*utf16String, utf16Length, *utf8String, utf8Length);
 //}
 //
-//void WCDBJNIGetUTF8StringArray(JNIEnv* env, jobjectArray value, char*** stringArray, int* length)
+//void WCDBRustGetUTF8StringArray(JNIEnv* env, jobjectArray value, char*** stringArray, int* length)
 //{
 //    if (UNLIKELY(value == NULL)) {
 //        return;
@@ -127,7 +147,7 @@
 //    *stringArray = preAllocSlot;
 //}
 //
-//jstring WCDBJNICreateJString(JNIEnv* env, const char* utf8String)
+//jstring WCDBRustCreateJString(JNIEnv* env, const char* utf8String)
 //{
 //    if (utf8String == NULL) {
 //        return NULL;
