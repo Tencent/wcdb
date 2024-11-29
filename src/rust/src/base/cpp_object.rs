@@ -1,5 +1,5 @@
 use std::ffi::c_void;
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 extern "C" {
     pub fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
@@ -10,12 +10,12 @@ pub struct CppObject {
 }
 
 impl CppObject {
-    pub fn new(cpp_obj: *mut c_void) -> CppObject {
-        CppObject { cpp_obj }
+    pub fn new() -> CppObject {
+        CppObject { cpp_obj: std::ptr::null_mut() }
     }
 
-    pub fn get(&self) -> *mut c_void {
-        self.cpp_obj
+    pub fn new_with_value(cpp_obj: *mut c_void) -> CppObject {
+        CppObject { cpp_obj }
     }
 }
 
@@ -24,6 +24,12 @@ impl Deref for CppObject {
 
     fn deref(&self) -> &Self::Target {
         &self.cpp_obj
+    }
+}
+
+impl DerefMut for CppObject {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.cpp_obj
     }
 }
 

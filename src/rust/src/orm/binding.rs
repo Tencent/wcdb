@@ -1,4 +1,5 @@
 use std::ffi::{c_char, c_void};
+use std::ptr::null_mut;
 
 use crate::base::cpp_object::CppObject;
 use crate::utils::ToCString;
@@ -13,12 +14,12 @@ pub struct Binding {
 }
 
 impl Binding {
-    pub fn new() -> Binding {
-        Binding { cpp_obj: CppObject::new(unsafe { WCDBRustBinding_create() }) }
-    }
+    // pub fn new() -> Binding {
+    //     Binding { cpp_obj: CppObject::new(unsafe { WCDBRustBinding_create() }) }
+    // }
 
     pub fn create_table(&self, table_name: &str, handle: *mut c_void) -> bool {
         let c_table_name = table_name.to_cstring();
-        unsafe { WCDBRustBinding_createTable(*self.cpp_obj, c_table_name.as_ptr()) }
+        unsafe { WCDBRustBinding_createTable(*self.cpp_obj, c_table_name.as_ptr(), null_mut()) }
     }
 }
