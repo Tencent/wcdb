@@ -9,16 +9,6 @@ pub struct CppObject {
     cpp_obj: *mut c_void,
 }
 
-impl CppObject {
-    pub fn new() -> CppObject {
-        CppObject { cpp_obj: std::ptr::null_mut() }
-    }
-
-    pub fn new_with_value(cpp_obj: *mut c_void) -> CppObject {
-        CppObject { cpp_obj }
-    }
-}
-
 impl Deref for CppObject {
     type Target = *mut c_void;
 
@@ -36,5 +26,15 @@ impl DerefMut for CppObject {
 impl Drop for CppObject {
     fn drop(&mut self) {
         unsafe { WCDBRustBase_releaseObject(self.cpp_obj) };
+    }
+}
+
+impl CppObject {
+    pub fn new() -> CppObject {
+        CppObject { cpp_obj: std::ptr::null_mut() }
+    }
+
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> CppObject {
+        CppObject { cpp_obj }
     }
 }

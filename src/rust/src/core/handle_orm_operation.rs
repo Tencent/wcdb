@@ -22,9 +22,9 @@ impl HandleORMOperation {
         }
     }
 
-    pub fn new_with_value(cpp_obj: *mut c_void) -> HandleORMOperation {
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> HandleORMOperation {
         HandleORMOperation {
-            handle_operation: HandleOperation::new_with_value(cpp_obj),
+            handle_operation: HandleOperation::new_with_obj(cpp_obj),
         }
     }
 

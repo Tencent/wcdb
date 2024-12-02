@@ -15,9 +15,9 @@ impl HandleOperation {
         }
     }
 
-    pub fn new_with_value(cpp_obj: *mut c_void) -> HandleOperation {
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> HandleOperation {
         HandleOperation {
-            cpp_obj: CppObject::new_with_value(cpp_obj),
+            cpp_obj: CppObject::new_with_obj(cpp_obj),
         }
     }
 

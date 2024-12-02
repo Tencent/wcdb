@@ -33,7 +33,7 @@ impl Database {
         let c_path = CString::new(path).unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr()) };
         Database {
-            handle_orm_operation: HandleORMOperation::new_with_value(cpp_obj),
+            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             close_callback: Arc::new(Mutex::new(None)),
         }
     }

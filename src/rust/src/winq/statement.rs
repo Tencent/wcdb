@@ -1,1 +1,5 @@
-pub struct Statement {}
+use crate::winq::identifier::Identifier;
+
+pub struct Statement {
+    identifier: Identifier,
+}

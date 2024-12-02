@@ -15,7 +15,8 @@ add_subdirectory(../../ ${CMAKE_CURRENT_BINARY_DIR}/wcdb)
 
 set(WCDB_RUST_SRC_DIR
         ${CMAKE_CURRENT_LIST_DIR}/base
-        ${CMAKE_CURRENT_LIST_DIR}/core)
+        ${CMAKE_CURRENT_LIST_DIR}/core
+        ${CMAKE_CURRENT_LIST_DIR}/winq)
 
 set(WCDB_RUST_SRC)
 set(WCDB_RUST_INCLUDE)
@@ -33,4 +34,3 @@ endforeach()
 
 target_sources(${TARGET_NAME} PUBLIC ${WCDB_RUST_SRC})
 target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_RUST_INCLUDE})
-
