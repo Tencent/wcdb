@@ -1,5 +1,6 @@
 use std::ffi::c_void;
 use std::ops::{Deref, DerefMut};
+use std::ptr::null_mut;
 
 extern "C" {
     pub fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
@@ -36,5 +37,10 @@ impl CppObject {
 
     pub fn new_with_obj(cpp_obj: *mut c_void) -> CppObject {
         CppObject { cpp_obj }
+    }
+
+    pub(crate) fn release_cpp_object(&mut self) {
+        unsafe { WCDBRustBase_releaseObject(self.cpp_obj) };
+        self.cpp_obj = null_mut()
     }
 }

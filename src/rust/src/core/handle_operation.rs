@@ -6,8 +6,6 @@ pub struct HandleOperation {
     cpp_obj: CppObject,
 }
 
-impl HandleOperation {}
-
 impl HandleOperation {
     pub fn new() -> HandleOperation {
         HandleOperation {
@@ -27,5 +25,12 @@ impl HandleOperation {
 
     pub fn get_cpp_obj(&self) -> *mut c_void {
         *self.cpp_obj
+    }
+}
+
+/// CppObject
+impl HandleOperation {
+    pub(crate) fn release_cpp_object(&mut self) {
+        self.cpp_obj.release_cpp_object();
     }
 }

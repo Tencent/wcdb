@@ -2,7 +2,10 @@ use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
 
+use crate::core::handle::Handle;
+use crate::core::handle_operation_trait::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
+use crate::orm::table_binding::TableBinding;
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
@@ -55,8 +58,23 @@ impl Database {
     }
 }
 
+/// HandleORMOperation
 impl Database {
+    fn create_table<T: TableBinding<T>>(&self, table_name: &str, binding: T) -> bool {
+        self.handle_orm_operation.create_table(table_name, binding, self)
+    }
+
     fn get_cpp_obj(&self) -> *mut c_void {
         self.handle_orm_operation.get_cpp_obj()
+    }
+}
+
+impl HandleOperationTrait for Database {
+    fn get_handle(&self, write_hint: bool) -> Handle {
+        Handle::new(self, write_hint)
+    }
+
+    fn auto_invalidate_handle(&self) -> bool {
+        true
     }
 }

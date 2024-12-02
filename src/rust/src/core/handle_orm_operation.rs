@@ -1,7 +1,7 @@
 use std::ffi::c_void;
 
-use crate::base::result_code::ResultCode;
 use crate::core::handle_operation::HandleOperation;
+use crate::core::handle_operation_trait::HandleOperationTrait;
 use crate::orm::table_binding::TableBinding;
 
 pub struct HandleORMOperation {
@@ -9,12 +9,20 @@ pub struct HandleORMOperation {
 }
 
 impl HandleORMOperation {
-    pub fn create_table<T: TableBinding>(&self, table_name: &str, binding: T) -> ResultCode {
-        binding.base_binding();
-        ResultCode::Success
+    pub fn create_table<T: TableBinding<T>>(&self, table_name: &str, binding: T, handle_operation_trait: &dyn HandleOperationTrait) -> bool {
+        let handle = handle_operation_trait.get_handle(true);
+        binding.base_binding().create_table(table_name, handle)
     }
 }
 
+/// HandleOperation
+impl HandleORMOperation {
+    pub fn release_cpp_object(&mut self) {
+        self.handle_operation.release_cpp_object();
+    }
+}
+
+/// Rust
 impl HandleORMOperation {
     pub fn new() -> HandleORMOperation {
         HandleORMOperation {
