@@ -278,6 +278,9 @@ bool FileManager::createDirectory(const UnsafeStringView &path)
     if (wcdb_mkdir(GetPathString(path), DirFullAccess) == 0) {
         return true;
     }
+    if (errno == EEXIST) {
+        return true;
+    }
     setThreadedError(path);
     return false;
 }
