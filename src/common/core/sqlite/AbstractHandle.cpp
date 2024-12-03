@@ -589,6 +589,9 @@ void AbstractHandle::rollbackTransaction()
             sqlite3_unimpeded(m_handle, true);
             succeed = executeStatement(StatementRollback().rollbackToSavepoint(
             getSavepointName(m_transactionLevel)));
+            if (!succeed && getError().getMessage().hasPrefix("no such savepoint:")) {
+                succeed = true;
+            }
             sqlite3_unimpeded(m_handle, false);
         }
         if (succeed) {
