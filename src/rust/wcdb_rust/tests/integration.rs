@@ -1,8 +1,7 @@
 #[cfg(test)]
 pub mod test_main {
     use std::ops::{Deref, DerefMut};
-
-    use wcdb_rust::core::database::Database;
+    use wcdb_core::core::database::Database;
 
     struct TestTableBinding;
 

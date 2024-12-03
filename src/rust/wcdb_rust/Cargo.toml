@@ -4,11 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-table_binding_derive = { path = "../table_binding_derive" }
-
-[build-dependencies]
-num_cpus = "1.16.0"
-cmake = "0.1.52"
+wcdb_core = { path = "../wcdb_core" }
+table_binding = { path = "../table_binding" }
 
 [[example]]
 name = "demo"
