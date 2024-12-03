@@ -1,16 +1,3 @@
-[package]
-name = "wcdb_rust"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-syn = "2.0.90"
-quote = "1.0.37"
-
-[build-dependencies]
-num_cpus = "1.16.0"
-cmake = "0.1.52"
-
-[[example]]
-name = "demo"
-path = "example/main.rs"
+[workspace]
+members = ["wcdb_rust", "table_binding_derive"]
+resolver = "2"

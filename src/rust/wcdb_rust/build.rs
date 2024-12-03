@@ -1,5 +1,5 @@
 fn main() {
-    let dst = cmake::Config::new("cpp")
+    let dst = cmake::Config::new("../cpp")
         .define("CMAKE_BUILD_TYPE", "Release")
         .build_arg(format!("-j{}", num_cpus::get()))
         .build_target("all")
