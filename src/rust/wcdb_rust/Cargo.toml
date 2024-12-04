@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 wcdb_core = { path = "../wcdb_core" }
 table_binding = { path = "../table_binding" }
+once_cell = "1.8.0"
+lazy_static = "1.5.0"
 
 [[example]]
 name = "demo"

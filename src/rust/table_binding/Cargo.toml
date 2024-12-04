@@ -8,6 +8,6 @@ proc-macro = true
 
 [dependencies]
 wcdb_core = { path = "../wcdb_core" }
-syn = { version = "2.0.90", features = ["extra-traits"] }
+syn = { version = "2.0.90", features = ["full", "extra-traits"] }
 proc-macro2 = "1.0.92"
 quote = "1.0.37"

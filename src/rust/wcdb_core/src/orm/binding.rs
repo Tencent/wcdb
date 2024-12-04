@@ -17,10 +17,13 @@ pub struct Binding {
     cpp_obj: CppObject,
 }
 
+unsafe impl Send for Binding {}
+unsafe impl Sync for Binding {}
+
 impl Binding {
-    // pub fn new() -> Binding {
-    //     Binding { cpp_obj: CppObject::new(unsafe { WCDBRustBinding_create() }) }
-    // }
+    pub fn new() -> Binding {
+        Binding { cpp_obj: CppObject::new_with_obj(unsafe { WCDBRustBinding_create() }) }
+    }
 
     pub fn create_table(&self, table_name: &str, handle: Handle) -> bool {
         let c_table_name = table_name.to_cstring();
@@ -31,5 +34,9 @@ impl Binding {
                 handle.get_cpp_handle(),
             )
         }
+    }
+
+    pub fn get_base_binding(&self) -> *mut c_void {
+        todo!()
     }
 }

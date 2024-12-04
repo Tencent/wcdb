@@ -2,13 +2,14 @@ use crate::base::result_code::ResultCode;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::binding::Binding;
 use crate::orm::field::Field;
+use std::any::TypeId;
 
 pub trait TableBinding<T> {
-    fn binding_type(&self) -> &'static str;
+    fn binding_type(&self) -> TypeId;
 
     fn all_binding_fields(&self) -> Vec<Field<T>>;
 
-    fn base_binding(&self) -> Binding;
+    fn base_binding(&self) -> &Binding;
 
     fn extract_object(
         &self,
