@@ -1,4 +1,3 @@
-use crate::base::result_code::ResultCode;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::binding::Binding;
 use crate::orm::field::Field;
@@ -7,7 +6,7 @@ use std::any::TypeId;
 pub trait TableBinding<T> {
     fn binding_type(&self) -> TypeId;
 
-    fn all_binding_fields(&self) -> Vec<Field<T>>;
+    fn all_binding_fields(&self) -> Vec<&Field<T>>;
 
     fn base_binding(&self) -> &Binding;
 
@@ -15,7 +14,7 @@ pub trait TableBinding<T> {
         &self,
         fields: Vec<Field<T>>,
         prepared_statement: &PreparedStatement,
-    ) -> Result<T, ResultCode>;
+    ) -> T;
 
     fn bind_field(
         &self,

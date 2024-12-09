@@ -1,14 +1,25 @@
 use once_cell::sync::Lazy;
 use std::any::TypeId;
-use wcdb_core::base::result_code::ResultCode;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::prepared_statement::PreparedStatement;
 use wcdb_core::orm::binding::Binding;
 use wcdb_core::orm::field::Field;
 use wcdb_core::orm::table_binding::TableBinding;
 
-pub struct DbTableMessage<'a> {
-    pub multi_primary1: Field<'a, DbTableMessage<'a>>,
+pub struct TableMessage {
+    pub multi_primary1: i32,
+}
+
+impl Default for TableMessage {
+    fn default() -> Self {
+        Self {
+            multi_primary1: 0,
+        }
+    }
+}
+
+pub struct DbTableMessage {
+    pub multi_primary1: *const Field<TableMessage>,
 }
 
 static DBTABLEMESSAGE_BINDING: Lazy<Binding> = Lazy::new(|| {
@@ -16,21 +27,25 @@ static DBTABLEMESSAGE_BINDING: Lazy<Binding> = Lazy::new(|| {
 });
 
 static DBTABLEMESSAGE_INSTANCE: Lazy<DbTableMessage> = Lazy::new(|| {
-    DbTableMessage {
-        multi_primary1: Field::new("multi_primary1", &*DBTABLEMESSAGE_INSTANCE, 1, false, false),
-    }
+    let mut instance = DbTableMessage {
+        multi_primary1: std::ptr::null(),
+    };
+    let instance_raw = unsafe { &instance as *const DbTableMessage };
+    let field = Box::new(Field::new("multi_primary1", instance_raw, 1, false, false));
+    instance.multi_primary1 = unsafe { Box::into_raw(field) };
+    instance
 });
 
-unsafe impl Send for DbTableMessage<'_> {}
-unsafe impl<'a> Sync for DbTableMessage<'a> {}
+unsafe impl Send for DbTableMessage {}
+unsafe impl Sync for DbTableMessage {}
 
-impl<'a> TableBinding<DbTableMessage<'a>> for DbTableMessage<'a> {
+impl TableBinding<TableMessage> for DbTableMessage {
     fn binding_type(&self) -> TypeId {
-        TypeId::of::<DbTableMessage>()
+        TypeId::of::<TableMessage>()
     }
 
-    fn all_binding_fields(&self) -> Vec<Field<'a, DbTableMessage<'a>>> {
-        todo!()
+    fn all_binding_fields(&self) -> Vec<&Field<TableMessage>> {
+        unsafe { vec![&*self.multi_primary1] }
     }
 
     fn base_binding(&self) -> &Binding {
@@ -39,21 +54,30 @@ impl<'a> TableBinding<DbTableMessage<'a>> for DbTableMessage<'a> {
 
     fn extract_object(
         &self,
-        fields: Vec<Field<'_, DbTableMessage<'_>>>,
+        fields: Vec<Field<TableMessage>>,
         prepared_statement: &PreparedStatement,
-    ) -> Result<DbTableMessage<'a>, ResultCode> {
+    ) -> TableMessage {
+        let mut new_one = TableMessage::default();
+        let mut index = 0;
+        for field in fields {
+            match field.get_field_id() {
+                1 => new_one.multi_primary1 = prepared_statement.get_int(index),
+                _ => unreachable!("Unknown field id"),
+            }
+            index += 1;
+        }
+        new_one
+    }
+
+    fn bind_field(&self, object: &TableMessage, field: &Field<TableMessage>, index: usize, prepared_statement: &mut PreparedStatement) {
         todo!()
     }
 
-    fn bind_field(&self, object: &DbTableMessage, field: &Field<DbTableMessage>, index: usize, prepared_statement: &mut PreparedStatement) {
-        todo!()
-    }
-
-    fn is_auto_increment(&self, object: &DbTableMessage) -> bool {
+    fn is_auto_increment(&self, object: &TableMessage) -> bool {
         false
     }
 
-    fn set_last_insert_row_id(&self, object: &mut DbTableMessage, last_insert_row_id: i64) {}
+    fn set_last_insert_row_id(&self, object: &mut TableMessage, last_insert_row_id: i64) {}
 }
 
 fn main() {

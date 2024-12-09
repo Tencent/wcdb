@@ -9,7 +9,7 @@ pub struct HandleORMOperation {
 }
 
 impl HandleORMOperation {
-    pub fn create_table<T: TableBinding<T>>(&self, table_name: &str, binding: &T, handle_operation_trait: &dyn HandleOperationTrait) -> bool {
+    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R, handle_operation_trait: &dyn HandleOperationTrait) -> bool {
         let handle = handle_operation_trait.get_handle(true);
         binding.base_binding().create_table(table_name, handle)
     }

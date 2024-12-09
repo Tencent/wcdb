@@ -60,7 +60,7 @@ impl Database {
 
 /// HandleORMOperation
 impl Database {
-    pub fn create_table<T: TableBinding<T>>(&self, table_name: &str, binding: &T) -> bool {
+    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
         self.handle_orm_operation.create_table(table_name, binding, self)
     }
 

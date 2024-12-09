@@ -20,9 +20,9 @@ impl Column {
         }
     }
 
-    pub fn new_with_binding(name: &str, table_binding: *mut c_void) -> Column {
+    pub fn new_with_binding(name: &str, binding_raw: *mut c_void) -> Column {
         let c_name = CString::new(name).unwrap_or_default();
-        let cpp_obj = unsafe { WCDBRustColumn_createWithName(c_name.as_ptr(), table_binding) };
+        let cpp_obj = unsafe { WCDBRustColumn_createWithName(c_name.as_ptr(), binding_raw) };
         Column {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
         }
