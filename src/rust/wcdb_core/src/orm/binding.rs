@@ -1,8 +1,9 @@
-use std::ffi::{c_char, c_void};
-
 use crate::base::cpp_object::CppObject;
 use crate::core::handle::Handle;
 use crate::utils::ToCString;
+use std::ffi::{c_char, c_void};
+use std::ptr::null_mut;
+use std::sync::RwLock;
 
 extern "C" {
     pub fn WCDBRustBinding_create() -> *mut c_void;
@@ -11,10 +12,12 @@ extern "C" {
         path: *const c_char,
         handle: *mut c_void,
     ) -> bool;
+    pub fn WCDBRustBinding_getBaseBinding(cpp_obj: *mut c_void) -> *mut c_void;
 }
 
 pub struct Binding {
     cpp_obj: CppObject,
+    base_binding: RwLock<*mut c_void>,
 }
 
 unsafe impl Send for Binding {}
@@ -22,7 +25,10 @@ unsafe impl Sync for Binding {}
 
 impl Binding {
     pub fn new() -> Binding {
-        Binding { cpp_obj: CppObject::new_with_obj(unsafe { WCDBRustBinding_create() }) }
+        Binding {
+            cpp_obj: CppObject::new_with_obj(unsafe { WCDBRustBinding_create() }),
+            base_binding: RwLock::new(null_mut()),
+        }
     }
 
     pub fn create_table(&self, table_name: &str, handle: Handle) -> bool {
@@ -37,6 +43,10 @@ impl Binding {
     }
 
     pub fn get_base_binding(&self) -> *mut c_void {
-        todo!()
+        if self.base_binding.read().unwrap().is_null() {
+            let base_binding = unsafe { WCDBRustBinding_getBaseBinding(*self.cpp_obj) };
+            *self.base_binding.write().unwrap() = base_binding;
+        }
+        *self.base_binding.read().unwrap()
     }
 }

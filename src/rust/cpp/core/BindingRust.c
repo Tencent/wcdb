@@ -94,9 +94,9 @@ bool WCDBRustBinding_createTable(void* self, const char* tableName, void* handle
 //    WCDBRustReleaseString(tableName);
 //    return ret;
 //}
-//
-//jlong WCDBRustBindingClassMethod(getBaseBinding, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    return (jlong) WCDBBindingGetBaseBinding(selfStruct);
-//}
+
+void* WCDBRustBindingClassMethod(getBaseBinding, void* self)
+{
+    WCDBRustBridgeStruct(CPPBinding, self);
+    return (void*) WCDBBindingGetBaseBinding(selfStruct);
+}

@@ -44,4 +44,4 @@ WCDB_EXTERN void* WCDBRustBindingClassMethodWithNoArg(create);
 WCDB_EXTERN bool WCDBRustBindingClassMethod(createTable, void* self, const char* tableName, void* handle);
 //jboolean
 //WCDBRustBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong handle);
-//jlong WCDBRustBindingClassMethod(getBaseBinding, jlong self);
+void* WCDBRustBindingClassMethod(getBaseBinding, void* self);
