@@ -40,8 +40,8 @@
 //void WCDBRustDatabaseClassMethod(setTag, jlong self, jlong tag);
 //jstring WCDBRustDatabaseClassMethod(getPath, jlong self);
 //jobject WCDBRustDatabaseClassMethod(getPaths, jlong self);
-//jlong WCDBRustDatabaseClassMethod(getHandle, jlong self, jboolean writeHint);
-//
+void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint);
+
 //jboolean WCDBRustDatabaseClassMethod(canOpen, jlong self);
 //jboolean WCDBRustDatabaseClassMethod(isOpened, jlong self);
 //jboolean WCDBRustDatabaseClassMethod(isBlockaded, jlong self);

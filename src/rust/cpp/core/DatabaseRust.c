@@ -89,13 +89,13 @@
 //    WCDBDatabaseGetPaths(selfStruct, &context, (WCDBStringEnumerater) WCDBRustStringEnumerator);
 //    return arrayList;
 //}
-//
-//jlong WCDBRustDatabaseClassMethod(getHandle, jlong self, jboolean writeHint)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return (jlong) WCDBDatabaseGetHandle(selfStruct, writeHint).innerValue;
-//}
-//
+
+void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint)
+{
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return (void*) WCDBDatabaseGetHandle(selfStruct, writeHint).innerValue;
+}
+
 //jboolean WCDBRustDatabaseClassMethod(canOpen, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);

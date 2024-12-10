@@ -93,6 +93,6 @@ impl TableBinding<TableMessage> for DbTableMessage {
 }
 
 fn main() {
-    let db = Database::new("test.db");
+    let db = Database::new("/Users/zhanglei/Downloads/test.db");
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE);
 }

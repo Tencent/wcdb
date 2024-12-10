@@ -11,12 +11,12 @@ pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
 extern "C" {
     pub fn WCDBRustCore_createDatabase(path: *const c_char) -> *mut c_void;
-
     pub fn WCDBRustDatabase_close(
         cpp_obj: *mut c_void,
         context: *mut c_void,
         cb: DatabaseCloseCallback,
     );
+    pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
 }
 
 pub struct Database {
@@ -28,6 +28,28 @@ extern "C" fn close_callback_wrapper(context: *mut c_void) {
     if !context.is_null() {
         let boxed_cb: Box<Box<dyn FnOnce()>> = unsafe { Box::from_raw(context as *mut _) };
         boxed_cb();
+    }
+}
+
+/// HandleORMOperation
+impl Database {
+    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
+        self.handle_orm_operation
+            .create_table(table_name, binding, self)
+    }
+
+    pub(crate) fn get_cpp_obj(&self) -> *mut c_void {
+        self.handle_orm_operation.get_cpp_obj()
+    }
+}
+
+impl HandleOperationTrait for Database {
+    fn get_handle(&self, write_hint: bool) -> Handle {
+        Handle::new(self, write_hint)
+    }
+
+    fn auto_invalidate_handle(&self) -> bool {
+        true
     }
 }
 
@@ -58,26 +80,9 @@ impl Database {
             }
         }
     }
-}
 
-/// HandleORMOperation
-impl Database {
-    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
-        self.handle_orm_operation
-            .create_table(table_name, binding, self)
-    }
-
-    fn get_cpp_obj(&self) -> *mut c_void {
-        self.handle_orm_operation.get_cpp_obj()
-    }
-}
-
-impl HandleOperationTrait for Database {
-    fn get_handle(&self, write_hint: bool) -> Handle {
-        Handle::new(self, write_hint)
-    }
-
-    fn auto_invalidate_handle(&self) -> bool {
-        true
+    /// static native long getHandle(long self, boolean writeHint);
+    pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
+        unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
     }
 }

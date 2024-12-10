@@ -38,7 +38,7 @@ impl Binding {
         unsafe { WCDBRustBinding_addColumnDef(*self.cpp_obj, column_def.get_cpp_obj()) };
     }
 
-    pub fn create_table(&self, table_name: &str, handle: Handle) -> bool {
+    pub fn create_table(&self, table_name: &str, mut handle: Handle) -> bool {
         let c_table_name = table_name.to_cstring();
         unsafe {
             WCDBRustBinding_createTable(

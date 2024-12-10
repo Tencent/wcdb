@@ -13,6 +13,13 @@ pub struct Handle<'a> {
     write_hint: bool,
 }
 
+/// HandleORMOperation
+impl<'a> Handle<'a> {
+    pub fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.handle_orm_operation.set_cpp_obj(cpp_obj);
+    }
+}
+
 impl<'a> Handle<'a> {
     pub fn new(database: &'a Database, write_hint: bool) -> Self {
         Self {
@@ -23,10 +30,14 @@ impl<'a> Handle<'a> {
         }
     }
 
-    pub fn get_cpp_handle(&self) -> *mut c_void {
-        let cpp_obj = self.handle_orm_operation.get_cpp_obj();
+    pub fn get_cpp_handle(&mut self) -> *mut c_void {
+        let mut cpp_obj = self.handle_orm_operation.get_cpp_obj();
         if cpp_obj.is_null() {
-            // TODO
+            self.set_cpp_obj(Database::get_handle_raw(
+                self.database.get_cpp_obj(),
+                self.write_hint,
+            ));
+            cpp_obj = self.handle_orm_operation.get_cpp_obj();
         }
         cpp_obj
     }
