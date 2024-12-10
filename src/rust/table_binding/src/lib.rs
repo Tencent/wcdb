@@ -75,7 +75,11 @@ fn generate_singleton(input: &DeriveInput, db_table: &Ident) -> proc_macro2::Tok
     }
 }
 
-fn get_attr<T: std::str::FromStr>(input: &DeriveInput, field_name: &str, attr_name: &str) -> Option<T> {
+fn get_attr<T: std::str::FromStr>(
+    input: &DeriveInput,
+    field_name: &str,
+    attr_name: &str,
+) -> Option<T> {
     if let Data::Struct(data_struct) = &input.data {
         for field in &data_struct.fields {
             if let Some(ident) = &field.ident {

@@ -1,9 +1,9 @@
 pub mod column;
+pub mod column_constraint;
+pub mod column_def;
+pub mod column_type;
 pub mod expression_operable;
 pub mod identifier;
-pub mod column_constraint;
-mod column_def;
-mod column_type;
-mod statement_create_index;
-mod statement;
-mod table_constraint;
+pub mod statement;
+pub mod statement_create_index;
+pub mod table_constraint;

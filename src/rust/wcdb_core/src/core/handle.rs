@@ -14,8 +14,8 @@ pub struct Handle<'a> {
 }
 
 impl<'a> Handle<'a> {
-    pub fn new(database: &Database, write_hint: bool) -> Handle {
-        Handle {
+    pub fn new(database: &'a Database, write_hint: bool) -> Self {
+        Self {
             handle_orm_operation: HandleORMOperation::new(),
             main_statement: None,
             database,

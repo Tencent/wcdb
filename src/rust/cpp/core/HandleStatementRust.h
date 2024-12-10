@@ -42,7 +42,7 @@
 //void WCDBRustHandleStatementClassMethod(clearBindings, jlong self);
 //void WCDBRustHandleStatementClassMethod(finalize, jlong self);
 //jboolean WCDBRustHandleStatementClassMethod(isDone, jlong self);
-//void WCDBRustHandleStatementClassMethod(bindInteger, jlong self, jlong value, jint index);
+void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value, int index);
 //void WCDBRustHandleStatementClassMethod(bindDouble, jlong self, jdouble value, jint index);
 //void WCDBRustHandleStatementClassMethod(bindText, jlong self, jstring value, jint index);
 //void WCDBRustHandleStatementClassMethod(bindBLOB, jlong self, jbyteArray value, jint index);

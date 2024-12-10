@@ -1,12 +1,15 @@
 use crate::base::cpp_object::CppObject;
 use crate::core::handle::Handle;
 use crate::utils::ToCString;
+use crate::winq::column_def::ColumnDef;
 use std::ffi::{c_char, c_void};
 use std::ptr::null_mut;
 use std::sync::RwLock;
 
 extern "C" {
+    /// createCppObj
     pub fn WCDBRustBinding_create() -> *mut c_void;
+    pub fn WCDBRustBinding_addColumnDef(cpp_obj: *mut c_void, column_def: *mut c_void);
     pub fn WCDBRustBinding_createTable(
         cpp_obj: *mut c_void,
         path: *const c_char,
@@ -29,6 +32,10 @@ impl Binding {
             cpp_obj: CppObject::new_with_obj(unsafe { WCDBRustBinding_create() }),
             base_binding: RwLock::new(null_mut()),
         }
+    }
+
+    pub fn add_column_def(&self, column_def: ColumnDef) {
+        unsafe { WCDBRustBinding_addColumnDef(*self.cpp_obj, column_def.get_cpp_obj()) };
     }
 
     pub fn create_table(&self, table_name: &str, handle: Handle) -> bool {

@@ -20,19 +20,20 @@
 
 #include "BindingRust.h"
 #include "BindingBridge.h"
+#include <printf.h>
 
-void* WCDBRustBinding_create()
+void* WCDBRustBindingClassMethodWithNoArg(create)
 {
     return (void*) WCDBBindingCreate().innerValue;
 }
 
-//void WCDBRustBindingClassMethod(addColumnDef, jlong self, jlong columnDef)
-//{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBRustBridgeStruct(CPPColumnDef, columnDef);
-//    WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
-//}
-//
+void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef)
+{
+    WCDBRustBridgeStruct(CPPBinding, self);
+    WCDBRustBridgeStruct(CPPColumnDef, columnDef);
+    WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
+}
+
 //void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPBinding, self);

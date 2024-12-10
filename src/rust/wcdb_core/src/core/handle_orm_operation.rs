@@ -9,7 +9,12 @@ pub struct HandleORMOperation {
 }
 
 impl HandleORMOperation {
-    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R, handle_operation_trait: &dyn HandleOperationTrait) -> bool {
+    pub fn create_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+        handle_operation_trait: &dyn HandleOperationTrait,
+    ) -> bool {
         let handle = handle_operation_trait.get_handle(true);
         binding.base_binding().create_table(table_name, handle)
     }
@@ -24,13 +29,13 @@ impl HandleORMOperation {
 
 /// Rust
 impl HandleORMOperation {
-    pub fn new() -> HandleORMOperation {
+    pub fn new() -> Self {
         HandleORMOperation {
             handle_operation: HandleOperation::new(),
         }
     }
 
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> HandleORMOperation {
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         HandleORMOperation {
             handle_operation: HandleOperation::new_with_obj(cpp_obj),
         }

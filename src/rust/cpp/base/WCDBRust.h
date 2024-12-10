@@ -190,30 +190,14 @@
         break;                                                                 \
     }
 
-#define WCDBRustTryReleaseStringInCommonValue(parameter)                                      \
-    if (parameter##_type == WCDBBridgedType_String                                           \
-        && parameter##_common.intValue != 0 && parameter##_utf16String != NULL) {            \
-        if (parameter##_isCritical) {                                                        \
-            (*env)->ReleaseStringCritical(env, parameter##_string, parameter##_utf16String); \
-        } else {                                                                             \
-            (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String);    \
-        }                                                                                    \
-    }
-
 #define WCDBRustObjectOrStringParameter(parameter)                              \
-    jint parameter##_type, jlong parameter##_long, jstring parameter##_string
+    int parameter##_type, long parameter##_long, const char* parameter##_string
 
-#define WCDBRustCreateObjectOrStringCommonValue(parameter, isCritical)          \
+#define WCDBRustCreateObjectOrStringCommonValue(parameter, isCritical)         \
     CPPCommonValue parameter##_common;                                         \
     parameter##_common.type = parameter##_type;                                \
-    const jchar *parameter##_utf16String = NULL;                               \
-    const bool parameter##_isCritical = isCritical;                            \
     if (parameter##_type == WCDBBridgedType_String) {                          \
-        WCDBRustGetUTF8String(env,                                              \
-                             parameter##_string,                               \
-                             (char **) &parameter##_common.intValue,           \
-                             &parameter##_utf16String,                         \
-                             parameter##_isCritical);                          \
+        parameter##_common.intValue = (long long) parameter##_string;          \
     } else {                                                                   \
         parameter##_common.intValue = parameter##_long;                        \
     }

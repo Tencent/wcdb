@@ -32,7 +32,7 @@ extern "C" fn close_callback_wrapper(context: *mut c_void) {
 }
 
 impl Database {
-    pub fn new(path: &str) -> Database {
+    pub fn new(path: &str) -> Self {
         let c_path = CString::new(path).unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr()) };
         Database {
@@ -52,7 +52,9 @@ impl Database {
             Some(cb) => {
                 let boxed_cb: Box<Box<dyn FnOnce()>> = Box::new(Box::new(cb));
                 let context = Box::into_raw(boxed_cb) as *mut c_void;
-                unsafe { WCDBRustDatabase_close(self.get_cpp_obj(), context, close_callback_wrapper) }
+                unsafe {
+                    WCDBRustDatabase_close(self.get_cpp_obj(), context, close_callback_wrapper)
+                }
             }
         }
     }
@@ -61,7 +63,8 @@ impl Database {
 /// HandleORMOperation
 impl Database {
     pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
-        self.handle_orm_operation.create_table(table_name, binding, self)
+        self.handle_orm_operation
+            .create_table(table_name, binding, self)
     }
 
     fn get_cpp_obj(&self) -> *mut c_void {

@@ -13,7 +13,7 @@ impl HandleOperation {
         }
     }
 
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> HandleOperation {
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         HandleOperation {
             cpp_obj: CppObject::new_with_obj(cpp_obj),
         }

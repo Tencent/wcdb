@@ -29,6 +29,10 @@ impl<T> Field<T> {
         }
     }
 
+    pub fn get_column(&self) -> &Column {
+        &self.column
+    }
+
     pub fn get_field_id(&self) -> usize {
         self.field_id
     }

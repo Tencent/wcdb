@@ -10,6 +10,8 @@ pub struct CppObject {
     cpp_obj: *mut c_void,
 }
 
+pub trait CppObjectTrait {}
+
 impl Deref for CppObject {
     type Target = *mut c_void;
 
@@ -32,10 +34,12 @@ impl Drop for CppObject {
 
 impl CppObject {
     pub fn new() -> CppObject {
-        CppObject { cpp_obj: std::ptr::null_mut() }
+        CppObject {
+            cpp_obj: std::ptr::null_mut(),
+        }
     }
 
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> CppObject {
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         CppObject { cpp_obj }
     }
 

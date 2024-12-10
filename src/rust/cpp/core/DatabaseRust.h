@@ -45,7 +45,7 @@
 //jboolean WCDBRustDatabaseClassMethod(canOpen, jlong self);
 //jboolean WCDBRustDatabaseClassMethod(isOpened, jlong self);
 //jboolean WCDBRustDatabaseClassMethod(isBlockaded, jlong self);
-WCDB_EXTERN void WCDBRustDatabaseClassMethod(close, void* self, void* context, WCDBDatabaseCloseCallback callback);
+void WCDBRustDatabaseClassMethod(close, void* self, void* context, WCDBDatabaseCloseCallback callback);
 //void WCDBRustDatabaseClassMethod(blockade, jlong self);
 //void WCDBRustDatabaseClassMethod(unblockade, jlong self);
 //void WCDBRustDatabaseClassMethod(purge, jlong self);

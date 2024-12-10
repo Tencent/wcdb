@@ -32,8 +32,8 @@
 #define WCDBRustBindingClassMethod(funcName, ...)                               \
     WCDBRustClassMethod(Binding, funcName, __VA_ARGS__)
 
-WCDB_EXTERN void* WCDBRustBindingClassMethodWithNoArg(create);
-//void WCDBRustBindingClassMethod(addColumnDef, jlong self, jlong columnDef);
+void* WCDBRustBindingClassMethodWithNoArg(create);
+void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef);
 //void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, jlong self);
 //void WCDBRustBindingClassMethod(
 //addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex);
@@ -41,7 +41,7 @@ WCDB_EXTERN void* WCDBRustBindingClassMethodWithNoArg(create);
 //void WCDBRustBindingClassMethod(configVirtualModule, jlong self, jstring moduleName);
 //void WCDBRustBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument);
 //void WCDBRustBindingClassMethod(configWithoutRowId, jlong self);
-WCDB_EXTERN bool WCDBRustBindingClassMethod(createTable, void* self, const char* tableName, void* handle);
+bool WCDBRustBindingClassMethod(createTable, void* self, const char* tableName, void* handle);
 //jboolean
 //WCDBRustBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong handle);
 void* WCDBRustBindingClassMethod(getBaseBinding, void* self);
