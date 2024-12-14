@@ -38,7 +38,7 @@ namespace WCDB {
 class HandleStatement;
 class CompressionTableInfo;
 
-enum class CompressionType {
+enum class CompressionType : char {
     Normal,
     Dict,
     VariousDict,
@@ -58,15 +58,15 @@ public:
     CompressionColumnInfo &operator=(const CompressionColumnInfo &other);
     CompressionColumnInfo &operator=(CompressionColumnInfo &&other);
 
-    const Column &getColumn() const;
+    StringView getColumn() const;
     void setColumnIndex(uint16_t index) const;
     uint16_t getColumnIndex() const;
 
-    const Column &getTypeColumn() const;
+    const StringView &getTypeColumn() const;
     void setTypeColumnIndex(uint16_t index) const;
     uint16_t getTypeColumnIndex() const;
 
-    const Column &getMatchColumn() const;
+    const StringView &getMatchColumn() const;
     void setMatchColumnIndex(uint16_t index) const;
     uint16_t getMatchColumnIndex() const;
 
@@ -78,11 +78,10 @@ public:
     void addMatchDict(const Integer &matchValue, DictId dictId);
 
 private:
-    Column m_column;
     mutable std::atomic_ushort m_columnIndex;
-    Column m_typeColumn;
+    StringView m_typeColumn;
     mutable std::atomic_ushort m_typeColumnIndex;
-    Column m_matchColumn;
+    StringView m_matchColumn;
     mutable std::atomic_ushort m_matchColumnIndex;
 
     CompressionType m_compressionType;

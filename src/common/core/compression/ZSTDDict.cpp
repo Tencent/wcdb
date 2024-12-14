@@ -121,7 +121,7 @@ bool ZSTDDict::loadData(const UnsafeData& data)
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return false;
     }
-    m_dictId = ZSTD_getDictID_fromDDict((ZSTD_DDict*) m_dDict);
+    m_dictId = (DictId) ZSTD_getDictID_fromDDict((ZSTD_DDict*) m_dDict);
     if (m_dictId == 0) {
         Error error(Error::Code::ZstdError,
                     Error::Level::Error,

@@ -339,12 +339,12 @@ Compression::InfoInitializer::checkCompressingColumns(const CompressionTableInfo
         uint16_t columnIndex = 0;
         bool findTypeColumn = false;
         for (const auto& column : curColumns) {
-            if (column.equal(compressingColumn.getColumn().syntax().name)) {
+            if (column.equal(compressingColumn.getColumn())) {
                 compressingColumn.setColumnIndex(columnIndex);
-            } else if (column.equal(compressingColumn.getTypeColumn().syntax().name)) {
+            } else if (column.equal(compressingColumn.getTypeColumn())) {
                 compressingColumn.setTypeColumnIndex(columnIndex);
                 findTypeColumn = true;
-            } else if (column.equal(compressingColumn.getMatchColumn().syntax().name)) {
+            } else if (column.equal(compressingColumn.getMatchColumn())) {
                 compressingColumn.setMatchColumnIndex(columnIndex);
             }
             columnIndex++;

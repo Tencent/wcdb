@@ -198,9 +198,8 @@ void CompressingStatementDecorator::bindDouble(const Float& value, int index)
             getHandle()->notifyError(
             Error::Code::Misuse,
             "",
-            StringView::formatted(
-            "Bind float to compression match column: %s",
-            info->columnInfo->getMatchColumn().syntax().name.data()));
+            StringView::formatted("Bind float to compression match column: %s",
+                                  info->columnInfo->getMatchColumn().data()));
             m_compressFail = true;
             return;
         }
@@ -222,9 +221,8 @@ void CompressingStatementDecorator::bindText(const Text& value, int index)
             getHandle()->notifyError(
             Error::Code::Misuse,
             "",
-            StringView::formatted(
-            "Bind text to compression match column: %s",
-            info->columnInfo->getMatchColumn().syntax().name.data()));
+            StringView::formatted("Bind text to compression match column: %s",
+                                  info->columnInfo->getMatchColumn().data()));
             m_compressFail = true;
             return;
         }
@@ -334,9 +332,8 @@ void CompressingStatementDecorator::bindBLOB(const BLOB& value, int index)
             getHandle()->notifyError(
             Error::Code::Misuse,
             "",
-            StringView::formatted(
-            "Bind blob to compression match column: %s",
-            info->columnInfo->getMatchColumn().syntax().name.data()));
+            StringView::formatted("Bind blob to compression match column: %s",
+                                  info->columnInfo->getMatchColumn().data()));
             m_compressFail = true;
             return;
         }
@@ -431,9 +428,8 @@ void CompressingStatementDecorator::bindNull(int index)
             getHandle()->notifyError(
             Error::Code::Misuse,
             "",
-            StringView::formatted(
-            "Bind null to compression match column: %s",
-            info->columnInfo->getMatchColumn().syntax().name.data()));
+            StringView::formatted("Bind null to compression match column: %s",
+                                  info->columnInfo->getMatchColumn().data()));
             m_compressFail = true;
             return;
         }
@@ -486,14 +482,12 @@ bool CompressingStatementDecorator::processInsert(const StatementInsert& insert)
         int index = 0;
         for (const auto& column : insertSTMT.columns) {
             for (auto& bindInfo : m_bindInfoList) {
-                if (bindInfo.columnInfo->getColumn().syntax().name.equal(column.name)) {
+                if (bindInfo.columnInfo->getColumn().equal(column.name)) {
                     bindInfo.columnParaIndex = { index, 0 };
-                } else if (bindInfo.columnInfo->getMatchColumn().syntax().name.equal(
-                           column.name)) {
+                } else if (bindInfo.columnInfo->getMatchColumn().equal(column.name)) {
                     bindInfo.matchColumnParaIndex = { index, 0 };
                 }
-                WCTAssert(
-                !bindInfo.columnInfo->getTypeColumn().syntax().name.equal(column.name));
+                WCTAssert(!bindInfo.columnInfo->getTypeColumn().equal(column.name));
             }
             index++;
         }
@@ -546,7 +540,7 @@ bool CompressingStatementDecorator::processInsert(const StatementInsert& insert)
                 m_bindInfoMap.emplace(bindInfo.matchColumnBindIndex, &bindInfo);
             }
             // INSERT INTO compressingTable(...columnA,..., columnB, ..., WCDB_CT_columnA, WCDB_CT_columnB, ...) VALUES(...)
-            newInsertSTMT.columns.push_back(bindInfo.columnInfo->getTypeColumn());
+            newInsertSTMT.columns.push_back(Column(bindInfo.columnInfo->getTypeColumn()));
             newInsertSTMT.expressionsValues.front().push_back(
             Expression(BindParameter(++maxBindIndex)));
             bindInfo.typeBindIndex = maxBindIndex;
@@ -564,8 +558,9 @@ bool CompressingStatementDecorator::processInsert(const StatementInsert& insert)
             for (const auto& columns : upsert.columnsList) {
                 for (const auto& column : columns) {
                     for (const auto& columnInfo : m_compressionTableInfo->getColumnInfos()) {
-                        if (column.name.equal(columnInfo.getColumn().syntax().name)) {
-                            newUpsert.columnsList.push_back({ columnInfo.getTypeColumn() });
+                        if (column.name.equal(columnInfo.getColumn())) {
+                            newUpsert.columnsList.push_back(
+                            { Column(columnInfo.getTypeColumn()) });
                             newUpsert.expressions.push_back(Expression(nullptr));
                             break;
                         }
@@ -612,17 +607,13 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
             int j = 0;
             for (const auto& column : columns) {
                 for (auto& bindInfo : m_bindInfoList) {
-                    if (bindInfo.columnInfo->getColumn().syntax().name.equal(
-                        column.name)) {
+                    if (bindInfo.columnInfo->getColumn().equal(column.name)) {
                         bindInfo.columnParaIndex = { i, j };
-                    } else if (bindInfo.columnInfo->getMatchColumn()
-                               .syntax()
-                               .name.equal(column.name)) {
+                    } else if (bindInfo.columnInfo->getMatchColumn().equal(
+                               column.name)) {
                         bindInfo.matchColumnParaIndex = { i, j };
                     }
-                    WCTAssert(
-                    !bindInfo.columnInfo->getTypeColumn().syntax().name.equal(
-                    column.name));
+                    WCTAssert(!bindInfo.columnInfo->getTypeColumn().equal(column.name));
                 }
                 j++;
             }
@@ -657,7 +648,8 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
                           == m_bindInfoMap.end());
                 m_bindInfoMap.emplace(bindInfo.matchColumnBindIndex, &bindInfo);
             }
-            newUpdateSTMT.columnsList.push_back({ bindInfo.columnInfo->getTypeColumn() });
+            newUpdateSTMT.columnsList.push_back(
+            { Column(bindInfo.columnInfo->getTypeColumn()) });
             newUpdateSTMT.expressions.push_back(Expression(BindParameter(++maxBindIndex)));
             bindInfo.typeBindIndex = maxBindIndex;
             WCTAssert(m_bindInfoMap.find(maxBindIndex) == m_bindInfoMap.end());
@@ -712,12 +704,12 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
                     } else if (bindInfo.columnInfo->getCompressionType()
                                == CompressionType::VariousDict) {
                         selectRowid.syntax().select.getOrCreate().resultColumns.push_back(
-                        ResultColumn(bindInfo.columnInfo->getMatchColumn()));
+                        ResultColumn(Column(bindInfo.columnInfo->getMatchColumn())));
                         bindInfo.matchColumnBindIndex = SelectedMatchValueBindIndex;
                         m_bindInfoMap.emplace(bindInfo.matchColumnBindIndex, &bindInfo);
                     }
                     newUpdateSTMT.columnsList.push_back(
-                    { bindInfo.columnInfo->getTypeColumn() });
+                    { Column(bindInfo.columnInfo->getTypeColumn()) });
                     newUpdateSTMT.expressions.push_back(
                     Expression(BindParameter(++maxBindIndex)));
                     bindInfo.typeBindIndex = maxBindIndex;
@@ -728,7 +720,7 @@ bool CompressingStatementDecorator::processUpdate(const StatementUpdate& update)
                 // Set null to compressed type
                 for (auto& bindInfo : m_bindInfoList) {
                     newUpdateSTMT.columnsList.push_back(
-                    { bindInfo.columnInfo->getTypeColumn() });
+                    { Column(bindInfo.columnInfo->getTypeColumn()) });
                     newUpdateSTMT.expressions.push_back(Expression(nullptr));
                 }
             }
@@ -1027,7 +1019,7 @@ bool CompressingStatementDecorator::adaptCompressingColumn(Statement& statement,
                 Syntax::ResultColumn& resultColumn = (Syntax::ResultColumn&) identifier;
                 auto iter = compressingColumns.find(&resultColumn.expression.value());
                 if (iter != compressingColumns.end()) {
-                    resultColumn.alias = iter->second->getColumn().syntax().name;
+                    resultColumn.alias = iter->second->getColumn();
                 }
                 return;
             }
@@ -1079,7 +1071,7 @@ bool CompressingStatementDecorator::adaptCompressingColumn(Statement& statement,
                 return;
             }
             for (const auto& compressingColumn : tableInfo->getColumnInfos()) {
-                if (compressingColumn.getColumn().syntax().name.equal(column.name)) {
+                if (compressingColumn.getColumn().equal(column.name)) {
                     compressingColumns[&expression] = &compressingColumn;
                     return;
                 }
@@ -1094,9 +1086,10 @@ bool CompressingStatementDecorator::adaptCompressingColumn(Statement& statement,
         expression = Expression();
         expression.switcher = Syntax::Expression::Switch::Function;
         expression.function() = DecompressFunctionName;
-        expression.expressions.push_back(Expression(compressingColumn.getColumn()));
+        expression.expressions.push_back(Expression(Column(compressingColumn.getColumn())));
         expression.expressions.back().column().table = table;
-        expression.expressions.push_back(Expression(compressingColumn.getTypeColumn()));
+        expression.expressions.push_back(
+        Expression(Column(compressingColumn.getTypeColumn())));
         expression.expressions.back().column().table = table;
         expression.useWildcard = false;
     }
