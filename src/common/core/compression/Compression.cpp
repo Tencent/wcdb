@@ -276,7 +276,7 @@ bool Compression::tryCreateRecordTable(InfoInitializer& initializer)
         return false;
     }
     if (exist.value()) {
-        m_hasCreatedRecord = false;
+        m_hasCreatedRecord = true;
         return true;
     }
     InnerHandle* handle = initializer.getCurrentHandle();
@@ -290,7 +290,7 @@ bool Compression::tryCreateRecordTable(InfoInitializer& initializer)
     if (!created) {
         return false;
     }
-    m_hasCreatedRecord = false;
+    m_hasCreatedRecord = true;
     if (handle->isInTransaction()) {
         m_localHasCreatedRecord.getOrCreate() = true;
     }
@@ -522,6 +522,9 @@ Optional<bool> Compression::tryAcquireTables(Compression::Stepper& stepper)
                 iter++;
             }
         }
+    }
+    if (!tryCreateRecordTable(stepper)) {
+        return NullOpt;
     }
     if (!stepper.filterComplessingTables(needCompressInfos)) {
         return NullOpt;
