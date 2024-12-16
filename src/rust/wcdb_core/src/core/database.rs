@@ -1,11 +1,11 @@
+use crate::base::cpp_object::CppObjectTrait;
+use crate::core::handle::Handle;
+use crate::core::handle_operation::HandleOperationTrait;
+use crate::core::handle_orm_operation::HandleORMOperation;
+use crate::orm::table_binding::TableBinding;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
-
-use crate::core::handle::Handle;
-use crate::core::handle_operation_trait::HandleOperationTrait;
-use crate::core::handle_orm_operation::HandleORMOperation;
-use crate::orm::table_binding::TableBinding;
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
@@ -19,11 +19,6 @@ extern "C" {
     pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
 }
 
-pub struct Database {
-    handle_orm_operation: HandleORMOperation,
-    close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
-}
-
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
     if !context.is_null() {
         let boxed_cb: Box<Box<dyn FnOnce()>> = unsafe { Box::from_raw(context as *mut _) };
@@ -31,26 +26,9 @@ extern "C" fn close_callback_wrapper(context: *mut c_void) {
     }
 }
 
-/// HandleORMOperation
-impl Database {
-    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
-        self.handle_orm_operation
-            .create_table(table_name, binding, self)
-    }
-
-    pub(crate) fn get_cpp_obj(&self) -> *mut c_void {
-        self.handle_orm_operation.get_cpp_obj()
-    }
-}
-
-impl HandleOperationTrait for Database {
-    fn get_handle(&self, write_hint: bool) -> Handle {
-        Handle::new(self, write_hint)
-    }
-
-    fn auto_invalidate_handle(&self) -> bool {
-        true
-    }
+pub struct Database {
+    handle_orm_operation: HandleORMOperation,
+    close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
 }
 
 impl Database {
@@ -84,5 +62,38 @@ impl Database {
     /// static native long getHandle(long self, boolean writeHint);
     pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
         unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
+    }
+
+    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
+        self.handle_orm_operation
+            .create_table(table_name, binding, self)
+    }
+
+    pub(crate) fn get_cpp_obj(&self) -> *mut c_void {
+        self.handle_orm_operation.get_cpp_obj()
+    }
+}
+
+impl HandleOperationTrait for Database {
+    fn get_handle(&self, write_hint: bool) -> Handle {
+        Handle::new(self, write_hint)
+    }
+
+    fn auto_invalidate_handle(&self) -> bool {
+        true
+    }
+}
+
+impl CppObjectTrait for Database {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.handle_orm_operation.set_cpp_obj(cpp_obj)
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.handle_orm_operation.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.handle_orm_operation.release_cpp_object();
     }
 }

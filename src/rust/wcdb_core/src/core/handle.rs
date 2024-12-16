@@ -1,9 +1,9 @@
-use std::ffi::c_void;
-
+use crate::base::cpp_object::CppObjectTrait;
 use crate::core::database::Database;
-use crate::core::handle_operation_trait::HandleOperationTrait;
+use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
+use std::ffi::c_void;
 
 pub struct Handle<'a> {
     handle_orm_operation: HandleORMOperation,
@@ -13,10 +13,27 @@ pub struct Handle<'a> {
     write_hint: bool,
 }
 
-/// HandleORMOperation
-impl<'a> Handle<'a> {
-    pub fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+impl<'a> HandleOperationTrait for Handle<'a> {
+    fn get_handle(&self, write_hint: bool) -> Handle {
+        unreachable!()
+    }
+
+    fn auto_invalidate_handle(&self) -> bool {
+        false
+    }
+}
+
+impl<'a> CppObjectTrait for Handle<'a> {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.handle_orm_operation.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.handle_orm_operation.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.handle_orm_operation.release_cpp_object()
     }
 }
 
@@ -48,15 +65,5 @@ impl<'a> Handle<'a> {
             self.handle_orm_operation.release_cpp_object();
             self.write_hint = false;
         }
-    }
-}
-
-impl<'a> HandleOperationTrait for Handle<'a> {
-    fn get_handle(&self, write_hint: bool) -> Handle {
-        unreachable!()
-    }
-
-    fn auto_invalidate_handle(&self) -> bool {
-        false
     }
 }

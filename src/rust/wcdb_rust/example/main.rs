@@ -8,20 +8,6 @@ use wcdb_core::orm::table_binding::TableBinding;
 use wcdb_core::winq::column_def::ColumnDef;
 use wcdb_core::winq::column_type::ColumnType;
 
-pub struct TableMessage {
-    pub multi_primary1: i32,
-}
-
-impl Default for TableMessage {
-    fn default() -> Self {
-        Self { multi_primary1: 0 }
-    }
-}
-
-pub struct DbTableMessage {
-    pub multi_primary1: *const Field<TableMessage>,
-}
-
 static DBTABLEMESSAGE_BINDING: Lazy<Binding> = Lazy::new(|| Binding::new());
 
 static DBTABLEMESSAGE_INSTANCE: Lazy<DbTableMessage> = Lazy::new(|| {
@@ -36,6 +22,20 @@ static DBTABLEMESSAGE_INSTANCE: Lazy<DbTableMessage> = Lazy::new(|| {
     DBTABLEMESSAGE_BINDING.add_column_def(multi_primary1_def);
     instance
 });
+
+pub struct TableMessage {
+    pub multi_primary1: i32,
+}
+
+impl Default for TableMessage {
+    fn default() -> Self {
+        Self { multi_primary1: 0 }
+    }
+}
+
+pub struct DbTableMessage {
+    pub multi_primary1: *const Field<TableMessage>,
+}
 
 unsafe impl Send for DbTableMessage {}
 unsafe impl Sync for DbTableMessage {}

@@ -1,33 +1,12 @@
-use std::ffi::c_void;
-
-use crate::core::handle_operation::HandleOperation;
-use crate::core::handle_operation_trait::HandleOperationTrait;
+use crate::base::cpp_object::CppObjectTrait;
+use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::table_binding::TableBinding;
+use std::ffi::c_void;
 
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
 }
 
-impl HandleORMOperation {
-    pub fn create_table<T, R: TableBinding<T>>(
-        &self,
-        table_name: &str,
-        binding: &R,
-        handle_operation_trait: &dyn HandleOperationTrait,
-    ) -> bool {
-        let handle = handle_operation_trait.get_handle(true);
-        binding.base_binding().create_table(table_name, handle)
-    }
-}
-
-/// HandleOperation
-impl HandleORMOperation {
-    pub fn release_cpp_object(&mut self) {
-        self.handle_operation.release_cpp_object();
-    }
-}
-
-/// Rust
 impl HandleORMOperation {
     pub fn new() -> Self {
         HandleORMOperation {
@@ -41,11 +20,27 @@ impl HandleORMOperation {
         }
     }
 
-    pub fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        self.handle_operation.set_cpp_obj(cpp_obj);
+    pub fn create_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+        handle_operation_trait: &dyn HandleOperationTrait,
+    ) -> bool {
+        let handle = handle_operation_trait.get_handle(true);
+        binding.base_binding().create_table(table_name, handle)
+    }
+}
+
+impl CppObjectTrait for HandleORMOperation {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.handle_operation.set_cpp_obj(cpp_obj)
     }
 
-    pub fn get_cpp_obj(&self) -> *mut c_void {
+    fn get_cpp_obj(&self) -> *mut c_void {
         self.handle_operation.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.handle_operation.release_cpp_object();
     }
 }
