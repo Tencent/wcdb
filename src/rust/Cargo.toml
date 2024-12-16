@@ -1,3 +1,3 @@
 [workspace]
-members = ["wcdb_rust", "table_binding", "wcdb_core"]
+members = ["wcdb_rust", "table_coding", "wcdb_core"]
 resolver = "2"

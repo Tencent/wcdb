@@ -5,8 +5,8 @@ use syn::parse::Parse;
 use syn::spanned::Spanned;
 use syn::{parse_macro_input, Data, DeriveInput, Ident, LitBool};
 
-#[proc_macro_derive(TableBinding, attributes(WCDBField))]
-pub fn table_binding(input: TokenStream) -> TokenStream {
+#[proc_macro_derive(WCDBTableCoding, attributes(WCDBTableCodingParam, WCDBField))]
+pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let table_name = input.ident.to_string();
     let db_table = Ident::new(&format!("Db{}", table_name), input.ident.span());
@@ -15,14 +15,14 @@ pub fn table_binding(input: TokenStream) -> TokenStream {
     let global_singleton = generate_singleton(&input, &db_table);
 
     let ret = quote! {
+        #global_singleton
+
         pub struct #db_table {
             #(#field_vec),*
         }
 
         unsafe impl Send for #db_table {}
         unsafe impl Sync for #db_table {}
-
-        #global_singleton,
     };
     ret.into()
 }
@@ -56,7 +56,6 @@ fn extract_fields(input: &DeriveInput) -> Vec<proc_macro2::TokenStream> {
 }
 
 fn generate_singleton(input: &DeriveInput, db_table: &Ident) -> proc_macro2::TokenStream {
-    let x = get_attr::<bool>(input, "multi_primary1", "is_primary");
     let binding = Ident::new(
         &format!("{}_BINDING", db_table.to_string().to_uppercase()),
         input.ident.span(),
