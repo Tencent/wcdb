@@ -2,7 +2,7 @@ use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 
 #[derive(WCDBTableCoding)]
-#[WCDBTableCodingParam(
+#[WCDBCodingParam(
     multi_primary_keys = ["multiPrimary1", "multiPrimary2", "multiPrimary3"],
     multi_unique_keys = ["multiUnique1", "multiUnique2", "multiUnique3"],
     indexes = [

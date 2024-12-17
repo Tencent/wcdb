@@ -1,114 +1,71 @@
 use proc_macro::TokenStream;
+use proc_macro2::Span;
 use quote::{quote, ToTokens};
 use std::fmt::Debug;
 use syn::parse::Parse;
-use syn::spanned::Spanned;
-use syn::{parse_macro_input, Data, DeriveInput, Ident, LitBool};
+use syn::{parse_macro_input, Data, DeriveInput, Ident, Type};
 
-#[proc_macro_derive(WCDBTableCoding, attributes(WCDBTableCodingParam, WCDBField))]
+#[proc_macro_derive(WCDBTableCoding, attributes(WCDBCodingParam, WCDBField))]
 pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
-    let table_name = input.ident.to_string();
-    let db_table = Ident::new(&format!("Db{}", table_name), input.ident.span());
-    let field_vec = extract_fields(&input);
-
-    let global_singleton = generate_singleton(&input, &db_table);
-
-    let ret = quote! {
-        #global_singleton
-
-        pub struct #db_table {
-            #(#field_vec),*
-        }
-
-        unsafe impl Send for #db_table {}
-        unsafe impl Sync for #db_table {}
+    let fields = match &input.data {
+        Data::Struct(data) => &data.fields,
+        _ => panic!("WCDBTableCoding can only be used on structs"),
     };
-    ret.into()
-}
+    let table_ident = &input.ident;
+    let db_table_ident = Ident::new(&format!("Db{}", table_ident), Span::call_site());
+    let field_name_vec: Vec<_> = fields.iter().map(|field| &field.ident).collect();
+    let field_type_vec: Vec<_> = fields.iter().map(|field| &field.ty).collect();
+    let global_singleton = generate_singleton(&db_table_ident, &field_name_vec, &field_type_vec);
 
-fn extract_fields(input: &DeriveInput) -> Vec<proc_macro2::TokenStream> {
-    let table_name = &input.ident;
-    match &input.data {
-        Data::Struct(data) => data
-            .fields
-            .iter()
-            .filter_map(|field| {
-                let has_wcdb_field = field
-                    .attrs
-                    .iter()
-                    .any(|attr| attr.path().is_ident("WCDBField"));
-                if has_wcdb_field {
-                    let field_name = field.ident.as_ref().unwrap();
-                    Some(quote! {
-                        pub #field_name: wcdb_core::orm::field::Field<#table_name>
-                    })
-                } else {
-                    None
-                }
-            })
-            .collect::<Vec<_>>(),
-        _ => {
-            let err = syn::Error::new_spanned(input, "TableBinding only used for struct!");
-            vec![err.to_compile_error()]
-        }
-    }
-}
-
-fn generate_singleton(input: &DeriveInput, db_table: &Ident) -> proc_macro2::TokenStream {
-    let binding = Ident::new(
-        &format!("{}_BINDING", db_table.to_string().to_uppercase()),
-        input.ident.span(),
-    );
-    let instance = Ident::new(
-        &format!("{}_INSTANCE", db_table.to_string().to_uppercase()),
-        input.ident.span(),
-    );
-    quote! {
-        static #binding: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
-            wcdb_core::orm::binding::Binding::new()
-        });
-        // static #instance: once_cell::sync::Lazy<#db_table> = once_cell::sync::Lazy::new(|| {
-        //
-        // });
-    }
-}
-
-fn get_attr<T: std::str::FromStr>(
-    input: &DeriveInput,
-    field_name: &str,
-    attr_name: &str,
-) -> Option<T> {
-    if let Data::Struct(data_struct) = &input.data {
-        for field in &data_struct.fields {
-            if let Some(ident) = &field.ident {
-                if ident == field_name {
-                    for attr in &field.attrs {
-                        if attr.meta.path().is_ident("WCDBField") {
-                            println!("{:#?}", attr.meta);
-                            let meta_list = attr.meta.require_list().unwrap();
-                            println!("Tokens: {:#?}", meta_list.tokens);
-                            match meta_list.parse_nested_meta(|meta| {
-                                println!("{:#?}", meta.path);
-                                if meta.path.is_ident(attr_name) {
-                                    let value = meta.value().unwrap();
-                                    let s: LitBool = value.parse().unwrap();
-                                    println!("113 {:#?}", s);
-                                }
-                                Ok(())
-                            }) {
-                                Ok(_) => {
-                                    println!("3333");
-                                }
-                                Err(e) => {
-                                    println!("{:?}", e);
-                                }
-                            }
-                        }
-                    }
+    let quote = quote! {
+        #global_singleton
+        
+        impl Default for #table_ident {
+            fn default() -> Self {
+                Self {
+                    #(#field_name_vec: Default::default()),*
                 }
             }
         }
+
+        pub struct #db_table_ident {
+            #(pub #field_name_vec: *const wcdb_core::orm::field::Field<#table_ident>),*
+        }
+
+        impl Default for #db_table_ident {
+            fn default() -> Self {
+                Self {
+                    #(#field_name_vec: std::ptr::null()),*
+                }
+            }
+        }
+
+        unsafe impl Send for #db_table_ident {}
+        unsafe impl Sync for #db_table_ident {}
+    };
+    quote.into()
+}
+
+fn generate_singleton(db_table_ident: &Ident, field_name_vec: &Vec<&Option<Ident>>, field_type_vec: &Vec<&Type>) -> proc_macro2::TokenStream {
+    let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
+    let binding_ident = Ident::new(&binding, Span::call_site());
+    let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
+    let instance_ident = Ident::new(&instance, Span::call_site());
+    quote! {
+        static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
+            wcdb_core::orm::binding::Binding::new()
+        });
+        static #instance_ident: once_cell::sync::Lazy<#db_table_ident> = once_cell::sync::Lazy::new(|| {
+            let mut instance = #db_table_ident::default();
+            let instance_raw = unsafe { &instance as *const #db_table_ident };
+            // #(
+            // let field = Box::new(Field::new("#field_name_vec", instance_raw, 1, false, false));
+            // let multi_primary1_def = ColumnDef::new_with_column_type(&field.get_column(), ColumnType::Integer);
+            // instance.multi_primary1 = unsafe { Box::into_raw(field) };
+            // #binding_ident.add_column_def(multi_primary1_def);
+            // )*
+            instance
+        });
     }
-    None
 }
