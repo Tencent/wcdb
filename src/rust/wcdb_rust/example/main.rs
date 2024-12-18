@@ -2,15 +2,13 @@ use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 
 #[derive(WCDBTableCoding)]
-#[WCDBCodingParam(
-    multi_primary_keys = ["multiPrimary1", "multiPrimary2", "multiPrimary3"],
-    multi_unique_keys = ["multiUnique1", "multiUnique2", "multiUnique3"],
-    indexes = [
-        (name = "specifiedNameIndex", columns = ["multiIndex1", "multiIndex2", "multiIndex3"]),
-        (columns = ["multiIndex1", "multiIndex2"])
-    ]
+#[WCDBTable(
+    multi_indexes(name = "specifiedNameIndex", columns = ["multiIndex1", "multiIndex2", "multiIndex3"]),
+    multi_indexes(columns = ["multiIndex1", "multiIndex2"]),
+    multi_primaries = ["multiPrimary1", "multiPrimary2", "multiPrimary3"],
+    multi_unique = ["multiUnique1", "multiUnique2", "multiUnique3"],
 )]
-pub struct TableMessage2 {
+pub struct TableMessage {
     #[WCDBField]
     multi_primary1: i32,
     #[WCDBField]
