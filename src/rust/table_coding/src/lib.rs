@@ -6,6 +6,7 @@ use quote::{quote, ToTokens};
 use std::fmt::Debug;
 use syn::parse::Parse;
 use syn::{parse_macro_input, DeriveInput, Generics, Ident, LitStr, Type};
+use syn::spanned::Spanned;
 
 #[derive(Debug, FromDeriveInput)]
 #[darling(attributes(WCDBTable))]
@@ -36,34 +37,40 @@ impl WCDBTable {
                 .iter()
                 .map(|field| field.ident.as_ref().unwrap())
                 .collect(),
-            _ => panic!("WCDBTable only works on structs"),
+            _ => unreachable!("WCDBTable only works on structs"),
         }
     }
 
     fn get_field_type_vec(&self) -> Vec<&Type> {
         match &self.data {
             Data::Struct(fields) => fields.iter().map(|field| &field.ty).collect(),
-            _ => panic!("WCDBTable only works on structs"),
+            _ => unreachable!("WCDBTable only works on structs"),
         }
     }
 }
 
-fn get_type_string(ty: &Type) -> String {
+fn get_type_string(ty: &Type) -> syn::Result<String> {
     if let Type::Path(type_path) = ty {
         if type_path.path.is_ident("i32") {
-            return "get_int".to_string();
+            Ok("get_int".to_string())
+        } else {
+            Err(syn::Error::new(ty.span(), "Unsupported field type"))
         }
+    } else {
+        Err(syn::Error::new(ty.span(), "WCDBTable's field type only works on Path"))
     }
-    panic!("Unsupported field type");
 }
 
-fn bind_type_string(ty: &Type) -> String {
+fn bind_type_string(ty: &Type) -> syn::Result<String> {
     if let Type::Path(type_path) = ty {
         if type_path.path.is_ident("i32") {
-            return "bind_integer".to_string();
+            Ok("bind_integer".to_string())
+        } else {
+            Err(syn::Error::new(ty.span(), "Unsupported field type"))
         }
+    } else {
+        Err(syn::Error::new(ty.span(), "WCDBTable's field type only works on Path"))
     }
-    panic!("Unsupported field type");
 }
 
 #[derive(Debug, FromMeta)]
@@ -97,17 +104,24 @@ struct WCDBField {
 pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let table = WCDBTable::from_derive_input(&input).unwrap();
+    match do_expand(&table) {
+        Ok(quote) => quote.into(),
+        Err(e) => e.to_compile_error().into(),
+    }
+}
+
+fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let table_ident = &table.ident;
     let db_table_ident = table.get_db_table();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());
     let field_ident_vec = table.get_field_ident_vec();
 
-    let singleton_statements = generate_singleton(&table);
-    let extract_object_statements = generate_extract_object(&table);
-    let bind_field_statements = generate_bind_field(&table);
+    let singleton_statements = generate_singleton(&table)?;
+    let extract_object_statements = generate_extract_object(&table)?;
+    let bind_field_statements = generate_bind_field(&table)?;
 
-    let quote = quote! {
+    Ok(quote! {
         #singleton_statements
 
         impl Default for #table_ident {
@@ -172,21 +186,26 @@ pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
 
             fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {}
         }
-    };
-    quote.into()
+    })
 }
 
-fn generate_singleton(table: &WCDBTable) -> proc_macro2::TokenStream {
+fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let db_table_ident = table.get_db_table();
     let field_ident_vec = table.get_field_ident_vec();
-    let field_ident_def_vec: Vec<Ident> = field_ident_vec.iter().map(|ident| {
-        Ident::new(&format!("{}_def", ident.to_string().to_uppercase()), Span::call_site())
-    }).collect();
+    let field_ident_def_vec: Vec<Ident> = field_ident_vec
+        .iter()
+        .map(|ident| {
+            Ident::new(
+                &format!("{}_def", ident.to_string()),
+                Span::call_site(),
+            )
+        })
+        .collect();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());
     let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
     let instance_ident = Ident::new(&instance, Span::call_site());
-    quote! {
+    Ok(quote! {
         static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
             wcdb_core::orm::binding::Binding::new()
         });
@@ -201,19 +220,22 @@ fn generate_singleton(table: &WCDBTable) -> proc_macro2::TokenStream {
             )*
             instance
         });
-    }
+    })
 }
 
-fn generate_extract_object(table: &WCDBTable) -> proc_macro2::TokenStream {
+fn generate_extract_object(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let table_ident = &table.ident;
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
     let field_get_type_vec: Vec<_> = field_type_vec
         .iter()
-        .map(|field| Ident::new(&get_type_string(field), Span::call_site()))
-        .collect();
+        .map(|field| {
+            let type_string = get_type_string(field)?;
+            Ok(Ident::new(&type_string, Span::call_site()))
+        })
+        .collect::<syn::Result<Vec<_>>>()?;
     let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
-    quote! {
+    Ok(quote! {
         let mut new_one = #table_ident::default();
         let mut index = 0;
         for field in fields {
@@ -226,23 +248,26 @@ fn generate_extract_object(table: &WCDBTable) -> proc_macro2::TokenStream {
             index += 1;
         }
         new_one
-    }
+    })
 }
 
-fn generate_bind_field(table: &WCDBTable) -> proc_macro2::TokenStream {
+fn generate_bind_field(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
     let field_bind_type_vec: Vec<_> = field_type_vec
         .iter()
-        .map(|field| Ident::new(&bind_type_string(field), Span::call_site()))
-        .collect();
+        .map(|field| {
+            let bind_type_string = bind_type_string(field)?;
+            Ok(Ident::new(&bind_type_string, Span::call_site()))
+        })
+        .collect::<syn::Result<Vec<_>>>()?;
     let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
-    quote! {
+    Ok(quote! {
         match field.get_field_id() {
             #(
                 #field_id_vec =>prepared_statement.#field_bind_type_vec(object.#field_ident_vec, index),
             )*
             _ => unreachable!("Unknown field id"),
         }
-    }
+    })
 }
