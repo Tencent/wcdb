@@ -32,7 +32,10 @@ impl WCDBTable {
 
     fn get_field_ident_vec(&self) -> Vec<&Ident> {
         match &self.data {
-            Data::Struct(fields) => fields.iter().map(|field| field.ident.as_ref().unwrap()).collect(),
+            Data::Struct(fields) => fields
+                .iter()
+                .map(|field| field.ident.as_ref().unwrap())
+                .collect(),
             _ => panic!("WCDBTable only works on structs"),
         }
     }
@@ -43,6 +46,24 @@ impl WCDBTable {
             _ => panic!("WCDBTable only works on structs"),
         }
     }
+}
+
+fn get_type_string(ty: &Type) -> String {
+    if let Type::Path(type_path) = ty {
+        if type_path.path.is_ident("i32") {
+            return "get_int".to_string();
+        }
+    }
+    panic!("Unsupported field type");
+}
+
+fn bind_type_string(ty: &Type) -> String {
+    if let Type::Path(type_path) = ty {
+        if type_path.path.is_ident("i32") {
+            return "bind_integer".to_string();
+        }
+    }
+    panic!("Unsupported field type");
 }
 
 #[derive(Debug, FromMeta)]
@@ -78,13 +99,16 @@ pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
     let table = WCDBTable::from_derive_input(&input).unwrap();
     let table_ident = &table.ident;
     let db_table_ident = table.get_db_table();
+    let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
+    let binding_ident = Ident::new(&binding, Span::call_site());
     let field_ident_vec = table.get_field_ident_vec();
-    let field_type_vec = table.get_field_type_vec();
 
-    let global_singleton = generate_singleton(&table);
+    let singleton_statements = generate_singleton(&table);
+    let extract_object_statements = generate_extract_object(&table);
+    let bind_field_statements = generate_bind_field(&table);
 
     let quote = quote! {
-        #global_singleton
+        #singleton_statements
 
         impl Default for #table_ident {
             fn default() -> Self {
@@ -108,12 +132,56 @@ pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
 
         unsafe impl Send for #db_table_ident {}
         unsafe impl Sync for #db_table_ident {}
+
+        impl wcdb_core::orm::table_binding::TableBinding<#table_ident> for #db_table_ident {
+            fn binding_type(&self) -> std::any::TypeId {
+                std::any::TypeId::of::<#table_ident>()
+            }
+
+            fn all_binding_fields(&self) -> Vec<&wcdb_core::orm::field::Field<#table_ident>> {
+                unsafe { vec![
+                    #(&*self.#field_ident_vec,)*
+                ] }
+            }
+
+            fn base_binding(&self) -> &wcdb_core::orm::binding::Binding {
+                &*#binding_ident
+            }
+
+            fn extract_object(
+                &self,
+                fields: Vec<wcdb_core::orm::field::Field<#table_ident>>,
+                prepared_statement: &wcdb_core::core::prepared_statement::PreparedStatement,
+            ) -> #table_ident {
+                #extract_object_statements
+            }
+
+            fn bind_field(
+                &self,
+                object: &#table_ident,
+                field: &wcdb_core::orm::field::Field<#table_ident>,
+                index: usize,
+                prepared_statement: &mut wcdb_core::core::prepared_statement::PreparedStatement,
+            ) {
+                #bind_field_statements
+            }
+
+            fn is_auto_increment(&self, object: &#table_ident) -> bool {
+                false
+            }
+
+            fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {}
+        }
     };
     quote.into()
 }
 
 fn generate_singleton(table: &WCDBTable) -> proc_macro2::TokenStream {
     let db_table_ident = table.get_db_table();
+    let field_ident_vec = table.get_field_ident_vec();
+    let field_ident_def_vec: Vec<Ident> = field_ident_vec.iter().map(|ident| {
+        Ident::new(&format!("{}_def", ident.to_string().to_uppercase()), Span::call_site())
+    }).collect();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());
     let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
@@ -125,34 +193,56 @@ fn generate_singleton(table: &WCDBTable) -> proc_macro2::TokenStream {
         static #instance_ident: once_cell::sync::Lazy<#db_table_ident> = once_cell::sync::Lazy::new(|| {
             let mut instance = #db_table_ident::default();
             let instance_raw = unsafe { &instance as *const #db_table_ident };
-            // #(
-            // let field = Box::new(Field::new("#field_name_vec", instance_raw, 1, false, false));
-            // let multi_primary1_def = ColumnDef::new_with_column_type(&field.get_column(), ColumnType::Integer);
-            // instance.multi_primary1 = unsafe { Box::into_raw(field) };
-            // #binding_ident.add_column_def(multi_primary1_def);
-            // )*
+            #(
+                let field = Box::new(wcdb_core::orm::field::Field::new(stringify!(#field_ident_vec), instance_raw, 1, false, false));
+                let #field_ident_def_vec = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(&field.get_column(), wcdb_core::winq::column_type::ColumnType::Integer);
+                instance.#field_ident_vec = unsafe { Box::into_raw(field) };
+                #binding_ident.add_column_def(#field_ident_def_vec);
+            )*
             instance
         });
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::MultiIndexes;
-    use darling::FromMeta;
-    use syn::Expr;
+fn generate_extract_object(table: &WCDBTable) -> proc_macro2::TokenStream {
+    let table_ident = &table.ident;
+    let field_ident_vec = table.get_field_ident_vec();
+    let field_type_vec = table.get_field_type_vec();
+    let field_get_type_vec: Vec<_> = field_type_vec
+        .iter()
+        .map(|field| Ident::new(&get_type_string(field), Span::call_site()))
+        .collect();
+    let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
+    quote! {
+        let mut new_one = #table_ident::default();
+        let mut index = 0;
+        for field in fields {
+            match field.get_field_id() {
+                #(
+                    #field_id_vec => new_one.#field_ident_vec = prepared_statement.#field_get_type_vec(index),
+                )*
+                _ => unreachable!("Unknown field id"),
+            }
+            index += 1;
+        }
+        new_one
+    }
+}
 
-    #[test]
-    fn test_case() {
-        let expr: Expr = syn::parse_str(
-            r#"
-            (name = "specifiedNameIndex", columns = ["multiIndex1", "multiIndex2", "multiIndex3"])
-        "#,
-        ).unwrap();
-
-        match MultiIndexes::from_expr(&expr) {
-            Ok(multi_indexes) => println!("{:?}", multi_indexes),
-            Err(err) => eprintln!("Error: {}", err),
+fn generate_bind_field(table: &WCDBTable) -> proc_macro2::TokenStream {
+    let field_ident_vec = table.get_field_ident_vec();
+    let field_type_vec = table.get_field_type_vec();
+    let field_bind_type_vec: Vec<_> = field_type_vec
+        .iter()
+        .map(|field| Ident::new(&bind_type_string(field), Span::call_site()))
+        .collect();
+    let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
+    quote! {
+        match field.get_field_id() {
+            #(
+                #field_id_vec =>prepared_statement.#field_bind_type_vec(object.#field_ident_vec, index),
+            )*
+            _ => unreachable!("Unknown field id"),
         }
     }
 }
