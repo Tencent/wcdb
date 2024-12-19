@@ -6,11 +6,13 @@ use crate::orm::table_binding::TableBinding;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
+use crate::utils::ToCow;
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
 extern "C" {
     pub fn WCDBRustCore_createDatabase(path: *const c_char) -> *mut c_void;
+    pub fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
     pub fn WCDBRustDatabase_close(
         cpp_obj: *mut c_void,
         context: *mut c_void,
@@ -29,49 +31,6 @@ extern "C" fn close_callback_wrapper(context: *mut c_void) {
 pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
-}
-
-impl Database {
-    pub fn new(path: &str) -> Self {
-        let c_path = CString::new(path).unwrap_or_default();
-        let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr()) };
-        Database {
-            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
-            close_callback: Arc::new(Mutex::new(None)),
-        }
-    }
-
-    pub fn close<CB>(&self, cb_opt: Option<CB>)
-    where
-        CB: FnOnce() + Send + 'static,
-    {
-        match cb_opt {
-            None => unsafe {
-                WCDBRustDatabase_close(self.get_cpp_obj(), null_mut(), close_callback_wrapper)
-            },
-            Some(cb) => {
-                let boxed_cb: Box<Box<dyn FnOnce()>> = Box::new(Box::new(cb));
-                let context = Box::into_raw(boxed_cb) as *mut c_void;
-                unsafe {
-                    WCDBRustDatabase_close(self.get_cpp_obj(), context, close_callback_wrapper)
-                }
-            }
-        }
-    }
-
-    /// static native long getHandle(long self, boolean writeHint);
-    pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
-        unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
-    }
-
-    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
-        self.handle_orm_operation
-            .create_table(table_name, binding, self)
-    }
-
-    pub(crate) fn get_cpp_obj(&self) -> *mut c_void {
-        self.handle_orm_operation.get_cpp_obj()
-    }
 }
 
 impl HandleOperationTrait for Database {
@@ -95,5 +54,49 @@ impl CppObjectTrait for Database {
 
     fn release_cpp_object(&mut self) {
         self.handle_orm_operation.release_cpp_object();
+    }
+}
+
+impl Database {
+    pub fn new(path: &str) -> Self {
+        let c_path = CString::new(path).unwrap_or_default();
+        let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr()) };
+        Database {
+            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            close_callback: Arc::new(Mutex::new(None)),
+        }
+    }
+
+    pub fn get_path(&self) -> String {
+        let path = unsafe { WCDBRustDatabase_getPath(self.get_cpp_obj()) };
+        path.to_cow().to_string()
+    }
+
+    pub fn close<CB>(&self, cb_opt: Option<CB>)
+    where
+        CB: FnOnce() + Send + 'static,
+    {
+        match cb_opt {
+            None => unsafe {
+                WCDBRustDatabase_close(self.get_cpp_obj(), null_mut(), close_callback_wrapper)
+            },
+            Some(cb) => {
+                let boxed_cb: Box<Box<dyn FnOnce()>> = Box::new(Box::new(cb));
+                let context = Box::into_raw(boxed_cb) as *mut c_void;
+                unsafe {
+                    WCDBRustDatabase_close(self.get_cpp_obj(), context, close_callback_wrapper)
+                }
+            }
+        }
+    }
+
+    /// Java: static native long getHandle(long self, boolean writeHint);
+    pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
+        unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
+    }
+
+    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
+        self.handle_orm_operation
+            .create_table(table_name, binding, self)
     }
 }

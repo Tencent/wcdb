@@ -52,13 +52,13 @@
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBDatabaseSetTag(selfStruct, tag);
 //}
-//
-//jstring WCDBRustDatabaseClassMethod(getPath, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateJStringAndReturn(WCDBDatabaseGetPath(selfStruct));
-//}
-//
+
+const char* WCDBRustDatabaseClassMethod(getPath, void* self)
+{
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseGetPath(selfStruct);
+}
+
 //typedef struct StringEnumeratorContext {
 //    JNIEnv* env;
 //    jobject array;

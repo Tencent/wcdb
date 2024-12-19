@@ -29,7 +29,26 @@ pub struct TableMessage {
     multi_index: i32,
 }
 
+impl TableMessage {
+    pub fn new() -> Self {
+        Self {
+            multi_primary1: 1,
+            multi_primary2: 2,
+            multi_primary: 3,
+            multi_unique1: 11,
+            multi_unique2: 12,
+            multi_unique: 13,
+            multi_index1: 21,
+            multi_index2: 22,
+            multi_index: 23,
+        }
+    }
+}
+
 fn main() {
     let db = Database::new("/Users/zhanglei/Downloads/test.db");
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE);
+    let record = TableMessage::new();
+    // db.insert_object(record, DbTable)
+
 }

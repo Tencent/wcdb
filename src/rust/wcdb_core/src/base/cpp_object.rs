@@ -6,20 +6,8 @@ extern "C" {
     pub fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
 }
 
-pub struct CppObject {
+pub(crate) struct CppObject {
     cpp_obj: *mut c_void,
-}
-
-impl CppObject {
-    pub fn new() -> CppObject {
-        CppObject {
-            cpp_obj: std::ptr::null_mut(),
-        }
-    }
-
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
-        CppObject { cpp_obj }
-    }
 }
 
 impl Deref for CppObject {
@@ -42,7 +30,7 @@ impl Drop for CppObject {
     }
 }
 
-pub trait CppObjectTrait {
+pub(crate) trait CppObjectTrait {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void);
     fn get_cpp_obj(&self) -> *mut c_void;
     fn release_cpp_object(&mut self);
@@ -60,5 +48,21 @@ impl CppObjectTrait for CppObject {
     fn release_cpp_object(&mut self) {
         unsafe { WCDBRustBase_releaseObject(self.cpp_obj) };
         self.cpp_obj = null_mut()
+    }
+}
+
+impl CppObject {
+    pub fn new() -> CppObject {
+        CppObject {
+            cpp_obj: null_mut(),
+        }
+    }
+
+    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
+        CppObject { cpp_obj }
+    }
+    
+    pub fn get<T: CppObjectTrait>(obj: &T) -> *mut c_void {
+        obj.get_cpp_obj()
     }
 }

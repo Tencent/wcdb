@@ -1,4 +1,4 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::core::database::Database;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
@@ -7,7 +7,6 @@ use std::ffi::c_void;
 
 pub struct Handle<'a> {
     handle_orm_operation: HandleORMOperation,
-
     main_statement: Option<PreparedStatement>,
     database: &'a Database,
     write_hint: bool,
@@ -51,7 +50,7 @@ impl<'a> Handle<'a> {
         let mut cpp_obj = self.handle_orm_operation.get_cpp_obj();
         if cpp_obj.is_null() {
             self.set_cpp_obj(Database::get_handle_raw(
-                self.database.get_cpp_obj(),
+                CppObject::get(self.database),
                 self.write_hint,
             ));
             cpp_obj = self.handle_orm_operation.get_cpp_obj();

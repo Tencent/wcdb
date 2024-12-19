@@ -115,6 +115,8 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let db_table_ident = table.get_db_table();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());
+    let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
+    let instance_ident = Ident::new(&instance, Span::call_site());
     let field_ident_vec = table.get_field_ident_vec();
 
     let singleton_statements = generate_singleton(&table)?;
@@ -140,6 +142,18 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
             fn default() -> Self {
                 Self {
                     #(#field_ident_vec: std::ptr::null()),*
+                }
+            }
+        }
+        
+        impl Drop for #db_table_ident {
+            fn drop(&mut self) {
+                unsafe {
+                    #(
+                        if !self.#field_ident_vec.is_null() {
+                            Box::from_raw(self.#field_ident_vec as *mut wcdb_core::orm::field::Field<#table_ident>);
+                        }
+                    )*
                 }
             }
         }
@@ -185,6 +199,14 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
             }
 
             fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {}
+        }
+        
+        impl #db_table_ident {
+            pub fn all_fields() -> Vec<&'static wcdb_core::orm::field::Field<#table_ident>> {
+                unsafe { vec![
+                    #(&*#instance_ident.#field_ident_vec,)*
+                ] }
+            }
         }
     })
 }

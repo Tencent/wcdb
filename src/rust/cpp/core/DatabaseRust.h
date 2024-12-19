@@ -38,7 +38,7 @@
 //jlong WCDBRustDatabaseClassMethod(getError, jlong self);
 //jlong WCDBRustDatabaseClassMethod(getTag, jlong self);
 //void WCDBRustDatabaseClassMethod(setTag, jlong self, jlong tag);
-//jstring WCDBRustDatabaseClassMethod(getPath, jlong self);
+const char* WCDBRustDatabaseClassMethod(getPath, void* self);
 //jobject WCDBRustDatabaseClassMethod(getPaths, jlong self);
 void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint);
 
