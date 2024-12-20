@@ -7,3 +7,4 @@ pub mod identifier;
 pub mod statement;
 pub mod statement_create_index;
 pub mod table_constraint;
+pub mod statement_insert;

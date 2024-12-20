@@ -1,12 +1,14 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::chaincall::insert::Insert;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
-use crate::core::handle_orm_operation::HandleORMOperation;
+use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTrait};
+use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
+use crate::utils::ToCow;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
-use crate::utils::ToCow;
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
@@ -31,6 +33,21 @@ extern "C" fn close_callback_wrapper(context: *mut c_void) {
 pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
+}
+
+impl HandleORMOperationTrait for Database {
+    fn insert_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) {
+        self.prepare_insert::<T>();
+    }
+
+    fn prepare_insert<T>(&self) -> Insert<T> {
+        Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
+    }
 }
 
 impl HandleOperationTrait for Database {
@@ -97,6 +114,6 @@ impl Database {
 
     pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
         self.handle_orm_operation
-            .create_table(table_name, binding, self)
+            .create_table(self, table_name, binding)
     }
 }

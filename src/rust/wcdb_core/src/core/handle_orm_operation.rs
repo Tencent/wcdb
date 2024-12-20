@@ -1,11 +1,40 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::chaincall::insert::Insert;
+use crate::core::handle::Handle;
 use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
+use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use std::ffi::c_void;
 
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
 }
+
+impl CppObjectTrait for HandleORMOperation {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.handle_operation.set_cpp_obj(cpp_obj)
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.handle_operation.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.handle_operation.release_cpp_object();
+    }
+}
+
+pub trait HandleORMOperationTrait {
+    fn insert_object<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str);
+    fn prepare_insert<T>(&self) -> Insert<T>;
+}
+//
+// impl HandleORMOperationTrait for HandleORMOperation {
+//     fn insert_object<T>(&self, handle: Handle, object: T, fields: Vec<&Field<T>>, table_name: &str) {
+//         // let x = self.prepare_insert();
+//         todo!()
+//     }
+// }
 
 impl HandleORMOperation {
     pub fn new() -> Self {
@@ -22,25 +51,23 @@ impl HandleORMOperation {
 
     pub fn create_table<T, R: TableBinding<T>>(
         &self,
+        handle_operation_trait: &dyn HandleOperationTrait,
         table_name: &str,
         binding: &R,
-        handle_operation_trait: &dyn HandleOperationTrait,
     ) -> bool {
         let handle = handle_operation_trait.get_handle(true);
         binding.base_binding().create_table(table_name, handle)
     }
-}
 
-impl CppObjectTrait for HandleORMOperation {
-    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        self.handle_operation.set_cpp_obj(cpp_obj)
-    }
-
-    fn get_cpp_obj(&self) -> *mut c_void {
-        self.handle_operation.get_cpp_obj()
-    }
-
-    fn release_cpp_object(&mut self) {
-        self.handle_operation.release_cpp_object();
+    pub fn insert_object<T>(
+        &self,
+        handle_operation_trait: &dyn HandleOperationTrait,
+        handle: Handle,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) {
+        // let x = self.prepare_insert();
+        todo!()
     }
 }
