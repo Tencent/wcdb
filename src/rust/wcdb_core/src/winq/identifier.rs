@@ -1,6 +1,6 @@
 use std::ffi::c_void;
 
-use crate::base::cpp_object::CppObject;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 
 #[derive(Debug, PartialEq, Eq)]
 #[repr(i32)]
@@ -78,6 +78,20 @@ pub struct Identifier {
     cpp_obj: CppObject,
 }
 
+impl CppObjectTrait for Identifier {
+     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.cpp_obj.set_cpp_obj(cpp_obj);
+    }
+
+     fn get_cpp_obj(&self) -> *mut c_void {
+        self.cpp_obj.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.cpp_obj.release_cpp_object();
+    }
+}
+
 impl Identifier {
     pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         Identifier {
@@ -91,13 +105,5 @@ impl Identifier {
 
     pub fn get_cpp_type(identifier: &Identifier) -> i32 {
         identifier.get_type()
-    }
-
-    pub fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        *self.cpp_obj = cpp_obj;
-    }
-
-    pub fn get_cpp_obj(&self) -> *mut c_void {
-        *self.cpp_obj
     }
 }

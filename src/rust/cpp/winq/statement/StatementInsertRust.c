@@ -40,15 +40,13 @@ void* WCDBRustStatementInsertClassMethodWithNoArg(create)
 //    WCDBRustBridgeStruct(CPPStatementInsert, self);
 //    WCDBStatementInsertConfigRecursive(selfStruct);
 //}
-//
-//void WCDBRustStatementInsertClassMethod(configTableName, jlong self, jstring tableName)
-//{
-//    WCDBRustBridgeStruct(CPPStatementInsert, self);
-//    WCDBRustGetStringCritical(tableName);
-//    WCDBStatementInsertConfigTable(selfStruct, tableNameString);
-//    WCDBRustReleaseStringCritical(tableName);
-//}
-//
+
+void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char* tableName)
+{
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBStatementInsertConfigTable(selfStruct, tableName);
+}
+
 //void WCDBRustStatementInsertClassMethod(configSchema,
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringParameter(schema))
@@ -72,16 +70,16 @@ void* WCDBRustStatementInsertClassMethodWithNoArg(create)
 //    WCDBStatementInsertConfigAlias(selfStruct, aliasString);
 //    WCDBRustReleaseStringCritical(alias);
 //}
-//
-//void WCDBRustStatementInsertClassMethod(configColumns,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns))
-//{
-//    WCDBRustBridgeStruct(CPPStatementInsert, self);
-//    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-//    columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
-//}
-//
+
+void WCDBRustStatementInsertClassMethod(configColumns,
+                                        void* self,
+                                        WCDBRustObjectOrStringArrayParameter(columns))
+{
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
+    columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
+}
+
 //void WCDBRustStatementInsertClassMethod(configValues, jlong self, WCDBRustMultiTypeArrayParameter(value))
 //{
 //    WCDBRustBridgeStruct(CPPStatementInsert, self);

@@ -1,6 +1,6 @@
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
-
+use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::{CPPType, IdentifierTrait};
 
@@ -12,16 +12,23 @@ pub struct Column {
     expression_operable: ExpressionOperable,
 }
 
-impl IdentifierTrait for Column {
-    fn get_type() -> i32 {
-        CPPType::Column as i32
+impl CppObjectTrait for Column {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.expression_operable.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.expression_operable.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.expression_operable.release_cpp_object();
     }
 }
 
-/// ExpressionOperable
-impl Column {
-    pub fn get_cpp_obj(&self) -> *mut c_void {
-        self.expression_operable.get_cpp_obj()
+impl IdentifierTrait for Column {
+    fn get_type() -> i32 {
+        CPPType::Column as i32
     }
 }
 

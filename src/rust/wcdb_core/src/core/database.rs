@@ -35,18 +35,17 @@ pub struct Database {
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
 }
 
-impl HandleORMOperationTrait for Database {
-    fn insert_object<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-    ) {
-        self.prepare_insert::<T>();
+impl CppObjectTrait for Database {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.handle_orm_operation.set_cpp_obj(cpp_obj)
     }
 
-    fn prepare_insert<T>(&self) -> Insert<T> {
-        Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.handle_orm_operation.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.handle_orm_operation.release_cpp_object();
     }
 }
 
@@ -60,17 +59,23 @@ impl HandleOperationTrait for Database {
     }
 }
 
-impl CppObjectTrait for Database {
-    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        self.handle_orm_operation.set_cpp_obj(cpp_obj)
+impl HandleORMOperationTrait for Database {
+    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
+        let handle = self.get_handle(true);
+        binding.base_binding().create_table(table_name, handle)
     }
 
-    fn get_cpp_obj(&self) -> *mut c_void {
-        self.handle_orm_operation.get_cpp_obj()
+    fn insert_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) {
+        self.prepare_insert::<T>().into_table(table_name).value(object).on_fields(fields).execute();
     }
 
-    fn release_cpp_object(&mut self) {
-        self.handle_orm_operation.release_cpp_object();
+    fn prepare_insert<T>(&self) -> Insert<T> {
+        Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 }
 
@@ -110,10 +115,5 @@ impl Database {
     /// Java: static native long getHandle(long self, boolean writeHint);
     pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
         unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
-    }
-
-    pub fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
-        self.handle_orm_operation
-            .create_table(self, table_name, binding)
     }
 }

@@ -4,7 +4,7 @@ use crate::winq::statement::StatementTrait;
 pub struct ChainCall<'a, T: StatementTrait> {
     handle: Handle<'a>,
     changes: i32,
-    statement: T,
+    pub statement: T,
     need_changes: bool,
     auto_invalidate_handle: bool,
 }

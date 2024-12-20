@@ -2,6 +2,7 @@ use crate::winq::column::Column;
 use crate::winq::column_type::ColumnType;
 use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierTrait};
 use std::ffi::{c_char, c_void};
+use crate::base::cpp_object::CppObjectTrait;
 
 extern "C" {
     pub fn WCDBRustColumnDef_create(

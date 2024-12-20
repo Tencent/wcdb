@@ -36,15 +36,15 @@
 void* WCDBRustStatementInsertClassMethodWithNoArg(create);
 //void WCDBRustStatementInsertClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementInsertClassMethod(configRecursive, jlong self);
-//void WCDBRustStatementInsertClassMethod(configTableName, jlong self, jstring tableName);
+void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char* tableName);
 //void WCDBRustStatementInsertClassMethod(configSchema,
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringParameter(schema));
 //void WCDBRustStatementInsertClassMethod(configConfliction, jlong self, jint action);
 //void WCDBRustStatementInsertClassMethod(configAs, jlong self, jstring alias);
-//void WCDBRustStatementInsertClassMethod(configColumns,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns));
+void WCDBRustStatementInsertClassMethod(configColumns,
+                                        void* self,
+                                        WCDBRustObjectOrStringArrayParameter(columns));
 //void WCDBRustStatementInsertClassMethod(configValues,
 //                                       jlong self,
 //                                       WCDBRustMultiTypeArrayParameter(value));

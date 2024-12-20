@@ -237,34 +237,22 @@
         WCDBRustReleaseDoubleArray(parameter##_doubleArray);                                       \
     }
 
-#define WCDBRustObjectOrStringArrayParameter(parameter)                         \
-    jint parameter##_type, jlongArray parameter##_longArray, jobjectArray parameter##_stringArray
+#define WCDBRustObjectOrStringArrayParameter(parameter)                                           \
+    int parameter##_type, void** parameter##_voidArray,                                           \
+    const char** parameter##_stringArray,                                                         \
+    int parameter##_arrayLen
 
-#define WCDBRustCreateObjectOrStringArrayCriticalWithAction(parameter, action)                     \
+#define WCDBRustCreateObjectOrStringArrayCriticalWithAction(parameter, action)                    \
     CPPCommonArray parameter##_commonArray;                                                       \
     parameter##_commonArray.type = parameter##_type;                                              \
     if (parameter##_type < WCDBBridgedType_Double || parameter##_type > WCDBBridgedType_String) { \
-        const jlong *parameter##_longArrayArray = NULL;                                           \
-        int parameter##_longArrayLength = 0;                                                      \
-        if (parameter##_longArray != NULL) {                                                      \
-            parameter##_longArrayLength                                                           \
-            = (*env)->GetArrayLength(env, parameter##_longArray);                                 \
-            parameter##_longArrayArray                                                            \
-            = (*env)->GetPrimitiveArrayCritical(env, parameter##_longArray, NULL);                \
-        }                                                                                         \
-        parameter##_commonArray.length = parameter##_longArrayLength;                             \
-        parameter##_commonArray.buffer = (const void **) parameter##_longArrayArray;              \
+        parameter##_commonArray.length = parameter##_arrayLen;                               \
+        parameter##_commonArray.buffer = (const void **) parameter##_voidArray;                   \
         action;                                                                                   \
-        if (parameter##_longArrayArray != NULL) {                                                 \
-            (*env)->ReleasePrimitiveArrayCritical(                                                \
-            env, parameter##_longArray, (void *) parameter##_longArrayArray, 0);                  \
-        }                                                                                         \
     } else if (parameter##_type == WCDBBridgedType_String) {                                      \
-        WCDBRustGetStringArray(parameter##_stringArray);                                           \
-        parameter##_commonArray.length = parameter##_stringArrayLength;                           \
-        parameter##_commonArray.buffer = (const void **) parameter##_stringArrayCharArray;        \
+        parameter##_commonArray.length = parameter##_arrayLen;                             \
+        parameter##_commonArray.buffer = (const void **) parameter##_stringArray;                 \
         action;                                                                                   \
-        WCDBRustReleaseStringArray(parameter##_stringArray);                                       \
     }
 
 #define WCDBRustMultiTypeArrayParameter(parameter)                              \

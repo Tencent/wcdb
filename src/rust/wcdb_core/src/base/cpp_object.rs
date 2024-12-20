@@ -61,7 +61,7 @@ impl CppObject {
     pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         CppObject { cpp_obj }
     }
-    
+
     pub fn get<T: CppObjectTrait>(obj: &T) -> *mut c_void {
         obj.get_cpp_obj()
     }

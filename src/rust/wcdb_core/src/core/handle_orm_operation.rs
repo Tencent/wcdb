@@ -1,7 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::chaincall::insert::Insert;
-use crate::core::handle::Handle;
-use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
+use crate::core::handle_operation::HandleOperation;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use std::ffi::c_void;
@@ -25,16 +24,10 @@ impl CppObjectTrait for HandleORMOperation {
 }
 
 pub trait HandleORMOperationTrait {
+    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool;
     fn insert_object<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str);
     fn prepare_insert<T>(&self) -> Insert<T>;
 }
-//
-// impl HandleORMOperationTrait for HandleORMOperation {
-//     fn insert_object<T>(&self, handle: Handle, object: T, fields: Vec<&Field<T>>, table_name: &str) {
-//         // let x = self.prepare_insert();
-//         todo!()
-//     }
-// }
 
 impl HandleORMOperation {
     pub fn new() -> Self {
@@ -47,27 +40,5 @@ impl HandleORMOperation {
         HandleORMOperation {
             handle_operation: HandleOperation::new_with_obj(cpp_obj),
         }
-    }
-
-    pub fn create_table<T, R: TableBinding<T>>(
-        &self,
-        handle_operation_trait: &dyn HandleOperationTrait,
-        table_name: &str,
-        binding: &R,
-    ) -> bool {
-        let handle = handle_operation_trait.get_handle(true);
-        binding.base_binding().create_table(table_name, handle)
-    }
-
-    pub fn insert_object<T>(
-        &self,
-        handle_operation_trait: &dyn HandleOperationTrait,
-        handle: Handle,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-    ) {
-        // let x = self.prepare_insert();
-        todo!()
     }
 }
