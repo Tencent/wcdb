@@ -993,13 +993,17 @@ public final class SQLiteDatabase extends SQLiteClosable {
      * @param bindArgs only byte[], String, Long and Double are supported in bindArgs.
      * @throws SQLException if the SQL string is invalid
      */
-    public void execSQL(String sql, Object[] bindArgs) {
-        execSQL(sql, bindArgs, null);
+    public int execSQL(String sql, Object[] bindArgs) {
+        return execSQL(sql, bindArgs, null);
     }
 
-    public void execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
+    public int execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
+        return execSQL(sql, bindArgs, cancellationSignal, false);
+    }
+
+    public int execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal, boolean readOnly) {
         try (SQLiteStatement stmt = new SQLiteStatement(mDB, sql, bindArgs)) {
-            stmt.execute(cancellationSignal);
+            return stmt.execute(cancellationSignal, readOnly);
         }
     }
 
