@@ -24,7 +24,7 @@
 package com.tencent.wcdb.base;
 
 public class WCDBInterruptException extends WCDBException {
-    WCDBInterruptException (Level level, Code code, long cppObj) {
+    WCDBInterruptException(Level level, Code code, long cppObj) {
         super(level, code, cppObj);
 
     }

@@ -62,11 +62,11 @@ public class TableConstraint extends Identifier {
 
     @NotNull
     public TableConstraint indexedBy(@NotNull IndexedColumnConvertible... indexedColumns) {
-        if(indexedColumns.length == 0) {
+        if (indexedColumns.length == 0) {
             return this;
         }
         long[] columns = new long[indexedColumns.length];
-        for(int i = 0; i < indexedColumns.length; i++) {
+        for (int i = 0; i < indexedColumns.length; i++) {
             columns[i] = CppObject.get(indexedColumns[i]);
         }
         configIndexedColumn(
@@ -83,9 +83,9 @@ public class TableConstraint extends Identifier {
     }
 
     private static native void configIndexedColumn(long self,
-                                            int type,
-                                            long[] columns,
-                                            String[] columnNames);
+                                                   int type,
+                                                   long[] columns,
+                                                   String[] columnNames);
 
     @NotNull
     public TableConstraint onConflict(ConflictAction action) {
@@ -117,7 +117,7 @@ public class TableConstraint extends Identifier {
     @NotNull
     public TableConstraint foreignKey(@NotNull ForeignKey foreignKey, @NotNull Column... columns) {
         long[] cppObjs = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
         configForeignKey(
@@ -130,8 +130,8 @@ public class TableConstraint extends Identifier {
     }
 
     private static native void configForeignKey(long self,
-                                         int type,
-                                         long[] columns,
-                                         String[] columnNames,
-                                         long foreignKey);
+                                                int type,
+                                                long[] columns,
+                                                String[] columnNames,
+                                                long foreignKey);
 }

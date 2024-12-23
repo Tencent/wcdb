@@ -42,11 +42,11 @@ public class StatementInsert extends Statement {
 
     @NotNull
     public StatementInsert with(@Nullable CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -55,11 +55,11 @@ public class StatementInsert extends Statement {
 
     @NotNull
     public StatementInsert withRecursive(@Nullable CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -122,6 +122,7 @@ public class StatementInsert extends Statement {
         configConflictAction(cppObj, ConflictAction.Ignore.ordinal());
         return this;
     }
+
     private static native void configConflictAction(long self, int action);
 
     @NotNull
@@ -134,11 +135,11 @@ public class StatementInsert extends Statement {
 
     @NotNull
     public StatementInsert columns(@NotNull Column... columns) {
-        if(columns.length == 0) {
+        if (columns.length == 0) {
             return this;
         }
         long[] cppColumns = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppColumns[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column, cppColumns, null);
@@ -147,7 +148,7 @@ public class StatementInsert extends Statement {
 
     @NotNull
     public StatementInsert columns(@NotNull String... columnNames) {
-        if(columnNames.length == 0) {
+        if (columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);
@@ -166,7 +167,7 @@ public class StatementInsert extends Statement {
 
     @NotNull
     public StatementInsert values(@Nullable Object... values) {
-        if(values == null || values.length == 0) {
+        if (values == null || values.length == 0) {
             return this;
         }
 

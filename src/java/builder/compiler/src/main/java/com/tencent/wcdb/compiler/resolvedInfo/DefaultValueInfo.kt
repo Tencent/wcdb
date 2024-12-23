@@ -32,11 +32,11 @@ data class DefaultValueInfo(
     var intValue: Long = 0,
     var doubleValue: Double = 0.0,
     var textValue: String = "",
-){
+) {
     companion object {
-        fun resolve(defaultValueAnnotation: KSAnnotation, logger: KSPLogger): DefaultValueInfo?{
+        fun resolve(defaultValueAnnotation: KSAnnotation, logger: KSPLogger): DefaultValueInfo? {
             val resolvedInfo = DefaultValueInfo()
-            for(argument in defaultValueAnnotation.arguments) {
+            for (argument in defaultValueAnnotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "intValue" -> {
@@ -49,6 +49,7 @@ data class DefaultValueInfo(
                             return null
                         }
                     }
+
                     "doubleValue" -> resolvedInfo.doubleValue = value as Double
                     "textValue" -> resolvedInfo.textValue = value as String
                     else -> {

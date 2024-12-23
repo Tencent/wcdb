@@ -205,6 +205,12 @@ config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint
     WCDBJNIReleaseString(name);
 }
 
+void WCDBJNIDatabaseClassMethod(enableLiteMode, jlong self, jboolean enable)
+{
+    WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseEnableLiteMode(selfStruct, enable);
+}
+
 void WCDBJNIDatabasePerformanceTrace(jobject tracer,
                                      long tag,
                                      const char* path,

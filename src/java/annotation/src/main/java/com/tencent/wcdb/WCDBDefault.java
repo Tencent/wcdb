@@ -32,6 +32,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface WCDBDefault {
     long intValue() default 0;
+
     double doubleValue() default 0;
+
     String textValue() default "";
 }

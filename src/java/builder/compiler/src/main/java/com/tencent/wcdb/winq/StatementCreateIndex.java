@@ -24,16 +24,48 @@
 package com.tencent.wcdb.winq;
 
 public class StatementCreateIndex {
-    public StatementCreateIndex() { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex createIndex(String indexName) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex unique() { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex ifNotExist() { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex of(String schemaName) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex of(Schema schema) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex on(String tableName) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex indexedBy(IndexedColumnConvertible... indexedColumnConvertible) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex indexedBy(IndexedColumnConvertible indexedColumnConvertible) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex indexedBy(String... indexedColumnNames) { throw new UnsatisfiedLinkError(); }
-    public StatementCreateIndex indexedBy(String indexedColumnName) { throw new UnsatisfiedLinkError(); }
+    public StatementCreateIndex() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex createIndex(String indexName) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex unique() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex ifNotExist() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex of(String schemaName) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex of(Schema schema) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex on(String tableName) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex indexedBy(IndexedColumnConvertible... indexedColumnConvertible) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex indexedBy(IndexedColumnConvertible indexedColumnConvertible) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex indexedBy(String... indexedColumnNames) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public StatementCreateIndex indexedBy(String indexedColumnName) {
+        throw new UnsatisfiedLinkError();
+    }
 //    public StatementCreateIndex where(Expression condition) { throw new UnsatisfiedLinkError(); }
 }

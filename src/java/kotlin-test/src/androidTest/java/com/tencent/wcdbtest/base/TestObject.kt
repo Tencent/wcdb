@@ -30,6 +30,7 @@ import com.tencent.wcdb.WCDBTableCoding
 class TestObject {
     @WCDBField(isPrimary = true, isAutoIncrement = true)
     var id = 0
+
     @WCDBField
     var content: String? = null
 

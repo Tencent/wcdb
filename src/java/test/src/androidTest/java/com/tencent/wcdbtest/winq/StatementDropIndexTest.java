@@ -24,6 +24,7 @@
 package com.tencent.wcdbtest.winq;
 
 import org.junit.Test;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import com.tencent.wcdb.winq.StatementDropIndex;

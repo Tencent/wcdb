@@ -35,18 +35,20 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
     protected int getType() {
         return CPPType.SelectSTMT;
     }
+
     public StatementSelect() {
         cppObj = createCppObj();
     }
+
     private static native long createCppObj();
 
     @NotNull
     public StatementSelect with(@Nullable CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -55,11 +57,11 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect withRecursive(CommonTableExpression... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         long[] cppExps = new long[expressions.length];
-        for(int i = 0; i < expressions.length; i++) {
+        for (int i = 0; i < expressions.length; i++) {
             cppExps[i] = CppObject.get(expressions[i]);
         }
         configWith(cppObj, cppExps);
@@ -73,13 +75,13 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect select(@NotNull ResultColumnConvertible... resultColumns) {
-        if(resultColumns.length == 0) {
+        if (resultColumns.length == 0) {
             return this;
         }
         int totalCount = resultColumns.length;
         int[] types = new int[totalCount];
         long[] cppObjs = new long[totalCount];
-        for(int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalCount; i++) {
             types[i] = Identifier.getCppType(resultColumns[i]);
             cppObjs[i] = CppObject.get(resultColumns[i]);
         }
@@ -89,7 +91,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect select(@NotNull String... resultColumns) {
-        if(resultColumns.length == 0) {
+        if (resultColumns.length == 0) {
             return this;
         }
         int[] types = new int[resultColumns.length];
@@ -100,7 +102,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect select(@NotNull Object... resultColumns) {
-        if(resultColumns.length == 0) {
+        if (resultColumns.length == 0) {
             return this;
         }
         int totalCount = resultColumns.length;
@@ -109,21 +111,21 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         String[] columnNames = new String[totalCount];
         int intIndex = 0;
         int stringIndex = 0;
-        for(int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalCount; i++) {
             Object obj = resultColumns[i];
-            if(obj instanceof String){
+            if (obj instanceof String) {
                 types[i] = CPPType.String;
                 columnNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof ResultColumnConvertible) {
-                ResultColumnConvertible resultColumn = (ResultColumnConvertible)obj;
+                ResultColumnConvertible resultColumn = (ResultColumnConvertible) obj;
                 types[i] = Identifier.getCppType(resultColumn);
                 cppObjs[intIndex] = CppObject.get(resultColumn);
                 intIndex++;
             }
         }
-        if(columnNames.length * 0.75 > stringIndex) {
-            if(stringIndex == 0) {
+        if (columnNames.length * 0.75 > stringIndex) {
+            if (stringIndex == 0) {
                 columnNames = null;
             } else {
                 columnNames = Arrays.copyOf(columnNames, stringIndex);
@@ -145,13 +147,13 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect from(@NotNull TableOrSubqueryConvertible... tableOrSubqueries) {
-        if(tableOrSubqueries.length == 0) {
+        if (tableOrSubqueries.length == 0) {
             return this;
         }
         int totalCount = tableOrSubqueries.length;
         int[] types = new int[totalCount];
         long[] cppObjs = new long[totalCount];
-        for(int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalCount; i++) {
             types[i] = Identifier.getCppType(tableOrSubqueries[i]);
             cppObjs[i] = CppObject.get(tableOrSubqueries[i]);
         }
@@ -161,7 +163,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect from(@NotNull String... tableNames) {
-        if(tableNames.length == 0) {
+        if (tableNames.length == 0) {
             return this;
         }
         int[] types = new int[tableNames.length];
@@ -172,7 +174,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect from(@NotNull Object... tableOrSubqueries) {
-        if(tableOrSubqueries.length == 0) {
+        if (tableOrSubqueries.length == 0) {
             return this;
         }
         int totalCount = tableOrSubqueries.length;
@@ -181,21 +183,21 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         String[] tablNames = new String[totalCount];
         int intIndex = 0;
         int stringIndex = 0;
-        for(int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalCount; i++) {
             Object obj = tableOrSubqueries[i];
-            if(obj instanceof String){
+            if (obj instanceof String) {
                 types[i] = CPPType.String;
                 tablNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof TableOrSubqueryConvertible) {
-                TableOrSubqueryConvertible tableOrSubquery = (TableOrSubqueryConvertible)obj;
+                TableOrSubqueryConvertible tableOrSubquery = (TableOrSubqueryConvertible) obj;
                 types[i] = Identifier.getCppType(tableOrSubquery);
                 cppObjs[intIndex] = CppObject.get(tableOrSubquery);
                 intIndex++;
             }
         }
-        if(tablNames.length * 0.75 > stringIndex) {
-            if(stringIndex == 0) {
+        if (tablNames.length * 0.75 > stringIndex) {
+            if (stringIndex == 0) {
                 tablNames = null;
             } else {
                 tablNames = Arrays.copyOf(tablNames, stringIndex);
@@ -217,13 +219,13 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect groupBy(@Nullable ExpressionConvertible... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         int totalCount = expressions.length;
         int[] types = new int[totalCount];
         long[] cppObjs = new long[totalCount];
-        for(int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalCount; i++) {
             types[i] = Identifier.getCppType(expressions[i]);
             cppObjs[i] = CppObject.get(expressions[i]);
         }
@@ -233,7 +235,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect groupBy(@Nullable String... columnNames) {
-        if(columnNames == null || columnNames.length == 0) {
+        if (columnNames == null || columnNames.length == 0) {
             return this;
         }
         int[] types = new int[columnNames.length];
@@ -244,7 +246,7 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect groupBy(@Nullable Object... expressions) {
-        if(expressions == null || expressions.length == 0) {
+        if (expressions == null || expressions.length == 0) {
             return this;
         }
         int totalCount = expressions.length;
@@ -253,21 +255,21 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
         String[] columnNames = new String[totalCount];
         int intIndex = 0;
         int stringIndex = 0;
-        for(int i = 0; i < totalCount; i++) {
+        for (int i = 0; i < totalCount; i++) {
             Object obj = expressions[i];
-            if(obj instanceof String){
+            if (obj instanceof String) {
                 types[i] = CPPType.String;
                 columnNames[stringIndex] = (String) obj;
                 stringIndex++;
             } else if (obj instanceof ExpressionConvertible) {
-                ExpressionConvertible expression = (ExpressionConvertible)obj;
+                ExpressionConvertible expression = (ExpressionConvertible) obj;
                 types[i] = Identifier.getCppType(expression);
                 cppObjs[intIndex] = CppObject.get(expression);
                 intIndex++;
             }
         }
-        if(columnNames.length * 0.75 > stringIndex) {
-            if(stringIndex == 0) {
+        if (columnNames.length * 0.75 > stringIndex) {
+            if (stringIndex == 0) {
                 columnNames = null;
             } else {
                 columnNames = Arrays.copyOf(columnNames, stringIndex);
@@ -321,11 +323,11 @@ public class StatementSelect extends Statement implements TableOrSubqueryConvert
 
     @NotNull
     public StatementSelect orderBy(@Nullable OrderingTerm... orders) {
-        if(orders == null || orders.length == 0) {
+        if (orders == null || orders.length == 0) {
             return this;
         }
         long[] cppOrders = new long[orders.length];
-        for(int i = 0; i < orders.length; i++) {
+        for (int i = 0; i < orders.length; i++) {
             cppOrders[i] = CppObject.get(orders[i]);
         }
         configOrders(cppObj, cppOrders);

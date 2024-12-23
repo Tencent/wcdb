@@ -21,6 +21,7 @@
  * limitations under the License.
  */
 package com.tencent.wcdbtest
+
 class WrappedValue {
     var boolValue = false
     var intValue: Long = 0

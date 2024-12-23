@@ -26,24 +26,26 @@ public class CppObject implements CppObjectConvertible {
     static {
         System.loadLibrary("WCDB");
     }
+
     @Override
     protected void finalize() throws Throwable {
-        if(cppObj > 0) {
+        if (cppObj > 0) {
             releaseCPPObject(cppObj);
         }
         super.finalize();
     }
+
     protected long cppObj = 0;
 
     public static long get(CppObject obj) {
-        if(obj == null) {
+        if (obj == null) {
             return 0;
         }
         return obj.cppObj;
     }
 
     public static long get(CppObjectConvertible obj) {
-        if(obj == null) {
+        if (obj == null) {
             return 0;
         }
         return obj.asCppObject().cppObj;

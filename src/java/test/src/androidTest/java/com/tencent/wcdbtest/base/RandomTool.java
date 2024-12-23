@@ -38,17 +38,18 @@ public class RandomTool {
     }
 
     public static String string(int length) {
-        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuilder stringBuffer = new StringBuilder(length);
-        for(int i = 0; i < length; i++){
-            int number=random.nextInt(62);
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(62);
             stringBuffer.append(str.charAt(number));
         }
         return stringBuffer.toString();
     }
 
     private static final ArrayList<String> g_englishWordArray = createEnglishWordArray();
+
     private static ArrayList<String> createEnglishWordArray() {
         Map<String, Integer> g_wordFrequency = new HashMap<>();
         g_wordFrequency.put("a", 408);
@@ -85,6 +86,7 @@ public class RandomTool {
     public static String englishString() {
         return englishString(100);
     }
+
     public static String englishString(int length) {
         StringBuilder ret = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -109,7 +111,7 @@ public class RandomTool {
 
     public static List<TestObject> autoIncrementTestCaseObjects(int count) {
         ArrayList<TestObject> objects = new ArrayList<>();
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             objects.add(TestObject.createAutoIncrementObject(useEnglishWord ? englishString() : string()));
         }
         return objects;
@@ -117,7 +119,7 @@ public class RandomTool {
 
     public static List<TestObject> testCaseObjects(int startIdentifier, int count) {
         ArrayList<TestObject> objects = new ArrayList<>();
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             objects.add(TestObject.createObject(i + startIdentifier, useEnglishWord ? englishString() : string()));
         }
         return objects;
@@ -128,7 +130,7 @@ public class RandomTool {
     }
 
     public static Value[] testRowWithId(int id) {
-        return new Value[]{ new Value(id), new Value(useEnglishWord ? englishString() : string())};
+        return new Value[]{new Value(id), new Value(useEnglishWord ? englishString() : string())};
     }
 
 }

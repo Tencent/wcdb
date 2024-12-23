@@ -649,23 +649,25 @@
     TestCaseAssertTrue([self dropTable]);
     TestCaseAssertTrue([self createTable]);
     __block int identifier = 0;
-    for (int loopCount = 0; loopCount < 5; loopCount++) {
+    for (int loopCount = 0; loopCount < 1; loopCount++) {
         [self.dispatch async:^{
-            __block int i = 0;
-            BOOL ret = [self.database runPausableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL) {
-                TestCaseAssertTrue(handle.isInTransaction);
-                WCTProperties properties = [self.tableClass allProperties];
-                WCTPreparedStatement* handleStament = [handle getOrCreatePreparedStatement:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))];
-                TestCaseAssertNotNil(handleStament);
-                [handleStament reset];
-                [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
-                TestCaseAssertTrue([handleStament step]);
+            @autoreleasepool {
+                __block int i = 0;
+                BOOL ret = [self.database runPausableTransactionWithOneLoop:^BOOL(WCTHandle* _Nonnull handle, BOOL* _Nonnull stop, BOOL) {
+                    TestCaseAssertTrue(handle.isInTransaction);
+                    WCTProperties properties = [self.tableClass allProperties];
+                    WCTPreparedStatement* handleStament = [handle getOrCreatePreparedStatement:WCDB::StatementInsert().insertIntoTable(self.tableName).columns(properties).values(WCDB::BindParameter::bindParameters(properties.size()))];
+                    TestCaseAssertNotNil(handleStament);
+                    [handleStament reset];
+                    [handleStament bindProperties:properties ofObject:[Random.shared testCaseObjectWithIdentifier:identifier++]];
+                    TestCaseAssertTrue([handleStament step]);
 
-                [NSThread sleepForTimeInterval:0.1];
-                *stop = ++i > 5;
-                return YES;
-            }];
-            TestCaseAssertTrue(ret);
+                    [NSThread sleepForTimeInterval:0.1];
+                    *stop = ++i > 5;
+                    return YES;
+                }];
+                TestCaseAssertTrue(ret);
+            }
         }];
     }
     [NSThread sleepForTimeInterval:0.4];

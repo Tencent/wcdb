@@ -24,6 +24,7 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import com.tencent.wcdb.winq.Column;
@@ -41,16 +42,16 @@ public class StatementAlterTableTest {
         winqEqual(new StatementAlterTable().alterTable("table1").renameTo("table2"),
                 "ALTER TABLE table1 RENAME TO table2");
         winqEqual(new StatementAlterTable().alterTable("table1")
-                .of("testSchema").renameTo("table2"),
+                        .of("testSchema").renameTo("table2"),
                 "ALTER TABLE testSchema.table1 RENAME TO table2");
         winqEqual(new StatementAlterTable().alterTable("table1")
-                .addColumn(new Column("column1").asDef(ColumnType.Float)),
+                        .addColumn(new Column("column1").asDef(ColumnType.Float)),
                 "ALTER TABLE table1 ADD COLUMN column1 REAL");
         winqEqual(new StatementAlterTable().alterTable("table1")
-                .renameColumn("column1").toColumn("column2"),
+                        .renameColumn("column1").toColumn("column2"),
                 "ALTER TABLE table1 RENAME COLUMN column1 TO column2");
         winqEqual(new StatementAlterTable().alterTable("table1")
-                  .renameColumn(new Column("column1")).toColumn(new Column("column2")),
+                        .renameColumn(new Column("column1")).toColumn(new Column("column2")),
                 "ALTER TABLE table1 RENAME COLUMN column1 TO column2");
     }
 }

@@ -33,8 +33,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface WCDBTableCoding {
     MultiIndexes[] multiIndexes() default {};
+
     MultiPrimary[] multiPrimaries() default {};
+
     MultiUnique[] multiUnique() default {};
+
     boolean isWithoutRowId() default false;
+
     FTSModule ftsModule() default @FTSModule();
 }

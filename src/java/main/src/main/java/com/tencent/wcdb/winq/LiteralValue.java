@@ -67,7 +67,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
     }
 
     public LiteralValue(@Nullable String value) {
-        if(value == null) {
+        if (value == null) {
             cppObj = createCppObj(CPPType.Null, 0, 0, null);
         } else {
             cppObj = createCppObj(CPPType.String, 0, 0, value);
@@ -76,7 +76,7 @@ public class LiteralValue extends Identifier implements ExpressionConvertible {
 
     private static native long createCppObj(int type, long intValue, double doubleValue, String stringValue);
 
-    private LiteralValue(){
+    private LiteralValue() {
     }
 
     @NotNull

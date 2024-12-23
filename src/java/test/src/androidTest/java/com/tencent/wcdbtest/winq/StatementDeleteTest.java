@@ -24,7 +24,9 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -41,7 +43,7 @@ public class StatementDeleteTest {
                 "DELETE FROM testTable WHERE column1 > 1");
 
         winqEqual(new StatementDelete().deleteFrom(new QualifiedTable("testTable").of("testSchema"))
-                .where(column1.gt(1)),
+                        .where(column1.gt(1)),
                 "DELETE FROM testSchema.testTable WHERE column1 > 1");
 
         winqEqual(genStatementDelete().orderBy(
@@ -55,7 +57,7 @@ public class StatementDeleteTest {
         winqEqual(genStatementDelete().limit(1).offset(3), "DELETE FROM testTable LIMIT 1 OFFSET 3");
 
         winqEqual(genStatementDelete().where(column1.gt(1))
-                .orderBy(column1.order(Order.Asc), column2.order(Order.Desc))
+                        .orderBy(column1.order(Order.Asc), column2.order(Order.Desc))
                         .limit(1).offset(2),
                 "DELETE FROM testTable WHERE column1 > 1 ORDER BY column1 ASC, column2 DESC LIMIT 1 OFFSET 2");
 

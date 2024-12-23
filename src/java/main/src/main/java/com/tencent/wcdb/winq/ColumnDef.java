@@ -28,7 +28,7 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ColumnDef extends Identifier{
+public class ColumnDef extends Identifier {
     @Override
     protected int getType() {
         return CPPType.ColumnDef;

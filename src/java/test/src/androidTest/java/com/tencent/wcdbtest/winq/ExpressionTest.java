@@ -27,6 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -63,7 +64,7 @@ public class ExpressionTest {
         winqEqual(Column.rowId().add(1).as("rowidAddOne"), "rowid + 1 AS rowidAddOne");
 
         winqEqual(Expression.case_().when(column.eq(1)).then("a")
-                .when(column.eq(2)).then("b").else_("c"),
+                        .when(column.eq(2)).then("b").else_("c"),
                 "CASE WHEN testColumn == 1 THEN 'a' WHEN testColumn == 2 THEN 'b' ELSE 'c' END");
         winqEqual(Expression.case_().when(column.eq("a")).then(1)
                         .when(column.eq("b")).then(2).else_(3),
@@ -230,8 +231,8 @@ public class ExpressionTest {
         winqEqual(column.in(new short[]{1, 2, 3}), "testColumn IN(1, 2, 3)");
         Set<Short> shortSet = new HashSet<Short>();
         shortSet.add((short) 1);
-        shortSet.add((short)2);
-        shortSet.add((short)3);
+        shortSet.add((short) 2);
+        shortSet.add((short) 3);
         winqEqual(column.in(shortSet), "testColumn IN(1, 2, 3)");
         winqEqual(column.in(new Short[]{1, 2, 3}), "testColumn IN(1, 2, 3)");
         List<Short> shortList = new ArrayList<Short>();
@@ -324,8 +325,8 @@ public class ExpressionTest {
         winqEqual(column.notIn(new short[]{1, 2, 3}), "testColumn NOT IN(1, 2, 3)");
         Set<Short> shortSet = new HashSet<Short>();
         shortSet.add((short) 1);
-        shortSet.add((short)2);
-        shortSet.add((short)3);
+        shortSet.add((short) 2);
+        shortSet.add((short) 3);
         winqEqual(column.notIn(shortSet), "testColumn NOT IN(1, 2, 3)");
         winqEqual(column.notIn(new Short[]{1, 2, 3}), "testColumn NOT IN(1, 2, 3)");
         List<Short> shortList = new ArrayList<Short>();
@@ -465,7 +466,7 @@ public class ExpressionTest {
 
         winqEqual(left.groupConcat(), "GROUP_CONCAT(left)");
 
-        winqEqual(left.groupConcat("-").distinct(),"GROUP_CONCAT(DISTINCT left, '-')");
+        winqEqual(left.groupConcat("-").distinct(), "GROUP_CONCAT(DISTINCT left, '-')");
 
         winqEqual(left.max(), "MAX(left)");
 

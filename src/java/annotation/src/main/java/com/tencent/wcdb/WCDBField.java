@@ -31,10 +31,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface WCDBField {
     String columnName() default "";
+
     boolean isPrimary() default false;
+
     boolean isAutoIncrement() default false;
+
     boolean enableAutoIncrementForExistingTable() default false;
+
     boolean isUnique() default false;
+
     boolean isNotNull() default false;
+
     boolean isNotIndexed() default false;
 }

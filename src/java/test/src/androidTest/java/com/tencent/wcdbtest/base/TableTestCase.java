@@ -73,7 +73,7 @@ public class TableTestCase extends DatabaseTestCase {
     }
 
     public void doTestObjectsAfterInsert(List objects, int insertCount, String[] sqls, TestOperation operation) {
-        if(insertCount > 1) {
+        if (insertCount > 1) {
             List<String> list = new ArrayList<String>(Arrays.asList(sqls));
             list.add(0, "BEGIN IMMEDIATE");
             list.add("COMMIT");

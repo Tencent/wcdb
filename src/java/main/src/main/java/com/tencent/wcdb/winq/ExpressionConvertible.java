@@ -22,5 +22,5 @@
  */
 package com.tencent.wcdb.winq;
 
-public interface ExpressionConvertible extends IdentifierConvertible{
+public interface ExpressionConvertible extends IdentifierConvertible {
 }

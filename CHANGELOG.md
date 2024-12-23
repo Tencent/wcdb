@@ -1,3 +1,8 @@
+## v2.1.9
+
+* Add lite mode (Set journal mode and synchronous flag to OFF)
+* Fix memory leak and other known bug
+
 ## v2.1.8
 
 * Increase migration speed

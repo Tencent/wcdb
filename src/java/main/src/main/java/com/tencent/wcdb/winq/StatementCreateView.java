@@ -81,11 +81,11 @@ public class StatementCreateView extends Statement {
 
     @NotNull
     public StatementCreateView withColumns(@NotNull Column... columns) {
-        if(columns.length == 0) {
+        if (columns.length == 0) {
             return this;
         }
         long[] cppObjs = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppObjs[i] = CppObject.get(columns[i]);
         }
         configColumns(cppObj, CPPType.Column, cppObjs, null);
@@ -94,7 +94,7 @@ public class StatementCreateView extends Statement {
 
     @NotNull
     public StatementCreateView withColumns(@NotNull String... columnNames) {
-        if(columnNames.length == 0) {
+        if (columnNames.length == 0) {
             return this;
         }
         configColumns(cppObj, CPPType.String, null, columnNames);

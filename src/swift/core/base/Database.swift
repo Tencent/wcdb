@@ -1471,6 +1471,15 @@ public extension Database {
     static func config(traditionalChineseDict: [String /*Traditional Chinese character*/ : String /*Simplified Chinese character*/]) {
         WCTAPIBridge.configTraditionalChineseDict(traditionalChineseDict)
     }
+
+    /// Enable/Disable Lite mode.
+    /// Lite mode is disabled by default.
+    /// In lite mode, the journal mode and synchronous flag of current database will be set to `OFF`,
+    /// which will significantly reduces IO, improve performance, and also increase the probability of data corruption.
+    /// Note that you can not rollback transaction or backup data in lite mode.
+    func setLiteMode(enable: Bool) {
+        WCDBDatabaseEnableLiteMode(database, enable)
+    }
 }
 
 // checkpoint

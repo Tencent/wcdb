@@ -24,7 +24,15 @@
 package com.tencent.wcdb.winq;
 
 public class Schema extends Identifier {
-    public Schema(String name) { throw new UnsatisfiedLinkError(); }
-    public static Schema main() { throw new UnsatisfiedLinkError(); }
-    public static Schema temp() { throw new UnsatisfiedLinkError(); }
+    public Schema(String name) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public static Schema main() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public static Schema temp() {
+        throw new UnsatisfiedLinkError();
+    }
 }

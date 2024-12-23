@@ -23,8 +23,8 @@
 
 package com.tencent.wcdb.base;
 
-public class WCDBNormalException extends WCDBException{
-    WCDBNormalException (Level level, Code code, long cppObj) {
+public class WCDBNormalException extends WCDBException {
+    WCDBNormalException(Level level, Code code, long cppObj) {
         super(level, code, cppObj);
 
     }

@@ -48,7 +48,7 @@ public:
 
     bool loadData(const UnsafeData& data);
 
-    typedef uint32_t DictId;
+    typedef uint16_t DictId;
     DictId getDictId() const;
     ZCDict* getCDict() const;
     ZDDcit* getDDict() const;

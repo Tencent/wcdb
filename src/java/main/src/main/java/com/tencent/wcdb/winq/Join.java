@@ -27,7 +27,7 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Join extends Identifier implements TableOrSubqueryConvertible{
+public class Join extends Identifier implements TableOrSubqueryConvertible {
     @Override
     protected int getType() {
         return CPPType.JoinClause;
@@ -43,7 +43,7 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
 
     private static native long createCppObj(int type, long object, String tableName);
 
-    
+
     @NotNull
     public Join with(@NotNull String tableName) {
         configWith(cppObj, CPPType.String, 0, tableName);
@@ -226,11 +226,11 @@ public class Join extends Identifier implements TableOrSubqueryConvertible{
 
     @NotNull
     public Join using(@Nullable Column... columns) {
-        if(columns == null || columns.length == 0) {
+        if (columns == null || columns.length == 0) {
             return this;
         }
         long[] cppColumns = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppColumns[i] = CppObject.get(columns[i]);
         }
         configUsingColumn(cppObj, CPPType.Column, cppColumns, null);

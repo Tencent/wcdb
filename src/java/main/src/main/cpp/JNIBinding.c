@@ -898,6 +898,7 @@ static const JNINativeMethod g_databaseMethods[] = {
       "(J" WCDBJNIStringSignature WCDBJNIDatabaseSignature
       "$Config;" WCDBJNIDatabaseSignature "$Config;I)V",
       (void *) WCDBJNIDatabaseFuncName(config) },
+    { "enableLiteMode", "(JZ)V", (void *) WCDBJNIDatabaseFuncName(enableLiteMode) },
     { "globalTracePerformance",
       "(" WCDBJNIDatabaseSignature "$PerformanceTracer;)V",
       (void *) WCDBJNIDatabaseFuncName(globalTracePerformance) },

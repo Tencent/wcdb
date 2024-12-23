@@ -70,6 +70,8 @@ void WCDBDatabaseConfig(CPPDatabase database,
                         int priority,
                         WCDBContextDestructor _Nonnull destructor);
 
+void WCDBDatabaseEnableLiteMode(CPPDatabase database, bool enable);
+
 typedef struct CPPPerformanceInfo {
     int tablePageReadCount;
     int tablePageWriteCount;

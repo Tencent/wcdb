@@ -39,6 +39,7 @@ public class ObjectUpdateTest extends ObjectCRUDTestCase {
     TestObject renewObject;
     TestObject renewedObject1;
     TestObject renewedObject2;
+
     @Before
     public void setup() throws WCDBException {
         super.setup();

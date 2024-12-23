@@ -745,6 +745,15 @@ public:
      */
     void addScalarFunction(const UnsafeStringView &name);
 
+    /**
+     @brief Enable/Disable Lite mode.
+     Lite mode is disabled by default.
+     In lite mode, the journal mode and synchronous flag of current database will be set to `OFF`,
+     which will significantly reduces IO, improve performance, and also increase the probability of data corruption.
+     @warning You can not rollback transaction or backup data in lite mode.
+     */
+    void enableLiteMode(bool enable);
+
 #pragma mark - Migration
     typedef struct MigrationInfo {
         StringView table;           // Target table of migration

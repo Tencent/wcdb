@@ -25,7 +25,7 @@ package com.tencent.wcdb.winq;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RaiseFunction extends Identifier implements ExpressionConvertible, ResultColumnConvertible{
+public class RaiseFunction extends Identifier implements ExpressionConvertible, ResultColumnConvertible {
     @Override
     protected int getType() {
         return CPPType.RaiseFunction;

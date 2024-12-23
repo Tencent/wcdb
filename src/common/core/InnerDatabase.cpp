@@ -42,6 +42,7 @@
 #include "MigratingHandleDecorator.hpp"
 
 #include "AutoVacuumConfig.hpp"
+#include "BasicConfig.hpp"
 #include "BusyRetryConfig.hpp"
 #include "CipherHandle.hpp"
 #include "CommonCore.hpp"
@@ -60,7 +61,7 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_closing(0)
 , m_tag(Tag::invalid())
 , m_fullSQLTrace(false)
-, m_autoCheckpoint(true)
+, m_liteModeEnable(false)
 , m_factory(path)
 , m_needLoadIncremetalMaterial(false)
 , m_migration(this)
@@ -240,9 +241,19 @@ void InnerDatabase::setFullSQLTraceEnable(bool enable)
     m_fullSQLTrace = enable;
 }
 
-void InnerDatabase::setAutoCheckpointEnable(bool enable)
+void InnerDatabase::setLiteModeEnable(bool enable)
 {
-    m_autoCheckpoint = enable;
+    if (m_liteModeEnable != enable) {
+        close([&] {
+            m_liteModeEnable = enable;
+            CommonCore::shared().enableAutoCheckpoint(this, !m_liteModeEnable);
+        });
+    }
+}
+
+bool InnerDatabase::liteModeEnable()
+{
+    return m_liteModeEnable;
 }
 
 #pragma mark - Handle
@@ -371,11 +382,12 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 
     handle->setTag(getTag());
     handle->setType(type);
+    handle->setLiteModeEnable(m_liteModeEnable);
     handle->setFullSQLTraceEnable(m_fullSQLTrace);
     handle->setBusyTraceEnable(CommonCore::shared().isBusyTraceEnable());
     HandleSlot slot = slotOfHandleType(type);
-    handle->enableWriteMainDB(slot == HandleSlotAutoTask || slot == HandleSlotAssemble
-                              || slot == HandleSlotVacuum);
+    handle->enableWriteMainDB(m_liteModeEnable || slot == HandleSlotAutoTask
+                              || slot == HandleSlotAssemble || slot == HandleSlotVacuum);
     handle->markAsCanBeSuspended(false);
     handle->markErrorAsUnignorable(99); //Clear all ignorable code
 
@@ -633,12 +645,6 @@ void InnerDatabase::tryLoadIncremetalMaterial()
     if (!m_needLoadIncremetalMaterial) {
         return;
     }
-    auto config = CommonCore::shared().getABTestConfig("clicfg_wcdb_incremental_backup");
-    if (config.failed() || config.value().length() == 0
-        || atoi(config.value().data()) != 1) {
-        m_needLoadIncremetalMaterial = false;
-        return;
-    }
 
     const StringView &databasePath = getPath();
     StringView materialPath
@@ -705,6 +711,8 @@ bool InnerDatabase::backup(bool interruptible)
 
     WCTRemedialAssert(
     !isInTransaction(), "Backup can't be run in transaction.", return false;);
+
+    WCTRemedialAssert(!m_liteModeEnable, "Backup can't run in lite mode.", return false;);
 
     RecyclableHandle backupReadHandle = flowOut(HandleType::BackupRead);
     if (backupReadHandle == nullptr) {

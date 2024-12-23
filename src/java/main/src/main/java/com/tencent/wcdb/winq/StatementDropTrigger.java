@@ -33,7 +33,7 @@ public class StatementDropTrigger extends Statement {
     protected int getType() {
         return CPPType.DropTriggerSTMT;
     }
-    
+
     public StatementDropTrigger() {
         cppObj = createCppObj();
     }

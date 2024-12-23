@@ -90,21 +90,21 @@ public class SimpleSample extends CRUDTestCase {
                 PreparedStatement insert = handle.getOrCreatePreparedStatement(new StatementInsert().insertInto("testTable").orReplace()
                         .columns(DBTestObject.allFields())
                         .valuesWithBindParameters(DBTestObject.allFields().length));
-                for(int i = 0; i < 200; i++) {
+                for (int i = 0; i < 200; i++) {
                     TestObject obj = TestObject.createObject(i, RandomTool.string());
                     insert.reset();
                     insert.bindObject(obj, DBTestObject.allFields());
                     insert.step();
-                    obj.id = (int)handle.getLastInsertedRowId();
+                    obj.id = (int) handle.getLastInsertedRowId();
                 }
                 // select count(*) from testTable
-                int count = (int)handle.getValueFromStatement(new StatementSelect().select(Column.all().count()).from("testTable")).getLong();
+                int count = (int) handle.getValueFromStatement(new StatementSelect().select(Column.all().count()).from("testTable")).getLong();
 
                 PreparedStatement select = handle.getOrCreatePreparedStatement(new StatementSelect().select(DBTestObject.allFields())
                         .from("testTable").where(DBTestObject.content.notNull()));
                 List<TestObject> result = new ArrayList<TestObject>();
                 select.step();
-                while(!select.isDone()) {
+                while (!select.isDone()) {
                     result.add(select.getOneObject(DBTestObject.allFields()));
                     select.step();
                 }

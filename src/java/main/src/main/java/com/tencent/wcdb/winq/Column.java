@@ -28,7 +28,7 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Column extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible{
+public class Column extends ExpressionOperable implements IndexedColumnConvertible, ResultColumnConvertible {
 
     @Override
     protected int getType() {

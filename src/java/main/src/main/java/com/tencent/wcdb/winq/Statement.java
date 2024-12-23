@@ -24,7 +24,7 @@
 
 package com.tencent.wcdb.winq;
 
-public class Statement extends Identifier{
+public class Statement extends Identifier {
     public boolean isWriteStatement() {
         return isWriteStatement(cppObj);
     }

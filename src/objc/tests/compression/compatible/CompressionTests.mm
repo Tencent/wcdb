@@ -621,7 +621,7 @@
 
         NSArray* objects = [self.table getObjects];
         NSArray* originObjects = [self.uncompressTable getObjects];
-        TestCaseAssertTrue([originObjects isEqualTo:objects]);
+        TestCaseAssertTrue([originObjects isEqualToArray:objects]);
 
         WCTValue* uncompressedTextCount = [self.database getValueFromStatement:WCDB::StatementSelect().select(WCDB::Column::all().count()).from(self.tableName).where(WCDB::Column("WCDB_CT_text").isNull())];
         TestCaseAssertTrue(uncompressedTextCount != nil && uncompressedTextCount.numberValue.intValue == 0);
@@ -650,7 +650,7 @@
 
         NSArray* objects = [self.table getObjects];
         NSArray* originObjects = [self.uncompressTable getObjects];
-        TestCaseAssertTrue([originObjects isEqualTo:objects]);
+        TestCaseAssertTrue([originObjects isEqualToArray:objects]);
     }];
 }
 

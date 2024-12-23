@@ -43,6 +43,7 @@ import java.io.IOException;
 @RunWith(AndroidJUnit4.class)
 public class FileTest extends DatabaseTestCase {
     static String[] dummyPaths;
+
     @Before
     public void setup() throws WCDBException {
         super.setup();
@@ -62,13 +63,13 @@ public class FileTest extends DatabaseTestCase {
     }
 
     void createDummyFiles() throws IOException {
-        for(String path : dummyPaths) {
+        for (String path : dummyPaths) {
             FileTool.createFile(path);
         }
     }
 
     void allFileExists(boolean exist, String[] paths) {
-        for(String path : paths) {
+        for (String path : paths) {
             assertEquals(FileTool.fileExist(path), exist);
         }
     }
@@ -104,7 +105,7 @@ public class FileTest extends DatabaseTestCase {
     public void testGetFileSize() throws IOException, WCDBException {
         byte[] data = new byte[10];
         createDummyFiles();
-        for(String path: dummyPaths) {
+        for (String path : dummyPaths) {
             FileOutputStream fileStream = new FileOutputStream(path);
             fileStream.write(data);
         }

@@ -43,19 +43,20 @@ public class ChainCall<T extends Statement> {
     }
 
     protected void updateChanges() throws WCDBException {
-        if(needChanges) {
+        if (needChanges) {
             changes = handle.getChanges();
         }
     }
 
     public void invalidateHandle() {
-        if(autoInvalidateHandle) {
+        if (autoInvalidateHandle) {
             handle.invalidate();
         }
     }
 
     /**
      * Get the number of changed rows in the most recent call.
+     *
      * @return the number of changed rows.
      */
     public int getChanges() {
@@ -65,6 +66,7 @@ public class ChainCall<T extends Statement> {
     /**
      * The statement that `ChainCall` will execute.
      * You can customize this statement directly to implement the capabilities not provided by `ChainCall`.
+     *
      * @return the current statement.
      */
     @NotNull

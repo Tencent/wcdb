@@ -25,14 +25,18 @@ package com.tencent.wcdb.compiler.resolvedInfo
 
 import kotlin.reflect.KClass
 
-internal fun <T : Any> resolveValueToList(value: Any, kClass: KClass<T>, list: MutableList<T>): Boolean {
-    if(kClass.isInstance(value)) {
+internal fun <T : Any> resolveValueToList(
+    value: Any,
+    kClass: KClass<T>,
+    list: MutableList<T>
+): Boolean {
+    if (kClass.isInstance(value)) {
         @Suppress("UNCHECKED_CAST")
         list.add(value as T)
-    } else if(value is ArrayList<*>) {
+    } else if (value is ArrayList<*>) {
         @Suppress("UNCHECKED_CAST")
         val array = value as ArrayList<T>
-        if(array.isNotEmpty()) {
+        if (array.isNotEmpty()) {
             list.addAll(array)
         }
     } else {

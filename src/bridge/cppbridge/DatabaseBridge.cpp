@@ -183,6 +183,12 @@ void WCDBDatabaseConfig(CPPDatabase database,
     priority);
 }
 
+void WCDBDatabaseEnableLiteMode(CPPDatabase database, bool enable)
+{
+    WCDBGetObjectOrReturn(database, WCDB::InnerDatabase, cppDatabase);
+    cppDatabase->setLiteModeEnable(enable);
+}
+
 static_assert(sizeof(CPPPerformanceInfo) == sizeof(WCDB::InnerHandle::PerformanceInfo), "");
 static_assert(offsetof(CPPPerformanceInfo, tablePageReadCount)
               == offsetof(WCDB::InnerHandle::PerformanceInfo, tablePageReadCount),

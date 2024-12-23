@@ -88,25 +88,31 @@ class KotlinCodeGenerator {
                 columnName = propertyName
             }
 
-            builder.append("$TAB$TAB${propertyName} = Field(\"$columnName\", this, " +
-                    "$fieldId, ${columnInfo.isPrimary && columnInfo.isAutoIncrement}, " +
-                    "${columnInfo.isPrimary})\n")
+            builder.append(
+                "$TAB$TAB${propertyName} = Field(\"$columnName\", this, " +
+                        "$fieldId, ${columnInfo.isPrimary && columnInfo.isAutoIncrement}, " +
+                        "${columnInfo.isPrimary})\n"
+            )
             fieldId++
 
             builder.append("$TAB${TAB}val ${propertyName}Def = ColumnDef($propertyName, ColumnType.${ormInfo.columnType})\n")
 
-            val constraintPrefix = "$TAB$TAB${propertyName}Def.constraint(\n$TAB$TAB${TAB}ColumnConstraint()"
+            val constraintPrefix =
+                "$TAB$TAB${propertyName}Def.constraint(\n$TAB$TAB${TAB}ColumnConstraint()"
             if (columnInfo.isPrimary) {
                 builder.append(constraintPrefix).append(".primaryKey()")
                     .append(if (columnInfo.isAutoIncrement) ".autoIncrement()\n$TAB$TAB)\n" else "\n$TAB$TAB)\n")
             }
             if (columnInfo.defaultValue != null) {
                 if (ormInfo.columnType == "Integer") {
-                    builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.intValue})\n$TAB$TAB)\n")
+                    builder.append(constraintPrefix)
+                        .append(".defaultTo(${columnInfo.defaultValue!!.intValue})\n$TAB$TAB)\n")
                 } else if (ormInfo.columnType == "Float") {
-                    builder.append(constraintPrefix).append(".defaultTo(${columnInfo.defaultValue!!.doubleValue})\n$TAB$TAB)\n")
+                    builder.append(constraintPrefix)
+                        .append(".defaultTo(${columnInfo.defaultValue!!.doubleValue})\n$TAB$TAB)\n")
                 } else {
-                    builder.append(constraintPrefix).append(".defaultTo(\"${columnInfo.defaultValue!!.textValue}\")\n$TAB$TAB)\n")
+                    builder.append(constraintPrefix)
+                        .append(".defaultTo(\"${columnInfo.defaultValue!!.textValue}\")\n$TAB$TAB)\n")
                 }
             }
             if (columnInfo.isUnique) {
@@ -150,7 +156,7 @@ class KotlinCodeGenerator {
             var indexName = name
             var isFullName = true
             if (indexName.isEmpty()) {
-                indexName = columns.joinToString( "_", "_", "_index")
+                indexName = columns.joinToString("_", "_", "_index")
                 isFullName = false
             }
             builder.append("$TAB${TAB}baseBinding.addIndex(\"$indexName\", $isFullName, StatementCreateIndex().ifNotExist().indexedBy(\n$TAB$TAB$TAB")

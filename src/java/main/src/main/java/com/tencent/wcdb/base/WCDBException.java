@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class WCDBException extends RuntimeException {
-    public enum Level{
+    public enum Level {
         Ignore,
         Debug,
         Notice,
@@ -37,6 +37,7 @@ public class WCDBException extends RuntimeException {
         Error,
         Fatal,
         Unknown;
+
         public static Level valueOf(int value) {
             switch (value) {
                 case 1:
@@ -76,6 +77,7 @@ public class WCDBException extends RuntimeException {
             }
         }
     }
+
     public enum Code {
         OK(0),
         Error(1),
@@ -183,6 +185,7 @@ public class WCDBException extends RuntimeException {
                     return Unknown;
             }
         }
+
         public int value() {
             return this.value;
         }
@@ -403,6 +406,7 @@ public class WCDBException extends RuntimeException {
                     return Unknown;
             }
         }
+
         public int value() {
             return this.value;
         }
@@ -418,9 +422,11 @@ public class WCDBException extends RuntimeException {
         message("Message");
 
         private final String value;
+
         Key(String value) {
             this.value = value;
         }
+
         String getValue() {
             return value;
         }
@@ -430,7 +436,7 @@ public class WCDBException extends RuntimeException {
     public final Code code;
     public final Map<String, Object> info;
 
-    WCDBException(Level level, Code code, long cppObj){
+    WCDBException(Level level, Code code, long cppObj) {
         this.level = level;
         this.code = code;
         String message = getMessage(cppObj);
@@ -442,7 +448,7 @@ public class WCDBException extends RuntimeException {
     public static WCDBException createException(long cppObj) {
         Level level = Level.valueOf(getLevel(cppObj));
         Code code = Code.valueOf(getCode(cppObj));
-        if(level != Level.Error) {
+        if (level != Level.Error) {
             return new WCDBNormalException(level, code, cppObj);
         }
         if (code == Code.Interrupt) {
@@ -461,33 +467,35 @@ public class WCDBException extends RuntimeException {
     }
 
     private static native int getLevel(long error);
+
     private static native int getCode(long error);
+
     private static native String getMessage(long error);
 
     private native void enumerateInfo(long cppError);
 
     private void addInfo(String key, int valueType, long intValue, double doubleValue, String stringValue) {
-        if(valueType == 3) {
+        if (valueType == 3) {
             info.put(key, intValue);
         } else if (valueType == 5) {
             info.put(key, doubleValue);
-        } else if (valueType == 6)  {
+        } else if (valueType == 6) {
             info.put(key, stringValue);
         }
     }
 
     public long tag() {
         Object tag = info.get(Key.tag.getValue());
-        if(tag != null) {
-            return (Long)tag;
+        if (tag != null) {
+            return (Long) tag;
         }
         return 0;
     }
 
     public ExtendCode extendCode() {
         Object code = info.get(Key.extendedCode.getValue());
-        if(code != null) {
-            return ExtendCode.valueOf(((Long)code).intValue());
+        if (code != null) {
+            return ExtendCode.valueOf(((Long) code).intValue());
         }
         return ExtendCode.Unknown;
     }

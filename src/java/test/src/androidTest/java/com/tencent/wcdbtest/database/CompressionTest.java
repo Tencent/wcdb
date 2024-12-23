@@ -67,8 +67,8 @@ public class CompressionTest extends TableTestCase {
             public void onCompressed(@NotNull Database notifiedDatabase, String table) {
                 Assert.assertEquals(database.getTag(), notifiedDatabase.getTag());
                 Assert.assertEquals(database.getPath(), notifiedDatabase.getPath());
-                if(table != null) {
-                    if(table.equals(tableName)) {
+                if (table != null) {
+                    if (table.equals(tableName)) {
                         tableCompressed.boolValue = true;
                     }
                 } else {
@@ -104,7 +104,7 @@ public class CompressionTest extends TableTestCase {
         table.insertObjects(preInsertObject);
 
         ArrayList<byte[]> samples = new ArrayList<>();
-        for(int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             String sample = RandomTool.englishString();
             samples.add(sample.getBytes(StandardCharsets.UTF_8));
         }
@@ -114,7 +114,7 @@ public class CompressionTest extends TableTestCase {
         database.setCompression(new Database.CompressionFilter() {
             @Override
             public void filterCompress(@NotNull Database.CompressionInfo info) {
-                info.addZSTDDictCompress(DBTestObject.content, (byte)1);
+                info.addZSTDDictCompress(DBTestObject.content, (byte) 1);
             }
         });
 
@@ -144,7 +144,7 @@ public class CompressionTest extends TableTestCase {
         table.insertObjects(preInsertObject);
 
         ArrayList<String> samples = new ArrayList<>();
-        for(int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             String sample = RandomTool.englishString();
             samples.add(sample);
         }
@@ -152,7 +152,7 @@ public class CompressionTest extends TableTestCase {
         Database.registerDict(dict1, (byte) 2);
 
         samples.clear();
-        for(int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             String sample = RandomTool.englishString();
             samples.add(sample);
         }
@@ -160,7 +160,7 @@ public class CompressionTest extends TableTestCase {
         Database.registerDict(dict2, (byte) 3);
 
         samples.clear();
-        for(int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             String sample = RandomTool.englishString();
             samples.add(sample);
         }
@@ -170,7 +170,7 @@ public class CompressionTest extends TableTestCase {
         database.setCompression(new Database.CompressionFilter() {
             @Override
             public void filterCompress(@NotNull Database.CompressionInfo info) {
-                info.addZSTDMultiDictCompress(DBTestObject.content, DBTestObject.id, new HashMap<Long, Byte>(){{
+                info.addZSTDMultiDictCompress(DBTestObject.content, DBTestObject.id, new HashMap<Long, Byte>() {{
                     put(1L, (byte) 2);
                     put(2L, (byte) 3);
                     put(Database.DictDefaultMatchValue, (byte) 3);

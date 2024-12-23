@@ -47,7 +47,6 @@
 {
     [super setUp];
     self.objectCount = 100;
-    [WCTDatabase setABTestConfigWithName:@"clicfg_wcdb_incremental_backup" andValue:@"1"];
 }
 
 - (NSMutableArray<NSObject<RepairTestObject>*>*)objects

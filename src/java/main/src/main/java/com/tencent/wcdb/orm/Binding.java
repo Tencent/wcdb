@@ -32,6 +32,7 @@ import com.tencent.wcdb.winq.TableConstraint;
 
 public class Binding extends CppObject {
     private long baseBinding = 0;
+
     public Binding() {
         cppObj = createCppObj();
     }
@@ -94,7 +95,7 @@ public class Binding extends CppObject {
     private static native boolean createVirtualTable(long self, String tableName, long handle);
 
     long getBaseBinding() {
-        if(baseBinding == 0) {
+        if (baseBinding == 0) {
             baseBinding = getBaseBinding(cppObj);
         }
         return baseBinding;

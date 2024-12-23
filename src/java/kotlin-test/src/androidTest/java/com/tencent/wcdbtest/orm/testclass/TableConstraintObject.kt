@@ -29,8 +29,11 @@ import com.tencent.wcdb.*
     multiPrimaries = [MultiPrimary(columns = ["multiPrimary1", "multiPrimary2", "multiPrimary3"])],
     multiUnique = [MultiUnique(columns = ["multiUnique1", "multiUnique2", "multiUnique3"])],
     multiIndexes = [
-        MultiIndexes( name = "specifiedNameIndex", columns = ["multiIndex1", "multiIndex2", "multiIndex3"]),
-        MultiIndexes( columns = ["multiIndex1", "multiIndex2"])
+        MultiIndexes(
+            name = "specifiedNameIndex",
+            columns = ["multiIndex1", "multiIndex2", "multiIndex3"]
+        ),
+        MultiIndexes(columns = ["multiIndex1", "multiIndex2"])
     ]
 )
 class TableConstraintObject {

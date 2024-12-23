@@ -27,6 +27,7 @@
 #include "ObjectBridge.h"
 #include <jni.h>
 #include <stdlib.h>
+#include <sys/prctl.h>
 
 #define WCDBJNIStringSignature "Ljava/lang/String;"
 
@@ -353,7 +354,16 @@ extern JavaVM *g_vm;
     int getEnvStat = (*g_vm)->GetEnv(g_vm, (void **) &env, JNI_VERSION_1_6);   \
     bool needDetach = false;                                                   \
     if (getEnvStat == JNI_EDETACHED) {                                         \
-        if ((*g_vm)->AttachCurrentThread(g_vm, &env, NULL) != 0) {             \
+        char thread_name[16];                                                  \
+        if (prctl(PR_GET_NAME, thread_name, NULL, NULL, NULL) != 0) {          \
+            assert(0);                                                         \
+            action;                                                            \
+        }                                                                      \
+        JavaVMAttachArgs args;                                                 \
+        args.group = NULL;                                                     \
+        args.name = thread_name;                                               \
+        args.version = JNI_VERSION_1_6;                                        \
+        if ((*g_vm)->AttachCurrentThread(g_vm, &env, &args) != 0) {            \
             assert(0);                                                         \
             action;                                                            \
         }                                                                      \
@@ -362,7 +372,7 @@ extern JavaVM *g_vm;
 
 #define WCDBJNITryDetach                                                       \
     if (needDetach) {                                                          \
-        (*g_vm)->DetachCurrentThread(g_vm);                                    \
+        WCDBJNIRegisterDetachVM();                                             \
     }
 
 WCDB_EXTERN_C_BEGIN
@@ -381,5 +391,6 @@ void WCDBJNIGetUTF8String(
 JNIEnv *env, jstring value, char **utf8String, const jchar **utf16String, bool critical);
 void WCDBJNIGetUTF8StringArray(JNIEnv *env, jobjectArray value, char ***stringArray, int *length);
 jstring WCDBJNICreateJString(JNIEnv *env, const char *utf8String);
+void WCDBJNIRegisterDetachVM();
 
 WCDB_EXTERN_C_END

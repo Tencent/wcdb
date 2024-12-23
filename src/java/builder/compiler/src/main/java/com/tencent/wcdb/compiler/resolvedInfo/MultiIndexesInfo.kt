@@ -32,25 +32,29 @@ data class MultiIndexesInfo(
     var columns: MutableList<String> = mutableListOf()
 ) {
     companion object {
-        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): MultiIndexesInfo?{
-            if(annotation == null) {
+        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): MultiIndexesInfo? {
+            if (annotation == null) {
                 return null
             }
             assert(annotation.shortName.asString() == "MultiIndexes")
             val resolvedInfo = MultiIndexesInfo()
-            for(argument in annotation.arguments) {
+            for (argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "name" -> {
                         resolvedInfo.name = value as String
                     }
+
                     "columns" -> {
-                        if(!resolveValueToList(value, String::class, resolvedInfo.columns)) {
-                            logger.error("Unresolved columns $value " +
-                                    "with type ${value::class.qualifiedName} in MultiIndexes")
+                        if (!resolveValueToList(value, String::class, resolvedInfo.columns)) {
+                            logger.error(
+                                "Unresolved columns $value " +
+                                        "with type ${value::class.qualifiedName} in MultiIndexes"
+                            )
                             return null
                         }
                     }
+
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in MultiIndexes")
                         return null

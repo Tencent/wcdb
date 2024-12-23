@@ -37,7 +37,8 @@ import kotlin.reflect.KClass
 
 const val OPTION_VERBOSE = "verbose"
 
-internal class KotlinAnnotationProcessor(private val environment: SymbolProcessorEnvironment): KSVisitorVoid(), SymbolProcessor {
+internal class KotlinAnnotationProcessor(private val environment: SymbolProcessorEnvironment) :
+    KSVisitorVoid(), SymbolProcessor {
     class Provider : SymbolProcessorProvider {
         override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
             return KotlinAnnotationProcessor(environment)
@@ -77,7 +78,10 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             environment.logger
         )
         if (tableConstraintInfo == null) {
-            environment.logger.error("Failed to resolve @WCDBTableCoding in ${classDeclaration.qualifiedName!!.asString()}!", classDeclaration)
+            environment.logger.error(
+                "Failed to resolve @WCDBTableCoding in ${classDeclaration.qualifiedName!!.asString()}!",
+                classDeclaration
+            )
             return
         }
         isKotlin = classDeclaration.containingFile!!.fileName.endsWith(".kt")
@@ -96,7 +100,8 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
                     fieldAnnotation,
                     indexAnnotation,
                     defaultValueAnnotation,
-                    environment.logger)
+                    environment.logger
+                )
                     ?: return
 
             if (!checkProperty(property, resolvedColumnInfo)) return
@@ -146,12 +151,15 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
         return true
     }
 
-    private fun checkFTSModule(classDeclaration: KSClassDeclaration, ftsModuleInfo: FTSModuleInfo?): Boolean {
+    private fun checkFTSModule(
+        classDeclaration: KSClassDeclaration,
+        ftsModuleInfo: FTSModuleInfo?
+    ): Boolean {
         if (ftsModuleInfo == null) {
             return true
         }
         if (ftsModuleInfo.ftsVersion.isEmpty()) {
-            if(ftsModuleInfo.tokenizer.isNotEmpty() ||  ftsModuleInfo.tokenizerParameters.isNotEmpty()) {
+            if (ftsModuleInfo.tokenizer.isNotEmpty() || ftsModuleInfo.tokenizerParameters.isNotEmpty()) {
                 environment.logger.error(
                     "You need to config fts version in @FTSModule",
                     classDeclaration
@@ -222,7 +230,10 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
                 }
             }
             if (columnInfo.hasIndex) {
-                environment.logger.error("${declaration.simpleName.asString()} is confined as primary key, so it does not need to configure @WCDBIndex", declaration)
+                environment.logger.error(
+                    "${declaration.simpleName.asString()} is confined as primary key, so it does not need to configure @WCDBIndex",
+                    declaration
+                )
                 return false
             }
         } else if (columnInfo.isAutoIncrement) {
@@ -280,8 +291,9 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
 
     private fun checkColumnInTableConstraint(classDeclaration: KSClassDeclaration): Boolean {
         if (tableConstraintInfo!!.multiIndexes.isEmpty() &&
-                tableConstraintInfo!!.multiPrimaries.isEmpty() &&
-                tableConstraintInfo!!.multiUnique.isEmpty()) {
+            tableConstraintInfo!!.multiPrimaries.isEmpty() &&
+            tableConstraintInfo!!.multiUnique.isEmpty()
+        ) {
             return true;
         }
 
@@ -289,8 +301,8 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             if (columnInfo.columnName.isEmpty()) columnInfo.propertyName else columnInfo.columnName
         }.toSet()
 
-        for(multiIndexes in tableConstraintInfo!!.multiIndexes) {
-            for(column in multiIndexes.columns) {
+        for (multiIndexes in tableConstraintInfo!!.multiIndexes) {
+            for (column in multiIndexes.columns) {
                 if (!allColumns.contains(column)) {
                     environment.logger.error(
                         "Can't find column \"$column\" in class orm config.",
@@ -301,8 +313,8 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             }
         }
 
-        for(multiPrimaries in tableConstraintInfo!!.multiPrimaries) {
-            for(column in multiPrimaries.columns) {
+        for (multiPrimaries in tableConstraintInfo!!.multiPrimaries) {
+            for (column in multiPrimaries.columns) {
                 if (!allColumns.contains(column)) {
                     environment.logger.error(
                         "Can't find column \"$column\" in class orm config.",
@@ -313,8 +325,8 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             }
         }
 
-        for(multiUnique in tableConstraintInfo!!.multiUnique) {
-            for(column in multiUnique.columns) {
+        for (multiUnique in tableConstraintInfo!!.multiUnique) {
+            for (column in multiUnique.columns) {
                 if (!allColumns.contains(column)) {
                     environment.logger.error(
                         "Can't find column \"$column\" in class orm config.",
@@ -342,7 +354,7 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             codeGenerator.allColumnInfo = allPropertyInfo
             code = codeGenerator.generate()
         } else {
-            for(propertyInfo in allPropertyInfo) {
+            for (propertyInfo in allPropertyInfo) {
                 propertyInfo.propertyType = K2JTypeMap[propertyInfo.propertyType]!!
             }
             val codeGenerator = JavaCodeGenerator()
@@ -361,7 +373,7 @@ internal class KotlinAnnotationProcessor(private val environment: SymbolProcesso
             ),
             packageName,
             ormClassName,
-            if(isKotlin) "kt" else "java"
+            if (isKotlin) "kt" else "java"
         )
         file.write(code.toByteArray())
         file.close()

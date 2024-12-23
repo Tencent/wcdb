@@ -21,6 +21,7 @@
  * limitations under the License.
  */
 package com.tencent.wcdb.core;
+
 import com.tencent.wcdb.base.WCDBException;
 import com.tencent.wcdb.chaincall.Delete;
 import com.tencent.wcdb.chaincall.Insert;
@@ -39,25 +40,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class HandleORMOperation extends HandleOperation{
+public abstract class HandleORMOperation extends HandleOperation {
     abstract Database getDatabase();
 
     /**
      * Create table and indexes from ORM binding if not exists.
      * It will run embedded transaction, and add newly defined columns automatically.
      * The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
+     *
      * @param tableName This would be the name of the table and the prefix of the index names.
-     * @param binding ORM binding of table.
+     * @param binding   ORM binding of table.
      * @throws WCDBException if any error occurs.
      */
     public <T> void createTable(@NotNull String tableName, @NotNull TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle(true);
         try {
-            if(!binding.baseBinding().createTable(tableName, handle)) {
+            if (!binding.baseBinding().createTable(tableName, handle)) {
                 throw handle.createException();
             }
         } finally {
-            if(autoInvalidateHandle() && handle != null) {
+            if (autoInvalidateHandle() && handle != null) {
                 handle.invalidate();
             }
         }
@@ -65,19 +67,20 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Create virtual table from ORM if not exists.
-     * @see <a href="http://www.sqlite.org/vtab.html">http://www.sqlite.org/vtab.html</a>
+     *
      * @param tableName The name of the virtual table to be created.
-     * @param binding ORM binding of table.
+     * @param binding   ORM binding of table.
      * @throws WCDBException if any error occurs.
+     * @see <a href="http://www.sqlite.org/vtab.html">http://www.sqlite.org/vtab.html</a>
      */
     public <T> void createVirtualTable(@NotNull String tableName, @NotNull TableBinding<T> binding) throws WCDBException {
         Handle handle = getHandle(true);
         try {
-            if(!binding.baseBinding().createVirtualTable(tableName, handle)) {
+            if (!binding.baseBinding().createVirtualTable(tableName, handle)) {
                 throw handle.createException();
             }
         } finally {
-            if(autoInvalidateHandle() && handle != null) {
+            if (autoInvalidateHandle() && handle != null) {
                 handle.invalidate();
             }
         }
@@ -85,6 +88,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Check the existence of the table.
+     *
      * @param tableName The name of the table to be checked.
      * @return true if table exists.
      * @throws WCDBException if any error occurs.
@@ -93,13 +97,13 @@ public abstract class HandleORMOperation extends HandleOperation{
         Handle handle = getHandle(false);
         int ret = Handle.tableExist(handle.cppObj, tableName);
         WCDBException exception = null;
-        if(ret > 1) {
+        if (ret > 1) {
             exception = handle.createException();
         }
-        if(autoInvalidateHandle()) {
+        if (autoInvalidateHandle()) {
             handle.invalidate();
         }
-        if(exception != null) {
+        if (exception != null) {
             throw exception;
         }
         return ret == 1;
@@ -107,8 +111,9 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Get a wrapper from an existing table.
+     *
      * @param tableName The name of the table.
-     * @param binding The ORM binding of table.
+     * @param binding   The ORM binding of table.
      * @return Table object.
      */
     @NotNull
@@ -118,6 +123,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Drop table if exists.
+     *
      * @param tableName The name of the table to be dropped.
      * @throws WCDBException if any error occurs.
      */
@@ -127,6 +133,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Drop index if exists.
+     *
      * @param indexName The name of the index to be dropped.
      * @throws WCDBException if any error occurs.
      */
@@ -136,6 +143,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Generate a {@link Insert} to do an insertion or replacement.
+     *
      * @return An {@link Insert} object.
      */
     @NotNull
@@ -145,6 +153,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Generate a {@link Update} to do an update.
+     *
      * @return An {@link Update} object.
      */
     @NotNull
@@ -154,6 +163,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Generate a {@link Select} to do an object selection.
+     *
      * @return An {@link Select} object.
      */
     @NotNull
@@ -163,6 +173,7 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Generate a {@link Delete} to do a deletion.
+     *
      * @return An {@link Delete} object.
      */
     @NotNull
@@ -172,8 +183,9 @@ public abstract class HandleORMOperation extends HandleOperation{
 
     /**
      * Execute inserting with one object on specific(or all) fields.
-     * @param object The object to insert.
-     * @param fields specific(or all) fields.
+     *
+     * @param object    The object to insert.
+     * @param fields    specific(or all) fields.
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -184,8 +196,9 @@ public abstract class HandleORMOperation extends HandleOperation{
     /**
      * Execute inserting with one object on specific(or all) fields.
      * It will replace the original row while they have same primary key or row id.
-     * @param object The object to insert.
-     * @param fields specific(or all) fields.
+     *
+     * @param object    The object to insert.
+     * @param fields    specific(or all) fields.
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -196,8 +209,9 @@ public abstract class HandleORMOperation extends HandleOperation{
     /**
      * Execute inserting with one object on specific(or all) fields.
      * It will ignore the object while there already exists the same primary key or row id in current table.
-     * @param object The object to insert.
-     * @param fields specific(or all) fields.
+     *
+     * @param object    The object to insert.
+     * @param fields    specific(or all) fields.
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -208,8 +222,9 @@ public abstract class HandleORMOperation extends HandleOperation{
     /**
      * Execute inserting with multi objects on specific(or all) fields.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
-     * @param objects The objects to insert.
-     * @param fields specific(or all) fields.
+     *
+     * @param objects   The objects to insert.
+     * @param fields    specific(or all) fields.
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -221,8 +236,9 @@ public abstract class HandleORMOperation extends HandleOperation{
      * Execute inserting with multi objects on specific(or all) fields.
      * It will replace the original row while they have same primary key or row id.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
-     * @param objects The objects to insert.
-     * @param fields specific(or all) fields.
+     *
+     * @param objects   The objects to insert.
+     * @param fields    specific(or all) fields.
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -234,8 +250,9 @@ public abstract class HandleORMOperation extends HandleOperation{
      * Execute inserting with multi objects on specific(or all) fields.
      * It will ignore the object while there already exists the same primary key or row id in current table.
      * It will run embedded transaction while objects.size()>1. The embedded transaction means that it will run a transaction if it's not in other transaction, otherwise it will be executed within the existing transaction.
-     * @param objects The objects to insert.
-     * @param fields specific(or all) fields.
+     *
+     * @param objects   The objects to insert.
+     * @param fields    specific(or all) fields.
      * @param tableName The table to insert.
      * @throws WCDBException if any error occurs.
      */
@@ -314,56 +331,62 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> void updateObject(@Nullable T object, @NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         this.<T>prepareUpdate().table(tableName).set(fields).toObject(object).orderBy(order).limit(limit).offset(offset).execute();
     }
-    
+
     @Nullable
     public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).firstObject();
     }
+
     @Nullable
     public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).firstObject(cls);
     }
-    
+
     @Nullable
     public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).firstObject();
     }
+
     @Nullable
     public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).firstObject(cls);
     }
-    
+
     @Nullable
     public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).firstObject();
     }
+
     @Nullable
     public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).firstObject(cls);
     }
-        
+
     @Nullable
     public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(1).offset(offset).firstObject();
     }
+
     @Nullable
     public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(1).offset(offset).firstObject(cls);
     }
-    
+
     @Nullable
     public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).firstObject();
     }
+
     @Nullable
     public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).firstObject(cls);
     }
-    
+
     @Nullable
     public <T> T getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(1).offset(offset).firstObject();
     }
+
     @Nullable
     public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(1).offset(offset).firstObject(cls);
@@ -373,6 +396,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).allObjects(cls);
@@ -382,6 +406,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).allObjects(cls);
@@ -391,6 +416,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).allObjects(cls);
@@ -400,6 +426,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).allObjects(cls);
@@ -409,6 +436,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).where(condition).orderBy(order).limit(limit).offset(offset).allObjects(cls);
@@ -418,6 +446,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).allObjects(cls);
@@ -427,6 +456,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).allObjects(cls);
@@ -436,6 +466,7 @@ public abstract class HandleORMOperation extends HandleOperation{
     public <T> List<T> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).offset(offset).allObjects();
     }
+
     @NotNull
     public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls) throws WCDBException {
         return this.<T>prepareSelect().select(fields).from(tableName).orderBy(order).limit(limit).offset(offset).allObjects(cls);

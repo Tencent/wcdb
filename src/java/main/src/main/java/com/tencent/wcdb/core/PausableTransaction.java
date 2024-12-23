@@ -30,7 +30,8 @@ import org.jetbrains.annotations.NotNull;
 public interface PausableTransaction {
     /**
      * Triggered when a new transaction is begun successfully or the main thread isn't suspended due to the current transaction.
-     * @param handle current handle
+     *
+     * @param handle           current handle
      * @param isNewTransaction ture if is a new transaction.
      * @return true to finish transaction.
      * @throws WCDBException if any error occurs.

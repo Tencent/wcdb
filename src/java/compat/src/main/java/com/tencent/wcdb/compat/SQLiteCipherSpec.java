@@ -32,10 +32,10 @@ public class SQLiteCipherSpec {
     public static final int HMAC_SHA256 = 1;
     public static final int HMAC_SHA512 = 2;
 
-    static final String[] HMAC_ALGO_MAPPING = new String[] {
+    static final String[] HMAC_ALGO_MAPPING = new String[]{
             "HMAC_SHA1", "HMAC_SHA256", "HMAC_SHA512"
     };
-    static final String[] PBKDF2_ALGO_MAPPING = new String[] {
+    static final String[] PBKDF2_ALGO_MAPPING = new String[]{
             "PBKDF2_HMAC_SHA1", "PBKDF2_HMAC_SHA256", "PBKDF2_HMAC_SHA512"
     };
 
@@ -96,7 +96,7 @@ public class SQLiteCipherSpec {
     /**
      * Create a new object as a copy of an existed one.
      *
-     * @param rhs   The object to be copied
+     * @param rhs The object to be copied
      */
     public SQLiteCipherSpec(SQLiteCipherSpec rhs) {
         kdfIteration = rhs.kdfIteration;
@@ -110,8 +110,8 @@ public class SQLiteCipherSpec {
     /**
      * Set KDF iteration times to be used.
      *
-     * @param iter  New iteration times value
-     * @return      This object to allow for chaining of calls to set methods
+     * @param iter New iteration times value
+     * @return This object to allow for chaining of calls to set methods
      * @see #kdfIteration
      */
     public SQLiteCipherSpec setKDFIteration(int iter) {
@@ -125,8 +125,8 @@ public class SQLiteCipherSpec {
     /**
      * Set whether to use HMAC in encryption. Default to true.
      *
-     * @param enabled   Whether to use HMAC
-     * @return          This object to allow for chaining of calls to set methods
+     * @param enabled Whether to use HMAC
+     * @return This object to allow for chaining of calls to set methods
      * @see #hmacEnabled
      */
     public SQLiteCipherSpec withHMACEnabled(boolean enabled) {
@@ -139,6 +139,7 @@ public class SQLiteCipherSpec {
 
     /**
      * Set algorithm to be used in HMAC.
+     *
      * @param algo Algorithm defined by {@code HMAC_*}
      * @return This object to allow for chaining of calls to set methods
      * @see #hmacAlgorithm
@@ -153,6 +154,7 @@ public class SQLiteCipherSpec {
 
     /**
      * Set algorithm to be used in PBKDF.
+     *
      * @param algo Algorithm defined by {@code HMAC_*}
      * @return This object to allow for chaining of calls to set methods
      * @see #kdfAlgorithm
@@ -168,12 +170,13 @@ public class SQLiteCipherSpec {
     /**
      * Set the page size to use. The page size should be a power of two.
      *
-     * @param size  Page size in byte
-     * @return      This object to allow for chaining of calls to set methods
+     * @param size Page size in byte
+     * @return This object to allow for chaining of calls to set methods
      * @see #pageSize
      */
     public SQLiteCipherSpec setPageSize(int size) {
-        pageSize = size; return this;
+        pageSize = size;
+        return this;
     }
 
     /**
@@ -181,8 +184,8 @@ public class SQLiteCipherSpec {
      * represent SQLCipher 1.x to 4.x. This method overwrites HMAC and KDF
      * iteration settings.
      *
-     * @param version   SQLCipher version, should be within 1 to 4
-     * @return          This object to allow for chaining of calls to set methods
+     * @param version SQLCipher version, should be within 1 to 4
+     * @return This object to allow for chaining of calls to set methods
      * @see #kdfIteration
      * @see #hmacEnabled
      * @see #hmacAlgorithm

@@ -143,7 +143,7 @@ public class ColumnConstraint extends Identifier {
 
     @NotNull
     public ColumnConstraint defaultTo(@Nullable String value) {
-        if(value != null) {
+        if (value != null) {
             defaultTo(cppObj, CPPType.String, 0, 0, value);
         } else {
             defaultTo(cppObj, CPPType.Null, 0, 0, null);

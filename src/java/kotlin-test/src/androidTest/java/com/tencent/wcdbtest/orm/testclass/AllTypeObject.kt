@@ -36,32 +36,44 @@ class AllTypeObject {
     //Integer
     @WCDBField
     var aBoolean = false
+
     @WCDBField
     var aBoolean2: Boolean? = null
+
     @WCDBField
     var aByte: Byte = 0
+
     @WCDBField
     var aByte2: Byte? = null
+
     @WCDBField
     var aShort: Short = 0
+
     @WCDBField
     var aShort2: Short? = null
+
     @WCDBField
     var anInt = 0
+
     @WCDBField
     var integer: Int? = null
+
     @WCDBField
     var aLong: Long = 0
+
     @WCDBField
     var aLong2: Long? = null
 
     // Float
     @WCDBField
     var aFloat = 0f
+
     @WCDBField
     var aFloat2: Float? = null
+
     @WCDBField
     var aDouble = 0.0
+
     @WCDBField
     var aDouble2: Double? = null
 
@@ -72,6 +84,7 @@ class AllTypeObject {
     // BLOB
     @WCDBField
     var bytes: ByteArray = byteArrayOf()
+
     @WCDBField
     var bytes2: ByteArray? = null
 

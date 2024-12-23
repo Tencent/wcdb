@@ -32,22 +32,25 @@ data class MultiUniqueInfo(
     var columns: MutableList<String> = mutableListOf()
 ) {
     companion object {
-        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): MultiUniqueInfo?{
-            if(annotation == null) {
+        fun resolve(annotation: KSAnnotation?, logger: KSPLogger): MultiUniqueInfo? {
+            if (annotation == null) {
                 return null
             }
             assert(annotation.shortName.asString() == "MultiUnique")
             val resolvedInfo = MultiUniqueInfo()
-            for(argument in annotation.arguments) {
+            for (argument in annotation.arguments) {
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "columns" -> {
-                        if(!resolveValueToList(value, String::class, resolvedInfo.columns)) {
-                            logger.error("Unresolved columns $value " +
-                                    "with type ${value::class.qualifiedName} in MultiUnique")
+                        if (!resolveValueToList(value, String::class, resolvedInfo.columns)) {
+                            logger.error(
+                                "Unresolved columns $value " +
+                                        "with type ${value::class.qualifiedName} in MultiUnique"
+                            )
                             return null
                         }
                     }
+
                     else -> {
                         logger.error("Unrecognized field ${argument.name?.asString()} in MultiUnique")
                         return null

@@ -33,11 +33,10 @@ namespace WCDB {
 
 BasicConfig::BasicConfig()
 : Config()
-// Journal Mode
 , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
-, m_setJournalModeWAL(StatementPragma().pragma(Pragma::journalMode()).to("WAL"))
-// Fullfsync
-, m_enableFullfsync(StatementPragma().pragma(Pragma::checkpointFullfsync()).to(true))
+, m_enableCheckPointFullfsync(
+  StatementPragma().pragma(Pragma::checkpointFullfsync()).to(true))
+, m_disableFullSync(StatementPragma().pragma(Pragma::synchronous()).to("OFF"))
 , m_setTempStore(StatementPragma().pragma(Pragma::tempStore()).to(1))
 {
 }
@@ -55,61 +54,68 @@ bool BasicConfig::invoke(InnerHandle* handle)
     bool succeed = true;
     if (!handle->isReadonly()) {
         handle->setWALFilePersist(true);
-        succeed = lazySetJournalModeWAL(handle) && handle->execute(m_enableFullfsync);
+        succeed = lazySetJournalMode(handle);
+        if (!handle->liteModeEnable()) {
+            succeed = succeed && handle->execute(m_enableCheckPointFullfsync);
+        } else {
+            succeed = succeed && handle->execute(m_disableFullSync);
+        }
 #ifndef __ANDROID__
-        succeed &= handle->execute(m_setTempStore);
+        succeed = succeed && handle->execute(m_setTempStore);
 #endif
     }
     return succeed;
 }
 
-#pragma mark - Pragma
-bool BasicConfig::getOrSetPragmaBegin(InnerHandle* handle, const StatementPragma& get)
-{
-    bool succeed = false;
-    if (handle->prepare(get)) {
-        succeed = handle->step();
-        if (!succeed) {
-            handle->finalize();
-        }
-    }
-    return succeed;
-}
-
-bool BasicConfig::getOrSetPragmaEnd(InnerHandle* handle, const StatementPragma& set, bool conditionToSet)
-{
-    WCTAssert(handle->isPrepared());
-    handle->finalize();
-    bool succeed = true;
-    if (conditionToSet) {
-        succeed = handle->execute(set);
-    }
-    return succeed;
-}
-
-#pragma mark - Pragma - Journal Mode
-bool BasicConfig::lazySetJournalModeWAL(InnerHandle* handle)
+#pragma mark - Journal Mode
+bool BasicConfig::lazySetJournalMode(InnerHandle* handle)
 {
     bool succeed = false;
     handle->markErrorAsIgnorable(Error::Code::Busy);
     int remainingNumberOfBusyRetryTimes = BasicConfigBusyRetryMaxAllowedNumberOfTimes;
     do {
-        succeed = getOrSetPragmaBegin(handle, m_getJournalMode);
-        if (succeed && !handle->getText(0).caseInsensitiveEqual("WAL")) {
-            if (!handle->canWriteMainDB()) {
-                handle->finalize();
-                succeed = false;
-                break;
-            } else {
-                succeed = getOrSetPragmaEnd(handle, m_setJournalModeWAL, true);
+        auto journalMode = getJournalMode(handle);
+        if (!journalMode.hasValue()) {
+            continue;
+        }
+        succeed = true;
+        if (!handle->liteModeEnable()) {
+            if (!journalMode.value().caseInsensitiveEqual("WAL")) {
+                if (!handle->canWriteMainDB()) {
+                    succeed = false;
+                    break;
+                } else {
+                    succeed = setJournalMode(handle, "WAL");
+                }
             }
         } else {
-            handle->finalize();
+            if (!journalMode.value().caseInsensitiveEqual("OFF")) {
+                succeed = setJournalMode(handle, "OFF");
+            }
         }
+        // These is no busy handler for this busy event.
+        // So we should retry from outside.
     } while (--remainingNumberOfBusyRetryTimes > 0 && !succeed
              && handle->getError().isIgnorable());
     handle->markErrorAsUnignorable();
     return succeed;
+}
+
+Optional<StringView> BasicConfig::getJournalMode(InnerHandle* handle)
+{
+    Optional<StringView> ret;
+    if (handle->prepare(m_getJournalMode)) {
+        if (handle->step()) {
+            ret = handle->getText();
+        }
+        handle->finalize();
+    }
+    return ret;
+}
+
+bool BasicConfig::setJournalMode(InnerHandle* handle, const UnsafeStringView& mode)
+{
+    return handle->execute(StatementPragma().pragma(Pragma::journalMode()).to(mode));
 }
 
 } //namespace WCDB

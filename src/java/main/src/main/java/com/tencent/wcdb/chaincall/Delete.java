@@ -33,7 +33,7 @@ import com.tencent.wcdb.winq.StatementDelete;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Delete extends ChainCall<StatementDelete>{
+public class Delete extends ChainCall<StatementDelete> {
     public Delete(@NotNull Handle handle, boolean needChanges, boolean autoInvalidateHandle) {
         super(handle, needChanges, autoInvalidateHandle);
         statement = new StatementDelete();
@@ -41,6 +41,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param table The name of the table to delete data from.
      * @return this
      */
@@ -52,6 +53,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param condition condition
      * @return this.
      */
@@ -63,6 +65,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param orders order list
      * @return this.
      */
@@ -74,6 +77,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit count.
      * @return this.
      */
@@ -85,6 +89,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param count limit expression.
      * @return this.
      */
@@ -96,6 +101,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset number.
      * @return this.
      */
@@ -107,6 +113,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * WINQ interface for SQL.
+     *
      * @param offset offset expression.
      * @return this.
      */
@@ -118,6 +125,7 @@ public class Delete extends ChainCall<StatementDelete>{
 
     /**
      * Execute the delete SQL.
+     *
      * @return this.
      * @throws WCDBException if any error occurs.
      */

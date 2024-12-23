@@ -39,6 +39,7 @@ import com.tencent.wcdb.fts.BuiltinTokenizer
 class FTS5TestObject {
     @WCDBField(isNotIndexed = true)
     var id: Int = 0
+
     @WCDBField
     var content: String = ""
 }

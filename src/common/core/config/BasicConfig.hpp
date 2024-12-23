@@ -36,24 +36,23 @@ public:
 
     bool invoke(InnerHandle* handle) override final;
 
-#pragma mark - Pragma
-private:
-    bool getOrSetPragmaBegin(InnerHandle* handle, const StatementPragma& get);
-    bool getOrSetPragmaEnd(InnerHandle* handle, const StatementPragma& set, bool conditionToSet);
-
-#pragma mark - Pragma - Journal Mode
+#pragma mark - Journal Mode
 protected:
-    bool lazySetJournalModeWAL(InnerHandle* handle);
+    bool lazySetJournalMode(InnerHandle* handle);
+
+private:
+    Optional<StringView> getJournalMode(InnerHandle* handle);
+    bool setJournalMode(InnerHandle* handle, const UnsafeStringView& mode);
 
 private:
     const StatementPragma m_getJournalMode;
-    const StatementPragma m_setJournalModeWAL;
 
-#pragma mark - Pragma - FullFsync
+#pragma mark - FullFsync
 protected:
-    const StatementPragma m_enableFullfsync;
+    const StatementPragma m_enableCheckPointFullfsync;
+    const StatementPragma m_disableFullSync;
 
-#pragma mark - Pragma - FullFsync
+#pragma mark - Temp Store
 protected:
     const StatementPragma m_setTempStore;
 };

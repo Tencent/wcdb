@@ -72,10 +72,11 @@ public:
         retain();
     }
 
-    Recyclable(const Recyclable &&other)
+    Recyclable(Recyclable &&other)
     : Referenced(other), m_value(std::move(other.m_value)), m_onRecycled(other.m_onRecycled)
     {
         retain();
+        other = nullptr;
     }
 
     Recyclable &operator=(const Recyclable &other)
@@ -91,6 +92,7 @@ public:
         reset(other);
         m_value = std::move(other.m_value);
         m_onRecycled = other.m_onRecycled;
+        other = nullptr;
         return *this;
     }
 

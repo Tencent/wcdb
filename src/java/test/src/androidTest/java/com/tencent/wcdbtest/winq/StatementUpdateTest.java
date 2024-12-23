@@ -27,6 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.winq.*;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class StatementUpdateTest {
         winqEqual(new StatementUpdate().update("testTable").set(column1).to(1).where(column1.gt(1)),
                 "UPDATE testTable SET column1 = 1 WHERE column1 > 1");
         winqEqual(new StatementUpdate().update("testTable").set(column1).to(1)
-                .orderBy(column1.order(Order.Asc), column2.order(Order.Desc)),
+                        .orderBy(column1.order(Order.Asc), column2.order(Order.Desc)),
                 "UPDATE testTable SET column1 = 1 ORDER BY column1 ASC, column2 DESC");
         winqEqual(new StatementUpdate().update("testTable").set(column1).to(1).limit(1),
                 "UPDATE testTable SET column1 = 1 LIMIT 1");

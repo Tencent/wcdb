@@ -507,6 +507,11 @@ void Database::addScalarFunction(const UnsafeStringView& name)
                                WCDB::Configs::Priority::Higher);
 }
 
+void Database::enableLiteMode(bool enable)
+{
+    m_innerDatabase->setLiteModeEnable(enable);
+}
+
 #pragma mark - Migration
 
 void Database::addMigration(const UnsafeStringView& sourcePath,

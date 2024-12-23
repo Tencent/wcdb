@@ -89,6 +89,7 @@ public class FTSTest extends DatabaseTestCase {
         MMICUTestObject chineseObject = new MMICUTestObject(2, "这是中文测试内容");
         MMICUTestObject numericObject = new MMICUTestObject(1, "123456");
         MMICUTestObject symbolicObject = new MMICUTestObject(1, "abc..def");
+        MMICUTestObject emptyObject = new MMICUTestObject(3, "");
         table.insertObjects(Arrays.asList(englishObject, chineseObject, numericObject, symbolicObject));
 
         // English
@@ -185,7 +186,7 @@ public class FTSTest extends DatabaseTestCase {
 
     @Test
     public void testTraditionalChinese() {
-        Database.configTraditionalChineseDict(new HashMap<String, String>(){{
+        Database.configTraditionalChineseDict(new HashMap<String, String>() {{
             put("們", "们");
             put("員", "员");
         }});

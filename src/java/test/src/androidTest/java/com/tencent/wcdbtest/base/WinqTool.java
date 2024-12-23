@@ -5,7 +5,7 @@ import com.tencent.wcdb.winq.Identifier;
 import org.junit.Assert;
 
 public class WinqTool {
-     public static void winqEqual(Identifier winq, String sql) {
-          Assert.assertEquals(sql, winq.getDescription());
-     }
+    public static void winqEqual(Identifier winq, String sql) {
+        Assert.assertEquals(sql, winq.getDescription());
+    }
 }

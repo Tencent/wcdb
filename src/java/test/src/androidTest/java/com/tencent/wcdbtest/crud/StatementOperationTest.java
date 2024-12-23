@@ -37,6 +37,7 @@ import com.tencent.wcdbtest.base.RandomTool;
 import com.tencent.wcdbtest.base.ValueCRUDTestCase;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 

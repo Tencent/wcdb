@@ -99,7 +99,7 @@ UnsafeStringView normalize(const UnsafeStringView &path)
     if (path.equal(":memory:")) {
         return path;
     }
-    std::string normalized;
+    StringView normalized;
 #ifndef _WIN32
     const char *resolvePath = realpath(path.data(), nullptr);
     if (resolvePath == nullptr && errno == ENOENT) {
@@ -141,18 +141,7 @@ UnsafeStringView normalize(const UnsafeStringView &path)
     }
 #endif
     if (normalized.length() > 0) {
-        std::size_t found;
-#if defined _WIN32
-        const char *doublePathSeparator = "\\\\";
-        const char *singlePathSeparator = "\\";
-#else
-        const char *doublePathSeparator = "//";
-        const char *singlePathSeparator = "/";
-#endif
-        while ((found = normalized.find(doublePathSeparator)) != std::string::npos) {
-            normalized.replace(found, 2, singlePathSeparator);
-        }
-        return StringView(std::move(normalized));
+        return normalized;
     } else {
         return path;
     }

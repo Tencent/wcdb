@@ -73,12 +73,12 @@ public class BindParameter extends Identifier implements ExpressionConvertible {
     private static native long dollarBindParameter(String name);
 
     public static BindParameter[] bindParameters(int num) {
-        if(num == 0) {
+        if (num == 0) {
             return new BindParameter[]{};
         }
         BindParameter[] bindParameters = new BindParameter[num];
         long[] cppObjs = createCppObjs(num);
-        for(int i = 0; i < num; i++) {
+        for (int i = 0; i < num; i++) {
             bindParameters[i] = new BindParameter();
             bindParameters[i].cppObj = cppObjs[i];
         }

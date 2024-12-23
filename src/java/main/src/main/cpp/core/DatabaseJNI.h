@@ -55,6 +55,8 @@ void WCDBJNIDatabaseClassMethod(configCipher, jlong self, jbyteArray cipherKey, 
 void WCDBJNIDatabaseClassMethod(
 config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint priority);
 
+void WCDBJNIDatabaseClassMethod(enableLiteMode, jlong self, jboolean enable);
+
 void WCDBJNIDatabaseClassMethod(globalTracePerformance, jobject tracer);
 void WCDBJNIDatabaseClassMethod(tracePerformance, jlong self, jobject tracer);
 

@@ -36,5 +36,6 @@ data class DataIndexObject(
 
     @WCDBField
     @WCDBIndex(name = "specifiedNameIndex", isUnique = true)
-    var uniqueIndex: Int = 0) {
+    var uniqueIndex: Int = 0
+) {
 }

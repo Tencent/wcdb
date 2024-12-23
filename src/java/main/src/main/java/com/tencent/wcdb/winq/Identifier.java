@@ -34,8 +34,8 @@ class CPPType {
     final static int UInt = 4;
     final static int Double = 5;
     final static int String = 6;
-    
-    
+
+
     final static int Column = 7;
     final static int Schema = 8;
     final static int ColumnDef = 9;
@@ -60,8 +60,8 @@ class CPPType {
     final static int SelectCore = 28;
     final static int ResultColumn = 29;
     final static int FrameSpec = 30;
-    
-    
+
+
     final static int AlterTableSTMT = 31;
     final static int AnalyzeSTMT = 32;
     final static int AttachSTMT = 33;
@@ -96,14 +96,14 @@ public class Identifier extends CppObject implements IdentifierConvertible {
     }
 
     protected static int getCppType(Identifier identifier) {
-        if(identifier == null){
+        if (identifier == null) {
             return CPPType.Null;
         }
         return identifier.getType();
     }
 
     protected static int getCppType(IdentifierConvertible identifier) {
-        if(identifier == null){
+        if (identifier == null) {
             return CPPType.Null;
         }
         return identifier.asIdentifier().getType();
@@ -126,5 +126,6 @@ public class Identifier extends CppObject implements IdentifierConvertible {
     }
 
     static native boolean isWriteStatement(long obj);
+
     private static native String getDescription(long obj);
 }

@@ -66,7 +66,7 @@ public class MigrationTest extends BaseTestCase {
         targetDatabase.addMigrationSource(sourceDatabase.getPath(), sourceCipher, new Database.MigrationFilter() {
             @Override
             public void filterMigrate(@NotNull Database.MigrationInfo info) {
-                if(info.table.equals(targetTableName)) {
+                if (info.table.equals(targetTableName)) {
                     info.sourceTable = sourceTableName;
                     info.filterCondition = DBTestObject.id.gt(2);
                 }
@@ -96,7 +96,7 @@ public class MigrationTest extends BaseTestCase {
         targetDatabase.setNotificationWhenMigrated(new Database.MigrationNotification() {
             @Override
             public void onMigrated(@NotNull Database database, Database.MigrationInfo info) {
-                if(info != null && info.table.equals(targetTableName)) {
+                if (info != null && info.table.equals(targetTableName)) {
                     migrateTable.stringValue = info.sourceTable;
                 }
             }
@@ -104,7 +104,7 @@ public class MigrationTest extends BaseTestCase {
 
         do {
             targetDatabase.stepMigration();
-        }while(!targetDatabase.isMigrated());
+        } while (!targetDatabase.isMigrated());
 
         assertEquals(migrateTable.stringValue, sourceTableName);
     }

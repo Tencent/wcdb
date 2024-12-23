@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/3/31.
+// Created by chenqiuwen on 2024/10/31.
 //
 
 /*
@@ -20,23 +20,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.wcdbtest.winq;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+#include "WCDBJNI.h"
+#include <thread>
 
-import com.tencent.wcdb.winq.*;
-
-import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(AndroidJUnit4.class)
-public class SchemaTest {
-    @Test
-    public void test() {
-        winqEqual(Schema.main, "main");
-        winqEqual(Schema.temp, "temp");
-        winqEqual(new Schema("testSchema"), "testSchema");
+class DetachVM {
+public:
+    ~DetachVM()
+    {
+        if (g_vm != NULL) {
+            g_vm->DetachCurrentThread();
+        }
     }
+};
+
+void WCDBJNIRegisterDetachVM()
+{
+    thread_local DetachVM detachVm;
 }

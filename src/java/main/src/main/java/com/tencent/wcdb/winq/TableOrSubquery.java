@@ -28,7 +28,7 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TableOrSubquery extends Identifier implements TableOrSubqueryConvertible{
+public class TableOrSubquery extends Identifier implements TableOrSubqueryConvertible {
     @Override
     protected int getType() {
         return CPPType.TableOrSubquery;
@@ -49,12 +49,12 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     private static native long createCppObj(int type, long object, String tableName);
 
     public TableOrSubquery(@NotNull TableOrSubqueryConvertible... tableOrSubqueries) {
-        if(tableOrSubqueries.length == 0) {
+        if (tableOrSubqueries.length == 0) {
             cppObj = createCppObj(CPPType.String, new long[]{}, null);
             return;
         }
         long[] array = new long[tableOrSubqueries.length];
-        for(int i = 0; i < tableOrSubqueries.length; i++) {
+        for (int i = 0; i < tableOrSubqueries.length; i++) {
             array[i] = CppObject.get(tableOrSubqueries[i]);
         }
         cppObj = createCppObj(Identifier.getCppType(tableOrSubqueries[0]), array, null);
@@ -67,13 +67,13 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     private static native long createCppObj(int type, long[] tableOrSubqueries, String[] tables);
 
     @NotNull
-     public TableOrSubquery schema(@Nullable String schemaName) {
+    public TableOrSubquery schema(@Nullable String schemaName) {
         schema(cppObj, CPPType.String, 0, schemaName);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery schema(@Nullable Schema schema) {
+    public TableOrSubquery schema(@Nullable Schema schema) {
         schema(cppObj, Identifier.getCppType(schema), CppObject.get(schema), null);
         return this;
     }
@@ -81,7 +81,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     private static native void schema(long self, int type, long schema, String schemaName);
 
     @NotNull
-     public TableOrSubquery as(@Nullable String alias) {
+    public TableOrSubquery as(@Nullable String alias) {
         as(cppObj, alias);
         return this;
     }
@@ -89,7 +89,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     private static native void as(long object, String alias);
 
     @NotNull
-     public TableOrSubquery notIndexd() {
+    public TableOrSubquery notIndexd() {
         notIndexed(cppObj);
         return this;
     }
@@ -97,7 +97,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     private static native void notIndexed(long object);
 
     @NotNull
-     public TableOrSubquery indexedBy(@Nullable String indexName) {
+    public TableOrSubquery indexedBy(@Nullable String indexName) {
         indexedBy(cppObj, indexName);
         return this;
     }
@@ -113,50 +113,50 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     public static native long createWithFunction(String funcName);
 
     @NotNull
-     public TableOrSubquery argument(boolean arg) {
+    public TableOrSubquery argument(boolean arg) {
         argument(cppObj, CPPType.Bool, arg ? 1 : 0, 0, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(byte arg) {
+    public TableOrSubquery argument(byte arg) {
         argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(short arg) {
+    public TableOrSubquery argument(short arg) {
         argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(int arg) {
+    public TableOrSubquery argument(int arg) {
         argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(long arg) {
+    public TableOrSubquery argument(long arg) {
         argument(cppObj, CPPType.Int, arg, 0, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(float arg) {
+    public TableOrSubquery argument(float arg) {
         argument(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(double arg) {
+    public TableOrSubquery argument(double arg) {
         argument(cppObj, CPPType.Double, 0, arg, null);
         return this;
     }
 
     @NotNull
-     public TableOrSubquery argument(@Nullable String arg) {
-        if( arg != null ) {
+    public TableOrSubquery argument(@Nullable String arg) {
+        if (arg != null) {
             argument(cppObj, CPPType.String, 0, 0, arg);
         } else {
             argument(cppObj, CPPType.Null, 0, 0, null);
@@ -165,7 +165,7 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     @NotNull
-     public TableOrSubquery argument(@Nullable ExpressionConvertible arg) {
+    public TableOrSubquery argument(@Nullable ExpressionConvertible arg) {
         argument(cppObj,
                 Identifier.getCppType(arg),
                 CppObject.get(arg),
@@ -175,8 +175,8 @@ public class TableOrSubquery extends Identifier implements TableOrSubqueryConver
     }
 
     private static native void argument(long self,
-                                 int type,
-                                 long intValue,
-                                 double doubleValue,
-                                 String stringValue);
+                                        int type,
+                                        long intValue,
+                                        double doubleValue,
+                                        String stringValue);
 }

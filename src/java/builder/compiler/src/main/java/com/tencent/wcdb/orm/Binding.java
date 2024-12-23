@@ -28,10 +28,27 @@ import com.tencent.wcdb.winq.StatementCreateIndex;
 import com.tencent.wcdb.winq.TableConstraint;
 
 public class Binding {
-    public Binding() { throw new UnsatisfiedLinkError(); }
-    public void addColumnDef(ColumnDef def) { throw new UnsatisfiedLinkError(); }
-    public void addIndex(String indexPrefix, StatementCreateIndex createIndex) { throw new UnsatisfiedLinkError(); }
-    public void addTableConstraint(TableConstraint constraint) { throw new UnsatisfiedLinkError(); }
-    public Binding configVirtualModule(String module) { throw new UnsatisfiedLinkError(); }
-    public void configVirtualModuleArgument(String argument) { throw new UnsatisfiedLinkError(); }
+    public Binding() {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public void addColumnDef(ColumnDef def) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public void addIndex(String indexPrefix, StatementCreateIndex createIndex) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public void addTableConstraint(TableConstraint constraint) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public Binding configVirtualModule(String module) {
+        throw new UnsatisfiedLinkError();
+    }
+
+    public void configVirtualModuleArgument(String argument) {
+        throw new UnsatisfiedLinkError();
+    }
 }

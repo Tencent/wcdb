@@ -24,6 +24,7 @@
 package com.tencent.wcdbtest.winq;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import static com.tencent.wcdbtest.base.WinqTool.winqEqual;
 
 import com.tencent.wcdb.chaincall.Insert;
@@ -56,47 +57,47 @@ public class StatementCreateTriggerTest {
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .before().delete().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTempTrigger(name)
                         .before().delete().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TEMP TRIGGER testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema).ifNotExist()
                         .before().delete().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER IF NOT EXISTS testSchema.testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name)
                         .before().delete().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER testTrigger BEFORE DELETE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .after().delete().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger AFTER DELETE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .insteadOf().delete().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger INSTEAD OF DELETE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .before().insert().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE INSERT ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .before().update().onTable(table).forEachRow().when(condition).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE ON testTable FOR EACH ROW WHEN column1 == 1 " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .before().update().ofColumns(column1).onTable(table).execute(update),
                 "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1 ON testTable " +
-                "BEGIN UPDATE testTable SET column1 = 2; END");
+                        "BEGIN UPDATE testTable SET column1 = 2; END");
 
         winqEqual(new StatementCreateTrigger().createTrigger(name).ofSchema(schema)
                         .before().update().ofColumns("column1").onTable(table).execute(update),

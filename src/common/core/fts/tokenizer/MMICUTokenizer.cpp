@@ -94,7 +94,8 @@ void MMICUTokenizer::loadInput(const char *pText, int nText, int flags)
     if (nText < 0) {
         nText = (int) strlen(pText);
     }
-    m_originText = pText, m_originTextLength = nText;
+    m_originText = pText;
+    m_originTextLength = nText;
 
     clearMemory();
 
@@ -109,6 +110,9 @@ const char **ppToken, int *nToken, int *iStart, int *iEnd, int *tflags, int *iPo
 {
     if (!loadICUFunctionsFromSystemLibrary()) {
         return FTSError::Error();
+    }
+    if (m_originTextLength == 0) {
+        return FTSError::Done();
     }
     int ret = initBRKIfNeeded();
     if (!FTSError::isOK(ret)) {

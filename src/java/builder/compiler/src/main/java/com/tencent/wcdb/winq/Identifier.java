@@ -27,5 +27,7 @@ public class Identifier {
         return this;
     }
 
-    public String getDescription() { throw new UnsatisfiedLinkError(); }
+    public String getDescription() {
+        throw new UnsatisfiedLinkError();
+    }
 }

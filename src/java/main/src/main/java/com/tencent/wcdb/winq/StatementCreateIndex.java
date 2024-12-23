@@ -88,11 +88,11 @@ public class StatementCreateIndex extends Statement {
 
     @NotNull
     public StatementCreateIndex indexedBy(@NotNull IndexedColumnConvertible... indexedColumnConvertible) {
-        if(indexedColumnConvertible.length == 0) {
+        if (indexedColumnConvertible.length == 0) {
             return this;
         }
         long[] columns = new long[indexedColumnConvertible.length];
-        for(int i = 0; i < indexedColumnConvertible.length; i++) {
+        for (int i = 0; i < indexedColumnConvertible.length; i++) {
             columns[i] = CppObject.get(indexedColumnConvertible[i]);
         }
         configIndexedColumns(

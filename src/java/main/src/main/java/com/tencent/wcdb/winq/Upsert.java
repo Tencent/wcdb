@@ -28,7 +28,7 @@ import com.tencent.wcdb.base.CppObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Upsert extends Identifier{
+public class Upsert extends Identifier {
     @Override
     protected int getType() {
         return CPPType.UpsertClause;
@@ -58,7 +58,7 @@ public class Upsert extends Identifier{
         }
 
         long[] cppIndexedColumns = new long[indexedColumns.length];
-        for(int i = 0; i < indexedColumns.length; i++) {
+        for (int i = 0; i < indexedColumns.length; i++) {
             cppIndexedColumns[i] = CppObject.get(indexedColumns[i]);
         }
 
@@ -105,7 +105,7 @@ public class Upsert extends Identifier{
         }
 
         long[] cppColumns = new long[columns.length];
-        for(int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             cppColumns[i] = CppObject.get(columns[i]);
         }
 
@@ -159,9 +159,9 @@ public class Upsert extends Identifier{
 
     @NotNull
     public Upsert to(@Nullable String value) {
-        if(value != null) {
+        if (value != null) {
             configToValue(cppObj, CPPType.String, 0, 0, value);
-        }else{
+        } else {
             configToValue(cppObj, CPPType.Null, 0, 0, null);
         }
         return this;

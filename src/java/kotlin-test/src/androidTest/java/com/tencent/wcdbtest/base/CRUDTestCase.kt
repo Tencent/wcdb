@@ -37,6 +37,7 @@ open class CRUDTestCase : TableTestCase() {
     protected var id = Column("id")
     protected var content = Column("content")
     protected lateinit var handle: Handle
+
     @Before
     @Throws(WCDBException::class)
     override fun setup() {

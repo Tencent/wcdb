@@ -29,19 +29,34 @@ import org.jetbrains.annotations.NotNull;
 
 public class Field<T> extends Column {
     protected TableBinding<T> binding = null;
-    public TableBinding<T> getTableBinding() { return binding; }
+
+    public TableBinding<T> getTableBinding() {
+        return binding;
+    }
 
     private int fieldId = 0;
-    public int getFieldId() { return fieldId; }
+
+    public int getFieldId() {
+        return fieldId;
+    }
 
     private String name;
-    public String getName() { return name; }
+
+    public String getName() {
+        return name;
+    }
 
     private boolean isAutoIncrement = false;
-    public boolean isAutoIncrement() { return isAutoIncrement; }
+
+    public boolean isAutoIncrement() {
+        return isAutoIncrement;
+    }
 
     private boolean isPrimaryKey = false;
-    public boolean isPrimaryKey() { return isPrimaryKey; }
+
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
+    }
 
     public Field(String name, TableBinding<T> binding, int fieldId, boolean isAutoIncrement, boolean isPrimaryKey) {
         super(name, binding.baseBinding().getBaseBinding());

@@ -24,13 +24,33 @@
 package com.tencent.wcdb.compiler
 
 internal val AllKotlinPropertyORMInfo = mapOf<String, KotlinPropertyORMInfo>(
-    Boolean::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindBool", "getBool(index)"),
-    Byte::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getByte(index)"),
-    Short::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getShort(index)"),
+    Boolean::class.qualifiedName!! to KotlinPropertyORMInfo(
+        "Integer",
+        "bindBool",
+        "getBool(index)"
+    ),
+    Byte::class.qualifiedName!! to KotlinPropertyORMInfo(
+        "Integer",
+        "bindInteger",
+        "getByte(index)"
+    ),
+    Short::class.qualifiedName!! to KotlinPropertyORMInfo(
+        "Integer",
+        "bindInteger",
+        "getShort(index)"
+    ),
     Int::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getInt(index)"),
-    Long::class.qualifiedName!! to KotlinPropertyORMInfo("Integer", "bindInteger", "getLong(index)"),
+    Long::class.qualifiedName!! to KotlinPropertyORMInfo(
+        "Integer",
+        "bindInteger",
+        "getLong(index)"
+    ),
     Float::class.qualifiedName!! to KotlinPropertyORMInfo("Float", "bindDouble", "getFloat(index)"),
-    Double::class.qualifiedName!! to KotlinPropertyORMInfo("Float", "bindDouble", "getDouble(index)"),
+    Double::class.qualifiedName!! to KotlinPropertyORMInfo(
+        "Float",
+        "bindDouble",
+        "getDouble(index)"
+    ),
     String::class.qualifiedName!! to KotlinPropertyORMInfo("Text", "bindText", "getText(index)"),
     ByteArray::class.qualifiedName!! to KotlinPropertyORMInfo("BLOB", "bindBLOB", "getBLOB(index)"),
 )
@@ -49,7 +69,9 @@ internal val K2JTypeMap = mapOf<String, String>(
     ByteArray::class.qualifiedName!! to "byte[]",
 )
 
-internal data class KotlinPropertyORMInfo(val columnType: String,
-                                          val getter: String,
-                                          val setter: String) {
+internal data class KotlinPropertyORMInfo(
+    val columnType: String,
+    val getter: String,
+    val setter: String
+) {
 }
