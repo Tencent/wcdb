@@ -4,6 +4,7 @@ use crate::core::handle_operation::HandleOperation;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use std::ffi::c_void;
+use crate::wcdb_error::{WCDBError, WCDBResult};
 
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
@@ -25,7 +26,12 @@ impl CppObjectTrait for HandleORMOperation {
 
 pub trait HandleORMOperationTrait {
     fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool;
-    fn insert_object<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str);
+    fn insert_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
     fn prepare_insert<T>(&self) -> Insert<T>;
 }
 

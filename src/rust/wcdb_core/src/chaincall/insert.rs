@@ -1,6 +1,10 @@
 use crate::chaincall::chain_call::ChainCall;
 use crate::core::handle::Handle;
+use crate::core::handle_operation::HandleOperationTrait;
+use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::field::Field;
+use crate::orm::table_binding::TableBinding;
+use crate::wcdb_error::WCDBResult;
 use crate::winq::statement_insert::StatementInsert;
 
 pub struct Insert<'a, T> {
@@ -48,12 +52,30 @@ impl<'a, T> Insert<'a, T> {
         self
     }
 
-    pub fn execute(&mut self) -> &mut Self {
+    pub fn execute(&mut self) -> WCDBResult<&mut Self> {
         if self.values.is_empty() {
-            return self;
+            return Ok(self);
         }
         assert!(!self.fields.is_empty());
-        todo!();
-        self
+        if self.values.len() > 1 {
+            self.chain_call.handle.run_transaction(|handle| {
+                self.real_execute();
+                return true;
+            })?;
+        } else {
+            self.real_execute();
+        }
+        Ok(self)
+    }
+
+    pub fn real_execute(&self) {
+        let field = self.fields[0];
+        let binding: &dyn TableBinding<T> = field.get_table_binding();
+        let prepared_statement = self
+            .chain_call
+            .handle
+            .prepared_with_main_statement(&self.chain_call.statement);
+
+        // let binding = Field::<T>::get_binding_from_fields(&self.fields);
     }
 }

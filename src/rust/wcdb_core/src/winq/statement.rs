@@ -21,7 +21,7 @@ impl CppObjectTrait for Statement {
 }
 
 pub trait StatementTrait {
-    
+
 }
 
 impl Statement {

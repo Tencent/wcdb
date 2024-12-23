@@ -30,7 +30,7 @@ impl Drop for CppObject {
     }
 }
 
-pub(crate) trait CppObjectTrait {
+pub trait CppObjectTrait {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void);
     fn get_cpp_obj(&self) -> *mut c_void;
     fn release_cpp_object(&mut self);

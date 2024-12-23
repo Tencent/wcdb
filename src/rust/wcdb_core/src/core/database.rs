@@ -6,6 +6,7 @@ use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTr
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
+use crate::wcdb_error::WCDBResult;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
@@ -57,6 +58,10 @@ impl HandleOperationTrait for Database {
     fn auto_invalidate_handle(&self) -> bool {
         true
     }
+
+    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
+        unimplemented!()
+    }
 }
 
 impl HandleORMOperationTrait for Database {
@@ -70,8 +75,13 @@ impl HandleORMOperationTrait for Database {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-    ) {
-        self.prepare_insert::<T>().into_table(table_name).value(object).on_fields(fields).execute();
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .into_table(table_name)
+            .value(object)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
     fn prepare_insert<T>(&self) -> Insert<T> {

@@ -34,7 +34,7 @@
     WCDBRustClassMethod(HandleStatement, funcName, __VA_ARGS__)
 
 //jlong WCDBRustHandleStatementClassMethod(getError, jlong self);
-//jboolean WCDBRustHandleStatementClassMethod(prepare, jlong self, jlong statement);
+bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement);
 //jboolean WCDBRustHandleStatementClassMethod(prepareSQL, jlong self, jstring sql);
 //jboolean WCDBRustHandleStatementClassMethod(checkPrepared, jlong self);
 //jboolean WCDBRustHandleStatementClassMethod(step, jlong self);

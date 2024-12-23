@@ -4,7 +4,7 @@ use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
 use std::ffi::{c_char, c_void};
 use std::ptr::null_mut;
-use std::sync::RwLock;
+use std::sync::{Arc, Mutex, RwLock};
 
 extern "C" {
     /// createCppObj

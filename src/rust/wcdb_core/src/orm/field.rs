@@ -52,4 +52,19 @@ impl<T> Field<T> {
     pub fn get_field_id(&self) -> usize {
         self.field_id
     }
+
+    pub fn get_table_binding(&self) -> &dyn TableBinding<T> {
+        assert!(!self.binding.is_null());
+        unsafe { &*self.binding }
+    }
+
+    pub fn get_binding_from_field(field: &Field<T>) -> &dyn TableBinding<T> {
+        field.get_table_binding()
+    }
+
+    pub fn get_binding_from_fields<'a>(fields: &Vec<&'a Field<T>>) -> &'a dyn TableBinding<T> {
+        assert!(!fields.is_empty());
+        let field = fields[0];
+        Self::get_binding_from_field(field)
+    }
 }

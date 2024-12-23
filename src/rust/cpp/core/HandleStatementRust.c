@@ -26,13 +26,13 @@
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return (jlong) WCDBHandleStatementGetError(selfStruct).innerValue;
 //}
-//
-//jboolean WCDBRustHandleStatementClassMethod(prepare, jlong self, jlong statement)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return WCDBHandleStatementPrepare(selfStruct, (CPPObject *) statement);
-//}
-//
+
+bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return WCDBHandleStatementPrepare(selfStruct, (CPPObject *) statement);
+}
+
 //jboolean WCDBRustHandleStatementClassMethod(prepareSQL, jlong self, jstring sql)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
