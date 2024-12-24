@@ -9,6 +9,7 @@ use std::ffi::c_void;
 use std::sync::{Arc, Mutex};
 
 extern "C" {
+    pub fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
     pub fn WCDBRustHandle_runTransaction(
         cpp_obj: *mut c_void,
         transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void),
@@ -76,12 +77,13 @@ impl HandleInner {
         statement: &T,
     ) -> Arc<PreparedStatement> {
         if self.main_statement.is_none() {
-            let mut prepared_statement = PreparedStatement::new(self.get_cpp_handle(database));
+            let cpp_obj = unsafe { WCDBRustHandle_getMainStatement(self.get_cpp_handle(database)) };
+            let mut prepared_statement = PreparedStatement::new(cpp_obj);
             prepared_statement.auto_finalize = true;
             self.main_statement = Some(Arc::new(prepared_statement));
         }
         let main_statement = self.main_statement.as_ref().unwrap();
-        main_statement.prepare(statement);
+        main_statement.prepare(statement).unwrap();
         main_statement.clone()
     }
 }

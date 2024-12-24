@@ -35,7 +35,7 @@
 //jlong WCDBRustHandleClassMethod(getError, jlong self);
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, jlong self, jlong statement);
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql);
-//jlong WCDBRustHandleClassMethod(getMainStatement, jlong self);
+void* WCDBRustHandleClassMethod(getMainStatement, void* self);
 //void WCDBRustHandleClassMethod(finalizeAllStatements, jlong self);
 //jboolean WCDBRustHandleClassMethod(execute, jlong self, jlong statement);
 //jboolean WCDBRustHandleClassMethod(executeSQL, jlong self, jstring sql);

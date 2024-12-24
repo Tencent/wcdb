@@ -43,13 +43,13 @@
 //    WCDBRustReleaseString(sql);
 //    return ret;
 //}
-//
-//jlong WCDBRustHandleClassMethod(getMainStatement, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return (jlong) WCDBHandleGetMainStatement(selfStruct).innerValue;
-//}
-//
+
+void* WCDBRustHandleClassMethod(getMainStatement, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandle, self);
+    return (void*) WCDBHandleGetMainStatement(selfStruct).innerValue;
+}
+
 //void WCDBRustHandleClassMethod(finalizeAllStatements, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
