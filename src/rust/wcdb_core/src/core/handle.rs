@@ -10,6 +10,8 @@ use std::sync::{Arc, Mutex};
 
 extern "C" {
     pub fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
+    pub fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> i32;
+    pub fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
     pub fn WCDBRustHandle_runTransaction(
         cpp_obj: *mut c_void,
         transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void),
@@ -69,6 +71,10 @@ impl HandleInner {
             self.handle_orm_operation.release_cpp_object();
             self.write_hint = false;
         }
+    }
+    
+    pub fn get_changes(&mut self, database: &Database) -> i32 {
+        unsafe { WCDBRustHandle_getChanges(self.get_cpp_handle(database)) }
     }
 
     pub fn prepared_with_main_statement<T: StatementTrait + CppObjectTrait>(
@@ -177,6 +183,15 @@ impl<'a> Handle<'a> {
     pub fn invalidate(&self) {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.invalidate();
+    }
+
+    pub fn get_changes(&self) -> i32 {
+        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
+        handle_inner_lock.get_changes(self.database)
+    }
+
+    pub fn get_last_inserted_row_id(&self) -> i64 {
+        unsafe { WCDBRustHandle_getLastInsertRowid(self.get_cpp_handle()) }
     }
 
     pub fn prepared_with_main_statement<T: StatementTrait + CppObjectTrait>(

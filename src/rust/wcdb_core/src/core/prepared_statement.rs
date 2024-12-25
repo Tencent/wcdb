@@ -5,7 +5,11 @@ use std::ffi::c_void;
 
 extern "C" {
     pub fn WCDBRustHandleStatement_prepare(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
+    pub fn WCDBRustHandleStatement_step(cpp_obj: *mut c_void) -> bool;
+    pub fn WCDBRustHandleStatement_reset(cpp_obj: *mut c_void);
+    pub fn WCDBRustHandleStatement_finalize(cpp_obj: *mut c_void);
     pub fn WCDBRustHandleStatement_bindInteger(cpp_obj: *mut c_void, value: i64, index: usize);
+    pub fn WCDBRustHandleStatement_bindNull(cpp_obj: *mut c_void, index: usize);
     pub fn WCDBRustHandleStatement_getInteger(cpp_obj: *mut c_void, index: usize) -> i64;
 }
 
@@ -28,6 +32,10 @@ impl PreparedStatement {
         unsafe { WCDBRustHandleStatement_bindInteger(*self.cpp_obj, value as i64, index) }
     }
 
+    pub fn bind_null(&self, index: usize) {
+        unsafe { WCDBRustHandleStatement_bindNull(*self.cpp_obj, index) }
+    }
+
     pub fn get_int(&self, index: usize) -> i32 {
         unsafe { WCDBRustHandleStatement_getInteger(*self.cpp_obj, index) as i32 }
     }
@@ -38,5 +46,22 @@ impl PreparedStatement {
         } else {
             Err(WCDBError::Exception)
         }
+    }
+
+    pub fn step(&self) {
+        if !unsafe { WCDBRustHandleStatement_step(*self.cpp_obj) } {
+            if self.auto_finalize {
+                self.finalize_statement();
+            }
+            // throw createException();
+        }
+    }
+
+    pub fn reset(&self) {
+        unsafe { WCDBRustHandleStatement_reset(*self.cpp_obj) }
+    }
+
+    pub fn finalize_statement(&self) {
+        unsafe { WCDBRustHandleStatement_finalize(*self.cpp_obj) }
     }
 }

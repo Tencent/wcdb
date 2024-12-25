@@ -21,10 +21,10 @@
 #include "HandleStatementRust.h"
 #include "HandleStatementBridge.h"
 
-//jlong WCDBRustHandleStatementClassMethod(getError, jlong self)
+//void* WCDBRustHandleStatementClassMethod(getError, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return (jlong) WCDBHandleStatementGetError(selfStruct).innerValue;
+//    return (void*) WCDBHandleStatementGetError(selfStruct).innerValue;
 //}
 
 bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
@@ -33,46 +33,46 @@ bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
     return WCDBHandleStatementPrepare(selfStruct, (CPPObject *) statement);
 }
 
-//jboolean WCDBRustHandleStatementClassMethod(prepareSQL, jlong self, jstring sql)
+//bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, jstring sql)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBRustGetString(sql);
-//    jboolean ret = WCDBHandleStatementPrepareSQL(selfStruct, sqlString);
+//    bool ret = WCDBHandleStatementPrepareSQL(selfStruct, sqlString);
 //    WCDBRustReleaseString(sql);
 //    return ret;
 //}
 //
-//jboolean WCDBRustHandleStatementClassMethod(checkPrepared, jlong self)
+//bool WCDBRustHandleStatementClassMethod(checkPrepared, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return WCDBHandleStatementCheckPrepared(selfStruct);
 //}
-//
-//jboolean WCDBRustHandleStatementClassMethod(step, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return WCDBHandleStatementStep(selfStruct);
-//}
-//
-//void WCDBRustHandleStatementClassMethod(reset, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    WCDBHandleStatementReset(selfStruct);
-//}
-//
-//void WCDBRustHandleStatementClassMethod(clearBindings, jlong self)
+
+bool WCDBRustHandleStatementClassMethod(step, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return WCDBHandleStatementStep(selfStruct);
+}
+
+void WCDBRustHandleStatementClassMethod(reset, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    WCDBHandleStatementReset(selfStruct);
+}
+
+//void WCDBRustHandleStatementClassMethod(clearBindings, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBHandleStatementClearBindings(selfStruct);
 //}
-//
-//void WCDBRustHandleStatementClassMethod(finalize, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    WCDBHandleStatementFinalize(selfStruct);
-//}
-//
-//jboolean WCDBRustHandleStatementClassMethod(isDone, jlong self)
+
+void WCDBRustHandleStatementClassMethod(finalize, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    WCDBHandleStatementFinalize(selfStruct);
+}
+
+//bool WCDBRustHandleStatementClassMethod(isDone, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return WCDBHandleStatementIsDone(selfStruct);
@@ -84,13 +84,13 @@ void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value
     WCDBHandleStatementBindInteger(selfStruct, index, value);
 }
 
-//void WCDBRustHandleStatementClassMethod(bindDouble, jlong self, jdouble value, jint index)
+//void WCDBRustHandleStatementClassMethod(bindDouble, void* self, jdouble value, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBHandleStatementBindDouble(selfStruct, index, value);
 //}
 //
-//void WCDBRustHandleStatementClassMethod(bindText, jlong self, jstring value, jint index)
+//void WCDBRustHandleStatementClassMethod(bindText, void* self, jstring value, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    int valueLength = 0;
@@ -106,21 +106,21 @@ void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value
 //    }
 //}
 //
-//void WCDBRustHandleStatementClassMethod(bindBLOB, jlong self, jbyteArray value, jint index)
+//void WCDBRustHandleStatementClassMethod(bindBLOB, void* self, jbyteArray value, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBRustGetByteArrayCritical(value);
 //    WCDBHandleStatementBindBlob(selfStruct, index, valueArray, valueLength);
 //    WCDBRustReleaseByteArrayCritical(value);
 //}
-//
-//void WCDBRustHandleStatementClassMethod(bindNull, jlong self, jint index)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    WCDBHandleStatementBindNull(selfStruct, index);
-//}
-//
-//jint WCDBRustHandleStatementClassMethod(bindParameterIndex, jlong self, jstring parameterName)
+
+void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    WCDBHandleStatementBindNull(selfStruct, index);
+}
+
+//jint WCDBRustHandleStatementClassMethod(bindParameterIndex, void* self, jstring parameterName)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBRustGetString(parameterName);
@@ -129,7 +129,7 @@ void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value
 //    return index;
 //}
 //
-//jint WCDBRustHandleStatementClassMethod(getColumnType, jlong self, jint index)
+//jint WCDBRustHandleStatementClassMethod(getColumnType, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return WCDBHandleStatementGetColumnType(selfStruct, index);
@@ -141,13 +141,13 @@ long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index)
     return WCDBHandleStatementGetInteger(selfStruct, index);
 }
 
-//jdouble WCDBRustHandleStatementClassMethod(getDouble, jlong self, jint index)
+//jdouble WCDBRustHandleStatementClassMethod(getDouble, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return WCDBHandleStatementGetDouble(selfStruct, index);
 //}
 //
-//jstring WCDBRustHandleStatementClassMethod(getText, jlong self, jint index)
+//jstring WCDBRustHandleStatementClassMethod(getText, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    const jchar *utf16Value
@@ -156,7 +156,7 @@ long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index)
 //    return (*env)->NewString(env, utf16Value, utf16ValueLength);
 //}
 //
-//jbyteArray WCDBRustHandleStatementClassMethod(getBLOB, jlong self, jint index)
+//jbyteArray WCDBRustHandleStatementClassMethod(getBLOB, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    jbyte *buffer = (jbyte *) WCDBHandleStatementGetBlob(selfStruct, index);
@@ -171,31 +171,31 @@ long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index)
 //    return array;
 //}
 //
-//jint WCDBRustHandleStatementClassMethod(getColumnCount, jlong self)
+//jint WCDBRustHandleStatementClassMethod(getColumnCount, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return WCDBHandleStatementGetColumnCount(selfStruct);
 //}
 //
-//jstring WCDBRustHandleStatementClassMethod(getColumnName, jlong self, jint index)
+//jstring WCDBRustHandleStatementClassMethod(getColumnName, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBRustCreateJStringAndReturn(WCDBHandleStatementGetColumnName(selfStruct, index));
 //}
 //
-//jstring WCDBRustHandleStatementClassMethod(getOriginalColumnName, jlong self, jint index)
+//jstring WCDBRustHandleStatementClassMethod(getOriginalColumnName, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBRustCreateJStringAndReturn(WCDBHandleStatementGetOriginalColumnName(selfStruct, index));
 //}
 //
-//jstring WCDBRustHandleStatementClassMethod(getColumnTableName, jlong self, jint index)
+//jstring WCDBRustHandleStatementClassMethod(getColumnTableName, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    WCDBRustCreateJStringAndReturn(WCDBHandleStatementGetColumnTableName(selfStruct, index));
 //}
 //
-//jboolean WCDBRustHandleStatementClassMethod(isReadOnly, jlong self)
+//bool WCDBRustHandleStatementClassMethod(isReadOnly, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
 //    return WCDBHandleStatementIsReadOnly(selfStruct);

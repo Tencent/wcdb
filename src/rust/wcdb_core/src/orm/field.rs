@@ -58,6 +58,10 @@ impl<T> Field<T> {
         unsafe { &*self.binding }
     }
 
+    pub fn is_auto_increment(&self) -> bool {
+        self.is_auto_increment
+    }
+
     pub fn get_binding_from_field(field: &Field<T>) -> &dyn TableBinding<T> {
         field.get_table_binding()
     }

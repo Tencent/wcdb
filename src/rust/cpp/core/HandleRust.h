@@ -32,30 +32,30 @@
 #define WCDBRustHandleClassMethod(funcName, ...)                                \
     WCDBRustClassMethod(Handle, funcName, __VA_ARGS__)
 
-//jlong WCDBRustHandleClassMethod(getError, jlong self);
-//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, jlong self, jlong statement);
-//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql);
+//jlong WCDBRustHandleClassMethod(getError, void* self);
+//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement);
+//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, void* self, jstring sql);
 void* WCDBRustHandleClassMethod(getMainStatement, void* self);
-//void WCDBRustHandleClassMethod(finalizeAllStatements, jlong self);
-//jboolean WCDBRustHandleClassMethod(execute, jlong self, jlong statement);
-//jboolean WCDBRustHandleClassMethod(executeSQL, jlong self, jstring sql);
-//jint WCDBRustHandleClassMethod(tableExist, jlong self, jstring table);
+//void WCDBRustHandleClassMethod(finalizeAllStatements, void* self);
+//jboolean WCDBRustHandleClassMethod(execute, void* self, jlong statement);
+//jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql);
+//jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table);
 //
-//jint WCDBRustHandleClassMethod(getChanges, jlong self);
-//jint WCDBRustHandleClassMethod(getTotalChanges, jlong self);
-//jlong WCDBRustHandleClassMethod(getLastInsertRowid, jlong self);
+int WCDBRustHandleClassMethod(getChanges, void* self);
+//jint WCDBRustHandleClassMethod(getTotalChanges, void* self);
+long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self);
 //
-//jboolean WCDBRustHandleClassMethod(isInTransaction, jlong self);
-//jboolean WCDBRustHandleClassMethod(beginTransaction, jlong self);
-//jboolean WCDBRustHandleClassMethod(commitTransaction, jlong self);
-//void WCDBRustHandleClassMethod(rollbackTransaction, jlong self);
+//jboolean WCDBRustHandleClassMethod(isInTransaction, void* self);
+//jboolean WCDBRustHandleClassMethod(beginTransaction, void* self);
+//jboolean WCDBRustHandleClassMethod(commitTransaction, void* self);
+//void WCDBRustHandleClassMethod(rollbackTransaction, void* self);
 
 typedef bool (*RustTransactionCallback)(void* closure_raw, void* database_raw, void* cpp_handle);
 bool WCDBRustHandleObjectMethod(runTransaction, void* self, RustTransactionCallback rust_callback, void* closure_raw, void* database_raw);
-//jboolean WCDBRustHandleObjectMethod(runPausableTransaction, jlong self, jobject transaction);
+//jboolean WCDBRustHandleObjectMethod(runPausableTransaction, void* self, jobject transaction);
 //
 //jlong WCDBRustHandleClassMethodWithNoArg(createCancellationSignal);
 //void WCDBRustHandleClassMethod(cancelSignal, jlong signal);
 //
-//void WCDBRustHandleClassMethod(attachCancellationSignal, jlong self, jlong signal);
-//void WCDBRustHandleClassMethod(detachCancellationSignal, jlong self);
+//void WCDBRustHandleClassMethod(attachCancellationSignal, void* self, jlong signal);
+//void WCDBRustHandleClassMethod(detachCancellationSignal, void* self);

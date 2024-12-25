@@ -189,7 +189,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
                 object: &#table_ident,
                 field: &wcdb_core::orm::field::Field<#table_ident>,
                 index: usize,
-                prepared_statement: &mut wcdb_core::core::prepared_statement::PreparedStatement,
+                prepared_statement: &std::sync::Arc<wcdb_core::core::prepared_statement::PreparedStatement>,
             ) {
                 #bind_field_statements
             }
@@ -287,7 +287,7 @@ fn generate_bind_field(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStrea
     Ok(quote! {
         match field.get_field_id() {
             #(
-                #field_id_vec =>prepared_statement.#field_bind_type_vec(object.#field_ident_vec, index),
+                #field_id_vec => prepared_statement.#field_bind_type_vec(object.#field_ident_vec, index),
             )*
             _ => unreachable!("Unknown field id"),
         }

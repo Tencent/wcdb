@@ -2,6 +2,7 @@ use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::binding::Binding;
 use crate::orm::field::Field;
 use std::any::TypeId;
+use std::sync::Arc;
 
 pub trait TableBinding<T> {
     fn binding_type(&self) -> TypeId;
@@ -17,7 +18,7 @@ pub trait TableBinding<T> {
         object: &T,
         field: &Field<T>,
         index: usize,
-        prepared_statement: &mut PreparedStatement,
+        prepared_statement: &Arc<PreparedStatement>,
     );
 
     fn is_auto_increment(&self, object: &T) -> bool;

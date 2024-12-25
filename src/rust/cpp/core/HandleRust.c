@@ -22,20 +22,20 @@
 #include "HandleBridge.h"
 #include "assert.h"
 
-//jlong WCDBRustHandleClassMethod(getError, jlong self)
+//jlong WCDBRustHandleClassMethod(getError, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return (jlong) WCDBHandleGetError(selfStruct).innerValue;
 //}
 //
-//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, jlong self, jlong statement)
+//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return (jlong) WCDBHandleGetOrCreatePreparedStatement(selfStruct, (CPPObject *) statement)
 //    .innerValue;
 //}
 //
-//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, jlong self, jstring sql)
+//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, void* self, jstring sql)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBRustGetString(sql);
@@ -50,19 +50,19 @@ void* WCDBRustHandleClassMethod(getMainStatement, void* self)
     return (void*) WCDBHandleGetMainStatement(selfStruct).innerValue;
 }
 
-//void WCDBRustHandleClassMethod(finalizeAllStatements, jlong self)
+//void WCDBRustHandleClassMethod(finalizeAllStatements, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBHandleFinalizeStatements(selfStruct);
 //}
 //
-//jboolean WCDBRustHandleClassMethod(execute, jlong self, jlong statement)
+//jboolean WCDBRustHandleClassMethod(execute, void* self, jlong statement)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
 //}
 //
-//jboolean WCDBRustHandleClassMethod(executeSQL, jlong self, jstring sql)
+//jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBRustGetString(sql);
@@ -71,7 +71,7 @@ void* WCDBRustHandleClassMethod(getMainStatement, void* self)
 //    return ret;
 //}
 //
-//jint WCDBRustHandleClassMethod(tableExist, jlong self, jstring table)
+//jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBRustGetString(table);
@@ -79,44 +79,44 @@ void* WCDBRustHandleClassMethod(getMainStatement, void* self)
 //    WCDBRustReleaseString(table);
 //    return ret.hasValue ? (jint) ret.value : 2;
 //}
-//
-//jint WCDBRustHandleClassMethod(getChanges, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleGetChange(selfStruct);
-//}
-//
-//jint WCDBRustHandleClassMethod(getTotalChanges, jlong self)
+
+int WCDBRustHandleClassMethod(getChanges, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandle, self);
+    return WCDBHandleGetChange(selfStruct);
+}
+
+//jint WCDBRustHandleClassMethod(getTotalChanges, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return WCDBHandleGetTotalChange(selfStruct);
 //}
-//
-//jlong WCDBRustHandleClassMethod(getLastInsertRowid, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleGetLastInsertedRowID(selfStruct);
-//}
-//
-//jboolean WCDBRustHandleClassMethod(isInTransaction, jlong self)
+
+long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandle, self);
+    return WCDBHandleGetLastInsertedRowID(selfStruct);
+}
+
+//jboolean WCDBRustHandleClassMethod(isInTransaction, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return WCDBHandleIsInTransaction(selfStruct);
 //}
 //
-//jboolean WCDBRustHandleClassMethod(beginTransaction, jlong self)
+//jboolean WCDBRustHandleClassMethod(beginTransaction, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return WCDBHandleBeginTransaction(selfStruct);
 //}
 //
-//jboolean WCDBRustHandleClassMethod(commitTransaction, jlong self)
+//jboolean WCDBRustHandleClassMethod(commitTransaction, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return WCDBHandleCommitTransaction(selfStruct);
 //}
 //
-//void WCDBRustHandleClassMethod(rollbackTransaction, jlong self)
+//void WCDBRustHandleClassMethod(rollbackTransaction, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    return WCDBHandleRollbackTransaction(selfStruct);
@@ -173,7 +173,7 @@ bool WCDBRustHandleObjectMethod(runTransaction, void* self, RustTransactionCallb
 //    }
 //}
 //
-//jboolean WCDBRustHandleObjectMethod(runPausableTransaction, jlong self, jobject transaction)
+//jboolean WCDBRustHandleObjectMethod(runPausableTransaction, void* self, jobject transaction)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    TransactionContext context;
@@ -196,14 +196,14 @@ bool WCDBRustHandleObjectMethod(runTransaction, void* self, RustTransactionCallb
 //    WCDBCancellationSignalCancel(signalStruct);
 //}
 //
-//void WCDBRustHandleClassMethod(attachCancellationSignal, jlong self, jlong signal)
+//void WCDBRustHandleClassMethod(attachCancellationSignal, void* self, jlong signal)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBRustBridgeStruct(CPPCancellationSignal, signal);
 //    WCDBHandleAttachCancellationSignal(selfStruct, signalStruct);
 //}
 //
-//void WCDBRustHandleClassMethod(detachCancellationSignal, jlong self)
+//void WCDBRustHandleClassMethod(detachCancellationSignal, void* self)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBHandleDettachCancellationSignal(selfStruct);

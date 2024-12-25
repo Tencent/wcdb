@@ -1,4 +1,4 @@
-use crate::chaincall::chain_call::ChainCall;
+use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::orm::field::Field;
@@ -13,6 +13,12 @@ pub struct Insert<'a, T> {
     fields: Vec<&'a Field<T>>,
     values: RefCell<Vec<T>>,
     last_insert_row_id: RefCell<i64>,
+}
+
+impl<'a, T> ChainCallTrait for Insert<'a, T> {
+    fn update_changes(&self) {
+        self.chain_call.update_changes()
+    }
 }
 
 impl<'a, T> Insert<'a, T> {
@@ -75,9 +81,28 @@ impl<'a, T> Insert<'a, T> {
             .handle
             .prepared_with_main_statement(&self.chain_call.statement);
         *self.last_insert_row_id.borrow_mut() = 0;
-        // let mut values = self.values.borrow_mut();
-        // for value in values.iter_mut() {
-        //     // binding.set_last_insert_row_id(value, self.chain_call.handle.ge)
-        // }
+        let mut values = self.values.borrow_mut();
+        for object in values.iter_mut() {
+            prepared_statement.reset();
+            let mut index: usize = 1;
+            let is_auto_increment = !self.has_conflict_action && binding.is_auto_increment(object);
+            for field in &self.fields {
+                if is_auto_increment && field.is_auto_increment() {
+                    prepared_statement.bind_null(index);
+                } else {
+                    binding.bind_field(object, field, index, &prepared_statement);
+                }
+                index += 1;
+            }
+            prepared_statement.step();
+            if (is_auto_increment) {
+                binding.set_last_insert_row_id(object, self.chain_call.handle.get_last_inserted_row_id());
+            }
+        }
+        if values.len() > 0 {
+            *self.last_insert_row_id.borrow_mut() = self.chain_call.handle.get_last_inserted_row_id();
+        }
+        self.update_changes();
+        prepared_statement.finalize_statement();
     }
 }
