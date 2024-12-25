@@ -57,19 +57,55 @@ public final class SQLiteStatement extends SQLiteClosable {
     }
 
     /**
-     * Execute this SQL statement, if it is not a SELECT / INSERT / DELETE / UPDATE, for example
-     * CREATE / DROP table, view, trigger, index etc.
+     * @see #execute(CancellationSignal, boolean)
+     * Executes a readonly database-operation without support for cancellation.
+     */
+    public int execute() {
+        return execute(null);
+    }
+
+    /**
+     * @see #execute(CancellationSignal, boolean)
+     * Executes a readonly database-operation with support for cancellation.
+     *
+     * @param cancellationSignal The CancellationSignal to cancel the operation if requested.
+     *                           This allows the operation to be stopped in progress, useful for
+     *                           long-running queries or operations that the user may wish to cancel.
+     * @return The number of changes made by the operation if it is not read-only; otherwise, returns 0.
+     *         This provides insight into how many rows were affected in the case of a modification.
      *
      * @throws android.database.SQLException If the SQL string is invalid for
      *                                       some reason
      */
-    public void execute() {
-        execute(null);
+    public int execute(CancellationSignal cancellationSignal) {
+        return execute(cancellationSignal, false);
     }
 
-    public void execute(CancellationSignal cancellationSignal) {
-        try (Handle handle = mDB.getHandle(true)) {
+    /**
+     * Execute this SQL statement, if it is not a SELECT / INSERT / DELETE / UPDATE, for example
+     * CREATE / DROP table, view, trigger, index etc.
+     * Executes a database operation with support for cancellation and read-only mode.
+     *
+     * @param cancellationSignal The CancellationSignal to cancel the operation if requested.
+     *                           This allows the operation to be stopped in progress, useful for
+     *                           long-running queries or operations that the user may wish to cancel.
+     * @param readOnly           Specifies if the operation is read-only. If true, the operation
+     *                           will not attempt any changes to the database; otherwise, it may
+     *                           perform write operations.
+     * @return The number of changes made by the operation if it is not read-only; otherwise, returns 0.
+     *         This provides insight into how many rows were affected in the case of a modification.
+     *
+     * @throws android.database.SQLException If the SQL string is invalid for some reason
+     */
+    public int execute(CancellationSignal cancellationSignal, boolean readOnly) {
+        try (Handle handle = mDB.getHandle(!readOnly)) {
             execute(handle, cancellationSignal);
+            if (!readOnly) {
+                return handle.getChanges();
+            } else {
+                // since readOnly, database has no changes
+                return 0;
+            }
         }
     }
 
@@ -123,7 +159,8 @@ public final class SQLiteStatement extends SQLiteClosable {
     }
 
     public long simpleQueryForLong(CancellationSignal cancellationSignal) {
-        try (Handle handle = mDB.getHandle(true)) {
+        // since just query, we can use read-only mode
+        try (Handle handle = mDB.getHandle(false)) {
             return executeForValue(handle, cancellationSignal).getLong();
         }
     }
@@ -140,7 +177,7 @@ public final class SQLiteStatement extends SQLiteClosable {
     }
 
     public String simpleQueryForString(CancellationSignal cancellationSignal) {
-        try (Handle handle = mDB.getHandle(true)) {
+        try (Handle handle = mDB.getHandle(false)) {
             return executeForValue(handle, cancellationSignal).getText();
         }
     }
