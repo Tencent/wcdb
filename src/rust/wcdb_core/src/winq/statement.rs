@@ -1,9 +1,10 @@
 use std::ffi::c_void;
+use std::fmt::Debug;
 use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::Identifier;
+use crate::winq::identifier::{Identifier, IdentifierTrait};
 
 pub struct Statement {
-    identifier: Identifier,
+    pub(crate) identifier: Identifier,
 }
 
 impl CppObjectTrait for Statement {
@@ -20,7 +21,7 @@ impl CppObjectTrait for Statement {
     }
 }
 
-pub trait StatementTrait {
+pub trait StatementTrait: Debug {
 
 }
 

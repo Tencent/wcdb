@@ -50,5 +50,5 @@ fn main() {
     let db = Database::new("/Users/zhanglei/Downloads/test.db");
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE);
     let record = TableMessage::new();
-    db.insert_object(record, DbTableMessage::all_fields(), "rct_message");
+    db.insert_object(record, DbTableMessage::all_fields(), "rct_message").unwrap();
 }

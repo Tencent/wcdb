@@ -1,8 +1,9 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
-use crate::winq::identifier::CPPType;
+use crate::winq::identifier::{CPPType, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_void, CString};
+use std::fmt::Debug;
 
 extern "C" {
     pub fn WCDBRustStatementInsert_create() -> *mut c_void;
@@ -17,10 +18,30 @@ extern "C" {
         columns_string_vec: *const *mut c_char,
         columns_vec_len: i32,
     );
+    pub fn WCDBRustStatementInsert_configValuesWithBindParameters(
+        cpp_obj: *mut c_void,
+        count: i32,
+    );
 }
 
 pub struct StatementInsert {
     statement: Statement,
+}
+
+impl Debug for StatementInsert {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "StatementInsert: {}",
+            self.statement.identifier.get_description()
+        )
+    }
+}
+
+impl IdentifierTrait for StatementInsert {
+    fn get_type() -> i32 {
+        CPPType::InsertSTMT as i32
+    }
 }
 
 impl CppObjectTrait for StatementInsert {
@@ -73,6 +94,11 @@ impl StatementInsert {
                 columns_void_vec_len,
             );
         }
+        self
+    }
+
+    pub fn values_with_bind_parameters(&self, parameters_count: usize) -> &Self {
+        unsafe { WCDBRustStatementInsert_configValuesWithBindParameters(self.get_cpp_obj(), parameters_count as i32) };
         self
     }
 }

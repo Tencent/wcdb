@@ -4,8 +4,10 @@ use crate::core::handle_operation::HandleOperationTrait;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::wcdb_error::WCDBResult;
+use crate::winq::statement::StatementTrait;
 use crate::winq::statement_insert::StatementInsert;
 use std::cell::RefCell;
+use std::fmt::Debug;
 
 pub struct Insert<'a, T> {
     chain_call: ChainCall<'a, StatementInsert>,
@@ -18,6 +20,10 @@ pub struct Insert<'a, T> {
 impl<'a, T> ChainCallTrait for Insert<'a, T> {
     fn update_changes(&self) {
         self.chain_call.update_changes()
+    }
+
+    fn get_statement(&self) -> &dyn StatementTrait {
+        &self.chain_call.statement
     }
 }
 
@@ -41,24 +47,27 @@ impl<'a, T> Insert<'a, T> {
         }
     }
 
-    pub fn into_table(&mut self, table_name: &str) -> &mut Self {
+    pub fn into_table(mut self, table_name: &str) -> Self {
         self.chain_call.statement.insert_into(table_name);
         self
     }
 
-    pub fn value(&mut self, object: T) -> &mut Self {
+    pub fn value(mut self, object: T) -> Self {
         self.values.borrow_mut().clear();
         self.values.borrow_mut().push(object);
         self
     }
 
-    pub fn on_fields(&mut self, fields: Vec<&'a Field<T>>) -> &mut Self {
+    pub fn on_fields(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
-        self.chain_call.statement.columns(&self.fields);
+        self.chain_call
+            .statement
+            .columns(&self.fields)
+            .values_with_bind_parameters(self.fields.len());
         self
     }
 
-    pub fn execute(&mut self) -> WCDBResult<&mut Self> {
+    pub fn execute(mut self) -> WCDBResult<Self> {
         if self.values.borrow().is_empty() {
             return Ok(self);
         }
@@ -96,11 +105,15 @@ impl<'a, T> Insert<'a, T> {
             }
             prepared_statement.step();
             if (is_auto_increment) {
-                binding.set_last_insert_row_id(object, self.chain_call.handle.get_last_inserted_row_id());
+                binding.set_last_insert_row_id(
+                    object,
+                    self.chain_call.handle.get_last_inserted_row_id(),
+                );
             }
         }
         if values.len() > 0 {
-            *self.last_insert_row_id.borrow_mut() = self.chain_call.handle.get_last_inserted_row_id();
+            *self.last_insert_row_id.borrow_mut() =
+                self.chain_call.handle.get_last_inserted_row_id();
         }
         self.update_changes();
         prepared_statement.finalize_statement();

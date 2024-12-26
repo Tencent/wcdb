@@ -1,6 +1,11 @@
-use std::ffi::c_void;
-
+use std::ffi::{c_char, c_void};
+use std::fmt::Debug;
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::utils::ToCow;
+
+extern "C" {
+    pub fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
+}
 
 #[derive(Debug, PartialEq, Eq)]
 #[repr(i32)]
@@ -66,16 +71,22 @@ pub enum CPPType {
     ExplainSTMT = 56,
 }
 
-pub trait IdentifierTrait {
-    fn get_type() -> i32;
-}
-
 pub fn get_cpp_type<T: IdentifierTrait>(_: &T) -> i32 {
     T::get_type()
 }
 
 pub struct Identifier {
     cpp_obj: CppObject,
+}
+
+pub trait IdentifierTrait {
+    fn get_type() -> i32;
+}
+
+impl IdentifierTrait for Identifier {
+    fn get_type() -> i32 {
+        CPPType::Invalid as i32
+    }
 }
 
 impl CppObjectTrait for Identifier {
@@ -105,5 +116,10 @@ impl Identifier {
 
     pub fn get_cpp_type(identifier: &Identifier) -> i32 {
         identifier.get_type()
+    }
+
+    pub fn get_description(&self) -> String {
+        let c_description = unsafe { WCDBRustWinq_getDescription(self.get_cpp_obj()) };
+        c_description.to_cow().to_string()
     }
 }

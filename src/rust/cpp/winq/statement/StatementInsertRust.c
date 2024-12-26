@@ -87,13 +87,13 @@ void WCDBRustStatementInsertClassMethod(configColumns,
 //    WCDBStatementInsertConfigValuesWithMultiTypeArray(selfStruct, valueArray);
 //    WCDBRustReleaseMultiTypeArray(value);
 //}
-//
-//void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, jlong self, jint count)
-//{
-//    WCDBRustBridgeStruct(CPPStatementInsert, self);
-//    WCDBStatementInsertConfigValuesWithBindParameters(selfStruct, count);
-//}
-//
+
+void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count)
+{
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBStatementInsertConfigValuesWithBindParameters(selfStruct, count);
+}
+
 //void WCDBRustStatementInsertClassMethod(configSelect, jlong self, jlong select)
 //{
 //    WCDBRustBridgeStruct(CPPStatementInsert, self);

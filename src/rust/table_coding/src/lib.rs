@@ -227,6 +227,7 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let binding_ident = Ident::new(&binding, Span::call_site());
     let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
     let instance_ident = Ident::new(&instance, Span::call_site());
+    let field_id_vec: Vec<usize> = (1..=field_ident_vec.len()).collect();
     Ok(quote! {
         static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
             wcdb_core::orm::binding::Binding::new()
@@ -235,7 +236,7 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
             let mut instance = #db_table_ident::default();
             let instance_raw = unsafe { &instance as *const #db_table_ident };
             #(
-                let field = Box::new(wcdb_core::orm::field::Field::new(stringify!(#field_ident_vec), instance_raw, 1, false, false));
+                let field = Box::new(wcdb_core::orm::field::Field::new(stringify!(#field_ident_vec), instance_raw, #field_id_vec, false, false));
                 let #field_ident_def_vec = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(&field.get_column(), wcdb_core::winq::column_type::ColumnType::Integer);
                 instance.#field_ident_vec = unsafe { Box::into_raw(field) };
                 #binding_ident.add_column_def(#field_ident_def_vec);

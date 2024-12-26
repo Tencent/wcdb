@@ -1,4 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::chaincall::chain_call::ChainCallTrait;
 use crate::chaincall::insert::Insert;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
