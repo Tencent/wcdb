@@ -1,7 +1,7 @@
-use std::ffi::{c_char, c_void};
-use std::fmt::Debug;
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::utils::ToCow;
+use std::ffi::{c_char, c_void};
+use std::fmt::Debug;
 
 extern "C" {
     pub fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
@@ -90,11 +90,11 @@ impl IdentifierTrait for Identifier {
 }
 
 impl CppObjectTrait for Identifier {
-     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.cpp_obj.set_cpp_obj(cpp_obj);
     }
 
-     fn get_cpp_obj(&self) -> *mut c_void {
+    fn get_cpp_obj(&self) -> *mut c_void {
         self.cpp_obj.get_cpp_obj()
     }
 
@@ -104,6 +104,12 @@ impl CppObjectTrait for Identifier {
 }
 
 impl Identifier {
+    pub fn new() -> Self {
+        Identifier {
+            cpp_obj: CppObject::new(),
+        }
+    }
+
     pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         Identifier {
             cpp_obj: CppObject::new_with_obj(cpp_obj),
@@ -114,8 +120,8 @@ impl Identifier {
         0
     }
 
-    pub fn get_cpp_type(identifier: &Identifier) -> i32 {
-        identifier.get_type()
+    pub fn get_cpp_type<T: IdentifierTrait>(_: &T) -> i32 {
+        T::get_type()
     }
 
     pub fn get_description(&self) -> String {

@@ -1,5 +1,4 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::chaincall::chain_call::ChainCallTrait;
 use crate::chaincall::insert::Insert;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
@@ -11,6 +10,7 @@ use crate::wcdb_error::WCDBResult;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
+use crate::winq::expression::Expression;
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
@@ -88,6 +88,10 @@ impl HandleORMOperationTrait for Database {
     fn prepare_insert<T>(&self) -> Insert<T> {
         Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
+
+    fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()> {
+        unimplemented!()
+    }
 }
 
 impl Database {
@@ -123,7 +127,6 @@ impl Database {
         }
     }
 
-    /// Java: static native long getHandle(long self, boolean writeHint);
     pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
         unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
     }

@@ -38,12 +38,6 @@ impl Debug for StatementInsert {
     }
 }
 
-impl IdentifierTrait for StatementInsert {
-    fn get_type() -> i32 {
-        CPPType::InsertSTMT as i32
-    }
-}
-
 impl CppObjectTrait for StatementInsert {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.statement.set_cpp_obj(cpp_obj);
@@ -58,10 +52,16 @@ impl CppObjectTrait for StatementInsert {
     }
 }
 
+impl IdentifierTrait for StatementInsert {
+    fn get_type() -> i32 {
+        CPPType::InsertSTMT as i32
+    }
+}
+
 impl StatementTrait for StatementInsert {}
 
 impl StatementInsert {
-    pub fn new() -> StatementInsert {
+    pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementInsert_create() };
         StatementInsert {
             statement: Statement::new_with_obj(cpp_obj),

@@ -26,44 +26,44 @@
 
 #define WCDBRust(className, funcName) WCDBRust##className##_##funcName
 
-#define WCDBRustObjectMethodWithNoArg(className, funcName)                      \
+#define WCDBRustObjectMethodWithNoArg(className, funcName)                     \
     WCDBRust(className, funcName)()
 
-#define WCDBRustObjectMethod(className, funcName, ...)                          \
+#define WCDBRustObjectMethod(className, funcName, ...)                         \
     WCDBRust(className, funcName)(__VA_ARGS__)
 
-#define WCDBRustClassMethodWithNoArg(className, funcName)                       \
+#define WCDBRustClassMethodWithNoArg(className, funcName)                      \
     WCDBRust(className, funcName)()
 
-#define WCDBRustClassMethod(className, funcName, ...)                           \
+#define WCDBRustClassMethod(className, funcName, ...)                          \
     WCDBRust(className, funcName)(__VA_ARGS__)
 
-#define WCDBRustBridgeStruct(type, value)                                       \
+#define WCDBRustBridgeStruct(type, value)                                      \
     type value##Struct = { (CPPObject *) value }
 
-#define WCDBRustGetString(value)                                                \
+#define WCDBRustGetString(value)                                               \
     char *value##String = NULL;                                                \
     const jchar *value##_utf16String = NULL;                                   \
     WCDBRustGetUTF8String(env, value, &value##String, &value##_utf16String, false);
 
-#define WCDBRustReleaseString(value)                                            \
+#define WCDBRustReleaseString(value)                                           \
     if (value##_utf16String != NULL) {                                         \
         (*env)->ReleaseStringChars(env, value, value##_utf16String);           \
     }                                                                          \
     WCDBClearAllPreAllocatedMemory();
 
-#define WCDBRustGetStringCritical(value)                                        \
+#define WCDBRustGetStringCritical(value)                                       \
     char *value##String = NULL;                                                \
     const jchar *value##_utf16String = NULL;                                   \
     WCDBRustGetUTF8String(env, value, &value##String, &value##_utf16String, true);
 
-#define WCDBRustReleaseStringCritical(value)                                    \
+#define WCDBRustReleaseStringCritical(value)                                   \
     if (value##_utf16String != NULL) {                                         \
         (*env)->ReleaseStringCritical(env, value, value##_utf16String);        \
     }                                                                          \
     WCDBClearAllPreAllocatedMemory();
 
-#define WCDBRustGetByteArray(value)                                                \
+#define WCDBRustGetByteArray(value)                                               \
     const unsigned char *value##Array = NULL;                                     \
     int value##Length = 0;                                                        \
     if (value != NULL) {                                                          \
@@ -72,12 +72,12 @@
         = (const unsigned char *) (*env)->GetByteArrayElements(env, value, NULL); \
     }
 
-#define WCDBRustReleaseByteArray(value)                                           \
+#define WCDBRustReleaseByteArray(value)                                          \
     if (value##Array != NULL) {                                                  \
         (*env)->ReleaseByteArrayElements(env, value, (jbyte *) value##Array, 0); \
     }
 
-#define WCDBRustGetByteArrayCritical(value)                                             \
+#define WCDBRustGetByteArrayCritical(value)                                            \
     const unsigned char *value##Array = NULL;                                          \
     int value##Length = 0;                                                             \
     if (value != NULL) {                                                               \
@@ -86,12 +86,12 @@
         = (const unsigned char *) (*env)->GetPrimitiveArrayCritical(env, value, NULL); \
     }
 
-#define WCDBRustReleaseByteArrayCritical(value)                                        \
+#define WCDBRustReleaseByteArrayCritical(value)                                       \
     if (value##Array != NULL) {                                                       \
         (*env)->ReleasePrimitiveArrayCritical(env, value, (jbyte *) value##Array, 0); \
     }
 
-#define WCDBRustGetLongArray(value)                                             \
+#define WCDBRustGetLongArray(value)                                            \
     const jlong *value##Array = NULL;                                          \
     int value##Length = 0;                                                     \
     if (value != NULL) {                                                       \
@@ -100,7 +100,7 @@
     }
 
 #define WCDBRustReleaseLongArray(value)                                                   \
-    if (value##Array != NULL) {                                                          \
+    if (value##Array != NULL) {                                                           \
         (*env)->ReleaseLongArrayElements(env, value, (jlong *) value##Array, Rust_ABORT); \
     }
 
@@ -122,12 +122,12 @@
         }                                                                      \
     }
 
-#define WCDBRustReleaseCppPointerArrayCritical(value)                                     \
+#define WCDBRustReleaseCppPointerArrayCritical(value)                                    \
     if (value##LongArray != NULL) {                                                      \
         (*env)->ReleasePrimitiveArrayCritical(env, value, (void *) value##LongArray, 0); \
     }
 
-#define WCDBRustGetIntArray(value)                                              \
+#define WCDBRustGetIntArray(value)                                             \
     const jint *value##Array = NULL;                                           \
     int value##Length = 0;                                                     \
     if (value != NULL) {                                                       \
@@ -136,7 +136,7 @@
     }
 
 #define WCDBRustReleaseIntArray(value)                                                  \
-    if (value##Array != NULL) {                                                        \
+    if (value##Array != NULL) {                                                         \
         (*env)->ReleaseIntArrayElements(env, value, (jint *) value##Array, Rust_ABORT); \
     }
 
@@ -149,26 +149,24 @@
     }
 
 #define WCDBRustReleaseDoubleArray(value)                                                     \
-    if (value##Array != NULL) {                                                              \
+    if (value##Array != NULL) {                                                               \
         (*env)->ReleaseDoubleArrayElements(env, value, (jdouble *) value##Array, Rust_ABORT); \
     }
 
-#define WCDBRustGetStringArray(value)                                           \
+#define WCDBRustGetStringArray(value)                                          \
     int value##Length = 0;                                                     \
     char **value##CharArray = NULL;                                            \
     WCDBRustGetUTF8StringArray(env, value, &value##CharArray, &value##Length);
 
 #define WCDBRustReleaseStringArray(value) WCDBClearAllPreAllocatedMemory();
 
-#define WCDBRustCommonValueParameter(parameter)                                 \
-    jint parameter##_type, jlong parameter##_long, jdouble parameter##_double, \
-    jstring parameter##_string
+#define WCDBRustCommonValueParameter(parameter)                                \
+    int parameter##_type, long long parameter##_long,                          \
+    double parameter##_double, const char* parameter##_string
 
-#define WCDBRustCreateCommonValue(parameter, isCritical)                        \
+#define WCDBRustCreateCommonValue(parameter)                       \
     CPPCommonValue parameter##_common;                                         \
     parameter##_common.type = parameter##_type;                                \
-    const bool parameter##_isCritical = isCritical;                            \
-    const jchar *parameter##_utf16String = NULL;                               \
     switch (parameter##_type) {                                                \
     case WCDBBridgedType_Bool:                                                 \
     case WCDBBridgedType_UInt:                                                 \
@@ -179,11 +177,7 @@
         parameter##_common.doubleValue = parameter##_double;                   \
         break;                                                                 \
     case WCDBBridgedType_String:                                               \
-        WCDBRustGetUTF8String(env,                                              \
-                             parameter##_string,                               \
-                             (char **) &parameter##_common.intValue,           \
-                             &parameter##_utf16String,                         \
-                             parameter##_isCritical);                          \
+        parameter##_common.intValue = (long long) parameter##_string;          \
         break;                                                                 \
     default:                                                                   \
         parameter##_common.intValue = parameter##_long;                        \
@@ -202,39 +196,39 @@
         parameter##_common.intValue = parameter##_long;                        \
     }
 
-#define WCDBRustObjectOrIntegerParameter(parameter)                             \
+#define WCDBRustObjectOrIntegerParameter(parameter)                            \
     jint parameter##_type, jlong parameter##_long
 
-#define WCDBRustCreateObjectOrIntegerCommonValue(parameter)                     \
+#define WCDBRustCreateObjectOrIntegerCommonValue(parameter)                    \
     CPPCommonValue parameter##_common;                                         \
     parameter##_common.type = parameter##_type;                                \
     parameter##_common.intValue = parameter##_long;
 
-#define WCDBRustCommonArrayParameter(parameter)                                 \
+#define WCDBRustCommonArrayParameter(parameter)                                \
     jint parameter##_type, jlongArray parameter##_longArray,                   \
     jdoubleArray parameter##_doubleArray, jobjectArray parameter##_stringArray
 
-#define WCDBRustCreateCommonArrayWithAction(parameter, action)                                     \
+#define WCDBRustCreateCommonArrayWithAction(parameter, action)                                    \
     CPPCommonArray parameter##_commonArray;                                                       \
     parameter##_commonArray.type = parameter##_type;                                              \
     if (parameter##_type < WCDBBridgedType_Double || parameter##_type > WCDBBridgedType_String) { \
-        WCDBRustGetLongArray(parameter##_longArray);                                               \
+        WCDBRustGetLongArray(parameter##_longArray);                                              \
         parameter##_commonArray.length = parameter##_longArrayLength;                             \
         parameter##_commonArray.buffer = (const void **) parameter##_longArrayArray;              \
         action;                                                                                   \
-        WCDBRustReleaseLongArray(parameter##_longArray);                                           \
+        WCDBRustReleaseLongArray(parameter##_longArray);                                          \
     } else if (parameter##_type == WCDBBridgedType_String) {                                      \
-        WCDBRustGetStringArray(parameter##_stringArray);                                           \
+        WCDBRustGetStringArray(parameter##_stringArray);                                          \
         parameter##_commonArray.length = parameter##_stringArrayLength;                           \
         parameter##_commonArray.buffer = (const void **) parameter##_stringArrayCharArray;        \
         action;                                                                                   \
-        WCDBRustReleaseStringArray(parameter##_stringArray);                                       \
+        WCDBRustReleaseStringArray(parameter##_stringArray);                                      \
     } else {                                                                                      \
-        WCDBRustGetDoubleArray(parameter##_doubleArray);                                           \
+        WCDBRustGetDoubleArray(parameter##_doubleArray);                                          \
         parameter##_commonArray.length = parameter##_doubleArrayLength;                           \
         parameter##_commonArray.buffer = (const void **) parameter##_doubleArrayArray;            \
         action;                                                                                   \
-        WCDBRustReleaseDoubleArray(parameter##_doubleArray);                                       \
+        WCDBRustReleaseDoubleArray(parameter##_doubleArray);                                      \
     }
 
 #define WCDBRustObjectOrStringArrayParameter(parameter)                                           \
@@ -246,11 +240,11 @@
     CPPCommonArray parameter##_commonArray;                                                       \
     parameter##_commonArray.type = parameter##_type;                                              \
     if (parameter##_type < WCDBBridgedType_Double || parameter##_type > WCDBBridgedType_String) { \
-        parameter##_commonArray.length = parameter##_arrayLen;                               \
+        parameter##_commonArray.length = parameter##_arrayLen;                                    \
         parameter##_commonArray.buffer = (const void **) parameter##_voidArray;                   \
         action;                                                                                   \
     } else if (parameter##_type == WCDBBridgedType_String) {                                      \
-        parameter##_commonArray.length = parameter##_arrayLen;                             \
+        parameter##_commonArray.length = parameter##_arrayLen;                                    \
         parameter##_commonArray.buffer = (const void **) parameter##_stringArray;                 \
         action;                                                                                   \
     }

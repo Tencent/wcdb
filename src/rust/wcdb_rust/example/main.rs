@@ -1,6 +1,7 @@
 use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::winq::expression::Expression;
 
 #[derive(WCDBTableCoding)]
 #[WCDBTable(
@@ -51,4 +52,5 @@ fn main() {
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE);
     let record = TableMessage::new();
     db.insert_object(record, DbTableMessage::all_fields(), "rct_message").unwrap();
+    // db.delete_objects("rct_message", Expression::new()).unwrap();
 }
