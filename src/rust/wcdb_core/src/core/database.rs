@@ -85,6 +85,20 @@ impl HandleORMOperationTrait for Database {
         Ok(())
     }
 
+    fn insert_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .into_table(table_name)
+            .values(objects)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
+    }
+
     fn prepare_insert<T>(&self) -> Insert<T> {
         Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }

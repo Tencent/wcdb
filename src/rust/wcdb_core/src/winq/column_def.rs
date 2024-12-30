@@ -1,9 +1,7 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::column::Column;
 use crate::winq::column_type::ColumnType;
-use crate::winq::identifier::{
-    get_cpp_type, CPPType, Identifier, IdentifierStaticTrait,
-};
+use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierStaticTrait};
 use std::ffi::{c_char, c_void};
 
 extern "C" {

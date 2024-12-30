@@ -19,6 +19,12 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+    fn insert_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
     fn prepare_insert<T>(&self) -> Insert<T>;
     fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()>;
 }

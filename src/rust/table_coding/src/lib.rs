@@ -5,8 +5,8 @@ use proc_macro2::Span;
 use quote::{quote, ToTokens};
 use std::fmt::Debug;
 use syn::parse::Parse;
-use syn::{parse_macro_input, DeriveInput, Generics, Ident, LitStr, Type};
 use syn::spanned::Spanned;
+use syn::{parse_macro_input, DeriveInput, Generics, Ident, LitStr, Type};
 
 #[derive(Debug, FromDeriveInput)]
 #[darling(attributes(WCDBTable))]
@@ -57,7 +57,10 @@ fn get_type_string(ty: &Type) -> syn::Result<String> {
             Err(syn::Error::new(ty.span(), "Unsupported field type"))
         }
     } else {
-        Err(syn::Error::new(ty.span(), "WCDBTable's field type only works on Path"))
+        Err(syn::Error::new(
+            ty.span(),
+            "WCDBTable's field type only works on Path",
+        ))
     }
 }
 
@@ -69,7 +72,10 @@ fn bind_type_string(ty: &Type) -> syn::Result<String> {
             Err(syn::Error::new(ty.span(), "Unsupported field type"))
         }
     } else {
-        Err(syn::Error::new(ty.span(), "WCDBTable's field type only works on Path"))
+        Err(syn::Error::new(
+            ty.span(),
+            "WCDBTable's field type only works on Path",
+        ))
     }
 }
 
@@ -145,7 +151,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
                 }
             }
         }
-        
+
         impl Drop for #db_table_ident {
             fn drop(&mut self) {
                 unsafe {
@@ -200,7 +206,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
 
             fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {}
         }
-        
+
         impl #db_table_ident {
             pub fn all_fields() -> Vec<&'static wcdb_core::orm::field::Field<#table_ident>> {
                 unsafe { vec![
@@ -216,12 +222,7 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let field_ident_vec = table.get_field_ident_vec();
     let field_ident_def_vec: Vec<Ident> = field_ident_vec
         .iter()
-        .map(|ident| {
-            Ident::new(
-                &format!("{}_def", ident.to_string()),
-                Span::call_site(),
-            )
-        })
+        .map(|ident| Ident::new(&format!("{}_def", ident.to_string()), Span::call_site()))
         .collect();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());

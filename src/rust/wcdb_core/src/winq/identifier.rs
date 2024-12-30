@@ -79,8 +79,7 @@ pub struct Identifier {
     cpp_obj: CppObject,
 }
 
-pub trait IdentifierTrait: CppObjectTrait {
-}
+pub trait IdentifierTrait: CppObjectTrait {}
 
 pub trait IdentifierStaticTrait {
     fn get_type() -> i32;

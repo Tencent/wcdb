@@ -58,6 +58,12 @@ impl<'a, T> Insert<'a, T> {
         self
     }
 
+    pub fn values(mut self, objects: Vec<T>) -> Self {
+        self.values.borrow_mut().clear();
+        self.values.borrow_mut().extend(objects);
+        self
+    }
+
     pub fn on_fields(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
         self.chain_call

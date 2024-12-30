@@ -63,9 +63,8 @@ impl LiteralValue {
     }
 
     pub fn new_with_f64(value: f64) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustLiteralValue_create(CPPType::Double as i32, 0i64, value, null())
-        };
+        let cpp_obj =
+            unsafe { WCDBRustLiteralValue_create(CPPType::Double as i32, 0i64, value, null()) };
         LiteralValue {
             identifier: Identifier::new_with_obj(cpp_obj),
         }
@@ -87,20 +86,16 @@ impl LiteralValue {
 
     pub fn new_with_str(value_opt: Option<&str>) -> Self {
         let cpp_obj = match value_opt {
-            None => {
-                unsafe {
-                    WCDBRustLiteralValue_create(CPPType::Null as i32, 0i64, 0f64, null())
-                }
+            None => unsafe {
+                WCDBRustLiteralValue_create(CPPType::Null as i32, 0i64, 0f64, null())
             },
-            Some(value) => {
-                unsafe {
-                    WCDBRustLiteralValue_create(
-                        CPPType::String as i32,
-                        0i64,
-                        0f64,
-                        value.as_ptr() as *const c_char,
-                    )
-                }
+            Some(value) => unsafe {
+                WCDBRustLiteralValue_create(
+                    CPPType::String as i32,
+                    0i64,
+                    0f64,
+                    value.as_ptr() as *const c_char,
+                )
             },
         };
         LiteralValue {

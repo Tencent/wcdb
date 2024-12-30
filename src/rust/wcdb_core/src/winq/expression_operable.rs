@@ -26,7 +26,7 @@ impl ExpressionOperable {
             identifier: Identifier::new(),
         }
     }
-    
+
     pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
         ExpressionOperable {
             identifier: Identifier::new_with_obj(cpp_obj),

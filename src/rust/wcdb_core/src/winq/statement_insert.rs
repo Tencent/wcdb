@@ -18,10 +18,7 @@ extern "C" {
         columns_string_vec: *const *mut c_char,
         columns_vec_len: i32,
     );
-    pub fn WCDBRustStatementInsert_configValuesWithBindParameters(
-        cpp_obj: *mut c_void,
-        count: i32,
-    );
+    pub fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: i32);
 }
 
 pub struct StatementInsert {
@@ -100,7 +97,12 @@ impl StatementInsert {
     }
 
     pub fn values_with_bind_parameters(&self, parameters_count: usize) -> &Self {
-        unsafe { WCDBRustStatementInsert_configValuesWithBindParameters(self.get_cpp_obj(), parameters_count as i32) };
+        unsafe {
+            WCDBRustStatementInsert_configValuesWithBindParameters(
+                self.get_cpp_obj(),
+                parameters_count as i32,
+            )
+        };
         self
     }
 }

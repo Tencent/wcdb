@@ -28,7 +28,12 @@ impl<'a, T: StatementTrait> ChainCallTrait for ChainCall<'a, T> {
 }
 
 impl<'a, T: StatementTrait> ChainCall<'a, T> {
-    pub fn new(statement: T, handle: Handle<'a>, need_changes: bool, auto_invalidate_handle: bool) -> ChainCall<'a, T> {
+    pub fn new(
+        statement: T,
+        handle: Handle<'a>,
+        need_changes: bool,
+        auto_invalidate_handle: bool,
+    ) -> ChainCall<'a, T> {
         ChainCall {
             handle,
             changes: RefCell::new(0),
@@ -37,7 +42,7 @@ impl<'a, T: StatementTrait> ChainCall<'a, T> {
             auto_invalidate_handle,
         }
     }
-    
+
     pub fn get_statement(&self) -> &T {
         &self.statement
     }

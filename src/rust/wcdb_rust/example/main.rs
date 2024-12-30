@@ -1,3 +1,5 @@
+use std::env;
+use std::env::VarError;
 use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
@@ -48,9 +50,36 @@ impl TableMessage {
 }
 
 fn main() {
-    let db = Database::new("/Users/zhanglei/Downloads/test.db");
+    let user = get_current_username();
+    let db_path = format!("/Users/{}/Downloads/test.db", user);
+    let db = Database::new(db_path.as_str());
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE);
-    let record = TableMessage::new();
-    db.insert_object(record, DbTableMessage::all_fields(), "rct_message").unwrap();
+
+    insert_object_to_rct_message(&db);
     // db.delete_objects("rct_message", Expression::new()).unwrap();
+
+    insert_objects_to_rct_message(&db);
+}
+
+/// 插入单条数据
+fn insert_object_to_rct_message(db: &Database) {
+    let record = TableMessage::new();
+    db.insert_object(record, DbTableMessage::all_fields(), "rct_message")
+        .unwrap();
+}
+
+/// 插入批量数据
+fn insert_objects_to_rct_message(db: &Database) {
+    let mut record1 = TableMessage::new();
+    record1.multi_unique = 111;
+    let mut record2 = TableMessage::new();
+    record2.multi_unique = 222;
+    let msg_vec = vec![record1, record2];
+    db.insert_objects(msg_vec, DbTableMessage::all_fields(), "rct_message")
+        .unwrap()
+}
+
+fn get_current_username() -> String {
+    let user_opt = env::var("USER");
+    user_opt.unwrap_or_else(|_| "zhanglei".to_string())
 }

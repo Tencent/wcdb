@@ -72,7 +72,7 @@ impl HandleInner {
             self.write_hint = false;
         }
     }
-    
+
     pub fn get_changes(&mut self, database: &Database) -> i32 {
         unsafe { WCDBRustHandle_getChanges(self.get_cpp_handle(database)) }
     }
