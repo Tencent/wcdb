@@ -5,24 +5,24 @@ use std::ffi::c_void;
 use std::fmt::Debug;
 
 extern "C" {
-    pub fn WCDBRustStatementDelete_create() -> *mut c_void;
+    pub fn WCDBRustStatementSelect_create() -> *mut c_void;
 }
 
-pub struct StatementDelete {
+pub struct StatementSelect {
     statement: Statement,
 }
 
-impl Debug for StatementDelete {
+impl Debug for StatementSelect {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "StatementInsert: {}",
+            "StatementSelect: {}",
             self.statement.identifier.get_description()
         )
     }
 }
 
-impl CppObjectTrait for StatementDelete {
+impl CppObjectTrait for StatementSelect {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.statement.set_cpp_obj(cpp_obj);
     }
@@ -36,20 +36,20 @@ impl CppObjectTrait for StatementDelete {
     }
 }
 
-impl IdentifierTrait for StatementDelete {}
+impl IdentifierTrait for StatementSelect {}
 
-impl IdentifierStaticTrait for StatementDelete {
+impl IdentifierStaticTrait for StatementSelect {
     fn get_type() -> i32 {
-        CPPType::DeleteSTMT as i32
+        CPPType::SelectSTMT as i32
     }
 }
 
-impl StatementTrait for StatementDelete {}
+impl StatementTrait for StatementSelect {}
 
-impl StatementDelete {
+impl StatementSelect {
     pub fn new() -> Self {
-        let cpp_obj = unsafe { WCDBRustStatementDelete_create() };
-        StatementDelete {
+        let cpp_obj = unsafe { WCDBRustStatementSelect_create() };
+        StatementSelect {
             statement: Statement::new_with_obj(cpp_obj),
         }
     }

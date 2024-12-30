@@ -1,6 +1,6 @@
+use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::identifier::Identifier;
 use std::ffi::c_void;
-use crate::base::cpp_object::CppObjectTrait;
 
 pub(crate) struct ExpressionOperable {
     identifier: Identifier,

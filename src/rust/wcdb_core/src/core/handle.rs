@@ -77,7 +77,7 @@ impl HandleInner {
         unsafe { WCDBRustHandle_getChanges(self.get_cpp_handle(database)) }
     }
 
-    pub fn prepared_with_main_statement<T: StatementTrait + CppObjectTrait>(
+    pub fn prepared_with_main_statement<T: StatementTrait>(
         &mut self,
         database: &Database,
         statement: &T,
@@ -99,8 +99,25 @@ pub struct Handle<'a> {
     database: &'a Database,
 }
 
+impl<'a> CppObjectTrait for Handle<'a> {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
+        handle_inner_lock.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        let handle_inner_lock = self.handle_inner.lock().unwrap();
+        handle_inner_lock.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
+        handle_inner_lock.release_cpp_object();
+    }
+}
+
 impl<'a> HandleOperationTrait for Handle<'a> {
-    fn get_handle(&self, write_hint: bool) -> Handle {
+    fn get_handle(&self, _: bool) -> Handle {
         Handle {
             handle_inner: self.handle_inner.clone(),
             database: self.database,
@@ -130,23 +147,6 @@ impl<'a> HandleOperationTrait for Handle<'a> {
             self.invalidate();
         }
         Ok(())
-    }
-}
-
-impl<'a> CppObjectTrait for Handle<'a> {
-    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.set_cpp_obj(cpp_obj);
-    }
-
-    fn get_cpp_obj(&self) -> *mut c_void {
-        let handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.get_cpp_obj()
-    }
-
-    fn release_cpp_object(&mut self) {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.release_cpp_object();
     }
 }
 
@@ -194,7 +194,7 @@ impl<'a> Handle<'a> {
         unsafe { WCDBRustHandle_getLastInsertRowid(self.get_cpp_handle()) }
     }
 
-    pub fn prepared_with_main_statement<T: StatementTrait + CppObjectTrait>(
+    pub fn prepared_with_main_statement<T: StatementTrait>(
         &self,
         statement: &T,
     ) -> Arc<PreparedStatement> {

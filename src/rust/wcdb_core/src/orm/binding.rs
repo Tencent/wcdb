@@ -1,10 +1,10 @@
-use crate::base::cpp_object::CppObject;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::core::handle::Handle;
 use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
 use std::ffi::{c_char, c_void};
 use std::ptr::null_mut;
-use std::sync::{Arc, Mutex, RwLock};
+use std::sync::RwLock;
 
 extern "C" {
     /// createCppObj

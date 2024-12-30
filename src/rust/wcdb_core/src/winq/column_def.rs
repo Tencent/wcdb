@@ -1,8 +1,10 @@
+use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::column::Column;
 use crate::winq::column_type::ColumnType;
-use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier::{
+    get_cpp_type, CPPType, Identifier, IdentifierStaticTrait,
+};
 use std::ffi::{c_char, c_void};
-use crate::base::cpp_object::CppObjectTrait;
 
 extern "C" {
     pub fn WCDBRustColumnDef_create(
@@ -17,16 +19,23 @@ pub struct ColumnDef {
     identifier: Identifier,
 }
 
-impl IdentifierTrait for ColumnDef {
-    fn get_type() -> i32 {
-        CPPType::ColumnDef as i32
+impl CppObjectTrait for ColumnDef {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.identifier.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.identifier.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.identifier.release_cpp_object();
     }
 }
 
-/// Identifier
-impl ColumnDef {
-    pub fn get_cpp_obj(&self) -> *mut c_void {
-        self.identifier.get_cpp_obj()
+impl IdentifierStaticTrait for ColumnDef {
+    fn get_type() -> i32 {
+        CPPType::ColumnDef as i32
     }
 }
 

@@ -1,6 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
-use crate::winq::identifier::{CPPType, IdentifierTrait};
+use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_void, CString};
 use std::fmt::Debug;
@@ -52,7 +52,9 @@ impl CppObjectTrait for StatementInsert {
     }
 }
 
-impl IdentifierTrait for StatementInsert {
+impl IdentifierTrait for StatementInsert {}
+
+impl IdentifierStaticTrait for StatementInsert {
     fn get_type() -> i32 {
         CPPType::InsertSTMT as i32
     }

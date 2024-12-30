@@ -1,15 +1,26 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::chaincall::insert::Insert;
-use crate::core::handle_operation::HandleOperation;
+use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
-use std::ffi::c_void;
-use std::unimplemented;
-use crate::wcdb_error::{WCDBError, WCDBResult};
+use crate::wcdb_error::WCDBResult;
 use crate::winq::expression::Expression;
+use std::ffi::c_void;
 
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
+}
+
+pub trait HandleORMOperationTrait: HandleOperationTrait {
+    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool;
+    fn insert_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
+    fn prepare_insert<T>(&self) -> Insert<T>;
+    fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()>;
 }
 
 impl CppObjectTrait for HandleORMOperation {
@@ -24,18 +35,6 @@ impl CppObjectTrait for HandleORMOperation {
     fn release_cpp_object(&mut self) {
         self.handle_operation.release_cpp_object();
     }
-}
-
-pub trait HandleORMOperationTrait {
-    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool;
-    fn insert_object<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-    ) -> WCDBResult<()>;
-    fn prepare_insert<T>(&self) -> Insert<T>;
-    fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()>;
 }
 
 impl HandleORMOperation {

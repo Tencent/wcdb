@@ -1,6 +1,6 @@
-use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object::CppObject;
 use crate::wcdb_error::{WCDBError, WCDBResult};
-use crate::winq::statement::{Statement, StatementTrait};
+use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
 
 extern "C" {
@@ -40,7 +40,7 @@ impl PreparedStatement {
         unsafe { WCDBRustHandleStatement_getInteger(*self.cpp_obj, index) as i32 }
     }
 
-    pub fn prepare<T: StatementTrait + CppObjectTrait>(&self, statement: &T) -> WCDBResult<()> {
+    pub fn prepare<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
         if unsafe { WCDBRustHandleStatement_prepare(*self.cpp_obj, CppObject::get(statement)) } {
             Ok(())
         } else {

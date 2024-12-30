@@ -71,7 +71,7 @@ pub enum CPPType {
     ExplainSTMT = 56,
 }
 
-pub fn get_cpp_type<T: IdentifierTrait>(_: &T) -> i32 {
+pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
     T::get_type()
 }
 
@@ -79,11 +79,14 @@ pub struct Identifier {
     cpp_obj: CppObject,
 }
 
-pub trait IdentifierTrait {
+pub trait IdentifierTrait: CppObjectTrait {
+}
+
+pub trait IdentifierStaticTrait {
     fn get_type() -> i32;
 }
 
-impl IdentifierTrait for Identifier {
+impl IdentifierStaticTrait for Identifier {
     fn get_type() -> i32 {
         CPPType::Invalid as i32
     }
@@ -120,7 +123,7 @@ impl Identifier {
         0
     }
 
-    pub fn get_cpp_type<T: IdentifierTrait>(_: &T) -> i32 {
+    pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
         T::get_type()
     }
 

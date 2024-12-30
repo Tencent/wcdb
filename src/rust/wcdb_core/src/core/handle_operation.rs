@@ -1,17 +1,16 @@
-use std::ffi::c_void;
-use std::sync::{Arc, Mutex};
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::core::handle::Handle;
-use crate::wcdb_error::{WCDBError, WCDBResult};
-
-pub trait HandleOperationTrait {
-    fn get_handle(&self, write_hint: bool) -> Handle;
-    fn auto_invalidate_handle(&self) -> bool;
-    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()>;
-}
+use crate::wcdb_error::WCDBResult;
+use std::ffi::c_void;
 
 pub struct HandleOperation {
     cpp_obj: CppObject,
+}
+
+pub trait HandleOperationTrait: CppObjectTrait {
+    fn get_handle(&self, write_hint: bool) -> Handle;
+    fn auto_invalidate_handle(&self) -> bool;
+    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()>;
 }
 
 impl CppObjectTrait for HandleOperation {

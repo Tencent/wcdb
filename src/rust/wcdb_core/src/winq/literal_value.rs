@@ -1,5 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait};
 use std::ffi::{c_char, c_void};
 use std::ptr::null;
 
@@ -30,7 +30,7 @@ impl CppObjectTrait for LiteralValue {
     }
 }
 
-impl IdentifierTrait for LiteralValue {
+impl IdentifierStaticTrait for LiteralValue {
     fn get_type() -> i32 {
         CPPType::LiteralValue as i32
     }

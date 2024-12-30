@@ -1,8 +1,8 @@
-use std::ffi::{c_char, c_void, CString};
-use std::ptr::null_mut;
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::expression_operable::ExpressionOperable;
-use crate::winq::identifier::{CPPType, IdentifierTrait};
+use crate::winq::identifier::{CPPType, IdentifierStaticTrait};
+use std::ffi::{c_char, c_void, CString};
+use std::ptr::null_mut;
 
 extern "C" {
     pub fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;
@@ -26,7 +26,7 @@ impl CppObjectTrait for Column {
     }
 }
 
-impl IdentifierTrait for Column {
+impl IdentifierStaticTrait for Column {
     fn get_type() -> i32 {
         CPPType::Column as i32
     }

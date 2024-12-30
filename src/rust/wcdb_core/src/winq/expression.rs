@@ -1,7 +1,9 @@
 use crate::base::cpp_object::CppObject;
+use crate::winq::column::Column;
 use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::Identifier;
 use crate::winq::literal_value::LiteralValue;
+use crate::winq::statement_select::StatementSelect;
 use std::ffi::c_void;
 
 extern "C" {
@@ -22,6 +24,27 @@ impl Expression {
     pub fn new_with_literal_value(value: LiteralValue) -> Self {
         let cpp_obj = unsafe {
             WCDBRustExpression_create(Identifier::get_cpp_type(&value), CppObject::get(&value))
+        };
+        Expression {
+            expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
+        }
+    }
+
+    pub fn new_with_column(column: Column) -> Self {
+        let cpp_obj = unsafe {
+            WCDBRustExpression_create(Identifier::get_cpp_type(&column), CppObject::get(&column))
+        };
+        Expression {
+            expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
+        }
+    }
+
+    pub fn new_with_statement_select(select: StatementSelect) -> Self {
+        let cpp_obj = unsafe {
+            WCDBRustExpression_create(
+                Identifier::get_cpp_type(&select),
+                CppObject::get(&select),
+            )
         };
         Expression {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),

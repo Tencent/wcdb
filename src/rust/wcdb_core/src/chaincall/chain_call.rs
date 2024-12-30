@@ -1,9 +1,8 @@
-use std::cell::RefCell;
-use crate::base::cpp_object::CppObjectTrait;
 use crate::core::handle::Handle;
 use crate::winq::statement::StatementTrait;
+use std::cell::RefCell;
 
-pub struct ChainCall<'a, T: StatementTrait + CppObjectTrait> {
+pub struct ChainCall<'a, T: StatementTrait> {
     pub(crate) handle: Handle<'a>,
     changes: RefCell<i32>,
     pub(crate) statement: T,
@@ -16,7 +15,7 @@ pub trait ChainCallTrait {
     fn get_statement(&self) -> &dyn StatementTrait;
 }
 
-impl<'a, T: StatementTrait + CppObjectTrait> ChainCallTrait for ChainCall<'a, T> {
+impl<'a, T: StatementTrait> ChainCallTrait for ChainCall<'a, T> {
     fn update_changes(&self) {
         if *self.need_changes.borrow() {
             *self.changes.borrow_mut() = self.handle.get_changes();
@@ -28,7 +27,7 @@ impl<'a, T: StatementTrait + CppObjectTrait> ChainCallTrait for ChainCall<'a, T>
     }
 }
 
-impl<'a, T: StatementTrait + CppObjectTrait> ChainCall<'a, T> {
+impl<'a, T: StatementTrait> ChainCall<'a, T> {
     pub fn new(statement: T, handle: Handle<'a>, need_changes: bool, auto_invalidate_handle: bool) -> ChainCall<'a, T> {
         ChainCall {
             handle,

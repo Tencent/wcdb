@@ -1,7 +1,7 @@
-use std::ffi::c_void;
-use std::fmt::Debug;
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::identifier::{Identifier, IdentifierTrait};
+use std::ffi::c_void;
+use std::fmt::Debug;
 
 pub struct Statement {
     pub(crate) identifier: Identifier,
@@ -21,9 +21,7 @@ impl CppObjectTrait for Statement {
     }
 }
 
-pub trait StatementTrait: Debug {
-
-}
+pub trait StatementTrait: IdentifierTrait + Debug {}
 
 impl Statement {
     pub fn new_with_obj(cpp_obj: *mut c_void) -> Statement {

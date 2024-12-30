@@ -10,4 +10,6 @@ pub mod statement;
 pub mod statement_create_index;
 pub mod statement_delete;
 pub mod statement_insert;
+pub mod statement_select;
 pub mod table_constraint;
+pub mod common_table_expression;

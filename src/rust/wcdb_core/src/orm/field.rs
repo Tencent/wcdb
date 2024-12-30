@@ -1,7 +1,7 @@
-use std::ffi::c_void;
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::column::Column;
+use std::ffi::c_void;
 
 pub struct Field<T> {
     column: Column,
