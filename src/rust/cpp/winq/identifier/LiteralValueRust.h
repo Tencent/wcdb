@@ -32,8 +32,8 @@
 
 void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value));
 
-//jlong WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime);
-//
-//jlong WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate);
-//
-//jlong WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp);
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime);
+
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate);
+
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp);

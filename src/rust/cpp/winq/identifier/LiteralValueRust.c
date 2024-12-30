@@ -27,11 +27,11 @@ void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value
     return (void*) WCDBLiteralValueCreate(value_common).innerValue;
 }
 
-//jlong WCDBRustLiteralValueClassMethod(createWithInt64, jlong value)
-//{
-//    return (jlong) WCDBLiteralValueCreateWithInt64(value).innerValue;
-//}
-//
+long long WCDBRustLiteralValueClassMethod(createWithInt64, long long value)
+{
+    return (long long) WCDBLiteralValueCreateWithInt64(value).innerValue;
+}
+
 //jlong WCDBRustLiteralValueClassMethod(createWithBool, jboolean value)
 //{
 //    return (jlong) WCDBLiteralValueCreateWithBool(value).innerValue;
@@ -49,18 +49,18 @@ void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value
 //    WCDBRustReleaseStringCritical(value);
 //    return result;
 //}
-//
-//jlong WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime)
-//{
-//    return (jlong) WCDBLiteralValueCreateWithCurrentTime().innerValue;
-//}
-//
-//jlong WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate)
-//{
-//    return (jlong) WCDBLiteralValueCreateWithCurrentDate().innerValue;
-//}
-//
-//jlong WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp)
-//{
-//    return (jlong) WCDBLiteralValueCreateWithCurrentTimestamp().innerValue;
-//}
+
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime)
+{
+    return (long long) WCDBLiteralValueCreateWithCurrentTime().innerValue;
+}
+
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate)
+{
+    return (long long) WCDBLiteralValueCreateWithCurrentDate().innerValue;
+}
+
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp)
+{
+    return (long long) WCDBLiteralValueCreateWithCurrentTimestamp().innerValue;
+}

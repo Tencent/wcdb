@@ -5,24 +5,24 @@ use std::ffi::c_void;
 use std::fmt::Debug;
 
 extern "C" {
-    pub fn WCDBRustStatementDelete_create() -> *mut c_void;
+    pub fn WCDBRustStatementUpdate_create() -> *mut c_void;
 }
 
-pub struct StatementDelete {
+pub struct StatementUpdate {
     statement: Statement,
 }
 
-impl Debug for StatementDelete {
+impl Debug for StatementUpdate {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "StatementDelete: {}",
+            "StatementUpdate: {}",
             self.statement.identifier.get_description()
         )
     }
 }
 
-impl CppObjectTrait for StatementDelete {
+impl CppObjectTrait for StatementUpdate {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.statement.set_cpp_obj(cpp_obj);
     }
@@ -36,20 +36,20 @@ impl CppObjectTrait for StatementDelete {
     }
 }
 
-impl IdentifierTrait for StatementDelete {}
+impl IdentifierTrait for StatementUpdate {}
 
-impl IdentifierStaticTrait for StatementDelete {
+impl IdentifierStaticTrait for StatementUpdate {
     fn get_type() -> i32 {
-        CPPType::DeleteSTMT as i32
+        CPPType::UpdateSTMT as i32
     }
 }
 
-impl StatementTrait for StatementDelete {}
+impl StatementTrait for StatementUpdate {}
 
-impl StatementDelete {
+impl StatementUpdate {
     pub fn new() -> Self {
-        let cpp_obj = unsafe { WCDBRustStatementDelete_create() };
-        StatementDelete {
+        let cpp_obj = unsafe { WCDBRustStatementUpdate_create() };
+        StatementUpdate {
             statement: Statement::new_with_obj(cpp_obj),
         }
     }

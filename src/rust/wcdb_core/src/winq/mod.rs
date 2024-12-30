@@ -12,4 +12,5 @@ pub mod statement_create_index;
 pub mod statement_delete;
 pub mod statement_insert;
 pub mod statement_select;
+pub mod statement_update;
 pub mod table_constraint;

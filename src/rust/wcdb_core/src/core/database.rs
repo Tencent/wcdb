@@ -123,6 +123,11 @@ impl Database {
         path.to_cow().to_string()
     }
 
+    // pub fn get_table<T>(&self, table_name: &str, binding: &dyn TableBinding<T>) -> Table<T> {
+    //     binding.base_binding().get_base_binding();
+    //     true
+    // }
+
     pub fn close<CB>(&self, cb_opt: Option<CB>)
     where
         CB: FnOnce() + Send + 'static,
