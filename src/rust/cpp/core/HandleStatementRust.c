@@ -21,11 +21,11 @@
 #include "HandleStatementRust.h"
 #include "HandleStatementBridge.h"
 
-//void* WCDBRustHandleStatementClassMethod(getError, void* self)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return (void*) WCDBHandleStatementGetError(selfStruct).innerValue;
-//}
+void* WCDBRustHandleStatementClassMethod(getError, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return (void*) WCDBHandleStatementGetError(selfStruct).innerValue;
+}
 
 bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
 {

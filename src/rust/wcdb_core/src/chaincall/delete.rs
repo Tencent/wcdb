@@ -1,5 +1,6 @@
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
+use crate::wcdb_error::WCDBResult;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_delete::StatementDelete;
 use std::fmt::Debug;
@@ -9,7 +10,7 @@ pub struct Delete<'a> {
 }
 
 impl<'a> ChainCallTrait for Delete<'a> {
-    fn update_changes(&self) {
+    fn update_changes(&self) -> WCDBResult<()> {
         self.chain_call.update_changes()
     }
 

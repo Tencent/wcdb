@@ -12,7 +12,11 @@ pub struct HandleORMOperation {
 }
 
 pub trait HandleORMOperationTrait: HandleOperationTrait {
-    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool;
+    fn create_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool>;
     fn insert_object<T>(
         &self,
         object: T,

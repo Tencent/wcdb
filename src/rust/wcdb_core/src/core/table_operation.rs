@@ -2,7 +2,7 @@ use crate::core::database::Database;
 
 pub struct TableOperation<'a> {
     table_name: String,
-    database: &'a Database, 
+    database: &'a Database,
 }
 
 impl<'a> TableOperation<'a> {

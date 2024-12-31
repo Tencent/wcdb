@@ -32,7 +32,7 @@
 #define WCDBRustHandleClassMethod(funcName, ...)                                \
     WCDBRustClassMethod(Handle, funcName, __VA_ARGS__)
 
-//jlong WCDBRustHandleClassMethod(getError, void* self);
+void* WCDBRustHandleClassMethod(getError, void* self);
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement);
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, void* self, jstring sql);
 void* WCDBRustHandleClassMethod(getMainStatement, void* self);

@@ -1,8 +1,10 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::base::wcdb_exception::{ExceptionInner, WCDBException};
 use crate::chaincall::insert::Insert;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTrait};
+use crate::core::table::Table;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
@@ -23,6 +25,7 @@ extern "C" {
         cb: DatabaseCloseCallback,
     );
     pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
+    pub fn WCDBRustDatabase_getError(cpp_obj: *mut c_void) -> *mut c_void;
 }
 
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
@@ -66,7 +69,11 @@ impl HandleOperationTrait for Database {
 }
 
 impl HandleORMOperationTrait for Database {
-    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> bool {
+    fn create_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool> {
         let handle = self.get_handle(true);
         binding.base_binding().create_table(table_name, handle)
     }
@@ -123,10 +130,14 @@ impl Database {
         path.to_cow().to_string()
     }
 
-    // pub fn get_table<T>(&self, table_name: &str, binding: &dyn TableBinding<T>) -> Table<T> {
-    //     binding.base_binding().get_base_binding();
-    //     true
-    // }
+    pub fn get_table<'a, T, R: TableBinding<T>>(
+        &'a self,
+        table_name: &str,
+        binding: &'a R,
+    ) -> Table<'a, T, R> {
+        assert!(!table_name.is_empty());
+        Table::new(table_name, binding, self)
+    }
 
     pub fn close<CB>(&self, cb_opt: Option<CB>)
     where
@@ -148,5 +159,9 @@ impl Database {
 
     pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
         unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
+    }
+
+    pub(crate) fn create_exception(&self) -> WCDBException {
+        WCDBException::create_exception(unsafe { WCDBRustDatabase_getError(self.get_cpp_obj()) })
     }
 }

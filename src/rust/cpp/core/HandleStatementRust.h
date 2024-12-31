@@ -33,7 +33,7 @@
 #define WCDBRustHandleStatementClassMethod(funcName, ...)                       \
     WCDBRustClassMethod(HandleStatement, funcName, __VA_ARGS__)
 
-//void* WCDBRustHandleStatementClassMethod(getError, void* self);
+void* WCDBRustHandleStatementClassMethod(getError, void* self);
 bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement);
 //bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, jstring sql);
 //bool WCDBRustHandleStatementClassMethod(checkPrepared, void* self);

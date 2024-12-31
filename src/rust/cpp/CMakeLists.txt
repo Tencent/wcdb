@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(WCDBRust)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_OSX_ARCHITECTURES "arm64")
+set(CMAKE_CXX_STANDARD 14)
 
 include(../../utility.cmake)
 

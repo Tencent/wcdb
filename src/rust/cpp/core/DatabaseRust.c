@@ -34,13 +34,13 @@
 //            action;                                                                   \
 //        }                                                                             \
 //    }
-//
-//jlong WCDBRustDatabaseClassMethod(getError, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return (jlong) WCDBDatabaseGetError(selfStruct).innerValue;
-//}
-//
+
+void* WCDBRustDatabaseClassMethod(getError, void* self)
+{
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return (void*) WCDBDatabaseGetError(selfStruct).innerValue;
+}
+
 //jlong WCDBRustDatabaseClassMethod(getTag, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);

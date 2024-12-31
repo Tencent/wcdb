@@ -1,4 +1,5 @@
 use crate::core::handle::Handle;
+use crate::wcdb_error::WCDBResult;
 use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
 
@@ -11,15 +12,16 @@ pub struct ChainCall<'a, T: StatementTrait> {
 }
 
 pub trait ChainCallTrait {
-    fn update_changes(&self);
+    fn update_changes(&self) -> WCDBResult<()>;
     fn get_statement(&self) -> &dyn StatementTrait;
 }
 
 impl<'a, T: StatementTrait> ChainCallTrait for ChainCall<'a, T> {
-    fn update_changes(&self) {
+    fn update_changes(&self) -> WCDBResult<()> {
         if *self.need_changes.borrow() {
-            *self.changes.borrow_mut() = self.handle.get_changes();
+            *self.changes.borrow_mut() = self.handle.get_changes()?;
         }
+        Ok(())
     }
 
     fn get_statement(&self) -> &dyn StatementTrait {

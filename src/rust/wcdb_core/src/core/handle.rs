@@ -1,20 +1,22 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::wcdb_exception::WCDBException;
 use crate::core::database::Database;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
-use crate::wcdb_error::{WCDBError, WCDBResult};
+use crate::wcdb_error::WCDBResult;
 use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
 use std::sync::{Arc, Mutex};
 
 extern "C" {
+    pub fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
     pub fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
     pub fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> i32;
     pub fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
     pub fn WCDBRustHandle_runTransaction(
         cpp_obj: *mut c_void,
-        transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void),
+        transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> bool,
         closure_raw: *mut c_void,
         database_raw: *mut c_void,
     ) -> bool;
@@ -24,12 +26,12 @@ extern "C" fn transaction_callback(
     closure_raw: *mut c_void,
     database_raw: *mut c_void,
     cpp_handle: *mut c_void,
-) {
+) -> bool {
     let database = unsafe { *(database_raw as *const &Database) };
     let handle = Handle::new_with_obj(cpp_handle, &database);
     let closure: Box<Box<dyn FnOnce(Handle) -> bool>> =
         unsafe { Box::from_raw(closure_raw as *mut Box<dyn FnOnce(Handle) -> bool>) };
-    closure(handle);
+    closure(handle)
 }
 
 pub struct HandleInner {
@@ -53,16 +55,18 @@ impl CppObjectTrait for HandleInner {
 }
 
 impl HandleInner {
-    pub fn get_cpp_handle(&mut self, database: &Database) -> *mut c_void {
-        let mut cpp_obj = self.handle_orm_operation.get_cpp_obj();
+    pub fn get_cpp_handle(&mut self, database: &Database) -> WCDBResult<*mut c_void> {
+        let mut cpp_obj = self.get_cpp_obj();
         if cpp_obj.is_null() {
             self.set_cpp_obj(Database::get_handle_raw(
                 CppObject::get(database),
                 self.write_hint,
             ));
-            cpp_obj = self.handle_orm_operation.get_cpp_obj();
+            if self.get_cpp_obj().is_null() {
+                return Err(database.create_exception());
+            }
         }
-        cpp_obj
+        Ok(self.get_cpp_obj())
     }
 
     pub fn invalidate(&mut self) {
@@ -73,24 +77,25 @@ impl HandleInner {
         }
     }
 
-    pub fn get_changes(&mut self, database: &Database) -> i32 {
-        unsafe { WCDBRustHandle_getChanges(self.get_cpp_handle(database)) }
+    pub fn get_changes(&mut self, database: &Database) -> WCDBResult<i32> {
+        Ok(unsafe { WCDBRustHandle_getChanges(self.get_cpp_handle(database)?) })
     }
 
     pub fn prepared_with_main_statement<T: StatementTrait>(
         &mut self,
         database: &Database,
         statement: &T,
-    ) -> Arc<PreparedStatement> {
+    ) -> WCDBResult<Arc<PreparedStatement>> {
         if self.main_statement.is_none() {
-            let cpp_obj = unsafe { WCDBRustHandle_getMainStatement(self.get_cpp_handle(database)) };
+            let cpp_obj =
+                unsafe { WCDBRustHandle_getMainStatement(self.get_cpp_handle(database)?) };
             let mut prepared_statement = PreparedStatement::new(cpp_obj);
             prepared_statement.auto_finalize = true;
             self.main_statement = Some(Arc::new(prepared_statement));
         }
         let main_statement = self.main_statement.as_ref().unwrap();
-        main_statement.prepare(statement).unwrap();
-        main_statement.clone()
+        main_statement.prepare(statement)?;
+        Ok(main_statement.clone())
     }
 }
 
@@ -133,20 +138,24 @@ impl<'a> HandleOperationTrait for Handle<'a> {
         let closure_box: Box<Box<dyn FnOnce(Handle) -> bool>> = Box::new(Box::new(closure));
         let closure_raw = Box::into_raw(closure_box) as *mut c_void;
         let database_raw = unsafe { &self.database as *const &Database as *mut c_void };
+        let mut exception_opt = None;
         if !unsafe {
             WCDBRustHandle_runTransaction(
-                handle.get_cpp_handle(),
+                handle.get_cpp_handle()?,
                 transaction_callback,
                 closure_raw,
                 database_raw,
             )
         } {
-            return Err(WCDBError::Exception);
+            exception_opt = Some(handle.create_exception());
         }
         if self.auto_invalidate_handle() {
             self.invalidate();
         }
-        Ok(())
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 }
 
@@ -175,9 +184,13 @@ impl<'a> Handle<'a> {
         }
     }
 
-    pub fn get_cpp_handle(&self) -> *mut c_void {
+    pub fn get_cpp_handle(&self) -> WCDBResult<*mut c_void> {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.get_cpp_handle(self.database)
+    }
+
+    pub fn create_exception(&self) -> WCDBException {
+        WCDBException::create_exception(unsafe { WCDBRustHandle_getError(self.get_cpp_obj()) })
     }
 
     pub fn invalidate(&self) {
@@ -185,19 +198,19 @@ impl<'a> Handle<'a> {
         handle_inner_lock.invalidate();
     }
 
-    pub fn get_changes(&self) -> i32 {
+    pub fn get_changes(&self) -> WCDBResult<i32> {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.get_changes(self.database)
     }
 
-    pub fn get_last_inserted_row_id(&self) -> i64 {
-        unsafe { WCDBRustHandle_getLastInsertRowid(self.get_cpp_handle()) }
+    pub fn get_last_inserted_row_id(&self) -> WCDBResult<i64> {
+        Ok(unsafe { WCDBRustHandle_getLastInsertRowid(self.get_cpp_handle()?) })
     }
 
     pub fn prepared_with_main_statement<T: StatementTrait>(
         &self,
         statement: &T,
-    ) -> Arc<PreparedStatement> {
+    ) -> WCDBResult<Arc<PreparedStatement>> {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.prepared_with_main_statement(self.database, statement)
     }

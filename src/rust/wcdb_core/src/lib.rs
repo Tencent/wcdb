@@ -1,3 +1,5 @@
+#![feature(box_into_inner)]
+
 pub mod base;
 pub mod chaincall;
 pub mod core;

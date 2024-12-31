@@ -1,9 +1,7 @@
 use std::env;
-use std::env::VarError;
 use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
-use wcdb_core::winq::expression::Expression;
 
 #[derive(WCDBTableCoding)]
 #[WCDBTable(
@@ -53,7 +51,8 @@ fn main() {
     let user = get_current_username();
     let db_path = format!("/Users/{}/Downloads/test.db", user);
     let db = Database::new(db_path.as_str());
-    db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE);
+    db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE)
+        .unwrap();
 
     insert_object_to_rct_message(&db);
     // db.delete_objects("rct_message", Expression::new()).unwrap();

@@ -35,7 +35,7 @@
 
 //#define WCDBRustDatabaseSignature "Lcom/tencent/wcdb/core/Database"
 //
-//jlong WCDBRustDatabaseClassMethod(getError, jlong self);
+void* WCDBRustDatabaseClassMethod(getError, void* self);
 //jlong WCDBRustDatabaseClassMethod(getTag, jlong self);
 //void WCDBRustDatabaseClassMethod(setTag, jlong self, jlong tag);
 const char* WCDBRustDatabaseClassMethod(getPath, void* self);

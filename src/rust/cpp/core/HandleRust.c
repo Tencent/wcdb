@@ -22,12 +22,12 @@
 #include "HandleBridge.h"
 #include "assert.h"
 
-//jlong WCDBRustHandleClassMethod(getError, void* self)
-//{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return (jlong) WCDBHandleGetError(selfStruct).innerValue;
-//}
-//
+void* WCDBRustHandleClassMethod(getError, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandle, self);
+    return (void*) WCDBHandleGetError(selfStruct).innerValue;
+}
+
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);

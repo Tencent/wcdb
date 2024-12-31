@@ -18,7 +18,7 @@ pub struct Insert<'a, T> {
 }
 
 impl<'a, T> ChainCallTrait for Insert<'a, T> {
-    fn update_changes(&self) {
+    fn update_changes(&self) -> WCDBResult<()> {
         self.chain_call.update_changes()
     }
 
@@ -79,22 +79,21 @@ impl<'a, T> Insert<'a, T> {
         }
         assert!(!self.fields.is_empty());
         if self.values.borrow().len() > 1 {
-            self.chain_call.handle.run_transaction(|handle| {
-                self.real_execute();
-                return true;
-            })?;
+            self.chain_call
+                .handle
+                .run_transaction(|handle| self.real_execute().is_ok())?;
         } else {
-            self.real_execute();
+            self.real_execute()?;
         }
         Ok(self)
     }
 
-    pub fn real_execute(&self) {
+    pub fn real_execute(&self) -> WCDBResult<()> {
         let binding: &dyn TableBinding<T> = Field::get_binding_from_fields(&self.fields);
         let prepared_statement = self
             .chain_call
             .handle
-            .prepared_with_main_statement(&self.chain_call.statement);
+            .prepared_with_main_statement(&self.chain_call.statement)?;
         *self.last_insert_row_id.borrow_mut() = 0;
         let mut values = self.values.borrow_mut();
         for object in values.iter_mut() {
@@ -109,19 +108,20 @@ impl<'a, T> Insert<'a, T> {
                 }
                 index += 1;
             }
-            prepared_statement.step();
+            prepared_statement.step()?;
             if (is_auto_increment) {
                 binding.set_last_insert_row_id(
                     object,
-                    self.chain_call.handle.get_last_inserted_row_id(),
+                    self.chain_call.handle.get_last_inserted_row_id()?,
                 );
             }
         }
         if values.len() > 0 {
             *self.last_insert_row_id.borrow_mut() =
-                self.chain_call.handle.get_last_inserted_row_id();
+                self.chain_call.handle.get_last_inserted_row_id()?;
         }
-        self.update_changes();
+        self.update_changes()?;
         prepared_statement.finalize_statement();
+        Ok(())
     }
 }
