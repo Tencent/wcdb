@@ -1,0 +1,44 @@
+image: "harbor.rongcloud.net/library/rust/wcdb:0.0.4"
+
+variables:
+  CARGO_HOME: ${CI_PROJECT_DIR}/CargoHome
+
+cache:
+  paths:
+    - CargoHome/registry/index/
+    - CargoHome/registry/cache/
+    # - examples/c_demo/tests/build/_deps/
+    # - examples/c_demo/tests/build/CMakeFiles/
+    # - examples/c_demo/tests/build/cmake_install.cmake
+    # - examples/c_demo/tests/build/CMakeCache.txt
+    # - examples/c_demo/tests/build/Makefile
+
+stages:
+  - test
+
+variables:
+  GIT_DEPTH: 1
+# variables:
+#   GIT_SUBMODULE_STRATEGY: recursive
+
+run_test:
+  stage: test
+  before_script:
+    - git submodule update --init sqlcipher zstd
+  script:
+    - export CC=clang
+    - export CXX=clang++
+    - export RUSTC_WRAPPER=sccache
+    - echo CI_PROJECT_DIR = ${CI_PROJECT_DIR}
+    - cd src/rust
+    - autocorrect --lint
+    - cargo fmt -- --check
+    - ls -al
+    # - du -sh target
+    - cargo build
+    # - autocorrect --lint
+    # - rm -f Cargo.lock
+    # - cargo build
+    # - cargo fmt -- --check
+    # - mkdir -p examples/c_demo/tests/build && cd examples/c_demo/tests/build && cmake .. && make
+    # - ./c_test -d yes --order rand
