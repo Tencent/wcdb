@@ -48,7 +48,7 @@ impl Expression {
         }
     }
 
-    pub fn get_expression_operable(&self) -> &ExpressionOperable {
+    pub(crate) fn get_expression_operable(&self) -> &ExpressionOperable {
         &self.expression_operable
     }
 }

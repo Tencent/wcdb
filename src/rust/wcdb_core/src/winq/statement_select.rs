@@ -1,6 +1,9 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{
+    CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
+};
 use crate::winq::statement::{Statement, StatementTrait};
+use crate::winq::statement_delete::StatementDelete;
 use std::ffi::c_void;
 use std::fmt::Debug;
 
@@ -44,7 +47,11 @@ impl IdentifierStaticTrait for StatementSelect {
     }
 }
 
-impl StatementTrait for StatementSelect {}
+impl StatementTrait for StatementSelect {
+    fn is_write_statement(&self) -> bool {
+        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+    }
+}
 
 impl StatementSelect {
     pub fn new() -> Self {

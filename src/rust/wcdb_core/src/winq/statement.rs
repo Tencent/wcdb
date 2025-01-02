@@ -21,7 +21,9 @@ impl CppObjectTrait for Statement {
     }
 }
 
-pub trait StatementTrait: IdentifierTrait + Debug {}
+pub trait StatementTrait: IdentifierTrait + Debug {
+    fn is_write_statement(&self) -> bool;
+}
 
 impl Statement {
     pub fn new_with_obj(cpp_obj: *mut c_void) -> Statement {

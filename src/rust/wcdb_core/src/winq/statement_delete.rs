@@ -1,6 +1,8 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::winq::expression::Expression;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{
+    CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
+};
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
@@ -57,7 +59,11 @@ impl IdentifierStaticTrait for StatementDelete {
     }
 }
 
-impl StatementTrait for StatementDelete {}
+impl StatementTrait for StatementDelete {
+    fn is_write_statement(&self) -> bool {
+        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+    }
+}
 
 impl StatementDelete {
     pub fn new() -> Self {

@@ -217,19 +217,17 @@ impl<'a> Handle<'a> {
     }
 
     pub fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
-        let mut ret = Ok(());
-        if !Handle::execute_native(self.get_cpp_obj(), statement) {
-            // ret = Err(self.create_exception()); // todo qixinbing 会崩溃，暂时注掉
+        let handle = self.get_handle(statement.is_write_statement());
+        let mut exception_opt = None;
+        if !unsafe { WCDBRustHandle_execute(handle.get_cpp_handle()?, CppObject::get(statement)) } {
+            exception_opt = Some(handle.create_exception());
         }
         if self.auto_invalidate_handle() {
             self.invalidate();
         }
-        ret
-    }
-}
-
-impl<'a> Handle<'a> {
-    pub fn execute_native<T: StatementTrait>(cpp_obj: *mut c_void, statement: &T) -> bool {
-        unsafe { WCDBRustHandle_execute(cpp_obj, statement.get_cpp_obj()) }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 }

@@ -37,16 +37,15 @@ impl<'a> Delete<'a> {
         self
     }
 
-    /// where 是 RUST 关键字，所以用 where_expression
     pub fn where_expression(self, condition: Expression) -> Self {
         self.chain_call.statement.where_expression(condition);
         self
     }
 
     pub fn execute(mut self) -> WCDBResult<Self> {
-        self.chain_call.handle.execute(&self.chain_call.statement)?;
+        let ret = self.chain_call.handle.execute(&self.chain_call.statement);
         self.chain_call.update_changes()?;
         self.chain_call.invalidate_handle();
-        Ok(self)
+        ret.map(|_| self)
     }
 }

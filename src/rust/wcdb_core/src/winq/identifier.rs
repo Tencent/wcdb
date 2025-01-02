@@ -127,10 +127,6 @@ impl Identifier {
         T::get_type()
     }
 
-    fn is_write_statement(&self) -> bool {
-        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
-    }
-
     pub fn get_description(&self) -> String {
         let c_description = unsafe { WCDBRustWinq_getDescription(self.get_cpp_obj()) };
         c_description.to_cow().to_string()

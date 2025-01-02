@@ -1,6 +1,8 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{
+    CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
+};
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_void, CString};
 use std::fmt::Debug;
@@ -57,7 +59,11 @@ impl IdentifierStaticTrait for StatementInsert {
     }
 }
 
-impl StatementTrait for StatementInsert {}
+impl StatementTrait for StatementInsert {
+    fn is_write_statement(&self) -> bool {
+        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+    }
+}
 
 impl StatementInsert {
     pub fn new() -> Self {
