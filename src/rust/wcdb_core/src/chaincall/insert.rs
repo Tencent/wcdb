@@ -1,9 +1,9 @@
+use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
-use crate::wcdb_error::WCDBResult;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_insert::StatementInsert;
 use std::cell::RefCell;

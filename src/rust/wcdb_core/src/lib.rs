@@ -4,7 +4,6 @@ pub mod base;
 pub mod chaincall;
 pub mod core;
 pub mod orm;
-pub mod wcdb_error;
 pub mod winq;
 
 mod utils;

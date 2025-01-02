@@ -1,6 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
-use crate::base::wcdb_exception::WCDBException;
-use crate::wcdb_error::WCDBResult;
+use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
 

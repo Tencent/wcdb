@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::wcdb_exception::WCDBResult;
 use crate::core::handle::Handle;
-use crate::wcdb_error::WCDBResult;
 use std::ffi::c_void;
 
 pub struct HandleOperation {

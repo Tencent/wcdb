@@ -1,10 +1,10 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
 use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
-use crate::wcdb_error::WCDBResult;
 use crate::winq::expression::Expression;
 use std::ffi::c_void;
 

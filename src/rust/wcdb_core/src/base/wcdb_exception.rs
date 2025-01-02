@@ -244,6 +244,8 @@ pub enum ExceptionObject {
     String(String),
 }
 
+pub type WCDBResult<T> = Result<T, WCDBException>;
+
 #[derive(Debug)]
 pub enum WCDBException {
     WCDBNormalException(ExceptionInner),

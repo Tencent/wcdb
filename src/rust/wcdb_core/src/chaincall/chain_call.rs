@@ -1,5 +1,5 @@
+use crate::base::wcdb_exception::WCDBResult;
 use crate::core::handle::Handle;
-use crate::wcdb_error::WCDBResult;
 use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
 

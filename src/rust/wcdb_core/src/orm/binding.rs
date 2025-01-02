@@ -1,7 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::wcdb_exception::WCDBResult;
 use crate::core::handle::Handle;
 use crate::utils::ToCString;
-use crate::wcdb_error::WCDBResult;
 use crate::winq::column_def::ColumnDef;
 use std::ffi::{c_char, c_void};
 use std::ptr::null_mut;

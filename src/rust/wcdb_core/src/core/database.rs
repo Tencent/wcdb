@@ -1,5 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::base::wcdb_exception::WCDBException;
+use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
 use crate::core::handle::Handle;
@@ -9,7 +9,6 @@ use crate::core::table::Table;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
-use crate::wcdb_error::WCDBResult;
 use crate::winq::expression::Expression;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
