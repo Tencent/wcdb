@@ -38,9 +38,9 @@ void* WCDBRustStatementUpdateClassMethodWithNoArg(create);
 //void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self);
 //
-//void WCDBRustStatementUpdateClassMethod(configTable,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringParameter(table));
+void WCDBRustStatementUpdateClassMethod(configTable,
+                                       void* self,
+                                       WCDBRustObjectOrStringParameter(table));
 //void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action);
 //void WCDBRustStatementUpdateClassMethod(configColumns,
 //                                       jlong self,
@@ -50,9 +50,9 @@ void* WCDBRustStatementUpdateClassMethodWithNoArg(create);
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringArrayParameter(columns),
 //                                       WCDBRustMultiTypeArrayParameter(values));
-//void WCDBRustStatementUpdateClassMethod(configColumnsWithBindParameter,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns));
+void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
+                                        void* self,
+                                        WCDBRustObjectOrStringArrayParameter(columns));
 //void WCDBRustStatementUpdateClassMethod(configCondition, jlong self, jlong condition);
 //void WCDBRustStatementUpdateClassMethod(configOrders, jlong self, jlongArray orders);
 //void WCDBRustStatementUpdateClassMethod(

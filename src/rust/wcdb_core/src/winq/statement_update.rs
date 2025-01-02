@@ -1,13 +1,30 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::orm::field::Field;
 use crate::winq::identifier::{
     CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
 };
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::c_void;
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
+use std::os::raw::c_long;
 
 extern "C" {
     pub fn WCDBRustStatementUpdate_create() -> *mut c_void;
+
+    pub fn WCDBRustStatementUpdate_configTable(
+        cpp_obj: *mut c_void,
+        type_i: c_int,
+        table: c_long,
+        table_name: *const c_char,
+    ) -> c_void;
+
+    pub fn WCDBRustStatementUpdate_configColumnsToBindParameters(
+        cpp_obj: *mut c_void,
+        columns_type: i32,
+        columns_void_vec: *const *mut c_void,
+        columns_string_vec: *const *mut c_char,
+        columns_vec_len: i32,
+    ) -> c_void;
 }
 
 #[derive(Debug)]
@@ -53,5 +70,40 @@ impl StatementUpdate {
         StatementUpdate {
             statement: Statement::new_with_obj(cpp_obj),
         }
+    }
+
+    pub fn update(&self, table_name: &str) -> &Self {
+        let c_table_name = CString::new(table_name).unwrap_or_default();
+        unsafe {
+            WCDBRustStatementUpdate_configTable(
+                self.get_cpp_obj(),
+                CPPType::String as i32,
+                0,
+                c_table_name.as_ptr(),
+            );
+        }
+        self
+    }
+
+    pub fn set_columns_to_bind_parameters<T>(&self, fields: &Vec<&Field<T>>) -> &Self {
+        if fields.is_empty() {
+            return self;
+        }
+        let columns_void_vec_len = fields.len() as i32;
+        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(fields.len());
+        for field in fields {
+            c_void_vec.push(field.get_cpp_obj());
+        }
+
+        unsafe {
+            WCDBRustStatementUpdate_configColumnsToBindParameters(
+                self.get_cpp_obj(),
+                CPPType::Column as i32,
+                c_void_vec.as_ptr(),
+                std::ptr::null(),
+                columns_void_vec_len,
+            );
+        }
+        self
     }
 }

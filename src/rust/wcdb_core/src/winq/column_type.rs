@@ -1,3 +1,4 @@
+#[derive(PartialEq)]
 pub enum ColumnType {
     Null = 0,
     Integer = 1,

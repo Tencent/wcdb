@@ -1,7 +1,11 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::value::Value;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
+use crate::orm::field::Field;
+use crate::winq::column_type::ColumnType;
 use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
+use std::sync::Arc;
 
 extern "C" {
     pub fn WCDBRustHandleStatement_getError(cpp_obj: *mut c_void) -> *mut c_void;
@@ -49,12 +53,73 @@ impl PreparedStatement {
         })
     }
 
-    pub fn bind_integer(&self, value: i32, index: usize) {
-        unsafe { WCDBRustHandleStatement_bindInteger(*self.cpp_obj, value as i64, index) }
+    pub fn bind_int(&self, value: i32, index: usize) {
+        self.bind_integer(value as i64, index);
+    }
+
+    pub fn bind_integer(&self, value: i64, index: usize) {
+        unsafe { WCDBRustHandleStatement_bindInteger(*self.cpp_obj, value, index) }
+    }
+
+    pub fn bind_double(&self, value: f64, index: usize) {
+        todo!("qixinbing")
+    }
+
+    pub fn bind_text(&self, value: &str, index: usize) {
+        todo!("qixinbing")
+    }
+
+    pub fn bind_blob(&self, value: &Vec<u8>, index: usize) {
+        todo!("qixinbing")
     }
 
     pub fn bind_null(&self, index: usize) {
         unsafe { WCDBRustHandleStatement_bindNull(*self.cpp_obj, index) }
+    }
+
+    pub fn bind_value(&self, value: &Value, index: usize) {
+        let value_type = value.get_type();
+        if ColumnType::Integer == value_type {
+            self.bind_integer(value.get_long(), index);
+            return;
+        }
+        if ColumnType::Float == value_type {
+            self.bind_double(value.get_double(), index);
+            return;
+        }
+        if ColumnType::Text == value_type {
+            self.bind_text(value.get_text(), index);
+            return;
+        }
+        if ColumnType::BLOB == value_type {
+            self.bind_blob(value.get_blob(), index);
+            return;
+        }
+        self.bind_null(index);
+    }
+
+    pub fn bind_row(&self, row: &Vec<Value>) {
+        let mut index = 1;
+        for value in row {
+            self.bind_value(value, index);
+            index += 1;
+        }
+    }
+
+    pub fn bind_object_by_fields<T>(
+        arc_self: &Arc<PreparedStatement>,
+        object: T,
+        fields: &Vec<&Field<T>>,
+    ) {
+        if fields.is_empty() {
+            return;
+        }
+        let mut index = 1;
+        let binding = fields[0].get_table_binding();
+        for field in fields {
+            binding.bind_field(&object, field, index, arc_self);
+            index += 1;
+        }
     }
 
     pub fn get_int(&self, index: usize) -> i32 {

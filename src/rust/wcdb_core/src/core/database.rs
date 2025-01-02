@@ -2,6 +2,7 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
+use crate::chaincall::update::Update;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTrait};
@@ -110,6 +111,10 @@ impl HandleORMOperationTrait for Database {
         Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 
+    fn prepare_update<T>(&self) -> Update<T> {
+        Update::new(self.get_handle(true), false, self.auto_invalidate_handle())
+    }
+
     fn prepare_delete(&self) -> Delete {
         Delete::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
@@ -124,7 +129,26 @@ impl HandleORMOperationTrait for Database {
         table_name: &str,
         expression: Expression,
     ) -> WCDBResult<()> {
+        // self.prepare_delete()
+        //     .from_table(table_name)
+        //     .where_expression(expression)
+        //     .execute()?;
+        // Ok(())
         todo!("qixinbing")
+    }
+
+    fn update_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(fields)
+            .to_object(object)
+            .execute()?;
+        Ok(())
     }
 }
 

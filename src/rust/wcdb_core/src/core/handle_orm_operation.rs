@@ -2,6 +2,7 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
+use crate::chaincall::update::Update;
 use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
@@ -32,12 +33,20 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
     ) -> WCDBResult<()>;
     fn prepare_insert<T>(&self) -> Insert<T>;
+    fn prepare_update<T>(&self) -> Update<T>;
     fn prepare_delete(&self) -> Delete;
     fn delete_objects(&self, table_name: &str) -> WCDBResult<()>;
     fn delete_objects_by_expression(
         &self,
         table_name: &str,
         expression: Expression,
+    ) -> WCDBResult<()>;
+
+    fn update_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
     ) -> WCDBResult<()>;
 }
 

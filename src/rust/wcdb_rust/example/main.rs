@@ -58,6 +58,8 @@ fn main() {
     insert_object_to_rct_message(&db);
     insert_objects_to_rct_message(&db);
     // delete_objects_from_rct_message(&db);
+    // delete_objects_by_expression_from_rct_message(&db);
+    // update_object_to_rct_message(&db);
 }
 
 /// 插入单条数据
@@ -79,8 +81,20 @@ fn insert_objects_to_rct_message(db: &Database) {
 }
 
 fn delete_objects_from_rct_message(db: &Database) {
-    // db.delete_objects_by_expression("rct_message", Expression::new()).unwrap();
     db.delete_objects("rct_message").unwrap();
+}
+
+fn delete_objects_by_expression_from_rct_message(db: &Database) {
+    db.delete_objects_by_expression("rct_message", Expression::new())
+        .unwrap();
+}
+
+fn update_object_to_rct_message(db: &Database) {
+    let mut record1 = TableMessage::new();
+    record1.multi_unique = 111;
+    record1.multi_index1 = 999;
+    db.update_object(record1, DbTableMessage::all_fields(), "rct_message")
+        .unwrap();
 }
 
 fn get_current_username() -> String {

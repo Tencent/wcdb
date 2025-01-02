@@ -56,4 +56,40 @@ impl Value {
             ValueObject::Double(_) => ColumnType::Float,
         }
     }
+
+    pub fn get_bool(&self) -> bool {
+        self.get_long() != 0
+    }
+
+    pub fn get_byte(&self) -> i8 {
+        self.get_long() as i8
+    }
+
+    pub fn get_short(&self) -> i16 {
+        self.get_long() as i16
+    }
+
+    pub fn get_int(&self) -> i32 {
+        self.get_long() as i32
+    }
+
+    pub fn get_long(&self) -> i64 {
+        todo!("qixinbing")
+    }
+
+    pub fn get_float(&self) -> f32 {
+        self.get_double() as f32
+    }
+
+    pub fn get_double(&self) -> f64 {
+        todo!("qixinbing")
+    }
+
+    pub fn get_text(&self) -> &str {
+        todo!("qixinbing")
+    }
+
+    pub fn get_blob(&self) -> &Vec<u8> {
+        todo!("qixinbing")
+    }
 }

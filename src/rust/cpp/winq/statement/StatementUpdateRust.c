@@ -41,13 +41,13 @@ void* WCDBRustStatementUpdateClassMethodWithNoArg(create)
 //    WCDBStatementUpdateConfigRecursive(selfStruct);
 //}
 //
-//void WCDBRustStatementUpdateClassMethod(configTable, jlong self, WCDBRustObjectOrStringParameter(table))
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustCreateObjectOrStringCommonValue(table, true);
-//    WCDBStatementUpdateConfigTable2(selfStruct, table_common);
-//    WCDBRustTryReleaseStringInCommonValue(table);
-//}
+void WCDBRustStatementUpdateClassMethod(configTable, void* self, WCDBRustObjectOrStringParameter(table))
+{
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBRustCreateObjectOrStringCommonValue(table, true);
+    WCDBStatementUpdateConfigTable2(selfStruct, table_common);
+//    WCDBRustTryReleaseStringInCommonValue(table); // todo qixinbing 需要释放？
+}
 //
 //void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action)
 //{
@@ -84,14 +84,14 @@ void* WCDBRustStatementUpdateClassMethodWithNoArg(create)
 //    WCDBRustReleaseMultiTypeArray(values);
 //}
 //
-//void WCDBRustStatementUpdateClassMethod(configColumnsWithBindParameter,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns))
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-//    columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
-//}
+void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
+                                       void* self,
+                                       WCDBRustObjectOrStringArrayParameter(columns))
+{
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
+    columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
+}
 //
 //void WCDBRustStatementUpdateClassMethod(configCondition, jlong self, jlong condition)
 //{

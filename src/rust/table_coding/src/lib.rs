@@ -67,6 +67,8 @@ fn get_type_string(ty: &Type) -> syn::Result<String> {
 fn bind_type_string(ty: &Type) -> syn::Result<String> {
     if let Type::Path(type_path) = ty {
         if type_path.path.is_ident("i32") {
+            Ok("bind_int".to_string())
+        } else if type_path.path.is_ident("i64") {
             Ok("bind_integer".to_string())
         } else {
             Err(syn::Error::new(ty.span(), "Unsupported field type"))
