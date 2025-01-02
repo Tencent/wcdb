@@ -29,11 +29,7 @@ pub struct StatementDelete {
 
 impl Debug for StatementDelete {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "StatementDelete: {}",
-            self.statement.identifier.get_description()
-        )
+        write!(f, "StatementDelete: {}", self.get_description())
     }
 }
 
@@ -51,7 +47,11 @@ impl CppObjectTrait for StatementDelete {
     }
 }
 
-impl IdentifierTrait for StatementDelete {}
+impl IdentifierTrait for StatementDelete {
+    fn get_description(&self) -> String {
+        self.statement.get_description()
+    }
+}
 
 impl IdentifierStaticTrait for StatementDelete {
     fn get_type() -> i32 {

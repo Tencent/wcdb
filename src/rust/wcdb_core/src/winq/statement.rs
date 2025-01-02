@@ -4,7 +4,7 @@ use std::ffi::c_void;
 use std::fmt::Debug;
 
 pub struct Statement {
-    pub(crate) identifier: Identifier,
+    identifier: Identifier,
 }
 
 impl CppObjectTrait for Statement {
@@ -18,6 +18,12 @@ impl CppObjectTrait for Statement {
 
     fn release_cpp_object(&mut self) {
         self.identifier.release_cpp_object();
+    }
+}
+
+impl IdentifierTrait for Statement {
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
     }
 }
 

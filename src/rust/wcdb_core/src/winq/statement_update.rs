@@ -16,11 +16,7 @@ pub struct StatementUpdate {
 
 impl Debug for StatementUpdate {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "StatementUpdate: {}",
-            self.statement.identifier.get_description()
-        )
+        write!(f, "StatementUpdate: {}", self.get_description())
     }
 }
 
@@ -38,7 +34,11 @@ impl CppObjectTrait for StatementUpdate {
     }
 }
 
-impl IdentifierTrait for StatementUpdate {}
+impl IdentifierTrait for StatementUpdate {
+    fn get_description(&self) -> String {
+        self.statement.get_description()
+    }
+}
 
 impl IdentifierStaticTrait for StatementUpdate {
     fn get_type() -> i32 {

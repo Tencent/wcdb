@@ -16,11 +16,7 @@ pub struct StatementSelect {
 
 impl Debug for StatementSelect {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "StatementSelect: {}",
-            self.statement.identifier.get_description()
-        )
+        write!(f, "StatementSelect: {}", self.get_description())
     }
 }
 
@@ -38,7 +34,11 @@ impl CppObjectTrait for StatementSelect {
     }
 }
 
-impl IdentifierTrait for StatementSelect {}
+impl IdentifierTrait for StatementSelect {
+    fn get_description(&self) -> String {
+        self.statement.get_description()
+    }
+}
 
 impl IdentifierStaticTrait for StatementSelect {
     fn get_type() -> i32 {

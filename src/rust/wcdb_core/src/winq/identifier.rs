@@ -80,7 +80,16 @@ pub struct Identifier {
     cpp_obj: CppObject,
 }
 
-pub trait IdentifierTrait: CppObjectTrait {}
+pub trait IdentifierTrait: CppObjectTrait {
+    fn get_description(&self) -> String;
+}
+
+impl IdentifierTrait for Identifier {
+    fn get_description(&self) -> String {
+        let c_description = unsafe { WCDBRustWinq_getDescription(self.get_cpp_obj()) };
+        c_description.to_cow().to_string()
+    }
+}
 
 pub trait IdentifierStaticTrait {
     fn get_type() -> i32;
@@ -119,16 +128,7 @@ impl Identifier {
         }
     }
 
-    pub fn get_type(&self) -> i32 {
-        0
-    }
-
     pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
         T::get_type()
-    }
-
-    pub fn get_description(&self) -> String {
-        let c_description = unsafe { WCDBRustWinq_getDescription(self.get_cpp_obj()) };
-        c_description.to_cow().to_string()
     }
 }

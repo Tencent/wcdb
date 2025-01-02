@@ -29,11 +29,7 @@ pub struct StatementInsert {
 
 impl Debug for StatementInsert {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "StatementInsert: {}",
-            self.statement.identifier.get_description()
-        )
+        write!(f, "StatementInsert: {}", self.get_description())
     }
 }
 
@@ -51,7 +47,11 @@ impl CppObjectTrait for StatementInsert {
     }
 }
 
-impl IdentifierTrait for StatementInsert {}
+impl IdentifierTrait for StatementInsert {
+    fn get_description(&self) -> String {
+        self.statement.get_description()
+    }
+}
 
 impl IdentifierStaticTrait for StatementInsert {
     fn get_type() -> i32 {
