@@ -6,8 +6,8 @@ use crate::winq::statement::StatementTrait;
 use crate::winq::statement_select::StatementSelect;
 
 pub struct Select<'a, T> {
-    fields: Vec<Field<&'a T>>,
     chain_call: ChainCall<'a, StatementSelect>,
+    fields: Vec<Field<&'a T>>,
 }
 
 impl<'a, T> ChainCallTrait for Select<'a, T> {
