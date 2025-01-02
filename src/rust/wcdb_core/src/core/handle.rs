@@ -5,13 +5,14 @@ use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::wcdb_error::WCDBResult;
-use crate::winq::statement::StatementTrait;
+use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::c_void;
 use std::sync::{Arc, Mutex};
 
 extern "C" {
     pub fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
     pub fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
+    pub fn WCDBRustHandle_execute(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
     pub fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> i32;
     pub fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
     pub fn WCDBRustHandle_runTransaction(
@@ -213,5 +214,22 @@ impl<'a> Handle<'a> {
     ) -> WCDBResult<Arc<PreparedStatement>> {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.prepared_with_main_statement(self.database, statement)
+    }
+
+    pub fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
+        let mut ret = Ok(());
+        if !Handle::execute_native(self.get_cpp_obj(), statement) {
+            // ret = Err(self.create_exception()); // todo qixinbing 会崩溃，暂时注掉
+        }
+        if self.auto_invalidate_handle() {
+            self.invalidate();
+        }
+        ret
+    }
+}
+
+impl<'a> Handle<'a> {
+    pub fn execute_native<T: StatementTrait>(cpp_obj: *mut c_void, statement: &T) -> bool {
+        unsafe { WCDBRustHandle_execute(cpp_obj, statement.get_cpp_obj()) }
     }
 }

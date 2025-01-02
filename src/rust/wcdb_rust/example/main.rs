@@ -2,6 +2,7 @@ use std::env;
 use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::winq::expression::Expression;
 
 #[derive(WCDBTableCoding)]
 #[WCDBTable(
@@ -55,9 +56,8 @@ fn main() {
         .unwrap();
 
     insert_object_to_rct_message(&db);
-    // db.delete_objects("rct_message", Expression::new()).unwrap();
-
     insert_objects_to_rct_message(&db);
+    delete_objects_from_rct_message(&db);
 }
 
 /// 插入单条数据
@@ -76,6 +76,10 @@ fn insert_objects_to_rct_message(db: &Database) {
     let msg_vec = vec![record1, record2];
     db.insert_objects(msg_vec, DbTableMessage::all_fields(), "rct_message")
         .unwrap()
+}
+
+fn delete_objects_from_rct_message(db: &Database) {
+    db.delete_objects("rct_message", Expression::new()).unwrap();
 }
 
 fn get_current_username() -> String {

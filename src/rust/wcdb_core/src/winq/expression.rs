@@ -47,4 +47,8 @@ impl Expression {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
         }
     }
+
+    pub fn get_expression_operable(&self) -> &ExpressionOperable {
+        &self.expression_operable
+    }
 }

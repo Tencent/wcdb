@@ -5,6 +5,7 @@ use std::fmt::Debug;
 
 extern "C" {
     pub fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
+    pub fn WCDBRustWinq_isWriteStatement(statement: *mut c_void) -> bool;
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -124,6 +125,10 @@ impl Identifier {
 
     pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
         T::get_type()
+    }
+
+    fn is_write_statement(&self) -> bool {
+        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
     }
 
     pub fn get_description(&self) -> String {

@@ -38,10 +38,10 @@ void* WCDBRustStatementDeleteClassMethodWithNoArg(create);
 //void WCDBRustStatementDeleteClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementDeleteClassMethod(configRecursive, jlong self);
 //
-//void WCDBRustStatementDeleteClassMethod(configTable,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringParameter(table));
-//void WCDBRustStatementDeleteClassMethod(configCondition, jlong self, jlong condition);
+void WCDBRustStatementDeleteClassMethod(configTable,
+                                       void* self,
+                                       WCDBRustObjectOrStringParameter(table));
+void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condition);
 //void WCDBRustStatementDeleteClassMethod(configOrders, jlong self, jlongArray orders);
 //void WCDBRustStatementDeleteClassMethod(
 //configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);

@@ -1,11 +1,24 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::c_void;
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
+use std::os::raw::c_long;
 
 extern "C" {
     pub fn WCDBRustStatementDelete_create() -> *mut c_void;
+    pub fn WCDBRustStatementDelete_configTable(
+        cpp_obj: *mut c_void,
+        type_i: c_int,
+        table: c_long,
+        table_name: *const c_char,
+    ) -> c_void;
+
+    pub fn WCDBRustStatementDelete_configCondition(
+        cpp_obj: *mut c_void,
+        condition: *mut c_void,
+    ) -> c_void;
 }
 
 pub struct StatementDelete {
@@ -52,5 +65,28 @@ impl StatementDelete {
         StatementDelete {
             statement: Statement::new_with_obj(cpp_obj),
         }
+    }
+
+    pub fn delete_from(&self, table_name: &str) -> &Self {
+        let c_table_name = CString::new(table_name).unwrap_or_default();
+        unsafe {
+            WCDBRustStatementDelete_configTable(
+                self.get_cpp_obj(),
+                CPPType::String as i32,
+                0,
+                c_table_name.as_ptr(),
+            );
+        }
+        self
+    }
+
+    pub fn where_expression(&self, condition: Expression) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configCondition(
+                self.get_cpp_obj(),
+                CppObject::get(condition.get_expression_operable()),
+            );
+        }
+        self
     }
 }

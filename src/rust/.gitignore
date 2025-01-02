@@ -1,2 +1,3 @@
 target/
 Cargo.lock
+cmake-build-debug

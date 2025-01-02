@@ -48,4 +48,8 @@ impl<'a, T: StatementTrait> ChainCall<'a, T> {
     pub fn get_statement(&self) -> &T {
         &self.statement
     }
+
+    pub fn invalidate_handle(&self) {
+        self.handle.invalidate();
+    }
 }

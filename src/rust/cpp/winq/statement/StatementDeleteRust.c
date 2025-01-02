@@ -41,20 +41,20 @@ void* WCDBRustStatementDeleteClassMethodWithNoArg(create)
 //    WCDBStatementDeleteConfigRecursive(selfStruct);
 //}
 //
-//void WCDBRustStatementDeleteClassMethod(configTable, jlong self, WCDBRustObjectOrStringParameter(table))
-//{
-//    WCDBRustBridgeStruct(CPPStatementDelete, self);
-//    WCDBRustCreateObjectOrStringCommonValue(table, true);
-//    WCDBStatementDeleteConfigDeleteFrom2(selfStruct, table_common);
-//    WCDBRustTryReleaseStringInCommonValue(table);
-//}
-//
-//void WCDBRustStatementDeleteClassMethod(configCondition, jlong self, jlong condition)
-//{
-//    WCDBRustBridgeStruct(CPPStatementDelete, self);
-//    WCDBRustBridgeStruct(CPPExpression, condition);
-//    WCDBStatementDeleteConfigWhere(selfStruct, conditionStruct);
-//}
+void WCDBRustStatementDeleteClassMethod(configTable, void* self, WCDBRustObjectOrStringParameter(table))
+{
+    WCDBRustBridgeStruct(CPPStatementDelete, self);
+    WCDBRustCreateObjectOrStringCommonValue(table, true);
+    WCDBStatementDeleteConfigDeleteFrom2(selfStruct, table_common);
+//    WCDBRustTryReleaseStringInCommonValue(table); // todo qixinbing char* need release?
+}
+
+void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condition)
+{
+    WCDBRustBridgeStruct(CPPStatementDelete, self);
+    WCDBRustBridgeStruct(CPPExpression, condition);
+    WCDBStatementDeleteConfigWhere(selfStruct, conditionStruct);
+}
 //
 //void WCDBRustStatementDeleteClassMethod(configOrders, jlong self, jlongArray orders)
 //{

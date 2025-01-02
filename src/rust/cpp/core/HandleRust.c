@@ -56,11 +56,11 @@ void* WCDBRustHandleClassMethod(getMainStatement, void* self)
 //    WCDBHandleFinalizeStatements(selfStruct);
 //}
 //
-//jboolean WCDBRustHandleClassMethod(execute, void* self, jlong statement)
-//{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
-//}
+bool WCDBRustHandleClassMethod(execute, void* self, void* statement)
+{
+    WCDBRustBridgeStruct(CPPHandle, self);
+    return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
+}
 //
 //jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql)
 //{

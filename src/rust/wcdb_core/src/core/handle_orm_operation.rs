@@ -1,4 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
 use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
@@ -30,6 +31,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
     ) -> WCDBResult<()>;
     fn prepare_insert<T>(&self) -> Insert<T>;
+    fn prepare_delete(&self) -> Delete;
     fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()>;
 }
 
