@@ -23,14 +23,9 @@ extern "C" {
     ) -> c_void;
 }
 
+#[derive(Debug)]
 pub struct StatementDelete {
     statement: Statement,
-}
-
-impl Debug for StatementDelete {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "StatementDelete: {}", self.get_description())
-    }
 }
 
 impl CppObjectTrait for StatementDelete {
@@ -61,7 +56,7 @@ impl IdentifierStaticTrait for StatementDelete {
 
 impl StatementTrait for StatementDelete {
     fn is_write_statement(&self) -> bool {
-        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+        self.statement.is_write_statement()
     }
 }
 

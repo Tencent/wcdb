@@ -1,8 +1,9 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::{Identifier, IdentifierTrait};
+use crate::winq::identifier::{Identifier, IdentifierTrait, WCDBRustWinq_isWriteStatement};
 use std::ffi::c_void;
 use std::fmt::Debug;
 
+#[derive(Debug)]
 pub struct Statement {
     identifier: Identifier,
 }
@@ -27,8 +28,14 @@ impl IdentifierTrait for Statement {
     }
 }
 
-pub trait StatementTrait: IdentifierTrait + Debug {
+pub trait StatementTrait: IdentifierTrait {
     fn is_write_statement(&self) -> bool;
+}
+
+impl StatementTrait for Statement {
+    fn is_write_statement(&self) -> bool {
+        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+    }
 }
 
 impl Statement {

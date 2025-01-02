@@ -1,6 +1,7 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::column::Column;
+use crate::winq::identifier::IdentifierTrait;
 use std::ffi::c_void;
 
 pub struct Field<T> {
@@ -23,6 +24,12 @@ impl<T> CppObjectTrait for Field<T> {
 
     fn release_cpp_object(&mut self) {
         self.column.release_cpp_object();
+    }
+}
+
+impl<T> IdentifierTrait for Field<T> {
+    fn get_description(&self) -> String {
+        self.column.get_description()
     }
 }
 

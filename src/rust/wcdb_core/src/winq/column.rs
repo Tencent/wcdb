@@ -1,6 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::expression_operable::ExpressionOperable;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait};
+use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 
@@ -23,6 +23,12 @@ impl CppObjectTrait for Column {
 
     fn release_cpp_object(&mut self) {
         self.expression_operable.release_cpp_object();
+    }
+}
+
+impl IdentifierTrait for Column {
+    fn get_description(&self) -> String {
+        self.expression_operable.get_description()
     }
 }
 

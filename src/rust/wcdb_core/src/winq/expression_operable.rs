@@ -1,7 +1,8 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::Identifier;
+use crate::winq::identifier::{Identifier, IdentifierTrait};
 use std::ffi::c_void;
 
+#[derive(Debug)]
 pub(crate) struct ExpressionOperable {
     identifier: Identifier,
 }
@@ -17,6 +18,12 @@ impl CppObjectTrait for ExpressionOperable {
 
     fn release_cpp_object(&mut self) {
         self.identifier.release_cpp_object();
+    }
+}
+
+impl IdentifierTrait for ExpressionOperable {
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
     }
 }
 

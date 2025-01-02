@@ -6,7 +6,7 @@ use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, RwLock};
 
 extern "C" {
     pub fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;

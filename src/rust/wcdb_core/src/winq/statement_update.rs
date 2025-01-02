@@ -10,14 +10,9 @@ extern "C" {
     pub fn WCDBRustStatementUpdate_create() -> *mut c_void;
 }
 
+#[derive(Debug)]
 pub struct StatementUpdate {
     statement: Statement,
-}
-
-impl Debug for StatementUpdate {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "StatementUpdate: {}", self.get_description())
-    }
 }
 
 impl CppObjectTrait for StatementUpdate {
@@ -48,7 +43,7 @@ impl IdentifierStaticTrait for StatementUpdate {
 
 impl StatementTrait for StatementUpdate {
     fn is_write_statement(&self) -> bool {
-        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+        self.statement.is_write_statement()
     }
 }
 

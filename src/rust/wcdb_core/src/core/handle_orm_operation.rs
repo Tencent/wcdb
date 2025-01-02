@@ -8,6 +8,7 @@ use crate::orm::table_binding::TableBinding;
 use crate::winq::expression::Expression;
 use std::ffi::c_void;
 
+#[derive(Debug)]
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
 }

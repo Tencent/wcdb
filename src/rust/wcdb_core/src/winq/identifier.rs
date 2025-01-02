@@ -76,8 +76,23 @@ pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
     T::get_type()
 }
 
+#[derive(Debug)]
 pub struct Identifier {
     cpp_obj: CppObject,
+}
+
+impl CppObjectTrait for Identifier {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.cpp_obj.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.cpp_obj.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.cpp_obj.release_cpp_object();
+    }
 }
 
 pub trait IdentifierTrait: CppObjectTrait {
@@ -98,20 +113,6 @@ pub trait IdentifierStaticTrait {
 impl IdentifierStaticTrait for Identifier {
     fn get_type() -> i32 {
         CPPType::Invalid as i32
-    }
-}
-
-impl CppObjectTrait for Identifier {
-    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        self.cpp_obj.set_cpp_obj(cpp_obj);
-    }
-
-    fn get_cpp_obj(&self) -> *mut c_void {
-        self.cpp_obj.get_cpp_obj()
-    }
-
-    fn release_cpp_object(&mut self) {
-        self.cpp_obj.release_cpp_object();
     }
 }
 

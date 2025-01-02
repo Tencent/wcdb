@@ -10,14 +10,9 @@ extern "C" {
     pub fn WCDBRustStatementSelect_create() -> *mut c_void;
 }
 
+#[derive(Debug)]
 pub struct StatementSelect {
     statement: Statement,
-}
-
-impl Debug for StatementSelect {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "StatementSelect: {}", self.get_description())
-    }
 }
 
 impl CppObjectTrait for StatementSelect {
@@ -48,7 +43,7 @@ impl IdentifierStaticTrait for StatementSelect {
 
 impl StatementTrait for StatementSelect {
     fn is_write_statement(&self) -> bool {
-        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+        self.statement.is_write_statement()
     }
 }
 

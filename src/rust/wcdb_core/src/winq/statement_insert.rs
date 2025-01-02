@@ -23,14 +23,9 @@ extern "C" {
     pub fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: i32);
 }
 
+#[derive(Debug)]
 pub struct StatementInsert {
     statement: Statement,
-}
-
-impl Debug for StatementInsert {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "StatementInsert: {}", self.get_description())
-    }
 }
 
 impl CppObjectTrait for StatementInsert {
@@ -61,7 +56,7 @@ impl IdentifierStaticTrait for StatementInsert {
 
 impl StatementTrait for StatementInsert {
     fn is_write_statement(&self) -> bool {
-        unsafe { WCDBRustWinq_isWriteStatement(self.get_cpp_obj()) }
+        self.statement.is_write_statement()
     }
 }
 

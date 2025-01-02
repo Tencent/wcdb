@@ -6,6 +6,7 @@ extern "C" {
     pub fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
 }
 
+#[derive(Debug)]
 pub(crate) struct CppObject {
     cpp_obj: *mut c_void,
 }

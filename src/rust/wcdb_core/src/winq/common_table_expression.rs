@@ -1,6 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::column::Column;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_char, c_void, CString};
 
 extern "C" {
@@ -24,6 +24,12 @@ impl CppObjectTrait for CommonTableExpression {
 
     fn release_cpp_object(&mut self) {
         self.identifier.release_cpp_object();
+    }
+}
+
+impl IdentifierTrait for CommonTableExpression {
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
     }
 }
 
