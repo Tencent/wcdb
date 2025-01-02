@@ -3,7 +3,6 @@ use crate::winq::identifier::{
     CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
 };
 use crate::winq::statement::{Statement, StatementTrait};
-use crate::winq::statement_delete::StatementDelete;
 use std::ffi::c_void;
 use std::fmt::Debug;
 

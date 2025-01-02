@@ -1,7 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::core::handle::Handle;
 use crate::wcdb_error::WCDBResult;
-use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
 
 pub struct HandleOperation {

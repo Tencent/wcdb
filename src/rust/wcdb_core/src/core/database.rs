@@ -1,5 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::base::wcdb_exception::{ExceptionInner, WCDBException};
+use crate::base::wcdb_exception::WCDBException;
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
 use crate::core::handle::Handle;
@@ -11,7 +11,6 @@ use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
 use crate::wcdb_error::WCDBResult;
 use crate::winq::expression::Expression;
-use crate::winq::statement::StatementTrait;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
@@ -116,12 +115,17 @@ impl HandleORMOperationTrait for Database {
         Delete::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 
-    fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()> {
-        self.prepare_delete()
-            .from_table(table_name)
-            .where_expression(expression)
-            .execute()?;
+    fn delete_objects(&self, table_name: &str) -> WCDBResult<()> {
+        self.prepare_delete().from_table(table_name).execute()?;
         Ok(())
+    }
+
+    fn delete_objects_by_expression(
+        &self,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<()> {
+        todo!("qixinbing")
     }
 }
 

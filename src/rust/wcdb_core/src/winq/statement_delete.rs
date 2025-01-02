@@ -1,7 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{
-    CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
+    CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
 };
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};

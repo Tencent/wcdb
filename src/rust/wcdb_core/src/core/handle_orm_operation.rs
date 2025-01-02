@@ -32,7 +32,12 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
     ) -> WCDBResult<()>;
     fn prepare_insert<T>(&self) -> Insert<T>;
     fn prepare_delete(&self) -> Delete;
-    fn delete_objects(&self, table_name: &str, expression: Expression) -> WCDBResult<()>;
+    fn delete_objects(&self, table_name: &str) -> WCDBResult<()>;
+    fn delete_objects_by_expression(
+        &self,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<()>;
 }
 
 impl CppObjectTrait for HandleORMOperation {

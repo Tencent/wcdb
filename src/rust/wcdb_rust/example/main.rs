@@ -57,7 +57,7 @@ fn main() {
 
     insert_object_to_rct_message(&db);
     insert_objects_to_rct_message(&db);
-    delete_objects_from_rct_message(&db);
+    // delete_objects_from_rct_message(&db);
 }
 
 /// 插入单条数据
@@ -79,7 +79,8 @@ fn insert_objects_to_rct_message(db: &Database) {
 }
 
 fn delete_objects_from_rct_message(db: &Database) {
-    db.delete_objects("rct_message", Expression::new()).unwrap();
+    // db.delete_objects_by_expression("rct_message", Expression::new()).unwrap();
+    db.delete_objects("rct_message").unwrap();
 }
 
 fn get_current_username() -> String {
