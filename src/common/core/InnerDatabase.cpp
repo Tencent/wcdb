@@ -567,6 +567,8 @@ bool InnerDatabase::removeFiles()
         if (!result) {
             assignWithSharedThreadedError();
         }
+        m_migration.purge();
+        m_compression.purge();
     });
     return result;
 }

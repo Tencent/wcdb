@@ -61,6 +61,7 @@ bool Compression::shouldCompress() const
 void Compression::purge()
 {
     LockGuard lockGuard(m_lock);
+    m_hasCreatedRecord = false;
     m_tableAcquired = false;
     m_compressed = false;
     m_compressings.clear();
