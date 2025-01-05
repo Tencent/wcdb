@@ -1013,12 +1013,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     public int execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal) {
-        return execSQL(sql, bindArgs, cancellationSignal, !TextUtils.isEmpty(sql) && sql.toLowerCase().startsWith("select"));
-    }
-
-    public int execSQL(String sql, Object[] bindArgs, CancellationSignal cancellationSignal, boolean readOnly) {
         try (SQLiteStatement stmt = new SQLiteStatement(mDB, sql, bindArgs)) {
-            return stmt.execute(cancellationSignal, readOnly);
+            return stmt.execute(cancellationSignal);
         }
     }
 
