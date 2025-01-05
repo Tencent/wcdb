@@ -53,8 +53,7 @@ void InnerHandle::setType(HandleType type)
     case HandleType::Compress:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeCompress);
         break;
-    case HandleType::BackupRead:
-    case HandleType::BackupWrite:
+    case HandleType::Backup:
     case HandleType::BackupCipher:
         m_error.infos.insert_or_assign(ErrorStringKeyType, ErrorTypeBackup);
         break;
