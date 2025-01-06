@@ -93,6 +93,36 @@ impl HandleORMOperationTrait for Database {
         Ok(())
     }
 
+    fn insert_or_replace_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_replace()
+            .into_table(table_name)
+            .value(object)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
+    }
+
+    fn insert_or_ignore_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_ignore()
+            .into_table(table_name)
+            .value(object)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
+    }
+
     fn insert_objects<T>(
         &self,
         objects: Vec<T>,
@@ -100,6 +130,36 @@ impl HandleORMOperationTrait for Database {
         table_name: &str,
     ) -> WCDBResult<()> {
         self.prepare_insert::<T>()
+            .into_table(table_name)
+            .values(objects)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
+    }
+
+    fn insert_or_replace_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_replace()
+            .into_table(table_name)
+            .values(objects)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
+    }
+
+    fn insert_or_ignore_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_ignore()
             .into_table(table_name)
             .values(objects)
             .on_fields(fields)

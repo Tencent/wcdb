@@ -98,16 +98,14 @@ impl Value {
     pub fn get_text(&self) -> String {
         match &self.value {
             ValueObject::String(val) => val.to_string(),
-            ValueObject::BLOB(val) => {
-                String::from_utf8((*val).clone()).unwrap_or("".to_string())
-            }
+            ValueObject::BLOB(val) => String::from_utf8((*val).clone()).unwrap_or("".to_string()),
             _ => "".to_string(),
         }
     }
 
     pub fn get_blob(&self) -> Vec<u8> {
         match &self.value {
-            ValueObject::BLOB(val) => {val.clone()}
+            ValueObject::BLOB(val) => val.clone(),
             _ => {
                 let string = self.get_text();
                 string.as_bytes().to_vec()

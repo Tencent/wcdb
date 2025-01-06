@@ -57,11 +57,11 @@ void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char*
 //    WCDBRustTryReleaseStringInCommonValue(schema);
 //}
 //
-//void WCDBRustStatementInsertClassMethod(configConfliction, jlong self, jint action)
-//{
-//    WCDBRustBridgeStruct(CPPStatementInsert, self);
-//    WCDBStatementInsertConfigConfiction(selfStruct, action);
-//}
+void WCDBRustStatementInsertClassMethod(configConflictAction, void* self, int action)
+{
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBStatementInsertConfigConfiction(selfStruct, action);
+}
 //
 //void WCDBRustStatementInsertClassMethod(configAs, jlong self, jstring alias)
 //{

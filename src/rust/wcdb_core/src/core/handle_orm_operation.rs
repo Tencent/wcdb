@@ -26,7 +26,31 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+    fn insert_or_replace_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
+    fn insert_or_ignore_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
     fn insert_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
+    fn insert_or_replace_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
+    fn insert_or_ignore_objects<T>(
         &self,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,

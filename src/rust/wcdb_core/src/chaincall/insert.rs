@@ -47,8 +47,29 @@ impl<'a, T> Insert<'a, T> {
         }
     }
 
+    pub fn or_replace(mut self) -> Self {
+        self.has_conflict_action = true;
+        self.chain_call.statement.or_replace();
+        self
+    }
+
+    pub fn or_ignore(mut self) -> Self {
+        self.has_conflict_action = true;
+        self.chain_call.statement.or_ignore();
+        self
+    }
+
     pub fn into_table(mut self, table_name: &str) -> Self {
         self.chain_call.statement.insert_into(table_name);
+        self
+    }
+
+    pub fn on_fields(mut self, fields: Vec<&'a Field<T>>) -> Self {
+        self.fields = fields;
+        self.chain_call
+            .statement
+            .columns(&self.fields)
+            .values_with_bind_parameters(self.fields.len());
         self
     }
 
@@ -61,15 +82,6 @@ impl<'a, T> Insert<'a, T> {
     pub fn values(mut self, objects: Vec<T>) -> Self {
         self.values.borrow_mut().clear();
         self.values.borrow_mut().extend(objects);
-        self
-    }
-
-    pub fn on_fields(mut self, fields: Vec<&'a Field<T>>) -> Self {
-        self.fields = fields;
-        self.chain_call
-            .statement
-            .columns(&self.fields)
-            .values_with_bind_parameters(self.fields.len());
         self
     }
 
@@ -87,6 +99,10 @@ impl<'a, T> Insert<'a, T> {
         }
         Ok(self)
     }
+
+    // pub fn get_last_insert_row_id(&self) -> i64 {
+    //     *self.last_insert_row_id.borrow()
+    // }
 
     pub fn real_execute(&self) -> WCDBResult<()> {
         let binding: &dyn TableBinding<T> = Field::get_binding_from_fields(&self.fields);

@@ -3,6 +3,7 @@ pub mod column_constraint;
 pub mod column_def;
 pub mod column_type;
 pub mod common_table_expression;
+pub mod conflict_action;
 pub mod expression;
 pub mod expression_operable;
 pub mod identifier;

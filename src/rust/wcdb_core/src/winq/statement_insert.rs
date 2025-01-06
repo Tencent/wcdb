@@ -1,10 +1,11 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
+use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{
     CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
 };
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::{c_char, c_void, CString};
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
@@ -13,6 +14,12 @@ extern "C" {
         cpp_obj: *mut c_void,
         table_name: *const c_char,
     ) -> *mut c_void;
+
+    pub fn WCDBRustStatementInsert_configConflictAction(
+        cpp_obj: *mut c_void,
+        action: c_int,
+    ) -> c_void;
+
     pub fn WCDBRustStatementInsert_configColumns(
         cpp_obj: *mut c_void,
         columns_type: i32,
@@ -72,6 +79,26 @@ impl StatementInsert {
         let c_table_name = CString::new(table_name).unwrap_or_default();
         unsafe {
             WCDBRustStatementInsert_configTableName(self.get_cpp_obj(), c_table_name.as_ptr());
+        }
+        self
+    }
+
+    pub fn or_replace(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configConflictAction(
+                self.get_cpp_obj(),
+                ConflictAction::Replace as i32,
+            );
+        }
+        self
+    }
+
+    pub fn or_ignore(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configConflictAction(
+                self.get_cpp_obj(),
+                ConflictAction::Ignore as i32,
+            );
         }
         self
     }

@@ -40,7 +40,7 @@ void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char*
 //void WCDBRustStatementInsertClassMethod(configSchema,
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringParameter(schema));
-//void WCDBRustStatementInsertClassMethod(configConfliction, jlong self, jint action);
+void WCDBRustStatementInsertClassMethod(configConflictAction, void* self, int action);
 //void WCDBRustStatementInsertClassMethod(configAs, jlong self, jstring alias);
 void WCDBRustStatementInsertClassMethod(configColumns,
                                         void* self,
