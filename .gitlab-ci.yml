@@ -7,19 +7,12 @@ cache:
   paths:
     - CargoHome/registry/index/
     - CargoHome/registry/cache/
-    # - examples/c_demo/tests/build/_deps/
-    # - examples/c_demo/tests/build/CMakeFiles/
-    # - examples/c_demo/tests/build/cmake_install.cmake
-    # - examples/c_demo/tests/build/CMakeCache.txt
-    # - examples/c_demo/tests/build/Makefile
 
 stages:
   - test
 
 variables:
   GIT_DEPTH: 1
-# variables:
-#   GIT_SUBMODULE_STRATEGY: recursive
 
 run_test:
   stage: test
@@ -28,19 +21,10 @@ run_test:
   script:
     - export CC=clang
     - export CXX=clang++
-    - export RUSTFLAGS="-D warnings -A unused -A deprecated"
     - export RUSTC_WRAPPER=sccache
-    - echo CI_PROJECT_DIR = ${CI_PROJECT_DIR}
+    - export RUSTFLAGS="-D warnings -A unused -A deprecated"
     - cd src/rust
     - autocorrect --lint
     - cargo fmt -- --check
-    - ls -al
-    # - du -sh target
     - cargo build
-    # - autocorrect --lint
-    # - rm -f Cargo.lock
-    # - cargo build
-    # - cargo fmt -- --check
-    # - mkdir -p examples/c_demo/tests/build && cd examples/c_demo/tests/build && cmake .. && make
-    # - ./c_test -d yes --order rand
-    
+    - cargo run --package wcdb_rust --example demo

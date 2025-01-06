@@ -7,15 +7,15 @@ fn main() {
 
     println!("cargo:rustc-link-lib=c++");
     println!("cargo:rustc-link-lib=z");
-    println!(
-        "cargo:rustc-link-search=native={}/build/wcdb/",
-        dst.display()
-    );
     println!("cargo:rustc-link-lib=static=sqlcipher");
     println!("cargo:rustc-link-lib=static=zstd");
     if cfg!(target_os = "macos") {
         println!("cargo:rustc-link-lib=framework=CoreFoundation");
         println!("cargo:rustc-link-lib=framework=Security");
+        println!(
+            "cargo:rustc-link-search=native={}/build/wcdb/",
+            dst.display()
+        );
         println!(
             "cargo:rustc-link-search=framework={}/build/wcdb/",
             dst.display()
@@ -26,6 +26,6 @@ fn main() {
             "cargo:rustc-link-search=native={}/build/wcdb/",
             dst.display()
         );
-        println!("cargo:rustc-link-lib=static=wcdb");
+        println!("cargo:rustc-link-lib=static=WCDB");
     }
 }
