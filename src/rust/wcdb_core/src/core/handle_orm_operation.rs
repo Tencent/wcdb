@@ -7,6 +7,7 @@ use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::expression::Expression;
+use crate::winq::ordering_term::OrderingTerm;
 use std::ffi::c_void;
 
 #[derive(Debug)]
@@ -64,6 +65,38 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         table_name: &str,
         expression: Expression,
+    ) -> WCDBResult<()>;
+
+    fn delete_objects_by_expression_order_limit(
+        &self,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()>;
+
+    fn delete_objects_by_expression_order_limit_offset(
+        &self,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()>;
+
+    fn delete_objects_by_order_limit(
+        &self,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()>;
+
+    fn delete_objects_by_order_limit_offset(
+        &self,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
     ) -> WCDBResult<()>;
 
     fn update_object<T>(

@@ -11,6 +11,7 @@ use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
 use crate::winq::expression::Expression;
+use crate::winq::ordering_term::OrderingTerm;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
@@ -189,12 +190,75 @@ impl HandleORMOperationTrait for Database {
         table_name: &str,
         expression: Expression,
     ) -> WCDBResult<()> {
-        // self.prepare_delete()
-        //     .from_table(table_name)
-        //     .where_expression(expression)
-        //     .execute()?;
-        // Ok(())
-        todo!("qixinbing")
+        self.prepare_delete()
+            .from_table(table_name)
+            .where_expression(expression)
+            .execute()?;
+        Ok(())
+    }
+
+    fn delete_objects_by_expression_order_limit(
+        &self,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_delete()
+            .from_table(table_name)
+            .where_expression(expression)
+            .order_by(&vec![order])
+            .limit(limit)
+            .execute()?;
+        Ok(())
+    }
+
+    fn delete_objects_by_expression_order_limit_offset(
+        &self,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_delete()
+            .from_table(table_name)
+            .where_expression(expression)
+            .order_by(&vec![order])
+            .limit(limit)
+            .offset(offset)
+            .execute()?;
+        Ok(())
+    }
+
+    fn delete_objects_by_order_limit(
+        &self,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_delete()
+            .from_table(table_name)
+            .order_by(&vec![order])
+            .limit(limit)
+            .execute()?;
+        Ok(())
+    }
+
+    fn delete_objects_by_order_limit_offset(
+        &self,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_delete()
+            .from_table(table_name)
+            .order_by(&vec![order])
+            .limit(limit)
+            .offset(offset)
+            .execute()?;
+        Ok(())
     }
 
     fn update_object<T>(

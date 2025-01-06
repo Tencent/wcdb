@@ -3,6 +3,7 @@ use crate::winq::expression::Expression;
 use crate::winq::identifier::{
     CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
 };
+use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
@@ -20,6 +21,18 @@ extern "C" {
     pub fn WCDBRustStatementDelete_configCondition(
         cpp_obj: *mut c_void,
         condition: *mut c_void,
+    ) -> c_void;
+
+    pub fn WCDBRustStatementDelete_configOrders(
+        cpp_obj: *mut c_void,
+        orders: *const *mut c_void,
+        len: usize,
+    ) -> c_void;
+
+    pub fn WCDBRustStatementDelete_configLimitCount(
+        cpp_obj: *mut c_void,
+        type_: c_int,
+        count: c_long,
     ) -> c_void;
 }
 
@@ -86,6 +99,46 @@ impl StatementDelete {
             WCDBRustStatementDelete_configCondition(
                 self.get_cpp_obj(),
                 CppObject::get(condition.get_expression_operable()),
+            );
+        }
+        self
+    }
+
+    pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
+        if orders.is_empty() {
+            return self;
+        }
+        let mut cpp_orders = Vec::with_capacity(orders.len());
+        for order in orders {
+            cpp_orders.push(order.get_cpp_obj());
+        }
+        unsafe {
+            WCDBRustStatementDelete_configOrders(
+                self.get_cpp_obj(),
+                cpp_orders.as_ptr(),
+                cpp_orders.len(),
+            );
+        }
+        self
+    }
+
+    pub fn limit(&self, count: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configLimitCount(
+                self.get_cpp_obj(),
+                CPPType::Int as i32,
+                count,
+            );
+        }
+        self
+    }
+
+    pub fn offset(&self, offset: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configLimitCount(
+                self.get_cpp_obj(),
+                CPPType::Int as i32,
+                offset,
             );
         }
         self

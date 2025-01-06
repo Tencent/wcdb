@@ -55,16 +55,16 @@ void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condi
     WCDBRustBridgeStruct(CPPExpression, condition);
     WCDBStatementDeleteConfigWhere(selfStruct, conditionStruct);
 }
-//
-//void WCDBRustStatementDeleteClassMethod(configOrders, jlong self, jlongArray orders)
-//{
-//    WCDBRustBridgeStruct(CPPStatementDelete, self);
-//    WCDBRustGetCppPointerArrayCritical(orders);
-//    WCDBStatementDeleteConfigOrder(
-//    selfStruct, (const CPPOrderingTerm *) ordersArray, ordersLength);
+
+void WCDBRustStatementDeleteClassMethod(configOrders, void* self, void** orders, size_t len)
+{
+    WCDBRustBridgeStruct(CPPStatementDelete, self);
+//    WCDBRustGetCppPointerArrayCritical(orders, len);
+    WCDBStatementDeleteConfigOrder(
+    selfStruct, (const CPPOrderingTerm *) orders, len);
 //    WCDBRustReleaseCppPointerArrayCritical(orders);
-//}
-//
+}
+
 //void WCDBRustStatementDeleteClassMethod(
 //configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 //{
@@ -78,14 +78,14 @@ void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condi
 //    WCDBStatementDeleteConfigLimitRange2(selfStruct, from_common, to_common);
 //}
 //
-//void WCDBRustStatementDeleteClassMethod(configLimitCount, jlong self, jint type, jlong limit)
-//{
-//    WCDBRustBridgeStruct(CPPStatementDelete, self);
-//    CPPCommonValue limit_common;
-//    limit_common.type = type;
-//    limit_common.intValue = limit;
-//    WCDBStatementDeleteConfigLimitCount2(selfStruct, limit_common);
-//}
+void WCDBRustStatementDeleteClassMethod(configLimitCount, void* self, int type, long limit)
+{
+    WCDBRustBridgeStruct(CPPStatementDelete, self);
+    CPPCommonValue limit_common;
+    limit_common.type = type;
+    limit_common.intValue = limit;
+    WCDBStatementDeleteConfigLimitCount2(selfStruct, limit_common);
+}
 //
 //void WCDBRustStatementDeleteClassMethod(configOffset, jlong self, jint type, jlong offset)
 //{

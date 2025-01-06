@@ -8,6 +8,7 @@ pub mod expression;
 pub mod expression_operable;
 pub mod identifier;
 pub mod literal_value;
+pub mod ordering_term;
 pub mod statement;
 pub mod statement_create_index;
 pub mod statement_delete;

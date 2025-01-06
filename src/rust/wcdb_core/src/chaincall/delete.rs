@@ -2,6 +2,8 @@ use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
 use crate::winq::expression::Expression;
+use crate::winq::expression_operable::ExpressionOperable;
+use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_delete::StatementDelete;
 use std::fmt::Debug;
@@ -39,6 +41,21 @@ impl<'a> Delete<'a> {
 
     pub fn where_expression(self, condition: Expression) -> Self {
         self.chain_call.statement.where_expression(condition);
+        self
+    }
+
+    pub fn order_by(self, orders: &Vec<OrderingTerm>) -> Self {
+        self.chain_call.statement.order_by(orders);
+        self
+    }
+
+    pub fn limit(self, count: i64) -> Self {
+        self.chain_call.statement.limit(count);
+        self
+    }
+
+    pub fn offset(self, offset: i64) -> Self {
+        self.chain_call.statement.offset(offset);
         self
     }
 
