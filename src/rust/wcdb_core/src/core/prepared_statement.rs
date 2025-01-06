@@ -88,11 +88,11 @@ impl PreparedStatement {
             return;
         }
         if ColumnType::Text == value_type {
-            self.bind_text(value.get_text(), index);
+            self.bind_text(value.get_text().as_str(), index);
             return;
         }
         if ColumnType::BLOB == value_type {
-            self.bind_blob(value.get_blob(), index);
+            self.bind_blob(&value.get_blob(), index);
             return;
         }
         self.bind_null(index);

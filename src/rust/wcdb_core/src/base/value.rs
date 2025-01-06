@@ -74,7 +74,12 @@ impl Value {
     }
 
     pub fn get_long(&self) -> i64 {
-        todo!("qixinbing")
+        match &self.value {
+            ValueObject::Long(val) => *val,
+            ValueObject::Double(val) => (*val).round() as i64,
+            ValueObject::String(val) => val.parse::<i64>().unwrap_or(0),
+            _ => 0,
+        }
     }
 
     pub fn get_float(&self) -> f32 {
@@ -82,14 +87,31 @@ impl Value {
     }
 
     pub fn get_double(&self) -> f64 {
-        todo!("qixinbing")
+        match &self.value {
+            ValueObject::Double(val) => *val,
+            ValueObject::Long(val) => (*val) as f64,
+            ValueObject::String(val) => val.parse::<f64>().unwrap_or(0.0),
+            _ => 0.0,
+        }
     }
 
-    pub fn get_text(&self) -> &str {
-        todo!("qixinbing")
+    pub fn get_text(&self) -> String {
+        match &self.value {
+            ValueObject::String(val) => val.to_string(),
+            ValueObject::BLOB(val) => {
+                String::from_utf8((*val).clone()).unwrap_or("".to_string())
+            }
+            _ => "".to_string(),
+        }
     }
 
-    pub fn get_blob(&self) -> &Vec<u8> {
-        todo!("qixinbing")
+    pub fn get_blob(&self) -> Vec<u8> {
+        match &self.value {
+            ValueObject::BLOB(val) => {val.clone()}
+            _ => {
+                let string = self.get_text();
+                string.as_bytes().to_vec()
+            }
+        }
     }
 }
