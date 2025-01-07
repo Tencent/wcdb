@@ -2,6 +2,7 @@ use std::env;
 use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::orm::field::Field;
 use wcdb_core::winq::expression::Expression;
 
 #[derive(WCDBTableCoding)]
@@ -60,6 +61,7 @@ fn main() {
     // delete_objects_from_rct_message(&db);
     // delete_objects_by_expression_from_rct_message(&db);
     // update_object_to_rct_message(&db);
+    get_all_object_from_rct_message(&db);
 }
 
 /// 插入单条数据
@@ -95,6 +97,44 @@ fn update_object_to_rct_message(db: &Database) {
     record1.multi_index1 = 999;
     db.update_object(record1, DbTableMessage::all_fields(), "rct_message")
         .unwrap();
+}
+
+fn get_all_object_from_rct_message(db: &Database) {
+    // let fields: Vec<&Field<TableMessage>> = DbTableMessage::all_fields();
+    let mut field_vec: Vec<Field<TableMessage>> = vec![];
+
+    let field = Field::new("multi_primary1", &*DBTABLEMESSAGE_INSTANCE, 1, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_primary2", &*DBTABLEMESSAGE_INSTANCE, 2, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_primary", &*DBTABLEMESSAGE_INSTANCE, 3, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_unique1", &*DBTABLEMESSAGE_INSTANCE, 4, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_unique2", &*DBTABLEMESSAGE_INSTANCE, 5, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_unique", &*DBTABLEMESSAGE_INSTANCE, 6, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_index1", &*DBTABLEMESSAGE_INSTANCE, 7, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_index2", &*DBTABLEMESSAGE_INSTANCE, 8, false, false);
+    field_vec.push(field);
+
+    let field = Field::new("multi_index", &*DBTABLEMESSAGE_INSTANCE, 9, false, false);
+    field_vec.push(field);
+
+    let all_objects_ret = db.get_all_objects::<TableMessage>(field_vec, "rct_message");
+    match all_objects_ret {
+        Ok(obj_vec) => for obj in obj_vec {},
+        Err(_) => {}
+    }
 }
 
 fn get_current_username() -> String {

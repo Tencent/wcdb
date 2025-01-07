@@ -38,13 +38,13 @@ void* WCDBRustStatementSelectClassMethodWithNoArg(create);
 //void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementSelectClassMethod(configRecursive, jlong self);
 //
-//void WCDBRustStatementSelectClassMethod(configResultColumns,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(resultColumns));
+void WCDBRustStatementSelectClassMethod(configResultColumns,
+                                       void* self,
+                                       WCDBRustMultiTypeArrayParameter(resultColumns));
 //void WCDBRustStatementSelectClassMethod(configDistiction, jlong self);
-//void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(tableOrSubqueries));
+void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
+                                       void* self,
+                                       WCDBRustMultiTypeArrayParameter(tableOrSubqueries));
 //void WCDBRustStatementSelectClassMethod(configCondition, jlong self, jlong condition);
 //void WCDBRustStatementSelectClassMethod(configGroups,
 //                                       jlong self,

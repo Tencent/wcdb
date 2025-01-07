@@ -41,15 +41,15 @@ void* WCDBRustStatementSelectClassMethodWithNoArg(create)
 //    WCDBStatementSelectConfigRecursive(selfStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configResultColumns,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(resultColumns))
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBRustCreateMultiTypeArray(resultColumns);
-//    WCDBStatementSelectConfigResultColumns2(selfStruct, resultColumnsArray);
+void WCDBRustStatementSelectClassMethod(configResultColumns,
+                                        void* self,
+                                       WCDBRustMultiTypeArrayParameter(resultColumns))
+{
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBRustCreateMultiTypeArray(resultColumns);
+    WCDBStatementSelectConfigResultColumns2(selfStruct, resultColumnsArray);
 //    WCDBRustReleaseMultiTypeArray(resultColumns);
-//}
+}
 //
 //void WCDBRustStatementSelectClassMethod(configDistiction, jlong self)
 //{
@@ -57,15 +57,15 @@ void* WCDBRustStatementSelectClassMethodWithNoArg(create)
 //    WCDBStatementSelectConfigDistinct(selfStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(tableOrSubqueries))
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBRustCreateMultiTypeArray(tableOrSubqueries);
-//    WCDBStatementSelectConfigFromTableOrSubqueries2(selfStruct, tableOrSubqueriesArray);
+void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
+                                        void* self,
+                                       WCDBRustMultiTypeArrayParameter(tableOrSubqueries))
+{
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBRustCreateMultiTypeArray(tableOrSubqueries);
+    WCDBStatementSelectConfigFromTableOrSubqueries2(selfStruct, tableOrSubqueriesArray);
 //    WCDBRustReleaseMultiTypeArray(tableOrSubqueries);
-//}
+}
 //
 //void WCDBRustStatementSelectClassMethod(configCondition, jlong self, jlong condition)
 //{

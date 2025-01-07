@@ -2,6 +2,7 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
+use crate::chaincall::select::Select;
 use crate::chaincall::update::Update;
 use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
@@ -59,6 +60,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
     ) -> WCDBResult<()>;
     fn prepare_insert<T>(&self) -> Insert<T>;
     fn prepare_update<T>(&self) -> Update<T>;
+    fn prepare_select<T>(&self) -> Select<T>;
     fn prepare_delete(&self) -> Delete;
     fn delete_objects(&self, table_name: &str) -> WCDBResult<()>;
     fn delete_objects_by_expression(
@@ -105,6 +107,8 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
+    fn get_all_objects<T>(&self, fields: Vec<Field<T>>, table_name: &str) -> WCDBResult<Vec<T>>;
 }
 
 impl CppObjectTrait for HandleORMOperation {

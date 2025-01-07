@@ -13,6 +13,7 @@ extern "C" {
     pub fn WCDBRustHandleStatement_step(cpp_obj: *mut c_void) -> bool;
     pub fn WCDBRustHandleStatement_reset(cpp_obj: *mut c_void);
     pub fn WCDBRustHandleStatement_finalize(cpp_obj: *mut c_void);
+    pub fn WCDBRustHandleStatement_isDone(cpp_obj: *mut c_void) -> bool;
     pub fn WCDBRustHandleStatement_bindInteger(cpp_obj: *mut c_void, value: i64, index: usize);
     pub fn WCDBRustHandleStatement_bindNull(cpp_obj: *mut c_void, index: usize);
     pub fn WCDBRustHandleStatement_getInteger(cpp_obj: *mut c_void, index: usize) -> i64;
@@ -151,5 +152,35 @@ impl PreparedStatement {
 
     pub fn finalize_statement(&self) {
         unsafe { WCDBRustHandleStatement_finalize(*self.cpp_obj) }
+    }
+
+    pub fn get_all_objects<T>(&self, fields: &Vec<Field<T>>) -> WCDBResult<Vec<T>> {
+        assert!(fields.len() > 0);
+        let field_opt = fields.first();
+        if field_opt.is_none() {
+            return Err(WCDBException::create_exception(self.get_cpp_obj()));
+        }
+        let field = field_opt.unwrap();
+        let tb = field.get_table_binding();
+
+        let mut obj_vec: Vec<T> = Vec::new();
+        self.step()?;
+
+        while !self.is_done() {
+            // let fields_clone =fields.clone();
+            // let mut field_vec_owned = vec![];
+            // for field in fields.clone() {
+            //     field_vec_owned.push(field);
+            // }
+            let obj = tb.extract_object(fields, self);
+            obj_vec.push(obj);
+            self.step()?;
+        }
+
+        Ok(obj_vec)
+    }
+
+    fn is_done(&self) -> bool {
+        unsafe { WCDBRustHandleStatement_isDone(*self.cpp_obj) }
     }
 }

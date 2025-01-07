@@ -72,11 +72,11 @@ void WCDBRustHandleStatementClassMethod(finalize, void* self)
     WCDBHandleStatementFinalize(selfStruct);
 }
 
-//bool WCDBRustHandleStatementClassMethod(isDone, void* self)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return WCDBHandleStatementIsDone(selfStruct);
-//}
+bool WCDBRustHandleStatementClassMethod(isDone, void* self)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return WCDBHandleStatementIsDone(selfStruct);
+}
 
 void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value, int index)
 {

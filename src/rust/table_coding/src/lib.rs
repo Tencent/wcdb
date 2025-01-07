@@ -186,7 +186,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
 
             fn extract_object(
                 &self,
-                fields: Vec<wcdb_core::orm::field::Field<#table_ident>>,
+                fields: &Vec<wcdb_core::orm::field::Field<#table_ident>>,
                 prepared_statement: &wcdb_core::core::prepared_statement::PreparedStatement,
             ) -> #table_ident {
                 #extract_object_statements

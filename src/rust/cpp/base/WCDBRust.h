@@ -128,7 +128,7 @@
     }
 
 #define WCDBRustGetIntArray(value)                                             \
-    const jint *value##Array = NULL;                                           \
+    const int *value##Array = NULL;                                           \
     int value##Length = 0;                                                     \
     if (value != NULL) {                                                       \
         value##Array = (*env)->GetIntArrayElements(env, value, NULL);          \
@@ -250,20 +250,17 @@
     }
 
 #define WCDBRustMultiTypeArrayParameter(parameter)                              \
-    jintArray parameter##_types, jlongArray parameter##_longValues,            \
-    jdoubleArray parameter##_doubleValues, jobjectArray parameter##_stringValues
+    int* parameter##_types, long* parameter##_longValues,            \
+    double* parameter##_doubleValues, void** parameter##_stringValues,          \
+    int parameter##_arrayLen
 
 #define WCDBRustCreateMultiTypeArray(parameter)                                      \
-    WCDBRustGetIntArray(parameter##_types);                                          \
-    WCDBRustGetLongArray(parameter##_longValues);                                    \
-    WCDBRustGetDoubleArray(parameter##_doubleValues);                                \
-    WCDBRustGetStringArray(parameter##_stringValues);                                \
     CPPMultiTypeArray parameter##Array;                                             \
-    parameter##Array.totalLength = parameter##_typesLength;                         \
-    parameter##Array.types = (const enum WCDBBridgedType *) parameter##_typesArray; \
-    parameter##Array.intValues = (const long long *) parameter##_longValuesArray;   \
-    parameter##Array.doubleValues = (const double *) parameter##_doubleValuesArray; \
-    parameter##Array.stringValues = (const char **) parameter##_stringValuesCharArray;
+    parameter##Array.totalLength = parameter##_arrayLen;                         \
+    parameter##Array.types = (const enum WCDBBridgedType *) parameter##_types; \
+    parameter##Array.intValues = (const long long *) parameter##_longValues;   \
+    parameter##Array.doubleValues = (const double *) parameter##_doubleValues; \
+    parameter##Array.stringValues = (const char **) parameter##_stringValues;
 
 #define WCDBRustReleaseMultiTypeArray(parameter)                                \
     WCDBRustReleaseIntArray(parameter##_types);                                 \

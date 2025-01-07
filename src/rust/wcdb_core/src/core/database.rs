@@ -2,6 +2,7 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
+use crate::chaincall::select::Select;
 use crate::chaincall::update::Update;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
@@ -176,6 +177,10 @@ impl HandleORMOperationTrait for Database {
         Update::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 
+    fn prepare_select<T>(&self) -> Select<T> {
+        Select::new(self.get_handle(false), false, self.auto_invalidate_handle())
+    }
+
     fn prepare_delete(&self) -> Delete {
         Delete::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
@@ -273,6 +278,13 @@ impl HandleORMOperationTrait for Database {
             .to_object(object)
             .execute()?;
         Ok(())
+    }
+
+    fn get_all_objects<T>(&self, fields: Vec<Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .all_objects()
     }
 }
 

@@ -41,7 +41,7 @@ bool WCDBRustHandleStatementClassMethod(step, void* self);
 void WCDBRustHandleStatementClassMethod(reset, void* self);
 //void WCDBRustHandleStatementClassMethod(clearBindings, void* self);
 void WCDBRustHandleStatementClassMethod(finalize, void* self);
-//bool WCDBRustHandleStatementClassMethod(isDone, void* self);
+bool WCDBRustHandleStatementClassMethod(isDone, void* self);
 void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value, int index);
 //void WCDBRustHandleStatementClassMethod(bindDouble, void* self, jdouble value, jint index);
 //void WCDBRustHandleStatementClassMethod(bindText, void* self, jstring value, jint index);
