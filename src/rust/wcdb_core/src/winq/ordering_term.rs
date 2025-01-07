@@ -29,7 +29,7 @@ impl IdentifierStaticTrait for OrderingTerm {
 }
 
 impl OrderingTerm {
-    pub fn new(expression: ExpressionOperable) -> Self {
+    pub(crate) fn new(expression: ExpressionOperable) -> Self {
         let identifier = Identifier::new_with_obj(expression.get_cpp_obj());
         OrderingTerm { identifier }
     }
