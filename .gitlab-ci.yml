@@ -1,12 +1,11 @@
 image: "harbor.rongcloud.net/library/rust/wcdb:0.0.4"
 
-variables:
-  CARGO_HOME: ${CI_PROJECT_DIR}/CargoHome
-
 cache:
   paths:
     - CargoHome/registry/index/
     - CargoHome/registry/cache/
+    - src/rust/target/
+    - src/rust/Cargo.lock
 
 stages:
   - test
@@ -19,12 +18,9 @@ run_test:
   before_script:
     - git submodule update --init sqlcipher zstd
   script:
-    - export CC=clang
-    - export CXX=clang++
-    - export RUSTC_WRAPPER=sccache
+    - export CARGO_HOME=${CI_PROJECT_DIR}/CargoHome
     - export RUSTFLAGS="-D warnings -A unused -A deprecated"
     - cd src/rust
     - autocorrect --lint
     - cargo fmt -- --check
-    - cargo build
     - cargo run --package wcdb_rust --example demo
