@@ -50,9 +50,7 @@ impl TableMessage {
 }
 
 fn main() {
-    let user = get_current_username();
-    let db_path = format!("/Users/{}/Downloads/test.db", user);
-    let db = Database::new(db_path.as_str());
+    let db = Database::new("./target/tmp/test.db");
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE)
         .unwrap();
 
