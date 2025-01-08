@@ -108,7 +108,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
     ) -> WCDBResult<()>;
 
-    fn get_all_objects<T>(&self, fields: Vec<Field<T>>, table_name: &str) -> WCDBResult<Vec<T>>;
+    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>>;
 }
 
 impl CppObjectTrait for HandleORMOperation {

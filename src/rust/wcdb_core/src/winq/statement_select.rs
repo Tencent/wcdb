@@ -73,7 +73,7 @@ impl StatementSelect {
         }
     }
 
-    pub fn select<T>(&self, fields: &Vec<Field<T>>) -> &Self {
+    pub fn select<T>(&self, fields: &Vec<&Field<T>>) -> &Self {
         if fields.is_empty() {
             return self;
         }

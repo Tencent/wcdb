@@ -20,6 +20,7 @@
 
 #include "HandleStatementRust.h"
 #include "HandleStatementBridge.h"
+#include <string.h>
 
 void* WCDBRustHandleStatementClassMethod(getError, void* self)
 {
@@ -84,27 +85,19 @@ void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value
     WCDBHandleStatementBindInteger(selfStruct, index, value);
 }
 
-//void WCDBRustHandleStatementClassMethod(bindDouble, void* self, jdouble value, jint index)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    WCDBHandleStatementBindDouble(selfStruct, index, value);
-//}
-//
-//void WCDBRustHandleStatementClassMethod(bindText, void* self, jstring value, jint index)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    int valueLength = 0;
-//    const jchar *valueUTF16String = NULL;
-//    if (value != NULL) {
-//        valueLength = (*env)->GetStringLength(env, value);
-//        valueUTF16String = (*env)->GetStringCritical(env, value, 0);
-//    }
-//    WCDBHandleStatementBindText16(
-//    selfStruct, index, (const short *) valueUTF16String, valueLength);
-//    if (valueUTF16String != NULL) {
-//        (*env)->ReleaseStringCritical(env, value, valueUTF16String);
-//    }
-//}
+void WCDBRustHandleStatementClassMethod(bindDouble, void* self, double value, int index)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    WCDBHandleStatementBindDouble(selfStruct, index, value);
+}
+
+void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value, int index)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    int valueLength = strlen(value);
+    WCDBHandleStatementBindText16(
+    selfStruct, index, (const short *) value, valueLength);
+}
 //
 //void WCDBRustHandleStatementClassMethod(bindBLOB, void* self, jbyteArray value, jint index)
 //{
@@ -141,20 +134,19 @@ long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index)
     return WCDBHandleStatementGetInteger(selfStruct, index);
 }
 
-//jdouble WCDBRustHandleStatementClassMethod(getDouble, void* self, jint index)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return WCDBHandleStatementGetDouble(selfStruct, index);
-//}
-//
-//jstring WCDBRustHandleStatementClassMethod(getText, void* self, jint index)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    const jchar *utf16Value
-//    = (const jchar *) WCDBHandleStatementGetText16(selfStruct, index);
-//    jsize utf16ValueLength = WCDBHandleStatementGetText16Length(selfStruct, index);
-//    return (*env)->NewString(env, utf16Value, utf16ValueLength);
-//}
+double WCDBRustHandleStatementClassMethod(getDouble, void* self, int index)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return WCDBHandleStatementGetDouble(selfStruct, index);
+}
+
+const char* WCDBRustHandleStatementClassMethod(getText, void* self, int index)
+{
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    const char *utf16Value
+    = (const char *) WCDBHandleStatementGetText16(selfStruct, index);
+    return utf16Value;
+}
 //
 //jbyteArray WCDBRustHandleStatementClassMethod(getBLOB, void* self, jint index)
 //{

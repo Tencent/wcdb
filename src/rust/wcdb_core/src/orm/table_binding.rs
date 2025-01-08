@@ -11,7 +11,7 @@ pub trait TableBinding<T> {
 
     fn base_binding(&self) -> &Binding;
 
-    fn extract_object(&self, fields: &Vec<Field<T>>, prepared_statement: &PreparedStatement) -> T;
+    fn extract_object(&self, fields: &Vec<&Field<T>>, prepared_statement: &PreparedStatement) -> T;
 
     fn bind_field(
         &self,

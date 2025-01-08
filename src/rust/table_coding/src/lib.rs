@@ -49,12 +49,30 @@ impl WCDBTable {
     }
 }
 
+// 参考 PreparedStatement get_xxx()
 fn get_type_string(ty: &Type) -> syn::Result<String> {
     if let Type::Path(type_path) = ty {
-        if type_path.path.is_ident("i32") {
+        if type_path.path.is_ident("bool") {
+            Ok("get_bool".to_string())
+        } else if type_path.path.is_ident("i8") {
+            Ok("get_byte".to_string())
+        } else if type_path.path.is_ident("i16") {
+            Ok("get_short".to_string())
+        } else if type_path.path.is_ident("i32") {
             Ok("get_int".to_string())
+        } else if type_path.path.is_ident("i64") {
+            Ok("get_long".to_string())
+        } else if type_path.path.is_ident("f32") {
+            Ok("get_float".to_string())
+        } else if type_path.path.is_ident("f64") {
+            Ok("get_double".to_string())
+        } else if type_path.path.is_ident("String") {
+            Ok("get_text".to_string())
         } else {
-            Err(syn::Error::new(ty.span(), "Unsupported field type"))
+            Err(syn::Error::new(
+                ty.span(),
+                "Unsupported field type for get_type_string",
+            ))
         }
     } else {
         Err(syn::Error::new(
@@ -64,14 +82,30 @@ fn get_type_string(ty: &Type) -> syn::Result<String> {
     }
 }
 
+// 参考 PreparedStatement bind_xxx()
 fn bind_type_string(ty: &Type) -> syn::Result<String> {
     if let Type::Path(type_path) = ty {
-        if type_path.path.is_ident("i32") {
+        if type_path.path.is_ident("bool") {
+            Ok("bind_bool".to_string())
+        } else if type_path.path.is_ident("i8") {
+            Ok("bind_byte".to_string())
+        } else if type_path.path.is_ident("i16") {
+            Ok("bind_short".to_string())
+        } else if type_path.path.is_ident("i32") {
             Ok("bind_int".to_string())
         } else if type_path.path.is_ident("i64") {
-            Ok("bind_integer".to_string())
+            Ok("bind_long".to_string())
+        } else if type_path.path.is_ident("f32") {
+            Ok("bind_float".to_string())
+        } else if type_path.path.is_ident("f64") {
+            Ok("bind_double".to_string())
+        } else if type_path.path.is_ident("String") {
+            Ok("bind_text".to_string())
         } else {
-            Err(syn::Error::new(ty.span(), "Unsupported field type"))
+            Err(syn::Error::new(
+                ty.span(),
+                "Unsupported field type for bind_type_string",
+            ))
         }
     } else {
         Err(syn::Error::new(
@@ -186,7 +220,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
 
             fn extract_object(
                 &self,
-                fields: &Vec<wcdb_core::orm::field::Field<#table_ident>>,
+                fields: &Vec<&wcdb_core::orm::field::Field<#table_ident>>,
                 prepared_statement: &wcdb_core::core::prepared_statement::PreparedStatement,
             ) -> #table_ident {
                 #extract_object_statements

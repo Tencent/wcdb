@@ -10,7 +10,7 @@ use std::sync::Arc;
 
 pub struct Select<'a, T> {
     chain_call: ChainCall<'a, StatementSelect>,
-    fields: Vec<Field<T>>,
+    fields: Vec<&'a Field<T>>,
 }
 
 impl<'a, T> ChainCallTrait for Select<'a, T> {
@@ -40,7 +40,7 @@ impl<'a, T> Select<'a, T> {
         }
     }
 
-    pub fn select(mut self, fields: Vec<Field<T>>) -> Self {
+    pub fn select(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
         self.chain_call.statement.select(&self.fields);
         self

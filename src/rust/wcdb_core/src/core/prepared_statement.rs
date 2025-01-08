@@ -2,9 +2,10 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::value::Value;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::orm::field::Field;
+use crate::utils::ToCow;
 use crate::winq::column_type::ColumnType;
 use crate::winq::statement::StatementTrait;
-use std::ffi::c_void;
+use std::ffi::{c_char, c_double, c_void, CString};
 use std::sync::Arc;
 
 extern "C" {
@@ -15,8 +16,16 @@ extern "C" {
     pub fn WCDBRustHandleStatement_finalize(cpp_obj: *mut c_void);
     pub fn WCDBRustHandleStatement_isDone(cpp_obj: *mut c_void) -> bool;
     pub fn WCDBRustHandleStatement_bindInteger(cpp_obj: *mut c_void, value: i64, index: usize);
+    pub fn WCDBRustHandleStatement_bindDouble(cpp_obj: *mut c_void, value: c_double, index: usize);
+    pub fn WCDBRustHandleStatement_bindText(
+        cpp_obj: *mut c_void,
+        value: *const c_char,
+        index: usize,
+    );
     pub fn WCDBRustHandleStatement_bindNull(cpp_obj: *mut c_void, index: usize);
     pub fn WCDBRustHandleStatement_getInteger(cpp_obj: *mut c_void, index: usize) -> i64;
+    pub fn WCDBRustHandleStatement_getDouble(cpp_obj: *mut c_void, index: usize) -> f64;
+    pub fn WCDBRustHandleStatement_getText(cpp_obj: *mut c_void, index: usize) -> *const c_char;
 }
 
 pub struct PreparedStatement {
@@ -54,20 +63,41 @@ impl PreparedStatement {
         })
     }
 
+    pub fn bind_bool(&self, value: bool, index: usize) {
+        self.bind_integer(if value { 1 } else { 0 }, index);
+    }
+
+    pub fn bind_byte(&self, value: i8, index: usize) {
+        self.bind_integer(value as i64, index);
+    }
+
+    pub fn bind_short(&self, value: i16, index: usize) {
+        self.bind_integer(value as i64, index);
+    }
+
     pub fn bind_int(&self, value: i32, index: usize) {
         self.bind_integer(value as i64, index);
     }
 
     pub fn bind_integer(&self, value: i64, index: usize) {
+        self.bind_long(value, index);
+    }
+
+    pub fn bind_long(&self, value: i64, index: usize) {
         unsafe { WCDBRustHandleStatement_bindInteger(*self.cpp_obj, value, index) }
     }
 
-    pub fn bind_double(&self, value: f64, index: usize) {
-        todo!("qixinbing")
+    pub fn bind_float(&self, value: f32, index: usize) {
+        self.bind_double(value as f64, index);
     }
 
-    pub fn bind_text(&self, value: &str, index: usize) {
-        todo!("qixinbing")
+    pub fn bind_double(&self, value: f64, index: usize) {
+        unsafe { WCDBRustHandleStatement_bindDouble(*self.cpp_obj, value, index) }
+    }
+
+    pub fn bind_text(&self, value: String, index: usize) {
+        let c_path = CString::new(value).unwrap_or_default();
+        unsafe { WCDBRustHandleStatement_bindText(*self.cpp_obj, c_path.as_ptr(), index) }
     }
 
     pub fn bind_blob(&self, value: &Vec<u8>, index: usize) {
@@ -89,7 +119,7 @@ impl PreparedStatement {
             return;
         }
         if ColumnType::Text == value_type {
-            self.bind_text(value.get_text().as_str(), index);
+            self.bind_text(value.get_text().to_string(), index);
             return;
         }
         if ColumnType::BLOB == value_type {
@@ -123,8 +153,40 @@ impl PreparedStatement {
         }
     }
 
+    pub fn get_bool(&self, index: usize) -> bool {
+        self.get_long(index) == 1
+    }
+
+    pub fn get_byte(&self, index: usize) -> i8 {
+        self.get_long(index) as i8
+    }
+
+    pub fn get_short(&self, index: usize) -> i16 {
+        self.get_long(index) as i16
+    }
+
     pub fn get_int(&self, index: usize) -> i32 {
-        unsafe { WCDBRustHandleStatement_getInteger(*self.cpp_obj, index) as i32 }
+        self.get_long(index) as i32
+    }
+
+    pub fn get_long(&self, index: usize) -> i64 {
+        unsafe { WCDBRustHandleStatement_getInteger(*self.cpp_obj, index) }
+    }
+
+    pub fn get_float(&self, index: usize) -> f32 {
+        self.get_double(index) as f32
+    }
+
+    pub fn get_double(&self, index: usize) -> f64 {
+        unsafe { WCDBRustHandleStatement_getDouble(*self.cpp_obj, index) }
+    }
+
+    pub fn get_text(&self, index: usize) -> String {
+        unsafe {
+            WCDBRustHandleStatement_getText(*self.cpp_obj, index)
+                .to_cow()
+                .to_string()
+        }
     }
 
     pub fn prepare<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
@@ -154,7 +216,7 @@ impl PreparedStatement {
         unsafe { WCDBRustHandleStatement_finalize(*self.cpp_obj) }
     }
 
-    pub fn get_all_objects<T>(&self, fields: &Vec<Field<T>>) -> WCDBResult<Vec<T>> {
+    pub fn get_all_objects<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<Vec<T>> {
         assert!(fields.len() > 0);
         let field_opt = fields.first();
         if field_opt.is_none() {

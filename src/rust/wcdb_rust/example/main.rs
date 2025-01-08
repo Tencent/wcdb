@@ -49,9 +49,50 @@ impl TableMessage {
     }
 }
 
+#[derive(WCDBTableCoding)]
+#[WCDBTable(
+    multi_indexes(name = "specifiedNameIndex", columns = ["item_i32", "item_i64"]),
+)]
+pub struct TableMessageBox {
+    #[WCDBField]
+    item_bool: bool,
+    #[WCDBField]
+    item_byte: i8,
+    #[WCDBField]
+    item_short: i16,
+    #[WCDBField]
+    item_i32: i32,
+    #[WCDBField(column_name = "message_id")]
+    item_i64: i64,
+    #[WCDBField]
+    item_float: f32,
+    #[WCDBField]
+    item_double: f64,
+    // todo qixinbing->zhanglei1 需要支持 String 和 blob 类型
+    // #[WCDBField]
+    // item_text: String,
+}
+
+impl TableMessageBox {
+    pub fn new() -> Self {
+        Self {
+            item_bool: false,
+            item_byte: 1,
+            item_short: 2,
+            item_i32: 32,
+            item_i64: 64,
+            item_float: 32.1f32,
+            item_double: 64.1f64,
+            // item_text: "hello".to_string(),
+        }
+    }
+}
+
 fn main() {
     let db = Database::new("./target/tmp/test.db");
     db.create_table("rct_message", &*DBTABLEMESSAGE_INSTANCE)
+        .unwrap();
+    db.create_table("rct_message_box", &*DBTABLEMESSAGEBOX_INSTANCE)
         .unwrap();
 
     insert_object_to_rct_message(&db);
@@ -60,6 +101,23 @@ fn main() {
     // delete_objects_by_expression_from_rct_message(&db);
     // update_object_to_rct_message(&db);
     get_all_object_from_rct_message(&db);
+    insert_object_to_rct_message_box(&db);
+    get_all_object_from_rct_message_box(&db);
+}
+
+fn insert_object_to_rct_message_box(db: &Database) {
+    let record = TableMessageBox::new();
+    db.insert_object(record, DbTableMessageBox::all_fields(), "rct_message_box")
+        .unwrap();
+}
+
+fn get_all_object_from_rct_message_box(db: &Database) {
+    let all_objects_ret =
+        db.get_all_objects::<TableMessageBox>(DbTableMessageBox::all_fields(), "rct_message_box");
+    match all_objects_ret {
+        Ok(obj_vec) => for obj in obj_vec {},
+        Err(_) => {}
+    }
 }
 
 /// 插入单条数据
@@ -98,37 +156,8 @@ fn update_object_to_rct_message(db: &Database) {
 }
 
 fn get_all_object_from_rct_message(db: &Database) {
-    // let fields: Vec<&Field<TableMessage>> = DbTableMessage::all_fields();
-    let mut field_vec: Vec<Field<TableMessage>> = vec![];
-
-    let field = Field::new("multi_primary1", &*DBTABLEMESSAGE_INSTANCE, 1, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_primary2", &*DBTABLEMESSAGE_INSTANCE, 2, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_primary", &*DBTABLEMESSAGE_INSTANCE, 3, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_unique1", &*DBTABLEMESSAGE_INSTANCE, 4, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_unique2", &*DBTABLEMESSAGE_INSTANCE, 5, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_unique", &*DBTABLEMESSAGE_INSTANCE, 6, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_index1", &*DBTABLEMESSAGE_INSTANCE, 7, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_index2", &*DBTABLEMESSAGE_INSTANCE, 8, false, false);
-    field_vec.push(field);
-
-    let field = Field::new("multi_index", &*DBTABLEMESSAGE_INSTANCE, 9, false, false);
-    field_vec.push(field);
-
-    let all_objects_ret = db.get_all_objects::<TableMessage>(field_vec, "rct_message");
+    let all_objects_ret =
+        db.get_all_objects::<TableMessage>(DbTableMessage::all_fields(), "rct_message");
     match all_objects_ret {
         Ok(obj_vec) => for obj in obj_vec {},
         Err(_) => {}

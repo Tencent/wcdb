@@ -280,7 +280,7 @@ impl HandleORMOperationTrait for Database {
         Ok(())
     }
 
-    fn get_all_objects<T>(&self, fields: Vec<Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
+    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
