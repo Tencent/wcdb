@@ -60,13 +60,13 @@ void* WCDBRustExpressionClassMethod(create, int type, long long object)
 //    WCDBRustTryReleaseStringInCommonValue(schema);
 //}
 //
-//void WCDBRustExpressionClassMethod(setArgument, jlong expression, WCDBRustCommonValueParameter(argument))
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustCreateCommonValue(argument, true);
-//    WCDBExpressionSetArgument(expressionStruct, argument_common);
-//    WCDBRustTryReleaseStringInCommonValue(argument);
-//}
+void WCDBRustExpressionClassMethod(argument, void* expression, WCDBRustCommonValueParameter(argument))
+{
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustCreateCommonValue(argument);
+    WCDBExpressionSetArgument(expressionStruct, argument_common);
+//    WCDBRustTryReleaseStringInCommonValue(argument); // todo qixinbing : 需要释放？
+}
 //
 //void WCDBRustExpressionClassMethod(invoke, jlong expression)
 //{

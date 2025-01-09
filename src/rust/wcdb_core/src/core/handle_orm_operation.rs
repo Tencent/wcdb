@@ -108,6 +108,15 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
     ) -> WCDBResult<()>;
 
+    fn get_first_object<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<T>;
+
+    fn get_first_object_by_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<T>;
+
     fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>>;
 }
 

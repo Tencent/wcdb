@@ -67,12 +67,12 @@ void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
 //    WCDBRustReleaseMultiTypeArray(tableOrSubqueries);
 }
 //
-//void WCDBRustStatementSelectClassMethod(configCondition, jlong self, jlong condition)
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBRustBridgeStruct(CPPExpression, condition);
-//    WCDBStatementSelectConfigWhere(selfStruct, conditionStruct);
-//}
+void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condition)
+{
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBRustBridgeStruct(CPPExpression, condition);
+    WCDBStatementSelectConfigWhere(selfStruct, conditionStruct);
+}
 //
 //void WCDBRustStatementSelectClassMethod(configGroups,
 //                                       jlong self,

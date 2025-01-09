@@ -1,8 +1,9 @@
 use std::env;
+use std::time::SystemTime;
 use table_coding::WCDBTableCoding;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
-use wcdb_core::orm::field::Field;
+use wcdb_core::winq::column::Column;
 use wcdb_core::winq::expression::Expression;
 
 #[derive(WCDBTableCoding)]
@@ -103,12 +104,35 @@ fn main() {
     get_all_object_from_rct_message(&db);
     insert_object_to_rct_message_box(&db);
     get_all_object_from_rct_message_box(&db);
+    get_first_object_from_rct_message_box(&db);
 }
 
 fn insert_object_to_rct_message_box(db: &Database) {
-    let record = TableMessageBox::new();
+    // 插入一条记录
+    let mut record = TableMessageBox::new();
+    let cur_ts = current_timestamp_ms();
+    record.item_i64 = cur_ts;
     db.insert_object(record, DbTableMessageBox::all_fields(), "rct_message_box")
         .unwrap();
+
+    println!("insert_object_to_rct_message_box cur_ts : {:?}", cur_ts);
+
+    // 通过时间戳再获取一次该数据
+    let expression = Expression::new_with_column(Column::new("item_i64")).eq_long(cur_ts);
+    // let desc = expression.get_description();
+    // println!("expression_desc: {:?}", desc);
+    let first_object_ret = db.get_first_object_by_expression::<TableMessageBox>(
+        DbTableMessageBox::all_fields(),
+        "rct_message_box",
+        expression,
+    );
+    match first_object_ret {
+        Ok(obj) => {
+            println!("first_object_ret: {:?}", obj.item_i64);
+            assert_eq!(obj.item_i64, cur_ts);
+        }
+        Err(_) => {}
+    }
 }
 
 fn get_all_object_from_rct_message_box(db: &Database) {
@@ -118,6 +142,17 @@ fn get_all_object_from_rct_message_box(db: &Database) {
         Ok(obj_vec) => for obj in obj_vec {},
         Err(_) => {}
     }
+}
+
+fn get_first_object_from_rct_message_box(db: &Database) {
+    let first_object_ret =
+        db.get_first_object::<TableMessageBox>(DbTableMessageBox::all_fields(), "rct_message_box");
+    match first_object_ret {
+        Ok(obj) => {
+            println!("first_object_ret: {:?}", obj.item_i64);
+        }
+        Err(_) => {}
+    };
 }
 
 /// 插入单条数据
@@ -167,4 +202,11 @@ fn get_all_object_from_rct_message(db: &Database) {
 fn get_current_username() -> String {
     let user_opt = env::var("USER");
     user_opt.unwrap_or_else(|_| "zhanglei".to_string())
+}
+
+fn current_timestamp_ms() -> i64 {
+    SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap()
+        .as_millis() as i64
 }

@@ -8,6 +8,13 @@ use std::ffi::c_void;
 
 extern "C" {
     pub fn WCDBRustExpression_create(value_type: i32, cpp_obj: *mut c_void) -> *mut c_void;
+    // pub fn WCDBRustExpression_argument(
+    //     cpp_obj: *mut c_void,
+    //     type_i: c_int,
+    //     int_value: c_long,
+    //     double_value: c_double,
+    //     string_value: *const c_char,
+    // ) -> c_void;
 }
 
 #[derive(Debug)]
@@ -67,6 +74,30 @@ impl Expression {
         Expression {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
         }
+    }
+
+    // pub fn argument_i64(self, value: i64) -> Self {
+    //     self.argument(CPPType::Int, value, 0.0, "".to_string());
+    //     self
+    // }
+    //
+    // // todo qixinbing: 怎么用？
+    // fn argument(&self, type_i: CPPType, int_value: i64, double_value: f64, string_value: String) {
+    //     let c_str = CString::new(string_value).unwrap_or_default();
+    //     unsafe {
+    //         WCDBRustExpression_argument(
+    //             self.get_cpp_obj(),
+    //             type_i as i32,
+    //             int_value,
+    //             double_value,
+    //             c_str.as_ptr(),
+    //         );
+    //     }
+    // }
+
+    pub fn eq_long(mut self, operand: i64) -> Self {
+        self.expression_operable = self.expression_operable.eq_long(operand);
+        self
     }
 
     pub(crate) fn get_expression_operable(&self) -> &ExpressionOperable {

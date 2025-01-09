@@ -4,6 +4,7 @@ use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::{Handle, WCDBRustHandle_getError};
 use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::field::Field;
+use crate::winq::expression::Expression;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_select::StatementSelect;
 use std::sync::Arc;
@@ -46,9 +47,36 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
+    pub fn where_expression(self, condition: Expression) -> Self {
+        self.chain_call.statement.where_expression(&condition);
+        self
+    }
+
     pub fn from(self, table_name: &str) -> Self {
         self.chain_call.statement.from(table_name);
         self
+    }
+
+    pub fn first_object(&self) -> WCDBResult<T> {
+        self.first_object_by_class()
+    }
+
+    pub fn first_object_by_class(&self) -> WCDBResult<T> {
+        let prepared_statement = self.prepare_statement()?;
+        prepared_statement.step()?;
+
+        let ret: WCDBResult<T> = if !prepared_statement.is_done() {
+            prepared_statement.get_one_object(&self.fields)
+        } else {
+            Err(WCDBException::create_exception(
+                prepared_statement.get_cpp_obj(),
+            ))
+        };
+
+        prepared_statement.finalize_statement();
+        self.chain_call.invalidate_handle();
+
+        ret
     }
 
     pub fn all_objects(&self) -> WCDBResult<Vec<T>> {

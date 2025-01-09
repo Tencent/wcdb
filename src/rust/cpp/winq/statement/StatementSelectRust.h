@@ -45,7 +45,7 @@ void WCDBRustStatementSelectClassMethod(configResultColumns,
 void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
                                        void* self,
                                        WCDBRustMultiTypeArrayParameter(tableOrSubqueries));
-//void WCDBRustStatementSelectClassMethod(configCondition, jlong self, jlong condition);
+void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condition);
 //void WCDBRustStatementSelectClassMethod(configGroups,
 //                                       jlong self,
 //                                       WCDBRustMultiTypeArrayParameter(groups));

@@ -280,6 +280,26 @@ impl HandleORMOperationTrait for Database {
         Ok(())
     }
 
+    fn get_first_object<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .first_object()
+    }
+
+    fn get_first_object_by_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(expression)
+            .first_object()
+    }
+
     fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)

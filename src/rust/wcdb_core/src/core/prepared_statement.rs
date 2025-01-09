@@ -216,6 +216,18 @@ impl PreparedStatement {
         unsafe { WCDBRustHandleStatement_finalize(*self.cpp_obj) }
     }
 
+    pub fn get_one_object<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<T> {
+        assert!(fields.len() > 0);
+        let field_opt = fields.first();
+        match field_opt {
+            Some(field) => {
+                let ret = field.get_table_binding().extract_object(fields, self);
+                Ok(ret)
+            }
+            None => Err(WCDBException::create_exception(self.get_cpp_obj())),
+        }
+    }
+
     pub fn get_all_objects<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<Vec<T>> {
         assert!(fields.len() > 0);
         let field_opt = fields.first();
@@ -229,11 +241,6 @@ impl PreparedStatement {
         self.step()?;
 
         while !self.is_done() {
-            // let fields_clone =fields.clone();
-            // let mut field_vec_owned = vec![];
-            // for field in fields.clone() {
-            //     field_vec_owned.push(field);
-            // }
             let obj = tb.extract_object(fields, self);
             obj_vec.push(obj);
             self.step()?;
@@ -242,7 +249,7 @@ impl PreparedStatement {
         Ok(obj_vec)
     }
 
-    fn is_done(&self) -> bool {
+    pub fn is_done(&self) -> bool {
         unsafe { WCDBRustHandleStatement_isDone(*self.cpp_obj) }
     }
 }

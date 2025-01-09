@@ -1,5 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
+use crate::winq::expression::Expression;
 use crate::winq::identifier::{
     CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
 };
@@ -25,6 +26,11 @@ extern "C" {
         double_vec: *const c_double,
         string_vec: *const *const c_char,
         vec_len: i32,
+    ) -> c_void;
+
+    pub fn WCDBRustStatementSelect_configCondition(
+        cpp_obj: *mut c_void,
+        condition: *mut c_void,
     ) -> c_void;
 }
 
@@ -112,6 +118,13 @@ impl StatementSelect {
                 str_vec.as_ptr(),
                 types_vec.len() as i32,
             );
+        }
+        self
+    }
+
+    pub fn where_expression(&self, condition: &Expression) -> &Self {
+        unsafe {
+            WCDBRustStatementSelect_configCondition(self.get_cpp_obj(), condition.get_cpp_obj());
         }
         self
     }

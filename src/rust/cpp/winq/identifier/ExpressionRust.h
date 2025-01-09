@@ -39,9 +39,9 @@ void* WCDBRustExpressionClassMethod(create, int type, long long object);
 //void WCDBRustExpressionClassMethod(setWithSchema,
 //                                  jlong expression,
 //                                  WCDBRustObjectOrStringParameter(schema));
-//void WCDBRustExpressionClassMethod(setArgument,
-//                                  jlong expression,
-//                                  WCDBRustCommonValueParameter(argument));
+void WCDBRustExpressionClassMethod(argument,
+                                  void* expression,
+                                  WCDBRustCommonValueParameter(argument));
 //
 //void WCDBRustExpressionClassMethod(invoke, jlong expression);
 //void WCDBRustExpressionClassMethod(invokeAll, jlong expression);
