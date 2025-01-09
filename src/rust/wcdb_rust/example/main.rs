@@ -182,9 +182,9 @@ fn delete_objects_by_expression_from_rct_message(db: &Database) {
         .unwrap();
 }
 
-fn update_object_to_rct_message(db: &Database) {
+fn update_object_to_rct_message(db: &Database, i: i32) {
     let mut record1 = TableMessage::new();
-    record1.multi_unique = 111;
+    record1.multi_unique = i;
     record1.multi_index1 = 999;
     db.update_object(record1, DbTableMessage::all_fields(), "rct_message")
         .unwrap();

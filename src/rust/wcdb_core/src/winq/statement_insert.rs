@@ -1,25 +1,15 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
 use crate::winq::conflict_action::ConflictAction;
-use crate::winq::identifier::{
-    CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
-};
+use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
     pub fn WCDBRustStatementInsert_create() -> *mut c_void;
-    pub fn WCDBRustStatementInsert_configTableName(
-        cpp_obj: *mut c_void,
-        table_name: *const c_char,
-    ) -> *mut c_void;
-
-    pub fn WCDBRustStatementInsert_configConflictAction(
-        cpp_obj: *mut c_void,
-        action: c_int,
-    ) -> c_void;
-
+    pub fn WCDBRustStatementInsert_configTableName(cpp_obj: *mut c_void, table_name: *const c_char);
+    pub fn WCDBRustStatementInsert_configConflictAction(cpp_obj: *mut c_void, action: c_int);
     pub fn WCDBRustStatementInsert_configColumns(
         cpp_obj: *mut c_void,
         columns_type: i32,
@@ -88,6 +78,36 @@ impl StatementInsert {
             WCDBRustStatementInsert_configConflictAction(
                 self.get_cpp_obj(),
                 ConflictAction::Replace as i32,
+            );
+        }
+        self
+    }
+
+    pub fn or_rollback(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configConflictAction(
+                self.get_cpp_obj(),
+                ConflictAction::Rollback as i32,
+            );
+        }
+        self
+    }
+
+    pub fn or_abort(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configConflictAction(
+                self.get_cpp_obj(),
+                ConflictAction::Abort as i32,
+            );
+        }
+        self
+    }
+
+    pub fn or_fail(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configConflictAction(
+                self.get_cpp_obj(),
+                ConflictAction::Fail as i32,
             );
         }
         self

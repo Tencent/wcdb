@@ -143,7 +143,9 @@ public class TableOperation {
     }
 
     private void insertRows(final Collection<Value[]> rows, Column[] columns, ConflictAction action) throws WCDBException {
-        final StatementInsert insert = new StatementInsert().insertInto(tableName).columns(columns).valuesWithBindParameters(columns.length);
+        final StatementInsert insert = new StatementInsert()
+            .insertInto(tableName).columns(columns)
+            .valuesWithBindParameters(columns.length);
         if (action == ConflictAction.Replace) {
             insert.orReplace();
         } else if (action == ConflictAction.Ignore) {
