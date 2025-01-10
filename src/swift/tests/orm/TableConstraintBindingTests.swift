@@ -94,7 +94,7 @@ class TableConstraintBindingTests: ORMTestCase {
             case variable1
             case variable2
             nonisolated(unsafe) static let objectRelationalMapping = TableBinding(CodingKeys.self) {
-                BindMultiUnique(.variable1, .variable2, onConflict: .Replace)
+                BindMultiUnique(variable1, variable2, onConflict: .Replace)
             }
         }
     }
