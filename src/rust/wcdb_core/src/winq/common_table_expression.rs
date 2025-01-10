@@ -5,8 +5,8 @@ use std::ffi::{c_char, c_void, CString};
 
 extern "C" {
     pub fn WCDBRustCommonTableExpression_createWithTable(table_name: *const c_char) -> *mut c_void;
-    pub fn WCDBRustCommonTableExpression_configColumn(self_obj: i64, column: i64);
-    pub fn WCDBRustCommonTableExpression_configSelect(self_obj: i64, select: i64);
+    pub fn WCDBRustCommonTableExpression_configColumn(self_obj: *mut c_void, column: *mut c_void);
+    pub fn WCDBRustCommonTableExpression_configSelect(self_obj: *mut c_void, select: *mut c_void);
 }
 
 pub struct CommonTableExpression {
@@ -52,8 +52,8 @@ impl CommonTableExpression {
     pub fn column(mut self, column: Column) -> Self {
         unsafe {
             WCDBRustCommonTableExpression_configColumn(
-                self.identifier.get_cpp_obj() as i64,
-                column.get_cpp_obj() as i64,
+                self.identifier.get_cpp_obj(),
+                column.get_cpp_obj(),
             );
         }
         self

@@ -12,3 +12,4 @@ syn = { version = "2.0.90", features = ["full", "extra-traits"] }
 proc-macro2 = "1.0.92"
 quote = "1.0.37"
 darling = "0.20.10"
+once_cell = "1.20.2"

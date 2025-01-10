@@ -46,7 +46,6 @@ void WCDBRustStatementUpdateClassMethod(configTable, void* self, WCDBRustObjectO
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     WCDBRustCreateObjectOrStringCommonValue(table, true);
     WCDBStatementUpdateConfigTable2(selfStruct, table_common);
-//    WCDBRustTryReleaseStringInCommonValue(table); // todo qixinbing 需要释放？
 }
 //
 //void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action)

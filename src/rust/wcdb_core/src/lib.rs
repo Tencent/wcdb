@@ -1,4 +1,5 @@
 #![feature(box_into_inner)]
+#![feature(c_size_t)]
 
 pub mod base;
 pub mod chaincall;

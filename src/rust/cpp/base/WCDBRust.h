@@ -164,7 +164,7 @@
     int parameter##_type, long long parameter##_long,                          \
     double parameter##_double, const char* parameter##_string
 
-#define WCDBRustCreateCommonValue(parameter)                       \
+#define WCDBRustCreateCommonValue(parameter)                                   \
     CPPCommonValue parameter##_common;                                         \
     parameter##_common.type = parameter##_type;                                \
     switch (parameter##_type) {                                                \
@@ -184,8 +184,8 @@
         break;                                                                 \
     }
 
-#define WCDBRustObjectOrStringParameter(parameter)                              \
-    int parameter##_type, long parameter##_long, const char* parameter##_string
+#define WCDBRustObjectOrStringParameter(parameter)                             \
+    int parameter##_type, void* parameter##_object, const char* parameter##_string
 
 #define WCDBRustCreateObjectOrStringCommonValue(parameter, isCritical)         \
     CPPCommonValue parameter##_common;                                         \
@@ -193,7 +193,7 @@
     if (parameter##_type == WCDBBridgedType_String) {                          \
         parameter##_common.intValue = (long long) parameter##_string;          \
     } else {                                                                   \
-        parameter##_common.intValue = parameter##_long;                        \
+        parameter##_common.intValue = (long long) parameter##_object;          \
     }
 
 #define WCDBRustObjectOrIntegerParameter(parameter)                            \
@@ -250,49 +250,49 @@
     }
 
 #define WCDBRustMultiTypeArrayParameter(parameter)                              \
-    int* parameter##_types, long* parameter##_longValues,            \
+    int* parameter##_types, long* parameter##_longValues,                       \
     double* parameter##_doubleValues, void** parameter##_stringValues,          \
     int parameter##_arrayLen
 
-#define WCDBRustCreateMultiTypeArray(parameter)                                      \
-    CPPMultiTypeArray parameter##Array;                                             \
-    parameter##Array.totalLength = parameter##_arrayLen;                         \
+#define WCDBRustCreateMultiTypeArray(parameter)                                \
+    CPPMultiTypeArray parameter##Array;                                        \
+    parameter##Array.totalLength = parameter##_arrayLen;                       \
     parameter##Array.types = (const enum WCDBBridgedType *) parameter##_types; \
     parameter##Array.intValues = (const long long *) parameter##_longValues;   \
     parameter##Array.doubleValues = (const double *) parameter##_doubleValues; \
     parameter##Array.stringValues = (const char **) parameter##_stringValues;
 
-#define WCDBRustReleaseMultiTypeArray(parameter)                                \
-    WCDBRustReleaseIntArray(parameter##_types);                                 \
-    WCDBRustReleaseLongArray(parameter##_longValues);                           \
-    WCDBRustReleaseDoubleArray(parameter##_doubleValues);                       \
+#define WCDBRustReleaseMultiTypeArray(parameter)                               \
+    WCDBRustReleaseIntArray(parameter##_types);                                \
+    WCDBRustReleaseLongArray(parameter##_longValues);                          \
+    WCDBRustReleaseDoubleArray(parameter##_doubleValues);                      \
     WCDBRustReleaseStringArray(parameter##_stringValues);
 
-#define WCDBRustCreateJStringAndReturn(action)                                  \
+#define WCDBRustCreateJStringAndReturn(action)                                 \
     return WCDBRustCreateJString(env, action)
 
-#define WCDBRustCreateJavaString(value)                                         \
+#define WCDBRustCreateJavaString(value)                                        \
     jstring j##value = WCDBRustCreateJString(env, value)
 
-#define WCDBRustFindClass(valueName, signature, action)                         \
+#define WCDBRustFindClass(valueName, signature, action)                        \
     static jclass valueName = NULL;                                            \
     if (valueName == NULL) {                                                   \
         valueName = (*env)->FindClass(env, signature);                         \
-        WCDBRustCreateGlobalRel(valueName);                                     \
+        WCDBRustCreateGlobalRel(valueName);                                    \
     }                                                                          \
     assert(valueName != NULL);                                                 \
     if (valueName == NULL) {                                                   \
         action;                                                                \
     }
 
-#define WCDBRustGetObjectMethodId(valueName, class, methodName, signature)      \
+#define WCDBRustGetObjectMethodId(valueName, class, methodName, signature)     \
     static jmethodID valueName = NULL;                                         \
     if (valueName == NULL) {                                                   \
         valueName = (*env)->GetMethodID(env, class, methodName, signature);    \
     }                                                                          \
     assert(valueName != NULL);
 
-#define WCDBRustCreateGlobalRel(value)                                          \
+#define WCDBRustCreateGlobalRel(value)                                         \
     if (value != NULL) {                                                       \
         value = (*env)->NewGlobalRef(env, value);                              \
     }

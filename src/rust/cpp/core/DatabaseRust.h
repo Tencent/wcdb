@@ -19,9 +19,9 @@
 */
 
 #pragma once
-#include "WCDBRust.h"
 
 #include "DatabaseBridge.h"
+#include "WCDBRust.h"
 
 //#define WCDBRustDatabaseFuncName(funcName) WCDBRust(Database, funcName)
 //#define WCDBRustDatabaseObjectMethod(funcName, ...)                             \
@@ -30,7 +30,7 @@
 //    WCDBRustObjectMethodWithNoArg(Database, funcName)
 //#define WCDBRustDatabaseClassMethodWithNoArg(funcName)                          \
 //    WCDBRustClassMethodWithNoArg(Database, funcName)
-#define WCDBRustDatabaseClassMethod(funcName, ...)                              \
+#define WCDBRustDatabaseClassMethod(funcName, ...)                                \
     WCDBRustClassMethod(Database, funcName, __VA_ARGS__)
 
 //#define WCDBRustDatabaseSignature "Lcom/tencent/wcdb/core/Database"

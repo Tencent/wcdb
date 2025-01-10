@@ -40,13 +40,12 @@ void* WCDBRustStatementDeleteClassMethodWithNoArg(create)
 //    WCDBRustBridgeStruct(CPPStatementDelete, self);
 //    WCDBStatementDeleteConfigRecursive(selfStruct);
 //}
-//
+
 void WCDBRustStatementDeleteClassMethod(configTable, void* self, WCDBRustObjectOrStringParameter(table))
 {
     WCDBRustBridgeStruct(CPPStatementDelete, self);
     WCDBRustCreateObjectOrStringCommonValue(table, true);
     WCDBStatementDeleteConfigDeleteFrom2(selfStruct, table_common);
-//    WCDBRustTryReleaseStringInCommonValue(table); // todo qixinbing char* need release?
 }
 
 void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condition)
@@ -77,7 +76,7 @@ void WCDBRustStatementDeleteClassMethod(configOrders, void* self, void** orders,
 //    to_common.intValue = to;
 //    WCDBStatementDeleteConfigLimitRange2(selfStruct, from_common, to_common);
 //}
-//
+
 void WCDBRustStatementDeleteClassMethod(configLimitCount, void* self, int type, long limit)
 {
     WCDBRustBridgeStruct(CPPStatementDelete, self);
@@ -86,7 +85,7 @@ void WCDBRustStatementDeleteClassMethod(configLimitCount, void* self, int type, 
     limit_common.intValue = limit;
     WCDBStatementDeleteConfigLimitCount2(selfStruct, limit_common);
 }
-//
+
 //void WCDBRustStatementDeleteClassMethod(configOffset, jlong self, jint type, jlong offset)
 //{
 //    WCDBRustBridgeStruct(CPPStatementDelete, self);

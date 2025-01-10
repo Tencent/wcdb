@@ -7,6 +7,7 @@ fn main() {
         .build_target("all")
         .build();
 
+    println!("cargo:rerun-if-changed=cpp");
     println!("cargo:rustc-link-lib=z");
     println!("cargo:rustc-link-lib=static=sqlcipher");
     println!("cargo:rustc-link-lib=static=zstd");

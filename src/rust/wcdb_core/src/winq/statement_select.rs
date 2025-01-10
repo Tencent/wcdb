@@ -1,37 +1,31 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
 use crate::winq::expression::Expression;
-use crate::winq::identifier::{
-    CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
-};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::{c_char, c_double, c_long, c_void, CString};
+use core::ffi::c_size_t;
+use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
     pub fn WCDBRustStatementSelect_create() -> *mut c_void;
     pub fn WCDBRustStatementSelect_configResultColumns(
         cpp_obj: *mut c_void,
-        type_vec: *const i32,
+        type_vec: *const c_int,
         void_vec: *const *mut c_void,
         double_vec: *const c_double,
         string_vec: *const *const c_char,
-        vec_len: i32,
-    ) -> c_void;
-
+        vec_len: c_size_t,
+    );
     pub fn WCDBRustStatementSelect_configTableOrSubqueries(
         cpp_obj: *mut c_void,
-        type_vec: *const i32,
+        type_vec: *const c_int,
         long_vec: *const c_long,
         double_vec: *const c_double,
         string_vec: *const *const c_char,
-        vec_len: i32,
-    ) -> c_void;
-
-    pub fn WCDBRustStatementSelect_configCondition(
-        cpp_obj: *mut c_void,
-        condition: *mut c_void,
-    ) -> c_void;
+        vec_len: c_size_t,
+    );
+    pub fn WCDBRustStatementSelect_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
 }
 
 #[derive(Debug)]
@@ -98,7 +92,7 @@ impl StatementSelect {
                 cpp_obj_vec.as_ptr(),
                 std::ptr::null(),
                 std::ptr::null(),
-                types_vec.len() as i32,
+                types_vec.len(),
             );
         }
         self
@@ -116,7 +110,7 @@ impl StatementSelect {
                 std::ptr::null(),
                 std::ptr::null(),
                 str_vec.as_ptr(),
-                types_vec.len() as i32,
+                types_vec.len(),
             );
         }
         self

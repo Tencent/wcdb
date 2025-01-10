@@ -1,8 +1,10 @@
 use darling::ast::Data;
 use darling::{FromDeriveInput, FromField, FromMeta};
+use once_cell::sync::Lazy;
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::{quote, ToTokens};
+use std::collections::HashMap;
 use std::fmt::Debug;
 use syn::parse::Parse;
 use syn::spanned::Spanned;
@@ -37,81 +39,15 @@ impl WCDBTable {
                 .iter()
                 .map(|field| field.ident.as_ref().unwrap())
                 .collect(),
-            _ => unreachable!("WCDBTable only works on structs"),
+            _ => panic!("WCDBTable only works on structs"),
         }
     }
 
     fn get_field_type_vec(&self) -> Vec<&Type> {
         match &self.data {
             Data::Struct(fields) => fields.iter().map(|field| &field.ty).collect(),
-            _ => unreachable!("WCDBTable only works on structs"),
+            _ => panic!("WCDBTable only works on structs"),
         }
-    }
-}
-
-// 参考 PreparedStatement get_xxx()
-fn get_type_string(ty: &Type) -> syn::Result<String> {
-    if let Type::Path(type_path) = ty {
-        if type_path.path.is_ident("bool") {
-            Ok("get_bool".to_string())
-        } else if type_path.path.is_ident("i8") {
-            Ok("get_byte".to_string())
-        } else if type_path.path.is_ident("i16") {
-            Ok("get_short".to_string())
-        } else if type_path.path.is_ident("i32") {
-            Ok("get_int".to_string())
-        } else if type_path.path.is_ident("i64") {
-            Ok("get_long".to_string())
-        } else if type_path.path.is_ident("f32") {
-            Ok("get_float".to_string())
-        } else if type_path.path.is_ident("f64") {
-            Ok("get_double".to_string())
-        } else if type_path.path.is_ident("String") {
-            Ok("get_text".to_string())
-        } else {
-            Err(syn::Error::new(
-                ty.span(),
-                "Unsupported field type for get_type_string",
-            ))
-        }
-    } else {
-        Err(syn::Error::new(
-            ty.span(),
-            "WCDBTable's field type only works on Path",
-        ))
-    }
-}
-
-// 参考 PreparedStatement bind_xxx()
-fn bind_type_string(ty: &Type) -> syn::Result<String> {
-    if let Type::Path(type_path) = ty {
-        if type_path.path.is_ident("bool") {
-            Ok("bind_bool".to_string())
-        } else if type_path.path.is_ident("i8") {
-            Ok("bind_byte".to_string())
-        } else if type_path.path.is_ident("i16") {
-            Ok("bind_short".to_string())
-        } else if type_path.path.is_ident("i32") {
-            Ok("bind_int".to_string())
-        } else if type_path.path.is_ident("i64") {
-            Ok("bind_long".to_string())
-        } else if type_path.path.is_ident("f32") {
-            Ok("bind_float".to_string())
-        } else if type_path.path.is_ident("f64") {
-            Ok("bind_double".to_string())
-        } else if type_path.path.is_ident("String") {
-            Ok("bind_text".to_string())
-        } else {
-            Err(syn::Error::new(
-                ty.span(),
-                "Unsupported field type for bind_type_string",
-            ))
-        }
-    } else {
-        Err(syn::Error::new(
-            ty.span(),
-            "WCDBTable's field type only works on Path",
-        ))
     }
 }
 
@@ -253,13 +189,103 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     })
 }
 
+struct FieldInfo {
+    column_type: String,
+    nullable: bool,
+    field_setter: String,
+    field_getter: String,
+}
+
+impl FieldInfo {
+    fn new(column_type: &str, nullable: bool, field_setter: &str, field_getter: &str) -> Self {
+        Self {
+            column_type: column_type.to_string(),
+            nullable,
+            field_setter: field_setter.to_string(),
+            field_getter: field_getter.to_string(),
+        }
+    }
+}
+
+macro_rules! match_field_info {
+    ($field_type_string:expr, $field:expr, $getter_name:ident) => {
+        match FIELD_INFO_MAP.get(&$field_type_string) {
+            Some(value) => value.$getter_name.clone(),
+            None => {
+                return Err(syn::Error::new(
+                    $field.span(),
+                    "Unsupported field type for bind_field",
+                ))
+            }
+        }
+    };
+}
+
+macro_rules! get_field_info_vec {
+    ($field_type_vec:expr, $field_getter:ident) => {
+        $field_type_vec
+            .iter()
+            .map(|field| {
+                let field_type_string = get_field_type_string(field)?;
+                let type_string = match_field_info!(field_type_string, field, $field_getter);
+                Ok(Ident::new(&type_string, Span::call_site()))
+            })
+            .collect::<syn::Result<Vec<_>>>()?
+    };
+}
+
+fn get_field_type_string(field: &Type) -> syn::Result<String> {
+    match field {
+        Type::Path(type_path) => Ok(type_path.path.segments[0].ident.to_string()),
+        _ => Err(syn::Error::new(
+            field.span(),
+            "WCDBTable's field type only works on Path",
+        )),
+    }
+}
+
+static FIELD_INFO_MAP: Lazy<HashMap<String, FieldInfo>> = Lazy::new(|| {
+    let mut all_info = HashMap::new();
+    all_info.insert(
+        "bool".to_string(),
+        FieldInfo::new("Integer", false, "bind_bool", "get_bool"),
+    );
+    all_info.insert(
+        "i8".to_string(),
+        FieldInfo::new("Integer", false, "bind_i8", "get_i8"),
+    );
+    all_info.insert(
+        "i16".to_string(),
+        FieldInfo::new("Integer", false, "bind_i16", "get_i16"),
+    );
+    all_info.insert(
+        "i32".to_string(),
+        FieldInfo::new("Integer", false, "bind_i32", "get_i32"),
+    );
+    all_info.insert(
+        "i64".to_string(),
+        FieldInfo::new("Integer", false, "bind_i64", "get_i64"),
+    );
+    all_info.insert(
+        "String".to_string(),
+        FieldInfo::new("Text", false, "bind_text", "get_text"),
+    );
+    all_info.insert(
+        "Option<String>".to_string(),
+        FieldInfo::new("Text", true, "bind_text", "get_text"),
+    );
+    all_info
+});
+
 fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let db_table_ident = table.get_db_table();
     let field_ident_vec = table.get_field_ident_vec();
+    let field_type_vec = table.get_field_type_vec();
     let field_ident_def_vec: Vec<Ident> = field_ident_vec
         .iter()
         .map(|ident| Ident::new(&format!("{}_def", ident.to_string()), Span::call_site()))
         .collect();
+    let column_type_vec: Vec<_> = get_field_info_vec!(field_type_vec, column_type);
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());
     let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
@@ -273,8 +299,17 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
             let mut instance = #db_table_ident::default();
             let instance_raw = unsafe { &instance as *const #db_table_ident };
             #(
-                let field = Box::new(wcdb_core::orm::field::Field::new(stringify!(#field_ident_vec), instance_raw, #field_id_vec, false, false));
-                let #field_ident_def_vec = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(&field.get_column(), wcdb_core::winq::column_type::ColumnType::Integer);
+                let field = Box::new(wcdb_core::orm::field::Field::new(
+                    stringify!(#field_ident_vec),
+                    instance_raw,
+                    #field_id_vec,
+                    false,
+                    false
+                ));
+                let #field_ident_def_vec = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(
+                    &field.get_column(),
+                    wcdb_core::winq::column_type::ColumnType::#column_type_vec
+                );
                 instance.#field_ident_vec = unsafe { Box::into_raw(field) };
                 #binding_ident.add_column_def(#field_ident_def_vec);
             )*
@@ -287,13 +322,7 @@ fn generate_extract_object(table: &WCDBTable) -> syn::Result<proc_macro2::TokenS
     let table_ident = &table.ident;
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
-    let field_get_type_vec: Vec<_> = field_type_vec
-        .iter()
-        .map(|field| {
-            let type_string = get_type_string(field)?;
-            Ok(Ident::new(&type_string, Span::call_site()))
-        })
-        .collect::<syn::Result<Vec<_>>>()?;
+    let field_get_type_vec: Vec<_> = get_field_info_vec!(field_type_vec, field_getter);
     let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
     Ok(quote! {
         let mut new_one = #table_ident::default();
@@ -303,7 +332,7 @@ fn generate_extract_object(table: &WCDBTable) -> syn::Result<proc_macro2::TokenS
                 #(
                     #field_id_vec => new_one.#field_ident_vec = prepared_statement.#field_get_type_vec(index),
                 )*
-                _ => unreachable!("Unknown field id"),
+                _ => panic!("Unknown field id"),
             }
             index += 1;
         }
@@ -312,22 +341,39 @@ fn generate_extract_object(table: &WCDBTable) -> syn::Result<proc_macro2::TokenS
 }
 
 fn generate_bind_field(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
+    let table_ident = &table.ident;
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
+    let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
     let field_bind_type_vec: Vec<_> = field_type_vec
         .iter()
         .map(|field| {
-            let bind_type_string = bind_type_string(field)?;
+            let field_type_string = get_field_type_string(field)?;
+            let bind_type_string = match_field_info!(field_type_string, field, field_setter);
             Ok(Ident::new(&bind_type_string, Span::call_site()))
         })
         .collect::<syn::Result<Vec<_>>>()?;
-    let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
+    let as_ref_vec: Vec<_> = field_bind_type_vec
+        .iter()
+        .map(|bind_type| {
+            if &bind_type.to_string() == "bind_text" {
+                quote!(.as_ref())
+            } else {
+                quote!()
+            }
+        })
+        .collect();
     Ok(quote! {
         match field.get_field_id() {
             #(
-                #field_id_vec => prepared_statement.#field_bind_type_vec(object.#field_ident_vec, index),
+                #field_id_vec => prepared_statement.#field_bind_type_vec(object.#field_ident_vec #as_ref_vec, index),
             )*
-            _ => unreachable!("Unknown field id"),
+            _ => panic!(
+                "Invalid id {} of field {} in {}",
+                field.get_field_id(),
+                wcdb_core::winq::identifier::IdentifierTrait::get_description(field),
+                stringify!(#table_ident)
+            ),
         }
     })
 }

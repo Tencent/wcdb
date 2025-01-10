@@ -19,6 +19,7 @@
 */
 
 #pragma once
+
 #include "WCDBRust.h"
 
 //#define WCDBRustCoreFuncName(funcName) WCDBRust(Core, funcName)

@@ -2,14 +2,14 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::column::Column;
 use crate::winq::column_type::ColumnType;
 use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierStaticTrait};
-use std::ffi::{c_char, c_void};
+use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     pub fn WCDBRustColumnDef_create(
-        cpp_type: i32,
+        cpp_type: c_int,
         column_cpp_obj: *mut c_void,
         name: *mut c_char,
-        column_type: i32,
+        column_type: c_int,
     ) -> *mut c_void;
 }
 

@@ -5,15 +5,15 @@ use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::winq::statement::StatementTrait;
-use std::ffi::c_void;
-use std::sync::{Arc, Mutex, RwLock};
+use std::ffi::{c_int, c_long, c_void};
+use std::sync::{Arc, Mutex};
 
 extern "C" {
     pub fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
     pub fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
     pub fn WCDBRustHandle_execute(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
-    pub fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> i32;
-    pub fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
+    pub fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
+    pub fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> c_long;
     pub fn WCDBRustHandle_runTransaction(
         cpp_obj: *mut c_void,
         transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> bool,

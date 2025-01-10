@@ -1,13 +1,13 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
-use std::ffi::{c_char, c_void};
+use std::ffi::{c_char, c_double, c_int, c_long, c_void};
 use std::ptr::null;
 
 extern "C" {
     pub fn WCDBRustLiteralValue_create(
-        value_type: i32,
-        value_long: i64,
-        value_double: f64,
+        value_type: c_int,
+        value_long: c_long,
+        value_double: c_double,
         value_string: *const c_char,
     ) -> *mut c_void;
 }

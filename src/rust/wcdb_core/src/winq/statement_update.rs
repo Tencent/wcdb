@@ -1,30 +1,26 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
-use crate::winq::identifier::{
-    CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
-};
+use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
-use std::os::raw::c_long;
+use std::ptr::null_mut;
 
 extern "C" {
     pub fn WCDBRustStatementUpdate_create() -> *mut c_void;
-
     pub fn WCDBRustStatementUpdate_configTable(
         cpp_obj: *mut c_void,
         type_i: c_int,
-        table: c_long,
+        table: *mut c_void,
         table_name: *const c_char,
-    ) -> c_void;
-
+    );
     pub fn WCDBRustStatementUpdate_configColumnsToBindParameters(
         cpp_obj: *mut c_void,
-        columns_type: i32,
+        columns_type: c_int,
         columns_void_vec: *const *mut c_void,
         columns_string_vec: *const *mut c_char,
-        columns_vec_len: i32,
-    ) -> c_void;
+        columns_vec_len: c_int,
+    );
 }
 
 #[derive(Debug)]
@@ -78,7 +74,7 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configTable(
                 self.get_cpp_obj(),
                 CPPType::String as i32,
-                0,
+                null_mut(),
                 c_table_name.as_ptr(),
             );
         }

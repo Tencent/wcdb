@@ -1,6 +1,7 @@
 use crate::winq::column_type::ColumnType;
 use std::fmt::Display;
 use std::hash::Hash;
+use std::str::from_utf8;
 
 #[derive(Debug, Clone)]
 pub enum ValueObject {
@@ -95,11 +96,11 @@ impl Value {
         }
     }
 
-    pub fn get_text(&self) -> String {
+    pub fn get_text(&self) -> &str {
         match &self.value {
-            ValueObject::String(val) => val.to_string(),
-            ValueObject::BLOB(val) => String::from_utf8((*val).clone()).unwrap_or("".to_string()),
-            _ => "".to_string(),
+            ValueObject::String(val) => val,
+            ValueObject::BLOB(val) => from_utf8(&val).unwrap_or_default(),
+            _ => "",
         }
     }
 

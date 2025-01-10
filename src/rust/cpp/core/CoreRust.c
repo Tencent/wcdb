@@ -23,6 +23,5 @@
 
 void* WCDBRustCoreClassMethod(createDatabase, const char* path)
 {
-    void* ret = (void*) WCDBCoreCreateDatabase(path).innerValue;
-    return ret;
+    return (void*) WCDBCoreCreateDatabase(path).innerValue;
 }

@@ -1,10 +1,9 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::winq::expression::Expression;
-use crate::winq::identifier::{
-    CPPType, IdentifierStaticTrait, IdentifierTrait, WCDBRustWinq_isWriteStatement,
-};
+use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
+use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
 use std::os::raw::c_long;
@@ -16,24 +15,18 @@ extern "C" {
         type_i: c_int,
         table: c_long,
         table_name: *const c_char,
-    ) -> c_void;
-
-    pub fn WCDBRustStatementDelete_configCondition(
-        cpp_obj: *mut c_void,
-        condition: *mut c_void,
-    ) -> c_void;
-
+    );
+    pub fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
     pub fn WCDBRustStatementDelete_configOrders(
         cpp_obj: *mut c_void,
         orders: *const *mut c_void,
-        len: usize,
-    ) -> c_void;
-
+        len: c_size_t,
+    );
     pub fn WCDBRustStatementDelete_configLimitCount(
         cpp_obj: *mut c_void,
         type_: c_int,
         count: c_long,
-    ) -> c_void;
+    );
 }
 
 #[derive(Debug)]

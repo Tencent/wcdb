@@ -12,12 +12,15 @@ extern "C" {
     pub fn WCDBRustStatementInsert_configConflictAction(cpp_obj: *mut c_void, action: c_int);
     pub fn WCDBRustStatementInsert_configColumns(
         cpp_obj: *mut c_void,
-        columns_type: i32,
+        columns_type: c_int,
         columns_void_vec: *const *mut c_void,
         columns_string_vec: *const *mut c_char,
-        columns_vec_len: i32,
+        columns_vec_len: c_int,
     );
-    pub fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: i32);
+    pub fn WCDBRustStatementInsert_configValuesWithBindParameters(
+        cpp_obj: *mut c_void,
+        count: c_int,
+    );
 }
 
 #[derive(Debug)]

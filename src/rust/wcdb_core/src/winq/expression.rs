@@ -4,10 +4,10 @@ use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::{Identifier, IdentifierTrait};
 use crate::winq::literal_value::LiteralValue;
 use crate::winq::statement_select::StatementSelect;
-use std::ffi::c_void;
+use std::ffi::{c_int, c_void};
 
 extern "C" {
-    pub fn WCDBRustExpression_create(value_type: i32, cpp_obj: *mut c_void) -> *mut c_void;
+    pub fn WCDBRustExpression_create(value_type: c_int, cpp_obj: *mut c_void) -> *mut c_void;
     // pub fn WCDBRustExpression_argument(
     //     cpp_obj: *mut c_void,
     //     type_i: c_int,

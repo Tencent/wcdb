@@ -20,7 +20,6 @@
 
 #include "HandleStatementRust.h"
 #include "HandleStatementBridge.h"
-#include <string.h>
 
 void* WCDBRustHandleStatementClassMethod(getError, void* self)
 {
@@ -31,7 +30,7 @@ void* WCDBRustHandleStatementClassMethod(getError, void* self)
 bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
 {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
-    return WCDBHandleStatementPrepare(selfStruct, (CPPObject *) statement);
+    return WCDBHandleStatementPrepare(selfStruct, (CPPObject*) statement);
 }
 
 //bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, jstring sql)
@@ -94,11 +93,9 @@ void WCDBRustHandleStatementClassMethod(bindDouble, void* self, double value, in
 void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value, int index)
 {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
-    int valueLength = strlen(value);
-    WCDBHandleStatementBindText16(
-    selfStruct, index, (const short *) value, valueLength);
+    WCDBHandleStatementBindText(selfStruct, index, value);
 }
-//
+
 //void WCDBRustHandleStatementClassMethod(bindBLOB, void* self, jbyteArray value, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);
@@ -143,9 +140,7 @@ double WCDBRustHandleStatementClassMethod(getDouble, void* self, int index)
 const char* WCDBRustHandleStatementClassMethod(getText, void* self, int index)
 {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
-    const char *utf16Value
-    = (const char *) WCDBHandleStatementGetText16(selfStruct, index);
-    return utf16Value;
+    return WCDBHandleStatementGetText(selfStruct, index);
 }
 //
 //jbyteArray WCDBRustHandleStatementClassMethod(getBLOB, void* self, jint index)
