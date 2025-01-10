@@ -3,6 +3,7 @@ package com.tencent.wcdb.compat;
 import android.database.sqlite.SQLiteClosable;
 import android.database.sqlite.SQLiteDoneException;
 import android.os.CancellationSignal;
+import android.text.TextUtils;
 
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.core.Database;
@@ -57,19 +58,28 @@ public final class SQLiteStatement extends SQLiteClosable {
     }
 
     /**
-     * Execute this SQL statement, if it is not a SELECT / INSERT / DELETE / UPDATE, for example
-     * CREATE / DROP table, view, trigger, index etc.
+     * @see #execute(CancellationSignal)
+     * Executes a readonly database-operation without support for cancellation.
+     */
+    public int execute() {
+        return execute(null);
+    }
+
+    /**
+     * Executes a readonly database-operation with support for cancellation.
      *
+     * @param cancellationSignal The CancellationSignal to cancel the operation if requested.
+     *                           This allows the operation to be stopped in progress, useful for
+     *                           long-running queries or operations that the user may wish to cancel.
+     * @return The number of changes made by the operation if it is not read-only; otherwise, returns 0.
+     * This provides insight into how many rows were affected in the case of a modification.
      * @throws android.database.SQLException If the SQL string is invalid for
      *                                       some reason
      */
-    public void execute() {
-        execute(null);
-    }
-
-    public void execute(CancellationSignal cancellationSignal) {
-        try (Handle handle = mDB.getHandle(true)) {
+    public int execute(CancellationSignal cancellationSignal) {
+        try (Handle handle = mDB.getHandle(!TextUtils.isEmpty(mSql) && !mSql.toLowerCase().startsWith("select"))) {
             execute(handle, cancellationSignal);
+            return handle.getChanges();
         }
     }
 
@@ -123,7 +133,8 @@ public final class SQLiteStatement extends SQLiteClosable {
     }
 
     public long simpleQueryForLong(CancellationSignal cancellationSignal) {
-        try (Handle handle = mDB.getHandle(true)) {
+        // since just query, we can use read-only mode
+        try (Handle handle = mDB.getHandle(false)) {
             return executeForValue(handle, cancellationSignal).getLong();
         }
     }
@@ -140,7 +151,7 @@ public final class SQLiteStatement extends SQLiteClosable {
     }
 
     public String simpleQueryForString(CancellationSignal cancellationSignal) {
-        try (Handle handle = mDB.getHandle(true)) {
+        try (Handle handle = mDB.getHandle(false)) {
             return executeForValue(handle, cancellationSignal).getText();
         }
     }

@@ -117,8 +117,7 @@ bool CompressHandleOperator::filterComplessingTables(std::set<const CompressionT
             auto compressedColumns = parseColumns(compression);
             bool columnMatched = true;
             for (const auto& compressingColumn : (*iter)->getColumnInfos()) {
-                const StringView& columnName
-                = compressingColumn.getColumn().syntax().name;
+                const StringView& columnName = compressingColumn.getColumn();
                 if (compressedColumns.find(columnName) == compressedColumns.end()) {
                     columnMatched = false;
                     break;
@@ -294,7 +293,7 @@ bool CompressHandleOperator::compressRow(OneRowValue& row)
             Error::Code::Error,
             nullptr,
             StringView::formatted("Compressing column %s with index index %u out of range",
-                                  column.getColumn().syntax().name.data(),
+                                  column.getColumn().data(),
                                   column.getColumnIndex()));
             return false;
         }
@@ -306,7 +305,7 @@ bool CompressHandleOperator::compressRow(OneRowValue& row)
             Error::Code::Error,
             nullptr,
             StringView::formatted("Compressing type column %s with index index %u out of range",
-                                  column.getTypeColumn().syntax().name.data(),
+                                  column.getTypeColumn().data(),
                                   column.getTypeColumnIndex()));
             return false;
         }
@@ -365,7 +364,7 @@ bool CompressHandleOperator::compressRow(OneRowValue& row)
                 Error::Code::Error,
                 nullptr,
                 StringView::formatted("Compressing match column %s with index index %u out of range",
-                                      column.getMatchColumn().syntax().name.data(),
+                                      column.getMatchColumn().data(),
                                       column.getMatchColumnIndex()));
                 return false;
             }
@@ -613,7 +612,7 @@ CompressHandleOperator::getCompressedColumns(const CompressionTableInfo* info)
     std::list<const CompressionColumnInfo*> compressedColumns;
     for (auto& compressingColumn : info->getColumnInfos()) {
         for (const auto& column : curColumns) {
-            if (column.equal(compressingColumn.getTypeColumn().syntax().name)) {
+            if (column.equal(compressingColumn.getTypeColumn())) {
                 compressedColumns.push_back(&compressingColumn);
             }
         }

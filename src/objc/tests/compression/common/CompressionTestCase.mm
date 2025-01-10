@@ -122,7 +122,7 @@
         TestCaseAssertTrue([m_sourceDatabase insertObjects:m_objects intoTable:self.tableName]);
         [self.database addMigration:m_sourceDatabase.path
                          withFilter:^(WCTMigrationUserInfo *info) {
-                             if ([info.table isEqualTo:self.tableName]) {
+                             if ([info.table isEqualToString:self.tableName]) {
                                  [info setSourceTable:self.tableName];
                              }
                          }];

@@ -258,7 +258,7 @@ void CompressionCenter::decompressContent(const UnsafeData& data,
     }
     int64_t decompressSize = 0;
     if (usingDict) {
-        DictId dictId = ZSTD_getDictID_fromFrame(data.buffer(), data.size());
+        DictId dictId = (DictId) ZSTD_getDictID_fromFrame(data.buffer(), data.size());
         if (dictId == 0) {
             resultAPI.setErrorResult(Error::Code::ZstdError, "Can not decode dictid");
             return;
@@ -319,7 +319,7 @@ CompressionCenter::decompressContent(const UnsafeData& data, bool usingDict, Inn
     }
     int64_t decompressSize = 0;
     if (usingDict) {
-        DictId dictId = ZSTD_getDictID_fromFrame(data.buffer(), data.size());
+        DictId dictId = (DictId) ZSTD_getDictID_fromFrame(data.buffer(), data.size());
         if (dictId == 0) {
             handle->notifyError(Error::Code::ZstdError, nullptr, "Can not decode dictid");
             return NullOpt;
@@ -379,7 +379,7 @@ bool CompressionCenter::testContentCanBeDecompressed(const UnsafeData& data,
     }
     int64_t decompressSize = 0;
     if (usingDict) {
-        DictId dictId = ZSTD_getDictID_fromFrame(data.buffer(), data.size());
+        DictId dictId = (DictId) ZSTD_getDictID_fromFrame(data.buffer(), data.size());
         if (dictId == 0) {
             errorReportHandle->notifyError(Error::Code::ZstdError, "", "Can not decode dictid");
             return false;

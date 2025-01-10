@@ -54,9 +54,9 @@ public:
     typedef std::function<void(CompressionTableUserInfo&)> TableFilter;
     void setTableFilter(const TableFilter& tableFilter);
     bool shouldCompress() const;
+    void purge();
 
 private:
-    void purge();
     TableFilter m_tableFilter;
 
     volatile int m_dataVersion;
