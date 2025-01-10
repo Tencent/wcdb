@@ -124,7 +124,7 @@ impl PreparedStatement {
             return;
         }
         if ColumnType::Text == value_type {
-            self.bind_text(&value.get_text(), index);
+            self.bind_text(value.get_text(), index);
             return;
         }
         if ColumnType::BLOB == value_type {

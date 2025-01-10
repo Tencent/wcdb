@@ -12,20 +12,20 @@ extern "C" {
     pub fn WCDBRustStatementDelete_create() -> *mut c_void;
     pub fn WCDBRustStatementDelete_configTable(
         cpp_obj: *mut c_void,
-        type_i: c_int,
-        table: c_long,
-        table_name: *const c_char,
+        table_type: c_int,
+        table_long: c_long,
+        table_string: *const c_char,
     );
     pub fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
     pub fn WCDBRustStatementDelete_configOrders(
         cpp_obj: *mut c_void,
         orders: *const *mut c_void,
-        len: c_size_t,
+        vec_len: c_size_t,
     );
     pub fn WCDBRustStatementDelete_configLimitCount(
         cpp_obj: *mut c_void,
-        type_: c_int,
-        count: c_long,
+        config_type: c_int,
+        limit: c_long,
     );
 }
 
@@ -101,15 +101,15 @@ impl StatementDelete {
         if orders.is_empty() {
             return self;
         }
-        let mut cpp_orders = Vec::with_capacity(orders.len());
+        let mut order_raw_vec = Vec::with_capacity(orders.len());
         for order in orders {
-            cpp_orders.push(order.get_cpp_obj());
+            order_raw_vec.push(order.get_cpp_obj());
         }
         unsafe {
             WCDBRustStatementDelete_configOrders(
                 self.get_cpp_obj(),
-                cpp_orders.as_ptr(),
-                cpp_orders.len(),
+                order_raw_vec.as_ptr(),
+                order_raw_vec.len(),
             );
         }
         self

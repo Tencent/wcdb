@@ -18,7 +18,7 @@ extern "C" {
         cpp_obj: *mut c_void,
         columns_type: c_int,
         columns_void_vec: *const *mut c_void,
-        columns_string_vec: *const *mut c_char,
+        columns_string_vec: *const *const c_char,
         columns_vec_len: c_int,
     );
 }

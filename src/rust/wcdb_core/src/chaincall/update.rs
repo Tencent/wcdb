@@ -79,10 +79,8 @@ impl<'a, T> Update<'a, T> {
         }
         prepared_statement.step()?;
         self.chain_call.update_changes()?;
-
         prepared_statement.finalize_statement();
         self.chain_call.invalidate_handle();
-
         Ok(self)
     }
 }

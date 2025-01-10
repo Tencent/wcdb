@@ -64,7 +64,6 @@ impl<'a, T> Select<'a, T> {
     pub fn first_object_by_class(&self) -> WCDBResult<T> {
         let prepared_statement = self.prepare_statement()?;
         prepared_statement.step()?;
-
         let ret: WCDBResult<T> = if !prepared_statement.is_done() {
             prepared_statement.get_one_object(&self.fields)
         } else {
@@ -72,10 +71,8 @@ impl<'a, T> Select<'a, T> {
                 prepared_statement.get_cpp_obj(),
             ))
         };
-
         prepared_statement.finalize_statement();
         self.chain_call.invalidate_handle();
-
         ret
     }
 
@@ -86,10 +83,8 @@ impl<'a, T> Select<'a, T> {
     pub fn all_objects_by_class(&self) -> WCDBResult<Vec<T>> {
         let prepared_statement = self.prepare_statement()?;
         let ret = prepared_statement.get_all_objects(&self.fields);
-
         prepared_statement.finalize_statement();
         self.chain_call.invalidate_handle();
-
         ret
     }
 
