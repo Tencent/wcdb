@@ -31,6 +31,7 @@
 #include "CustomConfig.hpp"
 #include "DBOperationNotifier.hpp"
 #include "FileManager.hpp"
+#include "Global.hpp"
 #include "InnerDatabase.hpp"
 #include "Path.hpp"
 #include "WCDBVersion.h"
@@ -510,6 +511,16 @@ void Database::addScalarFunction(const UnsafeStringView& name)
 void Database::enableLiteMode(bool enable)
 {
     m_innerDatabase->setLiteModeEnable(enable);
+}
+
+void Database::registerPOSIXOpen(POSIXOpen open)
+{
+    Global::shared().registerPOSIXOpen(open);
+}
+
+void Database::registerPOSIXClose(POSIXClose close)
+{
+    Global::shared().registerPOSIXClose(close);
 }
 
 #pragma mark - Migration

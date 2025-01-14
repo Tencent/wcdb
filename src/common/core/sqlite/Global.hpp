@@ -63,10 +63,17 @@ public:
     void setNotificationWhenFileOpened(const UnsafeStringView& name,
                                        const FileOpenedNotification& notification);
 
+    typedef int (*POSIXOpen)(const char*, int, int);
+    void registerPOSIXOpen(POSIXOpen open);
+
+    typedef int (*POSIXClose)(int);
+    void registerPOSIXClose(POSIXClose close);
+
 private:
     static int open(const char* path, int flags, int mode);
     void postFileOpenedNotification(int fd, const char* path, int flags, int mode);
     StringViewMap<FileOpenedNotification> m_fileOpenedNotifications;
+    POSIXOpen m_open;
 #endif
 
 #pragma mark - Lock
