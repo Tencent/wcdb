@@ -21,7 +21,6 @@
 #include "CoreRust.h"
 #include "CoreBridge.h"
 
-void* WCDBRustCoreClassMethod(createDatabase, const char* path)
-{
-    return (void*) WCDBCoreCreateDatabase(path).innerValue;
+void *WCDBRustCoreClassMethod(createDatabase, const char *path) {
+    return (void *) WCDBCoreCreateDatabase(path).innerValue;
 }

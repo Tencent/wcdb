@@ -35,10 +35,9 @@
 //        }                                                                             \
 //    }
 
-void* WCDBRustDatabaseClassMethod(getError, void* self)
-{
+void *WCDBRustDatabaseClassMethod(getError, void *self) {
     WCDBRustBridgeStruct(CPPDatabase, self);
-    return (void*) WCDBDatabaseGetError(selfStruct).innerValue;
+    return (void *) WCDBDatabaseGetError(selfStruct).innerValue;
 }
 
 //jlong WCDBRustDatabaseClassMethod(getTag, jlong self)
@@ -53,8 +52,7 @@ void* WCDBRustDatabaseClassMethod(getError, void* self)
 //    WCDBDatabaseSetTag(selfStruct, tag);
 //}
 
-const char* WCDBRustDatabaseClassMethod(getPath, void* self)
-{
+const char *WCDBRustDatabaseClassMethod(getPath, void *self) {
     WCDBRustBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseGetPath(selfStruct);
 }
@@ -90,17 +88,15 @@ const char* WCDBRustDatabaseClassMethod(getPath, void* self)
 //    return arrayList;
 //}
 
-void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint)
-{
+void *WCDBRustDatabaseClassMethod(getHandle, void *self, bool writeHint) {
     WCDBRustBridgeStruct(CPPDatabase, self);
-    return (void*) WCDBDatabaseGetHandle(selfStruct, writeHint).innerValue;
+    return (void *) WCDBDatabaseGetHandle(selfStruct, writeHint).innerValue;
 }
 
-//jboolean WCDBRustDatabaseClassMethod(canOpen, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseCanOpen(selfStruct);
-//}
+bool WCDBRustDatabaseClassMethod(canOpen, void *self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseCanOpen(selfStruct);
+}
 //
 //jboolean WCDBRustDatabaseClassMethod(isOpened, jlong self)
 //{
@@ -130,8 +126,7 @@ void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint)
 //    env, WCDBRustGetDatabaseClass(), g_methodId, context->callback);
 //}
 
-void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback callback)
-{
+void WCDBRustDatabase_close(void *self, void *context, WCDBDatabaseCloseCallback callback) {
     WCDBRustBridgeStruct(CPPDatabase, self);
     WCDBDatabaseClose(selfStruct, context, callback);
 }
@@ -182,8 +177,8 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustTryGetVM;
 //    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRel(invocation);
-//    WCDBRustCreateGlobalRel(unInvocation);
+//    WCDBRustCreateGlobalRef(invocation);
+//    WCDBRustCreateGlobalRef(unInvocation);
 //    WCDBRustGetString(name);
 //    WCDBDatabaseConfig(selfStruct,
 //                       nameString,
@@ -234,19 +229,43 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //    WCDBRustTryDetach;
 //}
 //
-//void WCDBRustDatabaseClassMethod(globalTracePerformance, jobject tracer)
-//{
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(tracer);
-//    WCDBDatabaseGlobalTracePerformance(
-//    tracer != NULL ? WCDBRustDatabasePerformanceTrace : NULL, tracer, WCDBRustDestructContext);
-//}
+typedef struct WCDBRustGlobalTracePerformanceContext {
+    RustGlobalTracePerformanceCallback rust_callback;
+} WCDBRustGlobalTracePerformanceContext;
+
+void WCDBRustDatabasePerformanceTrace(WCDBRustGlobalTracePerformanceContext *context,
+                                      long tag,
+                                      const char *path,
+                                      unsigned long long handleId,
+                                      const char *sql,
+                                      const CPPPerformanceInfo *info) {
+    if (context == NULL || context->rust_callback == NULL) {
+        return;
+    }
+    context->rust_callback(tag, path, handleId, sql, info);
+}
+
+void WCDBRustDestructContext(void *context) {
+    if (context != NULL) {
+        free(context);
+        context = NULL;
+    }
+}
+
+void WCDBRustDatabaseClassMethod(globalTracePerformance, RustGlobalTracePerformanceCallback rust_callback) {
+    size_t size = sizeof(WCDBRustGlobalTracePerformanceContext);
+    WCDBRustGlobalTracePerformanceContext *context = (WCDBRustGlobalTracePerformanceContext *) WCDBRustCreateGlobalRef(
+            size);
+    context->rust_callback = rust_callback;
+    WCDBDatabaseGlobalTracePerformance((WCDBPerformanceTracer) WCDBRustDatabasePerformanceTrace, context,
+                                       (WCDBContextDestructor) WCDBRustDestructContext);
+}
 //
 //void WCDBRustDatabaseClassMethod(tracePerformance, jlong self, jobject tracer)
 //{
 //    WCDBRustTryGetVM;
 //    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRel(tracer);
+//    WCDBRustCreateGlobalRef(tracer);
 //    WCDBDatabaseTracePerformance(
 //    selfStruct, tracer != NULL ? WCDBRustDatabasePerformanceTrace : NULL, tracer, WCDBRustDestructContext);
 //}
@@ -271,22 +290,55 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //    WCDBRustTryDetach;
 //}
 //
-//void WCDBRustDatabaseClassMethod(globalTraceSQL, jobject tracer)
-//{
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(tracer);
-//    WCDBDatabaseGlobalTraceSQL(
-//    tracer != NULL ? WCDBRustDatabaseSQLTrace : NULL, tracer, WCDBRustDestructContext);
-//}
-//
-//void WCDBRustDatabaseClassMethod(traceSQL, jlong self, jobject tracer)
-//{
-//    WCDBRustTryGetVM;
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRel(tracer);
-//    WCDBDatabaseTraceSQL(
-//    selfStruct, tracer != NULL ? WCDBRustDatabaseSQLTrace : NULL, tracer, WCDBRustDestructContext);
-//}
+
+typedef struct WCDBRustGlobalTraceSQLContext {
+    RustGlobalTraceSQLCallback rust_callback;
+} WCDBRustGlobalTraceSQLContext;
+
+void WCDBRustDatabaseGlobalSQLTrace(WCDBRustGlobalTraceSQLContext *context,
+                                    long tag,
+                                    const char *path,
+                                    unsigned long long handleId,
+                                    const char *sql,
+                                    const char *info) {
+    if (context == NULL || context->rust_callback == NULL) {
+        return;
+    }
+    context->rust_callback(tag, path, handleId, sql, info);
+}
+
+void WCDBRustDatabaseClassMethod(globalTraceSQL, RustGlobalTraceSQLCallback rust_callback) {
+    size_t size = sizeof(WCDBRustGlobalTraceSQLContext);
+    WCDBRustGlobalTraceSQLContext *context = (WCDBRustGlobalTraceSQLContext *) WCDBRustCreateGlobalRef(size);
+    context->rust_callback = rust_callback;
+    WCDBDatabaseGlobalTraceSQL((WCDBSQLTracer) WCDBRustDatabaseGlobalSQLTrace, context, WCDBRustDestructContext);
+}
+
+typedef struct WCDBRustTraceSQLContext {
+    RustTraceSQLCallback rust_callback;
+    void *closure_raw;
+} WCDBRustTraceSQLContext;
+
+void WCDBRustDatabaseSQLTrace(WCDBRustTraceSQLContext *context,
+                              long tag,
+                              const char *path,
+                              unsigned long long handleId,
+                              const char *sql,
+                              const char *info) {
+    if (context == NULL || context->rust_callback == NULL || context->closure_raw == NULL) {
+        return;
+    }
+    context->rust_callback(context->closure_raw, tag, path, handleId, sql, info);
+}
+
+void WCDBRustDatabaseClassMethod(traceSQL, void *self, RustTraceSQLCallback rust_callback, void *closure_raw) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    size_t size = sizeof(RustTraceSQLCallback);
+    WCDBRustTraceSQLContext *context = (WCDBRustTraceSQLContext *) WCDBRustCreateGlobalRef(size);
+    WCDBDatabaseTraceSQL(
+            selfStruct, closure_raw != NULL ? (WCDBSQLTracer) WCDBRustDatabaseSQLTrace : NULL, context,
+            WCDBRustDestructContext);
+}
 //
 //void WCDBRustDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable)
 //{
@@ -304,19 +356,32 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //    WCDBRustTryDetach;
 //}
 //
-//void WCDBRustDatabaseClassMethod(globalTraceError, jobject tracer)
-//{
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(tracer);
-//    WCDBDatabaseGlobalTraceError(
-//    tracer != NULL ? WCDBRustDatabaseErrorTrace : NULL, tracer, WCDBRustDestructContext);
-//}
+
+typedef struct WCDBRustGlobalTraceExceptionContext {
+    RustGlobalTraceTraceExceptionCallback rust_callback;
+} WCDBRustGlobalTraceExceptionContext;
+
+void WCDBRustDatabaseErrorTrace(WCDBRustGlobalTraceExceptionContext *context,
+                                CPPError error) {
+    if (context == NULL || context->rust_callback == NULL) {
+        return;
+    }
+    context->rust_callback(error.innerValue);
+}
+
+void WCDBRustDatabaseClassMethod(globalTraceException, RustGlobalTraceTraceExceptionCallback rust_callback) {
+    size_t size = sizeof(RustGlobalTraceTraceExceptionCallback);
+    WCDBRustGlobalTraceExceptionContext *context = (WCDBRustGlobalTraceExceptionContext *) WCDBRustCreateGlobalRef(
+            size);
+    context->rust_callback = rust_callback;
+    WCDBDatabaseGlobalTraceError((WCDBErrorTracer) WCDBRustDatabaseErrorTrace, context, WCDBRustDestructContext);
+}
 //
 //void WCDBRustDatabaseClassMethod(traceError, jlong self, jobject tracer)
 //{
 //    WCDBRustTryGetVM;
 //    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRel(tracer);
+//    WCDBRustCreateGlobalRef(tracer);
 //    WCDBDatabaseTraceError(
 //    selfStruct, tracer != NULL ? WCDBRustDatabaseErrorTrace : NULL, tracer, WCDBRustDestructContext);
 //}
@@ -339,7 +404,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //void WCDBRustDatabaseClassMethod(globalTraceOperation, jobject tracer)
 //{
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(tracer);
+//    WCDBRustCreateGlobalRef(tracer);
 //    WCDBDatabaseGlobalTraceOperation(
 //    (tracer != NULL ? (WCDBOperationTracer) WCDBRustDatabaseOperationTrace : NULL),
 //    tracer,
@@ -416,7 +481,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //void WCDBRustDatabaseClassMethod(globalTraceDatabaseBusy, jobject tracer, jdouble timeOut)
 //{
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(tracer);
+//    WCDBRustCreateGlobalRef(tracer);
 //    WCDBCoreGlobalTraceBusy(
 //    (tracer != NULL ? (WCDBBusyTracer) WCDBRustDatabaseBusyTrace : NULL), timeOut, tracer, WCDBRustDestructContext);
 //}
@@ -473,7 +538,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(notification);
+//    WCDBRustCreateGlobalRef(notification);
 //    WCDBDatabaseSetNotificationWhenCorrupted(
 //    selfStruct, notification != NULL ? WCDBRustDatabaseCorrupted : NULL, notification, WCDBRustDestructContext);
 //}
@@ -523,7 +588,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(tableShouldBeBackup);
+//    WCDBRustCreateGlobalRef(tableShouldBeBackup);
 //    WCDBDatabaseFilterBackup(
 //    selfStruct,
 //    tableShouldBeBackup != NULL ? WCDBRustDatabaseTableShouldBeBackup : NULL,
@@ -564,7 +629,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(onProgressUpdate);
+//    WCDBRustCreateGlobalRef(onProgressUpdate);
 //    return WCDBDatabaseRetrieve(
 //    selfStruct,
 //    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBRustDatabaseOnProgressUpdate : NULL,
@@ -576,7 +641,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(onProgressUpdate);
+//    WCDBRustCreateGlobalRef(onProgressUpdate);
 //    return WCDBDatabaseVacuum(
 //    selfStruct,
 //    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBRustDatabaseOnProgressUpdate : NULL,
@@ -631,7 +696,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobject filter)
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRel(filter);
+//    WCDBRustCreateGlobalRef(filter);
 //    WCDBRustGetString(sourcePath);
 //    WCDBRustGetByteArrayCritical(cipherKey);
 //    WCDBDatabaseAddMigration(selfStruct,
@@ -687,7 +752,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(onMigrated);
+//    WCDBRustCreateGlobalRef(onMigrated);
 //    WCDBDatabaseSetNotificationWhenMigrated(
 //    selfStruct, onMigrated != NULL ? WCDBRustDatabaseOnTableMigrate : NULL, onMigrated, WCDBRustDestructContext);
 //}
@@ -861,7 +926,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //void WCDBRustDatabaseClassMethod(setCompression, jlong self, jobject filter)
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRel(filter);
+//    WCDBRustCreateGlobalRef(filter);
 //    WCDBDatabaseSetCompression(
 //    selfStruct, filter != NULL ? WCDBRustDatabaseFilterCompress : NULL, filter, WCDBRustDestructContext);
 //}
@@ -901,7 +966,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(onCompressed);
+//    WCDBRustCreateGlobalRef(onCompressed);
 //    WCDBDatabaseSetNotificationWhenCompressed(
 //    selfStruct, onCompressed != NULL ? WCDBRustDatabaseOnTableCompressed : NULL, onCompressed, WCDBRustDestructContext);
 //}
@@ -916,7 +981,7 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
 //{
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRel(onProgressUpdate);
+//    WCDBRustCreateGlobalRef(onProgressUpdate);
 //    return WCDBDatabaseRollbackCompression(
 //    selfStruct,
 //    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBRustDatabaseOnProgressUpdate : NULL,

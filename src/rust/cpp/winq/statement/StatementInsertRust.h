@@ -33,22 +33,26 @@
 #define WCDBRustStatementInsertClassMethod(funcName, ...)                       \
     WCDBRustClassMethod(StatementInsert, funcName, __VA_ARGS__)
 
-void* WCDBRustStatementInsertClassMethodWithNoArg(create);
+void *WCDBRustStatementInsertClassMethodWithNoArg(create);
+
 //void WCDBRustStatementInsertClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementInsertClassMethod(configRecursive, jlong self);
-void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char* tableName);
+void WCDBRustStatementInsertClassMethod(configTableName, void *self, const char *tableName);
+
 //void WCDBRustStatementInsertClassMethod(configSchema,
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringParameter(schema));
-void WCDBRustStatementInsertClassMethod(configConflictAction, void* self, int action);
+void WCDBRustStatementInsertClassMethod(configConflictAction, void *self, int action);
+
 //void WCDBRustStatementInsertClassMethod(configAs, jlong self, jstring alias);
 void WCDBRustStatementInsertClassMethod(configColumns,
-                                        void* self,
+                                        void *self,
                                         WCDBRustObjectOrStringArrayParameter(columns));
+
 //void WCDBRustStatementInsertClassMethod(configValues,
 //                                       jlong self,
 //                                       WCDBRustMultiTypeArrayParameter(value));
-void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count);
+void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void *self, int count);
 //void WCDBRustStatementInsertClassMethod(configSelect, jlong self, jlong select);
 //void WCDBRustStatementInsertClassMethod(configDefaultValues, jlong self);
 //void WCDBRustStatementInsertClassMethod(configUpsert, jlong self, jlong upsert);

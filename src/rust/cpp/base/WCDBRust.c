@@ -35,9 +35,8 @@
 //    WCDBRustTryDetach;
 //}
 
-void WCDBRustBase_releaseObject(void* cppObject)
-{
-    WCDBReleaseCPPObject((CPPObject*) cppObject);
+void WCDBRustBase_releaseObject(void *cppObject) {
+    WCDBReleaseCPPObject((CPPObject *) cppObject);
 }
 
 //jclass g_databaseClass = NULL;
@@ -47,15 +46,15 @@ void WCDBRustBase_releaseObject(void* cppObject)
 //void WCDBRustInitJClasses(JNIEnv* env)
 //{
 //    g_databaseClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Database");
-//    WCDBRustCreateGlobalRel(g_databaseClass);
+//    WCDBRustCreateGlobalRef(g_databaseClass);
 //    assert(g_databaseClass != NULL);
 //
 //    g_handleClass = (*env)->FindClass(env, "com/tencent/wcdb/core/Handle");
-//    WCDBRustCreateGlobalRel(g_handleClass);
+//    WCDBRustCreateGlobalRef(g_handleClass);
 //    assert(g_handleClass != NULL);
 //
 //    g_exceptionClass = (*env)->FindClass(env, "com/tencent/wcdb/base/WCDBException");
-//    WCDBRustCreateGlobalRel(g_exceptionClass);
+//    WCDBRustCreateGlobalRef(g_exceptionClass);
 //    assert(g_exceptionClass != NULL);
 //}
 //

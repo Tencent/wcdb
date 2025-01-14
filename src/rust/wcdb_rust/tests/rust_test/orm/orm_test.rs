@@ -1,0 +1,95 @@
+use crate::rust_test::base::base_test_case::TestCaseTrait;
+use crate::rust_test::base::database_test_case::{DatabaseTestCase, Expect};
+use crate::rust_test::orm::testclass::all_type_object_helper::AllTypeObjectHelper;
+use crate::wcdb_orm::orm::testclass::all_type_object::{DbAllTypeObject, DBALLTYPEOBJECT_INSTANCE};
+use wcdb_core::base::wcdb_exception::WCDBResult;
+use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::orm::table_binding::TableBinding;
+
+pub struct OrmTest {
+    database_test_case: DatabaseTestCase,
+    table_name: String,
+}
+
+impl OrmTest {
+    pub fn new() -> Self {
+        OrmTest {
+            database_test_case: DatabaseTestCase::new(),
+            table_name: "testTable".to_string(),
+        }
+    }
+
+    fn do_test_create_table_and_index_sqls_as_expected<CB>(&self, sqls: Vec<String>, operation: CB)
+    where
+        CB: FnOnce() -> WCDBResult<()>,
+    {
+        assert!(sqls.len() > 0);
+        let mut new_sql_vec = vec![];
+        new_sql_vec.push("BEGIN IMMEDIATE".to_string());
+        new_sql_vec.extend(sqls);
+        new_sql_vec.push("COMMIT".to_string());
+        let table_name = self.table_name.clone();
+        let _ = self.database_test_case.do_test_sql_vec(new_sql_vec, || {
+            self.database_test_case
+                .create_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE)?;
+            Ok(())
+        });
+
+        // let table = self
+        //     .database_test_case
+        //     .get_database_lock()
+        //     .get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
+
+        let max = AllTypeObjectHelper::max_object();
+        let min = AllTypeObjectHelper::min_object();
+        let random = AllTypeObjectHelper::random_object();
+        let empty = AllTypeObjectHelper::empty_object();
+
+        let obj_vec = vec![max, min, random, empty];
+        let _ = self.database_test_case.get_database_lock().insert_objects(
+            obj_vec,
+            DbAllTypeObject::all_fields(),
+            "testTable",
+        );
+
+        //  todo qixinbing  table orm 待实现
+        // DbAllTypeObject::all_fields();
+    }
+}
+impl TestCaseTrait for OrmTest {
+    fn setup(&self) -> WCDBResult<()> {
+        self.database_test_case.setup()?;
+        self.database_test_case.set_expect_mode(Expect::SomeSQLs);
+        Ok(())
+    }
+
+    fn teardown(&self) -> WCDBResult<()> {
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+pub mod orm_test {
+    use super::*;
+
+    fn set_up(orm_test: &OrmTest) {
+        orm_test.setup().unwrap();
+    }
+
+    fn teardown(orm_test: &OrmTest) {
+        orm_test.teardown().unwrap();
+    }
+
+    #[test]
+    fn test_all_type() {
+        let orm_test = OrmTest::new();
+        set_up(&orm_test);
+
+        let mut sql_vec = vec![];
+        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(type TEXT, aBoolean INTEGER, aBoolean2 INTEGER, aByte INTEGER, aByte2 INTEGER, aShort INTEGER, aShort2 INTEGER, anInt INTEGER, integer INTEGER, aLong INTEGER, aLong2 INTEGER, aFloat REAL, aFloat2 REAL, aDouble REAL, aDouble2 REAL, string TEXT, bytes BLOB)".to_string());
+
+        orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || Ok(()));
+
+        teardown(&orm_test);
+    }
+}

@@ -31,8 +31,7 @@
 //    return (jlong) WCDBColumnCreateRowId().innerValue;
 //}
 
-void *WCDBRustColumn_createWithName(const char *name, void *binding)
-{
+void *WCDBRustColumn_createWithName(const char *name, void *binding) {
     return (void *) WCDBColumnCreateWithName2(name, (const void *) binding).innerValue;
 }
 

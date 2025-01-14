@@ -30,7 +30,10 @@
 #define WCDBRustErrorClassMethod(funcName, ...)                                 \
     WCDBRustClassMethod(Error, funcName, __VA_ARGS__)
 
-int WCDBRustErrorClassMethod(getLevel, void* error);
-int WCDBRustErrorClassMethod(getCode, void* error);
-const char* WCDBRustErrorClassMethod(getMessage, void* error);
-void WCDBRustErrorObjectMethod(enumerateInfo, void* error);
+int WCDBRustErrorClassMethod(getLevel, void *error);
+
+int WCDBRustErrorClassMethod(getCode, void *error);
+
+const char *WCDBRustErrorClassMethod(getMessage, void *error);
+
+void WCDBRustErrorObjectMethod(enumerateInfo, void *error);

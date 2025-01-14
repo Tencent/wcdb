@@ -21,12 +21,10 @@
 #include "WinqRust.h"
 #include "WinqBridge.h"
 
-const char* WCDBRustClassMethod(Winq, getDescription, void* statement)
-{
-    WCDBWinqGetDescription((CPPObject*) statement);
+const char *WCDBRustClassMethod(Winq, getDescription, void *statement) {
+    WCDBWinqGetDescription((CPPObject *) statement);
 }
 
-bool WCDBRustClassMethod(Winq, isWriteStatement, void* statement)
-{
-    return WCDBStatementNeedToWrite((CPPObject*) statement);
+bool WCDBRustClassMethod(Winq, isWriteStatement, void *statement) {
+    return WCDBStatementNeedToWrite((CPPObject *) statement);
 }

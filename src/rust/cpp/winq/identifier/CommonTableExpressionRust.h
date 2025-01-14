@@ -31,6 +31,8 @@
 #define WCDBRustCommonTableExpressionClassMethod(funcName, ...)                 \
     WCDBRustClassMethod(CommonTableExpression, funcName, __VA_ARGS__)
 
-void* WCDBRustCommonTableExpressionClassMethod(createWithTable, const char* tableName);
-void WCDBRustCommonTableExpressionClassMethod(configColumn, void* self, void* column);
-void WCDBRustCommonTableExpressionClassMethod(configSelectStatement, void* self, void* select);
+void *WCDBRustCommonTableExpressionClassMethod(createWithTable, const char *tableName);
+
+void WCDBRustCommonTableExpressionClassMethod(configColumn, void *self, void *column);
+
+void WCDBRustCommonTableExpressionClassMethod(configSelectStatement, void *self, void *select);

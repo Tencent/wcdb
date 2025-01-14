@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+lazy_static = "1.5.0"
 
 [build-dependencies]
 num_cpus = "1.16.0"

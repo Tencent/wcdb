@@ -21,9 +21,8 @@
 #include "StatementInsertRust.h"
 #include "StatementInsertBridge.h"
 
-void* WCDBRustStatementInsertClassMethodWithNoArg(create)
-{
-    return (void*) WCDBStatementInsertCreate().innerValue;
+void *WCDBRustStatementInsertClassMethodWithNoArg(create) {
+    return (void *) WCDBStatementInsertCreate().innerValue;
 }
 
 //void WCDBRustStatementInsertClassMethod(configWith, jlong self, jlongArray expressions)
@@ -41,8 +40,7 @@ void* WCDBRustStatementInsertClassMethodWithNoArg(create)
 //    WCDBStatementInsertConfigRecursive(selfStruct);
 //}
 
-void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char* tableName)
-{
+void WCDBRustStatementInsertClassMethod(configTableName, void *self, const char *tableName) {
     WCDBRustBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigTable(selfStruct, tableName);
 }
@@ -57,8 +55,7 @@ void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char*
 //    WCDBRustTryReleaseStringInCommonValue(schema);
 //}
 //
-void WCDBRustStatementInsertClassMethod(configConflictAction, void* self, int action)
-{
+void WCDBRustStatementInsertClassMethod(configConflictAction, void *self, int action) {
     WCDBRustBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigConfiction(selfStruct, action);
 }
@@ -72,12 +69,11 @@ void WCDBRustStatementInsertClassMethod(configConflictAction, void* self, int ac
 //}
 
 void WCDBRustStatementInsertClassMethod(configColumns,
-                                        void* self,
-                                        WCDBRustObjectOrStringArrayParameter(columns))
-{
+                                        void *self,
+                                        WCDBRustObjectOrStringArrayParameter(columns)) {
     WCDBRustBridgeStruct(CPPStatementInsert, self);
     WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-    columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
+            columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
 }
 
 //void WCDBRustStatementInsertClassMethod(configValues, jlong self, WCDBRustMultiTypeArrayParameter(value))
@@ -88,8 +84,7 @@ void WCDBRustStatementInsertClassMethod(configColumns,
 //    WCDBRustReleaseMultiTypeArray(value);
 //}
 
-void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count)
-{
+void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void *self, int count) {
     WCDBRustBridgeStruct(CPPStatementInsert, self);
     WCDBStatementInsertConfigValuesWithBindParameters(selfStruct, count);
 }

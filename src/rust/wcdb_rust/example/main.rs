@@ -5,6 +5,7 @@ use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb_core::winq::column::Column;
 use wcdb_core::winq::expression::Expression;
+use wcdb_core::winq::identifier::IdentifierTrait;
 
 #[derive(WCDBTableCoding)]
 #[WCDBTable(
@@ -119,8 +120,8 @@ fn insert_object_to_rct_message_box(db: &Database) {
 
     // 通过时间戳再获取一次该数据
     let expression = Expression::new_with_column(Column::new("item_i64")).eq_long(cur_ts);
-    // let desc = expression.get_description();
-    // println!("expression_desc: {:?}", desc);
+    let desc = expression.get_description();
+    println!("expression_desc: {:?}", desc);
     let first_object_ret = db.get_first_object_by_expression::<TableMessageBox>(
         DbTableMessageBox::all_fields(),
         "rct_message_box",

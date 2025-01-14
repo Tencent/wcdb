@@ -33,17 +33,20 @@
 #define WCDBRustStatementDeleteClassMethod(funcName, ...)                       \
     WCDBRustClassMethod(StatementDelete, funcName, __VA_ARGS__)
 
-void* WCDBRustStatementDeleteClassMethodWithNoArg(create);
+void *WCDBRustStatementDeleteClassMethodWithNoArg(create);
 
 //void WCDBRustStatementDeleteClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementDeleteClassMethod(configRecursive, jlong self);
 //
 void WCDBRustStatementDeleteClassMethod(configTable,
-                                       void* self,
-                                       WCDBRustObjectOrStringParameter(table));
-void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condition);
-void WCDBRustStatementDeleteClassMethod(configOrders, void* self, void** orders, size_t len);
+                                        void *self,
+                                        WCDBRustObjectOrStringParameter(table));
+
+void WCDBRustStatementDeleteClassMethod(configCondition, void *self, void *condition);
+
+void WCDBRustStatementDeleteClassMethod(configOrders, void *self, void **orders, size_t len);
+
 //void WCDBRustStatementDeleteClassMethod(
 //configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-void WCDBRustStatementDeleteClassMethod(configLimitCount, void* self, int type, long limit);
+void WCDBRustStatementDeleteClassMethod(configLimitCount, void *self, int type, long limit);
 //void WCDBRustStatementDeleteClassMethod(configOffset, jlong self, jint type, jlong offset);

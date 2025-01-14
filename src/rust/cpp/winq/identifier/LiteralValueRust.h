@@ -30,7 +30,7 @@
 #define WCDBRustLiteralValueClassMethod(funcName, ...)                          \
     WCDBRustClassMethod(LiteralValue, funcName, __VA_ARGS__)
 
-void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value));
+void *WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value));
 
 long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime);
 

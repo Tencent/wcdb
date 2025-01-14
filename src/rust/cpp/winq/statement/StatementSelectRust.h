@@ -33,19 +33,21 @@
 #define WCDBRustStatementSelectClassMethod(funcName, ...)                       \
     WCDBRustClassMethod(StatementSelect, funcName, __VA_ARGS__)
 
-void* WCDBRustStatementSelectClassMethodWithNoArg(create);
+void *WCDBRustStatementSelectClassMethodWithNoArg(create);
 
 //void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementSelectClassMethod(configRecursive, jlong self);
 //
 void WCDBRustStatementSelectClassMethod(configResultColumns,
-                                       void* self,
-                                       WCDBRustMultiTypeArrayParameter(resultColumns));
+                                        void *self,
+                                        WCDBRustMultiTypeArrayParameter(resultColumns));
+
 //void WCDBRustStatementSelectClassMethod(configDistiction, jlong self);
 void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
-                                       void* self,
-                                       WCDBRustMultiTypeArrayParameter(tableOrSubqueries));
-void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condition);
+                                        void *self,
+                                        WCDBRustMultiTypeArrayParameter(tableOrSubqueries));
+
+void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condition);
 //void WCDBRustStatementSelectClassMethod(configGroups,
 //                                       jlong self,
 //                                       WCDBRustMultiTypeArrayParameter(groups));

@@ -14,7 +14,7 @@ extern "C" {
     //     int_value: c_long,
     //     double_value: c_double,
     //     string_value: *const c_char,
-    // ) -> c_void;
+    // );
 }
 
 #[derive(Debug)]

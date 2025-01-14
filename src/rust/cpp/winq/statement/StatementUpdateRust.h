@@ -33,14 +33,15 @@
 #define WCDBRustStatementUpdateClassMethod(funcName, ...)                       \
     WCDBRustClassMethod(StatementUpdate, funcName, __VA_ARGS__)
 
-void* WCDBRustStatementUpdateClassMethodWithNoArg(create);
+void *WCDBRustStatementUpdateClassMethodWithNoArg(create);
 
 //void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions);
 //void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self);
 //
 void WCDBRustStatementUpdateClassMethod(configTable,
-                                       void* self,
-                                       WCDBRustObjectOrStringParameter(table));
+                                        void *self,
+                                        WCDBRustObjectOrStringParameter(table));
+
 //void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action);
 //void WCDBRustStatementUpdateClassMethod(configColumns,
 //                                       jlong self,
@@ -51,7 +52,7 @@ void WCDBRustStatementUpdateClassMethod(configTable,
 //                                       WCDBRustObjectOrStringArrayParameter(columns),
 //                                       WCDBRustMultiTypeArrayParameter(values));
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
-                                        void* self,
+                                        void *self,
                                         WCDBRustObjectOrStringArrayParameter(columns));
 //void WCDBRustStatementUpdateClassMethod(configCondition, jlong self, jlong condition);
 //void WCDBRustStatementUpdateClassMethod(configOrders, jlong self, jlongArray orders);

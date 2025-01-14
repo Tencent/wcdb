@@ -21,16 +21,14 @@
 #include "HandleStatementRust.h"
 #include "HandleStatementBridge.h"
 
-void* WCDBRustHandleStatementClassMethod(getError, void* self)
-{
+void *WCDBRustHandleStatementClassMethod(getError, void *self) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
-    return (void*) WCDBHandleStatementGetError(selfStruct).innerValue;
+    return (void *) WCDBHandleStatementGetError(selfStruct).innerValue;
 }
 
-bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
-{
+bool WCDBRustHandleStatementClassMethod(prepare, void *self, void *statement) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
-    return WCDBHandleStatementPrepare(selfStruct, (CPPObject*) statement);
+    return WCDBHandleStatementPrepare(selfStruct, (CPPObject *) statement);
 }
 
 //bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, jstring sql)
@@ -48,14 +46,12 @@ bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement)
 //    return WCDBHandleStatementCheckPrepared(selfStruct);
 //}
 
-bool WCDBRustHandleStatementClassMethod(step, void* self)
-{
+bool WCDBRustHandleStatementClassMethod(step, void *self) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     return WCDBHandleStatementStep(selfStruct);
 }
 
-void WCDBRustHandleStatementClassMethod(reset, void* self)
-{
+void WCDBRustHandleStatementClassMethod(reset, void *self) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     WCDBHandleStatementReset(selfStruct);
 }
@@ -66,32 +62,27 @@ void WCDBRustHandleStatementClassMethod(reset, void* self)
 //    WCDBHandleStatementClearBindings(selfStruct);
 //}
 
-void WCDBRustHandleStatementClassMethod(finalize, void* self)
-{
+void WCDBRustHandleStatementClassMethod(finalize, void *self) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     WCDBHandleStatementFinalize(selfStruct);
 }
 
-bool WCDBRustHandleStatementClassMethod(isDone, void* self)
-{
+bool WCDBRustHandleStatementClassMethod(isDone, void *self) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     return WCDBHandleStatementIsDone(selfStruct);
 }
 
-void WCDBRustHandleStatementClassMethod(bindInteger, void* self, long long value, int index)
-{
+void WCDBRustHandleStatementClassMethod(bindInteger, void *self, long long value, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     WCDBHandleStatementBindInteger(selfStruct, index, value);
 }
 
-void WCDBRustHandleStatementClassMethod(bindDouble, void* self, double value, int index)
-{
+void WCDBRustHandleStatementClassMethod(bindDouble, void *self, double value, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     WCDBHandleStatementBindDouble(selfStruct, index, value);
 }
 
-void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value, int index)
-{
+void WCDBRustHandleStatementClassMethod(bindText, void *self, const char *value, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     WCDBHandleStatementBindText(selfStruct, index, value);
 }
@@ -104,8 +95,7 @@ void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value,
 //    WCDBRustReleaseByteArrayCritical(value);
 //}
 
-void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index)
-{
+void WCDBRustHandleStatementClassMethod(bindNull, void *self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     WCDBHandleStatementBindNull(selfStruct, index);
 }
@@ -125,20 +115,17 @@ void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index)
 //    return WCDBHandleStatementGetColumnType(selfStruct, index);
 //}
 
-long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index)
-{
+long long WCDBRustHandleStatementClassMethod(getInteger, void *self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     return WCDBHandleStatementGetInteger(selfStruct, index);
 }
 
-double WCDBRustHandleStatementClassMethod(getDouble, void* self, int index)
-{
+double WCDBRustHandleStatementClassMethod(getDouble, void *self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     return WCDBHandleStatementGetDouble(selfStruct, index);
 }
 
-const char* WCDBRustHandleStatementClassMethod(getText, void* self, int index)
-{
+const char *WCDBRustHandleStatementClassMethod(getText, void *self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     return WCDBHandleStatementGetText(selfStruct, index);
 }

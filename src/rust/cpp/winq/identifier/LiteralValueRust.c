@@ -21,14 +21,12 @@
 #include "LiteralValueRust.h"
 #include "LiteralValueBridge.h"
 
-void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value))
-{
+void *WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value)) {
     WCDBRustCreateCommonValue(value)
-    return (void*) WCDBLiteralValueCreate(value_common).innerValue;
+    return (void *) WCDBLiteralValueCreate(value_common).innerValue;
 }
 
-long long WCDBRustLiteralValueClassMethod(createWithInt64, long long value)
-{
+long long WCDBRustLiteralValueClassMethod(createWithInt64, long long value) {
     return (long long) WCDBLiteralValueCreateWithInt64(value).innerValue;
 }
 
@@ -50,17 +48,14 @@ long long WCDBRustLiteralValueClassMethod(createWithInt64, long long value)
 //    return result;
 //}
 
-long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime)
-{
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime) {
     return (long long) WCDBLiteralValueCreateWithCurrentTime().innerValue;
 }
 
-long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate)
-{
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate) {
     return (long long) WCDBLiteralValueCreateWithCurrentDate().innerValue;
 }
 
-long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp)
-{
+long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp) {
     return (long long) WCDBLiteralValueCreateWithCurrentTimestamp().innerValue;
 }

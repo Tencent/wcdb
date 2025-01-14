@@ -21,12 +21,11 @@
 #include "ExpressionRust.h"
 #include "ExpressionBridge.h"
 
-void* WCDBRustExpressionClassMethod(create, int type, long long object)
-{
+void *WCDBRustExpressionClassMethod(create, int type, long long object) {
     CPPCommonValue commonValue;
     commonValue.type = type;
     commonValue.intValue = object;
-    void* ret = (void*) WCDBExpressionCreate(commonValue).innerValue;
+    void *ret = (void *) WCDBExpressionCreate(commonValue).innerValue;
     return ret;
 }
 
@@ -60,8 +59,7 @@ void* WCDBRustExpressionClassMethod(create, int type, long long object)
 //    WCDBRustTryReleaseStringInCommonValue(schema);
 //}
 //
-void WCDBRustExpressionClassMethod(argument, void* expression, WCDBRustCommonValueParameter(argument))
-{
+void WCDBRustExpressionClassMethod(argument, void *expression, WCDBRustCommonValueParameter(argument)) {
     WCDBRustBridgeStruct(CPPExpression, expression);
     WCDBRustCreateCommonValue(argument);
     WCDBExpressionSetArgument(expressionStruct, argument_common);

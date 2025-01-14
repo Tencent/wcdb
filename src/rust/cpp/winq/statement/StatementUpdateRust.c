@@ -21,9 +21,8 @@
 #include "StatementUpdateRust.h"
 #include "StatementUpdateBridge.h"
 
-void* WCDBRustStatementUpdateClassMethodWithNoArg(create)
-{
-    return (void*) WCDBStatementUpdateCreate().innerValue;
+void *WCDBRustStatementUpdateClassMethodWithNoArg(create) {
+    return (void *) WCDBStatementUpdateCreate().innerValue;
 }
 
 //void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions)
@@ -41,12 +40,12 @@ void* WCDBRustStatementUpdateClassMethodWithNoArg(create)
 //    WCDBStatementUpdateConfigRecursive(selfStruct);
 //}
 //
-void WCDBRustStatementUpdateClassMethod(configTable, void* self, WCDBRustObjectOrStringParameter(table))
-{
+void WCDBRustStatementUpdateClassMethod(configTable, void *self, WCDBRustObjectOrStringParameter(table)) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     WCDBRustCreateObjectOrStringCommonValue(table, true);
     WCDBStatementUpdateConfigTable2(selfStruct, table_common);
 }
+
 //
 //void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action)
 //{
@@ -84,12 +83,11 @@ void WCDBRustStatementUpdateClassMethod(configTable, void* self, WCDBRustObjectO
 //}
 //
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
-                                       void* self,
-                                       WCDBRustObjectOrStringArrayParameter(columns))
-{
+                                        void *self,
+                                        WCDBRustObjectOrStringArrayParameter(columns)) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-    columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
+            columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
 }
 //
 //void WCDBRustStatementUpdateClassMethod(configCondition, jlong self, jlong condition)

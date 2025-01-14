@@ -30,6 +30,6 @@
 #define WCDBRustColumnDefClassMethod(funcName, ...)                             \
     WCDBRustClassMethod(ColumnDef, funcName, __VA_ARGS__)
 
-void* WCDBRustColumnDefClassMethod(create, WCDBRustObjectOrStringParameter(column), int columnType);
+void *WCDBRustColumnDefClassMethod(create, WCDBRustObjectOrStringParameter(column), int columnType);
 
 //void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint);

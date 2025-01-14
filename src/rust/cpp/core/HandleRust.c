@@ -22,10 +22,9 @@
 #include "HandleBridge.h"
 #include "assert.h"
 
-void* WCDBRustHandleClassMethod(getError, void* self)
-{
+void *WCDBRustHandleClassMethod(getError, void *self) {
     WCDBRustBridgeStruct(CPPHandle, self);
-    return (void*) WCDBHandleGetError(selfStruct).innerValue;
+    return (void *) WCDBHandleGetError(selfStruct).innerValue;
 }
 
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement)
@@ -44,10 +43,9 @@ void* WCDBRustHandleClassMethod(getError, void* self)
 //    return ret;
 //}
 
-void* WCDBRustHandleClassMethod(getMainStatement, void* self)
-{
+void *WCDBRustHandleClassMethod(getMainStatement, void *self) {
     WCDBRustBridgeStruct(CPPHandle, self);
-    return (void*) WCDBHandleGetMainStatement(selfStruct).innerValue;
+    return (void *) WCDBHandleGetMainStatement(selfStruct).innerValue;
 }
 
 //void WCDBRustHandleClassMethod(finalizeAllStatements, void* self)
@@ -56,8 +54,7 @@ void* WCDBRustHandleClassMethod(getMainStatement, void* self)
 //    WCDBHandleFinalizeStatements(selfStruct);
 //}
 //
-bool WCDBRustHandleClassMethod(execute, void* self, void* statement)
-{
+bool WCDBRustHandleClassMethod(execute, void *self, void *statement) {
     WCDBRustBridgeStruct(CPPHandle, self);
     return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
 }
@@ -80,8 +77,7 @@ bool WCDBRustHandleClassMethod(execute, void* self, void* statement)
 //    return ret.hasValue ? (jint) ret.value : 2;
 //}
 
-int WCDBRustHandleClassMethod(getChanges, void* self)
-{
+int WCDBRustHandleClassMethod(getChanges, void *self) {
     WCDBRustBridgeStruct(CPPHandle, self);
     return WCDBHandleGetChange(selfStruct);
 }
@@ -92,8 +88,7 @@ int WCDBRustHandleClassMethod(getChanges, void* self)
 //    return WCDBHandleGetTotalChange(selfStruct);
 //}
 
-long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self)
-{
+long long WCDBRustHandleClassMethod(getLastInsertRowid, void *self) {
     WCDBRustBridgeStruct(CPPHandle, self);
     return WCDBHandleGetLastInsertedRowID(selfStruct);
 }
@@ -124,24 +119,23 @@ long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self)
 
 typedef struct TransactionContext {
     RustTransactionCallback rust_callback;
-    void* closure_raw;
-    void* database_raw;
+    void *closure_raw;
+    void *database_raw;
 } TransactionContext;
 
-bool WCDBRustHandleTransactionCallBack(TransactionContext* context, CPPHandle handle)
-{
+bool WCDBRustHandleTransactionCallBack(TransactionContext *context, CPPHandle handle) {
     return context->rust_callback(context->closure_raw, context->database_raw, handle.innerValue);
 }
 
-bool WCDBRustHandleObjectMethod(runTransaction, void* self, RustTransactionCallback rust_callback, void* closure_raw, void* database_raw)
-{
+bool WCDBRustHandleObjectMethod(runTransaction, void *self, RustTransactionCallback rust_callback, void *closure_raw,
+                                void *database_raw) {
     WCDBRustBridgeStruct(CPPHandle, self);
     TransactionContext context;
     context.rust_callback = rust_callback;
     context.closure_raw = closure_raw;
     context.database_raw = database_raw;
     return WCDBHandleRunTransaction(
-    selfStruct, &context, (TransactionCallback) WCDBRustHandleTransactionCallBack);
+            selfStruct, &context, (TransactionCallback) WCDBRustHandleTransactionCallBack);
 }
 
 //bool WCDBRustHandlePausableTransactionCallBack(TransactionContext *context,

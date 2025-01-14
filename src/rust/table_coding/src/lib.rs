@@ -267,6 +267,14 @@ static FIELD_INFO_MAP: Lazy<HashMap<String, FieldInfo>> = Lazy::new(|| {
         FieldInfo::new("Integer", false, "bind_i64", "get_i64"),
     );
     all_info.insert(
+        "f32".to_string(),
+        FieldInfo::new("Float", false, "bind_f32", "get_f32"),
+    );
+    all_info.insert(
+        "f64".to_string(),
+        FieldInfo::new("Float", false, "bind_f64", "get_f64"),
+    );
+    all_info.insert(
         "String".to_string(),
         FieldInfo::new("Text", false, "bind_text", "get_text"),
     );
@@ -292,10 +300,10 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let instance_ident = Ident::new(&instance, Span::call_site());
     let field_id_vec: Vec<usize> = (1..=field_ident_vec.len()).collect();
     Ok(quote! {
-        static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
+        pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
             wcdb_core::orm::binding::Binding::new()
         });
-        static #instance_ident: once_cell::sync::Lazy<#db_table_ident> = once_cell::sync::Lazy::new(|| {
+        pub static #instance_ident: once_cell::sync::Lazy<#db_table_ident> = once_cell::sync::Lazy::new(|| {
             let mut instance = #db_table_ident::default();
             let instance_raw = unsafe { &instance as *const #db_table_ident };
             #(

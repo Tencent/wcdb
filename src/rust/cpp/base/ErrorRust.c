@@ -22,55 +22,50 @@
 #include "ErrorBridge.h"
 #include "assert.h"
 
-extern void WCDBExceptionAddInfo(void* key_values_raw,
-                                 const char* key,
+extern void WCDBExceptionAddInfo(void *key_values_raw,
+                                 const char *key,
                                  int value_type,
                                  long long int_value,
                                  double double_value,
-                                 const char* string_value);
+                                 const char *string_value);
 
-int WCDBRustErrorClassMethod(getLevel, void* error)
-{
+int WCDBRustErrorClassMethod(getLevel, void *error) {
     WCDBRustBridgeStruct(CPPError, error);
     return WCDBErrorGetLevel(errorStruct);
 }
 
-int WCDBRustErrorClassMethod(getCode, void* error)
-{
+int WCDBRustErrorClassMethod(getCode, void *error) {
     WCDBRustBridgeStruct(CPPError, error);
     return WCDBErrorGetCode(errorStruct);
 }
 
-const char* WCDBRustErrorClassMethod(getMessage, void* error)
-{
+const char *WCDBRustErrorClassMethod(getMessage, void *error) {
     WCDBRustBridgeStruct(CPPError, error);
     return WCDBErrorGetMsg(errorStruct);
 }
 
-void WCDBRustErrorEnumerateInfoCallback(void* context, const char* key, CPPCommonValue value)
-{
+void WCDBRustErrorEnumerateInfoCallback(void *context, const char *key, CPPCommonValue value) {
     long long intValue = 0;
     double doubleValue = 0;
-    const char* stringValue = NULL;
+    const char *stringValue = NULL;
     switch (value.type) {
-    case WCDBBridgedType_Int:
-        intValue = (long long) value.intValue;
-        break;
-    case WCDBBridgedType_Double:
-        doubleValue = value.doubleValue;
-        break;
-    case WCDBBridgedType_String:
-        stringValue = (const char*) value.intValue;
-        break;
-    default:
-        break;
+        case WCDBBridgedType_Int:
+            intValue = (long long) value.intValue;
+            break;
+        case WCDBBridgedType_Double:
+            doubleValue = value.doubleValue;
+            break;
+        case WCDBBridgedType_String:
+            stringValue = (const char *) value.intValue;
+            break;
+        default:
+            break;
     }
     WCDBExceptionAddInfo(context, key, value.type, intValue, doubleValue, stringValue);
 }
 
-void WCDBRustErrorObjectMethod(enumerateInfo, void* error)
-{
+void WCDBRustErrorObjectMethod(enumerateInfo, void *error) {
     WCDBRustBridgeStruct(CPPError, error);
     WCDBErrorEnumerateAllInfo(
-    errorStruct, error, (StringViewMapEnumerator) &WCDBRustErrorEnumerateInfoCallback);
+            errorStruct, error, (StringViewMapEnumerator) &WCDBRustErrorEnumerateInfoCallback);
 }

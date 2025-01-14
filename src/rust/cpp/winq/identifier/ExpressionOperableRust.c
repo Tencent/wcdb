@@ -33,20 +33,19 @@
 //    return (jlong) WCDBExpressionNullOperate2(operand_common, isNot).innerValue;
 //}
 //
-void* WCDBRustExpressionOperableClassMethod(binaryOperate,
-                                           int leftType,
-                                           long left,
-                                           WCDBRustCommonValueParameter(right),
-                                           int operatorType,
-                                           bool isNot)
-{
+void *WCDBRustExpressionOperableClassMethod(binaryOperate,
+                                            int leftType,
+                                            long left,
+                                            WCDBRustCommonValueParameter(right),
+                                            int operatorType,
+                                            bool isNot) {
     CPPCommonValue left_common;
     left_common.type = leftType;
     left_common.intValue = left;
     WCDBRustCreateCommonValue(right);
-    void* ret = (void*) WCDBExpressionBinaryOperate2(
-                left_common, right_common, operatorType, isNot)
-                .innerValue;
+    void *ret = (void *) WCDBExpressionBinaryOperate2(
+            left_common, right_common, operatorType, isNot)
+            .innerValue;
 //    WCDBRustTryReleaseStringInCommonValue(right); // todo qixinbing : 需要释放？
     return ret;
 }

@@ -21,9 +21,8 @@
 #include "StatementSelectRust.h"
 #include "StatementSelectBridge.h"
 
-void* WCDBRustStatementSelectClassMethodWithNoArg(create)
-{
-    return (void*) WCDBStatementSelectCreate().innerValue;
+void *WCDBRustStatementSelectClassMethodWithNoArg(create) {
+    return (void *) WCDBStatementSelectCreate().innerValue;
 }
 
 //void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions)
@@ -42,14 +41,14 @@ void* WCDBRustStatementSelectClassMethodWithNoArg(create)
 //}
 //
 void WCDBRustStatementSelectClassMethod(configResultColumns,
-                                        void* self,
-                                       WCDBRustMultiTypeArrayParameter(resultColumns))
-{
+                                        void *self,
+                                        WCDBRustMultiTypeArrayParameter(resultColumns)) {
     WCDBRustBridgeStruct(CPPStatementSelect, self);
     WCDBRustCreateMultiTypeArray(resultColumns);
     WCDBStatementSelectConfigResultColumns2(selfStruct, resultColumnsArray);
 //    WCDBRustReleaseMultiTypeArray(resultColumns);
 }
+
 //
 //void WCDBRustStatementSelectClassMethod(configDistiction, jlong self)
 //{
@@ -58,17 +57,16 @@ void WCDBRustStatementSelectClassMethod(configResultColumns,
 //}
 //
 void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
-                                        void* self,
-                                       WCDBRustMultiTypeArrayParameter(tableOrSubqueries))
-{
+                                        void *self,
+                                        WCDBRustMultiTypeArrayParameter(tableOrSubqueries)) {
     WCDBRustBridgeStruct(CPPStatementSelect, self);
     WCDBRustCreateMultiTypeArray(tableOrSubqueries);
     WCDBStatementSelectConfigFromTableOrSubqueries2(selfStruct, tableOrSubqueriesArray);
 //    WCDBRustReleaseMultiTypeArray(tableOrSubqueries);
 }
+
 //
-void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condition)
-{
+void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condition) {
     WCDBRustBridgeStruct(CPPStatementSelect, self);
     WCDBRustBridgeStruct(CPPExpression, condition);
     WCDBStatementSelectConfigWhere(selfStruct, conditionStruct);

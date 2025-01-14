@@ -22,13 +22,11 @@
 #include "BindingBridge.h"
 #include <printf.h>
 
-void* WCDBRustBindingClassMethodWithNoArg(create)
-{
-    return (void*) WCDBBindingCreate().innerValue;
+void *WCDBRustBindingClassMethodWithNoArg(create) {
+    return (void *) WCDBBindingCreate().innerValue;
 }
 
-void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef)
-{
+void WCDBRustBindingClassMethod(addColumnDef, void *self, void *columnDef) {
     WCDBRustBridgeStruct(CPPBinding, self);
     WCDBRustBridgeStruct(CPPColumnDef, columnDef);
     WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
@@ -78,8 +76,7 @@ void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef)
 //    WCDBBindingConfigWithoutRowId(selfStruct);
 //}
 
-bool WCDBRustBinding_createTable(void* self, const char* tableName, void* handle)
-{
+bool WCDBRustBinding_createTable(void *self, const char *tableName, void *handle) {
     WCDBRustBridgeStruct(CPPBinding, self);
     WCDBRustBridgeStruct(CPPHandle, handle);
     bool ret = WCDBBindingCreateTable(selfStruct, tableName, handleStruct);
@@ -96,8 +93,7 @@ bool WCDBRustBinding_createTable(void* self, const char* tableName, void* handle
 //    return ret;
 //}
 
-void* WCDBRustBindingClassMethod(getBaseBinding, void* self)
-{
+void *WCDBRustBindingClassMethod(getBaseBinding, void *self) {
     WCDBRustBridgeStruct(CPPBinding, self);
-    return (void*) WCDBBindingGetBaseBinding(selfStruct);
+    return (void *) WCDBBindingGetBaseBinding(selfStruct);
 }

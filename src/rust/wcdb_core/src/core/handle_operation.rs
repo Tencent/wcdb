@@ -3,7 +3,7 @@ use crate::base::wcdb_exception::WCDBResult;
 use crate::core::handle::Handle;
 use std::ffi::c_void;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct HandleOperation {
     cpp_obj: CppObject,
 }

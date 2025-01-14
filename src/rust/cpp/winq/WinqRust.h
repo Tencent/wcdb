@@ -19,7 +19,9 @@
  */
 
 #pragma once
+
 #include "WCDBRust.h"
 
-const char* WCDBRustClassMethod(Winq, getDescription, void* statement);
-bool WCDBRustClassMethod(Winq, isWriteStatement, void* statement);
+const char *WCDBRustClassMethod(Winq, getDescription, void *statement);
+
+bool WCDBRustClassMethod(Winq, isWriteStatement, void *statement);

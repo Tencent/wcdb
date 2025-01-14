@@ -35,17 +35,21 @@
 
 //#define WCDBRustDatabaseSignature "Lcom/tencent/wcdb/core/Database"
 //
-void* WCDBRustDatabaseClassMethod(getError, void* self);
+void *WCDBRustDatabaseClassMethod(getError, void *self);
+
 //jlong WCDBRustDatabaseClassMethod(getTag, jlong self);
 //void WCDBRustDatabaseClassMethod(setTag, jlong self, jlong tag);
-const char* WCDBRustDatabaseClassMethod(getPath, void* self);
-//jobject WCDBRustDatabaseClassMethod(getPaths, jlong self);
-void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint);
+const char *WCDBRustDatabaseClassMethod(getPath, void *self);
 
-//jboolean WCDBRustDatabaseClassMethod(canOpen, jlong self);
+//jobject WCDBRustDatabaseClassMethod(getPaths, jlong self);
+void *WCDBRustDatabaseClassMethod(getHandle, void *self, bool writeHint);
+
+bool WCDBRustDatabaseClassMethod(canOpen, void *self);
+
 //jboolean WCDBRustDatabaseClassMethod(isOpened, jlong self);
 //jboolean WCDBRustDatabaseClassMethod(isBlockaded, jlong self);
-void WCDBRustDatabaseClassMethod(close, void* self, void* context, WCDBDatabaseCloseCallback callback);
+void WCDBRustDatabaseClassMethod(close, void *self, void *context, WCDBDatabaseCloseCallback callback);
+
 //void WCDBRustDatabaseClassMethod(blockade, jlong self);
 //void WCDBRustDatabaseClassMethod(unblockade, jlong self);
 //void WCDBRustDatabaseClassMethod(purge, jlong self);
@@ -56,14 +60,26 @@ void WCDBRustDatabaseClassMethod(close, void* self, void* context, WCDBDatabaseC
 //
 //void WCDBRustDatabaseClassMethod(enableLiteMode, jlong self, jboolean enable);
 //
-//void WCDBRustDatabaseClassMethod(globalTracePerformance, jobject tracer);
+typedef void (*RustGlobalTracePerformanceCallback)(long, const char *, unsigned long long, const char *,
+                                                   const CPPPerformanceInfo *);
+
+void WCDBRustDatabaseClassMethod(globalTracePerformance, RustGlobalTracePerformanceCallback rust_callback);
+
 //void WCDBRustDatabaseClassMethod(tracePerformance, jlong self, jobject tracer);
 //
-//void WCDBRustDatabaseClassMethod(globalTraceSQL, jobject tracer);
-//void WCDBRustDatabaseClassMethod(traceSQL, jlong self, jobject tracer);
+typedef void (*RustGlobalTraceSQLCallback)(long, const char *, unsigned long long, const char *, const char *);
+
+void WCDBRustDatabaseClassMethod(globalTraceSQL, RustGlobalTraceSQLCallback rust_callback);
+
+typedef void (*RustTraceSQLCallback)(void *, long, const char *, unsigned long long, const char *, const char *);
+
+void WCDBRustDatabaseClassMethod(traceSQL, void *self, RustTraceSQLCallback rust_callback, void *closure_raw);
 //void WCDBRustDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable);
 //
-//void WCDBRustDatabaseClassMethod(globalTraceError, jobject tracer);
+
+typedef void (*RustGlobalTraceTraceExceptionCallback)(void *exception);
+
+void WCDBRustDatabaseClassMethod(globalTraceException, RustGlobalTraceTraceExceptionCallback rust_callback);
 //void WCDBRustDatabaseClassMethod(traceError, jlong self, jobject tracer);
 //
 //void WCDBRustDatabaseClassMethod(globalTraceOperation, jobject tracer);

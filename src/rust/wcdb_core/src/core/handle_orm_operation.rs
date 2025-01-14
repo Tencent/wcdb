@@ -11,7 +11,7 @@ use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 use std::ffi::c_void;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
 }

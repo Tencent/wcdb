@@ -278,7 +278,7 @@
     static jclass valueName = NULL;                                            \
     if (valueName == NULL) {                                                   \
         valueName = (*env)->FindClass(env, signature);                         \
-        WCDBRustCreateGlobalRel(valueName);                                    \
+        WCDBRustCreateGlobalRef(valueName);                                    \
     }                                                                          \
     assert(valueName != NULL);                                                 \
     if (valueName == NULL) {                                                   \
@@ -292,10 +292,8 @@
     }                                                                          \
     assert(valueName != NULL);
 
-#define WCDBRustCreateGlobalRel(value)                                         \
-    if (value != NULL) {                                                       \
-        value = (*env)->NewGlobalRef(env, value);                              \
-    }
+#define WCDBRustCreateGlobalRef(size) \
+    malloc(sizeof(size))                                  \
 
 //extern JavaVM *g_vm;
 //
@@ -326,7 +324,7 @@ WCDB_EXTERN_C_BEGIN
 //
 //void WCDBRustDestructContext(jobject config);
 
-void WCDBRustClassMethod(Base, releaseObject, void* cppObject);
+void WCDBRustClassMethod(Base, releaseObject, void *cppObject);
 
 //void WCDBRustInitJClasses(RustEnv *env);
 //

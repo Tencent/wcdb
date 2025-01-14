@@ -32,26 +32,31 @@
 #define WCDBRustHandleClassMethod(funcName, ...)                                \
     WCDBRustClassMethod(Handle, funcName, __VA_ARGS__)
 
-void* WCDBRustHandleClassMethod(getError, void* self);
+void *WCDBRustHandleClassMethod(getError, void *self);
+
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement);
 //jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, void* self, jstring sql);
-void* WCDBRustHandleClassMethod(getMainStatement, void* self);
+void *WCDBRustHandleClassMethod(getMainStatement, void *self);
 //void WCDBRustHandleClassMethod(finalizeAllStatements, void* self);
-bool WCDBRustHandleClassMethod(execute, void* self, void* statement);
+bool WCDBRustHandleClassMethod(execute, void *self, void *statement);
+
 //jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql);
 //jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table);
 //
-int WCDBRustHandleClassMethod(getChanges, void* self);
+int WCDBRustHandleClassMethod(getChanges, void *self);
+
 //jint WCDBRustHandleClassMethod(getTotalChanges, void* self);
-long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self);
+long long WCDBRustHandleClassMethod(getLastInsertRowid, void *self);
 //
 //jboolean WCDBRustHandleClassMethod(isInTransaction, void* self);
 //jboolean WCDBRustHandleClassMethod(beginTransaction, void* self);
 //jboolean WCDBRustHandleClassMethod(commitTransaction, void* self);
 //void WCDBRustHandleClassMethod(rollbackTransaction, void* self);
 
-typedef bool (*RustTransactionCallback)(void* closure_raw, void* database_raw, void* cpp_handle);
-bool WCDBRustHandleObjectMethod(runTransaction, void* self, RustTransactionCallback rust_callback, void* closure_raw, void* database_raw);
+typedef bool (*RustTransactionCallback)(void *closure_raw, void *database_raw, void *cpp_handle);
+
+bool WCDBRustHandleObjectMethod(runTransaction, void *self, RustTransactionCallback rust_callback, void *closure_raw,
+                                void *database_raw);
 //jboolean WCDBRustHandleObjectMethod(runPausableTransaction, void* self, jobject transaction);
 //
 //jlong WCDBRustHandleClassMethodWithNoArg(createCancellationSignal);

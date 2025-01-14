@@ -34,7 +34,7 @@
 //
 //jlong WCDBRustColumnClassMethodWithNoArg(createRowId);
 
-void* WCDBRustColumnClassMethod(createWithName, const char* name, void* binding);
+void *WCDBRustColumnClassMethod(createWithName, const char *name, void *binding);
 
 //jlong WCDBRustColumnClassMethod(copy, jlong column);
 //

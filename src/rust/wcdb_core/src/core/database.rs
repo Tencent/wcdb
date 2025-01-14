@@ -13,9 +13,56 @@ use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
+use lazy_static::lazy_static;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
+
+// 定义性能跟踪回调的特性
+pub trait TracePerformanceCallbackTrait:
+    Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/PerformanceInfo) + Send
+{
+}
+pub type TracePerformanceCallback = Box<dyn TracePerformanceCallbackTrait>;
+impl<T> TracePerformanceCallbackTrait for T where
+    T: Fn(
+            /*tag*/ i64,
+            /*path*/ String,
+            /*handleId*/ i64,
+            /*sql*/ String,
+            /*info*/ PerformanceInfo,
+        ) + Send
+{
+}
+
+// 定义 sql 执行回调的特性
+pub trait TraceSqlCallbackTrait: Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/String) + Send {}
+pub type TraceSqlCallback = Box<dyn TraceSqlCallbackTrait>;
+impl<T> TraceSqlCallbackTrait for T where
+    T: Fn(
+            /*tag*/ i64,
+            /*path*/ String,
+            /*handleId*/ i64,
+            /*sql*/ String,
+            /*info*/ String,
+        ) + Send
+{
+}
+
+// 定义异常回调的特性
+pub trait TraceExceptionCallbackTrait: Fn(WCDBException) + Send {}
+pub type TraceExceptionCallback = Box<dyn TraceExceptionCallbackTrait>;
+impl<T> TraceExceptionCallbackTrait for T where T: Fn(WCDBException) + Send {}
+
+// 定义一个全局静态变量来存储闭包
+lazy_static! {
+    static ref GLOBAL_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
+        Arc::new(Mutex::new(None));
+}
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
@@ -27,8 +74,47 @@ extern "C" {
         context: *mut c_void,
         cb: DatabaseCloseCallback,
     );
+
+    pub fn WCDBRustDatabase_canOpen(cpp_obj: *mut c_void) -> bool;
     pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
     pub fn WCDBRustDatabase_getError(cpp_obj: *mut c_void) -> *mut c_void;
+
+    pub fn WCDBRustDatabase_globalTracePerformance(
+        global_trace_performance_callback: extern "C" fn(
+            i64,
+            *const c_char,
+            i64,
+            *const c_char,
+            PerformanceInfo,
+        ),
+    );
+
+    pub fn WCDBRustDatabase_globalTraceSQL(
+        global_trace_sql_callback: extern "C" fn(
+            i64,
+            *const c_char,
+            i64,
+            *const c_char,
+            *const c_char,
+        ),
+    );
+
+    pub fn WCDBRustDatabase_traceSQL(
+        cpp_obj: *mut c_void,
+        trace_sql_callback: extern "C" fn(
+            *mut c_void,
+            i64,
+            *const c_char,
+            i64,
+            *const c_char,
+            *const c_char,
+        ),
+        closure_raw: *mut c_void,
+    );
+
+    pub fn WCDBRustDatabase_globalTraceException(
+        global_trace_exception_callback: extern "C" fn(*mut c_void),
+    );
 }
 
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
@@ -38,6 +124,70 @@ extern "C" fn close_callback_wrapper(context: *mut c_void) {
     }
 }
 
+extern "C" fn global_trace_performance_callback(
+    tag: i64,
+    path: *const c_char,
+    handle_id: i64,
+    sql: *const c_char,
+    info: PerformanceInfo,
+) {
+    if let Some(callback) = &*GLOBAL_TRACE_PERFORMANCE_CALLBACK.lock().unwrap() {
+        callback(
+            tag,
+            path.to_cow().to_string(),
+            handle_id,
+            sql.to_cow().to_string(),
+            info,
+        );
+    }
+}
+
+extern "C" fn global_trace_sql_callback(
+    tag: i64,
+    path: *const c_char,
+    handle_id: i64,
+    sql: *const c_char,
+    info: *const c_char,
+) {
+    if let Some(callback) = &*GLOBAL_TRACE_SQL_CALLBACK.lock().unwrap() {
+        callback(
+            tag,
+            path.to_cow().to_string(),
+            handle_id,
+            sql.to_cow().to_string(),
+            info.to_cow().to_string(),
+        );
+    }
+}
+
+extern "C" fn trace_sql_callback(
+    closure_raw: *mut c_void,
+    tag: i64,
+    path: *const c_char,
+    handle_id: i64,
+    sql: *const c_char,
+    info: *const c_char,
+) {
+    let callback: Box<TraceSqlCallback> =
+        unsafe { Box::from_raw(closure_raw as *mut TraceSqlCallback) };
+
+    callback(
+        tag,
+        path.to_cow().to_string(),
+        handle_id,
+        sql.to_cow().to_string(),
+        info.to_cow().to_string(),
+    );
+}
+
+extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
+    if let Some(callback) = &*GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() {
+        let ex = WCDBException::create_exception(exp_cpp_obj);
+        callback(ex);
+    }
+}
+
+#[derive(Clone)]
 pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
@@ -323,6 +473,10 @@ impl Database {
         path.to_cow().to_string()
     }
 
+    pub fn can_open(&self) -> bool {
+        unsafe { WCDBRustDatabase_canOpen(self.get_cpp_obj()) }
+    }
+
     pub fn get_table<'a, T, R: TableBinding<T>>(
         &'a self,
         table_name: &str,
@@ -357,4 +511,95 @@ impl Database {
     pub(crate) fn create_exception(&self) -> WCDBException {
         WCDBException::create_exception(unsafe { WCDBRustDatabase_getError(self.get_cpp_obj()) })
     }
+
+    pub fn global_trace_performance<CB>(cb_opt: Option<CB>)
+    where
+        CB: TracePerformanceCallbackTrait + 'static,
+    {
+        match cb_opt {
+            None => {
+                *GLOBAL_TRACE_PERFORMANCE_CALLBACK.lock().unwrap() = None;
+                unsafe {
+                    WCDBRustDatabase_globalTracePerformance(global_trace_performance_callback);
+                }
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as TracePerformanceCallback;
+                *GLOBAL_TRACE_PERFORMANCE_CALLBACK.lock().unwrap() = Some(callback_box);
+                unsafe {
+                    WCDBRustDatabase_globalTracePerformance(global_trace_performance_callback);
+                }
+            }
+        }
+    }
+
+    pub fn global_trace_sql<CB>(cb_opt: Option<CB>)
+    where
+        CB: TraceSqlCallbackTrait + 'static,
+    {
+        match cb_opt {
+            None => unsafe {
+                *GLOBAL_TRACE_SQL_CALLBACK.lock().unwrap() = None;
+                WCDBRustDatabase_globalTraceSQL(global_trace_sql_callback);
+            },
+            Some(cb) => {
+                let callback_box = Box::new(cb) as TraceSqlCallback;
+                *GLOBAL_TRACE_SQL_CALLBACK.lock().unwrap() = Some(callback_box);
+                unsafe {
+                    WCDBRustDatabase_globalTraceSQL(global_trace_sql_callback);
+                }
+            }
+        }
+    }
+
+    pub fn trace_sql<CB>(&self, cb_opt: Option<CB>)
+    where
+        CB: TraceSqlCallbackTrait,
+    {
+        match cb_opt {
+            None => unsafe {
+                WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback, null_mut());
+            },
+            Some(cb) => {
+                let callback_box = Box::new(Box::new(cb));
+                let callback_raw = Box::into_raw(callback_box) as *mut c_void;
+                unsafe {
+                    WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback, callback_raw);
+                }
+            }
+        }
+    }
+
+    pub fn global_trace_exception<CB>(cb_opt: Option<CB>)
+    where
+        CB: TraceExceptionCallbackTrait + 'static,
+    {
+        match cb_opt {
+            None => {
+                *GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = None;
+                unsafe {
+                    WCDBRustDatabase_globalTraceException(global_trace_exception_callback);
+                }
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as TraceExceptionCallback;
+                *GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = Some(callback_box);
+                unsafe {
+                    WCDBRustDatabase_globalTraceException(global_trace_exception_callback);
+                }
+            }
+        }
+    }
+}
+
+#[derive(Debug, Default)]
+#[repr(C)]
+pub struct PerformanceInfo {
+    pub table_page_read_count: i32,
+    pub table_page_write_count: i32,
+    pub index_page_read_count: i32,
+    pub index_page_write_count: i32,
+    pub overflow_page_read_count: i32,
+    pub overflow_page_write_count: i32,
+    pub cost_in_nanoseconds: u64,
 }

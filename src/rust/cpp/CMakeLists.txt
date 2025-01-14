@@ -20,7 +20,7 @@ set(WCDB_RUST_SRC_DIR
 set(WCDB_RUST_SRC)
 set(WCDB_RUST_INCLUDE)
 
-foreach(DIR ${WCDB_RUST_SRC_DIR})
+foreach (DIR ${WCDB_RUST_SRC_DIR})
     file(GLOB_RECURSE DIR_SRC
             ${DIR}/*.cpp
             ${DIR}/*.c
@@ -29,7 +29,7 @@ foreach(DIR ${WCDB_RUST_SRC_DIR})
 
     recursive_subdirs(DIR_INCLUDE ${DIR})
     list(APPEND WCDB_RUST_INCLUDE ${DIR_INCLUDE})
-endforeach()
+endforeach ()
 
 target_sources(${TARGET_NAME} PUBLIC ${WCDB_RUST_SRC})
 target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_RUST_INCLUDE})
