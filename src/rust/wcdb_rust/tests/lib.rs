@@ -1,2 +1,2 @@
-pub mod rust_test;
-pub mod wcdb_orm;
+pub(crate) mod base;
+pub(crate) mod orm;

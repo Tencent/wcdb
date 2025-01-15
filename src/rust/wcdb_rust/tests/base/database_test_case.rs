@@ -1,10 +1,10 @@
-use crate::rust_test::base::base_test_case::{BaseTestCase, TestCaseTrait};
-use crate::rust_test::base::wrapped_value::WrappedValue;
+use crate::base::base_test_case::{BaseTestCase, TestCaseTrait};
+use crate::base::wrapped_value::WrappedValue;
 use std::cmp::PartialEq;
 use std::path::{Path, MAIN_SEPARATOR};
 use std::sync::{Arc, Mutex, MutexGuard};
 use wcdb_core::base::wcdb_exception::WCDBResult;
-use wcdb_core::core::database::{Database, TraceSqlCallback, TraceSqlCallbackTrait};
+use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb_core::orm::table_binding::TableBinding;
 
@@ -143,10 +143,10 @@ impl TestCaseTrait for DatabaseTestCase {
     fn setup(&self) -> WCDBResult<()> {
         self.base_test_case.setup()?;
         self.set_expect_mode(Expect::AllSQLs);
-        let file_name = "testDatabase";
+        let file_name = "test_database";
         self.set_file_name(file_name.to_string());
         let path = format!(
-            "{}{}{}",
+            "../{}{}{}",
             self.base_test_case.get_current_directory(),
             MAIN_SEPARATOR,
             file_name

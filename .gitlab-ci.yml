@@ -23,4 +23,4 @@ run_test:
     - cd src/rust
     - autocorrect --lint
     - cargo fmt -- --check
-    - cargo test --test lib
+    - cargo test
