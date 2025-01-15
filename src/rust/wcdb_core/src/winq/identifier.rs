@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::utils::ToCow;
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_void};
 use std::fmt::Debug;
 
@@ -131,5 +132,19 @@ impl Identifier {
 
     pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
         T::get_type()
+    }
+
+    pub(crate) fn get_cpp_type_by_identifier_convertible<T: IdentifierConvertibleTrait>(
+        identifier: &Option<T>,
+    ) -> i32 {
+        if let Some(identifier) = identifier {
+            identifier.as_identifier().get_type()
+        } else {
+            CPPType::Null as i32
+        }
+    }
+
+    fn get_type(&self) -> i32 {
+        CPPType::Invalid as i32
     }
 }

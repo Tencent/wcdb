@@ -1,6 +1,7 @@
-use crate::base::cpp_object::CppObjectTrait;
-use crate::orm::binding::WCDBRustBinding_createTable;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::utils::ToCString;
+use crate::winq::expression::Expression;
+use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_char, c_double, c_int, c_long, c_void};
 
@@ -61,6 +62,13 @@ impl ExpressionOperable {
         }
     }
 
+    pub fn or<T>(&mut self, operand: T) -> Self
+    where
+        T: ExpressionConvertibleTrait,
+    {
+        self.binary_operate_with_expression_convertible(operand, BinaryOperatorType::Or, false)
+    }
+
     pub fn eq_long(&self, operand: i64) -> Self {
         self.binary_operate_long(operand, BinaryOperatorType::Equal, false)
     }
@@ -105,6 +113,52 @@ impl ExpressionOperable {
                 0,
                 0.0,
                 c_operand.as_ptr(),
+                binary_operator_type as i32,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    fn binary_operate_with_expression_convertible<T>(
+        &mut self,
+        operand: T,
+        binary_operator_type: BinaryOperatorType,
+        is_not: bool,
+    ) -> Self
+    where
+        T: ExpressionConvertibleTrait,
+    {
+        let cpp_obj = unsafe {
+            let operand_option = Option::Some(operand);
+            WCDBRustExpressionOperable_binaryOperate(
+                Identifier::get_cpp_type(self),
+                CppObject::get(self),
+                Identifier::get_cpp_type_by_identifier_convertible(&operand_option),
+                CppObject::get_by_cpp_object_convertible_trait(&operand_option),
+                0.0,
+                std::ptr::null(),
+                binary_operator_type as i32,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    fn binary_operate_with_long(
+        &self,
+        operand: i64,
+        binary_operator_type: BinaryOperatorType,
+        is_not: bool,
+    ) -> Self {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_binaryOperate(
+                Identifier::get_cpp_type(self),
+                CppObject::get(self),
+                CPPType::Int as i32,
+                operand,
+                0.0,
+                std::ptr::null(),
                 binary_operator_type as i32,
                 is_not,
             )

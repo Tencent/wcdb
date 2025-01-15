@@ -1,3 +1,4 @@
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use std::ffi::c_void;
 use std::ops::{Deref, DerefMut};
 use std::ptr::null_mut;
@@ -65,5 +66,15 @@ impl CppObject {
 
     pub fn get<T: CppObjectTrait>(obj: &T) -> *mut c_void {
         obj.get_cpp_obj()
+    }
+
+    pub(crate) fn get_by_cpp_object_convertible_trait<T: CppObjectConvertibleTrait>(
+        obj: &Option<T>,
+    ) -> i64 {
+        if let Some(obj) = obj {
+            obj.as_cpp_object().cpp_obj as i64
+        } else {
+            0
+        }
     }
 }

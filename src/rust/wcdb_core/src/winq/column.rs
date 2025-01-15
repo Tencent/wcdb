@@ -1,4 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::winq::expression::Expression;
+use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_char, c_void, CString};
