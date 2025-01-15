@@ -101,11 +101,114 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         offset: i64,
     ) -> WCDBResult<()>;
 
-    fn update_object<T>(
+    fn update_object_by_field<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_field_expression<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_field_expression_order_limit<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_field_expression_order_limit_offset<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_field_order_limit<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_field_order_limit_offset<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_fields<T>(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_fields_expression<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_fields_expression_order_limit<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_fields_expression_order_limit_offset<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_fields_order_limit<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()>;
+
+    fn update_object_by_fields_order_limit_offset<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
     ) -> WCDBResult<()>;
 
     fn get_first_object<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<T>;

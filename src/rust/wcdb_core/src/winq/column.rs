@@ -3,6 +3,7 @@ use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::ordering_term::{Order, OrderingTerm, WCDBRustOrderingTerm_configOrder};
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 
@@ -55,5 +56,11 @@ impl Column {
         Column {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
         }
+    }
+}
+
+impl Column {
+    pub fn order(&self, order: Order) -> OrderingTerm {
+        return OrderingTerm::new(&self.expression_operable).order(order);
     }
 }

@@ -54,9 +54,9 @@ void WCDBRustStatementUpdateClassMethod(configTable,
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
                                         void *self,
                                         WCDBRustObjectOrStringArrayParameter(columns));
-//void WCDBRustStatementUpdateClassMethod(configCondition, jlong self, jlong condition);
-//void WCDBRustStatementUpdateClassMethod(configOrders, jlong self, jlongArray orders);
+void WCDBRustStatementUpdateClassMethod(configCondition, void* self, void* condition);
+void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders, size_t len);
 //void WCDBRustStatementUpdateClassMethod(
 //configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-//void WCDBRustStatementUpdateClassMethod(configLimitCount, jlong self, jint type, jlong limit);
-//void WCDBRustStatementUpdateClassMethod(configOffset, jlong self, jint type, jlong offset);
+void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit);
+void WCDBRustStatementUpdateClassMethod(configOffset, void* self, int type, long offset);

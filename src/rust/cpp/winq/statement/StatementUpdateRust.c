@@ -89,23 +89,23 @@ void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
     WCDBRustCreateObjectOrStringArrayCriticalWithAction(
             columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
 }
-//
-//void WCDBRustStatementUpdateClassMethod(configCondition, jlong self, jlong condition)
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustBridgeStruct(CPPExpression, condition);
-//    WCDBStatementUpdateConfigCondition(selfStruct, conditionStruct);
-//}
-//
-//void WCDBRustStatementUpdateClassMethod(configOrders, jlong self, jlongArray orders)
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+
+void WCDBRustStatementUpdateClassMethod(configCondition, void* self, void* condition)
+{
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBRustBridgeStruct(CPPExpression, condition);
+    WCDBStatementUpdateConfigCondition(selfStruct, conditionStruct);
+}
+
+void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders, size_t len)
+{
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
 //    WCDBRustGetCppPointerArrayCritical(orders);
-//    WCDBStatementUpdateConfigOrders(
-//    selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
+    WCDBStatementUpdateConfigOrders(
+    selfStruct, (const CPPOrderingTerm*) orders, (int)len);
 //    WCDBRustReleaseCppPointerArrayCritical(orders);
-//}
-//
+}
+
 //void WCDBRustStatementUpdateClassMethod(
 //configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 //{
@@ -118,21 +118,21 @@ void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
 //    to_common.intValue = to;
 //    WCDBStatementUpdateConfigLimitRange2(selfStruct, from_common, to_common);
 //}
-//
-//void WCDBRustStatementUpdateClassMethod(configLimitCount, jlong self, jint type, jlong limit)
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    CPPCommonValue limit_common;
-//    limit_common.type = type;
-//    limit_common.intValue = limit;
-//    WCDBStatementUpdateConfigLimitCount2(selfStruct, limit_common);
-//}
-//
-//void WCDBRustStatementUpdateClassMethod(configOffset, jlong self, jint type, jlong offset)
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    CPPCommonValue offset_common;
-//    offset_common.type = type;
-//    offset_common.intValue = offset;
-//    WCDBStatementUpdateConfigOffset2(selfStruct, offset_common);
-//}
+
+void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit)
+{
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    CPPCommonValue limit_common;
+    limit_common.type = type;
+    limit_common.intValue = limit;
+    WCDBStatementUpdateConfigLimitCount2(selfStruct, limit_common);
+}
+
+void WCDBRustStatementUpdateClassMethod(configOffset, void* self, int type, long offset)
+{
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    CPPCommonValue offset_common;
+    offset_common.type = type;
+    offset_common.intValue = offset;
+    WCDBStatementUpdateConfigOffset2(selfStruct, offset_common);
+}

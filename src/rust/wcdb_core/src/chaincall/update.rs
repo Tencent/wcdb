@@ -4,6 +4,8 @@ use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::field::Field;
+use crate::winq::expression::Expression;
+use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_update::StatementUpdate;
 use std::cell::RefCell;
@@ -54,6 +56,26 @@ impl<'a, T> Update<'a, T> {
         self.chain_call
             .statement
             .set_columns_to_bind_parameters(&self.fields);
+        self
+    }
+
+    pub fn where_expression(self, condition: Expression) -> Self {
+        self.chain_call.statement.where_expression(condition);
+        self
+    }
+
+    pub fn order_by(self, orders: &Vec<OrderingTerm>) -> Self {
+        self.chain_call.statement.order_by(orders);
+        self
+    }
+
+    pub fn limit(self, count: i64) -> Self {
+        self.chain_call.statement.limit(count);
+        self
+    }
+
+    pub fn offset(self, offset: i64) -> Self {
+        self.chain_call.statement.offset(offset);
         self
     }
 

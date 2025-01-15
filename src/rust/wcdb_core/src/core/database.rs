@@ -416,7 +416,117 @@ impl HandleORMOperationTrait for Database {
         Ok(())
     }
 
-    fn update_object<T>(
+    fn update_object_by_field<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(vec![field])
+            .to_object(object)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_field_expression<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(vec![field])
+            .to_object(object)
+            .where_expression(expression)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_field_expression_order_limit<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(vec![field])
+            .to_object(object)
+            .where_expression(expression)
+            .order_by(&vec![order])
+            .limit(limit)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_field_expression_order_limit_offset<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(vec![field])
+            .to_object(object)
+            .where_expression(expression)
+            .order_by(&vec![order])
+            .limit(limit)
+            .offset(offset)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_field_order_limit<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(vec![field])
+            .to_object(object)
+            .order_by(&vec![order])
+            .limit(limit)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_field_order_limit_offset<T>(
+        &self,
+        object: T,
+        field: &Field<T>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(vec![field])
+            .to_object(object)
+            .order_by(&vec![order])
+            .limit(limit)
+            .offset(offset)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_fields<T>(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
@@ -426,6 +536,102 @@ impl HandleORMOperationTrait for Database {
             .table(table_name)
             .set(fields)
             .to_object(object)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_fields_expression<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(fields)
+            .to_object(object)
+            .where_expression(expression)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_fields_expression_order_limit<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(fields)
+            .to_object(object)
+            .where_expression(expression)
+            .order_by(&vec![order])
+            .limit(limit)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_fields_expression_order_limit_offset<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        expression: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(fields)
+            .to_object(object)
+            .where_expression(expression)
+            .order_by(&vec![order])
+            .limit(limit)
+            .offset(offset)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_fields_order_limit<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(fields)
+            .to_object(object)
+            .order_by(&vec![order])
+            .limit(limit)
+            .execute()?;
+        Ok(())
+    }
+
+    fn update_object_by_fields_order_limit_offset<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<()> {
+        self.prepare_update::<T>()
+            .table(table_name)
+            .set(fields)
+            .to_object(object)
+            .order_by(&vec![order])
+            .limit(limit)
+            .offset(offset)
             .execute()?;
         Ok(())
     }

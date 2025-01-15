@@ -27,6 +27,11 @@ extern "C" {
         config_type: c_int,
         limit: c_long,
     );
+    pub fn WCDBRustStatementDelete_configOffset(
+        cpp_obj: *mut c_void,
+        config_type: c_int,
+        offset: c_long,
+    );
 }
 
 #[derive(Debug)]
@@ -128,11 +133,7 @@ impl StatementDelete {
 
     pub fn offset(&self, offset: i64) -> &Self {
         unsafe {
-            WCDBRustStatementDelete_configLimitCount(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                offset,
-            );
+            WCDBRustStatementDelete_configOffset(self.get_cpp_obj(), CPPType::Int as i32, offset);
         }
         self
     }
