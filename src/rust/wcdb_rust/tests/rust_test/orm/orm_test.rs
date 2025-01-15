@@ -7,6 +7,7 @@ use std::sync::MutexGuard;
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::core::table_orm_operation::TableORMOperationTrait;
 use wcdb_core::orm::table_binding::TableBinding;
 use wcdb_core::winq::column::Column;
 use wcdb_core::winq::expression::Expression;
@@ -41,10 +42,8 @@ impl OrmTest {
             Ok(())
         });
 
-        // let table = self
-        //     .database_test_case
-        //     .get_database_lock()
-        //     .get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
+        let database_lock: MutexGuard<Database> = self.database_test_case.get_database_lock();
+        let table = database_lock.get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
 
         let max = AllTypeObjectHelper::max_object();
         let min = AllTypeObjectHelper::min_object();
@@ -52,23 +51,21 @@ impl OrmTest {
         let empty = AllTypeObjectHelper::empty_object();
 
         let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
-        let database_lock: MutexGuard<Database> = self.database_test_case.get_database_lock();
-
-        let _ = database_lock.insert_objects(obj_vec, DbAllTypeObject::all_fields(), "testTable");
+        let _ = table.insert_objects(obj_vec, DbAllTypeObject::all_fields());
 
         let exp =
             Expression::new_with_column(Column::new("field_type")).eq_text(max.field_type.as_str());
         assert!(
-            max == database_lock
-                .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+            max == table
+                .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
                 .unwrap()
         );
 
         let exp =
             Expression::new_with_column(Column::new("field_type")).eq_text(min.field_type.as_str());
         assert!(
-            min == database_lock
-                .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+            min == table
+                .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
                 .unwrap()
         );
 
@@ -76,8 +73,8 @@ impl OrmTest {
             .eq_text(empty.field_type.as_str());
         assert!(
             empty
-                == database_lock
-                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+                == table
+                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
                     .unwrap()
         );
 
@@ -85,12 +82,10 @@ impl OrmTest {
             .eq_text(random.field_type.as_str());
         assert!(
             random
-                == database_lock
-                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+                == table
+                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
                     .unwrap()
         );
-
-        //  todo qixinbing  table orm 待实现
     }
 }
 impl TestCaseTrait for OrmTest {

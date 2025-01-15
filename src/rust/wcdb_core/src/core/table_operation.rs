@@ -91,3 +91,9 @@ impl<'a> TableOperation<'a> {
         Ok(())
     }
 }
+
+impl<'a> TableOperation<'a> {
+    pub fn get_handle(&self, write_hint: bool) -> Handle {
+        self.database.get_handle(false)
+    }
+}
