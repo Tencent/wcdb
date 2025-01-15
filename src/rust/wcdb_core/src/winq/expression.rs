@@ -100,6 +100,11 @@ impl Expression {
         self
     }
 
+    pub fn eq_text(mut self, operand: &str) -> Self {
+        self.expression_operable = self.expression_operable.eq_text(operand);
+        self
+    }
+
     pub(crate) fn get_expression_operable(&self) -> &ExpressionOperable {
         &self.expression_operable
     }

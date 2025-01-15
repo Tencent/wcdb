@@ -2,9 +2,15 @@ use crate::rust_test::base::base_test_case::TestCaseTrait;
 use crate::rust_test::base::database_test_case::{DatabaseTestCase, Expect};
 use crate::rust_test::orm::testclass::all_type_object_helper::AllTypeObjectHelper;
 use crate::wcdb_orm::orm::testclass::all_type_object::{DbAllTypeObject, DBALLTYPEOBJECT_INSTANCE};
+use std::cmp::PartialEq;
+use std::sync::MutexGuard;
 use wcdb_core::base::wcdb_exception::WCDBResult;
+use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb_core::orm::table_binding::TableBinding;
+use wcdb_core::winq::column::Column;
+use wcdb_core::winq::expression::Expression;
+use wcdb_core::winq::identifier::IdentifierTrait;
 
 pub struct OrmTest {
     database_test_case: DatabaseTestCase,
@@ -45,15 +51,46 @@ impl OrmTest {
         let random = AllTypeObjectHelper::random_object();
         let empty = AllTypeObjectHelper::empty_object();
 
-        let obj_vec = vec![max, min, random, empty];
-        let _ = self.database_test_case.get_database_lock().insert_objects(
-            obj_vec,
-            DbAllTypeObject::all_fields(),
-            "testTable",
+        let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
+        let database_lock: MutexGuard<Database> = self.database_test_case.get_database_lock();
+
+        let _ = database_lock.insert_objects(obj_vec, DbAllTypeObject::all_fields(), "testTable");
+
+        let exp =
+            Expression::new_with_column(Column::new("field_type")).eq_text(max.field_type.as_str());
+        assert!(
+            max == database_lock
+                .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+                .unwrap()
+        );
+
+        let exp =
+            Expression::new_with_column(Column::new("field_type")).eq_text(min.field_type.as_str());
+        assert!(
+            min == database_lock
+                .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+                .unwrap()
+        );
+
+        let exp = Expression::new_with_column(Column::new("field_type"))
+            .eq_text(empty.field_type.as_str());
+        assert!(
+            empty
+                == database_lock
+                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+                    .unwrap()
+        );
+
+        let exp = Expression::new_with_column(Column::new("field_type"))
+            .eq_text(random.field_type.as_str());
+        assert!(
+            random
+                == database_lock
+                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), "testTable", exp)
+                    .unwrap()
         );
 
         //  todo qixinbing  table orm 待实现
-        // DbAllTypeObject::all_fields();
     }
 }
 impl TestCaseTrait for OrmTest {
