@@ -22,15 +22,15 @@
 #include "WCDBRust.h"
 
 #define WCDBRustOrderingTermFuncName(funcName) WCDBRust(OrderingTerm, funcName)
-#define WCDBRustOrderingTermObjectMethod(funcName, ...)                         \
+#define WCDBRustOrderingTermObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(OrderingTerm, funcName, __VA_ARGS__)
-#define WCDBRustOrderingTermClassMethodWithNoArg(funcName)                      \
+#define WCDBRustOrderingTermClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(OrderingTerm, funcName)
-#define WCDBRustOrderingTermClassMethod(funcName, ...)                          \
+#define WCDBRustOrderingTermClassMethod(funcName, ...) \
     WCDBRustClassMethod(OrderingTerm, funcName, __VA_ARGS__)
 
-//jlong WCDBRustOrderingTermClassMethod(create, jint type, jlong expression);
+// jlong WCDBRustOrderingTermClassMethod(create, jint type, jlong expression);
 //
-//void WCDBRustOrderingTermClassMethod(configCollation, jlong object, jstring collation);
+// void WCDBRustOrderingTermClassMethod(configCollation, jlong object, jstring collation);
 
 void WCDBRustOrderingTermClassMethod(configOrder, void* object, int order);

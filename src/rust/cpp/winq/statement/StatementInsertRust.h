@@ -22,37 +22,36 @@
 
 #include "WCDBRust.h"
 
-#define WCDBRustStatementInsertFuncName(funcName)                               \
-    WCDBRust(StatementInsert, funcName)
-#define WCDBRustStatementInsertObjectMethod(funcName, ...)                      \
+#define WCDBRustStatementInsertFuncName(funcName) WCDBRust(StatementInsert, funcName)
+#define WCDBRustStatementInsertObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(StatementInsert, funcName, __VA_ARGS__)
-#define WCDBRustStatementInsertObjectMethodWithNoArg(funcName)                  \
+#define WCDBRustStatementInsertObjectMethodWithNoArg(funcName) \
     WCDBRustObjectMethodWithNoArg(StatementInsert, funcName)
-#define WCDBRustStatementInsertClassMethodWithNoArg(funcName)                   \
+#define WCDBRustStatementInsertClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(StatementInsert, funcName)
-#define WCDBRustStatementInsertClassMethod(funcName, ...)                       \
+#define WCDBRustStatementInsertClassMethod(funcName, ...) \
     WCDBRustClassMethod(StatementInsert, funcName, __VA_ARGS__)
 
-void *WCDBRustStatementInsertClassMethodWithNoArg(create);
+void* WCDBRustStatementInsertClassMethodWithNoArg(create);
 
-//void WCDBRustStatementInsertClassMethod(configWith, jlong self, jlongArray expressions);
-//void WCDBRustStatementInsertClassMethod(configRecursive, jlong self);
-void WCDBRustStatementInsertClassMethod(configTableName, void *self, const char *tableName);
+// void WCDBRustStatementInsertClassMethod(configWith, jlong self, jlongArray expressions);
+// void WCDBRustStatementInsertClassMethod(configRecursive, jlong self);
+void WCDBRustStatementInsertClassMethod(configTableName, void* self, const char* tableName);
 
-//void WCDBRustStatementInsertClassMethod(configSchema,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringParameter(schema));
-void WCDBRustStatementInsertClassMethod(configConflictAction, void *self, int action);
+// void WCDBRustStatementInsertClassMethod(configSchema,
+//                                        jlong self,
+//                                        WCDBRustObjectOrStringParameter(schema));
+void WCDBRustStatementInsertClassMethod(configConflictAction, void* self, int action);
 
-//void WCDBRustStatementInsertClassMethod(configAs, jlong self, jstring alias);
+// void WCDBRustStatementInsertClassMethod(configAs, jlong self, jstring alias);
 void WCDBRustStatementInsertClassMethod(configColumns,
-                                        void *self,
+                                        void* self,
                                         WCDBRustObjectOrStringArrayParameter(columns));
 
-//void WCDBRustStatementInsertClassMethod(configValues,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(value));
-void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void *self, int count);
-//void WCDBRustStatementInsertClassMethod(configSelect, jlong self, jlong select);
-//void WCDBRustStatementInsertClassMethod(configDefaultValues, jlong self);
-//void WCDBRustStatementInsertClassMethod(configUpsert, jlong self, jlong upsert);
+// void WCDBRustStatementInsertClassMethod(configValues,
+//                                        jlong self,
+//                                        WCDBRustMultiTypeArrayParameter(value));
+void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count);
+// void WCDBRustStatementInsertClassMethod(configSelect, jlong self, jlong select);
+// void WCDBRustStatementInsertClassMethod(configDefaultValues, jlong self);
+// void WCDBRustStatementInsertClassMethod(configUpsert, jlong self, jlong upsert);

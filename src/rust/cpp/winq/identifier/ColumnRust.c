@@ -19,49 +19,50 @@
  */
 
 #include "ColumnRust.h"
+
 #include "ColumnBridge.h"
 
-//jlong WCDBRustColumnClassMethodWithNoArg(createAll)
+// jlong WCDBRustColumnClassMethodWithNoArg(createAll)
 //{
-//    return (jlong) WCDBColumnCreateAll().innerValue;
-//}
+//     return (jlong) WCDBColumnCreateAll().innerValue;
+// }
 //
-//jlong WCDBRustColumnClassMethodWithNoArg(createRowId)
+// jlong WCDBRustColumnClassMethodWithNoArg(createRowId)
 //{
-//    return (jlong) WCDBColumnCreateRowId().innerValue;
-//}
+//     return (jlong) WCDBColumnCreateRowId().innerValue;
+// }
 
-void *WCDBRustColumn_createWithName(const char *name, void *binding) {
-    return (void *) WCDBColumnCreateWithName2(name, (const void *) binding).innerValue;
+void* WCDBRustColumn_createWithName(const char* name, void* binding) {
+    return (void*)WCDBColumnCreateWithName2(name, (const void*)binding).innerValue;
 }
 
-//jlong WCDBRustColumnClassMethod(copy, jlong column)
+// jlong WCDBRustColumnClassMethod(copy, jlong column)
 //{
-//    WCDBRustBridgeStruct(CPPColumn, column);
-//    return (jlong) WCDBColumnCopy(columnStruct).innerValue;
-//}
+//     WCDBRustBridgeStruct(CPPColumn, column);
+//     return (jlong) WCDBColumnCopy(columnStruct).innerValue;
+// }
 //
-//void WCDBRustColumnClassMethod(inTable, jlong column, jstring table)
+// void WCDBRustColumnClassMethod(inTable, jlong column, jstring table)
 //{
-//    WCDBRustGetStringCritical(table);
-//    WCDBRustBridgeStruct(CPPColumn, column);
-//    WCDBColumnInTable(columnStruct, tableString);
-//    WCDBRustReleaseStringCritical(table);
-//}
+//     WCDBRustGetStringCritical(table);
+//     WCDBRustBridgeStruct(CPPColumn, column);
+//     WCDBColumnInTable(columnStruct, tableString);
+//     WCDBRustReleaseStringCritical(table);
+// }
 //
-//void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema))
+// void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema))
 //{
-//    WCDBRustBridgeStruct(CPPColumn, column);
-//    WCDBRustCreateObjectOrStringCommonValue(schema, true);
-//    WCDBColumnOfSchema2(columnStruct, schema_common);
-//    WCDBRustTryReleaseStringInCommonValue(schema);
-//}
+//     WCDBRustBridgeStruct(CPPColumn, column);
+//     WCDBRustCreateObjectOrStringCommonValue(schema, true);
+//     WCDBColumnOfSchema2(columnStruct, schema_common);
+//     WCDBRustTryReleaseStringInCommonValue(schema);
+// }
 //
-//jlong WCDBRustColumnClassMethod(configAlias, jlong column, jstring alias)
+// jlong WCDBRustColumnClassMethod(configAlias, jlong column, jstring alias)
 //{
-//    WCDBRustBridgeStruct(CPPColumn, column);
-//    WCDBRustGetString(alias);
-//    jlong ret = (jlong) WCDBColumnConfigAlias(columnStruct, aliasString).innerValue;
-//    WCDBRustReleaseString(alias);
-//    return ret;
-//}
+//     WCDBRustBridgeStruct(CPPColumn, column);
+//     WCDBRustGetString(alias);
+//     jlong ret = (jlong) WCDBColumnConfigAlias(columnStruct, aliasString).innerValue;
+//     WCDBRustReleaseString(alias);
+//     return ret;
+// }

@@ -25,44 +25,45 @@
 
 #include "WCDBRust.h"
 
-#define WCDBRustExpressionOperableFuncName(funcName)                            \
-    WCDBRust(ExpressionOperable, funcName)
-#define WCDBRustExpressionOperableObjectMethod(funcName, ...)                   \
+#define WCDBRustExpressionOperableFuncName(funcName) WCDBRust(ExpressionOperable, funcName)
+#define WCDBRustExpressionOperableObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(ExpressionOperable, funcName, __VA_ARGS__)
-#define WCDBRustExpressionOperableClassMethodWithNoArg(funcName)                \
+#define WCDBRustExpressionOperableClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(ExpressionOperable, funcName)
-#define WCDBRustExpressionOperableClassMethod(funcName, ...)                    \
+#define WCDBRustExpressionOperableClassMethod(funcName, ...) \
     WCDBRustClassMethod(ExpressionOperable, funcName, __VA_ARGS__)
 
-//jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand, jboolean isNot);
+// jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand,
+// jboolean isNot);
 //
-void *WCDBRustExpressionOperableClassMethod(binaryOperate,
+void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             int leftType,
                                             long left,
                                             WCDBRustCommonValueParameter(right),
                                             int operatorType,
                                             bool isNot);
 //
-//jlong WCDBRustExpressionOperableClassMethod(betweenOperate,
+// jlong WCDBRustExpressionOperableClassMethod(betweenOperate,
 //                                           jint operandType,
 //                                           jlong operand,
 //                                           WCDBRustCommonValueParameter(left),
 //                                           WCDBRustCommonValueParameter(right),
 //                                           jboolean isNot);
 //
-//jlong WCDBRustExpressionOperableClassMethod(inOperate,
+// jlong WCDBRustExpressionOperableClassMethod(inOperate,
 //                                           jint operandType,
 //                                           jlong operand,
 //                                           WCDBRustCommonArrayParameter(values),
 //                                           jboolean isNot);
 //
-//jlong WCDBRustExpressionOperableClassMethod(
-//inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot);
+// jlong WCDBRustExpressionOperableClassMethod(
+// inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot);
 //
-//jlong WCDBRustExpressionOperableClassMethod(
-//inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot);
+// jlong WCDBRustExpressionOperableClassMethod(
+// inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot);
 //
-//jlong WCDBRustExpressionOperableClassMethod(
-//inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot);
+// jlong WCDBRustExpressionOperableClassMethod(
+// inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot);
 //
-//jlong WCDBRustExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand, jstring collation);
+// jlong WCDBRustExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand,
+// jstring collation);

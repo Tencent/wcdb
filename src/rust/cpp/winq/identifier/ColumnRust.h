@@ -23,23 +23,21 @@
 #include "WCDBRust.h"
 
 #define WCDBRustColumnFuncName(funcName) WCDBRust(Column, funcName)
-#define WCDBRustColumnObjectMethod(funcName, ...)                               \
+#define WCDBRustColumnObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(Column, funcName, __VA_ARGS__)
-#define WCDBRustColumnClassMethodWithNoArg(funcName)                            \
-    WCDBRustClassMethodWithNoArg(Column, funcName)
-#define WCDBRustColumnClassMethod(funcName, ...)                                \
-    WCDBRustClassMethod(Column, funcName, __VA_ARGS__)
+#define WCDBRustColumnClassMethodWithNoArg(funcName) WCDBRustClassMethodWithNoArg(Column, funcName)
+#define WCDBRustColumnClassMethod(funcName, ...) WCDBRustClassMethod(Column, funcName, __VA_ARGS__)
 
-//jlong WCDBRustColumnClassMethodWithNoArg(createAll);
+// jlong WCDBRustColumnClassMethodWithNoArg(createAll);
 //
-//jlong WCDBRustColumnClassMethodWithNoArg(createRowId);
+// jlong WCDBRustColumnClassMethodWithNoArg(createRowId);
 
-void *WCDBRustColumnClassMethod(createWithName, const char *name, void *binding);
+void* WCDBRustColumnClassMethod(createWithName, const char* name, void* binding);
 
-//jlong WCDBRustColumnClassMethod(copy, jlong column);
+// jlong WCDBRustColumnClassMethod(copy, jlong column);
 //
-//void WCDBRustColumnClassMethod(inTable, jlong column, jstring table);
+// void WCDBRustColumnClassMethod(inTable, jlong column, jstring table);
 //
-//void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema));
+// void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema));
 //
-//jlong WCDBRustColumnClassMethod(configAlias, jlong column, jstring alias);
+// jlong WCDBRustColumnClassMethod(configAlias, jlong column, jstring alias);

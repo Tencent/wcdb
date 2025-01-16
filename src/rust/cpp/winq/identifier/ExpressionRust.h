@@ -23,50 +23,50 @@
 #include "WCDBRust.h"
 
 #define WCDBRustExpressionFuncName(funcName) WCDBRust(Expression, funcName)
-#define WCDBRustExpressionObjectMethod(funcName, ...)                           \
+#define WCDBRustExpressionObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(Expression, funcName, __VA_ARGS__)
-#define WCDBRustExpressionClassMethodWithNoArg(funcName)                        \
+#define WCDBRustExpressionClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(Expression, funcName)
-#define WCDBRustExpressionClassMethod(funcName, ...)                            \
+#define WCDBRustExpressionClassMethod(funcName, ...) \
     WCDBRustClassMethod(Expression, funcName, __VA_ARGS__)
 
-void *WCDBRustExpressionClassMethod(create, int type, long long object);
+void* WCDBRustExpressionClassMethod(create, int type, long long object);
 
-//jlong WCDBRustExpressionClassMethod(createWithFunction, jstring func);
-//jlong WCDBRustExpressionClassMethod(createWithExistStatement, jlong select);
-//jlong WCDBRustExpressionClassMethod(createWithNotExistStatement, jlong select);
+// jlong WCDBRustExpressionClassMethod(createWithFunction, jstring func);
+// jlong WCDBRustExpressionClassMethod(createWithExistStatement, jlong select);
+// jlong WCDBRustExpressionClassMethod(createWithNotExistStatement, jlong select);
 //
-//void WCDBRustExpressionClassMethod(setWithSchema,
-//                                  jlong expression,
-//                                  WCDBRustObjectOrStringParameter(schema));
+// void WCDBRustExpressionClassMethod(setWithSchema,
+//                                   jlong expression,
+//                                   WCDBRustObjectOrStringParameter(schema));
 void WCDBRustExpressionClassMethod(argument,
-                                   void *expression,
+                                   void* expression,
                                    WCDBRustCommonValueParameter(argument));
 //
-//void WCDBRustExpressionClassMethod(invoke, jlong expression);
-//void WCDBRustExpressionClassMethod(invokeAll, jlong expression);
+// void WCDBRustExpressionClassMethod(invoke, jlong expression);
+// void WCDBRustExpressionClassMethod(invokeAll, jlong expression);
 //
-//void WCDBRustExpressionClassMethod(distinct, jlong expression);
+// void WCDBRustExpressionClassMethod(distinct, jlong expression);
 //
-//jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression));
-//void WCDBRustExpressionClassMethod(as, jlong expression, jint type);
+// jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression));
+// void WCDBRustExpressionClassMethod(as, jlong expression, jint type);
 //
-//jlong WCDBRustExpressionClassMethod(configAlias, jlong expression, jstring alias);
+// jlong WCDBRustExpressionClassMethod(configAlias, jlong expression, jstring alias);
 //
-//jlong WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression));
-//void WCDBRustExpressionClassMethod(setWithWhenExp,
+// jlong WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression));
+// void WCDBRustExpressionClassMethod(setWithWhenExp,
 //                                  jlong expression,
 //                                  WCDBRustCommonValueParameter(when));
-//void WCDBRustExpressionClassMethod(setWithThenExp,
+// void WCDBRustExpressionClassMethod(setWithThenExp,
 //                                  jlong expression,
 //                                  WCDBRustCommonValueParameter(then));
-//void WCDBRustExpressionClassMethod(setWithElseExp,
+// void WCDBRustExpressionClassMethod(setWithElseExp,
 //                                  jlong expression,
 //                                  WCDBRustCommonValueParameter(else_));
 //
-//void WCDBRustExpressionClassMethod(escapeWith, jlong expression, jstring content);
+// void WCDBRustExpressionClassMethod(escapeWith, jlong expression, jstring content);
 //
-//jlong WCDBRustExpressionClassMethod(createWithWindowFunction, jstring func);
-//void WCDBRustExpressionClassMethod(filter, jlong expression, jlong condition);
-//void WCDBRustExpressionClassMethod(overWindowDef, jlong expression, jlong def);
-//void WCDBRustExpressionClassMethod(overWindow, jlong expression, jstring window);
+// jlong WCDBRustExpressionClassMethod(createWithWindowFunction, jstring func);
+// void WCDBRustExpressionClassMethod(filter, jlong expression, jlong condition);
+// void WCDBRustExpressionClassMethod(overWindowDef, jlong expression, jlong def);
+// void WCDBRustExpressionClassMethod(overWindow, jlong expression, jstring window);

@@ -19,47 +19,48 @@
  */
 
 #include "HandleRust.h"
+
 #include "HandleBridge.h"
 #include "assert.h"
 
-void *WCDBRustHandleClassMethod(getError, void *self) {
+void* WCDBRustHandleClassMethod(getError, void* self) {
     WCDBRustBridgeStruct(CPPHandle, self);
-    return (void *) WCDBHandleGetError(selfStruct).innerValue;
+    return (void*)WCDBHandleGetError(selfStruct).innerValue;
 }
 
-//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement)
+// jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatement, void* self, jlong statement)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return (jlong) WCDBHandleGetOrCreatePreparedStatement(selfStruct, (CPPObject *) statement)
-//    .innerValue;
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     return (jlong) WCDBHandleGetOrCreatePreparedStatement(selfStruct, (CPPObject *) statement)
+//     .innerValue;
+// }
 //
-//jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, void* self, jstring sql)
+// jlong WCDBRustHandleClassMethod(getOrCreatePreparedStatementWithSQL, void* self, jstring sql)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    WCDBRustGetString(sql);
-//    jlong ret = (jlong) WCDBHandleGetOrCreatePreparedSQL(selfStruct, sqlString).innerValue;
-//    WCDBRustReleaseString(sql);
-//    return ret;
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     WCDBRustGetString(sql);
+//     jlong ret = (jlong) WCDBHandleGetOrCreatePreparedSQL(selfStruct, sqlString).innerValue;
+//     WCDBRustReleaseString(sql);
+//     return ret;
+// }
 
-void *WCDBRustHandleClassMethod(getMainStatement, void *self) {
+void* WCDBRustHandleClassMethod(getMainStatement, void* self) {
     WCDBRustBridgeStruct(CPPHandle, self);
-    return (void *) WCDBHandleGetMainStatement(selfStruct).innerValue;
+    return (void*)WCDBHandleGetMainStatement(selfStruct).innerValue;
 }
 
-//void WCDBRustHandleClassMethod(finalizeAllStatements, void* self)
+// void WCDBRustHandleClassMethod(finalizeAllStatements, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    WCDBHandleFinalizeStatements(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     WCDBHandleFinalizeStatements(selfStruct);
+// }
 //
-bool WCDBRustHandleClassMethod(execute, void *self, void *statement) {
+bool WCDBRustHandleClassMethod(execute, void* self, void* statement) {
     WCDBRustBridgeStruct(CPPHandle, self);
-    return WCDBHandleExecute(selfStruct, (CPPObject *) statement);
+    return WCDBHandleExecute(selfStruct, (CPPObject*)statement);
 }
 //
-//jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql)
+// jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBRustGetString(sql);
@@ -68,7 +69,7 @@ bool WCDBRustHandleClassMethod(execute, void *self, void *statement) {
 //    return ret;
 //}
 //
-//jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table)
+// jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table)
 //{
 //    WCDBRustBridgeStruct(CPPHandle, self);
 //    WCDBRustGetString(table);
@@ -77,128 +78,131 @@ bool WCDBRustHandleClassMethod(execute, void *self, void *statement) {
 //    return ret.hasValue ? (jint) ret.value : 2;
 //}
 
-int WCDBRustHandleClassMethod(getChanges, void *self) {
+int WCDBRustHandleClassMethod(getChanges, void* self) {
     WCDBRustBridgeStruct(CPPHandle, self);
     return WCDBHandleGetChange(selfStruct);
 }
 
-//jint WCDBRustHandleClassMethod(getTotalChanges, void* self)
+// jint WCDBRustHandleClassMethod(getTotalChanges, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleGetTotalChange(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     return WCDBHandleGetTotalChange(selfStruct);
+// }
 
-long long WCDBRustHandleClassMethod(getLastInsertRowid, void *self) {
+long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self) {
     WCDBRustBridgeStruct(CPPHandle, self);
     return WCDBHandleGetLastInsertedRowID(selfStruct);
 }
 
-//jboolean WCDBRustHandleClassMethod(isInTransaction, void* self)
+// jboolean WCDBRustHandleClassMethod(isInTransaction, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleIsInTransaction(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     return WCDBHandleIsInTransaction(selfStruct);
+// }
 //
-//jboolean WCDBRustHandleClassMethod(beginTransaction, void* self)
+// jboolean WCDBRustHandleClassMethod(beginTransaction, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleBeginTransaction(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     return WCDBHandleBeginTransaction(selfStruct);
+// }
 //
-//jboolean WCDBRustHandleClassMethod(commitTransaction, void* self)
+// jboolean WCDBRustHandleClassMethod(commitTransaction, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleCommitTransaction(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     return WCDBHandleCommitTransaction(selfStruct);
+// }
 //
-//void WCDBRustHandleClassMethod(rollbackTransaction, void* self)
+// void WCDBRustHandleClassMethod(rollbackTransaction, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    return WCDBHandleRollbackTransaction(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     return WCDBHandleRollbackTransaction(selfStruct);
+// }
 
 typedef struct TransactionContext {
     RustTransactionCallback rust_callback;
-    void *closure_raw;
-    void *database_raw;
+    void* closure_raw;
+    void* database_raw;
 } TransactionContext;
 
-bool WCDBRustHandleTransactionCallBack(TransactionContext *context, CPPHandle handle) {
+bool WCDBRustHandleTransactionCallBack(TransactionContext* context, CPPHandle handle) {
     return context->rust_callback(context->closure_raw, context->database_raw, handle.innerValue);
 }
 
-bool WCDBRustHandleObjectMethod(runTransaction, void *self, RustTransactionCallback rust_callback, void *closure_raw,
-                                void *database_raw) {
+bool WCDBRustHandleObjectMethod(runTransaction,
+                                void* self,
+                                RustTransactionCallback rust_callback,
+                                void* closure_raw,
+                                void* database_raw) {
     WCDBRustBridgeStruct(CPPHandle, self);
     TransactionContext context;
     context.rust_callback = rust_callback;
     context.closure_raw = closure_raw;
     context.database_raw = database_raw;
-    return WCDBHandleRunTransaction(
-            selfStruct, &context, (TransactionCallback) WCDBRustHandleTransactionCallBack);
+    return WCDBHandleRunTransaction(selfStruct, &context,
+                                    (TransactionCallback)WCDBRustHandleTransactionCallBack);
 }
 
-//bool WCDBRustHandlePausableTransactionCallBack(TransactionContext *context,
-//                                              CPPHandle handle,
-//                                              bool *stop,
-//                                              bool isNewTransaction)
+// bool WCDBRustHandlePausableTransactionCallBack(TransactionContext *context,
+//                                               CPPHandle handle,
+//                                               bool *stop,
+//                                               bool isNewTransaction)
 //{
-//    JNIEnv *env = context->env;
+//     JNIEnv *env = context->env;
 //
-//    static jmethodID g_methodId = NULL;
-//    if (g_methodId == NULL) {
-//        g_methodId = (*env)->GetMethodID(
-//        env, WCDBRustGetHandleClass(), "onPausableTransaction", "(JLcom/tencent/wcdb/core/PausableTransaction;Z)I");
-//        if (g_methodId == NULL) {
-//            assert(0);
-//            return false;
-//        }
-//    }
-//    jint ret = (*env)->CallIntMethod(
-//    env, context->handle, g_methodId, (jlong) handle.innerValue, context->transaction, isNewTransaction);
-//    if ((*env)->ExceptionCheck(env)) {
-//        ret = 2;
-//    }
-//    if (ret == 2) {
-//        return false;
-//    } else {
-//        *stop = ret == 1;
-//        return true;
-//    }
-//}
+//     static jmethodID g_methodId = NULL;
+//     if (g_methodId == NULL) {
+//         g_methodId = (*env)->GetMethodID(
+//         env, WCDBRustGetHandleClass(), "onPausableTransaction",
+//         "(JLcom/tencent/wcdb/core/PausableTransaction;Z)I"); if (g_methodId == NULL) {
+//             assert(0);
+//             return false;
+//         }
+//     }
+//     jint ret = (*env)->CallIntMethod(
+//     env, context->handle, g_methodId, (jlong) handle.innerValue, context->transaction,
+//     isNewTransaction); if ((*env)->ExceptionCheck(env)) {
+//         ret = 2;
+//     }
+//     if (ret == 2) {
+//         return false;
+//     } else {
+//         *stop = ret == 1;
+//         return true;
+//     }
+// }
 //
-//jboolean WCDBRustHandleObjectMethod(runPausableTransaction, void* self, jobject transaction)
+// jboolean WCDBRustHandleObjectMethod(runPausableTransaction, void* self, jobject transaction)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    TransactionContext context;
-//    context.env = env;
-//    context.handle = obj;
-//    context.transaction = transaction;
-//    return WCDBHandleRunPausableTransaction(
-//    selfStruct, &context, (PausableTransaction) WCDBRustHandlePausableTransactionCallBack);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     TransactionContext context;
+//     context.env = env;
+//     context.handle = obj;
+//     context.transaction = transaction;
+//     return WCDBHandleRunPausableTransaction(
+//     selfStruct, &context, (PausableTransaction) WCDBRustHandlePausableTransactionCallBack);
+// }
 //
-//jlong WCDBRustHandleClassMethodWithNoArg(createCancellationSignal)
+// jlong WCDBRustHandleClassMethodWithNoArg(createCancellationSignal)
 //{
-//    jlong ret = (jlong) WCDBCancellationSignalCreate().innerValue;
-//    return ret;
-//}
+//     jlong ret = (jlong) WCDBCancellationSignalCreate().innerValue;
+//     return ret;
+// }
 //
-//void WCDBRustHandleClassMethod(cancelSignal, jlong signal)
+// void WCDBRustHandleClassMethod(cancelSignal, jlong signal)
 //{
-//    WCDBRustBridgeStruct(CPPCancellationSignal, signal);
-//    WCDBCancellationSignalCancel(signalStruct);
-//}
+//     WCDBRustBridgeStruct(CPPCancellationSignal, signal);
+//     WCDBCancellationSignalCancel(signalStruct);
+// }
 //
-//void WCDBRustHandleClassMethod(attachCancellationSignal, void* self, jlong signal)
+// void WCDBRustHandleClassMethod(attachCancellationSignal, void* self, jlong signal)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    WCDBRustBridgeStruct(CPPCancellationSignal, signal);
-//    WCDBHandleAttachCancellationSignal(selfStruct, signalStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     WCDBRustBridgeStruct(CPPCancellationSignal, signal);
+//     WCDBHandleAttachCancellationSignal(selfStruct, signalStruct);
+// }
 //
-//void WCDBRustHandleClassMethod(detachCancellationSignal, void* self)
+// void WCDBRustHandleClassMethod(detachCancellationSignal, void* self)
 //{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    WCDBHandleDettachCancellationSignal(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPHandle, self);
+//     WCDBHandleDettachCancellationSignal(selfStruct);
+// }

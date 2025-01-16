@@ -19,22 +19,25 @@
  */
 
 #include "ColumnDefRust.h"
+
 #include "ColumnDefBridge.h"
 
-void *WCDBRustColumnDefClassMethod(create, WCDBRustObjectOrStringParameter(column), int columnType) {
+void* WCDBRustColumnDefClassMethod(create,
+                                   WCDBRustObjectOrStringParameter(column),
+                                   int columnType) {
     WCDBRustCreateObjectOrStringCommonValue(column, true);
-    void *ret = 0;
+    void* ret = 0;
     if (columnType != 0) {
-        ret = (void *) WCDBColumnDefCreateWithType2(column_common, columnType).innerValue;
+        ret = (void*)WCDBColumnDefCreateWithType2(column_common, columnType).innerValue;
     } else {
-        ret = (void *) WCDBColumnDefCreateWithoutType2(column_common).innerValue;
+        ret = (void*)WCDBColumnDefCreateWithoutType2(column_common).innerValue;
     }
     return ret;
 }
 
-//void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint)
+// void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint)
 //{
-//    WCDBRustBridgeStruct(CPPColumnDef, columnDef);
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBColumnDefConfigConstraint(columnDefStruct, constraintStruct);
-//}
+//     WCDBRustBridgeStruct(CPPColumnDef, columnDef);
+//     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+//     WCDBColumnDefConfigConstraint(columnDefStruct, constraintStruct);
+// }

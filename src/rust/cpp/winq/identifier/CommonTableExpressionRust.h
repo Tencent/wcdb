@@ -22,17 +22,16 @@
 
 #include "WCDBRust.h"
 
-#define WCDBRustCommonTableExpressionFuncName(funcName)                         \
-    WCDBRust(CommonTableExpression, funcName)
-#define WCDBRustCommonTableExpressionObjectMethod(funcName, ...)                \
+#define WCDBRustCommonTableExpressionFuncName(funcName) WCDBRust(CommonTableExpression, funcName)
+#define WCDBRustCommonTableExpressionObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(CommonTableExpression, funcName, __VA_ARGS__)
-#define WCDBRustCommonTableExpressionClassMethodWithNoArg(funcName)             \
+#define WCDBRustCommonTableExpressionClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(CommonTableExpression, funcName)
-#define WCDBRustCommonTableExpressionClassMethod(funcName, ...)                 \
+#define WCDBRustCommonTableExpressionClassMethod(funcName, ...) \
     WCDBRustClassMethod(CommonTableExpression, funcName, __VA_ARGS__)
 
-void *WCDBRustCommonTableExpressionClassMethod(createWithTable, const char *tableName);
+void* WCDBRustCommonTableExpressionClassMethod(createWithTable, const char* tableName);
 
-void WCDBRustCommonTableExpressionClassMethod(configColumn, void *self, void *column);
+void WCDBRustCommonTableExpressionClassMethod(configColumn, void* self, void* column);
 
-void WCDBRustCommonTableExpressionClassMethod(configSelectStatement, void *self, void *select);
+void WCDBRustCommonTableExpressionClassMethod(configSelectStatement, void* self, void* select);

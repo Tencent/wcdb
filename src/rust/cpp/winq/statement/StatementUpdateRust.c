@@ -19,41 +19,44 @@
  */
 
 #include "StatementUpdateRust.h"
+
 #include "StatementUpdateBridge.h"
 
-void *WCDBRustStatementUpdateClassMethodWithNoArg(create) {
-    return (void *) WCDBStatementUpdateCreate().innerValue;
+void* WCDBRustStatementUpdateClassMethodWithNoArg(create) {
+    return (void*)WCDBStatementUpdateCreate().innerValue;
 }
 
-//void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions)
+// void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions)
 //{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustGetCppPointerArrayCritical(expressions);
-//    WCDBStatementUpdateConfigWith(
-//    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
-//    WCDBRustReleaseCppPointerArrayCritical(expressions);
-//}
+//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
+//     WCDBRustGetCppPointerArrayCritical(expressions);
+//     WCDBStatementUpdateConfigWith(
+//     selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+//     WCDBRustReleaseCppPointerArrayCritical(expressions);
+// }
 //
-//void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self)
+// void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self)
 //{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBStatementUpdateConfigRecursive(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
+//     WCDBStatementUpdateConfigRecursive(selfStruct);
+// }
 //
-void WCDBRustStatementUpdateClassMethod(configTable, void *self, WCDBRustObjectOrStringParameter(table)) {
+void WCDBRustStatementUpdateClassMethod(configTable,
+                                        void* self,
+                                        WCDBRustObjectOrStringParameter(table)) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     WCDBRustCreateObjectOrStringCommonValue(table, true);
     WCDBStatementUpdateConfigTable2(selfStruct, table_common);
 }
 
 //
-//void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action)
+// void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action)
 //{
 //    WCDBRustBridgeStruct(CPPStatementUpdate, self);
 //    WCDBStatementUpdateConfigConfiction(selfStruct, action);
 //}
 //
-//void WCDBRustStatementUpdateClassMethod(configColumns,
+// void WCDBRustStatementUpdateClassMethod(configColumns,
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringArrayParameter(columns))
 //{
@@ -62,7 +65,8 @@ void WCDBRustStatementUpdateClassMethod(configTable, void *self, WCDBRustObjectO
 //    columns, WCDBStatementUpdateConfigColumns2(selfStruct, columns_commonArray));
 //}
 //
-//void WCDBRustStatementUpdateClassMethod(configValue, jlong self, WCDBRustCommonValueParameter(value))
+// void WCDBRustStatementUpdateClassMethod(configValue, jlong self,
+// WCDBRustCommonValueParameter(value))
 //{
 //    WCDBRustBridgeStruct(CPPStatementUpdate, self);
 //    WCDBRustCreateCommonValue(value, true);
@@ -70,7 +74,7 @@ void WCDBRustStatementUpdateClassMethod(configTable, void *self, WCDBRustObjectO
 //    WCDBRustTryReleaseStringInCommonValue(value);
 //}
 //
-//void WCDBRustStatementUpdateClassMethod(configColumnsToValues,
+// void WCDBRustStatementUpdateClassMethod(configColumnsToValues,
 //                                       jlong self,
 //                                       WCDBRustObjectOrStringArrayParameter(columns),
 //                                       WCDBRustMultiTypeArrayParameter(values))
@@ -78,49 +82,45 @@ void WCDBRustStatementUpdateClassMethod(configTable, void *self, WCDBRustObjectO
 //    WCDBRustBridgeStruct(CPPStatementUpdate, self);
 //    WCDBRustCreateMultiTypeArray(values);
 //    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-//    columns, WCDBStatementUpdateConfigColumnsToValues(selfStruct, columns_commonArray, valuesArray));
-//    WCDBRustReleaseMultiTypeArray(values);
+//    columns, WCDBStatementUpdateConfigColumnsToValues(selfStruct, columns_commonArray,
+//    valuesArray)); WCDBRustReleaseMultiTypeArray(values);
 //}
 //
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
-                                        void *self,
+                                        void* self,
                                         WCDBRustObjectOrStringArrayParameter(columns)) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-            columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
+        columns, WCDBStatementUpdateConfigColumnsToBindParameters(selfStruct, columns_commonArray));
 }
 
-void WCDBRustStatementUpdateClassMethod(configCondition, void* self, void* condition)
-{
+void WCDBRustStatementUpdateClassMethod(configCondition, void* self, void* condition) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     WCDBRustBridgeStruct(CPPExpression, condition);
     WCDBStatementUpdateConfigCondition(selfStruct, conditionStruct);
 }
 
-void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders, size_t len)
-{
+void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders, size_t len) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustGetCppPointerArrayCritical(orders);
-    WCDBStatementUpdateConfigOrders(
-    selfStruct, (const CPPOrderingTerm*) orders, (int)len);
-//    WCDBRustReleaseCppPointerArrayCritical(orders);
+    //    WCDBRustGetCppPointerArrayCritical(orders);
+    WCDBStatementUpdateConfigOrders(selfStruct, (const CPPOrderingTerm*)orders, (int)len);
+    //    WCDBRustReleaseCppPointerArrayCritical(orders);
 }
 
-//void WCDBRustStatementUpdateClassMethod(
-//configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
+// void WCDBRustStatementUpdateClassMethod(
+// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 //{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    CPPCommonValue from_common;
-//    from_common.type = fromType;
-//    from_common.intValue = from;
-//    CPPCommonValue to_common;
-//    to_common.type = toType;
-//    to_common.intValue = to;
-//    WCDBStatementUpdateConfigLimitRange2(selfStruct, from_common, to_common);
-//}
+//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
+//     CPPCommonValue from_common;
+//     from_common.type = fromType;
+//     from_common.intValue = from;
+//     CPPCommonValue to_common;
+//     to_common.type = toType;
+//     to_common.intValue = to;
+//     WCDBStatementUpdateConfigLimitRange2(selfStruct, from_common, to_common);
+// }
 
-void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit)
-{
+void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     CPPCommonValue limit_common;
     limit_common.type = type;
@@ -128,8 +128,7 @@ void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, 
     WCDBStatementUpdateConfigLimitCount2(selfStruct, limit_common);
 }
 
-void WCDBRustStatementUpdateClassMethod(configOffset, void* self, int type, long offset)
-{
+void WCDBRustStatementUpdateClassMethod(configOffset, void* self, int type, long offset) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);
     CPPCommonValue offset_common;
     offset_common.type = type;

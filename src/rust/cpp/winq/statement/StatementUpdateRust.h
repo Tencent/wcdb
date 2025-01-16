@@ -22,41 +22,41 @@
 
 #include "WCDBRust.h"
 
-#define WCDBRustStatementUpdateFuncName(funcName)                               \
-    WCDBRust(StatementUpdate, funcName)
-#define WCDBRustStatementUpdateObjectMethod(funcName, ...)                      \
+#define WCDBRustStatementUpdateFuncName(funcName) WCDBRust(StatementUpdate, funcName)
+#define WCDBRustStatementUpdateObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(StatementUpdate, funcName, __VA_ARGS__)
-#define WCDBRustStatementUpdateObjectMethodWithNoArg(funcName)                  \
+#define WCDBRustStatementUpdateObjectMethodWithNoArg(funcName) \
     WCDBRustObjectMethodWithNoArg(StatementUpdate, funcName)
-#define WCDBRustStatementUpdateClassMethodWithNoArg(funcName)                   \
+#define WCDBRustStatementUpdateClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(StatementUpdate, funcName)
-#define WCDBRustStatementUpdateClassMethod(funcName, ...)                       \
+#define WCDBRustStatementUpdateClassMethod(funcName, ...) \
     WCDBRustClassMethod(StatementUpdate, funcName, __VA_ARGS__)
 
-void *WCDBRustStatementUpdateClassMethodWithNoArg(create);
+void* WCDBRustStatementUpdateClassMethodWithNoArg(create);
 
-//void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions);
-//void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self);
+// void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions);
+// void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self);
 //
 void WCDBRustStatementUpdateClassMethod(configTable,
-                                        void *self,
+                                        void* self,
                                         WCDBRustObjectOrStringParameter(table));
 
-//void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action);
-//void WCDBRustStatementUpdateClassMethod(configColumns,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns));
-//void WCDBRustStatementUpdateClassMethod(configValue, jlong self, WCDBRustCommonValueParameter(value));
-//void WCDBRustStatementUpdateClassMethod(configColumnsToValues,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns),
-//                                       WCDBRustMultiTypeArrayParameter(values));
+// void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action);
+// void WCDBRustStatementUpdateClassMethod(configColumns,
+//                                        jlong self,
+//                                        WCDBRustObjectOrStringArrayParameter(columns));
+// void WCDBRustStatementUpdateClassMethod(configValue, jlong self,
+// WCDBRustCommonValueParameter(value)); void
+// WCDBRustStatementUpdateClassMethod(configColumnsToValues,
+//                                        jlong self,
+//                                        WCDBRustObjectOrStringArrayParameter(columns),
+//                                        WCDBRustMultiTypeArrayParameter(values));
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
-                                        void *self,
+                                        void* self,
                                         WCDBRustObjectOrStringArrayParameter(columns));
 void WCDBRustStatementUpdateClassMethod(configCondition, void* self, void* condition);
 void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders, size_t len);
-//void WCDBRustStatementUpdateClassMethod(
-//configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
+// void WCDBRustStatementUpdateClassMethod(
+// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
 void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit);
 void WCDBRustStatementUpdateClassMethod(configOffset, void* self, int type, long offset);

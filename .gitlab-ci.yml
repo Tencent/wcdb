@@ -1,4 +1,4 @@
-image: "harbor.rongcloud.net/library/rust/wcdb:0.0.4"
+image: "harbor.rongcloud.net/library/rust/wcdb:0.0.7"
 
 cache:
   paths:
@@ -17,10 +17,22 @@ run_test:
   stage: test
   before_script:
     - git submodule update --init sqlcipher zstd
+    - npm config set registry https://registry.npmmirror.com
+    - npm install --save-dev @commitlint/config-conventional @commitlint/cli
   script:
     - export CARGO_HOME=${CI_PROJECT_DIR}/CargoHome
     - export RUSTFLAGS="-D warnings -A unused -A deprecated"
     - cd src/rust
+    - echo "${CI_COMMIT_MESSAGE}" | npx commitlint
     - autocorrect --lint
+    - FILES=$(git ls-files '*.c' '*.cpp' '*.h')
+    - for file in $FILES; do
+        clang-format "$file" | colordiff -u "$file" -;
+      done
     - cargo fmt -- --check
     - cargo test
+    - TARGET_SIZE=$(du -sm target 2>/dev/null | awk '{print $1}')
+    - echo "target:${TARGET_SIZE}m"
+    - if [ "$TARGET_SIZE" -gt 2048 ]; then
+        rm -rf target;
+      fi

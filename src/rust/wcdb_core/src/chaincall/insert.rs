@@ -125,7 +125,7 @@ impl<'a, T> Insert<'a, T> {
                 index += 1;
             }
             prepared_statement.step()?;
-            if (is_auto_increment) {
+            if is_auto_increment {
                 binding.set_last_insert_row_id(
                     object,
                     self.chain_call.handle.get_last_inserted_row_id()?,

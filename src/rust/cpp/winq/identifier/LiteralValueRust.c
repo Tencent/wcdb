@@ -19,43 +19,43 @@
  */
 
 #include "LiteralValueRust.h"
+
 #include "LiteralValueBridge.h"
 
-void *WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value)) {
-    WCDBRustCreateCommonValue(value)
-    return (void *) WCDBLiteralValueCreate(value_common).innerValue;
+void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value)) {
+    WCDBRustCreateCommonValue(value) return (void*)WCDBLiteralValueCreate(value_common).innerValue;
 }
 
 long long WCDBRustLiteralValueClassMethod(createWithInt64, long long value) {
-    return (long long) WCDBLiteralValueCreateWithInt64(value).innerValue;
+    return (long long)WCDBLiteralValueCreateWithInt64(value).innerValue;
 }
 
-//jlong WCDBRustLiteralValueClassMethod(createWithBool, jboolean value)
+// jlong WCDBRustLiteralValueClassMethod(createWithBool, jboolean value)
 //{
-//    return (jlong) WCDBLiteralValueCreateWithBool(value).innerValue;
-//}
+//     return (jlong) WCDBLiteralValueCreateWithBool(value).innerValue;
+// }
 //
-//jlong WCDBRustLiteralValueClassMethod(createWithDouble, jdouble value)
+// jlong WCDBRustLiteralValueClassMethod(createWithDouble, jdouble value)
 //{
-//    return (jlong) WCDBLiteralValueCreateWithDouble(value).innerValue;
-//}
+//     return (jlong) WCDBLiteralValueCreateWithDouble(value).innerValue;
+// }
 //
-//jlong WCDBRustLiteralValueClassMethod(createWithString, jstring value)
+// jlong WCDBRustLiteralValueClassMethod(createWithString, jstring value)
 //{
-//    WCDBRustGetStringCritical(value);
-//    jlong result = (jlong) WCDBLiteralValueCreateWithString(valueString).innerValue;
-//    WCDBRustReleaseStringCritical(value);
-//    return result;
-//}
+//     WCDBRustGetStringCritical(value);
+//     jlong result = (jlong) WCDBLiteralValueCreateWithString(valueString).innerValue;
+//     WCDBRustReleaseStringCritical(value);
+//     return result;
+// }
 
 long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime) {
-    return (long long) WCDBLiteralValueCreateWithCurrentTime().innerValue;
+    return (long long)WCDBLiteralValueCreateWithCurrentTime().innerValue;
 }
 
 long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentDate) {
-    return (long long) WCDBLiteralValueCreateWithCurrentDate().innerValue;
+    return (long long)WCDBLiteralValueCreateWithCurrentDate().innerValue;
 }
 
 long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTimestamp) {
-    return (long long) WCDBLiteralValueCreateWithCurrentTimestamp().innerValue;
+    return (long long)WCDBLiteralValueCreateWithCurrentTimestamp().innerValue;
 }

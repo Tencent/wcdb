@@ -22,42 +22,41 @@
 
 #include "WCDBRust.h"
 
-#define WCDBRustStatementSelectFuncName(funcName)                               \
-    WCDBRust(StatementSelect, funcName)
-#define WCDBRustStatementSelectObjectMethod(funcName, ...)                      \
+#define WCDBRustStatementSelectFuncName(funcName) WCDBRust(StatementSelect, funcName)
+#define WCDBRustStatementSelectObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(StatementSelect, funcName, __VA_ARGS__)
-#define WCDBRustStatementSelectObjectMethodWithNoArg(funcName)                  \
+#define WCDBRustStatementSelectObjectMethodWithNoArg(funcName) \
     WCDBRustObjectMethodWithNoArg(StatementSelect, funcName)
-#define WCDBRustStatementSelectClassMethodWithNoArg(funcName)                   \
+#define WCDBRustStatementSelectClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(StatementSelect, funcName)
-#define WCDBRustStatementSelectClassMethod(funcName, ...)                       \
+#define WCDBRustStatementSelectClassMethod(funcName, ...) \
     WCDBRustClassMethod(StatementSelect, funcName, __VA_ARGS__)
 
-void *WCDBRustStatementSelectClassMethodWithNoArg(create);
+void* WCDBRustStatementSelectClassMethodWithNoArg(create);
 
-//void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions);
-//void WCDBRustStatementSelectClassMethod(configRecursive, jlong self);
+// void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions);
+// void WCDBRustStatementSelectClassMethod(configRecursive, jlong self);
 //
 void WCDBRustStatementSelectClassMethod(configResultColumns,
-                                        void *self,
+                                        void* self,
                                         WCDBRustMultiTypeArrayParameter(resultColumns));
 
-//void WCDBRustStatementSelectClassMethod(configDistiction, jlong self);
+// void WCDBRustStatementSelectClassMethod(configDistiction, jlong self);
 void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
-                                        void *self,
+                                        void* self,
                                         WCDBRustMultiTypeArrayParameter(tableOrSubqueries));
 
-void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condition);
-//void WCDBRustStatementSelectClassMethod(configGroups,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(groups));
-//void WCDBRustStatementSelectClassMethod(configHaving, jlong self, jlong expression);
-//void WCDBRustStatementSelectClassMethod(configUnion, jlong self);
-//void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self);
-//void WCDBRustStatementSelectClassMethod(configIntersect, jlong self);
-//void WCDBRustStatementSelectClassMethod(configExcept, jlong self);
-//void WCDBRustStatementSelectClassMethod(configOrders, jlong self, jlongArray orders);
-//void WCDBRustStatementSelectClassMethod(
-//configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-//void WCDBRustStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit);
-//void WCDBRustStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset);
+void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condition);
+// void WCDBRustStatementSelectClassMethod(configGroups,
+//                                        jlong self,
+//                                        WCDBRustMultiTypeArrayParameter(groups));
+// void WCDBRustStatementSelectClassMethod(configHaving, jlong self, jlong expression);
+// void WCDBRustStatementSelectClassMethod(configUnion, jlong self);
+// void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self);
+// void WCDBRustStatementSelectClassMethod(configIntersect, jlong self);
+// void WCDBRustStatementSelectClassMethod(configExcept, jlong self);
+// void WCDBRustStatementSelectClassMethod(configOrders, jlong self, jlongArray orders);
+// void WCDBRustStatementSelectClassMethod(
+// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
+// void WCDBRustStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit);
+// void WCDBRustStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset);

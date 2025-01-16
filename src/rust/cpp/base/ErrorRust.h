@@ -23,17 +23,14 @@
 #include "WCDBRust.h"
 
 #define WCDBRustErrorFuncName(funcName) WCDBRust(Error, funcName)
-#define WCDBRustErrorObjectMethod(funcName, ...)                                \
-    WCDBRustObjectMethod(Error, funcName, __VA_ARGS__)
-#define WCDBRustErrorClassMethodWithNoArg(funcName)                             \
-    WCDBRustClassMethodWithNoArg(Error, funcName)
-#define WCDBRustErrorClassMethod(funcName, ...)                                 \
-    WCDBRustClassMethod(Error, funcName, __VA_ARGS__)
+#define WCDBRustErrorObjectMethod(funcName, ...) WCDBRustObjectMethod(Error, funcName, __VA_ARGS__)
+#define WCDBRustErrorClassMethodWithNoArg(funcName) WCDBRustClassMethodWithNoArg(Error, funcName)
+#define WCDBRustErrorClassMethod(funcName, ...) WCDBRustClassMethod(Error, funcName, __VA_ARGS__)
 
-int WCDBRustErrorClassMethod(getLevel, void *error);
+int WCDBRustErrorClassMethod(getLevel, void* error);
 
-int WCDBRustErrorClassMethod(getCode, void *error);
+int WCDBRustErrorClassMethod(getCode, void* error);
 
-const char *WCDBRustErrorClassMethod(getMessage, void *error);
+const char* WCDBRustErrorClassMethod(getMessage, void* error);
 
-void WCDBRustErrorObjectMethod(enumerateInfo, void *error);
+void WCDBRustErrorObjectMethod(enumerateInfo, void* error);

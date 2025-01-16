@@ -19,60 +19,61 @@
  */
 
 #include "StatementSelectRust.h"
+
 #include "StatementSelectBridge.h"
 
-void *WCDBRustStatementSelectClassMethodWithNoArg(create) {
-    return (void *) WCDBStatementSelectCreate().innerValue;
+void* WCDBRustStatementSelectClassMethodWithNoArg(create) {
+    return (void*)WCDBStatementSelectCreate().innerValue;
 }
 
-//void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions)
+// void WCDBRustStatementSelectClassMethod(configWith, jlong self, jlongArray expressions)
 //{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBRustGetCppPointerArrayCritical(expressions);
-//    WCDBStatementSelectConfigWith(
-//    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
-//    WCDBRustReleaseCppPointerArrayCritical(expressions);
-//}
+//     WCDBRustBridgeStruct(CPPStatementSelect, self);
+//     WCDBRustGetCppPointerArrayCritical(expressions);
+//     WCDBStatementSelectConfigWith(
+//     selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+//     WCDBRustReleaseCppPointerArrayCritical(expressions);
+// }
 //
-//void WCDBRustStatementSelectClassMethod(configRecursive, jlong self)
+// void WCDBRustStatementSelectClassMethod(configRecursive, jlong self)
 //{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBStatementSelectConfigRecursive(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPStatementSelect, self);
+//     WCDBStatementSelectConfigRecursive(selfStruct);
+// }
 //
 void WCDBRustStatementSelectClassMethod(configResultColumns,
-                                        void *self,
+                                        void* self,
                                         WCDBRustMultiTypeArrayParameter(resultColumns)) {
     WCDBRustBridgeStruct(CPPStatementSelect, self);
     WCDBRustCreateMultiTypeArray(resultColumns);
     WCDBStatementSelectConfigResultColumns2(selfStruct, resultColumnsArray);
-//    WCDBRustReleaseMultiTypeArray(resultColumns);
+    //    WCDBRustReleaseMultiTypeArray(resultColumns);
 }
 
 //
-//void WCDBRustStatementSelectClassMethod(configDistiction, jlong self)
+// void WCDBRustStatementSelectClassMethod(configDistiction, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBStatementSelectConfigDistinct(selfStruct);
 //}
 //
 void WCDBRustStatementSelectClassMethod(configTableOrSubqueries,
-                                        void *self,
+                                        void* self,
                                         WCDBRustMultiTypeArrayParameter(tableOrSubqueries)) {
     WCDBRustBridgeStruct(CPPStatementSelect, self);
     WCDBRustCreateMultiTypeArray(tableOrSubqueries);
     WCDBStatementSelectConfigFromTableOrSubqueries2(selfStruct, tableOrSubqueriesArray);
-//    WCDBRustReleaseMultiTypeArray(tableOrSubqueries);
+    //    WCDBRustReleaseMultiTypeArray(tableOrSubqueries);
 }
 
 //
-void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condition) {
+void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condition) {
     WCDBRustBridgeStruct(CPPStatementSelect, self);
     WCDBRustBridgeStruct(CPPExpression, condition);
     WCDBStatementSelectConfigWhere(selfStruct, conditionStruct);
 }
 //
-//void WCDBRustStatementSelectClassMethod(configGroups,
+// void WCDBRustStatementSelectClassMethod(configGroups,
 //                                       jlong self,
 //                                       WCDBRustMultiTypeArrayParameter(groups))
 //{
@@ -82,38 +83,38 @@ void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condi
 //    WCDBRustReleaseMultiTypeArray(groups);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configHaving, jlong self, jlong expression)
+// void WCDBRustStatementSelectClassMethod(configHaving, jlong self, jlong expression)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBRustBridgeStruct(CPPExpression, expression);
 //    WCDBStatementSelectConfigHaving(selfStruct, expressionStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configUnion, jlong self)
+// void WCDBRustStatementSelectClassMethod(configUnion, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBStatementSelectConfigUnion(selfStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self)
+// void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBStatementSelectConfigUnionAll(selfStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configIntersect, jlong self)
+// void WCDBRustStatementSelectClassMethod(configIntersect, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBStatementSelectConfigIntersect(selfStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configExcept, jlong self)
+// void WCDBRustStatementSelectClassMethod(configExcept, jlong self)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBStatementSelectConfigExcept(selfStruct);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configOrders, jlong self, jlongArray orders)
+// void WCDBRustStatementSelectClassMethod(configOrders, jlong self, jlongArray orders)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBRustGetCppPointerArrayCritical(orders);
@@ -122,8 +123,8 @@ void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condi
 //    WCDBRustReleaseCppPointerArrayCritical(orders);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(
-//configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
+// void WCDBRustStatementSelectClassMethod(
+// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    CPPCommonValue from_common;
@@ -135,7 +136,7 @@ void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condi
 //    WCDBStatementSelectConfigLimitRange2(selfStruct, from_common, to_common);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit)
+// void WCDBRustStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    CPPCommonValue limit_common;
@@ -144,7 +145,7 @@ void WCDBRustStatementSelectClassMethod(configCondition, void *self, void *condi
 //    WCDBStatementSelectConfigLimitCount2(selfStruct, limit_common);
 //}
 //
-//void WCDBRustStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset)
+// void WCDBRustStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset)
 //{
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    CPPCommonValue offset_common;

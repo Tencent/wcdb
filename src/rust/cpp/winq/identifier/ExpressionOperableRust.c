@@ -22,18 +22,21 @@
  */
 
 #include "ExpressionOperableRust.h"
+
 #include "ExpressionOperatableBridge.h"
+
 #include <alloca.h>
 
-//jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand, jboolean isNot)
+// jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand,
+// jboolean isNot)
 //{
-//    CPPCommonValue operand_common;
-//    operand_common.type = operandType;
-//    operand_common.intValue = operand;
-//    return (jlong) WCDBExpressionNullOperate2(operand_common, isNot).innerValue;
-//}
+//     CPPCommonValue operand_common;
+//     operand_common.type = operandType;
+//     operand_common.intValue = operand;
+//     return (jlong) WCDBExpressionNullOperate2(operand_common, isNot).innerValue;
+// }
 //
-void *WCDBRustExpressionOperableClassMethod(binaryOperate,
+void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             int leftType,
                                             long left,
                                             WCDBRustCommonValueParameter(right),
@@ -43,14 +46,13 @@ void *WCDBRustExpressionOperableClassMethod(binaryOperate,
     left_common.type = leftType;
     left_common.intValue = left;
     WCDBRustCreateCommonValue(right);
-    void *ret = (void *) WCDBExpressionBinaryOperate2(
-            left_common, right_common, operatorType, isNot)
-            .innerValue;
-//    WCDBRustTryReleaseStringInCommonValue(right); // todo qixinbing : 需要释放？
+    void* ret = (void*)WCDBExpressionBinaryOperate2(left_common, right_common, operatorType, isNot)
+                    .innerValue;
+    //    WCDBRustTryReleaseStringInCommonValue(right); // todo qixinbing : 需要释放？
     return ret;
 }
 //
-//jlong WCDBRustExpressionOperableClassMethod(betweenOperate,
+// jlong WCDBRustExpressionOperableClassMethod(betweenOperate,
 //                                           jint operandType,
 //                                           jlong operand,
 //                                           WCDBRustCommonValueParameter(left),
@@ -70,7 +72,7 @@ void *WCDBRustExpressionOperableClassMethod(binaryOperate,
 //    return ret;
 //}
 //
-//jlong WCDBRustExpressionOperableClassMethod(inOperate,
+// jlong WCDBRustExpressionOperableClassMethod(inOperate,
 //                                           jint operandType,
 //                                           jlong operand,
 //                                           WCDBRustCommonArrayParameter(values),
@@ -87,8 +89,8 @@ void *WCDBRustExpressionOperableClassMethod(binaryOperate,
 //    return ret;
 //}
 //
-//jlong WCDBRustExpressionOperableClassMethod(
-//inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
+// jlong WCDBRustExpressionOperableClassMethod(
+// inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
 //{
 //    CPPCommonValue operand_common;
 //    operand_common.type = operandType;
@@ -100,8 +102,8 @@ void *WCDBRustExpressionOperableClassMethod(binaryOperate,
 //    return ret;
 //}
 //
-//jlong WCDBRustExpressionOperableClassMethod(
-//inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot)
+// jlong WCDBRustExpressionOperableClassMethod(
+// inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot)
 //{
 //    CPPCommonValue operand_common;
 //    operand_common.type = operandType;
@@ -113,8 +115,8 @@ void *WCDBRustExpressionOperableClassMethod(binaryOperate,
 //    return ret;
 //}
 //
-//jlong WCDBRustExpressionOperableClassMethod(
-//inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot)
+// jlong WCDBRustExpressionOperableClassMethod(
+// inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot)
 //{
 //    CPPCommonValue operand_common;
 //    operand_common.type = operandType;
@@ -124,7 +126,8 @@ void *WCDBRustExpressionOperableClassMethod(binaryOperate,
 //    .innerValue;
 //}
 //
-//jlong WCDBRustExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand, jstring collation)
+// jlong WCDBRustExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand,
+// jstring collation)
 //{
 //    CPPCommonValue operand_common;
 //    operand_common.type = operandType;

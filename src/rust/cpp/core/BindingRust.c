@@ -19,81 +19,85 @@
  */
 
 #include "BindingRust.h"
+
 #include "BindingBridge.h"
+
 #include <printf.h>
 
-void *WCDBRustBindingClassMethodWithNoArg(create) {
-    return (void *) WCDBBindingCreate().innerValue;
+void* WCDBRustBindingClassMethodWithNoArg(create) {
+    return (void*)WCDBBindingCreate().innerValue;
 }
 
-void WCDBRustBindingClassMethod(addColumnDef, void *self, void *columnDef) {
+void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef) {
     WCDBRustBridgeStruct(CPPBinding, self);
     WCDBRustBridgeStruct(CPPColumnDef, columnDef);
     WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
 }
 
-//void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, jlong self)
+// void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, jlong self)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
+// }
 //
-//void WCDBRustBindingClassMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex)
+// void WCDBRustBindingClassMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean
+// isFullName, jlong createIndex)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBRustBridgeStruct(CPPStatementCreateIndex, createIndex);
-//    WCDBRustGetStringCritical(indexNameOrSuffix);
-//    WCDBBindingAddIndex(selfStruct, indexNameOrSuffixString, isFullName, createIndexStruct);
-//    WCDBRustReleaseStringCritical(indexNameOrSuffix);
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBRustBridgeStruct(CPPStatementCreateIndex, createIndex);
+//     WCDBRustGetStringCritical(indexNameOrSuffix);
+//     WCDBBindingAddIndex(selfStruct, indexNameOrSuffixString, isFullName, createIndexStruct);
+//     WCDBRustReleaseStringCritical(indexNameOrSuffix);
+// }
 //
-//void WCDBRustBindingClassMethod(addTableConstraint, jlong self, jlong constraint)
+// void WCDBRustBindingClassMethod(addTableConstraint, jlong self, jlong constraint)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBRustBridgeStruct(CPPTableConstraint, constraint);
-//    WCDBBindingAddTableConstraint(selfStruct, constraintStruct);
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBRustBridgeStruct(CPPTableConstraint, constraint);
+//     WCDBBindingAddTableConstraint(selfStruct, constraintStruct);
+// }
 //
-//void WCDBRustBindingClassMethod(configVirtualModule, jlong self, jstring moduleName)
+// void WCDBRustBindingClassMethod(configVirtualModule, jlong self, jstring moduleName)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBRustGetStringCritical(moduleName);
-//    WCDBBindingConfigVirtualModule(selfStruct, moduleNameString);
-//    WCDBRustReleaseStringCritical(moduleName);
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBRustGetStringCritical(moduleName);
+//     WCDBBindingConfigVirtualModule(selfStruct, moduleNameString);
+//     WCDBRustReleaseStringCritical(moduleName);
+// }
 //
-//void WCDBRustBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument)
+// void WCDBRustBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBRustGetStringCritical(argument);
-//    WCDBBindingConfigVirtualModuleArgument(selfStruct, argumentString);
-//    WCDBRustReleaseStringCritical(argument);
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBRustGetStringCritical(argument);
+//     WCDBBindingConfigVirtualModuleArgument(selfStruct, argumentString);
+//     WCDBRustReleaseStringCritical(argument);
+// }
 //
-//void WCDBRustBindingClassMethod(configWithoutRowId, jlong self)
+// void WCDBRustBindingClassMethod(configWithoutRowId, jlong self)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBBindingConfigWithoutRowId(selfStruct);
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBBindingConfigWithoutRowId(selfStruct);
+// }
 
-bool WCDBRustBinding_createTable(void *self, const char *tableName, void *handle) {
+bool WCDBRustBinding_createTable(void* self, const char* tableName, void* handle) {
     WCDBRustBridgeStruct(CPPBinding, self);
     WCDBRustBridgeStruct(CPPHandle, handle);
     bool ret = WCDBBindingCreateTable(selfStruct, tableName, handleStruct);
     return ret;
 }
 
-//jboolean WCDBRustBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong handle)
+// jboolean WCDBRustBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong
+// handle)
 //{
-//    WCDBRustBridgeStruct(CPPBinding, self);
-//    WCDBRustBridgeStruct(CPPHandle, handle);
-//    WCDBRustGetString(tableName);
-//    jboolean ret = WCDBBindingCreateVirtualTable(selfStruct, tableNameString, handleStruct);
-//    WCDBRustReleaseString(tableName);
-//    return ret;
-//}
+//     WCDBRustBridgeStruct(CPPBinding, self);
+//     WCDBRustBridgeStruct(CPPHandle, handle);
+//     WCDBRustGetString(tableName);
+//     jboolean ret = WCDBBindingCreateVirtualTable(selfStruct, tableNameString, handleStruct);
+//     WCDBRustReleaseString(tableName);
+//     return ret;
+// }
 
-void *WCDBRustBindingClassMethod(getBaseBinding, void *self) {
+void* WCDBRustBindingClassMethod(getBaseBinding, void* self) {
     WCDBRustBridgeStruct(CPPBinding, self);
-    return (void *) WCDBBindingGetBaseBinding(selfStruct);
+    return (void*)WCDBBindingGetBaseBinding(selfStruct);
 }

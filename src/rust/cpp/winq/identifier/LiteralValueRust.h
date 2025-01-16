@@ -23,14 +23,14 @@
 #include "WCDBRust.h"
 
 #define WCDBRustLiteralValueFuncName(funcName) WCDBRust(LiteralValue, funcName)
-#define WCDBRustLiteralValueObjectMethod(funcName, ...)                         \
+#define WCDBRustLiteralValueObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(LiteralValue, funcName, __VA_ARGS__)
-#define WCDBRustLiteralValueClassMethodWithNoArg(funcName)                      \
+#define WCDBRustLiteralValueClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(LiteralValue, funcName)
-#define WCDBRustLiteralValueClassMethod(funcName, ...)                          \
+#define WCDBRustLiteralValueClassMethod(funcName, ...) \
     WCDBRustClassMethod(LiteralValue, funcName, __VA_ARGS__)
 
-void *WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value));
+void* WCDBRustLiteralValueClassMethod(create, WCDBRustCommonValueParameter(value));
 
 long long WCDBRustLiteralValueClassMethodWithNoArg(createWithCurrentTime);
 

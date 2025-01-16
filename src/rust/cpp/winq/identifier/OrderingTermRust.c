@@ -19,26 +19,26 @@
  */
 
 #include "OrderingTermRust.h"
+
 #include "OrderingTermBridge.h"
 
-//jlong WCDBRustOrderingTermClassMethod(create, jint type, jlong expression)
+// jlong WCDBRustOrderingTermClassMethod(create, jint type, jlong expression)
 //{
-//    CPPCommonValue common_expression;
-//    common_expression.type = type;
-//    common_expression.intValue = expression;
-//    return (jlong) WCDBOrderingTermCreate2(common_expression).innerValue;
-//}
+//     CPPCommonValue common_expression;
+//     common_expression.type = type;
+//     common_expression.intValue = expression;
+//     return (jlong) WCDBOrderingTermCreate2(common_expression).innerValue;
+// }
 //
-//void WCDBRustOrderingTermClassMethod(configCollation, jlong object, jstring collation)
+// void WCDBRustOrderingTermClassMethod(configCollation, jlong object, jstring collation)
 //{
-//    WCDBRustBridgeStruct(CPPOrderingTerm, object);
-//    WCDBRustGetStringCritical(collation);
-//    WCDBOrderingTermConfigCollation(objectStruct, collationString);
-//    WCDBRustReleaseStringCritical(collation);
-//}
+//     WCDBRustBridgeStruct(CPPOrderingTerm, object);
+//     WCDBRustGetStringCritical(collation);
+//     WCDBOrderingTermConfigCollation(objectStruct, collationString);
+//     WCDBRustReleaseStringCritical(collation);
+// }
 
-void WCDBRustOrderingTermClassMethod(configOrder, void* object, int order)
-{
+void WCDBRustOrderingTermClassMethod(configOrder, void* object, int order) {
     WCDBRustBridgeStruct(CPPOrderingTerm, object);
     WCDBOrderingTermConfigOrder(objectStruct, order);
 }

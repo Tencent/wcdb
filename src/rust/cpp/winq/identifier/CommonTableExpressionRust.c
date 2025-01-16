@@ -19,19 +19,20 @@
  */
 
 #include "CommonTableExpressionRust.h"
+
 #include "CommonTableExpressionBridge.h"
 
-void *WCDBRustCommonTableExpressionClassMethod(createWithTable, const char *tableName) {
-    return (void *) WCDBCommonTableExpressionCreate(tableName).innerValue;
+void* WCDBRustCommonTableExpressionClassMethod(createWithTable, const char* tableName) {
+    return (void*)WCDBCommonTableExpressionCreate(tableName).innerValue;
 }
 
-void WCDBRustCommonTableExpressionClassMethod(configColumn, void *self, void *column) {
+void WCDBRustCommonTableExpressionClassMethod(configColumn, void* self, void* column) {
     WCDBRustBridgeStruct(CPPCommonTableExpression, self);
     WCDBRustBridgeStruct(CPPColumn, column);
     WCDBCommonTableExpressionAddColumn(selfStruct, columnStruct);
 }
 
-void WCDBRustCommonTableExpressionClassMethod(configSelectStatement, void *self, void *select) {
+void WCDBRustCommonTableExpressionClassMethod(configSelectStatement, void* self, void* select) {
     WCDBRustBridgeStruct(CPPCommonTableExpression, self);
     WCDBRustBridgeStruct(CPPStatementSelect, select);
     WCDBCommonTableExpressionAsSelection(selfStruct, selectStruct);

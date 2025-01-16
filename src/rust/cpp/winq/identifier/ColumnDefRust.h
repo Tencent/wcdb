@@ -23,13 +23,13 @@
 #include "WCDBRust.h"
 
 #define WCDBRustColumnDefFuncName(funcName) WCDBRust(ColumnDef, funcName)
-#define WCDBRustColumnDefObjectMethod(funcName, ...)                            \
+#define WCDBRustColumnDefObjectMethod(funcName, ...) \
     WCDBRustObjectMethod(ColumnDef, funcName, __VA_ARGS__)
-#define WCDBRustColumnDefClassMethodWithNoArg(funcName)                         \
+#define WCDBRustColumnDefClassMethodWithNoArg(funcName) \
     WCDBRustClassMethodWithNoArg(ColumnDef, funcName)
-#define WCDBRustColumnDefClassMethod(funcName, ...)                             \
+#define WCDBRustColumnDefClassMethod(funcName, ...) \
     WCDBRustClassMethod(ColumnDef, funcName, __VA_ARGS__)
 
-void *WCDBRustColumnDefClassMethod(create, WCDBRustObjectOrStringParameter(column), int columnType);
+void* WCDBRustColumnDefClassMethod(create, WCDBRustObjectOrStringParameter(column), int columnType);
 
-//void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint);
+// void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint);
