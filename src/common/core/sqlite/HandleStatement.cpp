@@ -25,6 +25,7 @@
 #include "HandleStatement.hpp"
 #include "AbstractHandle.hpp"
 #include "Assertion.hpp"
+#include "WCDBLog.hpp"
 #include "BaseBinding.hpp"
 #include "CommonCore.hpp"
 #include "CompressingHandleDecorator.hpp"
@@ -375,8 +376,10 @@ bool HandleStatement::prepareSQL(const UnsafeStringView &sql)
     WCTRemedialAssert(!isPrepared(), "Last statement is not finalized.", finalize(););
     WCTAssert(sql.length() > 0);
 
+    WCDB2_LOGI("start-prepareSQL-sql=%s",sql.data());
     bool result = APIExit(
     sqlite3_prepare_v2(getRawHandle(), sql.data(), -1, &m_stmt, nullptr), sql);
+    WCDB2_LOGI("end-prepareSQL-sql=%s", sql.data());
     m_done = false;
     m_fullTrace = getHandle()->isFullSQLEnable();
     if (!result) {

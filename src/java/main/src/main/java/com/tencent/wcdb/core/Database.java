@@ -22,6 +22,8 @@
  */
 package com.tencent.wcdb.core;
 
+import android.util.Log;
+
 import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.Value;
 import com.tencent.wcdb.base.WCDBException;
@@ -57,7 +59,10 @@ public class Database extends HandleORMOperation {
      */
     @NotNull
     public String getPath() {
-        return getPath(cppObj);
+        return dbPath;
+        // 没有必要再走一次native方法getPath
+        // 并且getPath主要用于日志打印，无功能依赖
+//        return getPath(cppObj);
     }
 
     private static native String getPath(long self);

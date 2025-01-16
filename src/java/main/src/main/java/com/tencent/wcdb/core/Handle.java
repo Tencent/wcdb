@@ -24,6 +24,7 @@ package com.tencent.wcdb.core;
 
 import com.tencent.wcdb.base.CppObject;
 import com.tencent.wcdb.base.WCDBException;
+import com.tencent.wcdb.utils.leak.HandleLeakUtil;
 import com.tencent.wcdb.winq.Statement;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +47,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
 
     public long getCppHandle() throws WCDBException {
         if (cppObj == 0) {
+            HandleLeakUtil.inst().startTimer(String.valueOf(hashCode()));
             assert database != null;
             cppObj = Database.getHandle(CppObject.get(database), writeHint);
             if (cppObj == 0) {
@@ -166,8 +168,10 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
     public void invalidate() {
         mainStatement = null;
         if (cppObj != 0) {
-            releaseCPPObject(cppObj);
+            long obj = cppObj;
             cppObj = 0;
+            HandleLeakUtil.inst().cancelTimer(String.valueOf(hashCode()));
+            releaseCPPObject(obj);
             writeHint = false;
         }
     }

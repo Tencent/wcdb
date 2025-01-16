@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">WCDBDemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="init_db">初始化DB</string>
+    <string name="query_message">读操作</string>
+    <string name="insert_message_with_no_transaction">无事务写</string>
+    <string name="insert_message_with_simple_transaction">单事务写</string>
+    <string name="insert_message_with_nested_transaction">嵌套事务写</string>
+</resources>

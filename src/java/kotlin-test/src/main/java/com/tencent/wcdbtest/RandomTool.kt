@@ -61,4 +61,8 @@ object RandomTool {
     fun testRowWithId(id: Int): Array<Value> {
         return arrayOf(Value(id.toLong()), Value(string()))
     }
+
+    fun getRandomInt():Int {
+        return kotlin.random.Random(100).nextInt()
+    }
 }

@@ -23,6 +23,7 @@
 
 #include "WCDBJNI.h"
 #include "ObjectBridge.h"
+#include "WCDBLog.hpp"
 #include "assert.h"
 #include <string.h>
 
@@ -40,6 +41,7 @@ void WCDBJNIDestructContext(jobject config)
 
 void WCDBJNIClassMethod(Base, releaseObject, long long cppObject)
 {
+    WCDB2_LOGI("start-WCDBReleaseCPPObject,cppObject=%lld",cppObject);
     WCDBReleaseCPPObject((CPPObject*) cppObject);
 }
 

@@ -25,6 +25,7 @@
 #include "TransactionGuard.hpp"
 #include "Assertion.hpp"
 #include "InnerHandle.hpp"
+#include "WCDBLog.hpp"
 
 namespace WCDB {
 
@@ -42,6 +43,8 @@ TransactionGuard::~TransactionGuard()
         return;
     }
     bool isInTransactionAfter = m_handle->isInTransaction();
+    WCDB2_LOGI("TransactionGuard,isInTransactionAfter=%d,m_isInTransactionBefore=%d",
+               isInTransactionAfter, m_isInTransactionBefore);
     if (!m_isInTransactionBefore && isInTransactionAfter) {
         m_event->markHandleAsTransactioned(m_handle);
     } else if (m_isInTransactionBefore && !isInTransactionAfter) {

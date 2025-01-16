@@ -24,6 +24,7 @@
 
 #include "InnerDatabase.hpp"
 #include "Assertion.hpp"
+#include "WCDBLog.hpp"
 #include "FileManager.hpp"
 #include "Notifier.hpp"
 #include "Path.hpp"
@@ -272,6 +273,8 @@ RecyclableHandle InnerDatabase::getHandle(bool writeHint)
     if (handle.get() != nullptr) {
         handle->configTransactionEvent(this);
         WCTAssert(m_concurrency.readSafety());
+        WCDB2_LOGI("get一个%s类型的handle, handleReferenceAddress=%p", writeHint ? "写" : "仅读",
+                   (void *) &handle);
         return handle;
     }
     InitializedGuard initializedGuard = initialize();
@@ -282,6 +285,8 @@ RecyclableHandle InnerDatabase::getHandle(bool writeHint)
     if (handle != nullptr) {
         handle->configTransactionEvent(this);
     }
+    WCDB2_LOGI("生成一个%s类型的handle, handleReferenceAddress=%p", writeHint ? "写" : "仅读",
+               (void *) &handle);
     return handle;
 }
 
@@ -473,6 +478,8 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 #pragma mark - Threaded
 void InnerDatabase::markHandleAsTransactioned(InnerHandle *handle)
 {
+    WCDB2_LOGI("start-markHandleAsTransactioned,handle=%p,writeHint=%d", (void *) &handle,
+               handle->getWriteHint());
     WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
     RecyclableHandle currentHandle = getHandle();
     WCTAssert(currentHandle.get() == handle);
@@ -482,6 +489,7 @@ void InnerDatabase::markHandleAsTransactioned(InnerHandle *handle)
 
 void InnerDatabase::markHandleAsUntransactioned()
 {
+    WCDB2_LOGI("start-markHandleAsUntransactioned");
     WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
     m_transactionedHandles.getOrCreate() = nullptr;
     WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
@@ -492,37 +500,47 @@ bool InnerDatabase::isInTransaction()
 {
     WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr
               || m_transactionedHandles.getOrCreate().get()->isInTransaction());
-    return m_transactionedHandles.getOrCreate().get() != nullptr;
+    bool inTransaction = m_transactionedHandles.getOrCreate().get() != nullptr;
+    WCDB2_LOGI("start-isInTransaction,result=%d", inTransaction);
+    return inTransaction;
 }
 
 bool InnerDatabase::beginTransaction()
 {
+    WCDB2_LOGI("start-beginTransaction");
     RecyclableHandle handle = getHandle(true);
     if (handle == nullptr) {
+        WCDB2_LOGI("end-beginTransaction handle is null");
         return false;
     }
     if (handle->beginTransaction()) {
+        WCDB2_LOGI("end-beginTransaction ok");
         return true;
     }
+    WCDB2_LOGI("end-beginTransaction error");
     setThreadedError(handle->getError());
     return false;
 }
 
 bool InnerDatabase::commitOrRollbackTransaction()
 {
+    WCDB2_LOGI("start-commitOrRollbackTransaction");
     RecyclableHandle handle = getHandle();
     WCTRemedialAssert(handle != nullptr,
                       "Commit or rollback transaction should not be called without begin.",
                       return false;);
     if (handle->commitOrRollbackTransaction()) {
+        WCDB2_LOGI("end-commitOrRollbackTransaction ok");
         return true;
     }
+    WCDB2_LOGI("end-commitOrRollbackTransaction error");
     setThreadedError(handle->getError());
     return false;
 }
 
 void InnerDatabase::rollbackTransaction()
 {
+    WCDB2_LOGI("start-rollbackTransaction");
     RecyclableHandle handle = getHandle();
     WCTRemedialAssert(handle != nullptr,
                       "Rollback transaction should not be called without begin.",
@@ -532,12 +550,19 @@ void InnerDatabase::rollbackTransaction()
 
 bool InnerDatabase::runTransaction(const TransactionCallback &transaction)
 {
+    WCDB2_LOGI("start-runTransaction");
     RecyclableHandle handle = getHandle(true);
+    WCDB2_LOGI("start-runTransaction,getHandle=%p,writeHint=%d", (void *) &handle,
+               handle->getWriteHint());
     if (handle == nullptr) return false;
     if (!handle->runTransaction(transaction)) {
         setThreadedError(handle->getError());
+        WCDB2_LOGI("start-runTransaction,error,getHandle=%p,writeHint=%d", (void *) &handle,
+                   handle->getWriteHint());
         return false;
     }
+    WCDB2_LOGI("start-runTransaction ,ok, getHandle=%p,writeHint=%d", (void *) &handle,
+               handle->getWriteHint());
     return true;
 }
 

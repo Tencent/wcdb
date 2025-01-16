@@ -24,6 +24,7 @@
 
 #include "HandlePool.hpp"
 #include "Assertion.hpp"
+#include "WCDBLog.hpp"
 #include "CoreConst.h"
 #include "FileManager.hpp"
 #include "InnerHandle.hpp"
@@ -169,6 +170,9 @@ size_t HandlePool::numberOfAliveHandlesInSlot(HandleSlot slot) const
 
 RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
 {
+    auto threadId = std::this_thread::get_id();
+    auto threadHash = std::hash<std::thread::id>{}(threadId);
+    WCDB2_LOGI("进入flowOut函数 writeHint=%d, threadId=%zu",writeHint,  threadHash);
     HandleSlot slot = slotOfHandleType(type);
     WCTAssert(slot < HandleSlotCount);
     HandleCategory category = categoryOfHandleType(type);
@@ -182,6 +186,9 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
             WCTAssert(referencedHandle.reference > 0);
             WCTAssert(referencedHandle.handle->isUsingInThread(Thread::getCurrentThreadId()));
             ++referencedHandle.reference;
+            WCDB2_LOGI(
+                    "inFlowOut1 当前缓存池已经存在写handle-可以复用 计数++之后，referencedHandleCount=%d, address=%p,writeHint=%d,threadId=%zu",
+                    referencedHandle.reference, (void *) &referencedHandle, writeHint, threadHash);
             return RecyclableHandle(
             referencedHandle.handle,
             std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
@@ -189,6 +196,9 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
     }
 
     if (!m_counter.tryIncreaseHandleCount(type, writeHint)) {
+        WCDB2_LOGI(
+                "inFlowOut2 tryIncreaseHandleCount失败：The operating count of database exceeds the maximum allowed. referencedHandleCount=%d, address=%p,writeHint=%d,threadId=%zu",
+                referencedHandle.reference, (void *) &referencedHandle, writeHint, threadHash);
         Error error(Error::Code::Exceed,
                     Error::Level::Error,
                     "The operating count of database exceeds the maximum allowed.");
@@ -206,6 +216,9 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
         auto &freeSlot = m_frees[slot];
         if (!freeSlot.empty()) {
             handle = freeSlot.back();
+            WCDB2_LOGI(
+                    "inFlowOut3 !freeSlot.empty(). referencedHandleCount=%d, writeHint=%d, handle isNull=%d, threadId=%zu",
+                    referencedHandle.reference, writeHint, handle == nullptr, threadHash);
             WCTAssert(handle != nullptr);
             freeSlot.pop_back();
         }
@@ -248,12 +261,18 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
     WCTAssert(referencedHandle.handle == nullptr && referencedHandle.reference == 0);
     referencedHandle.handle = handle;
     referencedHandle.reference = 1;
+    WCDB2_LOGI(
+            "inFlowOut4 新建一个handle,referencedHandle.reference =%d, address=%p, writeHint=%d, threadId=%zu",
+            referencedHandle.reference, (void *) &referencedHandle, writeHint, threadHash);
     return RecyclableHandle(
     handle, std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
 }
 
 void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &handle)
 {
+    auto threadId = std::this_thread::get_id();
+    auto threadHash = std::hash<std::thread::id>{}(threadId);
+    WCDB2_LOGI("进入flowBack函数 writeHint=%d, threadId=%zu",handle->getWriteHint(),  threadHash);
     WCTAssert(handle != nullptr);
     WCTAssert(m_concurrency.readSafety());
 
@@ -265,7 +284,12 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
     ReferencedHandle &referencedHandle = m_threadedHandles.getOrCreate().at(category);
     WCTAssert(referencedHandle.handle == handle);
     WCTAssert(referencedHandle.reference > 0);
+    WCDB2_LOGI("before释放引用计数 referencedHandleCount=%d, address=%p, writeHint=%d",
+               referencedHandle.reference, (void *) &referencedHandle, handle->getWriteHint());
     if (--referencedHandle.reference == 0) {
+        WCDB2_LOGI(
+                "really释放引用计数 开始真正的finalizeStatements referencedHandleCount=%d, address=%p,writeHint=%d",
+                referencedHandle.reference, (void *) &referencedHandle, handle->getWriteHint());
         handle->configTransactionEvent(nullptr);
         referencedHandle.handle = nullptr;
         bool writeHint = handle->getWriteHint();

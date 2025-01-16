@@ -134,8 +134,11 @@ public class Delete extends ChainCall<StatementDelete> {
         try {
             handle.execute(statement);
         } finally {
-            updateChanges();
-            invalidateHandle();
+            try {
+                updateChanges();
+            } finally {
+                invalidateHandle();
+            }
         }
         return this;
     }

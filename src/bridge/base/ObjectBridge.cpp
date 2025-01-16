@@ -24,6 +24,7 @@
 
 #include "ObjectBridge.hpp"
 #include "Assertion.hpp"
+#include "WCDBLog.hpp"
 
 WCDBReleaseSwiftObject g_releaseSwiftObject = nullptr;
 
@@ -40,12 +41,15 @@ WCDBReleaseSwiftObject _Nonnull WCDBGetReleaseSwiftObjectFunction()
 void WCDBReleaseCPPObject(CPPObject* _Nonnull obj)
 {
     if (obj == nullptr) {
+        WCDB2_LOGI("WCDBReleaseCPPObject obj == nullptr");
         return;
     }
     if (obj->deleter != nullptr) {
+        WCDB2_LOGI("WCDBReleaseCPPObject obj->deleter != nullptr and start free");
         obj->deleter(obj->realValue);
     }
     free(obj);
+    WCDB2_LOGI("WCDBReleaseCPPObject really-free(%p);",(void *) &obj);
 }
 
 #ifdef __ANDROID__

@@ -54,3 +54,8 @@
     int onPausableTransaction(long, com.tencent.wcdb.core.PausableTransaction, boolean);
     boolean onTransaction(long, com.tencent.wcdb.core.Transaction);
 }
+
+
+-keep class com.tencent.wcdb.base.HandleLeakUtil{
+ *;
+}

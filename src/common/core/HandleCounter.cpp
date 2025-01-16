@@ -24,6 +24,7 @@
 
 #include "HandleCounter.hpp"
 #include "Assertion.hpp"
+#include "WCDBLog.hpp"
 #include <condition_variable>
 
 namespace WCDB {
@@ -34,9 +35,14 @@ HandleCounter::HandleCounter() : m_writerCount(0), m_totalCount(0)
 
 HandleCounter::~HandleCounter() = default;
 
+static int handlerIndex = 0 ;
+
 bool HandleCounter::tryIncreaseHandleCount(HandleType type, bool writeHint)
 {
     std::unique_lock<std::mutex> lockGuard(m_lock);
+    handlerIndex++;
+    WCDB2_LOGI("tryIncreaseHandleCount-start-获得一个%s handle, writerCount=%d,m_totalCount=%d,handlerIndex=%d",
+               writeHint ? "可写-tryIncrease" : "仅读-tryIncrease", m_writerCount, m_totalCount, handlerIndex);
     while (m_totalCount >= HandlePoolMaxAllowedNumberOfHandles
            || (writeHint && m_writerCount >= HandlePoolMaxAllowedNumberOfWriters)) {
         while (m_totalCount >= HandlePoolMaxAllowedNumberOfHandles) {
@@ -60,6 +66,8 @@ bool HandleCounter::tryIncreaseHandleCount(HandleType type, bool writeHint)
         m_writerCount++;
     }
     m_totalCount++;
+    WCDB2_LOGI("tryIncreaseHandleCount-end-获得一个%s handle, writerCount=%d,m_totalCount=%d,handlerIndex=%d",
+              writeHint ? "可写-tryIncrease" : "仅读-tryIncrease", m_writerCount, m_totalCount,handlerIndex);
     return true;
 }
 
@@ -67,6 +75,8 @@ void HandleCounter::decreaseHandleCount(bool writeHint)
 {
     bool hasNotified = false;
     std::unique_lock<std::mutex> lockGuard(m_lock);
+    WCDB2_LOGI("decreaseHandleCount-start-释放一个%s handle, writerCount=%d,m_totalCount=%d,handlerIndex=%d",
+               writeHint ? "可写-decrease" : "仅读-decrease", m_writerCount, m_totalCount,handlerIndex);
     if (writeHint) {
         m_writerCount--;
         WCTAssert(m_writerCount >= 0);
@@ -88,6 +98,8 @@ void HandleCounter::decreaseHandleCount(bool writeHint)
         m_conditionalNormals.notify_all();
 #endif
     }
+    WCDB2_LOGI("decreaseHandleCount-end-释放一个%s handle, writerCount=%d,m_totalCount=%d,handlerIndex=%d",
+              writeHint ? "可写-decrease" : "仅读-decrease", m_writerCount, m_totalCount,handlerIndex);
 }
 
 } // namespace WCDB
