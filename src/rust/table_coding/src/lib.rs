@@ -43,6 +43,25 @@ impl WCDBTable {
         }
     }
 
+    fn get_field_column_name_ident_vec(&self) -> Vec<Ident> {
+        match &self.data {
+            Data::Struct(fields) => {
+                fields
+                    .iter()
+                    .map(|field| {
+                        let mut ident = field.ident.clone().unwrap();
+                        if field.column_name.len() > 0 {
+                            // 使用 column_name 当做表名
+                            ident = Ident::new(field.column_name.as_str(), ident.span());
+                        }
+                        ident
+                    })
+                    .collect()
+            }
+            _ => panic!("WCDBTable only works on structs"),
+        }
+    }
+
     fn get_field_type_vec(&self) -> Vec<&Type> {
         match &self.data {
             Data::Struct(fields) => fields.iter().map(|field| &field.ty).collect(),
@@ -287,6 +306,7 @@ static FIELD_INFO_MAP: Lazy<HashMap<String, FieldInfo>> = Lazy::new(|| {
 
 fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let db_table_ident = table.get_db_table();
+    let field_column_name_ident_vec = table.get_field_column_name_ident_vec();
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
     let field_ident_def_vec: Vec<Ident> = field_ident_vec
@@ -308,7 +328,7 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
             let instance_raw = unsafe { &instance as *const #db_table_ident };
             #(
                 let field = Box::new(wcdb_core::orm::field::Field::new(
-                    stringify!(#field_ident_vec),
+                    stringify!(#field_column_name_ident_vec),
                     instance_raw,
                     #field_id_vec,
                     false,

@@ -134,6 +134,14 @@ impl AllTypeObjectHelper {
     }
 }
 
+#[derive(WCDBTableCoding)]
+pub struct FieldObject {
+    #[WCDBField]
+    field: i32,
+    #[WCDBField(column_name = "differentName")]
+    field_with_different_name: i32,
+}
+
 pub struct OrmTest {
     database_test_case: DatabaseTestCase,
     table_name: String,
@@ -232,6 +240,18 @@ pub mod orm_test {
 
     fn teardown(orm_test: &OrmTest) {
         orm_test.teardown().unwrap();
+    }
+
+    #[test]
+    fn test_all_field() {
+        assert_eq!(DbFieldObject::all_fields().len(), 2);
+
+        let binding = DbFieldObject::all_fields();
+        let first_field = binding.first().unwrap();
+        assert_eq!(first_field.get_description(), "field");
+
+        let second_field = binding.last().unwrap();
+        assert_eq!(second_field.get_description(), "differentName");
     }
 
     #[test]
