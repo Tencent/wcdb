@@ -1096,8 +1096,17 @@ public abstract class HandleOperation extends CppObject {
      * @throws WCDBException if any error occurs.
      */
     public boolean isInTransaction() throws WCDBException {
-        Handle handle = getHandle(false);
-        return Handle.isInTransaction(handle.getCppHandle());
+        Handle handle = null;
+        boolean res;
+        try {
+            handle = getHandle(false);
+            res = Handle.isInTransaction(handle.getCppHandle());
+        } finally {
+            if (handle != null && autoInvalidateHandle()) {
+                handle.invalidate();
+            }
+        }
+        return res;
     }
 
     /**
