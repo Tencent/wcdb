@@ -116,6 +116,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let instance_ident = Ident::new(&instance, Span::call_site());
     let field_ident_vec = table.get_field_ident_vec();
 
+    check_field_element(table);
     let singleton_statements = generate_singleton(&table)?;
     let extract_object_statements = generate_extract_object(&table)?;
     let bind_field_statements = generate_bind_field(&table)?;
@@ -303,6 +304,47 @@ static FIELD_INFO_MAP: Lazy<HashMap<String, FieldInfo>> = Lazy::new(|| {
     );
     all_info
 });
+
+fn check_field_element(table: &WCDBTable) {
+    let mut primary_key_count = 0;
+    match &table.data {
+        Data::Struct(fields) => fields
+            .iter()
+            .map(|field| {
+                let field_key = field.ident.span().source_text();
+                if field.is_primary {
+                    primary_key_count += 1;
+                    if primary_key_count > 1 {
+                        panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ",field_key.unwrap())
+                    }
+
+                    if field.is_auto_increment {
+                        let field_type =  &field.ty;
+                        let field_type_string = get_field_type_string(field_type).unwrap();
+                        if !is_column_type_integer(field_type_string) {
+                            panic!("#[WCDBField] Auto-increment field must be integer for \"{}\".", field_key.unwrap());
+                        }
+                    }
+                    // todo qixinbing check  @WCDBIndex
+                }else if field.is_auto_increment {
+                    panic!("#[WCDBField] Auto-increment field must be primary key for \"{}\".", field_key.unwrap());
+                }
+            })
+            .collect(),
+        _ => panic!("WCDBTable only works on structs"),
+    }
+}
+
+fn is_column_type_integer(column_type: String) -> bool {
+    if "i8".to_string() == column_type
+        || "i16".to_string() == column_type
+        || "i32".to_string() == column_type
+        || "i64".to_string() == column_type
+    {
+        return true;
+    }
+    false
+}
 
 fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let db_table_ident = table.get_db_table();
