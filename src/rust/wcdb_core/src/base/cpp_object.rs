@@ -68,11 +68,12 @@ impl CppObject {
         obj.get_cpp_obj()
     }
 
-    pub(crate) fn get_by_cpp_object_convertible_trait<T: CppObjectConvertibleTrait>(
-        obj: &Option<T>,
-    ) -> i64 {
+    pub(crate) fn get_by_cpp_object_convertible_trait<T>(obj: &Option<&T>) -> i64
+    where
+        T: CppObjectConvertibleTrait,
+    {
         if let Some(obj) = obj {
-            obj.as_cpp_object().cpp_obj as i64
+            obj.as_cpp_object() as i64
         } else {
             0
         }

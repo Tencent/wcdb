@@ -624,10 +624,19 @@ public abstract class ExpressionOperable extends Identifier implements Expressio
 
     @NotNull
     public Expression between(@Nullable ExpressionConvertible begin, @Nullable ExpressionConvertible end) {
-        return createExpression(betweenOperate(Identifier.getCppType(this), CppObject.get(this),
-                Identifier.getCppType(begin), CppObject.get(begin), 0, null,
-                Identifier.getCppType(end), CppObject.get(end), 0, null,
-                false));
+        return createExpression(
+            betweenOperate(
+                Identifier.getCppType(this),
+                CppObject.get(this),
+                Identifier.getCppType(begin),
+                CppObject.get(begin),
+                0, null,
+                Identifier.getCppType(end),
+                CppObject.get(end),
+                0,
+                null,
+                false)
+        );
     }
 
     @NotNull

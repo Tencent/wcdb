@@ -12,6 +12,7 @@ use wcdb_core::core::table_orm_operation::TableORMOperationTrait;
 use wcdb_core::orm::table_binding::TableBinding;
 use wcdb_core::winq::column::Column;
 use wcdb_core::winq::expression::Expression;
+use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
 use wcdb_core::winq::identifier::IdentifierTrait;
 
 #[derive(WCDBTableCoding, PartialEq, Clone)]
@@ -214,16 +215,16 @@ impl OrmTest {
         let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
         let _ = table.insert_objects(obj_vec, DbAllTypeObject::all_fields());
 
-        let exp =
-            Expression::new_with_column(Column::new("field_type")).eq_text(max.field_type.as_str());
+        let exp = Expression::new_with_column(Column::new("field_type"))
+            .eq_string(max.field_type.as_str());
         assert!(
             max == table
                 .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
                 .unwrap()
         );
 
-        let exp =
-            Expression::new_with_column(Column::new("field_type")).eq_text(min.field_type.as_str());
+        let exp = Expression::new_with_column(Column::new("field_type"))
+            .eq_string(min.field_type.as_str());
         assert!(
             min == table
                 .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
@@ -231,7 +232,7 @@ impl OrmTest {
         );
 
         let exp = Expression::new_with_column(Column::new("field_type"))
-            .eq_text(empty.field_type.as_str());
+            .eq_string(empty.field_type.as_str());
         assert!(
             empty
                 == table
@@ -240,7 +241,7 @@ impl OrmTest {
         );
 
         let exp = Expression::new_with_column(Column::new("field_type"))
-            .eq_text(random.field_type.as_str());
+            .eq_string(random.field_type.as_str());
         assert!(
             random
                 == table

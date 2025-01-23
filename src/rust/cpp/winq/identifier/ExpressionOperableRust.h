@@ -42,13 +42,13 @@ void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             WCDBRustCommonValueParameter(right),
                                             int operatorType,
                                             bool isNot);
-//
-// jlong WCDBRustExpressionOperableClassMethod(betweenOperate,
-//                                           jint operandType,
-//                                           jlong operand,
-//                                           WCDBRustCommonValueParameter(left),
-//                                           WCDBRustCommonValueParameter(right),
-//                                           jboolean isNot);
+
+void* WCDBRustExpressionOperableClassMethod(betweenOperate,
+                                            int operandType,
+                                            long operand,
+                                            WCDBRustCommonValueParameter(left),
+                                            WCDBRustCommonValueParameter(right),
+                                            bool isNot);
 //
 // jlong WCDBRustExpressionOperableClassMethod(inOperate,
 //                                           jint operandType,

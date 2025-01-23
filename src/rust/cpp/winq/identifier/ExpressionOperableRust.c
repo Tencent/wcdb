@@ -51,26 +51,26 @@ void* WCDBRustExpressionOperableClassMethod(binaryOperate,
     //    WCDBRustTryReleaseStringInCommonValue(right); // todo qixinbing : 需要释放？
     return ret;
 }
-//
-// jlong WCDBRustExpressionOperableClassMethod(betweenOperate,
-//                                           jint operandType,
-//                                           jlong operand,
-//                                           WCDBRustCommonValueParameter(left),
-//                                           WCDBRustCommonValueParameter(right),
-//                                           jboolean isNot)
-//{
-//    CPPCommonValue operand_common;
-//    operand_common.type = operandType;
-//    operand_common.intValue = operand;
-//    WCDBRustCreateCommonValue(left, false);
-//    WCDBRustCreateCommonValue(right, false);
-//    jlong ret = (jlong) WCDBExpressionBetweenOperate2(
-//                operand_common, left_common, right_common, isNot)
-//                .innerValue;
-//    WCDBRustTryReleaseStringInCommonValue(left);
-//    WCDBRustTryReleaseStringInCommonValue(right);
-//    return ret;
-//}
+
+void* WCDBRustExpressionOperableClassMethod(betweenOperate,
+                                            int operandType,
+                                            long operand,
+                                            WCDBRustCommonValueParameter(left),
+                                            WCDBRustCommonValueParameter(right),
+                                            bool isNot) {
+    CPPCommonValue operand_common;
+    operand_common.type = operandType;
+    operand_common.intValue = operand;
+    WCDBRustCreateCommonValueWithIsCritical(left, false);
+    WCDBRustCreateCommonValueWithIsCritical(right, false);
+    void* ret =
+        (void*)WCDBExpressionBetweenOperate2(operand_common, left_common, right_common, isNot)
+            .innerValue;
+    //    WCDBRustTryReleaseStringInCommonValue(left);
+    //    WCDBRustTryReleaseStringInCommonValue(right);
+    return ret;
+}
+
 //
 // jlong WCDBRustExpressionOperableClassMethod(inOperate,
 //                                           jint operandType,

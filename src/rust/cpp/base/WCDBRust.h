@@ -157,6 +157,38 @@
     int parameter##_type, long long parameter##_long, double parameter##_double, \
         const char *parameter##_string
 
+#define WCDBRustCreateCommonValueWithIsCritical(parameter, isCritical)   \
+    CPPCommonValue parameter##_common;                                   \
+    parameter##_common.type = parameter##_type;                          \
+    const bool parameter##_isCritical = isCritical;                      \
+    const char* parameter##_utf16String = NULL;                          \
+    switch (parameter##_type) {                                          \
+        case WCDBBridgedType_Bool:                                       \
+        case WCDBBridgedType_UInt:                                       \
+        case WCDBBridgedType_Int:                                        \
+            parameter##_common.intValue = parameter##_long;              \
+            break;                                                       \
+        case WCDBBridgedType_Double:                                     \
+            parameter##_common.doubleValue = parameter##_double;         \
+            break;                                                       \
+        case WCDBBridgedType_String:                                     \
+            parameter##_common.intValue = (long long)parameter##_string; \
+            break;                                                       \
+        default:                                                         \
+            parameter##_common.intValue = parameter##_long;              \
+            break;                                                       \
+    }
+
+//#define WCDBRustTryReleaseStringInCommonValue(parameter)                                      \
+//    if (parameter##_type == WCDBBridgedType_String                                           \
+//        && parameter##_common.intValue != 0 && parameter##_utf16String != NULL) {            \
+//        if (parameter##_isCritical) {                                                        \
+//            (*env)->ReleaseStringCritical(env, parameter##_string, parameter##_utf16String); \
+//        } else {                                                                             \
+//            (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String);    \
+//        }                                                                                    \
+//    }
+
 #define WCDBRustCreateCommonValue(parameter)                             \
     CPPCommonValue parameter##_common;                                   \
     parameter##_common.type = parameter##_type;                          \

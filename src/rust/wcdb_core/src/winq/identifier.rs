@@ -1,7 +1,10 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCow;
+use crate::winq::expression_convertible::ExpressionConvertibleTrait;
+use crate::winq::identifier;
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::ffi::{c_char, c_void};
+use std::ffi::{c_char, c_long, c_void};
 use std::fmt::Debug;
 
 extern "C" {
@@ -117,6 +120,18 @@ impl IdentifierStaticTrait for Identifier {
     }
 }
 
+impl CppObjectConvertibleTrait for Identifier {
+    fn as_cpp_object(&self) -> *mut c_void {
+        self.cpp_obj.get_cpp_obj()
+    }
+}
+
+impl IdentifierConvertibleTrait for Identifier {
+    fn as_identifier(&self) -> &Self {
+        self
+    }
+}
+
 impl Identifier {
     pub fn new() -> Self {
         Identifier {
@@ -134,11 +149,13 @@ impl Identifier {
         T::get_type()
     }
 
-    pub(crate) fn get_cpp_type_by_identifier_convertible<T: IdentifierConvertibleTrait>(
-        identifier: &Option<T>,
+    pub fn get_cpp_type_with_option<
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    >(
+        identifier: &Option<&T>,
     ) -> i32 {
-        if let Some(identifier) = identifier {
-            identifier.as_identifier().get_type()
+        if let Some(val) = identifier {
+            T::get_type()
         } else {
             CPPType::Null as i32
         }
