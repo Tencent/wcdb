@@ -3,7 +3,6 @@ package com.tencent.wcdb.compat;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteClosable;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.database.sqlite.SQLiteTransactionListener;
 import android.os.CancellationSignal;
@@ -43,7 +42,7 @@ import java.util.List;
  * to the current locale.
  * </p>
  */
-public final class SQLiteDatabase extends SQLiteClosable {
+public final class SQLiteDatabase {
     private final Database mDB;
 
     SQLiteDatabase(Database db) {
@@ -111,21 +110,6 @@ public final class SQLiteDatabase extends SQLiteClosable {
         return mDB;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        close();
-    }
-
-    @Override
-    protected void onAllReferencesReleased() {
-        mDB.close(new Database.CloseCallBack() {
-            @Override
-            public void onClose() throws WCDBException {
-                isOpen = false;
-            }
-        });
-    }
-
     /**
      * Attempts to release memory that SQLite holds but does not require to
      * operate properly. Typically this memory will come from the page cache.
@@ -162,10 +146,8 @@ public final class SQLiteDatabase extends SQLiteClosable {
         }
     }
 
-    private volatile boolean isOpen = false;
-
     public boolean isOpen() {
-        return isOpen;
+        return mDB.isOpened();
     }
 
     /**
@@ -1033,9 +1015,7 @@ public final class SQLiteDatabase extends SQLiteClosable {
     }
 
     public static SQLiteDatabase wrap(Database db) {
-        SQLiteDatabase dbObj = new SQLiteDatabase(db);
-        dbObj.isOpen = db.canOpen();
-        return dbObj;
+        return new SQLiteDatabase(db);
     }
 
     /**
@@ -1131,7 +1111,6 @@ public final class SQLiteDatabase extends SQLiteClosable {
             Handle handle = db.getHandle();     // May throw
             handle.invalidate();
         }
-        dbObj.isOpen = true;
         return dbObj;
     }
 

@@ -137,7 +137,9 @@ public class Database extends HandleORMOperation {
      * @throws WCDBException if any error occurs.
      */
     public void close(@Nullable CloseCallBack callBack) {
-        close(cppObj, callBack);
+        if(cppObj > 0) {
+            close(cppObj, callBack);
+        }
     }
 
     /**
