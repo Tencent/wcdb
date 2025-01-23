@@ -35,9 +35,8 @@ void* WCDBRustColumnDefClassMethod(create,
     return ret;
 }
 
-// void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint)
-//{
-//     WCDBRustBridgeStruct(CPPColumnDef, columnDef);
-//     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//     WCDBColumnDefConfigConstraint(columnDefStruct, constraintStruct);
-// }
+void WCDBRustColumnDefClassMethod(constraint, void* columnDef, void* constraint) {
+    WCDBRustBridgeStruct(CPPColumnDef, columnDef);
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBColumnDefConfigConstraint(columnDefStruct, constraintStruct);
+}

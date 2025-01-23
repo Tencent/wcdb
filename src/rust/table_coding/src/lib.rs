@@ -62,9 +62,53 @@ impl WCDBTable {
         }
     }
 
+    fn get_field_is_auto_increment_vec(&self) -> Vec<bool> {
+        match &self.data {
+            Data::Struct(fields) => fields.iter().map(|field| field.is_auto_increment).collect(),
+            _ => panic!("WCDBTable only works on structs"),
+        }
+    }
+
+    fn get_field_is_primary_key_vec(&self) -> Vec<bool> {
+        match &self.data {
+            Data::Struct(fields) => fields.iter().map(|field| field.is_primary).collect(),
+            _ => panic!("WCDBTable only works on structs"),
+        }
+    }
+
+    pub fn get_enable_auto_increment_for_existing_table(&self) -> bool {
+        match &self.data {
+            Data::Struct(fields) => {
+                for field in fields.iter() {
+                    if field.enable_auto_increment_for_existing_table {
+                        return true;
+                    }
+                }
+                false
+            }
+            _ => panic!("WCDBTable only works on structs"),
+        }
+    }
+
     fn get_field_type_vec(&self) -> Vec<&Type> {
         match &self.data {
             Data::Struct(fields) => fields.iter().map(|field| &field.ty).collect(),
+            _ => panic!("WCDBTable only works on structs"),
+        }
+    }
+
+    fn get_auto_increment_ident_field(&self) -> Option<&WCDBField> {
+        match &self.data {
+            Data::Struct(fields) => {
+                let mut ret = None;
+                for field in fields.iter() {
+                    if field.is_primary && field.is_auto_increment {
+                        ret = Some(field);
+                        break;
+                    }
+                }
+                ret
+            }
             _ => panic!("WCDBTable only works on structs"),
         }
     }
@@ -120,6 +164,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let singleton_statements = generate_singleton(&table)?;
     let extract_object_statements = generate_extract_object(&table)?;
     let bind_field_statements = generate_bind_field(&table)?;
+    let auto_increment_statements = generate_auto_increment(&table)?;
 
     Ok(quote! {
         #singleton_statements
@@ -192,11 +237,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
                 #bind_field_statements
             }
 
-            fn is_auto_increment(&self, object: &#table_ident) -> bool {
-                false
-            }
-
-            fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {}
+            #auto_increment_statements
         }
 
         impl #db_table_ident {
@@ -261,6 +302,13 @@ fn get_field_type_string(field: &Type) -> syn::Result<String> {
             field.span(),
             "WCDBTable's field type only works on Path",
         )),
+    }
+}
+
+fn get_field_type_ident(field_type: &Type) -> &Ident {
+    match field_type {
+        Type::Path(type_path) => &type_path.path.segments[0].ident,
+        _ => panic!("WCDBTable's field type only works on Path"),
     }
 }
 
@@ -348,7 +396,6 @@ fn is_column_type_integer(column_type: String) -> bool {
 
 fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let db_table_ident = table.get_db_table();
-    let field_column_name_ident_vec = table.get_field_column_name_ident_vec();
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
     let field_ident_def_vec: Vec<Ident> = field_ident_vec
@@ -361,6 +408,19 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
     let instance_ident = Ident::new(&instance, Span::call_site());
     let field_id_vec: Vec<usize> = (1..=field_ident_vec.len()).collect();
+    let field_column_name_ident_vec = table.get_field_column_name_ident_vec();
+    let field_is_auto_increment_vec: Vec<bool> = table.get_field_is_auto_increment_vec();
+    let field_is_primary_key_vec: Vec<bool> = table.get_field_is_primary_key_vec();
+    let enable_auto_increment_for_existing_table =
+        table.get_enable_auto_increment_for_existing_table();
+    let enable_auto_increment_for_existing_table_statements =
+        if enable_auto_increment_for_existing_table {
+            quote! {
+                #binding_ident.enable_auto_increment_for_existing_table();
+            }
+        } else {
+            quote! {}
+        };
     Ok(quote! {
         pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
             wcdb_core::orm::binding::Binding::new()
@@ -373,15 +433,27 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
                     stringify!(#field_column_name_ident_vec),
                     instance_raw,
                     #field_id_vec,
-                    false,
-                    false
+                    #field_is_auto_increment_vec,
+                    #field_is_primary_key_vec
                 ));
+
                 let #field_ident_def_vec = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(
                     &field.get_column(),
                     wcdb_core::winq::column_type::ColumnType::#column_type_vec
                 );
+
+                if #field_is_primary_key_vec  {
+                    let column_constraint = wcdb_core::winq::column_constraint::ColumnConstraint::new();
+                    column_constraint.primary_key();
+                    if #field_is_auto_increment_vec {
+                        column_constraint.auto_increment();
+                    }
+                    #field_ident_def_vec.constraint(column_constraint);
+                }
+
                 instance.#field_ident_vec = unsafe { Box::into_raw(field) };
                 #binding_ident.add_column_def(#field_ident_def_vec);
+                #enable_auto_increment_for_existing_table_statements
             )*
             instance
         });
@@ -446,4 +518,33 @@ fn generate_bind_field(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStrea
             ),
         }
     })
+}
+
+fn generate_auto_increment(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
+    let table_ident = &table.ident;
+    let auto_increment_field_opt = table.get_auto_increment_ident_field();
+    match auto_increment_field_opt {
+        None => Ok(quote! {
+            fn is_auto_increment(&self, object: &#table_ident) -> bool {
+                false
+            }
+
+            fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {
+
+            }
+        }),
+        Some(field) => {
+            let field_ident = field.ident.clone().unwrap();
+            let field_type_ident = get_field_type_ident(&field.ty);
+            Ok(quote! {
+                fn is_auto_increment(&self, object: &#table_ident) -> bool {
+                    object.#field_ident == 0
+                }
+
+                fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {
+                    object.#field_ident = last_insert_row_id as #field_type_ident
+                }
+            })
+        }
+    }
 }

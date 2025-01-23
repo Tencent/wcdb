@@ -32,4 +32,4 @@
 
 void* WCDBRustColumnDefClassMethod(create, WCDBRustObjectOrStringParameter(column), int columnType);
 
-// void WCDBRustColumnDefClassMethod(configConstraint, jlong columnDef, jlong constraint);
+void WCDBRustColumnDefClassMethod(constraint, void* columnDef, void* constraint);

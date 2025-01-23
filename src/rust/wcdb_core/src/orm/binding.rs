@@ -10,6 +10,7 @@ use std::sync::RwLock;
 extern "C" {
     pub fn WCDBRustBinding_create() -> *mut c_void;
     pub fn WCDBRustBinding_addColumnDef(cpp_obj: *mut c_void, column_def: *mut c_void);
+    pub fn WCDBRustBinding_enableAutoIncrementForExistingTable(cpp_obj: *mut c_void);
     pub fn WCDBRustBinding_createTable(
         cpp_obj: *mut c_void,
         path: *const c_char,
@@ -36,6 +37,10 @@ impl Binding {
 
     pub fn add_column_def(&self, column_def: ColumnDef) {
         unsafe { WCDBRustBinding_addColumnDef(*self.cpp_obj, column_def.get_cpp_obj()) };
+    }
+
+    pub fn enable_auto_increment_for_existing_table(&self) {
+        unsafe { WCDBRustBinding_enableAutoIncrementForExistingTable(*self.cpp_obj) };
     }
 
     pub fn create_table(&self, table_name: &str, mut handle: Handle) -> WCDBResult<bool> {

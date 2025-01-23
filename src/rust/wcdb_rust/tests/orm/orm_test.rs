@@ -146,6 +146,34 @@ pub struct FieldObject {
     field_with_different_name: i32,
 }
 
+#[derive(WCDBTableCoding)]
+pub struct PrimaryNotAutoIncrementObject {
+    #[WCDBField(is_primary = true)]
+    id: i32,
+}
+
+impl PrimaryNotAutoIncrementObject {
+    pub fn new() -> Self {
+        PrimaryNotAutoIncrementObject { id: 0 }
+    }
+}
+
+#[derive(WCDBTableCoding, Clone)]
+pub struct PrimaryEnableAutoIncrementObject {
+    #[WCDBField(
+        is_primary = true,
+        is_auto_increment = true,
+        enable_auto_increment_for_existing_table = true
+    )]
+    id: i32,
+}
+
+impl PrimaryEnableAutoIncrementObject {
+    pub fn new() -> Self {
+        PrimaryEnableAutoIncrementObject { id: 0 }
+    }
+}
+
 pub struct OrmTest {
     database_test_case: DatabaseTestCase,
     table_name: String,
@@ -267,6 +295,49 @@ pub mod orm_test {
         sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(type TEXT, aBoolean INTEGER, aBoolean2 INTEGER, aByte INTEGER, aByte2 INTEGER, aShort INTEGER, aShort2 INTEGER, anInt INTEGER, integer INTEGER, aLong INTEGER, aLong2 INTEGER, aFloat REAL, aFloat2 REAL, aDouble REAL, aDouble2 REAL, string TEXT, bytes BLOB)".to_string());
 
         orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || Ok(()));
+
+        teardown(&orm_test);
+    }
+
+    #[test]
+    fn test_primary_key_enable_auto_increment_for_existing_table() {
+        let orm_test = OrmTest::new();
+        set_up(&orm_test);
+
+        let database_lock = orm_test.database_test_case.get_database_lock();
+        // let table_name = orm_test.table_name.as_str(); 见 DatabaseTestCase setup 方法
+        let table_name = "testTable2";
+
+        database_lock
+            .create_table(table_name, &*DBPRIMARYNOTAUTOINCREMENTOBJECT_INSTANCE)
+            .unwrap();
+        let mut obj1 = PrimaryNotAutoIncrementObject::new();
+        obj1.id = 1;
+        database_lock
+            .insert_object(
+                obj1,
+                DbPrimaryNotAutoIncrementObject::all_fields(),
+                table_name,
+            )
+            .unwrap();
+
+        database_lock
+            .create_table(table_name, &*DBPRIMARYENABLEAUTOINCREMENTOBJECT_INSTANCE)
+            .unwrap();
+        database_lock.delete_objects(table_name).unwrap();
+
+        let obj2 = PrimaryEnableAutoIncrementObject::new();
+        database_lock
+            .insert_object(
+                obj2,
+                DbPrimaryEnableAutoIncrementObject::all_fields(),
+                table_name,
+            )
+            .unwrap();
+        let obj_vec = database_lock
+            .get_all_objects(DbPrimaryEnableAutoIncrementObject::all_fields(), table_name)
+            .unwrap();
+        assert_eq!(obj_vec.last().unwrap().id, 2);
 
         teardown(&orm_test);
     }

@@ -63,7 +63,6 @@ impl BaseTestCase {
 impl TestCaseTrait for BaseTestCase {
     fn setup(&self) -> WCDBResult<()> {
         println!("Current directory: {}", self.current_directory);
-        eprintln!("Current directory: {}", self.current_directory);
         Ok(())
     }
 

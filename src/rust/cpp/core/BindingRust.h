@@ -35,7 +35,7 @@
 void* WCDBRustBindingClassMethodWithNoArg(create);
 
 void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef);
-// void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, jlong self);
+void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, void* self);
 // void WCDBRustBindingClassMethod(
 // addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex);
 // void WCDBRustBindingClassMethod(addTableConstraint, jlong self, jlong constraint);

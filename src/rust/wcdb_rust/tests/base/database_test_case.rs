@@ -152,6 +152,7 @@ impl TestCaseTrait for DatabaseTestCase {
             file_name
         );
         if Path::new(&path).exists() {
+            // todo qixinbing : 此处会出现删除失败的情况，应该是多线程导致的，待处理
             std::fs::remove_file(path.as_str()).unwrap();
         }
         self.set_path(path.clone());

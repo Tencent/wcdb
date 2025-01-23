@@ -34,11 +34,10 @@ void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef) {
     WCDBBindingAddColumnDef(selfStruct, columnDefStruct);
 }
 
-// void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPBinding, self);
-//     WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
-// }
+void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, void* self) {
+    WCDBRustBridgeStruct(CPPBinding, self);
+    WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
+}
 //
 // void WCDBRustBindingClassMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean
 // isFullName, jlong createIndex)

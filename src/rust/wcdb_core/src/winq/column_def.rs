@@ -1,5 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::column::Column;
+use crate::winq::column_constraint::ColumnConstraint;
 use crate::winq::column_type::ColumnType;
 use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierStaticTrait};
 use std::ffi::{c_char, c_int, c_void};
@@ -11,6 +12,8 @@ extern "C" {
         name: *mut c_char,
         column_type: c_int,
     ) -> *mut c_void;
+
+    pub fn WCDBRustColumnDef_constraint(cpp_obj: *mut c_void, constraint_cpp_obj: *mut c_void);
 }
 
 pub struct ColumnDef {
@@ -50,5 +53,12 @@ impl ColumnDef {
         Self {
             identifier: Identifier::new_with_obj(cpp_obj),
         }
+    }
+
+    pub fn constraint(&self, constraint: ColumnConstraint) -> &Self {
+        unsafe {
+            WCDBRustColumnDef_constraint(self.get_cpp_obj(), constraint.get_cpp_obj());
+        }
+        self
     }
 }
