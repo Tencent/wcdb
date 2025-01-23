@@ -29,8 +29,10 @@ public class CppObject implements CppObjectConvertible {
 
     @Override
     protected void finalize() throws Throwable {
-        if (cppObj > 0) {
-            releaseCPPObject(cppObj);
+        long cObj = cppObj;
+        cppObj = 0;
+        if (cObj > 0) {
+            releaseCPPObject(cObj);
         }
         super.finalize();
     }
