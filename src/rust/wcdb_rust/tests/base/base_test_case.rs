@@ -49,9 +49,8 @@ impl BaseTestCase {
             );
         }));
 
-        // todo qixinbing 有崩溃
         // Database::global_trace_exception(Some(|exception| {
-        //     log_error!("global_trace_exception exception:{:?}", exception);
+        //     println!("global_trace_exception exception:{:?}", exception);
         // }));
     }
 

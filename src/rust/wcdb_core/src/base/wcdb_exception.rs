@@ -7,7 +7,7 @@ extern "C" {
     pub fn WCDBRustError_getLevel(cpp_obj: *mut c_void) -> i32;
     pub fn WCDBRustError_getCode(cpp_obj: *mut c_void) -> i32;
     pub fn WCDBRustError_getMessage(cpp_obj: *mut c_void) -> *const c_char;
-    pub fn WCDBRustError_enumerateInfo(cpp_obj: *mut c_void, key_values_raw: *mut c_void);
+    pub fn WCDBRustError_enumerateInfo(cpp_obj: *mut c_void);
 }
 
 #[no_mangle]
@@ -307,13 +307,9 @@ impl ExceptionInner {
             ExceptionKey::Message.to_string(),
             ExceptionObject::String(message.to_cow().to_string()),
         );
-        let key_values_raw = Box::into_raw(Box::new(key_values)) as *mut c_void;
         unsafe {
-            WCDBRustError_enumerateInfo(cpp_obj, key_values_raw);
+            WCDBRustError_enumerateInfo(cpp_obj);
         }
-        let key_values_box =
-            unsafe { *Box::from_raw(key_values_raw as *mut Box<HashMap<String, ExceptionObject>>) };
-        let key_values = Box::into_inner(key_values_box);
         ExceptionInner {
             level,
             code,
