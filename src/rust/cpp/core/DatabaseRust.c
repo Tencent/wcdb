@@ -323,7 +323,6 @@ void WCDBRustDatabaseClassMethod(globalTraceSQL, RustGlobalTraceSQLCallback rust
 
 typedef struct WCDBRustTraceSQLContext {
     RustTraceSQLCallback rust_callback;
-    void* closure_raw;
 } WCDBRustTraceSQLContext;
 
 void WCDBRustDatabaseSQLTrace(WCDBRustTraceSQLContext* context,
@@ -332,22 +331,19 @@ void WCDBRustDatabaseSQLTrace(WCDBRustTraceSQLContext* context,
                               unsigned long long handleId,
                               const char* sql,
                               const char* info) {
-    if (context == NULL || context->rust_callback == NULL || context->closure_raw == NULL) {
+    if (context == NULL || context->rust_callback == NULL) {
         return;
     }
-    context->rust_callback(context->closure_raw, tag, path, handleId, sql, info);
+    context->rust_callback(tag, path, handleId, sql, info);
 }
 
-void WCDBRustDatabaseClassMethod(traceSQL,
-                                 void* self,
-                                 RustTraceSQLCallback rust_callback,
-                                 void* closure_raw) {
+void WCDBRustDatabaseClassMethod(traceSQL, void* self, RustTraceSQLCallback rust_callback) {
     WCDBRustBridgeStruct(CPPDatabase, self);
-    size_t size = sizeof(RustTraceSQLCallback);
+    size_t size = sizeof(WCDBRustTraceSQLContext);
     WCDBRustTraceSQLContext* context = (WCDBRustTraceSQLContext*)WCDBRustCreateGlobalRef(size);
-    WCDBDatabaseTraceSQL(selfStruct,
-                         closure_raw != NULL ? (WCDBSQLTracer)WCDBRustDatabaseSQLTrace : NULL,
-                         context, WCDBRustDestructContext);
+    context->rust_callback = rust_callback;
+    WCDBDatabaseTraceSQL(selfStruct, (WCDBSQLTracer)WCDBRustDatabaseSQLTrace, context,
+                         WCDBRustDestructContext);
 }
 //
 // void WCDBRustDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable)

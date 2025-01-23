@@ -198,11 +198,9 @@ impl OrmTest {
         new_sql_vec.extend(sqls);
         new_sql_vec.push("COMMIT".to_string());
         let table_name = self.table_name.clone();
-        let _ = self.database_test_case.do_test_sql_vec(new_sql_vec, || {
-            self.database_test_case
-                .create_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE)?;
-            Ok(())
-        });
+        let _ = self
+            .database_test_case
+            .do_test_sql_vec(new_sql_vec, operation);
 
         let database_lock: MutexGuard<Database> = self.database_test_case.get_database_lock();
         let table = database_lock.get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
@@ -293,9 +291,14 @@ pub mod orm_test {
         set_up(&orm_test);
 
         let mut sql_vec = vec![];
-        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(type TEXT, aBoolean INTEGER, aBoolean2 INTEGER, aByte INTEGER, aByte2 INTEGER, aShort INTEGER, aShort2 INTEGER, anInt INTEGER, integer INTEGER, aLong INTEGER, aLong2 INTEGER, aFloat REAL, aFloat2 REAL, aDouble REAL, aDouble2 REAL, string TEXT, bytes BLOB)".to_string());
+        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(field_type TEXT, a_bool INTEGER, a_byte INTEGER, a_short INTEGER, a_int INTEGER, a_long INTEGER, a_float REAL, a_double REAL, a_string TEXT)".to_string());
 
-        orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || Ok(()));
+        orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
+            orm_test
+                .database_test_case
+                .create_table(orm_test.table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE)?;
+            Ok(())
+        });
 
         teardown(&orm_test);
     }

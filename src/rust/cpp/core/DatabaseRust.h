@@ -80,12 +80,9 @@ typedef void (
 void WCDBRustDatabaseClassMethod(globalTraceSQL, RustGlobalTraceSQLCallback rust_callback);
 
 typedef void (
-    *RustTraceSQLCallback)(void*, long, const char*, unsigned long long, const char*, const char*);
+    *RustTraceSQLCallback)(long, const char*, unsigned long long, const char*, const char*);
 
-void WCDBRustDatabaseClassMethod(traceSQL,
-                                 void* self,
-                                 RustTraceSQLCallback rust_callback,
-                                 void* closure_raw);
+void WCDBRustDatabaseClassMethod(traceSQL, void* self, RustTraceSQLCallback rust_callback);
 // void WCDBRustDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable);
 //
 

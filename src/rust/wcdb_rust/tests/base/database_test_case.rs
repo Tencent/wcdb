@@ -1,5 +1,6 @@
 use crate::base::base_test_case::{BaseTestCase, TestCaseTrait};
 use crate::base::wrapped_value::WrappedValue;
+use std::cell::RefCell;
 use std::cmp::PartialEq;
 use std::path::{Path, MAIN_SEPARATOR};
 use std::sync::{Arc, Mutex, MutexGuard};
@@ -53,19 +54,21 @@ impl DatabaseTestCase {
         loop {
             let mut trace = WrappedValue::new();
             trace.bool_value = true;
-            let mut expected_sql_vec = sql_vec.clone();
-            {
-                self.get_database_lock().trace_sql(Some(
-                    move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
-                        if !trace.bool_value {
-                            return;
-                        }
-                        // todo qixinbing
-                        // DatabaseTestCase::do_test_sql_as_expected(&self_clone,expected_sql_vec, sql);
-                    },
-                ));
-                expected_sql_vec.clear();
-            }
+            let expected_sql_vec_mutex = Arc::new(Mutex::new(sql_vec.clone()));
+            let expected_sql_vec_mutex_clone = expected_sql_vec_mutex.clone();
+            let mode_ref = self.get_expect_mode().clone();
+            self.get_database_lock().trace_sql(Some(
+                move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
+                    if !trace.bool_value {
+                        return;
+                    }
+                    DatabaseTestCase::do_test_sql_as_expected(
+                        &mode_ref,
+                        &expected_sql_vec_mutex,
+                        sql,
+                    );
+                },
+            ));
 
             let mode_ref = self.get_expect_mode();
             if mode_ref != Expect::SomeSQLs {
@@ -78,10 +81,10 @@ impl DatabaseTestCase {
             }
             trace.bool_value = true;
             operation()?;
-            if expected_sql_vec.len() != 0 {
-                eprintln!("Reminding: {:?}", expected_sql_vec);
+            let expected_sql_vec_mutex_clone_lock = expected_sql_vec_mutex_clone.lock().unwrap();
+            if expected_sql_vec_mutex_clone_lock.len() != 0 {
+                eprintln!("Reminding: {:?}", expected_sql_vec_mutex_clone_lock);
                 assert!(false);
-                break;
             }
             trace.bool_value = false;
             break;
@@ -93,13 +96,13 @@ impl DatabaseTestCase {
     }
 
     fn do_test_sql_as_expected(
-        self_clone: &DatabaseTestCase,
-        mut expected_sql_vec: Vec<String>,
+        mode_ref: &Expect,
+        expected_sql_vec_mutex: &Arc<Mutex<Vec<String>>>,
         sql: String,
     ) {
-        let mode_ref = self_clone.get_expect_mode();
         match mode_ref {
             Expect::AllSQLs => {
+                let mut expected_sql_vec = expected_sql_vec_mutex.lock().unwrap();
                 let first_sql = match expected_sql_vec.first() {
                     None => "".to_string(),
                     Some(str) => str.clone(),
@@ -111,6 +114,7 @@ impl DatabaseTestCase {
                 }
             }
             Expect::FirstFewSQLs => {
+                let mut expected_sql_vec = expected_sql_vec_mutex.lock().unwrap();
                 let first_sql = match expected_sql_vec.first() {
                     None => "".to_string(),
                     Some(str) => str.clone(),
@@ -122,6 +126,7 @@ impl DatabaseTestCase {
                 }
             }
             Expect::SomeSQLs => {
+                let mut expected_sql_vec = expected_sql_vec_mutex.lock().unwrap();
                 for i in 0..expected_sql_vec.len() {
                     let sql_ = match expected_sql_vec.get(i) {
                         None => "".to_string(),
@@ -203,8 +208,6 @@ impl DatabaseTestCase {
 
     pub fn get_expect_mode(&self) -> Expect {
         let data = self.expect_mode.lock().unwrap();
-        // data.as_ref()
-        // &(*data)
         data.clone()
     }
 }

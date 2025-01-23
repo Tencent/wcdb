@@ -60,6 +60,8 @@ lazy_static! {
         Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
         Arc::new(Mutex::new(None));
+    static ref DATABASE_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
+        Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
         Arc::new(Mutex::new(None));
 }
@@ -101,15 +103,7 @@ extern "C" {
 
     pub fn WCDBRustDatabase_traceSQL(
         cpp_obj: *mut c_void,
-        trace_sql_callback: extern "C" fn(
-            *mut c_void,
-            i64,
-            *const c_char,
-            i64,
-            *const c_char,
-            *const c_char,
-        ),
-        closure_raw: *mut c_void,
+        trace_sql_callback: extern "C" fn(i64, *const c_char, i64, *const c_char, *const c_char),
     );
 
     pub fn WCDBRustDatabase_globalTraceException(
@@ -161,23 +155,21 @@ extern "C" fn global_trace_sql_callback(
 }
 
 extern "C" fn trace_sql_callback(
-    closure_raw: *mut c_void,
     tag: i64,
     path: *const c_char,
     handle_id: i64,
     sql: *const c_char,
     info: *const c_char,
 ) {
-    let callback: Box<TraceSqlCallback> =
-        unsafe { Box::from_raw(closure_raw as *mut TraceSqlCallback) };
-
-    callback(
-        tag,
-        path.to_cow().to_string(),
-        handle_id,
-        sql.to_cow().to_string(),
-        info.to_cow().to_string(),
-    );
+    if let Some(callback) = &*DATABASE_TRACE_SQL_CALLBACK.lock().unwrap() {
+        callback(
+            tag,
+            path.to_cow().to_string(),
+            handle_id,
+            sql.to_cow().to_string(),
+            info.to_cow().to_string(),
+        );
+    }
 }
 
 extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
@@ -760,17 +752,18 @@ impl Database {
 
     pub fn trace_sql<CB>(&self, cb_opt: Option<CB>)
     where
-        CB: TraceSqlCallbackTrait,
+        CB: TraceSqlCallbackTrait + 'static,
     {
         match cb_opt {
             None => unsafe {
-                WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback, null_mut());
+                *DATABASE_TRACE_SQL_CALLBACK.lock().unwrap() = None;
+                WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback);
             },
             Some(cb) => {
-                let callback_box = Box::new(Box::new(cb));
-                let callback_raw = Box::into_raw(callback_box) as *mut c_void;
+                let callback_box = Box::new(cb) as TraceSqlCallback;
+                *DATABASE_TRACE_SQL_CALLBACK.lock().unwrap() = Some(callback_box);
                 unsafe {
-                    WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback, callback_raw);
+                    WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback);
                 }
             }
         }
