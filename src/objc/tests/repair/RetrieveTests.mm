@@ -271,6 +271,47 @@
     }];
 }
 
+#pragma mark - Corrupted Schema
+- (void)doCorruptSchema
+{
+    TestCaseAssertTrue([self.database execute:WCDB::StatementPragma().pragma(WCDB::Pragma::writableSchema()).to(true)]);
+    WCTMaster* indexMaster = [[WCTMaster alloc] init];
+    indexMaster.type = @"index";
+    indexMaster.name = @"unexist_index";
+    indexMaster.tblName = @"unexist_table";
+    indexMaster.sql = @"CREATE INDEX unexist_index on unexist_table(unexist_column)";
+    TestCaseAssertTrue([self.database insertObject:indexMaster intoTable:WCTMaster.tableName]);
+    [self.database close];
+    TestCaseAssertFalse([self.database canOpen]);
+}
+
+- (void)test_retrieve_corrupted_schema
+{
+    [self executeTest:^{
+        TestCaseAssertTrue([self.database backup]);
+        [self doCorruptSchema];
+        TestCaseAssertTrue([self.database retrieve:nil] > 0);
+        [self doTestObjectsRetrieved];
+    }];
+}
+
+- (void)test_auto_detect_corrupted_schema
+{
+    [self executeTest:^{
+        [self doCorruptSchema];
+        __block BOOL detectCorrupted = false;
+        [self.database setNotificationWhenCorrupted:^(WCTDatabase* _Nonnull) {
+            detectCorrupted = true;
+        }];
+        TestCaseAssertFalse([self.table insertObject:[[Random shared] repairObjectWithClass:self.testClass andIdentifier:10000]]);
+        [NSThread sleepForTimeInterval:1.0];
+        TestCaseAssertTrue(detectCorrupted);
+        TestCaseAssertTrue([self.database isAlreadyCorrupted]);
+        TestCaseAssertTrue([self.database retrieve:nil] > 0);
+        [self doTestObjectsRetrieved];
+    }];
+}
+
 #ifndef WCDB_QUICK_TESTS
 - (void)test_backup_huge_database
 {
