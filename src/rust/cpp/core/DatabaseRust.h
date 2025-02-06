@@ -37,8 +37,8 @@
 //
 void* WCDBRustDatabaseClassMethod(getError, void* self);
 
-// jlong WCDBRustDatabaseClassMethod(getTag, jlong self);
-// void WCDBRustDatabaseClassMethod(setTag, jlong self, jlong tag);
+void* WCDBRustDatabaseClassMethod(getTag, void* self);
+void WCDBRustDatabaseClassMethod(setTag, void* self, long tag);
 const char* WCDBRustDatabaseClassMethod(getPath, void* self);
 
 // jobject WCDBRustDatabaseClassMethod(getPaths, jlong self);
@@ -46,15 +46,15 @@ void* WCDBRustDatabaseClassMethod(getHandle, void* self, bool writeHint);
 
 bool WCDBRustDatabaseClassMethod(canOpen, void* self);
 
-// jboolean WCDBRustDatabaseClassMethod(isOpened, jlong self);
-// jboolean WCDBRustDatabaseClassMethod(isBlockaded, jlong self);
+bool WCDBRustDatabaseClassMethod(isOpened, void* self);
+bool WCDBRustDatabaseClassMethod(isBlockaded, void* self);
 void WCDBRustDatabaseClassMethod(close,
                                  void* self,
                                  void* context,
                                  WCDBDatabaseCloseCallback callback);
 
-// void WCDBRustDatabaseClassMethod(blockade, jlong self);
-// void WCDBRustDatabaseClassMethod(unblockade, jlong self);
+void WCDBRustDatabaseClassMethod(blockade, void* self);
+void WCDBRustDatabaseClassMethod(unblockade, void* self);
 // void WCDBRustDatabaseClassMethod(purge, jlong self);
 //
 // void WCDBRustDatabaseClassMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize,

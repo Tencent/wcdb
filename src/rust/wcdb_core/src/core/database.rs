@@ -20,9 +20,8 @@ use std::sync::{Arc, Mutex};
 
 // 定义性能跟踪回调的特性
 pub trait TracePerformanceCallbackTrait:
-    Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/PerformanceInfo) + Send
-{
-}
+Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/PerformanceInfo) + Send
+{}
 pub type TracePerformanceCallback = Box<dyn TracePerformanceCallbackTrait>;
 impl<T> TracePerformanceCallbackTrait for T where
     T: Fn(
@@ -77,7 +76,15 @@ extern "C" {
         cb: DatabaseCloseCallback,
     );
 
+    pub fn WCDBRustDatabase_blockade(cpp_obj: *mut c_void);
+
+    pub fn WCDBRustDatabase_unblockade(cpp_obj: *mut c_void);
+
+    pub fn WCDBRustDatabase_isBlockaded(cpp_obj: *mut c_void) -> bool;
     pub fn WCDBRustDatabase_canOpen(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_isOpened(cpp_obj: *mut c_void) -> bool;
+
     pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
     pub fn WCDBRustDatabase_getError(cpp_obj: *mut c_void) -> *mut c_void;
 
@@ -109,6 +116,10 @@ extern "C" {
     pub fn WCDBRustDatabase_globalTraceException(
         global_trace_exception_callback: extern "C" fn(*mut c_void),
     );
+
+    pub fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
+
+    pub fn WCDBRustDatabase_setTag(cpp_obj: *mut c_void, tag: i64);
 }
 
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
@@ -184,6 +195,10 @@ pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
 }
+
+unsafe impl Send for Database {}
+
+unsafe impl Sync for Database {}
 
 impl CppObjectTrait for Database {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
@@ -675,6 +690,10 @@ impl Database {
         unsafe { WCDBRustDatabase_canOpen(self.get_cpp_obj()) }
     }
 
+    pub fn is_opened(&self) -> bool {
+        unsafe { WCDBRustDatabase_isOpened(self.get_cpp_obj()) }
+    }
+
     pub fn get_table<'a, T, R: TableBinding<T>>(
         &'a self,
         table_name: &str,
@@ -700,6 +719,18 @@ impl Database {
                 }
             }
         }
+    }
+
+    pub fn blockade(&self) {
+        unsafe { WCDBRustDatabase_blockade(self.get_cpp_obj()) }
+    }
+
+    pub fn un_blockade(&self) {
+        unsafe { WCDBRustDatabase_unblockade(self.get_cpp_obj()) }
+    }
+
+    pub fn is_blockaded(&self) -> bool {
+        unsafe { WCDBRustDatabase_isBlockaded(self.get_cpp_obj()) }
     }
 
     pub(crate) fn get_handle_raw(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void {
@@ -788,6 +819,15 @@ impl Database {
                 }
             }
         }
+    }
+
+    pub fn set_tag(&self, tag: i64) {
+        unsafe { WCDBRustDatabase_setTag(self.get_cpp_obj(), tag) }
+    }
+
+    /// Get the tag of the database. Tag is 0 by default.
+    pub fn get_tag(&self) -> i64 {
+        unsafe { WCDBRustDatabase_getTag(self.get_cpp_obj()) as i64 }
     }
 }
 

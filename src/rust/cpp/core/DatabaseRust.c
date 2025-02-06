@@ -42,17 +42,15 @@ void* WCDBRustDatabaseClassMethod(getError, void* self) {
     return (void*)WCDBDatabaseGetError(selfStruct).innerValue;
 }
 
-// jlong WCDBRustDatabaseClassMethod(getTag, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPDatabase, self);
-//     return (jlong) WCDBDatabaseGetTag(selfStruct);
-// }
-//
-// void WCDBRustDatabaseClassMethod(setTag, jlong self, jlong tag)
-//{
-//     WCDBRustBridgeStruct(CPPDatabase, self);
-//     WCDBDatabaseSetTag(selfStruct, tag);
-// }
+void* WCDBRustDatabaseClassMethod(getTag, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return (void*)WCDBDatabaseGetTag(selfStruct);
+}
+
+void WCDBRustDatabaseClassMethod(setTag, void* self, long tag) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseSetTag(selfStruct, tag);
+}
 
 const char* WCDBRustDatabaseClassMethod(getPath, void* self) {
     WCDBRustBridgeStruct(CPPDatabase, self);
@@ -99,18 +97,17 @@ bool WCDBRustDatabaseClassMethod(canOpen, void* self) {
     WCDBRustBridgeStruct(CPPDatabase, self);
     return WCDBDatabaseCanOpen(selfStruct);
 }
-//
-// jboolean WCDBRustDatabaseClassMethod(isOpened, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseIsOpened(selfStruct);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(isBlockaded, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseIsBlockaded(selfStruct);
-//}
+
+bool WCDBRustDatabaseClassMethod(isOpened, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseIsOpened(selfStruct);
+}
+
+bool WCDBRustDatabaseClassMethod(isBlockaded, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseIsBlockaded(selfStruct);
+}
+
 //
 // typedef void (*DatabaseCloseCallback)();
 //
@@ -133,17 +130,16 @@ void WCDBRustDatabase_close(void* self, void* context, WCDBDatabaseCloseCallback
     WCDBDatabaseClose(selfStruct, context, callback);
 }
 
-// void WCDBRustDatabaseClassMethod(blockade, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPDatabase, self);
-//     WCDBDatabaseBlockade(selfStruct);
-// }
-//
-// void WCDBRustDatabaseClassMethod(unblockade, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPDatabase, self);
-//     WCDBDatabaseUnblockade(selfStruct);
-// }
+void WCDBRustDatabaseClassMethod(blockade, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseBlockade(selfStruct);
+}
+
+void WCDBRustDatabaseClassMethod(unblockade, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseUnblockade(selfStruct);
+}
+
 //
 // void WCDBRustDatabaseClassMethod(purge, jlong self)
 //{

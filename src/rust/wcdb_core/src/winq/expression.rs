@@ -685,18 +685,205 @@ impl ExpressionOperableTrait for Expression {
             .concat_string(Self::get_type(), operand)
     }
 
-    fn between_expr_expr<T>(&self, begin: &T, eng: &T) -> Expression
+    fn between_expr_expr<T>(&self, begin: &T, end: &T) -> Expression
     where
         T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
     {
-        todo!()
+        self.expression_operable
+            .between_operate_with_expression_convertible(Self::get_type(), begin, end)
     }
 
     fn between_expr_long<T>(&self, begin: &T, end: i64) -> Expression
     where
         T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
     {
-        todo!()
+        self.expression_operable
+            .between_expr_long(Self::get_type(), begin, end)
+    }
+
+    fn between_expr_double<T>(&self, begin: &T, end: f64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .between_expr_double(Self::get_type(), begin, end)
+    }
+
+    fn between_expr_string<T>(&self, begin: &T, end: &str) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .between_expr_string(Self::get_type(), begin, end)
+    }
+
+    fn between_long_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .between_long_expr(Self::get_type(), begin, end)
+    }
+
+    fn between_long_long(&self, begin: i64, end: i64) -> Expression {
+        self.expression_operable
+            .between_long_long(Self::get_type(), begin, end)
+    }
+
+    fn between_long_double(&self, begin: i64, end: f64) -> Expression {
+        self.expression_operable
+            .between_long_double(Self::get_type(), begin, end)
+    }
+
+    fn between_long_string(&self, begin: i64, end: &str) -> Expression {
+        self.expression_operable
+            .between_long_string(Self::get_type(), begin, end)
+    }
+
+    fn between_double_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .between_double_expr(Self::get_type(), begin, end)
+    }
+
+    fn between_double_long(&self, begin: f64, end: i64) -> Expression {
+        self.expression_operable
+            .between_double_long(Self::get_type(), begin, end)
+    }
+
+    fn between_double_double(&self, begin: f64, end: f64) -> Expression {
+        self.expression_operable
+            .between_double_double(Self::get_type(), begin, end)
+    }
+
+    fn between_double_string(&self, begin: f64, end: &str) -> Expression {
+        self.expression_operable
+            .between_double_string(Self::get_type(), begin, end)
+    }
+
+    fn between_string_expr<T>(&self, begin: &str, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .between_string_expr(Self::get_type(), begin, end)
+    }
+
+    fn between_string_long(&self, begin: &str, end: i64) -> Expression {
+        self.expression_operable
+            .between_string_long(Self::get_type(), begin, end)
+    }
+
+    fn between_string_double(&self, begin: &str, end: f64) -> Expression {
+        self.expression_operable
+            .between_string_double(Self::get_type(), begin, end)
+    }
+
+    fn between_string_string(&self, begin: &str, end: &str) -> Expression {
+        self.expression_operable
+            .between_string_string(Self::get_type(), begin, end)
+    }
+    fn not_between_expr_expr<T>(&self, begin: &T, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_expr_expr(Self::get_type(), begin, end)
+    }
+
+    fn not_between_expr_long<T>(&self, begin: &T, end: i64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_expr_long(Self::get_type(), begin, end)
+    }
+
+    fn not_between_expr_double<T>(&self, begin: &T, end: f64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_expr_double(Self::get_type(), begin, end)
+    }
+
+    fn not_between_expr_string<T>(&self, begin: &T, end: &str) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_expr_string(Self::get_type(), begin, end)
+    }
+
+    fn not_between_long_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_long_expr(Self::get_type(), begin, end)
+    }
+
+    fn not_between_long_long(&self, begin: i64, end: i64) -> Expression {
+        self.expression_operable
+            .not_between_long_long(Self::get_type(), begin, end)
+    }
+
+    fn not_between_long_double(&self, begin: i64, end: f64) -> Expression {
+        self.expression_operable
+            .not_between_long_double(Self::get_type(), begin, end)
+    }
+
+    fn not_between_long_string(&self, begin: i64, end: &str) -> Expression {
+        self.expression_operable
+            .not_between_long_string(Self::get_type(), begin, end)
+    }
+
+    fn not_between_double_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_double_expr(Self::get_type(), begin, end)
+    }
+
+    fn not_between_double_long(&self, begin: f64, end: i64) -> Expression {
+        self.expression_operable
+            .not_between_double_long(Self::get_type(), begin, end)
+    }
+
+    fn not_between_double_double(&self, begin: f64, end: f64) -> Expression {
+        self.expression_operable
+            .not_between_double_double(Self::get_type(), begin, end)
+    }
+
+    fn not_between_double_string(&self, begin: f64, end: &str) -> Expression {
+        self.expression_operable
+            .not_between_double_string(Self::get_type(), begin, end)
+    }
+
+    fn not_between_string_expr<T>(&self, begin: &str, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .not_between_string_expr(Self::get_type(), begin, end)
+    }
+
+    fn not_between_string_long(&self, begin: &str, end: i64) -> Expression {
+        self.expression_operable
+            .not_between_string_long(Self::get_type(), begin, end)
+    }
+
+    fn not_between_string_double(&self, begin: &str, end: f64) -> Expression {
+        self.expression_operable
+            .not_between_string_double(Self::get_type(), begin, end)
+    }
+
+    fn not_between_string_string(&self, begin: &str, end: &str) -> Expression {
+        self.expression_operable
+            .not_between_string_string(Self::get_type(), begin, end)
     }
 }
 

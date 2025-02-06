@@ -275,36 +275,88 @@ pub trait ExpressionOperableTrait {
     fn between_expr_long<T>(&self, begin: &T, end: i64) -> Expression
     where
         T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
-    //
-    // fn between_expr_double<T>(&self, begin: &T, end: f64) -> Expression
-    // where
-    //     T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
-    //
-    // fn between_expr_string<T>(&self, begin: &T, end: String) -> Expression
-    // where
-    //     T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
-    //
-    // fn between_long_expr<T>(&self, begin: i64, end: &T) -> Expression
-    // where
-    //     T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
-    //
-    // fn between_long_long(&self, begin: i64, end: i64) -> Expression;
-    //
-    // fn between_long_double(&self, begin: i64, end: f64) -> Expression;
-    //
-    // fn between_long_string(&self, begin: i64, end: String) -> Expression;
-    //
-    // fn between_double_expr<T>(&self, begin: i64, end: &T) -> Expression
-    // where
-    //     T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
-    //
-    // fn between_double_long(&self, begin: f64, end: i64) -> Expression;
-    //
-    // fn between_double_double(&self, begin: f64, end: f64) -> Expression;
-    //
-    // fn between_double_string(&self, begin: f64, end: String) -> Expression;
-    //
-    // fn between_string_expr<T>(&self, begin: String, end: &T) -> Expression
-    // where
-    //     T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn between_expr_double<T>(&self, begin: &T, end: f64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn between_expr_string<T>(&self, begin: &T, end: &str) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn between_long_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn between_long_long(&self, begin: i64, end: i64) -> Expression;
+
+    fn between_long_double(&self, begin: i64, end: f64) -> Expression;
+
+    fn between_long_string(&self, begin: i64, end: &str) -> Expression;
+
+    fn between_double_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn between_double_long(&self, begin: f64, end: i64) -> Expression;
+
+    fn between_double_double(&self, begin: f64, end: f64) -> Expression;
+
+    fn between_double_string(&self, begin: f64, end: &str) -> Expression;
+
+    fn between_string_expr<T>(&self, begin: &str, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn between_string_long(&self, begin: &str, end: i64) -> Expression;
+
+    fn between_string_double(&self, begin: &str, end: f64) -> Expression;
+
+    fn between_string_string(&self, begin: &str, end: &str) -> Expression;
+
+    fn not_between_expr_expr<T>(&self, begin: &T, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_expr_long<T>(&self, begin: &T, end: i64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_expr_double<T>(&self, begin: &T, end: f64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_expr_string<T>(&self, begin: &T, end: &str) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_long_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_long_long(&self, begin: i64, end: i64) -> Expression;
+
+    fn not_between_long_double(&self, begin: i64, end: f64) -> Expression;
+
+    fn not_between_long_string(&self, begin: i64, end: &str) -> Expression;
+
+    fn not_between_double_expr<T>(&self, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_double_long(&self, begin: f64, end: i64) -> Expression;
+
+    fn not_between_double_double(&self, begin: f64, end: f64) -> Expression;
+
+    fn not_between_double_string(&self, begin: f64, end: &str) -> Expression;
+
+    fn not_between_string_expr<T>(&self, begin: &str, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn not_between_string_long(&self, begin: &str, end: i64) -> Expression;
+
+    fn not_between_string_double(&self, begin: &str, end: f64) -> Expression;
+
+    fn not_between_string_string(&self, begin: &str, end: &str) -> Expression;
 }

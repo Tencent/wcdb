@@ -148,11 +148,16 @@ impl TestCaseTrait for DatabaseTestCase {
     fn setup(&self) -> WCDBResult<()> {
         self.base_test_case.setup()?;
         self.set_expect_mode(Expect::AllSQLs);
-        let file_name = "test_database";
+        let file_name = "testDatabase";
         self.set_file_name(file_name.to_string());
+        // "/Users/xxx/Rust/wcdb_rust/src/rust/wcdb_rust/BaseTestCase/target/tmp/testDatabase"
         let path = format!(
-            "../{}{}{}",
+            "{}{}{}{}{}{}{}",
             self.base_test_case.get_current_directory(),
+            MAIN_SEPARATOR,
+            "target",
+            MAIN_SEPARATOR,
+            "tmp",
             MAIN_SEPARATOR,
             file_name
         );
@@ -161,6 +166,8 @@ impl TestCaseTrait for DatabaseTestCase {
         }
         self.set_path(path.clone());
         self.set_database(Database::new(path.as_str()));
+        let database = self.get_database_lock();
+        database.set_tag(10001);
         Ok(())
     }
 
@@ -209,6 +216,10 @@ impl DatabaseTestCase {
     pub fn get_expect_mode(&self) -> Expect {
         let data = self.expect_mode.lock().unwrap();
         data.clone()
+    }
+
+    pub fn get_database(&self) -> Arc<Mutex<Database>> {
+        Arc::clone(&self.database)
     }
 }
 

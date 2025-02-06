@@ -720,6 +720,698 @@ impl ExpressionOperable {
         };
         Self::create_expression(cpp_obj)
     }
+
+    pub fn between_expr_long<T>(&self, left_cpp_type: i32, begin: &T, end: i64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                std::ptr::null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_expr_double<T>(&self, left_cpp_type: i32, begin: &T, end: f64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                std::ptr::null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_expr_string<T>(&self, left_cpp_type: i32, begin: &T, end: &str) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let c_operand = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_operand.as_ptr(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_long_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let end_option = Option::Some(end);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_long_long(&self, left_cpp_type: i32, begin: i64, end: i64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_long_double(&self, left_cpp_type: i32, begin: i64, end: f64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_long_string(&self, left_cpp_type: i32, begin: i64, end: &str) -> Expression {
+        let c_end = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_end.as_ptr(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_double_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let end_option = Option::Some(end);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin as c_double,
+                null(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_double_long(&self, left_cpp_type: i32, begin: f64, end: i64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin,
+                null(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_double_double(&self, left_cpp_type: i32, begin: f64, end: f64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin,
+                null(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_double_string(&self, left_cpp_type: i32, begin: f64, end: &str) -> Expression {
+        let c_end = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin,
+                null(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_end.as_ptr(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_string_expr<T>(&self, left_cpp_type: i32, begin: &str, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let end_option = Option::Some(end);
+        let c_begin = begin.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                c_begin.as_ptr(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_string_long(&self, left_cpp_type: i32, begin: &str, end: i64) -> Expression {
+        let c_begin = begin.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_begin.as_ptr(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_string_double(&self, left_cpp_type: i32, begin: &str, end: f64) -> Expression {
+        let c_begin = begin.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_begin.as_ptr(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                null(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn between_string_string(&self, left_cpp_type: i32, begin: &str, end: &str) -> Expression {
+        let c_begin = begin.to_cstring();
+        let c_end = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_begin.as_ptr(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_end.as_ptr(),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_expr_expr<T>(&self, left_cpp_type: i32, begin: &T, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let end_option = Option::Some(end);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_expr_long<T>(&self, left_cpp_type: i32, begin: &T, end: i64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                std::ptr::null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_expr_double<T>(&self, left_cpp_type: i32, begin: &T, end: f64) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                std::ptr::null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_expr_string<T>(&self, left_cpp_type: i32, begin: &T, end: &str) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
+        let begin_option = Option::Some(begin);
+        let c_operand = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                Identifier::get_cpp_type_with_option(&begin_option),
+                begin_cpp_obj,
+                0.0,
+                std::ptr::null(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_operand.as_ptr(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_long_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let end_option = Option::Some(end);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_long_long(&self, left_cpp_type: i32, begin: i64, end: i64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_long_double(&self, left_cpp_type: i32, begin: i64, end: f64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_long_string(&self, left_cpp_type: i32, begin: i64, end: &str) -> Expression {
+        let c_end = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                begin as *mut c_void,
+                0.0,
+                null(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_end.as_ptr(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_double_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let end_option = Option::Some(end);
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin as c_double,
+                null(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_double_long(&self, left_cpp_type: i32, begin: f64, end: i64) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin,
+                null(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_double_double(
+        &self,
+        left_cpp_type: i32,
+        begin: f64,
+        end: f64,
+    ) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin,
+                null(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_double_string(
+        &self,
+        left_cpp_type: i32,
+        begin: f64,
+        end: &str,
+    ) -> Expression {
+        let c_end = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                begin,
+                null(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_end.as_ptr(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_string_expr<T>(&self, left_cpp_type: i32, begin: &str, end: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        let end_cpp_obj: *mut c_void = end.as_cpp_object();
+        let end_option = Option::Some(end);
+        let c_begin = begin.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                c_begin.as_ptr(),
+                Identifier::get_cpp_type_with_option(&end_option),
+                end_cpp_obj,
+                0.0,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_string_long(&self, left_cpp_type: i32, begin: &str, end: i64) -> Expression {
+        let c_begin = begin.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_begin.as_ptr(),
+                CPPType::Int as c_int,
+                end as *mut c_void,
+                0.0,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_string_double(
+        &self,
+        left_cpp_type: i32,
+        begin: &str,
+        end: f64,
+    ) -> Expression {
+        let c_begin = begin.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_begin.as_ptr(),
+                CPPType::Double as c_int,
+                0 as *mut c_void,
+                end,
+                null(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn not_between_string_string(
+        &self,
+        left_cpp_type: i32,
+        begin: &str,
+        end: &str,
+    ) -> Expression {
+        let c_begin = begin.to_cstring();
+        let c_end = end.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_betweenOperate(
+                left_cpp_type,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_begin.as_ptr(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0.0,
+                c_end.as_ptr(),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
 }
 
 pub enum BinaryOperatorType {

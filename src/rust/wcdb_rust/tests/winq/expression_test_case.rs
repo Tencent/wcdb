@@ -311,7 +311,84 @@ pub mod expression_test {
         let column = Column::new("testColumn");
         let start = Column::new("start");
         let end = Column::new("end");
+
         let desc = column.between_expr_expr(&start, &end).get_description();
         assert_eq!(desc.as_str(), "testColumn BETWEEN start AND end");
+        let desc = column.between_expr_long(&start, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN start AND 1");
+        let desc = column.between_expr_double(&start, 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn BETWEEN start AND 1.1000000000000001"
+        );
+        let desc = column.between_expr_string(&start, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN start AND 'abc'");
+
+        let desc = column.between_long_expr(1, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND end");
+        let desc = column.between_long_long(1, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND 1");
+        let desc = column.between_long_double(1, 1.1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND 1.1000000000000001");
+        let desc = column.between_long_string(1, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND 'abc'");
+
+        let desc = column.between_string_expr("abc", &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 'abc' AND end");
+        let desc = column.between_string_long("abc", 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 'abc' AND 1");
+        let desc = column.between_string_double("abc", 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn BETWEEN 'abc' AND 1.1000000000000001"
+        );
+        let desc = column.between_string_string("abc", "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 'abc' AND 'abc'");
+
+        let desc = column.not_between_expr_expr(&start, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN start AND end");
+        let desc = column.not_between_expr_long(&start, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN start AND 1");
+        let desc = column
+            .not_between_expr_double(&start, 1.1)
+            .get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT BETWEEN start AND 1.1000000000000001"
+        );
+        let desc = column
+            .not_between_expr_string(&start, "abc")
+            .get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN start AND 'abc'");
+
+        let desc = column.not_between_long_expr(1, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 1 AND end");
+        let desc = column.not_between_long_long(1, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 1 AND 1");
+        let desc = column.not_between_long_double(1, 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT BETWEEN 1 AND 1.1000000000000001"
+        );
+        let desc = column.not_between_long_string(1, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 1 AND 'abc'");
+
+        let desc = column
+            .not_between_string_expr("abc", &end)
+            .get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND end");
+        let desc = column.not_between_string_long("abc", 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND 1");
+        let desc = column
+            .not_between_string_double("abc", 1.1)
+            .get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT BETWEEN 'abc' AND 1.1000000000000001"
+        );
+        let desc = column
+            .not_between_string_string("abc", "abc")
+            .get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND 'abc'");
     }
 }

@@ -1,7 +1,7 @@
 use lazy_static::lazy_static;
 use std::fmt::Display;
-use std::thread;
 use std::time::Duration;
+use std::{env, thread};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::Database;
 
@@ -25,11 +25,14 @@ pub struct BaseTestCase {
 impl BaseTestCase {
     pub fn new() -> BaseTestCase {
         let _ = &*GLOBAL_SETUP;
+        let current_dir = env::current_dir().expect("Failed to get current directory");
+        let current_dir = current_dir.join("BaseTestCase");
         BaseTestCase {
-            current_directory: "./target/tmp".to_string(),
+            current_directory: current_dir.display().to_string().clone(),
         }
     }
 
+    // current_directory: "/Users/xxx/Rust/wcdb_rust/src/rust/wcdb_rust/BaseTestCase"
     pub fn get_current_directory(&self) -> &str {
         self.current_directory.as_str()
     }
