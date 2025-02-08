@@ -13,6 +13,7 @@ use crate::orm::table_binding::TableBinding;
 use crate::utils::ToCow;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
+use crate::winq::statement::StatementTrait;
 use lazy_static::lazy_static;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
@@ -828,6 +829,21 @@ impl Database {
     /// Get the tag of the database. Tag is 0 by default.
     pub fn get_tag(&self) -> i64 {
         unsafe { WCDBRustDatabase_getTag(self.get_cpp_obj()) as i64 }
+    }
+
+    pub fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
+        let handle = self.get_handle(statement.is_write_statement());
+        let mut exception_opt = None;
+        if !Handle::execute_inner(handle.get_cpp_handle()?, statement) {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 }
 

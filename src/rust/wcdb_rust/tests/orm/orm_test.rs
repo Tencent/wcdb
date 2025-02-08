@@ -202,7 +202,8 @@ impl OrmTest {
             .database_test_case
             .do_test_sql_vec(new_sql_vec, operation);
 
-        let database_lock: MutexGuard<Database> = self.database_test_case.get_database_lock();
+        let binding = self.database_test_case.get_database();
+        let database_lock = binding.read().unwrap();
         let table = database_lock.get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
 
         let max = AllTypeObjectHelper::max_object();
@@ -308,7 +309,8 @@ pub mod orm_test {
         let orm_test = OrmTest::new();
         set_up(&orm_test);
 
-        let database_lock = orm_test.database_test_case.get_database_lock();
+        let binding = orm_test.database_test_case.get_database();
+        let database_lock = binding.read().unwrap();
         // let table_name = orm_test.table_name.as_str(); 见 DatabaseTestCase setup 方法
         let table_name = "testTable2";
 

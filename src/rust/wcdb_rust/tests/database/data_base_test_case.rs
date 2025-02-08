@@ -1,7 +1,7 @@
 use crate::base::base_test_case::TestCaseTrait;
 use crate::base::table_test_case::TableTestCase;
 use lazy_static::lazy_static;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::Database;
 
@@ -39,7 +39,7 @@ lazy_static! {
         let database_test = DatabaseTest::new();
         database_test
     };
-    static ref DATABASE: Arc<Mutex<Database>> = {
+    static ref DATABASE: Arc<RwLock<Database>> = {
         DATABASE_TEST.setup().unwrap();
         DATABASE_TEST.get_table_test_case().get_database()
     };
@@ -48,9 +48,15 @@ lazy_static! {
 #[cfg(test)]
 pub mod data_base_test {
     use crate::base::base_test_case::TestCaseTrait;
+    use crate::base::wrapped_value::WrappedValue;
     use crate::database::data_base_test_case::{DatabaseTest, DATABASE, DATABASE_TEST};
-    use std::time::{SystemTime, UNIX_EPOCH};
+    use std::sync::{Arc, Mutex};
+    use std::thread;
+    use std::thread::JoinHandle;
+    use std::time::{Duration, SystemTime, UNIX_EPOCH};
     use wcdb_core::core::database::Database;
+    use wcdb_core::winq::pragma::Pragma;
+    use wcdb_core::winq::statement_pragma::StatementPragma;
 
     fn setup(database_test: &DatabaseTest) {
         database_test.setup().unwrap();
@@ -65,7 +71,7 @@ pub mod data_base_test {
 
     #[test]
     pub fn test_tag() {
-        let database = DATABASE.lock().unwrap();
+        let database = DATABASE.read().unwrap();
         assert_ne!(database.get_tag(), 0);
         let new_database = Database::new(database.get_path().as_str());
         assert_eq!(database.get_tag(), new_database.get_tag());
@@ -73,7 +79,7 @@ pub mod data_base_test {
 
     #[test]
     pub fn test_path() {
-        let database = DATABASE.lock().unwrap();
+        let database = DATABASE.read().unwrap();
         assert_eq!(database.can_open(), true);
         assert_eq!(
             database.get_path(),
@@ -84,12 +90,11 @@ pub mod data_base_test {
     #[test]
     pub fn test_open_and_close() {
         let database_test = DatabaseTest::new();
-        // setup(&database_test);
-        let database = database_test.get_table_test_case().get_database_lock();
+        let binding = database_test.get_table_test_case().get_database();
+        let database = binding.read().unwrap();
         assert_eq!(database.is_opened(), false);
 
-        let database = DATABASE.lock().unwrap();
-        // assert_eq!(database.is_opened(), false);
+        let database = DATABASE.read().unwrap();
         assert_eq!(database.can_open(), true);
         assert_eq!(database.is_opened(), true);
         database.close(Some(|| {}));
@@ -98,53 +103,81 @@ pub mod data_base_test {
 
     #[test]
     pub fn test_blockade() {
-        // {
-        //     let database = DATABASE.lock().unwrap();
-        //     database.blockade();
-        // }
-        //
-        // let time_arc = Arc::new(Mutex::new(WrappedValue::new()));
-        // let clone_database = Arc::clone(&DATABASE);
-        // let pair: Arc<(Mutex<bool>, Condvar)> = Arc::new((Mutex::new(false), Condvar::new()));
-        // let clone_pair = Arc::clone(&pair);
-        // let mut clone_time = Arc::clone(&time_arc);
-        // thread::spawn(move || {
-        //     let is_blockaded = {
-        //         let database = clone_database.lock().unwrap();
-        //         database.is_blockaded()
-        //     };
-        //     if is_blockaded {
-        //         let (lock, cvar) = &*clone_pair;
-        //         let mut started: MutexGuard<bool> = lock.lock().unwrap();
-        //         while !*started {
-        //             started = cvar.wait(started).unwrap();
-        //         }
-        //     }
-        //
-        //     let database = clone_database.lock().unwrap();
-        //     assert_eq!(database.can_open(), true);
-        //     let mut time = clone_time.lock().unwrap();
-        //     time.int_value = current_time_millis() as i64;
-        // });
-        //
-        // thread::sleep(Duration::from_millis(1000));
-        // let new_time = current_time_millis() as i64;
-        // {
-        //     let database = DATABASE.lock().unwrap();
-        //     database.un_blockade();
-        // }
-        //
-        // {
-        //     let (lock, cvar) = &*pair;
-        //     let mut started: MutexGuard<bool> = lock.lock().unwrap();
-        //     *started = true;
-        //     cvar.notify_one();
-        // }
-        //
-        // thread::sleep(Duration::from_millis(1000));
-        //
-        // let clone_time = Arc::clone(&time_arc);
-        // let time = clone_time.lock().unwrap().int_value;
-        // assert_eq!(new_time < time, true);
+        {
+            let database = DATABASE.write().unwrap();
+            database.blockade();
+        }
+        let time = Arc::new(Mutex::new(WrappedValue::new()));
+        let thread_handle = {
+            let database_clone = Arc::clone(&DATABASE);
+            let time_clone = Arc::clone(&time);
+            thread::spawn(move || {
+                let database = database_clone.read().unwrap();
+                assert!(database.can_open());
+                let mut time = time_clone.lock().unwrap();
+                time.int_value = current_time_millis() as i64;
+            })
+        };
+        thread::sleep(Duration::from_millis(1000));
+        let new_time = current_time_millis() as i64;
+        {
+            let database2 = DATABASE.read().unwrap();
+            database2.un_blockade();
+        }
+        thread_handle.join().unwrap();
+        let time = time.lock().unwrap();
+        assert!(new_time < time.int_value);
+    }
+
+    #[test]
+    pub fn test_blockade_and_close() {
+        let main = Arc::new(Mutex::new(WrappedValue::current_time()));
+        let sub_thread = Arc::new(Mutex::new(WrappedValue::current_time()));
+
+        let thread_handle: JoinHandle<()> = {
+            let database = Arc::clone(&DATABASE);
+            let sub_thread = Arc::clone(&sub_thread);
+            thread::spawn(move || {
+                let db = database.read().unwrap();
+                assert!(db.can_open());
+                let mut sub_thread_value = sub_thread.lock().unwrap();
+                sub_thread_value.int_value = current_time_millis() as i64;
+            })
+        };
+
+        let main_clone = Arc::clone(&main);
+        let database = DATABASE.read().unwrap();
+        database.close(Some(move || {
+            let mut main_value = main_clone.lock().unwrap();
+            thread::sleep(Duration::from_secs(1));
+            main_value.int_value = current_time_millis() as i64;
+        }));
+
+        thread_handle.join().unwrap();
+
+        let main_value = main.lock().unwrap();
+        let sub_thread_value = sub_thread.lock().unwrap();
+        assert!(main_value.int_value < sub_thread_value.int_value);
+    }
+
+    #[test]
+    pub fn test_readonly() {}
+
+    #[test]
+    pub fn test_run_while_close() {
+        let database = DATABASE.read().unwrap();
+        assert_eq!(database.can_open(), true);
+        assert_eq!(database.is_opened(), true);
+        let database_clone = Arc::clone(&DATABASE);
+        database.close(Some(move || {
+            let database = database_clone.read().unwrap();
+            let statement_pragma = StatementPragma::new();
+            let statement_pragma = statement_pragma
+                .pragma(Pragma::user_version())
+                .to_value(123);
+            let ret = database.execute(statement_pragma);
+            assert!(ret.is_ok());
+        }));
+        assert_eq!(database.is_opened(), false);
     }
 }

@@ -1,9 +1,8 @@
 use crate::base::base_test_case::{BaseTestCase, TestCaseTrait};
 use crate::base::wrapped_value::WrappedValue;
-use std::cell::RefCell;
 use std::cmp::PartialEq;
 use std::path::{Path, MAIN_SEPARATOR};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
@@ -14,7 +13,7 @@ pub struct DatabaseTestCase {
     base_test_case: BaseTestCase,
     path: Arc<Mutex<String>>,
     file_name: Arc<Mutex<String>>,
-    database: Arc<Mutex<Database>>,
+    database: Arc<RwLock<Database>>,
     expect_mode: Arc<Mutex<Expect>>,
 }
 
@@ -24,7 +23,7 @@ impl DatabaseTestCase {
             base_test_case: BaseTestCase::new(),
             path: Arc::new(Mutex::new("".to_string())),
             file_name: Arc::new(Mutex::new("".to_string())),
-            database: Arc::new(Mutex::new(Database::new("./target/tmp/test.db"))),
+            database: Arc::new(RwLock::new(Database::new("./target/tmp/test.db"))),
             expect_mode: Arc::new(Mutex::new(Expect::AllSQLs)),
         }
     }
@@ -34,7 +33,10 @@ impl DatabaseTestCase {
         table_name: &str,
         binding: &R,
     ) -> WCDBResult<()> {
-        self.get_database_lock().create_table(table_name, binding)?;
+        self.get_database()
+            .write()
+            .unwrap()
+            .create_table(table_name, binding)?;
         Ok(())
     }
 
@@ -57,7 +59,7 @@ impl DatabaseTestCase {
             let expected_sql_vec_mutex = Arc::new(Mutex::new(sql_vec.clone()));
             let expected_sql_vec_mutex_clone = expected_sql_vec_mutex.clone();
             let mode_ref = self.get_expect_mode().clone();
-            self.get_database_lock().trace_sql(Some(
+            self.get_database().write().unwrap().trace_sql(Some(
                 move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
                     if !trace.bool_value {
                         return;
@@ -73,7 +75,7 @@ impl DatabaseTestCase {
             let mode_ref = self.get_expect_mode();
             if mode_ref != Expect::SomeSQLs {
                 {
-                    if !self.get_database_lock().can_open() {
+                    if !self.get_database().read().unwrap().can_open() {
                         assert!(false, "database can not open");
                         break;
                     }
@@ -166,7 +168,8 @@ impl TestCaseTrait for DatabaseTestCase {
         }
         self.set_path(path.clone());
         self.set_database(Database::new(path.as_str()));
-        let database = self.get_database_lock();
+        let binding = self.get_database();
+        let database = binding.read().unwrap();
         database.set_tag(10001);
         Ok(())
     }
@@ -200,12 +203,8 @@ impl DatabaseTestCase {
     }
 
     pub fn set_database(&self, database: Database) {
-        let mut data = self.database.lock().unwrap();
+        let mut data = self.database.write().expect("TODO: panic message");
         *data = database;
-    }
-    pub fn get_database_lock(&self) -> MutexGuard<Database> {
-        let data = self.database.lock().unwrap();
-        data
     }
 
     pub fn set_expect_mode(&self, expect_mode: Expect) {
@@ -218,7 +217,7 @@ impl DatabaseTestCase {
         data.clone()
     }
 
-    pub fn get_database(&self) -> Arc<Mutex<Database>> {
+    pub fn get_database(&self) -> Arc<RwLock<Database>> {
         Arc::clone(&self.database)
     }
 }

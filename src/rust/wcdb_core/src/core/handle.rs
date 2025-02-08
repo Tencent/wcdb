@@ -215,6 +215,10 @@ impl<'a> Handle<'a> {
         handle_inner_lock.prepared_with_main_statement(self.database, statement)
     }
 
+    pub fn execute_inner<T: StatementTrait>(cpp_obj: *mut c_void, statement: &T) -> bool {
+        unsafe { WCDBRustHandle_execute(cpp_obj, CppObject::get(statement)) }
+    }
+
     pub fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
         let handle = self.get_handle(statement.is_write_statement());
         let mut exception_opt = None;

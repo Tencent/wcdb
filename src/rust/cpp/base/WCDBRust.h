@@ -53,11 +53,7 @@
     const jchar* value##_utf16String = NULL; \
     WCDBRustGetUTF8String(env, value, &value##String, &value##_utf16String, true);
 
-#define WCDBRustReleaseStringCritical(value)                            \
-    if (value##_utf16String != NULL) {                                  \
-        (*env)->ReleaseStringCritical(env, value, value##_utf16String); \
-    }                                                                   \
-    WCDBClearAllPreAllocatedMemory();
+#define WCDBRustReleaseStringCritical(value) WCDBClearAllPreAllocatedMemory();
 
 #define WCDBRustGetByteArray(value)                                                          \
     const unsigned char* value##Array = NULL;                                                \
@@ -161,7 +157,6 @@
     CPPCommonValue parameter##_common;                                   \
     parameter##_common.type = parameter##_type;                          \
     const bool parameter##_isCritical = isCritical;                      \
-    const char* parameter##_utf16String = NULL;                          \
     switch (parameter##_type) {                                          \
         case WCDBBridgedType_Bool:                                       \
         case WCDBBridgedType_UInt:                                       \
@@ -179,15 +174,15 @@
             break;                                                       \
     }
 
-//#define WCDBRustTryReleaseStringInCommonValue(parameter)                                      \
-//    if (parameter##_type == WCDBBridgedType_String                                           \
-//        && parameter##_common.intValue != 0 && parameter##_utf16String != NULL) {            \
-//        if (parameter##_isCritical) {                                                        \
-//            (*env)->ReleaseStringCritical(env, parameter##_string, parameter##_utf16String); \
-//        } else {                                                                             \
-//            (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String);    \
-//        }                                                                                    \
-//    }
+#define WCDBRustTryReleaseStringInCommonValue(parameter)                                     \
+    if (parameter##_type == WCDBBridgedType_String && parameter##_common.intValue != 0 &&    \
+        parameter##_utf16String != NULL) {                                                   \
+        if (parameter##_isCritical) {                                                        \
+            (*env)->ReleaseStringCritical(env, parameter##_string, parameter##_utf16String); \
+        } else {                                                                             \
+            (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String);    \
+        }                                                                                    \
+    }
 
 #define WCDBRustCreateCommonValue(parameter)                             \
     CPPCommonValue parameter##_common;                                   \
