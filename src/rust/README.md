@@ -44,3 +44,4 @@ Rust 语言接口适配以源仓库自带的 Java 接口适配为蓝本进行翻
 3. [clang-format](cpp/.clang-format)
 4. [cargo fmt](https://github.com/rust-lang/rustfmt)
 5. Rust 集成测试用例
+6. Rust 项目的单元测试默认采用单线程执行，命令为：cargo test -p wcdb_rust -- --test-threads=1。原因有两方面：一是 Java 代码的单元测试通常是单线程执行；二是某些测试场景依赖数据库的打开/关闭状态等，导致无法并行执行。

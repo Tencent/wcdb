@@ -30,7 +30,7 @@ run_test:
         clang-format "$file" | colordiff -u "$file" -;
       done
     - cargo fmt -- --check
-    - cargo test
+    - cargo test -p wcdb_rust -- --test-threads=1
     - TARGET_SIZE=$(du -sm target 2>/dev/null | awk '{print $1}')
     - echo "target:${TARGET_SIZE}m"
     - if [ "$TARGET_SIZE" -gt 2048 ]; then
