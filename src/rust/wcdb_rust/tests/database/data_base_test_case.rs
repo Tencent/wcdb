@@ -140,6 +140,7 @@ pub mod data_base_test {
             thread::spawn(move || {
                 let db = database.read().unwrap();
                 assert!(db.can_open());
+                thread::sleep(Duration::from_millis(100));
                 let mut sub_thread_value = sub_thread.lock().unwrap();
                 sub_thread_value.int_value = current_time_millis() as i64;
             })
