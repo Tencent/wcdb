@@ -71,23 +71,20 @@ void* WCDBRustExpressionOperableClassMethod(betweenOperate,
     return ret;
 }
 
-//
-// jlong WCDBRustExpressionOperableClassMethod(inOperate,
-//                                           jint operandType,
-//                                           jlong operand,
-//                                           WCDBRustCommonArrayParameter(values),
-//                                           jboolean isNot)
-//{
-//    CPPCommonValue operand_common;
-//    operand_common.type = operandType;
-//    operand_common.intValue = operand;
-//    jlong ret = 0;
-//    WCDBRustCreateCommonArrayWithAction(
-//    values,
-//    ret
-//    = (jlong) WCDBExpressionInOperate(operand_common, values_commonArray, isNot).innerValue);
-//    return ret;
-//}
+void* WCDBRustExpressionOperableClassMethod(inOperate,
+                                            int operandType,
+                                            long operand,
+                                            WCDBRustCommonArrayParameter(values),
+                                            bool isNot) {
+    CPPCommonValue operand_common;
+    operand_common.type = operandType;
+    operand_common.intValue = operand;
+    void* ret = 0;
+    WCDBRustCreateCommonArrayWithAction(
+        values,
+        ret = (void*)WCDBExpressionInOperate(operand_common, values_commonArray, isNot).innerValue);
+    return ret;
+}
 //
 // jlong WCDBRustExpressionOperableClassMethod(
 // inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
@@ -126,15 +123,14 @@ void* WCDBRustExpressionOperableClassMethod(betweenOperate,
 //    .innerValue;
 //}
 //
-// jlong WCDBRustExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand,
-// jstring collation)
-//{
-//    CPPCommonValue operand_common;
-//    operand_common.type = operandType;
-//    operand_common.intValue = operand;
-//    WCDBRustGetStringCritical(collation);
-//    jlong ret
-//    = (jlong) WCDBExpressionCollateOperate2(operand_common, collationString).innerValue;
-//    WCDBRustReleaseStringCritical(collation);
-//    return ret;
-//}
+
+void* WCDBRustExpressionOperableClassMethod(collateOperate,
+                                            int operandType,
+                                            long operand,
+                                            const char* collation) {
+    CPPCommonValue operand_common;
+    operand_common.type = operandType;
+    operand_common.intValue = operand;
+    void* ret = (void*)WCDBExpressionCollateOperate2(operand_common, collation).innerValue;
+    return ret;
+}

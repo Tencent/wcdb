@@ -3,9 +3,10 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
+use crate::winq::expression_operable_trait::ExpressionOperableTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_long, c_void};
+use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::ptr::null;
 
 extern "C" {
@@ -32,6 +33,23 @@ extern "C" {
         right_double: c_double,
         right_string: *const c_char,
         is_not: bool,
+    ) -> *mut c_void;
+
+    pub fn WCDBRustExpressionOperable_inOperate(
+        operand_type: c_int,
+        operand: *mut c_void,
+        cpp_type: c_int,
+        long_array: *const c_long,
+        double_array: *const c_double,
+        string_array: *const *const c_char,
+        array_length: c_int,
+        is_not: bool,
+    ) -> *mut c_void;
+
+    pub fn WCDBRustExpressionOperable_collateOperate(
+        cpp_type: c_int,
+        operand: *mut c_void,
+        collation: *const c_char,
     ) -> *mut c_void;
 }
 
@@ -1411,6 +1429,187 @@ impl ExpressionOperable {
             )
         };
         Self::create_expression(cpp_obj)
+    }
+
+    pub fn in_short(&self, left_cpp_type: i32, operands: Vec<i16>, is_not: bool) -> Expression {
+        let val: Vec<i64> = operands.iter().map(|&i| i as i64).collect();
+        self.in_long(left_cpp_type, val, is_not)
+    }
+
+    pub fn in_int(&self, left_cpp_type: i32, operands: Vec<i32>, is_not: bool) -> Expression {
+        let val: Vec<i64> = operands.iter().map(|&i| i as i64).collect();
+        self.in_long(left_cpp_type, val, is_not)
+    }
+
+    pub fn in_float(&self, left_cpp_type: i32, operands: Vec<f32>, is_not: bool) -> Expression {
+        let val: Vec<f64> = operands.iter().map(|&i| i as f64).collect();
+        self.in_double(left_cpp_type, val, is_not)
+    }
+
+    pub fn in_double(&self, left_cpp_type: i32, operands: Vec<f64>, is_not: bool) -> Expression {
+        self.in_double_operate(left_cpp_type, operands, is_not)
+    }
+
+    pub fn in_long(&self, left_cpp_type: i32, operands: Vec<i64>, is_not: bool) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                CPPType::Int as c_int,
+                operands.as_ptr(),
+                null(),
+                null(),
+                operands.len() as c_int,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn in_long_with_cpp_type(
+        &self,
+        left_cpp_type: i32,
+        cpp_type: i32,
+        operands: Vec<i64>,
+        is_not: bool,
+    ) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                cpp_type as c_int,
+                operands.as_ptr(),
+                null(),
+                null(),
+                operands.len() as c_int,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn in_double_operate(
+        &self,
+        left_cpp_type: i32,
+        operands: Vec<f64>,
+        is_not: bool,
+    ) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                CPPType::Double as c_int,
+                null(),
+                operands.as_ptr(),
+                null(),
+                operands.len() as c_int,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn in_string(&self, left_cpp_type: i32, operands: Vec<&str>, is_not: bool) -> Expression {
+        let mut c_string_array: Vec<*const c_char> = Vec::new();
+        for x in operands {
+            let c_string = CString::new(x).expect("Failed to create CString");
+            c_string_array.push(c_string.into_raw());
+        }
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                CPPType::String as c_int,
+                null(),
+                null(),
+                c_string_array.as_ptr(),
+                c_string_array.len() as c_int,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn in_object<T>(
+        &self,
+        operands: Option<Vec<T>>,
+        left_cpp_type: i32,
+        is_not: bool,
+    ) -> Expression {
+        Expression::new()
+        // match operands {
+        //     None => {
+        //         self.in_long(left_cpp_type, Vec::new(), is_not)
+        //     }
+        //     Some(val) => {
+        //         let first = val.first().unwrap();
+        //         let data_type: ObjectType = MultiTypeArray::get_object_type(Box::new(first));
+        //         match data_type {
+        //             ObjectType::Identifier => {
+        //                 // let mut vector: Vec<i64> = Vec::new();
+        //                 // for x in val {
+        //                 //     let few = x as Identifier.get_cpp_obj();
+        //                 //     vector.push(few as i64);
+        //                 // }
+        //                 //
+        //                 // let cpp_type = crate::winq::identifier::Identifier::get_cpp_type(first);
+        //                 // self.in_long_with_cpp_type(left_cpp_type, cpp_type, vector, is_not)
+        //                 Expression::new()
+        //             }
+        //             ObjectType::Value => {
+        //                 Expression::new()
+        //             }
+        //             ObjectType::String => {
+        //                 // if val.is_empty() {
+        //                 //     self.in_string(left_cpp_type, Vec::new(), is_not)
+        //                 // } else {
+        //                 //     let mut string_vec:Vec<&str> = Vec::new();
+        //                 //     for x in val {
+        //                 //         string_vec.push(x);
+        //                 //     }
+        //                 //     self.in_string(left_cpp_type, string_vec, is_not)
+        //                 // }
+        //                 Expression::new()
+        //             }
+        //             ObjectType::Float => {
+        //                 Expression::new()
+        //             }
+        //             ObjectType::Bool | ObjectType::Char | ObjectType::Byte | ObjectType::Short | ObjectType::Int
+        //             | ObjectType::Long | ObjectType::Double => {
+        //                 Expression::new()
+        //             }
+        //             ObjectType::Null | ObjectType::Unknown => {
+        //                 Expression::new()
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    pub fn collate(&self, left_cpp_type: i32, collation: &str) -> Expression {
+        let c_string = collation.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_collateOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                c_string.as_ptr(),
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub fn substr_int(&self, left_cpp_type: i32, start: i32, length: i32) -> Expression {
+        Self::create_expression(Expression::function("SUBSTR"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+            .argument_int(start)
+            .argument_int(length)
+    }
+
+    pub fn substr_long(&self, left_cpp_type: i32, start: i64, length: i64) -> Expression {
+        Self::create_expression(Expression::function("SUBSTR"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+            .argument_long(start)
+            .argument_long(length)
     }
 }
 

@@ -12,6 +12,7 @@ pub mod identifier;
 pub mod identifier_convertible;
 pub mod indexed_column_convertible;
 pub mod literal_value;
+pub mod multi_type_array;
 pub mod ordering_term;
 pub mod pragma;
 pub mod statement;

@@ -1,3 +1,4 @@
+use crate::base::value::Value;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::IdentifierStaticTrait;
@@ -359,4 +360,38 @@ pub trait ExpressionOperableTrait {
     fn not_between_string_double(&self, begin: &str, end: f64) -> Expression;
 
     fn not_between_string_string(&self, begin: &str, end: &str) -> Expression;
+
+    fn in_short(&self, operands: Vec<i16>) -> Expression;
+
+    fn in_int(&self, operands: Vec<i32>) -> Expression;
+
+    fn in_long(&self, operands: Vec<i64>) -> Expression;
+
+    fn in_float(&self, operands: Vec<f32>) -> Expression;
+
+    fn in_double(&self, operands: Vec<f64>) -> Expression;
+
+    fn in_string(&self, operands: Vec<&str>) -> Expression;
+
+    fn in_value(&self, operands: Vec<Value>) -> Expression;
+
+    fn not_in_short(&self, operands: Vec<i16>) -> Expression;
+
+    fn not_in_int(&self, operands: Vec<i32>) -> Expression;
+
+    fn not_in_long(&self, operands: Vec<i64>) -> Expression;
+
+    fn not_in_float(&self, operands: Vec<f32>) -> Expression;
+
+    fn not_in_double(&self, operands: Vec<f64>) -> Expression;
+
+    fn not_in_string(&self, operands: Vec<&str>) -> Expression;
+
+    fn not_in_value(&self, operands: Vec<Value>) -> Expression;
+
+    fn collate(&self, collation: &str) -> Expression;
+
+    fn substr_int(&self, start: i32, length: i32) -> Expression;
+
+    fn substr_long(&self, start: i64, length: i64) -> Expression;
 }

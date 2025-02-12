@@ -30,13 +30,11 @@ void* WCDBRustExpressionClassMethod(create, int type, long long object) {
     return ret;
 }
 
-// jlong WCDBRustExpressionClassMethod(createWithFunction, jstring funcName)
-//{
-//     WCDBRustGetStringCritical(funcName);
-//     jlong ret = (jlong) WCDBExpressionCreateWithFunction(funcNameString).innerValue;
-//     WCDBRustReleaseStringCritical(funcName);
-//     return ret;
-// }
+void* WCDBRustExpressionClassMethod(createWithFunction, const char* func) {
+    void* ret = (void*)WCDBExpressionCreateWithFunction(func).innerValue;
+    return ret;
+}
+
 //
 // jlong WCDBRustExpressionClassMethod(createWithExistStatement, jlong select)
 //{

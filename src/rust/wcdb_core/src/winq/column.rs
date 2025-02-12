@@ -1,14 +1,15 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::value::Value;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::expression_operable::{BinaryOperatorType, ExpressionOperable};
+use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::expression_operable_trait::ExpressionOperableTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use crate::winq::ordering_term::{Order, OrderingTerm, WCDBRustOrderingTerm_configOrder};
-use std::ffi::{c_char, c_long, c_void, CString};
+use crate::winq::ordering_term::{Order, OrderingTerm};
+use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 
 extern "C" {
@@ -876,6 +877,91 @@ impl ExpressionOperableTrait for Column {
     fn not_between_string_string(&self, begin: &str, end: &str) -> Expression {
         self.expression_operable
             .not_between_string_string(Self::get_type(), begin, end)
+    }
+
+    fn in_short(&self, operands: Vec<i16>) -> Expression {
+        self.expression_operable
+            .in_short(Self::get_type(), operands, false)
+    }
+
+    fn in_int(&self, operands: Vec<i32>) -> Expression {
+        self.expression_operable
+            .in_int(Self::get_type(), operands, false)
+    }
+
+    fn in_long(&self, operands: Vec<i64>) -> Expression {
+        self.expression_operable
+            .in_long(Self::get_type(), operands, false)
+    }
+
+    fn in_float(&self, operands: Vec<f32>) -> Expression {
+        self.expression_operable
+            .in_float(Self::get_type(), operands, false)
+    }
+
+    fn in_double(&self, operands: Vec<f64>) -> Expression {
+        self.expression_operable
+            .in_double(Self::get_type(), operands, false)
+    }
+
+    fn in_string(&self, operands: Vec<&str>) -> Expression {
+        self.expression_operable
+            .in_string(Self::get_type(), operands, false)
+    }
+
+    fn in_value(&self, operands: Vec<Value>) -> Expression {
+        self.expression_operable
+            .in_object(Option::Some(operands), Self::get_type(), false)
+    }
+
+    fn not_in_short(&self, operands: Vec<i16>) -> Expression {
+        self.expression_operable
+            .in_short(Self::get_type(), operands, true)
+    }
+
+    fn not_in_int(&self, operands: Vec<i32>) -> Expression {
+        self.expression_operable
+            .in_int(Self::get_type(), operands, true)
+    }
+
+    fn not_in_long(&self, operands: Vec<i64>) -> Expression {
+        self.expression_operable
+            .in_long(Self::get_type(), operands, true)
+    }
+
+    fn not_in_float(&self, operands: Vec<f32>) -> Expression {
+        self.expression_operable
+            .in_float(Self::get_type(), operands, true)
+    }
+
+    fn not_in_double(&self, operands: Vec<f64>) -> Expression {
+        self.expression_operable
+            .in_double(Self::get_type(), operands, true)
+    }
+
+    fn not_in_string(&self, operands: Vec<&str>) -> Expression {
+        self.expression_operable
+            .in_string(Self::get_type(), operands, true)
+    }
+
+    fn not_in_value(&self, operands: Vec<Value>) -> Expression {
+        self.expression_operable
+            .in_object(Option::Some(operands), Self::get_type(), true)
+    }
+
+    fn collate(&self, collation: &str) -> Expression {
+        self.expression_operable
+            .collate(Self::get_type(), collation)
+    }
+
+    fn substr_int(&self, start: i32, length: i32) -> Expression {
+        self.expression_operable
+            .substr_int(Self::get_type(), start, length)
+    }
+
+    fn substr_long(&self, start: i64, length: i64) -> Expression {
+        self.expression_operable
+            .substr_long(Self::get_type(), start, length)
     }
 }
 

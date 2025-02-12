@@ -391,4 +391,96 @@ pub mod expression_test {
             .get_description();
         assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND 'abc'");
     }
+
+    #[test]
+    pub fn test_in_operation() {
+        let column = Column::new("testColumn");
+
+        let operands: Vec<i16> = vec![1, 2, 3];
+        let desc = column.in_short(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
+
+        let operands: Vec<i32> = vec![1, 2, 3];
+        let desc = column.in_int(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
+
+        let operands: Vec<i64> = vec![1, 2, 3];
+        let desc = column.in_long(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
+
+        let operands: Vec<f32> = vec![1.1f32, 2.1f32, 3.1f32];
+        let desc = column.in_float(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)"
+        );
+
+        let operands: Vec<f64> = vec![1.1f64, 2.1f64, 3.1f64];
+        let desc = column.in_double(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)"
+        );
+
+        let mut operands: Vec<&str> = Vec::new();
+        operands.push("abc");
+        operands.push("def");
+        operands.push("ghi");
+        let desc = column.in_string(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN('abc', 'def', 'ghi')");
+    }
+
+    #[test]
+    pub fn test_not_in_operation() {
+        let column = Column::new("testColumn");
+
+        let operands: Vec<i16> = vec![1, 2, 3];
+        let desc = column.not_in_short(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN(1, 2, 3)");
+
+        let operands: Vec<i32> = vec![1, 2, 3];
+        let desc = column.not_in_int(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN(1, 2, 3)");
+
+        let operands: Vec<i64> = vec![1, 2, 3];
+        let desc = column.not_in_long(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN(1, 2, 3)");
+
+        let operands: Vec<f32> = vec![1.1f32, 2.1f32, 3.1f32];
+        let desc = column.not_in_float(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)"
+        );
+
+        let operands: Vec<f64> = vec![1.1f64, 2.1f64, 3.1f64];
+        let desc = column.not_in_double(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)"
+        );
+
+        let mut operands: Vec<&str> = Vec::new();
+        operands.push("abc");
+        operands.push("def");
+        operands.push("ghi");
+        let desc = column.not_in_string(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN('abc', 'def', 'ghi')");
+    }
+
+    #[test]
+    pub fn test_collate() {
+        let column = Column::new("testColumn");
+        let desc = column.collate("BINARY").get_description();
+        assert_eq!(desc.as_str(), "testColumn COLLATE BINARY");
+    }
+
+    #[test]
+    pub fn test_function() {
+        let left = Column::new("left");
+        let right: &str = "right";
+
+        let desc = left.substr_int(1, 2).get_description();
+        assert_eq!(desc.as_str(), "SUBSTR(left, 1, 2)");
+    }
 }

@@ -1,17 +1,18 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::value::Value;
+use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::expression_operable::{BinaryOperatorType, ExpressionOperable};
+use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::expression_operable_trait::ExpressionOperableTrait;
-use crate::winq::identifier::{
-    get_cpp_type, CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait,
-};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::literal_value::LiteralValue;
 use crate::winq::statement_select::StatementSelect;
-use std::ffi::{c_int, c_long, c_void};
+use std::ffi::{c_char, c_double, c_int, c_void};
+use std::ptr::null;
 
 extern "C" {
     pub fn WCDBRustExpression_create(value_type: c_int, cpp_obj: *mut c_void) -> *mut c_void;
@@ -22,6 +23,16 @@ extern "C" {
     //     double_value: c_double,
     //     string_value: *const c_char,
     // );
+
+    pub fn WCDBRustExpression_createWithFunction(func: *const c_char) -> *mut c_void;
+
+    pub fn WCDBRustExpression_argument(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        int_value: *mut c_void,
+        double_value: c_double,
+        string_value: *const c_char,
+    );
 }
 
 #[derive(Debug)]
@@ -885,6 +896,90 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable
             .not_between_string_string(Self::get_type(), begin, end)
     }
+
+    fn in_short(&self, operands: Vec<i16>) -> Expression {
+        self.expression_operable
+            .in_short(Self::get_type(), operands, false)
+    }
+    fn in_int(&self, operands: Vec<i32>) -> Expression {
+        self.expression_operable
+            .in_int(Self::get_type(), operands, false)
+    }
+
+    fn in_long(&self, operands: Vec<i64>) -> Expression {
+        self.expression_operable
+            .in_long(Self::get_type(), operands, false)
+    }
+
+    fn in_float(&self, operands: Vec<f32>) -> Expression {
+        self.expression_operable
+            .in_float(Self::get_type(), operands, false)
+    }
+
+    fn in_double(&self, operands: Vec<f64>) -> Expression {
+        self.expression_operable
+            .in_double(Self::get_type(), operands, false)
+    }
+
+    fn in_string(&self, operands: Vec<&str>) -> Expression {
+        self.expression_operable
+            .in_string(Self::get_type(), operands, false)
+    }
+
+    fn in_value(&self, operands: Vec<Value>) -> Expression {
+        self.expression_operable
+            .in_object(Option::Some(operands), Self::get_type(), false)
+    }
+
+    fn not_in_short(&self, operands: Vec<i16>) -> Expression {
+        self.expression_operable
+            .in_short(Self::get_type(), operands, true)
+    }
+
+    fn not_in_int(&self, operands: Vec<i32>) -> Expression {
+        self.expression_operable
+            .in_int(Self::get_type(), operands, true)
+    }
+
+    fn not_in_long(&self, operands: Vec<i64>) -> Expression {
+        self.expression_operable
+            .in_long(Self::get_type(), operands, true)
+    }
+
+    fn not_in_float(&self, operands: Vec<f32>) -> Expression {
+        self.expression_operable
+            .in_float(Self::get_type(), operands, true)
+    }
+
+    fn not_in_double(&self, operands: Vec<f64>) -> Expression {
+        self.expression_operable
+            .in_double(Self::get_type(), operands, true)
+    }
+
+    fn not_in_string(&self, operands: Vec<&str>) -> Expression {
+        self.expression_operable
+            .in_string(Self::get_type(), operands, true)
+    }
+
+    fn not_in_value(&self, operands: Vec<Value>) -> Expression {
+        self.expression_operable
+            .in_object(Option::Some(operands), Self::get_type(), true)
+    }
+
+    fn collate(&self, collation: &str) -> Expression {
+        self.expression_operable
+            .collate(Self::get_type(), collation)
+    }
+
+    fn substr_int(&self, start: i32, length: i32) -> Expression {
+        self.expression_operable
+            .substr_int(Self::get_type(), start, length)
+    }
+
+    fn substr_long(&self, start: i64, length: i64) -> Expression {
+        self.expression_operable
+            .substr_long(Self::get_type(), start, length)
+    }
 }
 
 impl Expression {
@@ -942,5 +1037,51 @@ impl Expression {
 
     pub(crate) fn get_expression_operable(&self) -> &ExpressionOperable {
         &self.expression_operable
+    }
+
+    pub(crate) fn function(func_name: &str) -> *mut c_void {
+        let c_str = func_name.to_cstring();
+        let cpp_obj = unsafe { WCDBRustExpression_createWithFunction(c_str.as_ptr()) };
+        cpp_obj
+    }
+
+    pub(crate) fn argument_expression_convertible_trait(
+        mut self,
+        cpp_type: i32,
+        arg_cpp_object: *mut c_void,
+    ) -> Expression {
+        let cpp_obj = self.get_cpp_obj();
+        unsafe {
+            WCDBRustExpression_argument(cpp_obj, cpp_type, arg_cpp_object, 0 as c_double, null());
+        };
+        self
+    }
+
+    pub(crate) fn argument_int(mut self, arg: i32) -> Expression {
+        let cpp_obj = self.get_cpp_obj();
+        unsafe {
+            WCDBRustExpression_argument(
+                cpp_obj,
+                CPPType::Int as c_int,
+                arg as *mut c_void,
+                0 as c_double,
+                null(),
+            );
+        };
+        self
+    }
+
+    pub(crate) fn argument_long(mut self, arg: i64) -> Expression {
+        let cpp_obj = self.get_cpp_obj();
+        unsafe {
+            WCDBRustExpression_argument(
+                cpp_obj,
+                CPPType::Int as c_int,
+                arg as *mut c_void,
+                0 as c_double,
+                null(),
+            );
+        };
+        self
     }
 }

@@ -49,13 +49,13 @@ void* WCDBRustExpressionOperableClassMethod(betweenOperate,
                                             WCDBRustCommonValueParameter(left),
                                             WCDBRustCommonValueParameter(right),
                                             bool isNot);
-//
-// jlong WCDBRustExpressionOperableClassMethod(inOperate,
-//                                           jint operandType,
-//                                           jlong operand,
-//                                           WCDBRustCommonArrayParameter(values),
-//                                           jboolean isNot);
-//
+
+void* WCDBRustExpressionOperableClassMethod(inOperate,
+                                            int operandType,
+                                            long operand,
+                                            WCDBRustCommonArrayParameter(values),
+                                            bool isNot);
+
 // jlong WCDBRustExpressionOperableClassMethod(
 // inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot);
 //
@@ -65,5 +65,8 @@ void* WCDBRustExpressionOperableClassMethod(betweenOperate,
 // jlong WCDBRustExpressionOperableClassMethod(
 // inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot);
 //
-// jlong WCDBRustExpressionOperableClassMethod(collateOperate, jint operandType, jlong operand,
-// jstring collation);
+
+void* WCDBRustExpressionOperableClassMethod(collateOperate,
+                                            int operandType,
+                                            long operand,
+                                            const char* collation);

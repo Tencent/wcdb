@@ -32,7 +32,7 @@
 
 void* WCDBRustExpressionClassMethod(create, int type, long long object);
 
-// jlong WCDBRustExpressionClassMethod(createWithFunction, jstring func);
+void* WCDBRustExpressionClassMethod(createWithFunction, const char* func);
 // jlong WCDBRustExpressionClassMethod(createWithExistStatement, jlong select);
 // jlong WCDBRustExpressionClassMethod(createWithNotExistStatement, jlong select);
 //
