@@ -5,6 +5,11 @@ use crate::winq::identifier::IdentifierStaticTrait;
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 
 pub trait ExpressionOperableTrait {
+    //todo dengxudong
+    fn is_null(&self) -> Expression;
+
+    fn not_null(&self) -> Expression;
+
     fn or<T>(&self, operand: &T) -> Expression
     where
         T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
@@ -375,6 +380,10 @@ pub trait ExpressionOperableTrait {
 
     fn in_value(&self, operands: Vec<Value>) -> Expression;
 
+    // todo dengxudong
+    //public <T> Expression in(@NotNull Set<T> operands) {
+    // public <T> Expression in(@NotNull List<T> operands) {
+
     fn not_in_short(&self, operands: Vec<i16>) -> Expression;
 
     fn not_in_int(&self, operands: Vec<i32>) -> Expression;
@@ -389,9 +398,118 @@ pub trait ExpressionOperableTrait {
 
     fn not_in_value(&self, operands: Vec<Value>) -> Expression;
 
+    // todo dengxudong
+    // public <T> Expression notIn(@NotNull Set<T> operands)
+    // public <T> Expression notIn(@NotNull List<T> operands)
+
+    // public Expression inTable(@NotNull String table) {
+    // Expression notInTable(@NotNull String table)
+    // Expression inFunction(@NotNull String table)
+    // public Expression notInFunction(@NotNull String table)
+    // Expression in(@NotNull StatementSelect select)
+    // Expression notIn(@NotNull StatementSelect select)
+
     fn collate(&self, collation: &str) -> Expression;
+
+    fn substr_short(&self, start: i16, length: i16) -> Expression;
 
     fn substr_int(&self, start: i32, length: i32) -> Expression;
 
     fn substr_long(&self, start: i64, length: i64) -> Expression;
+
+    fn like(&self, content: &str) -> Expression;
+
+    fn not_like(&self, content: &str) -> Expression;
+
+    fn glob(&self, content: &str) -> Expression;
+
+    fn not_glob(&self, content: &str) -> Expression;
+
+    fn match_string(&self, content: &str) -> Expression;
+
+    fn not_match(&self, content: &str) -> Expression;
+
+    fn regexp(&self, content: &str) -> Expression;
+
+    fn not_regexp(&self, content: &str) -> Expression;
+
+    fn is_bool(&self, operand: bool) -> Expression;
+
+    fn is_byte(&self, operand: u8) -> Expression;
+
+    fn is_short(&self, operand: i16) -> Expression;
+
+    fn is_i32(&self, operand: i32) -> Expression;
+
+    fn is_long(&self, operand: i64) -> Expression;
+
+    fn is_float(&self, operand: f32) -> Expression;
+
+    fn is_double(&self, operand: f64) -> Expression;
+
+    fn is_string(&self, operand: &str) -> Expression;
+
+    fn is_expression_convertible<T>(&self, operand: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn is_not_bool(&self, operand: bool) -> Expression;
+
+    fn is_not_byte(&self, operand: u8) -> Expression;
+
+    fn is_not_short(&self, operand: i16) -> Expression;
+
+    fn is_not_i32(&self, operand: i32) -> Expression;
+
+    fn is_not_long(&self, operand: i64) -> Expression;
+
+    fn is_not_float(&self, operand: f32) -> Expression;
+
+    fn is_not_double(&self, operand: f64) -> Expression;
+
+    fn is_not_string(&self, operand: &str) -> Expression;
+
+    fn is_not_expression_convertible<T>(&self, operand: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait;
+
+    fn avg(&self) -> Expression;
+
+    fn count(&self) -> Expression;
+
+    fn group_concat(&self) -> Expression;
+
+    fn group_concat_string(&self, sperator: &str) -> Expression;
+
+    fn max(&self) -> Expression;
+
+    fn min(&self) -> Expression;
+
+    fn sum(&self) -> Expression;
+
+    fn total(&self) -> Expression;
+
+    fn abs(&self) -> Expression;
+
+    fn hex(&self) -> Expression;
+
+    fn length(&self) -> Expression;
+
+    fn lower(&self) -> Expression;
+
+    fn upper(&self) -> Expression;
+
+    fn round(&self) -> Expression;
+
+    fn match_info(&self) -> Expression;
+
+    fn offsets(&self) -> Expression;
+
+    fn snippet(&self) -> Expression;
+
+    fn bm25(&self) -> Expression;
+
+    fn highlight(&self) -> Expression;
+
+    fn substring_match_info(&self) -> Expression;
 }

@@ -78,12 +78,10 @@ void WCDBRustExpressionClassMethod(argument,
 //    WCDBRustBridgeStruct(CPPExpression, expression);
 //    WCDBExpressionInvokeAll(expressionStruct);
 //}
-//
-// void WCDBRustExpressionClassMethod(distinct, jlong expression)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBExpressionDistinct(expressionStruct);
-//}
+void WCDBRustExpressionClassMethod(distinct, void* expression) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBExpressionDistinct(expressionStruct);
+}
 //
 // jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression))
 //{
@@ -150,7 +148,12 @@ void WCDBRustExpressionClassMethod(argument,
 //    WCDBExpressionSetWithElseExp2(expressionStruct, else__common);
 //    WCDBRustTryReleaseStringInCommonValue(else_);
 //}
-//
+
+void WCDBRustExpressionClassMethod(escapeWith, void* expression, const char* content) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBExpressionEscapeWith2(expressionStruct, content);
+}
+
 // void WCDBRustExpressionClassMethod(escapeWith, jlong expression, jstring content)
 //{
 //    WCDBRustBridgeStruct(CPPExpression, expression);

@@ -482,5 +482,120 @@ pub mod expression_test {
 
         let desc = left.substr_int(1, 2).get_description();
         assert_eq!(desc.as_str(), "SUBSTR(left, 1, 2)");
+
+        let desc = left.like(right).get_description();
+        assert_eq!(desc.as_str(), "left LIKE 'right'");
+
+        let desc = left.glob(right).get_description();
+        assert_eq!(desc.as_str(), "left GLOB 'right'");
+
+        let desc = left.match_string(right).get_description();
+        assert_eq!(desc.as_str(), "left MATCH 'right'");
+
+        let desc = left.regexp(right).get_description();
+        assert_eq!(desc.as_str(), "left REGEXP 'right'");
+
+        let desc = left.not_like(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT LIKE 'right'");
+
+        let desc = left.not_glob(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT GLOB 'right'");
+
+        let desc = left.not_match(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT MATCH 'right'");
+
+        let desc = left.not_regexp(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT REGEXP 'right'");
+
+        let desc = left.like(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left LIKE 'right' ESCAPE '%'");
+
+        let desc = left.glob(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left GLOB 'right' ESCAPE '%'");
+
+        let desc = left.match_string(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left MATCH 'right' ESCAPE '%'");
+
+        let desc = left.regexp(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left REGEXP 'right' ESCAPE '%'");
+
+        let desc = left.not_like(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT LIKE 'right' ESCAPE '%'");
+
+        let desc = left.not_glob(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT GLOB 'right' ESCAPE '%'");
+
+        let desc = left.not_match(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT MATCH 'right' ESCAPE '%'");
+
+        let desc = left.not_regexp(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT REGEXP 'right' ESCAPE '%'");
+
+        //is
+        let desc = left.is_string(right).get_description();
+        assert_eq!(desc.as_str(), "left IS 'right'");
+
+        let desc = left.is_not_string(right).get_description();
+        assert_eq!(desc.as_str(), "left IS NOT 'right'");
+
+        let desc = left.avg().get_description();
+        assert_eq!(desc.as_str(), "AVG(left)");
+
+        let desc = left.count().distinct().get_description();
+        assert_eq!(desc.as_str(), "COUNT(DISTINCT left)");
+
+        let desc = left.group_concat().get_description();
+        assert_eq!(desc.as_str(), "GROUP_CONCAT(left)");
+
+        let desc = left.group_concat_string("-").distinct().get_description();
+        assert_eq!(desc.as_str(), "GROUP_CONCAT(DISTINCT left, '-')");
+
+        let desc = left.max().get_description();
+        assert_eq!(desc.as_str(), "MAX(left)");
+
+        let desc = left.min().get_description();
+        assert_eq!(desc.as_str(), "MIN(left)");
+
+        let desc = left.sum().get_description();
+        assert_eq!(desc.as_str(), "SUM(left)");
+
+        let desc = left.total().get_description();
+        assert_eq!(desc.as_str(), "TOTAL(left)");
+
+        let desc = left.abs().get_description();
+        assert_eq!(desc.as_str(), "ABS(left)");
+
+        let desc = left.hex().get_description();
+        assert_eq!(desc.as_str(), "HEX(left)");
+
+        let desc = left.length().get_description();
+        assert_eq!(desc.as_str(), "LENGTH(left)");
+
+        let desc = left.lower().get_description();
+        assert_eq!(desc.as_str(), "LOWER(left)");
+
+        let desc = left.upper().get_description();
+        assert_eq!(desc.as_str(), "UPPER(left)");
+
+        let desc = left.round().get_description();
+        assert_eq!(desc.as_str(), "ROUND(left)");
+
+        let desc = left.match_info().get_description();
+        assert_eq!(desc.as_str(), "matchInfo(left)");
+
+        let desc = left.offsets().get_description();
+        assert_eq!(desc.as_str(), "offsets(left)");
+
+        let desc = left.snippet().get_description();
+        assert_eq!(desc.as_str(), "snippet(left)");
+
+        let desc = left.bm25().get_description();
+        assert_eq!(desc.as_str(), "bm25(left)");
+
+        let desc = left.highlight().get_description();
+        assert_eq!(desc.as_str(), "highlight(left)");
+
+        let desc = left.substring_match_info().get_description();
+        assert_eq!(desc.as_str(), "substring_match_info(left)");
     }
 }

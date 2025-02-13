@@ -63,6 +63,14 @@ impl ExpressionConvertibleTrait for Column {}
 impl IndexedColumnConvertibleTrait for Column {}
 
 impl ExpressionOperableTrait for Column {
+    fn is_null(&self) -> Expression {
+        todo!()
+    }
+
+    fn not_null(&self) -> Expression {
+        todo!()
+    }
+
     fn or<T>(&self, operand: &T) -> Expression
     where
         T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
@@ -954,6 +962,11 @@ impl ExpressionOperableTrait for Column {
             .collate(Self::get_type(), collation)
     }
 
+    fn substr_short(&self, start: i16, length: i16) -> Expression {
+        self.expression_operable
+            .substr_int(Self::get_type(), start as i32, length as i32)
+    }
+
     fn substr_int(&self, start: i32, length: i32) -> Expression {
         self.expression_operable
             .substr_int(Self::get_type(), start, length)
@@ -962,6 +975,224 @@ impl ExpressionOperableTrait for Column {
     fn substr_long(&self, start: i64, length: i64) -> Expression {
         self.expression_operable
             .substr_long(Self::get_type(), start, length)
+    }
+
+    fn like(&self, content: &str) -> Expression {
+        self.expression_operable
+            .like(Self::get_type(), content, false)
+    }
+
+    fn not_like(&self, content: &str) -> Expression {
+        self.expression_operable
+            .like(Self::get_type(), content, true)
+    }
+
+    fn glob(&self, content: &str) -> Expression {
+        self.expression_operable
+            .glob(Self::get_type(), content, false)
+    }
+
+    fn not_glob(&self, content: &str) -> Expression {
+        self.expression_operable
+            .glob(Self::get_type(), content, true)
+    }
+
+    fn match_string(&self, content: &str) -> Expression {
+        self.expression_operable
+            .match_string(Self::get_type(), content, false)
+    }
+
+    fn not_match(&self, content: &str) -> Expression {
+        self.expression_operable
+            .match_string(Self::get_type(), content, true)
+    }
+
+    fn regexp(&self, content: &str) -> Expression {
+        self.expression_operable
+            .regexp(Self::get_type(), content, false)
+    }
+
+    fn not_regexp(&self, content: &str) -> Expression {
+        self.expression_operable
+            .regexp(Self::get_type(), content, true)
+    }
+
+    fn is_bool(&self, operand: bool) -> Expression {
+        self.expression_operable
+            .is_bool(Self::get_type(), operand, false)
+    }
+
+    fn is_byte(&self, operand: u8) -> Expression {
+        self.expression_operable
+            .is_byte(Self::get_type(), operand, false)
+    }
+
+    fn is_short(&self, operand: i16) -> Expression {
+        self.expression_operable
+            .is_short(Self::get_type(), operand, false)
+    }
+
+    fn is_i32(&self, operand: i32) -> Expression {
+        self.expression_operable
+            .is_i32(Self::get_type(), operand, false)
+    }
+
+    fn is_long(&self, operand: i64) -> Expression {
+        self.expression_operable
+            .is_long(Self::get_type(), operand, false)
+    }
+
+    fn is_float(&self, operand: f32) -> Expression {
+        self.expression_operable
+            .is_float(Self::get_type(), operand, false)
+    }
+
+    fn is_double(&self, operand: f64) -> Expression {
+        self.expression_operable
+            .is_double(Self::get_type(), operand, false)
+    }
+
+    fn is_string(&self, operand: &str) -> Expression {
+        self.expression_operable
+            .is_string(Self::get_type(), operand, false)
+    }
+
+    fn is_expression_convertible<T>(&self, operand: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .is_expression_convertible(Self::get_type(), operand, false)
+    }
+
+    fn is_not_bool(&self, operand: bool) -> Expression {
+        self.expression_operable
+            .is_bool(Self::get_type(), operand, true)
+    }
+
+    fn is_not_byte(&self, operand: u8) -> Expression {
+        self.expression_operable
+            .is_byte(Self::get_type(), operand, true)
+    }
+
+    fn is_not_short(&self, operand: i16) -> Expression {
+        self.expression_operable
+            .is_short(Self::get_type(), operand, true)
+    }
+
+    fn is_not_i32(&self, operand: i32) -> Expression {
+        self.expression_operable
+            .is_i32(Self::get_type(), operand, true)
+    }
+
+    fn is_not_long(&self, operand: i64) -> Expression {
+        self.expression_operable
+            .is_long(Self::get_type(), operand, true)
+    }
+
+    fn is_not_float(&self, operand: f32) -> Expression {
+        self.expression_operable
+            .is_float(Self::get_type(), operand, true)
+    }
+
+    fn is_not_double(&self, operand: f64) -> Expression {
+        self.expression_operable
+            .is_double(Self::get_type(), operand, true)
+    }
+
+    fn is_not_string(&self, operand: &str) -> Expression {
+        self.expression_operable
+            .is_string(Self::get_type(), operand, true)
+    }
+
+    fn is_not_expression_convertible<T>(&self, operand: &T) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.expression_operable
+            .is_expression_convertible(Self::get_type(), operand, true)
+    }
+
+    fn avg(&self) -> Expression {
+        self.expression_operable.avg(Self::get_type())
+    }
+
+    fn count(&self) -> Expression {
+        self.expression_operable.count(Self::get_type())
+    }
+
+    fn group_concat(&self) -> Expression {
+        self.expression_operable.group_concat(Self::get_type())
+    }
+
+    fn group_concat_string(&self, sperator: &str) -> Expression {
+        self.expression_operable
+            .group_concat_string(Self::get_type(), sperator)
+    }
+
+    fn max(&self) -> Expression {
+        self.expression_operable.max(Self::get_type())
+    }
+
+    fn min(&self) -> Expression {
+        self.expression_operable.min(Self::get_type())
+    }
+
+    fn sum(&self) -> Expression {
+        self.expression_operable.sum(Self::get_type())
+    }
+
+    fn total(&self) -> Expression {
+        self.expression_operable.total(Self::get_type())
+    }
+
+    fn abs(&self) -> Expression {
+        self.expression_operable.abs(Self::get_type())
+    }
+
+    fn hex(&self) -> Expression {
+        self.expression_operable.hex(Self::get_type())
+    }
+
+    fn length(&self) -> Expression {
+        self.expression_operable.length(Self::get_type())
+    }
+
+    fn lower(&self) -> Expression {
+        self.expression_operable.lower(Self::get_type())
+    }
+
+    fn upper(&self) -> Expression {
+        self.expression_operable.upper(Self::get_type())
+    }
+
+    fn round(&self) -> Expression {
+        self.expression_operable.round(Self::get_type())
+    }
+
+    fn match_info(&self) -> Expression {
+        self.expression_operable.match_info(Self::get_type())
+    }
+
+    fn offsets(&self) -> Expression {
+        self.expression_operable.offsets(Self::get_type())
+    }
+
+    fn snippet(&self) -> Expression {
+        self.expression_operable.snippet(Self::get_type())
+    }
+
+    fn bm25(&self) -> Expression {
+        self.expression_operable.bm25(Self::get_type())
+    }
+
+    fn highlight(&self) -> Expression {
+        self.expression_operable.highlight(Self::get_type())
+    }
+
+    fn substring_match_info(&self) -> Expression {
+        self.expression_operable
+            .substring_match_info(Self::get_type())
     }
 }
 

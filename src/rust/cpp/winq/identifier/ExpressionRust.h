@@ -46,7 +46,7 @@ void WCDBRustExpressionClassMethod(argument,
 // void WCDBRustExpressionClassMethod(invoke, jlong expression);
 // void WCDBRustExpressionClassMethod(invokeAll, jlong expression);
 //
-// void WCDBRustExpressionClassMethod(distinct, jlong expression);
+void WCDBRustExpressionClassMethod(distinct, void* expression);
 //
 // jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression));
 // void WCDBRustExpressionClassMethod(as, jlong expression, jint type);
@@ -64,7 +64,7 @@ void WCDBRustExpressionClassMethod(argument,
 //                                  jlong expression,
 //                                  WCDBRustCommonValueParameter(else_));
 //
-// void WCDBRustExpressionClassMethod(escapeWith, jlong expression, jstring content);
+void WCDBRustExpressionClassMethod(escapeWith, void* expression, const char* content);
 //
 // jlong WCDBRustExpressionClassMethod(createWithWindowFunction, jstring func);
 // void WCDBRustExpressionClassMethod(filter, jlong expression, jlong condition);

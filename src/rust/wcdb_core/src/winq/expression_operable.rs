@@ -708,6 +708,11 @@ impl ExpressionOperable {
         expression
     }
 
+    fn null_operate() -> Expression {
+        // todo dengxudong
+        Expression::new()
+    }
+
     pub fn between_operate_with_expression_convertible<T>(
         &self,
         left_cpp_type: i32,
@@ -1536,6 +1541,7 @@ impl ExpressionOperable {
         left_cpp_type: i32,
         is_not: bool,
     ) -> Expression {
+        //todo dengxudong
         Expression::new()
         // match operands {
         //     None => {
@@ -1610,6 +1616,192 @@ impl ExpressionOperable {
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
             .argument_long(start)
             .argument_long(length)
+    }
+
+    pub fn like(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
+        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::Like, is_not)
+    }
+
+    pub fn glob(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
+        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::GLOB, is_not)
+    }
+
+    pub fn match_string(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
+        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::Match, is_not)
+    }
+
+    pub fn regexp(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
+        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::RegExp, is_not)
+    }
+
+    pub fn is_bool(&self, left_cpp_type: i32, operand: bool, is_not: bool) -> Expression {
+        self.binary_operate_with_bool(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
+    }
+
+    pub fn is_byte(&self, left_cpp_type: i32, operand: u8, is_not: bool) -> Expression {
+        self.binary_operate_with_long(
+            left_cpp_type,
+            operand as i64,
+            BinaryOperatorType::Is,
+            is_not,
+        )
+    }
+
+    pub fn is_short(&self, left_cpp_type: i32, operand: i16, is_not: bool) -> Expression {
+        self.binary_operate_with_long(
+            left_cpp_type,
+            operand as i64,
+            BinaryOperatorType::Is,
+            is_not,
+        )
+    }
+
+    pub fn is_i32(&self, left_cpp_type: i32, operand: i32, is_not: bool) -> Expression {
+        self.binary_operate_with_long(
+            left_cpp_type,
+            operand as i64,
+            BinaryOperatorType::Is,
+            is_not,
+        )
+    }
+
+    pub fn is_long(&self, left_cpp_type: i32, operand: i64, is_not: bool) -> Expression {
+        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
+    }
+
+    pub fn is_float(&self, left_cpp_type: i32, operand: f32, is_not: bool) -> Expression {
+        self.binary_operate_with_double(
+            left_cpp_type,
+            operand as f64,
+            BinaryOperatorType::Is,
+            is_not,
+        )
+    }
+
+    pub fn is_double(&self, left_cpp_type: i32, operand: f64, is_not: bool) -> Expression {
+        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
+    }
+
+    pub fn is_string(&self, left_cpp_type: i32, operand: &str, is_not: bool) -> Expression {
+        self.binary_operate_text(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
+    }
+
+    pub fn is_expression_convertible<T>(
+        &self,
+        left_cpp_type: i32,
+        operand: &T,
+        is_not: bool,
+    ) -> Expression
+    where
+        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
+    {
+        self.binary_operate_with_expression_convertible(
+            left_cpp_type,
+            operand,
+            BinaryOperatorType::Is,
+            is_not,
+        )
+    }
+
+    pub fn avg(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("AVG"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn count(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("COUNT"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn group_concat(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("GROUP_CONCAT"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn group_concat_string(&self, left_cpp_type: i32, sperator: &str) -> Expression {
+        Self::create_expression(Expression::function("GROUP_CONCAT"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+            .argument_string(sperator)
+    }
+
+    pub fn max(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("MAX"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn min(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("MIN"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn sum(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("SUM"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn total(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("TOTAL"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn abs(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("ABS"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn hex(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("HEX"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn length(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("LENGTH"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn lower(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("LOWER"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn upper(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("UPPER"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn round(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("ROUND"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn match_info(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("matchInfo"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn offsets(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("offsets"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn snippet(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("snippet"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn bm25(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("bm25"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn highlight(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("highlight"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    }
+
+    pub fn substring_match_info(&self, left_cpp_type: i32) -> Expression {
+        Self::create_expression(Expression::function("substring_match_info"))
+            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 }
 
