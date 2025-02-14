@@ -90,6 +90,9 @@ impl<'a> TableOperation<'a> {
         }
         Ok(())
     }
+
+    // todo dengxudong
+    // public void updateValue(int value, @NotNull Column column) throws WCDBException {
 }
 
 impl<'a> TableOperation<'a> {

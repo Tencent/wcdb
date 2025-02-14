@@ -1,9 +1,11 @@
 use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::expression_operable::ExpressionOperable;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::expression_convertible::ExpressionConvertibleTrait;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait};
 use std::ffi::{c_int, c_void};
 
 extern "C" {
+    pub fn WCDBRustOrderingTerm_create(cpp_type: c_int, expression: *mut c_void) -> *mut c_void;
+
     pub fn WCDBRustOrderingTerm_configOrder(cpp_obj: *mut c_void, order: c_int);
 }
 
@@ -38,8 +40,12 @@ impl IdentifierStaticTrait for OrderingTerm {
 }
 
 impl OrderingTerm {
-    pub(crate) fn new(expression: &ExpressionOperable) -> Self {
-        let identifier = Identifier::new_with_obj(expression.get_cpp_obj());
+    pub(crate) fn new<T: ExpressionConvertibleTrait>(left_cpp_type: i32, expression: &T) -> Self {
+        let cpp_obj = unsafe {
+            let left_cpp_obj = expression.as_cpp_object();
+            WCDBRustOrderingTerm_create(left_cpp_type as c_int, left_cpp_obj)
+        };
+        let identifier = Identifier::new_with_obj(cpp_obj);
         OrderingTerm { identifier }
     }
 }

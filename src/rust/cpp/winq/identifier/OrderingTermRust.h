@@ -29,7 +29,7 @@
 #define WCDBRustOrderingTermClassMethod(funcName, ...) \
     WCDBRustClassMethod(OrderingTerm, funcName, __VA_ARGS__)
 
-// jlong WCDBRustOrderingTermClassMethod(create, jint type, jlong expression);
+void* WCDBRustOrderingTermClassMethod(create, int type, void* expression);
 //
 // void WCDBRustOrderingTermClassMethod(configCollation, jlong object, jstring collation);
 

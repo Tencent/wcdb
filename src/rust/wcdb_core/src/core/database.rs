@@ -225,7 +225,8 @@ impl HandleOperationTrait for Database {
     }
 
     fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        unimplemented!()
+        let handle = self.get_handle(true);
+        handle.run_transaction(callback)
     }
 }
 

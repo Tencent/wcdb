@@ -22,6 +22,13 @@
 
 #include "OrderingTermBridge.h"
 
+void* WCDBRustOrderingTermClassMethod(create, int type, void* expression) {
+    CPPCommonValue common_expression;
+    common_expression.type = type;
+    common_expression.intValue = expression;
+    return (void*)WCDBOrderingTermCreate2(common_expression).innerValue;
+}
+
 // jlong WCDBRustOrderingTermClassMethod(create, jint type, jlong expression)
 //{
 //     CPPCommonValue common_expression;

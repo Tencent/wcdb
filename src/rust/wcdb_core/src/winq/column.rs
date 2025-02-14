@@ -1214,6 +1214,6 @@ impl Column {
     }
 
     pub fn order(&self, order: Order) -> OrderingTerm {
-        return OrderingTerm::new(&self.expression_operable).order(order);
+        OrderingTerm::new(Self::get_type(), self).order(order)
     }
 }
