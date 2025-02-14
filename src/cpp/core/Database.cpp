@@ -513,6 +513,8 @@ void Database::enableLiteMode(bool enable)
     m_innerDatabase->setLiteModeEnable(enable);
 }
 
+#ifndef _WIN32
+
 void Database::registerPOSIXOpen(POSIXOpen open)
 {
     Global::shared().registerPOSIXOpen(open);
@@ -522,6 +524,8 @@ void Database::registerPOSIXClose(POSIXClose close)
 {
     Global::shared().registerPOSIXClose(close);
 }
+
+#endif
 
 #pragma mark - Migration
 
