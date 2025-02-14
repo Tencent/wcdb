@@ -5,6 +5,7 @@ use std::ffi::{c_char, c_void, CString};
 extern "C" {
     pub fn WCDBRustPragma_create(name: *const c_char) -> *mut c_void;
 }
+
 pub struct Pragma {
     identifier: Identifier,
 }

@@ -22,17 +22,15 @@
 
 #include "ExpressionBridge.h"
 
-void* WCDBRustExpressionClassMethod(create, int type, long long object) {
+void* WCDBRustExpressionClassMethod(create, int type, void* object) {
     CPPCommonValue commonValue;
     commonValue.type = type;
-    commonValue.intValue = object;
-    void* ret = (void*)WCDBExpressionCreate(commonValue).innerValue;
-    return ret;
+    commonValue.intValue = (long long)object;
+    return (void*)WCDBExpressionCreate(commonValue).innerValue;
 }
 
 void* WCDBRustExpressionClassMethod(createWithFunction, const char* func) {
-    void* ret = (void*)WCDBExpressionCreateWithFunction(func).innerValue;
-    return ret;
+    return (void*)WCDBExpressionCreateWithFunction(func).innerValue;
 }
 
 //

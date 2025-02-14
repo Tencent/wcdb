@@ -41,10 +41,8 @@ impl IdentifierStaticTrait for OrderingTerm {
 
 impl OrderingTerm {
     pub(crate) fn new<T: ExpressionConvertibleTrait>(left_cpp_type: i32, expression: &T) -> Self {
-        let cpp_obj = unsafe {
-            let left_cpp_obj = expression.as_cpp_object();
-            WCDBRustOrderingTerm_create(left_cpp_type as c_int, left_cpp_obj)
-        };
+        let left_cpp_obj = expression.as_cpp_object();
+        let cpp_obj = unsafe { WCDBRustOrderingTerm_create(left_cpp_type as c_int, left_cpp_obj) };
         let identifier = Identifier::new_with_obj(cpp_obj);
         OrderingTerm { identifier }
     }

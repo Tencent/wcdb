@@ -1,6 +1,3 @@
-// Created by chenqiuwen on 2023/4/1.
-//
-
 /*
  * Tencent is pleased to support the open source community by making
  * WCDB available.
@@ -131,6 +128,5 @@ void* WCDBRustExpressionOperableClassMethod(collateOperate,
     CPPCommonValue operand_common;
     operand_common.type = operandType;
     operand_common.intValue = operand;
-    void* ret = (void*)WCDBExpressionCollateOperate2(operand_common, collation).innerValue;
-    return ret;
+    return (void*)WCDBExpressionCollateOperate2(operand_common, collation).innerValue;
 }

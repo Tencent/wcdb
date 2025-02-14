@@ -25,7 +25,7 @@
 void* WCDBRustOrderingTermClassMethod(create, int type, void* expression) {
     CPPCommonValue common_expression;
     common_expression.type = type;
-    common_expression.intValue = expression;
+    common_expression.intValue = (long long)expression;
     return (void*)WCDBOrderingTermCreate2(common_expression).innerValue;
 }
 

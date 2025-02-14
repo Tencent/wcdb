@@ -30,7 +30,7 @@
 #define WCDBRustExpressionClassMethod(funcName, ...) \
     WCDBRustClassMethod(Expression, funcName, __VA_ARGS__)
 
-void* WCDBRustExpressionClassMethod(create, int type, long long object);
+void* WCDBRustExpressionClassMethod(create, int type, void* object);
 
 void* WCDBRustExpressionClassMethod(createWithFunction, const char* func);
 // jlong WCDBRustExpressionClassMethod(createWithExistStatement, jlong select);

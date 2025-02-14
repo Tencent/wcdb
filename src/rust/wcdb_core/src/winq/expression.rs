@@ -29,6 +29,7 @@ extern "C" {
     pub fn WCDBRustExpression_argument(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
+        // TODO(dengxudong, 02/14): 这里加一个 void_ptr: *mut c_void, 不要跟 int_value 共用，int_value 还保持 c_int 类型。
         int_value: *mut c_void,
         double_value: c_double,
         string_value: *const c_char,
