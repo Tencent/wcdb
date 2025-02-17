@@ -2,6 +2,7 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
@@ -26,6 +27,24 @@ extern "C" {
         vec_len: c_size_t,
     );
     pub fn WCDBRustStatementSelect_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
+
+    pub fn WCDBRustStatementSelect_configOrders(
+        cpp_obj: *mut c_void,
+        orders: *const c_long,
+        orders_length: c_int,
+    );
+
+    pub fn WCDBRustStatementSelect_configLimitCount(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        count: c_long,
+    );
+
+    pub fn WCDBRustStatementSelect_configOffset(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        count: c_long,
+    );
 }
 
 #[derive(Debug)]
@@ -119,6 +138,47 @@ impl StatementSelect {
     pub fn where_expression(&self, condition: &Expression) -> &Self {
         unsafe {
             WCDBRustStatementSelect_configCondition(self.get_cpp_obj(), condition.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn order_by(&self, orders: Vec<OrderingTerm>) -> &Self {
+        if orders.is_empty() {
+            self;
+        }
+        let mut cpp_orders: Vec<*mut c_void> = Vec::new();
+        for x in orders {
+            cpp_orders.push(x.get_cpp_obj());
+        }
+        let orders_length = cpp_orders.len() as c_int;
+        unsafe {
+            WCDBRustStatementSelect_configOrders(
+                self.get_cpp_obj(),
+                cpp_orders.as_ptr() as *const c_long,
+                orders_length,
+            )
+        }
+        self
+    }
+
+    pub fn limit(&self, count: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementSelect_configLimitCount(
+                self.get_cpp_obj(),
+                CPPType::Int as c_int,
+                count as c_long,
+            )
+        }
+        self
+    }
+
+    pub fn offset(&self, offset: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementSelect_configOffset(
+                self.get_cpp_obj(),
+                CPPType::Int as c_int,
+                offset as c_long,
+            )
         }
         self
     }

@@ -164,6 +164,119 @@ pub trait TableORMOperationTrait {
         offset: i64,
     ) -> WCDBResult<()>;
 
+    // getFirstObject( binding
+
+    // getFirstObject select(fields)
+
+    fn get_all_objects<T>(&self) -> WCDBResult<Vec<T>>;
+    //public <R extends T> List<R> getAllObjects(@NotNull Class<R> cls)
+    fn get_all_objects_by_expression<T>(&self, condition: Expression) -> WCDBResult<Vec<T>>;
+    //public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @NotNull Class<R> cls)
+    fn get_all_objects_by_expression_order<T>(
+        &self,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>>;
+    //public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+    fn get_all_objects_by_expression_order_limit<T>(
+        &self,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>>;
+    //public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_expression_order_limit_offset<T>(
+        &self,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>>;
+    // public <R extends T> List<R> getAllObjects(@Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
+
+    fn get_all_objects_order<T>(&self, order: OrderingTerm) -> WCDBResult<Vec<T>>;
+    // public <R extends T> List<R> getAllObjects(@Nullable OrderingTerm order, @NotNull Class<R> cls)
+    fn get_all_objects_order_limit<T>(&self, order: OrderingTerm, limit: i64)
+        -> WCDBResult<Vec<T>>;
+    //public <R extends T> List<R> getAllObjects(@Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
+    fn get_all_objects_order_limit_offset<T>(
+        &self,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>>;
+    //public <R extends T> List<R> getAllObjects(@Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_fields<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<Vec<T>>;
+
+    //  public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull Class<R> cls) throws WCDBException {
+
+    fn get_all_objects_by_fields_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_fields_expression_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>>;
+
+    //  public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_fields_expression_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    // public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_fields_expression_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    // public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_fields_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>>;
+
+    // public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_fields_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    //     fn get_all_objects_by_order_limit<T>(&self, fields: Vec<&Field<T>>, order: OrderingTerm, limit: i64) -> WCDBResult<Vec<T>>;
+
+    fn get_all_objects_by_fields_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    // public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
+
     fn get_first_object<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<T>;
 
     fn get_first_object_by_expression<T>(
@@ -171,8 +284,6 @@ pub trait TableORMOperationTrait {
         fields: Vec<&Field<T>>,
         expression: Expression,
     ) -> WCDBResult<T>;
-
-    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<Vec<T>>;
 }
 
 impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for TableORMOperation<'a, K, R> {
@@ -512,8 +623,202 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for TableORMOperation<'a,
         Ok(())
     }
 
+    fn get_all_objects<T>(&self) -> WCDBResult<Vec<T>> {
+        //todo dengxudong binding.all_binding_fields 返回值有问题
+        // self.prepare_select().select(self.binding.all_binding_fields()).all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_by_expression<T>(&self, condition: Expression) -> WCDBResult<Vec<T>> {
+        // self.prepare_select::<T>()
+        //     .select(self.binding.all_binding_fields())
+        //     .where_expression(condition)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_by_expression_order<T>(
+        &self,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>> {
+        // self.prepare_select()
+        //     .select(self.binding.all_binding_fields())
+        //     .where_expression(condition)
+        //     .order_by(order)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_by_expression_order_limit<T>(
+        &self,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>> {
+        // self.prepare_select::<T>()
+        //     .select(self.binding.all_binding_fields())
+        //     .where_expression(condition)
+        //     .order_by(order)
+        //     .limit(limit)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_by_expression_order_limit_offset<T>(
+        &self,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>> {
+        // self.prepare_select::<T>()
+        //     .select(self.binding.all_binding_fields())
+        //     .where_expression(condition)
+        //     .order_by(order)
+        //     .limit(limit)
+        //     .offset(offset)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_order<T>(&self, order: OrderingTerm) -> WCDBResult<Vec<T>> {
+        // self.prepare_select::<T>()
+        //     .select(self.binding.all_binding_fields())
+        //     .order_by(order)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_order_limit<T>(
+        &self,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>> {
+        // self.prepare_select::<T>()
+        //     .select(self.binding.all_binding_fields())
+        //     .order_by(order)
+        //     .limit(limit)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_order_limit_offset<T>(
+        &self,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>> {
+        // self.prepare_select::<T>()
+        //     .select(self.binding.all_binding_fields())
+        //     .order_by(order)
+        //     .limit(limit)
+        //     .offset(offset)
+        //     .all_objects()
+        Ok((vec![]))
+    }
+
+    fn get_all_objects_by_fields<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>().select(fields).all_objects()
+    }
+
+    fn get_all_objects_by_fields_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .where_expression(condition)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_fields_expression_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .where_expression(condition)
+            .order_by(order)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_fields_expression_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .where_expression(condition)
+            .order_by(order)
+            .limit(limit)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_fields_expression_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .where_expression(condition)
+            .order_by(order)
+            .limit(limit)
+            .offset(offset)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_fields_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .order_by(order)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_fields_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .order_by(order)
+            .limit(limit)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_fields_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select::<T>()
+            .select(fields)
+            .order_by(order)
+            .limit(limit)
+            .offset(offset)
+            .all_objects()
+    }
+
     fn get_first_object<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<T> {
-        self.prepare_select().select(fields).first_object()
+        self.prepare_select::<T>().select(fields).first_object()
     }
 
     fn get_first_object_by_expression<T>(
@@ -521,14 +826,10 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for TableORMOperation<'a,
         fields: Vec<&Field<T>>,
         expression: Expression,
     ) -> WCDBResult<T> {
-        self.prepare_select()
+        self.prepare_select::<T>()
             .select(fields)
             .where_expression(expression)
             .first_object()
-    }
-
-    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<Vec<T>> {
-        self.prepare_select().select(fields).all_objects()
     }
 }
 

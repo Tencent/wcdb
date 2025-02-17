@@ -671,6 +671,190 @@ impl HandleORMOperationTrait for Database {
             .from(table_name)
             .all_objects()
     }
+
+    fn get_first_object_by_table_name_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+    ) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .first_object()
+    }
+
+    fn get_first_object_by_table_name_expression_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .order_by(order)
+            .first_object()
+    }
+
+    fn get_first_object_by_table_name_expression_order_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+        offset: i64,
+    ) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .order_by(order)
+            .limit(1)
+            .offset(offset)
+            .first_object()
+    }
+
+    fn get_first_object_by_table_name_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+    ) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .order_by(order)
+            .first_object()
+    }
+
+    fn get_first_object_by_table_name_order_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        offset: i64,
+    ) -> WCDBResult<T> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .order_by(order)
+            .limit(1)
+            .offset(offset)
+            .first_object()
+    }
+
+    fn get_all_objects_by_table_name_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_table_name_expression_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .order_by(order)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_table_name_expression_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .order_by(order)
+            .limit(limit)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_table_name_expression_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .where_expression(condition)
+            .order_by(order)
+            .limit(limit)
+            .offset(offset)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_table_name_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .order_by(order)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_table_name_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .order_by(order)
+            .limit(limit)
+            .all_objects()
+    }
+
+    fn get_all_objects_by_table_name_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .order_by(order)
+            .limit(limit)
+            .offset(offset)
+            .all_objects()
+    }
 }
 
 impl Database {

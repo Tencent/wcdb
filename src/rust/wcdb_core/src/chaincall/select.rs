@@ -1,10 +1,11 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
-use crate::core::handle::{Handle, WCDBRustHandle_getError};
+use crate::core::handle::Handle;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::field::Field;
 use crate::winq::expression::Expression;
+use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_select::StatementSelect;
 use std::sync::Arc;
@@ -49,6 +50,21 @@ impl<'a, T> Select<'a, T> {
 
     pub fn where_expression(self, condition: Expression) -> Self {
         self.chain_call.statement.where_expression(&condition);
+        self
+    }
+
+    pub fn order_by(self, order: OrderingTerm) -> Self {
+        self.chain_call.statement.order_by(vec![order]);
+        self
+    }
+
+    pub fn limit(self, count: i64) -> Self {
+        self.chain_call.statement.limit(count);
+        self
+    }
+
+    pub fn offset(self, count: i64) -> Self {
+        self.chain_call.statement.offset(count);
         self
     }
 

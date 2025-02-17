@@ -1,33 +1,7 @@
-use table_coding::WCDBTableCoding;
-
-#[derive(WCDBTableCoding)]
-#[WCDBTable]
-pub struct TestTable {
-    #[WCDBField(is_primary = true, is_auto_increment = true)]
-    id: i32,
-    #[WCDBField]
-    content: String,
-}
-impl TestTable {
-    pub fn new(content: String) -> TestTable {
-        TestTable {
-            id: 0,
-            content: content.clone(),
-        }
-    }
-
-    pub fn create_object(id: i32, content: String) -> TestTable {
-        TestTable {
-            id,
-            content: content.clone(),
-        }
-    }
-}
-
 #[cfg(test)]
 pub mod simple_sample {
     use crate::base::random_tool::RandomTool;
-    use crate::sample::simple_sample::{DbTestTable, TestTable, DBTESTTABLE_INSTANCE};
+    use crate::base::test_object::{DbTestObject, TestObject, DBTESTOBJECT_INSTANCE};
     use wcdb_core::core::database::Database;
     use wcdb_core::core::handle::Handle;
     use wcdb_core::core::handle_operation::HandleOperationTrait;
@@ -49,30 +23,30 @@ pub mod simple_sample {
         //         });
         // 建表，不用判断表是否存在，底下会判断
         database
-            .create_table("testTable", &*DBTESTTABLE_INSTANCE)
+            .create_table("testTable", &*DBTESTOBJECT_INSTANCE)
             .unwrap();
-        let table = database.get_table("testTable", &*DBTESTTABLE_INSTANCE);
+        let table = database.get_table("testTable", &*DBTESTOBJECT_INSTANCE);
 
-        let test_table = TestTable::new(String::from("abc"));
+        let test_table = TestObject::new(String::from("abc"));
         table
-            .insert_object(test_table, DbTestTable::all_fields())
+            .insert_object(test_table, DbTestObject::all_fields())
             .unwrap();
         let mut messages = Vec::new();
         for x in 0..100 {
-            let test_table = TestTable::new(RandomTool::string_by_length(x));
+            let test_table = TestObject::new(RandomTool::string_by_length(x));
             messages.push(test_table);
         }
         // 批量插入，自动开事务
         table
-            .insert_objects(messages, DbTestTable::all_fields())
+            .insert_objects(messages, DbTestObject::all_fields())
             .unwrap();
-        let test_table = TestTable::new(String::from("updateContent"));
+        let test_table = TestObject::new(String::from("updateContent"));
 
         // 更新，可以用一个数据、一行数据、一个对象为单位去更新，后面还可以跟 order，limit，offset 参数
-        let test_table = TestTable::create_object(200, String::from("updateContent2"));
-        let id = DBTESTTABLE_INSTANCE.id;
+        let test_table = TestObject::create_object(200, String::from("updateContent2"));
+        let id = DBTESTOBJECT_INSTANCE.id;
         let filed_id = unsafe { &*id };
-        let content = DBTESTTABLE_INSTANCE.content;
+        let content = DBTESTOBJECT_INSTANCE.content;
         let filed_content = unsafe { &*content };
         let express_content = filed_content.get_column().eq_string("updateContent");
         let express = filed_id.get_column().eq_long(100).and(&express_content);
@@ -85,7 +59,7 @@ pub mod simple_sample {
         }
 
         // 删除
-        let id = DBTESTTABLE_INSTANCE.id;
+        let id = DBTESTOBJECT_INSTANCE.id;
         let filed_id = unsafe { &*id };
         let express = filed_id.get_column().lt_int(10);
         // table.delete_objects_by_expression(express).unwrap();
@@ -99,13 +73,23 @@ pub mod simple_sample {
         }
 
         // 读取
-        let data = table.get_all_objects(DbTestTable::all_fields()).unwrap();
+        let data = table
+            .get_all_objects_by_fields(DbTestObject::all_fields())
+            .unwrap();
+        let id = DBTESTOBJECT_INSTANCE.id;
+        let filed_id = unsafe { &*id };
+        let expression = filed_id.get_column().gt_int(100);
+        // table.get_all_objects_by_expression_order_limit(
+        //     expression,
+        //     filed_id.get_column().order(Order::Desc),
+        //     10,
+        // );
 
         // 执行事务
         let ret = database.run_transaction(move |handle: Handle| {
-            let test_table = TestTable::new(String::from("run_transaction"));
+            let test_table = TestObject::new(String::from("run_transaction"));
             table
-                .insert_object(test_table, DbTestTable::all_fields())
+                .insert_object(test_table, DbTestObject::all_fields())
                 .unwrap();
             return true; //返回 false 回滚整个事务
         });

@@ -1,4 +1,5 @@
 pub(crate) mod base;
+pub(crate) mod crud;
 pub(crate) mod database;
 pub(crate) mod orm;
 pub(crate) mod sample;

@@ -220,7 +220,133 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         expression: Expression,
     ) -> WCDBResult<T>;
 
+    // todo dengxudong
+    // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls)
+
+    fn get_first_object_by_table_name_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+    ) -> WCDBResult<T>;
+
+    // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
+
+    fn get_first_object_by_table_name_expression_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<T>;
+
+    //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+
+    fn get_first_object_by_table_name_expression_order_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+        offset: i64,
+    ) -> WCDBResult<T>;
+
+    //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls)
+
+    fn get_first_object_by_table_name_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+    ) -> WCDBResult<T>;
+
+    //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+
+    fn get_first_object_by_table_name_order_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        offset: i64,
+    ) -> WCDBResult<T>;
+
+    // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls)
+
     fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_expression<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_expression_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_expression_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_expression_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition: Expression,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_order<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_order_limit<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
+
+    fn get_all_objects_by_table_name_order_limit_offset<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        order: OrderingTerm,
+        limit: i64,
+        offset: i64,
+    ) -> WCDBResult<Vec<T>>;
+
+    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
 }
 
 impl CppObjectTrait for HandleORMOperation {

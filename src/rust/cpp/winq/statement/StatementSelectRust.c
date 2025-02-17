@@ -113,15 +113,12 @@ void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condi
 //    WCDBRustBridgeStruct(CPPStatementSelect, self);
 //    WCDBStatementSelectConfigExcept(selfStruct);
 //}
-//
-// void WCDBRustStatementSelectClassMethod(configOrders, jlong self, jlongArray orders)
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBRustGetCppPointerArrayCritical(orders);
-//    WCDBStatementSelectConfigOrders(
-//    selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
-//    WCDBRustReleaseCppPointerArrayCritical(orders);
-//}
+
+void WCDBRustStatementSelectClassMethod(configOrders, void* self, void** orders, int ordersLength) {
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBStatementSelectConfigOrders(selfStruct, (const CPPOrderingTerm*)orders, ordersLength);
+}
+
 //
 // void WCDBRustStatementSelectClassMethod(
 // configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
@@ -135,21 +132,19 @@ void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condi
 //    to_common.intValue = to;
 //    WCDBStatementSelectConfigLimitRange2(selfStruct, from_common, to_common);
 //}
-//
-// void WCDBRustStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit)
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    CPPCommonValue limit_common;
-//    limit_common.type = type;
-//    limit_common.intValue = limit;
-//    WCDBStatementSelectConfigLimitCount2(selfStruct, limit_common);
-//}
-//
-// void WCDBRustStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset)
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    CPPCommonValue offset_common;
-//    offset_common.type = type;
-//    offset_common.intValue = offset;
-//    WCDBStatementSelectConfigOffset2(selfStruct, offset_common);
-//}
+
+void WCDBRustStatementSelectClassMethod(configLimitCount, void* self, int type, long limit) {
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    CPPCommonValue limit_common;
+    limit_common.type = type;
+    limit_common.intValue = limit;
+    WCDBStatementSelectConfigLimitCount2(selfStruct, limit_common);
+}
+
+void WCDBRustStatementSelectClassMethod(configOffset, void* self, int type, long offset) {
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    CPPCommonValue offset_common;
+    offset_common.type = type;
+    offset_common.intValue = offset;
+    WCDBStatementSelectConfigOffset2(selfStruct, offset_common);
+}

@@ -55,8 +55,8 @@ void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condi
 // void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self);
 // void WCDBRustStatementSelectClassMethod(configIntersect, jlong self);
 // void WCDBRustStatementSelectClassMethod(configExcept, jlong self);
-// void WCDBRustStatementSelectClassMethod(configOrders, jlong self, jlongArray orders);
+void WCDBRustStatementSelectClassMethod(configOrders, void* self, void** orders, int ordersLength);
 // void WCDBRustStatementSelectClassMethod(
 // configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
-// void WCDBRustStatementSelectClassMethod(configLimitCount, jlong self, jint type, jlong limit);
-// void WCDBRustStatementSelectClassMethod(configOffset, jlong self, jint type, jlong offset);
+void WCDBRustStatementSelectClassMethod(configLimitCount, void* self, int type, long limit);
+void WCDBRustStatementSelectClassMethod(configOffset, void* self, int type, long offset);
