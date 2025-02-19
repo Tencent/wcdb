@@ -1,15 +1,22 @@
 use crate::base::base_test_case::TestCaseTrait;
 use crate::base::database_test_case::DatabaseTestCase;
-use crate::base::test_object::TestObject;
+use crate::base::test_object::{DbTestObject, TestObject, DBTESTOBJECT_INSTANCE};
+use lazy_static::lazy_static;
 use std::sync::{Arc, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::Database;
+use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::core::table::Table;
 
 pub trait SelectingObjectOperationTrait {
     fn execute() -> Vec<TestObject>;
 }
+
 pub struct TableTestCase {
+    table_name: String,
     data_base_test_case: DatabaseTestCase,
+    is_virtual_table: bool,
+    table: Option<Arc<Table<'static, TestObject, DbTestObject>>>,
 }
 
 impl TestCaseTrait for TableTestCase {
@@ -22,10 +29,24 @@ impl TestCaseTrait for TableTestCase {
     }
 }
 
+lazy_static! {
+    static ref TABLE_TEST_CASE: TableTestCase = {
+        let table_test = TableTestCase::new();
+        table_test
+    };
+    static ref DATABASE: Arc<RwLock<Database>> = {
+        TABLE_TEST_CASE.setup().unwrap();
+        TABLE_TEST_CASE.get_database()
+    };
+}
+
 impl TableTestCase {
     pub fn new() -> Self {
         TableTestCase {
+            table_name: "testTable".to_string(),
             data_base_test_case: DatabaseTestCase::new(),
+            is_virtual_table: false,
+            table: None,
         }
     }
 
@@ -46,6 +67,21 @@ impl TableTestCase {
         self.do_test_objects_by_selecting(vec![object], vec![sql], operation);
     }
 
+    pub fn create_table(&mut self) -> WCDBResult<()> {
+        let database = DATABASE.read().unwrap();
+        if !self.is_virtual_table {
+            database.create_table(&*self.table_name, &*DBTESTOBJECT_INSTANCE)?;
+        } else {
+            // todo dengxudong
+            // database.createVirtualTable(tableName, tableBinding);
+        }
+
+        let db: &'static Database = Box::leak(Box::new(database));
+        let table = db.get_table(&*self.table_name, &*DBTESTOBJECT_INSTANCE);
+        self.table = Some(table);
+        Ok(())
+    }
+
     pub fn do_test_objects_by_selecting<T: SelectingObjectOperationTrait>(
         &self,
         objects: Vec<TestObject>,
@@ -55,5 +91,18 @@ impl TableTestCase {
         self.data_base_test_case
             .do_test_sql_vec(sqls, move || Ok(()))
             .unwrap();
+    }
+
+    pub fn get_table(&self) -> Arc<Table<'static, TestObject, DbTestObject>> {
+        match &self.table {
+            None => {
+                panic!("Table is None");
+            }
+            Some(table) => Arc::clone(table),
+        }
+    }
+
+    pub fn get_data_base_test_case(&self) -> &DatabaseTestCase {
+        &self.data_base_test_case
     }
 }

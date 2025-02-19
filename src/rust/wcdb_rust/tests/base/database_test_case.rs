@@ -220,6 +220,24 @@ impl DatabaseTestCase {
     pub fn get_database(&self) -> Arc<RwLock<Database>> {
         Arc::clone(&self.database)
     }
+
+    pub fn first_material_path(&self) -> String {
+        let path_clone = Arc::clone(&self.path);
+        let path = path_clone.lock().unwrap();
+        format!("{}{}", path, "-first.material")
+    }
+
+    pub fn last_material_path(&self) -> String {
+        let path_clone = Arc::clone(&self.path);
+        let path = path_clone.lock().unwrap();
+        format!("{}{}", path, "-last.material")
+    }
+
+    pub fn factory_path(&self) -> String {
+        let path_clone = Arc::clone(&self.path);
+        let path = path_clone.lock().unwrap();
+        format!("{}{}", path, ".factory")
+    }
 }
 
 #[derive(PartialEq, Clone)]

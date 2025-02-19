@@ -22,4 +22,11 @@ impl TestObject {
             content: content.clone(),
         }
     }
+
+    pub fn create_auto_increment_object(content: String) -> TestObject {
+        TestObject {
+            id: 0,
+            content: content.clone(),
+        }
+    }
 }

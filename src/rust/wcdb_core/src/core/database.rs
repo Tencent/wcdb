@@ -15,7 +15,7 @@ use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use lazy_static::lazy_static;
-use std::ffi::{c_char, c_void, CString};
+use std::ffi::{c_char, c_double, c_void, CStr, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
 
@@ -54,6 +54,25 @@ pub trait TraceExceptionCallbackTrait: Fn(WCDBException) + Send {}
 pub type TraceExceptionCallback = Box<dyn TraceExceptionCallbackTrait>;
 impl<T> TraceExceptionCallbackTrait for T where T: Fn(WCDBException) + Send {}
 
+// 定义损坏检测回调的特性
+pub trait CorruptionNotificationTrait: Fn(Database) + Send {}
+impl<T> CorruptionNotificationTrait for T where T: Fn(Database) + Send {}
+pub type CorruptionNotificationCallback = Box<dyn CorruptionNotificationTrait>;
+
+pub trait BackupFilterTrait {
+    fn table_should_be_backup(&self, table_name: &str) -> bool;
+}
+
+// 定义备份回调的特性
+pub trait BackupFilterCallbackTrait: Fn(&str) -> bool + Send {}
+impl<T> BackupFilterCallbackTrait for T where T: Fn(&str) -> bool + Send {}
+pub type BackupFilterCallback = Box<dyn BackupFilterCallbackTrait>;
+
+//
+pub trait ProgressMonitorTrait: Fn(i64, i64) -> bool + Send {}
+impl<T> ProgressMonitorTrait for T where T: Fn(i64, i64) -> bool + Send {}
+pub type ProgressMonitorTraitCallback = Box<dyn ProgressMonitorTrait>;
+
 // 定义一个全局静态变量来存储闭包
 lazy_static! {
     static ref GLOBAL_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
@@ -64,6 +83,12 @@ lazy_static! {
         Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
         Arc::new(Mutex::new(None));
+    static ref GLOBAL_CORRUPTION_NOTIFICATION_CALLBACK: Arc<Mutex<Option<CorruptionNotificationCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_BACKUP_FILTER_CALLBACK: Arc<Mutex<Option<BackupFilterCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK: Arc<Mutex<Option<ProgressMonitorTraitCallback>>> =
+        Arc::new(Mutex::new(None));
 }
 
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
@@ -71,6 +96,9 @@ pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 extern "C" {
     pub fn WCDBRustCore_createDatabase(path: *const c_char) -> *mut c_void;
     pub fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
+
+    pub fn WCDBRustDatabase_removeFiles(cpp_obj: *mut c_void) -> bool;
+
     pub fn WCDBRustDatabase_close(
         cpp_obj: *mut c_void,
         context: *mut c_void,
@@ -121,6 +149,23 @@ extern "C" {
     pub fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
 
     pub fn WCDBRustDatabase_setTag(cpp_obj: *mut c_void, tag: i64);
+
+    pub fn WCDBRustDatabase_setNotificationWhenCorrupted(
+        cpp_obj: *mut c_void,
+        global_corruption_notification: *mut c_void,
+    );
+
+    pub fn WCDBRustDatabase_checkIfCorrupted(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_checkIfIsAlreadyCorrupted(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_enableAutoBackup(cpp_obj: *mut c_void, enable: bool);
+
+    pub fn WCDBRustDatabase_backup(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_filterBackup(cpp_obj: *mut c_void, filter: *const c_void);
+
+    pub fn WCDBRustDatabase_retrieve(cpp_obj: *mut c_void, monitor: *const c_void) -> c_double;
 }
 
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
@@ -189,6 +234,29 @@ extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
         let ex = WCDBException::create_exception(exp_cpp_obj);
         callback(ex);
     }
+}
+
+extern "C" fn global_corruption_notification_callback_wrapper(cpp_obj: *mut c_void) {
+    if let Some(callback) = &*GLOBAL_CORRUPTION_NOTIFICATION_CALLBACK.lock().unwrap() {
+        let database = Database::from(cpp_obj);
+        callback(database);
+    }
+}
+
+extern "C" fn backup_filter_callback_wrapper(table_name: *const c_char) -> bool {
+    if let Some(callback) = &*GLOBAL_BACKUP_FILTER_CALLBACK.lock().unwrap() {
+        let cstr = unsafe { CStr::from_ptr(table_name) };
+        let table = cstr.to_str().unwrap();
+        return callback(table);
+    }
+    return false;
+}
+
+extern "C" fn progress_monitor_trait_wrapper(percentage: c_double, increment: c_double) -> bool {
+    if let Some(callback) = &*GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK.lock().unwrap() {
+        return callback(percentage as i64, increment as i64);
+    }
+    return false;
 }
 
 #[derive(Clone)]
@@ -867,9 +935,25 @@ impl Database {
         }
     }
 
+    pub fn from(cpp_obj: *mut c_void) -> Self {
+        Database {
+            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            close_callback: Arc::new(Mutex::new(None)),
+        }
+    }
+
     pub fn get_path(&self) -> String {
         let path = unsafe { WCDBRustDatabase_getPath(self.get_cpp_obj()) };
         path.to_cow().to_string()
+    }
+
+    pub fn remove_files(&self) -> WCDBResult<()> {
+        let ret: bool = unsafe { WCDBRustDatabase_removeFiles(self.get_cpp_obj()) };
+        if ret {
+            Ok(())
+        } else {
+            Err(self.create_exception())
+        }
     }
 
     pub fn can_open(&self) -> bool {
@@ -884,9 +968,9 @@ impl Database {
         &'a self,
         table_name: &str,
         binding: &'a R,
-    ) -> Table<'a, T, R> {
+    ) -> Arc<Table<'a, T, R>> {
         assert!(!table_name.is_empty());
-        Table::new(table_name, binding, self)
+        Arc::new(Table::new(table_name, binding, self))
     }
 
     pub fn close<CB>(&self, cb_opt: Option<CB>)
@@ -1028,6 +1112,109 @@ impl Database {
         match exception_opt {
             None => Ok(()),
             Some(exception) => Err(exception),
+        }
+    }
+
+    pub fn set_notification_when_corrupted<CB>(&self, monitor: Option<CB>)
+    where
+        CB: CorruptionNotificationTrait + 'static,
+    {
+        match monitor {
+            None => {
+                *GLOBAL_CORRUPTION_NOTIFICATION_CALLBACK.lock().unwrap() = None;
+                unsafe {
+                    WCDBRustDatabase_setNotificationWhenCorrupted(self.get_cpp_obj(), null_mut())
+                }
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as CorruptionNotificationCallback;
+                *GLOBAL_CORRUPTION_NOTIFICATION_CALLBACK.lock().unwrap() = Some(callback_box);
+                unsafe {
+                    WCDBRustDatabase_setNotificationWhenCorrupted(
+                        self.get_cpp_obj(),
+                        global_corruption_notification_callback_wrapper as *mut c_void,
+                    )
+                }
+            }
+        }
+    }
+
+    pub fn check_if_corrupted(&self) -> bool {
+        unsafe { WCDBRustDatabase_checkIfCorrupted(self.get_cpp_obj()) }
+    }
+
+    pub fn check_if_is_already_corrupted(&self) -> bool {
+        unsafe { WCDBRustDatabase_checkIfIsAlreadyCorrupted(self.get_cpp_obj()) }
+    }
+
+    pub fn enable_auto_backup(&self, enable: bool) {
+        unsafe { WCDBRustDatabase_enableAutoBackup(self.get_cpp_obj(), enable) }
+    }
+
+    pub fn backup(&self) -> WCDBResult<()> {
+        let ret = unsafe { WCDBRustDatabase_backup(self.get_cpp_obj()) };
+        if ret == false {
+            Err(self.create_exception())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn check_table_should_be_backup<T: BackupFilterTrait>(
+        &self,
+        filter: &T,
+        table_name: &str,
+    ) -> bool {
+        filter.table_should_be_backup(table_name)
+    }
+
+    pub fn filter_backup<CB>(&self, filter: Option<CB>)
+    where
+        CB: BackupFilterCallbackTrait + 'static,
+    {
+        match filter {
+            None => {
+                *GLOBAL_BACKUP_FILTER_CALLBACK.lock().unwrap() = None;
+                unsafe { WCDBRustDatabase_filterBackup(self.get_cpp_obj(), null_mut()) }
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as BackupFilterCallback;
+                *GLOBAL_BACKUP_FILTER_CALLBACK.lock().unwrap() = Some(callback_box);
+                unsafe {
+                    WCDBRustDatabase_filterBackup(
+                        self.get_cpp_obj(),
+                        backup_filter_callback_wrapper as *const c_void,
+                    )
+                }
+            }
+        }
+    }
+
+    pub fn retrieve<CB>(&self, monitor: Option<CB>) -> WCDBResult<i64>
+    where
+        CB: ProgressMonitorTrait + 'static,
+    {
+        let mut score = 0;
+        match monitor {
+            None => {
+                *GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK.lock().unwrap() = None;
+                score = unsafe { WCDBRustDatabase_retrieve(self.get_cpp_obj(), null_mut()) as i64 };
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as ProgressMonitorTraitCallback;
+                *GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK.lock().unwrap() = Some(callback_box);
+                score = unsafe {
+                    WCDBRustDatabase_retrieve(
+                        self.get_cpp_obj(),
+                        progress_monitor_trait_wrapper as *mut c_void,
+                    ) as i64
+                };
+            }
+        }
+        if score < 0 {
+            Err(self.create_exception())
+        } else {
+            Ok(score)
         }
     }
 }

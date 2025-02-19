@@ -492,12 +492,12 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
 //    (tracer != NULL ? (WCDBBusyTracer) WCDBRustDatabaseBusyTrace : NULL), timeOut, tracer,
 //    WCDBRustDestructContext);
 //}
-//
-// jboolean WCDBRustDatabaseClassMethod(removeFiles, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseRemoveFile(selfStruct);
-//}
+
+bool WCDBRustDatabaseClassMethod(removeFiles, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseRemoveFile(selfStruct);
+}
+
 //
 // jboolean WCDBRustDatabaseClassMethod(moveFile, jlong self, jstring destination)
 //{
@@ -540,69 +540,59 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
 //    env, WCDBRustGetDatabaseClass(), g_methodId, notification, (jlong) database.innerValue);
 //    WCDBRustTryDetach;
 //}
-//
-// void WCDBRustDatabaseClassMethod(setNotificationWhenCorrupted, jlong self, jobject notification)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRef(notification);
-//    WCDBDatabaseSetNotificationWhenCorrupted(
-//    selfStruct, notification != NULL ? WCDBRustDatabaseCorrupted : NULL, notification,
-//    WCDBRustDestructContext);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(checkIfCorrupted, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseCheckIfCorrupted(selfStruct);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(checkIfIsAlreadyCorrupted, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseCheckIsAlreadyCorrupted(selfStruct);
-//}
-//
-// void WCDBRustDatabaseClassMethod(enableAutoBackup, jlong self, jboolean enable)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBDatabaseEnableAutoBackup(selfStruct, enable);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(backup, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseBackup(selfStruct);
-//}
-//
-// bool WCDBRustDatabaseTableShouldBeBackup(jobject filter, const char* table)
-//{
-//    WCDBRustTryGetEnvOr(return false);
-//    WCDBRustTryGetDatabaseMethodId("checkTableShouldBeBackup",
-//                                  "(" WCDBRustDatabaseSignature
-//                                  "$BackupFilter;" WCDBRustStringSignature ")Z",
-//                                  return false);
-//    WCDBRustCreateJavaString(table);
-//    bool ret = (*env)->CallStaticBooleanMethod(
-//    env, WCDBRustGetDatabaseClass(), g_methodId, filter, jtable);
-//    if ((*env)->ExceptionCheck(env)) {
-//        ret = false;
-//    }
-//    WCDBRustTryDetach;
-//    return ret;
-//}
-//
-// void WCDBRustDatabaseClassMethod(filterBackup, jlong self, jobject tableShouldBeBackup)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRef(tableShouldBeBackup);
-//    WCDBDatabaseFilterBackup(
-//    selfStruct,
-//    tableShouldBeBackup != NULL ? WCDBRustDatabaseTableShouldBeBackup : NULL,
-//    tableShouldBeBackup,
-//    WCDBRustDestructContext);
-//}
+
+void WCDBRustDatabaseCorrupted(void* notification, CPPDatabase database) {
+    RustGlobalCorruptionNotificationCallback func =
+        (RustGlobalCorruptionNotificationCallback)notification;
+    func((void*)database.innerValue);
+}
+
+void WCDBRustDatabaseClassMethod(setNotificationWhenCorrupted,
+                                 void* self,
+                                 RustGlobalCorruptionNotificationCallback* notification) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseSetNotificationWhenCorrupted(
+        selfStruct, notification == NULL ? NULL : WCDBRustDatabaseCorrupted, notification,
+        (WCDBContextDestructor)WCDBRustDestructContext);
+}
+
+bool WCDBRustDatabaseClassMethod(checkIfCorrupted, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseCheckIfCorrupted(selfStruct);
+}
+
+bool WCDBRustDatabaseClassMethod(checkIfIsAlreadyCorrupted, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseCheckIsAlreadyCorrupted(selfStruct);
+}
+
+void WCDBRustDatabaseClassMethod(enableAutoBackup, void* self, bool enable) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseEnableAutoBackup(selfStruct, enable);
+}
+
+bool WCDBRustDatabaseClassMethod(backup, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseBackup(selfStruct);
+}
+
+bool WCDBRustDatabaseTableShouldBeBackup(void* context, const char* table) {
+    if (context == NULL) {
+        return false;
+    }
+    RustTableShouldBeBackupCallback callback = (RustTableShouldBeBackupCallback)context;
+    return callback(table);
+}
+
+void WCDBRustDatabaseClassMethod(filterBackup,
+                                 void* self,
+                                 RustTableShouldBeBackupCallback* tableShouldBeBackup) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseFilterBackup(
+        selfStruct, tableShouldBeBackup == NULL ? NULL : WCDBRustDatabaseTableShouldBeBackup,
+        tableShouldBeBackup, (WCDBContextDestructor)WCDBRustDestructContext);
+}
+
 //
 // jboolean WCDBRustDatabaseClassMethod(deposit, jlong self)
 //{
@@ -621,28 +611,34 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
 //    WCDBRustBridgeStruct(CPPDatabase, self);
 //    return WCDBDatabaseContainDepositedFiles(selfStruct);
 //}
-//
-// bool WCDBRustDatabaseOnProgressUpdate(jobject monitor, double percentage, double increment)
-//{
-//    WCDBRustTryGetEnvOr(return false);
-//    WCDBRustTryGetDatabaseMethodId(
-//    "onProgressUpdate", "(" WCDBRustDatabaseSignature "$ProgressMonitor;DD)Z", return false);
-//    bool ret = (*env)->CallStaticBooleanMethod(
-//    env, WCDBRustGetDatabaseClass(), g_methodId, monitor, (jdouble) percentage, (jdouble)
-//    increment); WCDBRustTryDetach; return ret;
-//}
-//
-// jdouble WCDBRustDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRef(onProgressUpdate);
-//    return WCDBDatabaseRetrieve(
-//    selfStruct,
-//    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBRustDatabaseOnProgressUpdate : NULL,
-//    onProgressUpdate,
-//    WCDBRustDestructContext);
-//}
+
+typedef struct WCDBRustGlobalProgressMonitorContext {
+    RustProgressMonitorCallback rust_callback;
+} WCDBRustGlobalProgressMonitorContext;
+
+bool WCDBRustDatabaseOnProgressUpdate(WCDBRustGlobalProgressMonitorContext* context,
+                                      double percentage,
+                                      double increment) {
+    if (context == NULL || context->rust_callback == NULL) {
+        return false;
+    }
+    return context->rust_callback(percentage, increment);
+}
+
+double WCDBRustDatabaseClassMethod(retrieve,
+                                   void* self,
+                                   RustProgressMonitorCallback onProgressUpdate) {
+    size_t size = sizeof(RustProgressMonitorCallback);
+    WCDBRustGlobalProgressMonitorContext* context =
+        (WCDBRustGlobalProgressMonitorContext*)WCDBRustCreateGlobalRef(size);
+    context->rust_callback = onProgressUpdate;
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseRetrieve(
+        selfStruct,
+        onProgressUpdate != NULL ? (WCDBProgressUpdate)WCDBRustDatabaseOnProgressUpdate : NULL,
+        context, (WCDBContextDestructor)WCDBRustDestructContext);
+}
+
 //
 // jdouble WCDBRustDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate)
 //{

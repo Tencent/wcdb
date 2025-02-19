@@ -97,24 +97,36 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
 //
 // void WCDBRustDatabaseClassMethod(globalTraceDatabaseBusy, jobject tracer, jdouble timeOut);
 //
-// jboolean WCDBRustDatabaseClassMethod(removeFiles, jlong self);
+bool WCDBRustDatabaseClassMethod(removeFiles, void* self);
 // jboolean WCDBRustDatabaseClassMethod(moveFile, jlong self, jstring destination);
 //
 // jlong WCDBRustDatabaseClassMethod(getFileSize, jlong self);
 //
 // void WCDBRustDatabaseClassMethod(addTokenizer, jlong self, jstring tokenizer);
 // void WCDBRustDatabaseClassMethod(addAuxiliaryFunction, jlong self, jstring auxiliaryFunction);
-//
-// void WCDBRustDatabaseClassMethod(setNotificationWhenCorrupted, jlong self, jobject notification);
-// jboolean WCDBRustDatabaseClassMethod(checkIfCorrupted, jlong self);
-// jboolean WCDBRustDatabaseClassMethod(checkIfIsAlreadyCorrupted, jlong self);
-// void WCDBRustDatabaseClassMethod(enableAutoBackup, jlong self, jboolean enable);
-// jboolean WCDBRustDatabaseClassMethod(backup, jlong self);
-// void WCDBRustDatabaseClassMethod(filterBackup, jlong self, jobject tableShouldBeBackup);
+
+typedef void (*RustGlobalCorruptionNotificationCallback)(void* self);
+void WCDBRustDatabaseClassMethod(setNotificationWhenCorrupted,
+                                 void* self,
+                                 RustGlobalCorruptionNotificationCallback* notification);
+
+bool WCDBRustDatabaseClassMethod(checkIfCorrupted, void* self);
+bool WCDBRustDatabaseClassMethod(checkIfIsAlreadyCorrupted, void* self);
+void WCDBRustDatabaseClassMethod(enableAutoBackup, void* self, bool enable);
+bool WCDBRustDatabaseClassMethod(backup, void* self);
+
+typedef bool (*RustTableShouldBeBackupCallback)(const char* table);
+void WCDBRustDatabaseClassMethod(filterBackup,
+                                 void* self,
+                                 RustTableShouldBeBackupCallback* tableShouldBeBackup);
+
 // jboolean WCDBRustDatabaseClassMethod(deposit, jlong self);
 // jboolean WCDBRustDatabaseClassMethod(removeDepositedFiles, jlong self);
 // jboolean WCDBRustDatabaseClassMethod(containDepositedFiles, jlong self);
-// jdouble WCDBRustDatabaseClassMethod(retrieve, jlong self, jobject onProgressUpdate);
+typedef bool (*RustProgressMonitorCallback)(double percentage, double increment);
+double WCDBRustDatabaseClassMethod(retrieve,
+                                   void* self,
+                                   RustProgressMonitorCallback onProgressUpdate);
 // jdouble WCDBRustDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate);
 // void WCDBRustDatabaseClassMethod(enableAutoVacuum, jlong self, jboolean incremental);
 // jboolean WCDBRustDatabaseClassMethod(incrementalVacuum, jlong self, jint pageCount);

@@ -1,3 +1,4 @@
+use crate::base::test_object::TestObject;
 use rand::seq::SliceRandom;
 
 pub struct RandomTool {}
@@ -15,5 +16,14 @@ impl RandomTool {
         (0..length)
             .map(|_| *chars.choose(&mut rng).unwrap())
             .collect()
+    }
+
+    pub fn auto_increment_test_case_objects(count: i32) -> Vec<TestObject> {
+        let mut vec = Vec::new();
+        for x in 0..count {
+            let obj = TestObject::create_auto_increment_object(Self::string());
+            vec.push(obj);
+        }
+        vec
     }
 }
