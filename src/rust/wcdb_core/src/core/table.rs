@@ -10,56 +10,48 @@ use crate::orm::table_binding::TableBinding;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 
-pub struct Table<'a, K, R: TableBinding<K>> {
-    table_orm_operation: TableORMOperation<'a, K, R>,
+pub struct Table<'a, T, R: TableBinding<T>> {
+    table_orm_operation: TableORMOperation<'a, T, R>,
 }
 
-impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
-    fn insert_object<T>(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
+impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for Table<'a, T, R> {
+    fn insert_object(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation.insert_object(object, fields)
     }
 
-    fn insert_or_replace_object<T>(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
+    fn insert_or_replace_object(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation
             .insert_or_replace_object(object, fields)
     }
 
-    fn insert_or_ignore_object<T>(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
+    fn insert_or_ignore_object(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation
             .insert_or_ignore_object(object, fields)
     }
 
-    fn insert_objects<T>(&self, objects: Vec<T>, fields: Vec<&Field<T>>) -> WCDBResult<()> {
+    fn insert_objects(&self, objects: Vec<T>, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation.insert_objects(objects, fields)
     }
 
-    fn insert_or_replace_objects<T>(
-        &self,
-        objects: Vec<T>,
-        fields: Vec<&Field<T>>,
-    ) -> WCDBResult<()> {
+    fn insert_or_replace_objects(&self, objects: Vec<T>, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation
             .insert_or_replace_objects(objects, fields)
     }
 
-    fn insert_or_ignore_objects<T>(
-        &self,
-        objects: Vec<T>,
-        fields: Vec<&Field<T>>,
-    ) -> WCDBResult<()> {
+    fn insert_or_ignore_objects(&self, objects: Vec<T>, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation
             .insert_or_ignore_objects(objects, fields)
     }
 
-    fn prepare_insert<T>(&self) -> Insert<T> {
+    fn prepare_insert(&self) -> Insert<T> {
         self.table_orm_operation.prepare_insert()
     }
 
-    fn prepare_update<T>(&self) -> Update<T> {
+    fn prepare_update(&self) -> Update<T> {
         self.table_orm_operation.prepare_update()
     }
 
-    fn prepare_select<T>(&self) -> Select<T> {
+    fn prepare_select(&self) -> Select<T> {
         self.table_orm_operation.prepare_select()
     }
 
@@ -112,12 +104,12 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .delete_objects_by_order_limit_offset(order, limit, offset)
     }
 
-    fn update_object_by_field<T>(&self, object: T, field: &Field<T>) -> WCDBResult<()> {
+    fn update_object_by_field(&self, object: T, field: &Field<T>) -> WCDBResult<()> {
         self.table_orm_operation
             .update_object_by_field(object, field)
     }
 
-    fn update_object_by_field_expression<T>(
+    fn update_object_by_field_expression(
         &self,
         object: T,
         field: &Field<T>,
@@ -127,7 +119,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_field_expression(object, field, expression)
     }
 
-    fn update_object_by_field_expression_order_limit<T>(
+    fn update_object_by_field_expression_order_limit(
         &self,
         object: T,
         field: &Field<T>,
@@ -139,7 +131,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_field_expression_order_limit(object, field, expression, order, limit)
     }
 
-    fn update_object_by_field_expression_order_limit_offset<T>(
+    fn update_object_by_field_expression_order_limit_offset(
         &self,
         object: T,
         field: &Field<T>,
@@ -154,7 +146,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             )
     }
 
-    fn update_object_by_field_order_limit<T>(
+    fn update_object_by_field_order_limit(
         &self,
         object: T,
         field: &Field<T>,
@@ -165,7 +157,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_field_order_limit(object, field, order, limit)
     }
 
-    fn update_object_by_field_order_limit_offset<T>(
+    fn update_object_by_field_order_limit_offset(
         &self,
         object: T,
         field: &Field<T>,
@@ -177,12 +169,12 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_field_order_limit_offset(object, field, order, limit, offset)
     }
 
-    fn update_object_by_fields<T>(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
+    fn update_object_by_fields(&self, object: T, fields: Vec<&Field<T>>) -> WCDBResult<()> {
         self.table_orm_operation
             .update_object_by_fields(object, fields)
     }
 
-    fn update_object_by_fields_expression<T>(
+    fn update_object_by_fields_expression(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
@@ -192,7 +184,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_fields_expression(object, fields, expression)
     }
 
-    fn update_object_by_fields_expression_order_limit<T>(
+    fn update_object_by_fields_expression_order_limit(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
@@ -206,7 +198,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             )
     }
 
-    fn update_object_by_fields_expression_order_limit_offset<T>(
+    fn update_object_by_fields_expression_order_limit_offset(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
@@ -221,7 +213,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             )
     }
 
-    fn update_object_by_fields_order_limit<T>(
+    fn update_object_by_fields_order_limit(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
@@ -232,7 +224,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_fields_order_limit(object, fields, order, limit)
     }
 
-    fn update_object_by_fields_order_limit_offset<T>(
+    fn update_object_by_fields_order_limit_offset(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
@@ -244,16 +236,16 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .update_object_by_fields_order_limit_offset(object, fields, order, limit, offset)
     }
 
-    fn get_all_objects<T>(&self) -> WCDBResult<Vec<T>> {
+    fn get_all_objects(&self) -> WCDBResult<Vec<T>> {
         self.table_orm_operation.get_all_objects()
     }
 
-    fn get_all_objects_by_expression<T>(&self, condition: Expression) -> WCDBResult<Vec<T>> {
+    fn get_all_objects_by_expression(&self, condition: Expression) -> WCDBResult<Vec<T>> {
         self.table_orm_operation
             .get_all_objects_by_expression(condition)
     }
 
-    fn get_all_objects_by_expression_order<T>(
+    fn get_all_objects_by_expression_order(
         &self,
         condition: Expression,
         order: OrderingTerm,
@@ -262,7 +254,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_expression_order(condition, order)
     }
 
-    fn get_all_objects_by_expression_order_limit<T>(
+    fn get_all_objects_by_expression_order_limit(
         &self,
         condition: Expression,
         order: OrderingTerm,
@@ -272,7 +264,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_expression_order_limit(condition, order, limit)
     }
 
-    fn get_all_objects_by_expression_order_limit_offset<T>(
+    fn get_all_objects_by_expression_order_limit_offset(
         &self,
         condition: Expression,
         order: OrderingTerm,
@@ -283,20 +275,16 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_expression_order_limit_offset(condition, order, limit, offset)
     }
 
-    fn get_all_objects_order<T>(&self, order: OrderingTerm) -> WCDBResult<Vec<T>> {
+    fn get_all_objects_order(&self, order: OrderingTerm) -> WCDBResult<Vec<T>> {
         self.table_orm_operation.get_all_objects_order(order)
     }
 
-    fn get_all_objects_order_limit<T>(
-        &self,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<Vec<T>> {
+    fn get_all_objects_order_limit(&self, order: OrderingTerm, limit: i64) -> WCDBResult<Vec<T>> {
         self.table_orm_operation
             .get_all_objects_order_limit(order, limit)
     }
 
-    fn get_all_objects_order_limit_offset<T>(
+    fn get_all_objects_order_limit_offset(
         &self,
         order: OrderingTerm,
         limit: i64,
@@ -306,11 +294,11 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_order_limit_offset(order, limit, offset)
     }
 
-    fn get_all_objects_by_fields<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<Vec<T>> {
+    fn get_all_objects_by_fields(&self, fields: Vec<&Field<T>>) -> WCDBResult<Vec<T>> {
         self.table_orm_operation.get_all_objects_by_fields(fields)
     }
 
-    fn get_all_objects_by_fields_expression<T>(
+    fn get_all_objects_by_fields_expression(
         &self,
         fields: Vec<&Field<T>>,
         condition: Expression,
@@ -319,7 +307,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_fields_expression(fields, condition)
     }
 
-    fn get_all_objects_by_fields_expression_order<T>(
+    fn get_all_objects_by_fields_expression_order(
         &self,
         fields: Vec<&Field<T>>,
         condition: Expression,
@@ -329,7 +317,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_fields_expression_order(fields, condition, order)
     }
 
-    fn get_all_objects_by_fields_expression_order_limit<T>(
+    fn get_all_objects_by_fields_expression_order_limit(
         &self,
         fields: Vec<&Field<T>>,
         condition: Expression,
@@ -340,7 +328,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_fields_expression_order_limit(fields, condition, order, limit)
     }
 
-    fn get_all_objects_by_fields_expression_order_limit_offset<T>(
+    fn get_all_objects_by_fields_expression_order_limit_offset(
         &self,
         fields: Vec<&Field<T>>,
         condition: Expression,
@@ -354,7 +342,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             )
     }
 
-    fn get_all_objects_by_fields_order<T>(
+    fn get_all_objects_by_fields_order(
         &self,
         fields: Vec<&Field<T>>,
         order: OrderingTerm,
@@ -363,7 +351,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_fields_order(fields, order)
     }
 
-    fn get_all_objects_by_fields_order_limit<T>(
+    fn get_all_objects_by_fields_order_limit(
         &self,
         fields: Vec<&Field<T>>,
         order: OrderingTerm,
@@ -373,7 +361,7 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_fields_order_limit(fields, order, limit)
     }
 
-    fn get_all_objects_by_fields_order_limit_offset<T>(
+    fn get_all_objects_by_fields_order_limit_offset(
         &self,
         fields: Vec<&Field<T>>,
         order: OrderingTerm,
@@ -384,11 +372,11 @@ impl<'a, K, R: TableBinding<K>> TableORMOperationTrait for Table<'a, K, R> {
             .get_all_objects_by_fields_order_limit_offset(fields, order, limit, offset)
     }
 
-    fn get_first_object<T>(&self, fields: Vec<&Field<T>>) -> WCDBResult<T> {
+    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<T> {
         self.table_orm_operation.get_first_object(fields)
     }
 
-    fn get_first_object_by_expression<T>(
+    fn get_first_object_by_expression(
         &self,
         fields: Vec<&Field<T>>,
         expression: Expression,
