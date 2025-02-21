@@ -154,7 +154,7 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
 
     return true;
 }
-#ifndef __ANDROID__
+#if !defined(OHOS) && !defined(ANDROID)
 bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to)
 {
 #ifndef _WIN32
