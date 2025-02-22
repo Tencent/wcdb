@@ -34,9 +34,6 @@ namespace WCDB {
 BasicConfig::BasicConfig()
 : Config()
 , m_getJournalMode(StatementPragma().pragma(Pragma::journalMode()))
-, m_enableCheckPointFullfsync(
-  StatementPragma().pragma(Pragma::checkpointFullfsync()).to(true))
-, m_disableFullSync(StatementPragma().pragma(Pragma::synchronous()).to("OFF"))
 , m_setTempStore(StatementPragma().pragma(Pragma::tempStore()).to(1))
 {
 }
@@ -55,11 +52,6 @@ bool BasicConfig::invoke(InnerHandle* handle)
     if (!handle->isReadonly()) {
         handle->setWALFilePersist(true);
         succeed = lazySetJournalMode(handle);
-        if (!handle->liteModeEnable()) {
-            succeed = succeed && handle->execute(m_enableCheckPointFullfsync);
-        } else {
-            succeed = succeed && handle->execute(m_disableFullSync);
-        }
 #ifndef __ANDROID__
         succeed = succeed && handle->execute(m_setTempStore);
 #endif

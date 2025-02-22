@@ -47,11 +47,6 @@ private:
 private:
     const StatementPragma m_getJournalMode;
 
-#pragma mark - FullFsync
-protected:
-    const StatementPragma m_enableCheckPointFullfsync;
-    const StatementPragma m_disableFullSync;
-
 #pragma mark - Temp Store
 protected:
     const StatementPragma m_setTempStore;
