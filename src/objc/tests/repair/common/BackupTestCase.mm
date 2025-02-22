@@ -71,6 +71,11 @@
         if (_needCipher) {
             cipher = [Random.shared data];
         }
+        if (i % 2 == 0) {
+            self.tableName = @"testTable";
+        } else {
+            self.tableName = @"'test@Table'";
+        }
         TestCaseLog(@"Test repair %d: testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
                     i,
                     self.testClass,
