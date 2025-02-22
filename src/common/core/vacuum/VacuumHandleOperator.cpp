@@ -200,8 +200,13 @@ bool VacuumHandleOperator::copyWithouRowidTable(const TableInfo &info)
     if (!createTable(info)) {
         return false;
     }
-    StatementInsert insert = StatementInsert().insertIntoTable(info.name).values(
-    StatementSelect().select(Column::all()).from(TableOrSubquery(info.name).schema(kOriginSchema)));
+    StringView protectedTableName = StringView::formatted("'%s'", info.name.data());
+    StatementInsert insert
+    = StatementInsert()
+      .insertIntoTable(protectedTableName)
+      .values(StatementSelect()
+              .select(Column::all())
+              .from(TableOrSubquery(protectedTableName).schema(kOriginSchema)));
     if (!getHandle()->execute(insert)) {
         return false;
     }
@@ -215,9 +220,11 @@ bool VacuumHandleOperator::copyNormalTable(const TableInfo &info)
     }
     InnerHandle *handle = getHandle();
     WCTAssert(handle->isOpened());
-    auto selectMaxRowid = StatementSelect()
-                          .select(Column::rowid().max())
-                          .from(TableOrSubquery(info.name).schema(kOriginSchema));
+    StringView protectedTableName = StringView::formatted("'%s'", info.name.data());
+    auto selectMaxRowid
+    = StatementSelect()
+      .select(Column::rowid().max())
+      .from(TableOrSubquery(protectedTableName).schema(kOriginSchema));
     if (!handle->prepare(selectMaxRowid)) {
         return false;
     }
@@ -232,9 +239,10 @@ bool VacuumHandleOperator::copyNormalTable(const TableInfo &info)
     int64_t maxRowid = handle->getInteger();
     handle->finalize();
 
-    auto selectMinRowid = StatementSelect()
-                          .select(Column::rowid().min())
-                          .from(TableOrSubquery(info.name).schema(kOriginSchema));
+    auto selectMinRowid
+    = StatementSelect()
+      .select(Column::rowid().min())
+      .from(TableOrSubquery(protectedTableName).schema(kOriginSchema));
     if (!handle->prepare(selectMinRowid)) {
         return false;
     }
@@ -259,13 +267,15 @@ bool VacuumHandleOperator::copyNormalTable(const TableInfo &info)
         columns.push_back(Column(meta.name));
     }
 
-    auto insert = StatementInsert().insertIntoTable(info.name).columns(columns).values(
-    StatementSelect()
-    .select(columns)
-    .from(TableOrSubquery(info.name).schema(kOriginSchema))
-    .where(Column::rowid() >= BindParameter())
-    .order(Column::rowid().asOrder(Order::ASC))
-    .limit(VacuumBatchCount));
+    auto insert = StatementInsert()
+                  .insertIntoTable(protectedTableName)
+                  .columns(columns)
+                  .values(StatementSelect()
+                          .select(columns)
+                          .from(TableOrSubquery(protectedTableName).schema(kOriginSchema))
+                          .where(Column::rowid() >= BindParameter())
+                          .order(Column::rowid().asOrder(Order::ASC))
+                          .limit(VacuumBatchCount));
     if (!handle->prepare(insert)) {
         return false;
     }

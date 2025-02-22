@@ -250,7 +250,7 @@
 - (void)test_filter
 {
     [self.database filterBackup:^BOOL(NSString *tableName) {
-        if ([tableName isEqualToString:self.tableName]) {
+        if ([tableName isEqualToString:self.tableName] or [NSString stringWithFormat:@"'%@'", self.tableName]) {
             return false;
         }
         return true;

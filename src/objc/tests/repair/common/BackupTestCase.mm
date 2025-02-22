@@ -61,8 +61,14 @@
 
 - (void)executeTest:(void (^)())operation
 {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 12; i++) {
         int config = i;
+        if (config % 2 == 0) {
+            self.tableName = @"testTable";
+        } else {
+            self.tableName = @"'test@Table'";
+        }
+        config /= 2;
         _needCipher = (BOOL) (config % 2);
         config /= 2;
         _testClass = [BackupTestCase allTestClassess][config];
@@ -71,13 +77,9 @@
         if (_needCipher) {
             cipher = [Random.shared data];
         }
-        if (i % 2 == 0) {
-            self.tableName = @"testTable";
-        } else {
-            self.tableName = @"'test@Table'";
-        }
-        TestCaseLog(@"Test repair %d: testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
+        TestCaseLog(@"Test repair %d: tableName %@, testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
                     i,
+                    self.tableName,
                     self.testClass,
                     self.needCipher,
                     self.incrementalBackup,
@@ -97,8 +99,14 @@
 - (void)executeFullTest:(void (^)())operation withCheck:(void (^)())check
 {
     [self.database enableAutoCheckpoint:NO];
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 48; i++) {
         int config = i;
+        if (config % 2 == 0) {
+            self.tableName = @"testTable";
+        } else {
+            self.tableName = @"'test@Table'";
+        }
+        config /= 2;
         _needCipher = (BOOL) (config % 2);
         config /= 2;
         _incrementalBackup = config % 2;
@@ -107,8 +115,9 @@
         config /= 2;
         _testClass = [BackupTestCase allTestClassess][config];
 
-        TestCaseLog(@"Test repair %d: testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
+        TestCaseLog(@"Test repair %d: tableName %@, testClass %@, needCipher %d, incrementalBackup %d, corruptHeader %d",
                     i,
+                    self.tableName,
                     self.testClass,
                     self.needCipher,
                     self.incrementalBackup,
