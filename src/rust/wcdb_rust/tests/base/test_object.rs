@@ -1,6 +1,6 @@
 use table_coding::WCDBTableCoding;
 
-#[derive(WCDBTableCoding)]
+#[derive(PartialEq, Debug, WCDBTableCoding)]
 #[WCDBTable]
 pub struct TestObject {
     #[WCDBField(is_primary = true, is_auto_increment = true)]
@@ -28,5 +28,13 @@ impl TestObject {
             id: 0,
             content: content.clone(),
         }
+    }
+
+    pub fn id(&self) -> i32 {
+        self.id
+    }
+
+    pub fn content(&self) -> &str {
+        &self.content
     }
 }

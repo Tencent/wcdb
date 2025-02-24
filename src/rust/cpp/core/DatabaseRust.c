@@ -593,24 +593,20 @@ void WCDBRustDatabaseClassMethod(filterBackup,
         tableShouldBeBackup, (WCDBContextDestructor)WCDBRustDestructContext);
 }
 
-//
-// jboolean WCDBRustDatabaseClassMethod(deposit, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseDeposit(selfStruct);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(removeDepositedFiles, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseRemoveDepositedFiles(selfStruct);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(containDepositedFiles, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseContainDepositedFiles(selfStruct);
-//}
+bool WCDBRustDatabaseClassMethod(deposit, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseDeposit(selfStruct);
+}
+
+bool WCDBRustDatabaseClassMethod(removeDepositedFiles, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseRemoveDepositedFiles(selfStruct);
+}
+
+bool WCDBRustDatabaseClassMethod(containDepositedFiles, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseContainDepositedFiles(selfStruct);
+}
 
 typedef struct WCDBRustGlobalProgressMonitorContext {
     RustProgressMonitorCallback rust_callback;
@@ -627,7 +623,7 @@ bool WCDBRustDatabaseOnProgressUpdate(WCDBRustGlobalProgressMonitorContext* cont
 
 double WCDBRustDatabaseClassMethod(retrieve,
                                    void* self,
-                                   RustProgressMonitorCallback onProgressUpdate) {
+                                   RustProgressMonitorCallback* onProgressUpdate) {
     size_t size = sizeof(RustProgressMonitorCallback);
     WCDBRustGlobalProgressMonitorContext* context =
         (WCDBRustGlobalProgressMonitorContext*)WCDBRustCreateGlobalRef(size);
@@ -639,30 +635,29 @@ double WCDBRustDatabaseClassMethod(retrieve,
         context, (WCDBContextDestructor)WCDBRustDestructContext);
 }
 
-//
-// jdouble WCDBRustDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustTryGetVM;
-//    WCDBRustCreateGlobalRef(onProgressUpdate);
-//    return WCDBDatabaseVacuum(
-//    selfStruct,
-//    onProgressUpdate != NULL ? (WCDBProgressUpdate) WCDBRustDatabaseOnProgressUpdate : NULL,
-//    onProgressUpdate,
-//    WCDBRustDestructContext);
-//}
-//
-// void WCDBRustDatabaseClassMethod(enableAutoVacuum, jlong self, jboolean incremental)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBDatabaseEnableAutoVacuum(selfStruct, incremental);
-//}
-//
-// jboolean WCDBRustDatabaseClassMethod(incrementalVacuum, jlong self, jint pageCount)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseIncrementalVacuum(selfStruct, pageCount);
-//}
+bool WCDBRustDatabaseClassMethod(vacuum,
+                                 void* self,
+                                 RustProgressMonitorCallback* onProgressUpdate) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    size_t size = sizeof(RustProgressMonitorCallback);
+    WCDBRustGlobalProgressMonitorContext* context =
+        (WCDBRustGlobalProgressMonitorContext*)WCDBRustCreateGlobalRef(size);
+    context->rust_callback = onProgressUpdate;
+    return WCDBDatabaseVacuum(
+        selfStruct,
+        onProgressUpdate != NULL ? (WCDBProgressUpdate)WCDBRustDatabaseOnProgressUpdate : NULL,
+        context, (WCDBContextDestructor)WCDBRustDestructContext);
+}
+
+void WCDBRustDatabaseClassMethod(enableAutoVacuum, void* self, bool incremental) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseEnableAutoVacuum(selfStruct, incremental);
+}
+
+bool WCDBRustDatabaseClassMethod(incrementalVacuum, void* self, int pageCount) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseIncrementalVacuum(selfStruct, pageCount);
+}
 //
 // jboolean WCDBRustDatabaseClassMethod(passiveCheckpoint, jlong self)
 //{
@@ -670,17 +665,15 @@ double WCDBRustDatabaseClassMethod(retrieve,
 //    return WCDBDatabasePassiveCheckpoint(selfStruct);
 //}
 //
-// jboolean WCDBRustDatabaseClassMethod(truncateCheckpoint, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    return WCDBDatabaseTruncateCheckpoint(selfStruct);
-//}
-//
-// void WCDBRustDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean enable)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBCoreSetAutoCheckpointEnable(selfStruct, (bool) enable);
-//}
+bool WCDBRustDatabaseClassMethod(truncateCheckpoint, void* self) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    return WCDBDatabaseTruncateCheckpoint(selfStruct);
+}
+
+void WCDBRustDatabaseClassMethod(setAutoCheckpointEnable, void* self, bool enable) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBCoreSetAutoCheckpointEnable(selfStruct, (bool)enable);
+}
 //
 // void WCDBRustDatabaseFilterMigrate(jobject filter, const char* table, void* info,
 // WCDBMigrationInfoSetter setter)

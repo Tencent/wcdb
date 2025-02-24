@@ -93,6 +93,11 @@ impl<'a> TableOperation<'a> {
 
     // todo dengxudong
     // public void updateValue(int value, @NotNull Column column) throws WCDBException {
+    // public void updateRow(@NotNull Value[] row, @NotNull Column[] columns) throws WCDBException {
+    // public void deleteValue() throws WCDBException {
+    // public Value getValue(@NotNull ResultColumnConvertible column) throws WCDBException {
+    // public List<Value> getOneColumn(@NotNull ResultColumnConvertible column) throws WCDBException {
+    // ...
 }
 
 impl<'a> TableOperation<'a> {

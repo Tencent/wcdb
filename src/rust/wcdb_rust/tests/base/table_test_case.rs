@@ -16,7 +16,6 @@ pub struct TableTestCase {
     table_name: String,
     data_base_test_case: DatabaseTestCase,
     is_virtual_table: bool,
-    table: Option<Arc<Table<'static, TestObject, DbTestObject>>>,
 }
 
 impl TestCaseTrait for TableTestCase {
@@ -34,10 +33,6 @@ lazy_static! {
         let table_test = TableTestCase::new();
         table_test
     };
-    static ref DATABASE: Arc<RwLock<Database>> = {
-        TABLE_TEST_CASE.setup().unwrap();
-        TABLE_TEST_CASE.get_database()
-    };
 }
 
 impl TableTestCase {
@@ -46,7 +41,6 @@ impl TableTestCase {
             table_name: "testTable".to_string(),
             data_base_test_case: DatabaseTestCase::new(),
             is_virtual_table: false,
-            table: None,
         }
     }
 
@@ -68,17 +62,14 @@ impl TableTestCase {
     }
 
     pub fn create_table(&mut self) -> WCDBResult<()> {
-        let database = DATABASE.read().unwrap();
+        let database_clone = Arc::clone(&self.data_base_test_case.get_database());
+        let database = database_clone.read().unwrap();
         if !self.is_virtual_table {
             database.create_table(&*self.table_name, &*DBTESTOBJECT_INSTANCE)?;
         } else {
             // todo dengxudong
             // database.createVirtualTable(tableName, tableBinding);
         }
-
-        let db: &'static Database = Box::leak(Box::new(database));
-        let table = db.get_table(&*self.table_name, &*DBTESTOBJECT_INSTANCE);
-        self.table = Some(table);
         Ok(())
     }
 
@@ -93,16 +84,20 @@ impl TableTestCase {
             .unwrap();
     }
 
-    pub fn get_table(&self) -> Arc<Table<'static, TestObject, DbTestObject>> {
-        match &self.table {
-            None => {
-                panic!("Table is None");
-            }
-            Some(table) => Arc::clone(table),
-        }
-    }
+    // pub fn get_table(&self) -> Arc<Table<'static, TestObject, DbTestObject>> {
+    //     match &self.table {
+    //         None => {
+    //             panic!("Table is None");
+    //         }
+    //         Some(table) => Arc::clone(table),
+    //     }
+    // }
 
     pub fn get_data_base_test_case(&self) -> &DatabaseTestCase {
         &self.data_base_test_case
+    }
+
+    pub fn get_table_name(&self) -> &str {
+        &self.table_name
     }
 }

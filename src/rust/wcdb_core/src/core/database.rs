@@ -68,9 +68,9 @@ pub trait BackupFilterCallbackTrait: Fn(&str) -> bool + Send {}
 impl<T> BackupFilterCallbackTrait for T where T: Fn(&str) -> bool + Send {}
 pub type BackupFilterCallback = Box<dyn BackupFilterCallbackTrait>;
 
-//
-pub trait ProgressMonitorTrait: Fn(i64, i64) -> bool + Send {}
-impl<T> ProgressMonitorTrait for T where T: Fn(i64, i64) -> bool + Send {}
+// return True to continue current operation.
+pub trait ProgressMonitorTrait: Fn(f64, f64) -> bool + Send {}
+impl<T> ProgressMonitorTrait for T where T: Fn(f64, f64) -> bool + Send {}
 pub type ProgressMonitorTraitCallback = Box<dyn ProgressMonitorTrait>;
 
 // 定义一个全局静态变量来存储闭包
@@ -88,6 +88,8 @@ lazy_static! {
     static ref GLOBAL_BACKUP_FILTER_CALLBACK: Arc<Mutex<Option<BackupFilterCallback>>> =
         Arc::new(Mutex::new(None));
     static ref GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK: Arc<Mutex<Option<ProgressMonitorTraitCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_VACUUM_PROGRESS_MONITOR_TRAIT_CALLBACK: Arc<Mutex<Option<ProgressMonitorTraitCallback>>> =
         Arc::new(Mutex::new(None));
 }
 
@@ -115,6 +117,13 @@ extern "C" {
     pub fn WCDBRustDatabase_isOpened(cpp_obj: *mut c_void) -> bool;
 
     pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
+
+    pub fn WCDBRustDatabase_vacuum(cpp_obj: *mut c_void, monitor: *const c_void) -> bool;
+
+    pub fn WCDBRustDatabase_enableAutoVacuum(cpp_obj: *mut c_void, incremental: bool);
+
+    pub fn WCDBRustDatabase_incrementalVacuum(cpp_obj: *mut c_void, pages: i32) -> bool;
+
     pub fn WCDBRustDatabase_getError(cpp_obj: *mut c_void) -> *mut c_void;
 
     pub fn WCDBRustDatabase_globalTracePerformance(
@@ -166,6 +175,15 @@ extern "C" {
     pub fn WCDBRustDatabase_filterBackup(cpp_obj: *mut c_void, filter: *const c_void);
 
     pub fn WCDBRustDatabase_retrieve(cpp_obj: *mut c_void, monitor: *const c_void) -> c_double;
+
+    pub fn WCDBRustDatabase_deposit(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_removeDepositedFiles(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_containDepositedFiles(cpp_obj: *mut c_void) -> bool;
+    pub fn WCDBRustDatabase_truncateCheckpoint(cpp_obj: *mut c_void) -> bool;
+
+    pub fn WCDBRustDatabase_setAutoCheckpointEnable(cpp_obj: *mut c_void, enable: bool);
 }
 
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
@@ -252,9 +270,27 @@ extern "C" fn backup_filter_callback_wrapper(table_name: *const c_char) -> bool 
     return false;
 }
 
-extern "C" fn progress_monitor_trait_wrapper(percentage: c_double, increment: c_double) -> bool {
+// True to continue current operation.
+extern "C" fn retrieve_progress_monitor_trait_wrapper(
+    percentage: c_double,
+    increment: c_double,
+) -> bool {
     if let Some(callback) = &*GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK.lock().unwrap() {
-        return callback(percentage as i64, increment as i64);
+        return callback(percentage as f64, increment as f64);
+    }
+    return false;
+}
+
+// True to continue current operation.
+extern "C" fn vacuum_progress_monitor_trait_wrapper(
+    percentage: c_double,
+    increment: c_double,
+) -> bool {
+    if let Some(callback) = &*GLOBAL_VACUUM_PROGRESS_MONITOR_TRAIT_CALLBACK
+        .lock()
+        .unwrap()
+    {
+        return callback(percentage as f64, increment as f64);
     }
     return false;
 }
@@ -733,13 +769,6 @@ impl HandleORMOperationTrait for Database {
             .first_object()
     }
 
-    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
-        self.prepare_select()
-            .select(fields)
-            .from(table_name)
-            .all_objects()
-    }
-
     fn get_first_object_by_table_name_expression<T>(
         &self,
         fields: Vec<&Field<T>>,
@@ -813,6 +842,13 @@ impl HandleORMOperationTrait for Database {
             .limit(1)
             .offset(offset)
             .first_object()
+    }
+
+    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
+        self.prepare_select()
+            .select(fields)
+            .from(table_name)
+            .all_objects()
     }
 
     fn get_all_objects_by_table_name_expression<T>(
@@ -1007,6 +1043,51 @@ impl Database {
         unsafe { WCDBRustDatabase_getHandle(cpp_obj, write_hint) }
     }
 
+    pub fn vacuum<CB>(&self, monitor: Option<CB>) -> WCDBResult<()>
+    where
+        CB: ProgressMonitorTrait + 'static,
+    {
+        let mut ret: bool = false;
+        match monitor {
+            None => {
+                *GLOBAL_VACUUM_PROGRESS_MONITOR_TRAIT_CALLBACK
+                    .lock()
+                    .unwrap() = None;
+                ret = unsafe { WCDBRustDatabase_vacuum(self.get_cpp_obj(), null_mut()) };
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as ProgressMonitorTraitCallback;
+                *GLOBAL_VACUUM_PROGRESS_MONITOR_TRAIT_CALLBACK
+                    .lock()
+                    .unwrap() = Some(callback_box);
+                ret = unsafe {
+                    WCDBRustDatabase_vacuum(
+                        self.get_cpp_obj(),
+                        vacuum_progress_monitor_trait_wrapper as *mut c_void,
+                    )
+                };
+            }
+        }
+        if ret {
+            Ok(())
+        } else {
+            Err(self.create_exception())
+        }
+    }
+
+    pub fn enable_auto_vacuum(&self, incremental: bool) {
+        unsafe { WCDBRustDatabase_enableAutoVacuum(self.get_cpp_obj(), incremental) }
+    }
+
+    pub fn incremental_vacuum(&self, pages: i32) -> WCDBResult<()> {
+        let ret: bool = unsafe { WCDBRustDatabase_incrementalVacuum(self.get_cpp_obj(), pages) };
+        if ret {
+            Ok(())
+        } else {
+            Err(self.create_exception())
+        }
+    }
+
     pub(crate) fn create_exception(&self) -> WCDBException {
         WCDBException::create_exception(unsafe { WCDBRustDatabase_getError(self.get_cpp_obj()) })
     }
@@ -1153,10 +1234,10 @@ impl Database {
 
     pub fn backup(&self) -> WCDBResult<()> {
         let ret = unsafe { WCDBRustDatabase_backup(self.get_cpp_obj()) };
-        if ret == false {
-            Err(self.create_exception())
-        } else {
+        if ret {
             Ok(())
+        } else {
+            Err(self.create_exception())
         }
     }
 
@@ -1190,15 +1271,15 @@ impl Database {
         }
     }
 
-    pub fn retrieve<CB>(&self, monitor: Option<CB>) -> WCDBResult<i64>
+    pub fn retrieve<CB>(&self, monitor: Option<CB>) -> WCDBResult<f64>
     where
         CB: ProgressMonitorTrait + 'static,
     {
-        let mut score = 0;
+        let mut score: f64 = 0f64;
         match monitor {
             None => {
                 *GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK.lock().unwrap() = None;
-                score = unsafe { WCDBRustDatabase_retrieve(self.get_cpp_obj(), null_mut()) as i64 };
+                score = unsafe { WCDBRustDatabase_retrieve(self.get_cpp_obj(), null_mut()) as f64 };
             }
             Some(cb) => {
                 let callback_box = Box::new(cb) as ProgressMonitorTraitCallback;
@@ -1206,16 +1287,51 @@ impl Database {
                 score = unsafe {
                     WCDBRustDatabase_retrieve(
                         self.get_cpp_obj(),
-                        progress_monitor_trait_wrapper as *mut c_void,
-                    ) as i64
+                        retrieve_progress_monitor_trait_wrapper as *mut c_void,
+                    ) as f64
                 };
             }
         }
-        if score < 0 {
+        if score < 0f64 {
             Err(self.create_exception())
         } else {
             Ok(score)
         }
+    }
+
+    pub fn deposit(&self) -> WCDBResult<()> {
+        let ret: bool = unsafe { WCDBRustDatabase_deposit(self.get_cpp_obj()) };
+        if ret {
+            Ok(())
+        } else {
+            Err(self.create_exception())
+        }
+    }
+
+    pub fn remove_deposited_files(&self) -> WCDBResult<()> {
+        let ret: bool = unsafe { WCDBRustDatabase_removeDepositedFiles(self.get_cpp_obj()) };
+        if ret {
+            Ok(())
+        } else {
+            Err(self.create_exception())
+        }
+    }
+
+    pub fn contain_deposited_files(&self) -> bool {
+        unsafe { WCDBRustDatabase_containDepositedFiles(self.get_cpp_obj()) }
+    }
+
+    pub fn truncate_check_point(&self) -> WCDBResult<()> {
+        let ret: bool = unsafe { WCDBRustDatabase_truncateCheckpoint(self.get_cpp_obj()) };
+        if ret {
+            Ok(())
+        } else {
+            Err(self.create_exception())
+        }
+    }
+
+    pub fn set_auto_check_point_enable(&self, enable: bool) {
+        unsafe { WCDBRustDatabase_setAutoCheckpointEnable(self.get_cpp_obj(), enable) }
     }
 }
 

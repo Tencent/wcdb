@@ -613,7 +613,10 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     }
 
     fn get_all_objects_by_expression(&self, condition: Expression) -> WCDBResult<Vec<T>> {
-        todo!()
+        self.prepare_select()
+            .select(self.binding.all_binding_fields())
+            .where_expression(condition)
+            .all_objects()
     }
 
     fn get_all_objects_by_expression_order(
@@ -621,7 +624,11 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         condition: Expression,
         order: OrderingTerm,
     ) -> WCDBResult<Vec<T>> {
-        todo!()
+        self.prepare_select()
+            .select(self.binding.all_binding_fields())
+            .where_expression(condition)
+            .order_by(order)
+            .all_objects()
     }
 
     fn get_all_objects_by_expression_order_limit(
@@ -662,7 +669,11 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     }
 
     fn get_all_objects_order_limit(&self, order: OrderingTerm, limit: i64) -> WCDBResult<Vec<T>> {
-        todo!()
+        self.prepare_select()
+            .select(self.binding.all_binding_fields())
+            .order_by(order)
+            .limit(limit)
+            .all_objects()
     }
 
     fn get_all_objects_order_limit_offset(

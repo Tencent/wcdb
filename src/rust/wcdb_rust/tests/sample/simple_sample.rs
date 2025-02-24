@@ -76,14 +76,16 @@ pub mod simple_sample {
         let data = table
             .get_all_objects_by_fields(DbTestObject::all_fields())
             .unwrap();
-        let id = DBTESTOBJECT_INSTANCE.id;
-        let filed_id = unsafe { &*id };
-        let expression = filed_id.get_column().gt_int(100);
-        // table.get_all_objects_by_expression_order_limit(
-        //     expression,
-        //     filed_id.get_column().order(Order::Desc),
-        //     10,
-        // );
+        // let id = DBTESTOBJECT_INSTANCE.id;
+        // let filed_id = unsafe { &*id };
+        // let expression = filed_id.get_column().gt_int(100);
+        // table
+        //     .get_all_objects_by_expression_order_limit(
+        //         expression,
+        //         filed_id.get_column().order(Order::Desc),
+        //         10,
+        //     )
+        //     .unwrap();
 
         // 执行事务
         let ret = database.run_transaction(move |handle: Handle| {

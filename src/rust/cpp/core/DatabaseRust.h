@@ -120,20 +120,20 @@ void WCDBRustDatabaseClassMethod(filterBackup,
                                  void* self,
                                  RustTableShouldBeBackupCallback* tableShouldBeBackup);
 
-// jboolean WCDBRustDatabaseClassMethod(deposit, jlong self);
-// jboolean WCDBRustDatabaseClassMethod(removeDepositedFiles, jlong self);
-// jboolean WCDBRustDatabaseClassMethod(containDepositedFiles, jlong self);
+bool WCDBRustDatabaseClassMethod(deposit, void* self);
+bool WCDBRustDatabaseClassMethod(removeDepositedFiles, void* self);
+bool WCDBRustDatabaseClassMethod(containDepositedFiles, void* self);
 typedef bool (*RustProgressMonitorCallback)(double percentage, double increment);
 double WCDBRustDatabaseClassMethod(retrieve,
                                    void* self,
-                                   RustProgressMonitorCallback onProgressUpdate);
-// jdouble WCDBRustDatabaseClassMethod(vacuum, jlong self, jobject onProgressUpdate);
-// void WCDBRustDatabaseClassMethod(enableAutoVacuum, jlong self, jboolean incremental);
-// jboolean WCDBRustDatabaseClassMethod(incrementalVacuum, jlong self, jint pageCount);
+                                   RustProgressMonitorCallback* onProgressUpdate);
+bool WCDBRustDatabaseClassMethod(vacuum, void* self, RustProgressMonitorCallback* onProgressUpdate);
+void WCDBRustDatabaseClassMethod(enableAutoVacuum, void* self, bool incremental);
+bool WCDBRustDatabaseClassMethod(incrementalVacuum, void* self, int pageCount);
 //
 // jboolean WCDBRustDatabaseClassMethod(passiveCheckpoint, jlong self);
-// jboolean WCDBRustDatabaseClassMethod(truncateCheckpoint, jlong self);
-// void WCDBRustDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean enable);
+bool WCDBRustDatabaseClassMethod(truncateCheckpoint, void* self);
+void WCDBRustDatabaseClassMethod(setAutoCheckpointEnable, void* self, bool enable);
 //
 // void WCDBRustDatabaseClassMethod(addMigrationSource,
 //                                 jlong self,
