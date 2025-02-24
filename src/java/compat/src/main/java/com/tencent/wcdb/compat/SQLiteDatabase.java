@@ -151,6 +151,13 @@ public final class SQLiteDatabase {
     }
 
     /**
+     * Close all handle of current database
+     */
+    public void close() {
+        mDB.close();
+    }
+
+    /**
      * Begins a transaction in EXCLUSIVE mode.
      * <p>
      * Transactions can be nested.
