@@ -1,145 +1,25 @@
+mod column_info;
+mod default_value_info;
+mod field_orm_info;
+mod multi_indexes;
+mod multi_primary;
+mod multi_unique;
+mod wcdb_field;
+mod wcdb_table;
+
+use crate::field_orm_info::FIELD_ORM_INFO_MAP;
+use crate::multi_indexes::MultiIndexes;
+use crate::wcdb_field::WCDBField;
+use crate::wcdb_table::WCDBTable;
 use darling::ast::Data;
 use darling::{FromDeriveInput, FromField, FromMeta};
-use once_cell::sync::Lazy;
 use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::{quote, ToTokens};
-use std::collections::HashMap;
 use std::fmt::Debug;
 use syn::parse::Parse;
 use syn::spanned::Spanned;
-use syn::{parse_macro_input, DeriveInput, Generics, Ident, LitStr, Type};
-
-#[derive(Debug, FromDeriveInput)]
-#[darling(attributes(WCDBTable))]
-struct WCDBTable {
-    ident: Ident,
-    generics: Generics,
-    data: Data<(), WCDBField>,
-    #[darling(default, multiple)]
-    multi_indexes: Vec<MultiIndexes>,
-    #[darling(default)]
-    multi_primaries: Vec<LitStr>,
-    #[darling(default)]
-    multi_unique: Vec<LitStr>,
-    #[darling(default)]
-    is_without_row_id: bool,
-    // #[darling(default)]
-    // fts_module: ???,
-}
-
-impl WCDBTable {
-    fn get_db_table(&self) -> Ident {
-        Ident::new(&format!("Db{}", self.ident), Span::call_site())
-    }
-
-    fn get_field_ident_vec(&self) -> Vec<&Ident> {
-        match &self.data {
-            Data::Struct(fields) => fields
-                .iter()
-                .map(|field| field.ident.as_ref().unwrap())
-                .collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    fn get_field_column_name_ident_vec(&self) -> Vec<Ident> {
-        match &self.data {
-            Data::Struct(fields) => {
-                fields
-                    .iter()
-                    .map(|field| {
-                        let mut ident = field.ident.clone().unwrap();
-                        if field.column_name.len() > 0 {
-                            // 使用 column_name 当做表名
-                            ident = Ident::new(field.column_name.as_str(), ident.span());
-                        }
-                        ident
-                    })
-                    .collect()
-            }
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    fn get_field_is_auto_increment_vec(&self) -> Vec<bool> {
-        match &self.data {
-            Data::Struct(fields) => fields.iter().map(|field| field.is_auto_increment).collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    fn get_field_is_primary_key_vec(&self) -> Vec<bool> {
-        match &self.data {
-            Data::Struct(fields) => fields.iter().map(|field| field.is_primary).collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_enable_auto_increment_for_existing_table(&self) -> bool {
-        match &self.data {
-            Data::Struct(fields) => {
-                for field in fields.iter() {
-                    if field.enable_auto_increment_for_existing_table {
-                        return true;
-                    }
-                }
-                false
-            }
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    fn get_field_type_vec(&self) -> Vec<&Type> {
-        match &self.data {
-            Data::Struct(fields) => fields.iter().map(|field| &field.ty).collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    fn get_auto_increment_ident_field(&self) -> Option<&WCDBField> {
-        match &self.data {
-            Data::Struct(fields) => {
-                let mut ret = None;
-                for field in fields.iter() {
-                    if field.is_primary && field.is_auto_increment {
-                        ret = Some(field);
-                        break;
-                    }
-                }
-                ret
-            }
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-}
-
-#[derive(Debug, FromMeta)]
-struct MultiIndexes {
-    name: Option<LitStr>,
-    columns: Vec<LitStr>,
-}
-
-#[derive(Debug, FromField)]
-#[darling(attributes(WCDBField))]
-struct WCDBField {
-    ident: Option<Ident>,
-    ty: Type,
-    #[darling(default)]
-    pub column_name: String,
-    #[darling(default)]
-    pub is_primary: bool,
-    #[darling(default)]
-    pub is_auto_increment: bool,
-    #[darling(default)]
-    pub enable_auto_increment_for_existing_table: bool,
-    #[darling(default)]
-    pub is_unique: bool,
-    #[darling(default)]
-    pub is_not_null: bool,
-    #[darling(default)]
-    pub is_not_indexed: bool,
-}
+use syn::{parse_macro_input, DeriveInput, Ident, Type};
 
 #[proc_macro_derive(WCDBTableCoding, attributes(WCDBTable, WCDBField))]
 pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
@@ -250,27 +130,9 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     })
 }
 
-struct FieldInfo {
-    column_type: String,
-    nullable: bool,
-    field_setter: String,
-    field_getter: String,
-}
-
-impl FieldInfo {
-    fn new(column_type: &str, nullable: bool, field_setter: &str, field_getter: &str) -> Self {
-        Self {
-            column_type: column_type.to_string(),
-            nullable,
-            field_setter: field_setter.to_string(),
-            field_getter: field_getter.to_string(),
-        }
-    }
-}
-
 macro_rules! match_field_info {
     ($field_type_string:expr, $field:expr, $getter_name:ident) => {
-        match FIELD_INFO_MAP.get(&$field_type_string) {
+        match FIELD_ORM_INFO_MAP.get(&$field_type_string) {
             Some(value) => value.$getter_name.clone(),
             None => {
                 return Err(syn::Error::new(
@@ -281,7 +143,6 @@ macro_rules! match_field_info {
         }
     };
 }
-
 macro_rules! get_field_info_vec {
     ($field_type_vec:expr, $field_getter:ident) => {
         $field_type_vec
@@ -311,47 +172,6 @@ fn get_field_type_ident(field_type: &Type) -> &Ident {
         _ => panic!("WCDBTable's field type only works on Path"),
     }
 }
-
-static FIELD_INFO_MAP: Lazy<HashMap<String, FieldInfo>> = Lazy::new(|| {
-    let mut all_info = HashMap::new();
-    all_info.insert(
-        "bool".to_string(),
-        FieldInfo::new("Integer", false, "bind_bool", "get_bool"),
-    );
-    all_info.insert(
-        "i8".to_string(),
-        FieldInfo::new("Integer", false, "bind_i8", "get_i8"),
-    );
-    all_info.insert(
-        "i16".to_string(),
-        FieldInfo::new("Integer", false, "bind_i16", "get_i16"),
-    );
-    all_info.insert(
-        "i32".to_string(),
-        FieldInfo::new("Integer", false, "bind_i32", "get_i32"),
-    );
-    all_info.insert(
-        "i64".to_string(),
-        FieldInfo::new("Integer", false, "bind_i64", "get_i64"),
-    );
-    all_info.insert(
-        "f32".to_string(),
-        FieldInfo::new("Float", false, "bind_f32", "get_f32"),
-    );
-    all_info.insert(
-        "f64".to_string(),
-        FieldInfo::new("Float", false, "bind_f64", "get_f64"),
-    );
-    all_info.insert(
-        "String".to_string(),
-        FieldInfo::new("Text", false, "bind_text", "get_text"),
-    );
-    all_info.insert(
-        "Option<String>".to_string(),
-        FieldInfo::new("Text", true, "bind_text", "get_text"),
-    );
-    all_info
-});
 
 fn check_field_element(table: &WCDBTable) {
     let mut primary_key_count = 0;
@@ -411,16 +231,12 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let field_column_name_ident_vec = table.get_field_column_name_ident_vec();
     let field_is_auto_increment_vec: Vec<bool> = table.get_field_is_auto_increment_vec();
     let field_is_primary_key_vec: Vec<bool> = table.get_field_is_primary_key_vec();
-    let enable_auto_increment_for_existing_table =
-        table.get_enable_auto_increment_for_existing_table();
+
     let enable_auto_increment_for_existing_table_statements =
-        if enable_auto_increment_for_existing_table {
-            quote! {
-                #binding_ident.enable_auto_increment_for_existing_table();
-            }
-        } else {
-            quote! {}
-        };
+        generate_enable_auto_increment_for_existing_table(table, &binding_ident)?;
+
+    let table_config_statements = generate_table_config(table, &binding_ident)?;
+
     Ok(quote! {
         pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
             wcdb_core::orm::binding::Binding::new()
@@ -453,8 +269,12 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
 
                 instance.#field_ident_vec = unsafe { Box::into_raw(field) };
                 #binding_ident.add_column_def(#field_ident_def_vec);
+
                 #enable_auto_increment_for_existing_table_statements
             )*
+
+            #table_config_statements
+
             instance
         });
     })
@@ -547,4 +367,59 @@ fn generate_auto_increment(table: &WCDBTable) -> syn::Result<proc_macro2::TokenS
             })
         }
     }
+}
+
+fn generate_enable_auto_increment_for_existing_table(
+    table: &WCDBTable,
+    binding_ident: &Ident,
+) -> syn::Result<proc_macro2::TokenStream> {
+    let enable_auto_increment_for_existing_table =
+        table.get_enable_auto_increment_for_existing_table();
+    let enable_auto_increment_for_existing_table_statements =
+        if enable_auto_increment_for_existing_table {
+            quote! {
+                #binding_ident.enable_auto_increment_for_existing_table();
+            }
+        } else {
+            quote! {}
+        };
+    Ok(enable_auto_increment_for_existing_table_statements)
+}
+
+fn generate_table_config(
+    table: &WCDBTable,
+    binding_ident: &Ident,
+) -> syn::Result<proc_macro2::TokenStream> {
+    let all_field_info_vec = table.get_all_column_info_vec();
+
+    let multi_index_vec = table.get_multi_index_vec();
+    let multi_index_statements = if multi_index_vec.is_empty() {
+        quote! {}
+    } else {
+        let mut code = proc_macro2::TokenStream::new();
+
+        for multi_index in multi_index_vec {
+            let index_name_ident: Ident = multi_index.get_index_name_ident();
+            let index_column_name_ident_vec: Vec<Ident> =
+                multi_index.get_index_column_name_ident_vec(&all_field_info_vec);
+            let is_full_name = multi_index.get_is_full_name();
+
+            code.extend(quote! {
+                let create_index = wcdb_core::winq::statement_create_index::StatementCreateIndex::new();
+                create_index.if_not_exist();
+                create_index.indexed_by(
+                    unsafe {vec![
+                        #(
+                            (*instance.#index_column_name_ident_vec).get_column(),
+                        )*
+                    ]});
+                #binding_ident.add_index(stringify!(#index_name_ident), #is_full_name, create_index);
+            });
+        }
+        code
+    };
+
+    Ok(quote! {
+        #multi_index_statements
+    })
 }

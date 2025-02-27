@@ -38,23 +38,22 @@ void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, void* self)
     WCDBRustBridgeStruct(CPPBinding, self);
     WCDBBindingEnableAutoIncrementForExistingTable(selfStruct);
 }
-//
-// void WCDBRustBindingClassMethod(addIndex, jlong self, jstring indexNameOrSuffix, jboolean
-// isFullName, jlong createIndex)
-//{
-//     WCDBRustBridgeStruct(CPPBinding, self);
-//     WCDBRustBridgeStruct(CPPStatementCreateIndex, createIndex);
-//     WCDBRustGetStringCritical(indexNameOrSuffix);
-//     WCDBBindingAddIndex(selfStruct, indexNameOrSuffixString, isFullName, createIndexStruct);
-//     WCDBRustReleaseStringCritical(indexNameOrSuffix);
-// }
-//
-// void WCDBRustBindingClassMethod(addTableConstraint, jlong self, jlong constraint)
-//{
-//     WCDBRustBridgeStruct(CPPBinding, self);
-//     WCDBRustBridgeStruct(CPPTableConstraint, constraint);
-//     WCDBBindingAddTableConstraint(selfStruct, constraintStruct);
-// }
+
+void WCDBRustBindingClassMethod(addIndex,
+                                void* self,
+                                const char* indexNameOrSuffix,
+                                bool isFullName,
+                                void* createIndex) {
+    WCDBRustBridgeStruct(CPPBinding, self);
+    WCDBRustBridgeStruct(CPPStatementCreateIndex, createIndex);
+    WCDBBindingAddIndex(selfStruct, indexNameOrSuffix, isFullName, createIndexStruct);
+}
+
+void WCDBRustBindingClassMethod(addTableConstraint, void* self, void* constraint) {
+    WCDBRustBridgeStruct(CPPBinding, self);
+    WCDBRustBridgeStruct(CPPTableConstraint, constraint);
+    WCDBBindingAddTableConstraint(selfStruct, constraintStruct);
+}
 //
 // void WCDBRustBindingClassMethod(configVirtualModule, jlong self, jstring moduleName)
 //{

@@ -36,9 +36,12 @@ void* WCDBRustBindingClassMethodWithNoArg(create);
 
 void WCDBRustBindingClassMethod(addColumnDef, void* self, void* columnDef);
 void WCDBRustBindingClassMethod(enableAutoIncrementForExistingTable, void* self);
-// void WCDBRustBindingClassMethod(
-// addIndex, jlong self, jstring indexNameOrSuffix, jboolean isFullName, jlong createIndex);
-// void WCDBRustBindingClassMethod(addTableConstraint, jlong self, jlong constraint);
+void WCDBRustBindingClassMethod(addIndex,
+                                void* self,
+                                const char* indexNameOrSuffix,
+                                bool isFullName,
+                                void* createIndex);
+void WCDBRustBindingClassMethod(addTableConstraint, void* self, void* constraint);
 // void WCDBRustBindingClassMethod(configVirtualModule, jlong self, jstring moduleName);
 // void WCDBRustBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument);
 // void WCDBRustBindingClassMethod(configWithoutRowId, jlong self);

@@ -175,6 +175,34 @@ impl PrimaryEnableAutoIncrementObject {
     }
 }
 
+#[derive(WCDBTableCoding, Clone)]
+#[WCDBTable(
+    multi_primaries(columns = ["multiPrimary1", "multiPrimary2", "multiPrimary3"]),
+    multi_unique(columns = ["multiUnique1", "multiUnique2", "multiUnique3"]),
+    multi_indexes(name = "specifiedNameIndex", columns = ["multiIndex1", "multiIndex2", "multiIndex3"]),
+    multi_indexes(columns = ["multiIndex1", "multiIndex2"])
+)]
+pub struct TableConstraintObject {
+    #[WCDBField(column_name = "multiPrimary1")]
+    multi_primary1: i32,
+    #[WCDBField(column_name = "multiPrimary2")]
+    multi_primary2: i32,
+    #[WCDBField(column_name = "multiPrimary3")]
+    multi_primary: i32,
+    #[WCDBField(column_name = "multiUnique1")]
+    multi_unique1: i32,
+    #[WCDBField(column_name = "multiUnique2")]
+    multi_unique2: i32,
+    #[WCDBField(column_name = "multiUnique3")]
+    multi_unique: i32,
+    #[WCDBField(column_name = "multiIndex1")]
+    multi_index1: i32,
+    #[WCDBField(column_name = "multiIndex2")]
+    multi_index2: i32,
+    #[WCDBField(column_name = "multiIndex3")]
+    multi_index: i32,
+}
+
 pub struct OrmTest {
     database_test_case: DatabaseTestCase,
     table_name: String,
@@ -197,12 +225,70 @@ impl OrmTest {
         new_sql_vec.push("BEGIN IMMEDIATE".to_string());
         new_sql_vec.extend(sqls);
         new_sql_vec.push("COMMIT".to_string());
-        let table_name = self.table_name.clone();
         let _ = self
             .database_test_case
             .do_test_sql_vec(new_sql_vec, operation);
+    }
+}
 
-        let binding = self.database_test_case.get_database();
+impl TestCaseTrait for OrmTest {
+    fn setup(&self) -> WCDBResult<()> {
+        self.database_test_case.setup()?;
+        self.database_test_case.set_expect_mode(Expect::SomeSQLs);
+        Ok(())
+    }
+
+    fn teardown(&self) -> WCDBResult<()> {
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+pub mod orm_test {
+    use super::*;
+    use std::sync::{Arc, RwLock};
+
+    fn setup(orm_test: &OrmTest) {
+        orm_test.setup().unwrap();
+    }
+
+    fn teardown(orm_test: &OrmTest) {
+        orm_test.teardown().unwrap();
+    }
+
+    #[test]
+    fn test_all_field() {
+        assert_eq!(DbFieldObject::all_fields().len(), 2);
+
+        let orm_test = OrmTest::new();
+        let binding = orm_test.database_test_case.get_database();
+        let database_lock = binding.read().unwrap();
+        let binding = DbFieldObject::all_fields();
+        let first_field = binding.first().unwrap();
+        assert_eq!(first_field.get_description(), "field");
+
+        let second_field = binding.last().unwrap();
+        assert_eq!(second_field.get_description(), "differentName");
+    }
+
+    #[test]
+    fn test_all_type() {
+        let orm_test = OrmTest::new();
+        setup(&orm_test);
+
+        let table_name = "table_all_type".to_string();
+
+        let mut sql_vec = vec![];
+        sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT, a_bool INTEGER, a_byte INTEGER, a_short INTEGER, a_int INTEGER, a_long INTEGER, a_float REAL, a_double REAL, a_string TEXT)".to_string());
+
+        orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
+            orm_test
+                .database_test_case
+                .create_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE)?;
+            Ok(())
+        });
+
+        let binding = orm_test.database_test_case.get_database();
         let database_lock = binding.read().unwrap();
         let table = database_lock.get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
 
@@ -247,57 +333,27 @@ impl OrmTest {
                     .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
                     .unwrap()
         );
-    }
-}
 
-impl TestCaseTrait for OrmTest {
-    fn setup(&self) -> WCDBResult<()> {
-        self.database_test_case.setup()?;
-        self.database_test_case.set_expect_mode(Expect::SomeSQLs);
-        Ok(())
-    }
-
-    fn teardown(&self) -> WCDBResult<()> {
-        Ok(())
-    }
-}
-
-#[cfg(test)]
-pub mod orm_test {
-    use super::*;
-
-    fn set_up(orm_test: &OrmTest) {
-        orm_test.setup().unwrap();
-    }
-
-    fn teardown(orm_test: &OrmTest) {
-        orm_test.teardown().unwrap();
+        teardown(&orm_test);
     }
 
     #[test]
-    fn test_all_field() {
-        assert_eq!(DbFieldObject::all_fields().len(), 2);
-
-        let binding = DbFieldObject::all_fields();
-        let first_field = binding.first().unwrap();
-        assert_eq!(first_field.get_description(), "field");
-
-        let second_field = binding.last().unwrap();
-        assert_eq!(second_field.get_description(), "differentName");
-    }
-
-    #[test]
-    fn test_all_type() {
+    fn test_table_constraint() {
         let orm_test = OrmTest::new();
-        set_up(&orm_test);
+        setup(&orm_test);
+
+        let table_name = orm_test.table_name.as_str();
 
         let mut sql_vec = vec![];
-        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(field_type TEXT, a_bool INTEGER, a_byte INTEGER, a_short INTEGER, a_int INTEGER, a_long INTEGER, a_float REAL, a_double REAL, a_string TEXT)".to_string());
+        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(multiPrimary1 INTEGER, multiPrimary2 INTEGER, multiPrimary3 INTEGER, multiUnique1 INTEGER, multiUnique2 INTEGER, multiUnique3 INTEGER, multiIndex1 INTEGER, multiIndex2 INTEGER, multiIndex3 INTEGER)".to_string());
+        sql_vec.push("CREATE INDEX IF NOT EXISTS specifiedNameIndex ON testTable(multiIndex1, multiIndex2, multiIndex3)".to_string());
+        sql_vec.push("CREATE INDEX IF NOT EXISTS testTable_multiIndex1_multiIndex2_index ON testTable(multiIndex1, multiIndex2)".to_string());
 
         orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
             orm_test
                 .database_test_case
-                .create_table(orm_test.table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE)?;
+                .create_table(table_name, &*DBTABLECONSTRAINTOBJECT_INSTANCE)
+                .unwrap();
             Ok(())
         });
 
@@ -307,7 +363,7 @@ pub mod orm_test {
     #[test]
     fn test_primary_key_enable_auto_increment_for_existing_table() {
         let orm_test = OrmTest::new();
-        set_up(&orm_test);
+        setup(&orm_test);
 
         let binding = orm_test.database_test_case.get_database();
         let database_lock = binding.read().unwrap();
