@@ -20,7 +20,17 @@ extern "C" {
         is_full_name: bool,
         create_index: *mut c_void,
     );
+
+    pub fn WCDBRustBinding_configWithoutRowId(cpp_obj: *mut c_void);
+
     pub fn WCDBRustBinding_addTableConstraint(cpp_obj: *mut c_void, table_constraint: *mut c_void);
+    pub fn WCDBRustBinding_configVirtualModule(cpp_obj: *mut c_void, module: *const c_char);
+
+    pub fn WCDBRustBinding_configVirtualModuleArgument(
+        cpp_obj: *mut c_void,
+        argument: *const c_char,
+    );
+
     pub fn WCDBRustBinding_createTable(
         cpp_obj: *mut c_void,
         path: *const c_char,
@@ -76,6 +86,23 @@ impl Binding {
         unsafe {
             WCDBRustBinding_addTableConstraint(self.cpp_obj.get_cpp_obj(), constraint.get_cpp_obj())
         };
+    }
+
+    pub fn config_virtual_module(&self, module: &str) -> &Binding {
+        let cstr = module.to_cstring();
+        unsafe { WCDBRustBinding_configVirtualModule(*self.cpp_obj, cstr.as_ptr()) }
+        self
+    }
+
+    pub fn config_virtual_module_argument(&self, argument: &str) {
+        let cstr = argument.to_cstring();
+        unsafe {
+            WCDBRustBinding_configVirtualModuleArgument(*self.cpp_obj, cstr.as_ptr());
+        }
+    }
+
+    pub fn config_without_row_id(&self) {
+        unsafe { WCDBRustBinding_configWithoutRowId(*self.cpp_obj) }
     }
 
     pub fn create_table(&self, table_name: &str, mut handle: Handle) -> WCDBResult<bool> {

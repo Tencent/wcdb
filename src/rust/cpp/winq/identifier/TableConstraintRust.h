@@ -32,7 +32,7 @@
 
 void* WCDBRustTableConstraintClassMethod(create, const char* name);
 void WCDBRustTableConstraintClassMethod(configPrimaryKey, void* constraint);
-// void WCDBRustTableConstraintClassMethod(configUnique, jlong constraint);
+void WCDBRustTableConstraintClassMethod(configUnique, void* constraint);
 void WCDBRustTableConstraintClassMethod(configIndexedColumn,
                                         void* constraint,
                                         WCDBRustObjectOrStringArrayParameter(indexedColumns));

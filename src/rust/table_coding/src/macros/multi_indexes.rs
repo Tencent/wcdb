@@ -1,4 +1,4 @@
-use crate::column_info::ColumnInfo;
+use crate::compiler::resolved_info::column_info::ColumnInfo;
 use darling::FromMeta;
 use proc_macro2::{Ident, Span};
 use syn::LitStr;
@@ -37,8 +37,8 @@ impl MultiIndexes {
             let column_name = &column.value();
             let mut property_name = column_name.clone();
             for column_info in all_field_info_vec {
-                if column_info.column_name == column_name.clone() {
-                    property_name = column_info.property_name.clone();
+                if column_info.column_name() == column_name.clone() {
+                    property_name = column_info.property_name();
                     break;
                 }
             }

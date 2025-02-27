@@ -1,16 +1,11 @@
-mod column_info;
-mod default_value_info;
+#![feature(proc_macro_quote)]
+
+mod compiler;
 mod field_orm_info;
-mod multi_indexes;
-mod multi_primary;
-mod multi_unique;
-mod wcdb_field;
-mod wcdb_table;
+mod macros;
 
 use crate::field_orm_info::FIELD_ORM_INFO_MAP;
-use crate::multi_indexes::MultiIndexes;
-use crate::wcdb_field::WCDBField;
-use crate::wcdb_table::WCDBTable;
+use crate::macros::wcdb_table::WCDBTable;
 use darling::ast::Data;
 use darling::{FromDeriveInput, FromField, FromMeta};
 use proc_macro::TokenStream;
@@ -32,7 +27,7 @@ pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
 }
 
 fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
-    let table_ident = &table.ident;
+    let table_ident = table.ident();
     let db_table_ident = table.get_db_table();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
     let binding_ident = Ident::new(&binding, Span::call_site());
@@ -175,26 +170,26 @@ fn get_field_type_ident(field_type: &Type) -> &Ident {
 
 fn check_field_element(table: &WCDBTable) {
     let mut primary_key_count = 0;
-    match &table.data {
+    match &table.data() {
         Data::Struct(fields) => fields
             .iter()
             .map(|field| {
-                let field_key = field.ident.span().source_text();
-                if field.is_primary {
+                let field_key = field.ident().span().source_text();
+                if field.is_primary() {
                     primary_key_count += 1;
                     if primary_key_count > 1 {
                         panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ",field_key.unwrap())
                     }
 
-                    if field.is_auto_increment {
-                        let field_type =  &field.ty;
+                    if field.is_auto_increment() {
+                        let field_type =  &field.ty();
                         let field_type_string = get_field_type_string(field_type).unwrap();
                         if !is_column_type_integer(field_type_string) {
                             panic!("#[WCDBField] Auto-increment field must be integer for \"{}\".", field_key.unwrap());
                         }
                     }
                     // todo qixinbing check  @WCDBIndex
-                }else if field.is_auto_increment {
+                }else if field.is_auto_increment() {
                     panic!("#[WCDBField] Auto-increment field must be primary key for \"{}\".", field_key.unwrap());
                 }
             })
@@ -281,7 +276,7 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
 }
 
 fn generate_extract_object(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
-    let table_ident = &table.ident;
+    let table_ident = &table.ident();
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
     let field_get_type_vec: Vec<_> = get_field_info_vec!(field_type_vec, field_getter);
@@ -303,7 +298,7 @@ fn generate_extract_object(table: &WCDBTable) -> syn::Result<proc_macro2::TokenS
 }
 
 fn generate_bind_field(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
-    let table_ident = &table.ident;
+    let table_ident = &table.ident();
     let field_ident_vec = table.get_field_ident_vec();
     let field_type_vec = table.get_field_type_vec();
     let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
@@ -341,7 +336,7 @@ fn generate_bind_field(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStrea
 }
 
 fn generate_auto_increment(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
-    let table_ident = &table.ident;
+    let table_ident = &table.ident();
     let auto_increment_field_opt = table.get_auto_increment_ident_field();
     match auto_increment_field_opt {
         None => Ok(quote! {
@@ -354,8 +349,8 @@ fn generate_auto_increment(table: &WCDBTable) -> syn::Result<proc_macro2::TokenS
             }
         }),
         Some(field) => {
-            let field_ident = field.ident.clone().unwrap();
-            let field_type_ident = get_field_type_ident(&field.ty);
+            let field_ident = field.ident().clone().unwrap();
+            let field_type_ident = get_field_type_ident(&field.ty());
             Ok(quote! {
                 fn is_auto_increment(&self, object: &#table_ident) -> bool {
                     object.#field_ident == 0

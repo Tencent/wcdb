@@ -1,0 +1,9 @@
+pub(crate) mod fts_module;
+pub(crate) mod fts_version;
+pub(crate) mod multi_indexes;
+pub(crate) mod multi_primary;
+pub(crate) mod multi_unique;
+pub(crate) mod wcdb_default;
+pub(crate) mod wcdb_field;
+pub(crate) mod wcdb_index;
+pub(crate) mod wcdb_table;

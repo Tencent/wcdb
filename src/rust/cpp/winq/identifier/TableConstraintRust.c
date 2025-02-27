@@ -32,12 +32,11 @@ void WCDBRustTableConstraintClassMethod(configPrimaryKey, void* constraint) {
     WCDBTableConstraintConfigPrimaryKey(constraintStruct);
 }
 
-// void WCDBRustTableConstraintClassMethod(configUnique, jlong constraint)
-//{
-//     WCDBRustBridgeStruct(CPPTableConstraint, constraint);
-//     WCDBTableConstraintConfigUnique(constraintStruct);
-// }
-//
+void WCDBRustTableConstraintClassMethod(configUnique, void* constraint) {
+    WCDBRustBridgeStruct(CPPTableConstraint, constraint);
+    WCDBTableConstraintConfigUnique(constraintStruct);
+}
+
 void WCDBRustTableConstraintClassMethod(configIndexedColumn,
                                         void* constraint,
                                         WCDBRustObjectOrStringArrayParameter(indexedColumns)) {

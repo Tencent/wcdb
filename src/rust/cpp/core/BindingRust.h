@@ -42,9 +42,9 @@ void WCDBRustBindingClassMethod(addIndex,
                                 bool isFullName,
                                 void* createIndex);
 void WCDBRustBindingClassMethod(addTableConstraint, void* self, void* constraint);
-// void WCDBRustBindingClassMethod(configVirtualModule, jlong self, jstring moduleName);
-// void WCDBRustBindingClassMethod(configVirtualModuleArgument, jlong self, jstring argument);
-// void WCDBRustBindingClassMethod(configWithoutRowId, jlong self);
+void WCDBRustBindingClassMethod(configVirtualModule, void* self, const char* moduleName);
+void WCDBRustBindingClassMethod(configVirtualModuleArgument, void* self, const char* argument);
+void WCDBRustBindingClassMethod(configWithoutRowId, void* self);
 bool WCDBRustBindingClassMethod(createTable, void* self, const char* tableName, void* handle);
 
 // jboolean
