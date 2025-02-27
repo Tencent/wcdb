@@ -6,6 +6,9 @@ use std::ffi::{c_char, c_int, c_void, CString};
 extern "C" {
     pub fn WCDBRustTableConstraint_create(name: *const c_char) -> *mut c_void;
     pub fn WCDBRustTableConstraint_configPrimaryKey(cpp_obj: *mut c_void);
+
+    pub fn WCDBRustTableConstraint_configUnique(cpp_obj: *mut c_void);
+
     pub fn WCDBRustTableConstraint_configIndexedColumn(
         cpp_obj: *mut c_void,
         columns_type: c_int,
@@ -68,7 +71,14 @@ impl TableConstraint {
         self
     }
 
-    pub fn indexed_by<T>(&self, column_convertible_vec: Vec<T>) -> &Self
+    pub fn unique(&self) -> &Self {
+        unsafe {
+            WCDBRustTableConstraint_configUnique(self.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
     where
         T: IndexedColumnConvertibleTrait + IdentifierStaticTrait,
     {
@@ -77,7 +87,7 @@ impl TableConstraint {
         }
         let columns_void_vec_len = column_convertible_vec.len() as i32;
         let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(column_convertible_vec.len());
-        let cpp_type = Identifier::get_cpp_type(&column_convertible_vec[0]);
+        let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]);
         for item in column_convertible_vec {
             c_void_vec.push(item.as_identifier().get_cpp_obj());
         }

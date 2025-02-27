@@ -17,7 +17,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use crate::compiler::resolved_info::column_info::ColumnInfo;
 use crate::macros::multi_unique::MultiUnique;
+use proc_macro2::{Ident, Span};
+use std::collections::HashMap;
 
 pub struct MultiUniqueInfo {
     columns: Vec<String>,
@@ -38,5 +41,14 @@ impl MultiUniqueInfo {
 
     pub fn columns(&self) -> &Vec<String> {
         &self.columns
+    }
+
+    pub fn columns_ident_vec(&self, all_columns_map: &HashMap<String, ColumnInfo>) -> Vec<Ident> {
+        let mut ident_vec: Vec<Ident> = Vec::new();
+        for column_item in self.columns.iter() {
+            let property_name = all_columns_map.get(column_item).unwrap().property_name();
+            ident_vec.push(Ident::new(property_name.as_str(), Span::call_site()));
+        }
+        ident_vec
     }
 }

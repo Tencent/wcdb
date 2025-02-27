@@ -4,6 +4,10 @@ mod compiler;
 mod field_orm_info;
 mod macros;
 
+use crate::compiler::resolved_info::column_info::ColumnInfo;
+use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
+use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
+use crate::compiler::rust_code_generator::RustCodeGenerator;
 use crate::field_orm_info::FIELD_ORM_INFO_MAP;
 use crate::macros::wcdb_field::WCDBField;
 use crate::macros::wcdb_table::WCDBTable;
@@ -190,6 +194,28 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let columns_statements = generate_columns(table)?;
     let table_config_statements = generate_table_config(table, &binding_ident)?;
 
+    //
+    let table_ident = table.ident();
+    let mut code_gen = RustCodeGenerator::new();
+    code_gen.set_class_name(table_ident.to_string());
+    code_gen.set_orm_class_name(db_table_ident.to_string());
+    code_gen.set_table_constraint_info(Option::from(TableConfigInfo::resolve(
+        table,
+        Some(FTSModuleInfo::new()),
+    )));
+    match table.data() {
+        Data::Enum(_) => {}
+        Data::Struct(fields) => {
+            let mut all_column_info: Vec<ColumnInfo> = vec![];
+            for field in &fields.fields {
+                all_column_info.push(ColumnInfo::resolve(&field));
+            }
+            code_gen.set_all_column_info(all_column_info);
+        }
+    }
+    // let generate_fields_statements = code_gen.generate_fields()?;
+    let generate_table_config = code_gen.generate_table_config(&binding_ident)?;
+
     Ok(quote! {
         pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
             wcdb_core::orm::binding::Binding::new()
@@ -201,7 +227,7 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
             #columns_statements
 
             #table_config_statements
-
+            #generate_table_config
             instance
         });
     })
