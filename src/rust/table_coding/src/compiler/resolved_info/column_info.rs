@@ -18,7 +18,6 @@
  * limitations under the License.
  */
 use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
-use crate::get_field_type_string;
 use crate::macros::wcdb_field::WCDBField;
 
 #[derive(Clone, Debug)]
@@ -70,7 +69,8 @@ impl ColumnInfo {
             .iter()
             .map(|field_name| field_name.to_string())
             .collect::<String>();
-        column_info.property_type = get_field_type_string(&field.ty()).unwrap_or(String::from(""));
+        column_info.property_type =
+            WCDBField::get_field_type_string(&field.ty()).unwrap_or(String::from(""));
         column_info.nullable = field.is_not_null();
         column_info.column_name = field.column_name();
         column_info.is_primary = field.is_primary();

@@ -31,6 +31,13 @@ impl WCDBTable {
         Ident::new(&format!("Db{}", self.ident), Span::call_site())
     }
 
+    pub fn get_field_vec(&self) -> Vec<&WCDBField> {
+        match &self.data {
+            Data::Struct(fields) => fields.iter().collect(),
+            _ => panic!("WCDBTable only works on structs"),
+        }
+    }
+
     pub fn get_all_column_info_vec(&self) -> Vec<ColumnInfo> {
         match &self.data {
             Data::Struct(fields) => fields
