@@ -1,16 +1,40 @@
 use crate::compiler::resolved_info::column_info::ColumnInfo;
-use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
-use crate::compiler::resolved_info::multi_indexes_info::MultiIndexesInfo;
-use crate::compiler::resolved_info::multi_primary_info::MultiPrimaryInfo;
-use crate::compiler::resolved_info::multi_unique_info::MultiUniqueInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
+use crate::field_orm_info::FIELD_ORM_INFO_MAP;
+use crate::macros::wcdb_field::WCDBField;
+use crate::macros::wcdb_table::WCDBTable;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use std::collections::HashMap;
-use std::fmt::format;
-use syn::DeriveInput;
-use wcdb_core::winq::column::Column;
-use wcdb_core::winq::table_constraint::TableConstraint;
+use syn::spanned::Spanned;
+use syn::Type;
+
+macro_rules! get_field_info_vec {
+    ($field_type_vec:expr, $field_getter:ident) => {
+        $field_type_vec
+            .iter()
+            .map(|field| {
+                let field_type_string = WCDBField::get_field_type_string(field)?;
+                let type_string = match_field_info!(field_type_string, field, $field_getter);
+                Ok(Ident::new(&type_string, Span::call_site()))
+            })
+            .collect::<syn::Result<Vec<_>>>()?
+    };
+}
+
+macro_rules! match_field_info {
+    ($field_type_string:expr, $field:expr, $getter_name:ident) => {
+        match FIELD_ORM_INFO_MAP.get(&$field_type_string) {
+            Some(value) => value.$getter_name.clone(),
+            None => {
+                return Err(syn::Error::new(
+                    $field.span(),
+                    "Unsupported field type for bind_field",
+                ))
+            }
+        }
+    };
+}
 
 pub struct RustCodeGenerator {
     package_name: String,
@@ -21,7 +45,7 @@ pub struct RustCodeGenerator {
 }
 
 impl RustCodeGenerator {
-    pub fn new() -> Self {
+    pub(crate) fn new() -> Self {
         RustCodeGenerator {
             package_name: "".to_string(),
             class_name: "".to_string(),
@@ -31,34 +55,37 @@ impl RustCodeGenerator {
         }
     }
 
-    pub fn set_package_name(&mut self, package_name: String) {
+    pub(crate) fn set_package_name(&mut self, package_name: String) {
         self.package_name = package_name;
     }
 
-    pub fn set_class_name(&mut self, class_name: String) {
+    pub(crate) fn set_class_name(&mut self, class_name: String) {
         self.class_name = class_name;
     }
 
-    pub fn set_orm_class_name(&mut self, orm_class_name: String) {
+    pub(crate) fn set_orm_class_name(&mut self, orm_class_name: String) {
         self.orm_class_name = orm_class_name;
     }
 
-    pub fn set_table_constraint_info(&mut self, table_constraint_info: Option<TableConfigInfo>) {
+    pub(crate) fn set_table_constraint_info(
+        &mut self,
+        table_constraint_info: Option<TableConfigInfo>,
+    ) {
         self.table_constraint_info = table_constraint_info;
     }
 
-    pub fn set_all_column_info(&mut self, all_column_info: Vec<ColumnInfo>) {
+    pub(crate) fn set_all_column_info(&mut self, all_column_info: Vec<ColumnInfo>) {
         self.all_column_info = all_column_info;
     }
 
-    pub fn generate_fields(&self) -> syn::Result<proc_macro2::TokenStream> {
+    pub(crate) fn generate_fields(&self) -> syn::Result<proc_macro2::TokenStream> {
         let mut token_stream = proc_macro2::TokenStream::new();
         let class_name = &self.class_name;
         for column_info in &self.all_column_info {
             let name = &column_info.property_name();
             // name: id ， class_name: ProcessorTest
             let stream_tmp: proc_macro2::TokenStream = quote! {
-                pub #name: Field<#class_name>,
+                pub(crate) #name: Field<#class_name>,
             }
             .into();
             token_stream.extend(stream_tmp);
@@ -66,7 +93,131 @@ impl RustCodeGenerator {
         Ok(token_stream)
     }
 
-    pub fn generate_table_config(
+    pub(crate) fn generate_singleton(
+        &self,
+        table: &WCDBTable,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        let db_table_ident = table.get_db_table();
+        let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
+        let binding_ident = Ident::new(&binding, Span::call_site());
+        let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
+        let instance_ident = Ident::new(&instance, Span::call_site());
+
+        let generate_table_config = self.generate_table_config(&binding_ident)?;
+        let columns_statements = self.generate_columns(table)?;
+
+        Ok(quote! {
+            pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
+                wcdb_core::orm::binding::Binding::new()
+            });
+            pub static #instance_ident: once_cell::sync::Lazy<#db_table_ident> = once_cell::sync::Lazy::new(|| {
+                let mut instance = #db_table_ident::default();
+                let instance_raw = unsafe { &instance as *const #db_table_ident };
+
+                #columns_statements
+                #generate_table_config
+                instance
+            });
+        })
+    }
+
+    fn generate_columns(&self, table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
+        let db_table_ident = table.get_db_table();
+        let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
+        let binding_ident = Ident::new(&binding, Span::call_site());
+
+        let field_vec = table.get_field_vec();
+        let columns_statements = if field_vec.is_empty() {
+            quote! {}
+        } else {
+            let mut token_stream = proc_macro2::TokenStream::new();
+            let mut field_id: usize = 1;
+            for field in field_vec {
+                let column_name_ident = field.get_column_name_ident();
+                let field_ident = field.get_field_ident();
+                let field_def_ident = Ident::new(
+                    &format!("{}_def", field_ident.to_string()),
+                    Span::call_site(),
+                );
+
+                let is_primary_key = field.is_primary();
+                let is_auto_increment = field.is_auto_increment();
+                let column_type_ident = field.get_column_type_ident()?;
+
+                token_stream.extend(quote! {
+                    let field = Box::new(wcdb_core::orm::field::Field::new(
+                        stringify!(#column_name_ident),
+                        instance_raw,
+                        #field_id,
+                        #is_auto_increment,
+                        #is_primary_key
+                    ));
+                });
+
+                field_id += 1;
+
+                token_stream.extend(quote! {
+                let #field_def_ident = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(
+                    &field.get_column(),
+                    wcdb_core::winq::column_type::ColumnType::#column_type_ident
+                );
+            });
+
+                token_stream.extend(quote! {
+                let column_constraint = wcdb_core::winq::column_constraint::ColumnConstraint::new();
+            });
+
+                if is_primary_key {
+                    token_stream.extend(quote! {
+                        column_constraint.primary_key();
+                    });
+                    if is_auto_increment {
+                        token_stream.extend(quote! {
+                            column_constraint.auto_increment();
+                        });
+                    }
+                }
+
+                if field.is_unique() {
+                    token_stream.extend(quote! {
+                        column_constraint.unique();
+                    });
+                }
+
+                if field.is_not_null() {
+                    token_stream.extend(quote! {
+                        column_constraint.not_null();
+                    });
+                }
+
+                if field.is_not_indexed() {
+                    token_stream.extend(quote! {
+                        column_constraint.un_index();
+                    });
+                }
+
+                token_stream.extend(quote! {
+                    #field_def_ident.constraint(column_constraint);
+                });
+
+                token_stream.extend(quote! {
+                    instance.#field_ident = unsafe { Box::into_raw(field) };
+                    #binding_ident.add_column_def(#field_def_ident);
+                });
+
+                if table.get_enable_auto_increment_for_existing_table() {
+                    token_stream.extend(quote! {
+                        #binding_ident.enable_auto_increment_for_existing_table();
+                    });
+                }
+            }
+            token_stream
+        };
+
+        Ok(columns_statements)
+    }
+
+    fn generate_table_config(
         &self,
         binding_ident: &Ident,
     ) -> syn::Result<proc_macro2::TokenStream> {
@@ -182,7 +333,7 @@ impl RustCodeGenerator {
                             #binding_ident.config_virtual_module_argument(#tokenizer.as_str());
                         });
 
-                        if (!module_info.external_table().is_empty()) {
+                        if !module_info.external_table().is_empty() {
                             let content =
                                 format!("{}{}{}", "content='", module_info.external_table(), "'");
                             token_stream.extend(quote::quote! {
@@ -194,5 +345,150 @@ impl RustCodeGenerator {
             }
         }
         Ok(token_stream.clone())
+    }
+
+    pub(crate) fn generate_binding_type(
+        &self,
+        table_ident: &&Ident,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        Ok(quote::quote! {
+            fn binding_type(&self) -> std::any::TypeId {
+                std::any::TypeId::of::<#table_ident>()
+            }
+        })
+    }
+
+    pub(crate) fn generate_binding_fields(
+        &self,
+        table_ident: &&Ident,
+        field_ident_vec: &Vec<&Ident>,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        Ok(quote::quote! {
+            fn all_binding_fields(&self) -> Vec<&wcdb_core::orm::field::Field<#table_ident>> {
+                unsafe { vec![
+                    #(&*self.#field_ident_vec,)*
+                ] }
+            }
+        })
+    }
+
+    pub(crate) fn generate_base_binding(
+        &self,
+        binding_ident: &Ident,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        Ok(quote::quote! {
+            fn base_binding(&self) -> &wcdb_core::orm::binding::Binding {
+                &*#binding_ident
+            }
+        })
+    }
+
+    pub(crate) fn generate_extract_object(
+        &self,
+        table_ident: &&Ident,
+        field_ident_vec: &Vec<&Ident>,
+        field_type_vec: &Vec<&Type>,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        let field_get_type_vec: Vec<_> = get_field_info_vec!(field_type_vec, field_getter);
+        let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
+
+        Ok(quote::quote! {
+             fn extract_object(
+                &self,
+                fields: &Vec<&wcdb_core::orm::field::Field<#table_ident>>,
+                prepared_statement: &wcdb_core::core::prepared_statement::PreparedStatement,
+            ) -> #table_ident {
+                let mut new_one = #table_ident::default();
+                let mut index = 0;
+                for field in fields {
+                    match field.get_field_id() {
+                        #(
+                            #field_id_vec => new_one.#field_ident_vec = prepared_statement.#field_get_type_vec(index),
+                        )*
+                        _ => panic!("Unknown field id"),
+                    }
+                    index += 1;
+                }
+                new_one
+            }
+        })
+    }
+
+    pub(crate) fn generate_bind_object(
+        &self,
+        table_ident: &&Ident,
+        field_ident_vec: &Vec<&Ident>,
+        field_type_vec: &Vec<&Type>,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
+        let field_bind_type_vec: Vec<_> = field_type_vec
+            .iter()
+            .map(|field| {
+                let field_type_string = WCDBField::get_field_type_string(field)?;
+                let bind_type_string = match_field_info!(field_type_string, field, field_setter);
+                Ok(Ident::new(&bind_type_string, Span::call_site()))
+            })
+            .collect::<syn::Result<Vec<_>>>()?;
+        let as_ref_vec: Vec<_> = field_bind_type_vec
+            .iter()
+            .map(|bind_type| {
+                if &bind_type.to_string() == "bind_text" {
+                    quote!(.as_ref())
+                } else {
+                    quote!()
+                }
+            })
+            .collect();
+        Ok(quote::quote! {
+             fn bind_field(
+                &self,
+                object: &#table_ident,
+                field: &wcdb_core::orm::field::Field<#table_ident>,
+                index: usize,
+                prepared_statement: &std::sync::Arc<wcdb_core::core::prepared_statement::PreparedStatement>,
+            ) {
+                match field.get_field_id() {
+                    #(
+                        #field_id_vec => prepared_statement.#field_bind_type_vec(object.#field_ident_vec #as_ref_vec, index),
+                    )*
+                    _ => panic!("Invalid id {} of field {} in {}",
+                        field.get_field_id(),
+                        wcdb_core::winq::identifier::IdentifierTrait::get_description(field),
+                        stringify!(#table_ident)
+                    ),
+                }
+            }
+        })
+    }
+
+    pub(crate) fn generate_auto_increment_config(
+        &self,
+        table_ident: &&Ident,
+        auto_increment_field_opt: &Option<&WCDBField>,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        match auto_increment_field_opt {
+            None => Ok(quote! {
+                fn is_auto_increment(&self, object: &#table_ident) -> bool {
+                    false
+                }
+
+                fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {
+
+                }
+            }),
+            Some(field) => {
+                let field_ident = field.ident().clone().unwrap();
+                let field_type_ident = field.get_field_type_ident();
+                Ok(quote! {
+                    fn is_auto_increment(&self, object: &#table_ident) -> bool {
+                        object.#field_ident == 0
+                    }
+
+                    fn set_last_insert_row_id(&self, object: &mut #table_ident, last_insert_row_id: i64) {
+                        object.#field_ident = last_insert_row_id as #field_type_ident
+                    }
+                })
+            }
+        }
     }
 }
