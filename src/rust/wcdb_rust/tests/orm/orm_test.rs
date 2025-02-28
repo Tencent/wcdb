@@ -1,207 +1,17 @@
 use crate::base::base_test_case::TestCaseTrait;
-use crate::base::database_test_case::{DatabaseTestCase, Expect};
-use crate::base::random_tool::RandomTool;
+use crate::base::database_test_case::{DatabaseTestCase, Expect, TestOperation};
+use crate::orm::testclass::auto_add_column_object::AutoAddColumnObject;
 use rand::Rng;
 use std::cmp::PartialEq;
-use std::sync::MutexGuard;
-use table_coding::WCDBTableCoding;
-use wcdb_core::base::wcdb_exception::WCDBResult;
-use wcdb_core::core::database::Database;
+use wcdb_core::base::wcdb_exception::{WCDBException, WCDBResult};
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb_core::core::table_orm_operation::TableORMOperationTrait;
+use wcdb_core::orm::field::Field;
 use wcdb_core::orm::table_binding::TableBinding;
 use wcdb_core::winq::column::Column;
 use wcdb_core::winq::expression::Expression;
 use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
 use wcdb_core::winq::identifier::IdentifierTrait;
-
-#[derive(WCDBTableCoding, PartialEq, Clone)]
-pub struct AllTypeObject {
-    #[WCDBField]
-    pub field_type: String,
-
-    // Integer
-    #[WCDBField]
-    pub a_bool: bool,
-    #[WCDBField]
-    pub a_byte: i8,
-    #[WCDBField]
-    pub a_short: i16,
-    #[WCDBField]
-    pub a_int: i32,
-    #[WCDBField]
-    pub a_long: i64,
-
-    // Float
-    #[WCDBField]
-    pub a_float: f32,
-    #[WCDBField]
-    pub a_double: f64,
-
-    // String
-    #[WCDBField]
-    pub a_string: String,
-    // BLOB
-    // #[WCDBField] todo qixinbing 待实现
-    // a_blob : Vec<u8>,
-}
-
-impl AllTypeObject {
-    pub fn new() -> Self {
-        AllTypeObject {
-            field_type: "".to_string(),
-            a_bool: false,
-            a_byte: 0,
-            a_short: 0,
-            a_int: 0,
-            a_long: 0,
-            a_float: 0.0,
-            a_double: 0.0,
-            a_string: "".to_string(),
-            // a_blob : Vec::new(),
-        }
-    }
-
-    pub fn equals(&self, other: &AllTypeObject) -> bool {
-        self.a_bool == other.a_bool
-            && self.a_byte == other.a_byte
-            && self.a_short == other.a_short
-            && self.a_int == other.a_int
-            && self.a_long == other.a_long
-            && self.a_float == other.a_float
-            && self.a_double == other.a_double
-            && self.a_string == other.a_string
-    }
-}
-
-pub struct AllTypeObjectHelper {}
-
-impl AllTypeObjectHelper {
-    pub fn max_object() -> AllTypeObject {
-        AllTypeObject {
-            field_type: "max".to_string(),
-            a_bool: true,
-            a_byte: i8::MAX,
-            a_short: i16::MAX,
-            a_int: i32::MAX,
-            a_long: i64::MAX,
-            a_float: f32::MAX,
-            a_double: f64::MAX,
-            a_string: RandomTool::string(),
-        }
-    }
-
-    pub fn min_object() -> AllTypeObject {
-        AllTypeObject {
-            field_type: "min".to_string(),
-            a_bool: false,
-            a_byte: i8::MIN,
-            a_short: i16::MIN,
-            a_int: i32::MIN,
-            a_long: i64::MIN,
-            a_float: f32::MIN,
-            a_double: f64::MIN,
-            a_string: RandomTool::string(),
-        }
-    }
-
-    pub fn random_object() -> AllTypeObject {
-        let mut rng = rand::thread_rng();
-        AllTypeObject {
-            field_type: "random".to_string(),
-            a_bool: rng.gen::<bool>(),
-            a_byte: rng.gen::<i8>(),
-            a_short: rng.gen::<i16>(),
-            a_int: rng.gen::<i32>(),
-            a_long: rng.gen::<i64>(),
-            a_float: rng.gen::<f32>(),
-            a_double: rng.gen::<f64>(),
-            a_string: RandomTool::string(),
-        }
-    }
-
-    pub fn empty_object() -> AllTypeObject {
-        AllTypeObject {
-            field_type: "empty".to_string(),
-            a_bool: false,
-            a_byte: 0,
-            a_short: 0,
-            a_int: 0,
-            a_long: 0,
-            a_float: 0.0,
-            a_double: 0.0,
-            a_string: RandomTool::string(),
-        }
-    }
-}
-
-#[derive(WCDBTableCoding)]
-pub struct FieldObject {
-    #[WCDBField]
-    field: i32,
-    #[WCDBField(
-        column_name = "differentName",
-        is_primary = true,
-        is_auto_increment = true
-    )]
-    field_with_different_name: i32,
-}
-
-#[derive(WCDBTableCoding)]
-pub struct PrimaryNotAutoIncrementObject {
-    #[WCDBField(is_primary = true)]
-    id: i32,
-}
-
-impl PrimaryNotAutoIncrementObject {
-    pub fn new() -> Self {
-        PrimaryNotAutoIncrementObject { id: 0 }
-    }
-}
-
-#[derive(WCDBTableCoding, Clone)]
-pub struct PrimaryEnableAutoIncrementObject {
-    #[WCDBField(
-        is_primary = true,
-        is_auto_increment = true,
-        enable_auto_increment_for_existing_table = true
-    )]
-    id: i32,
-}
-
-impl PrimaryEnableAutoIncrementObject {
-    pub fn new() -> Self {
-        PrimaryEnableAutoIncrementObject { id: 0 }
-    }
-}
-
-#[derive(WCDBTableCoding, Clone)]
-#[WCDBTable(
-    multi_primaries(columns = ["multiPrimary1", "multiPrimary2", "multiPrimary3"]),
-    multi_unique(columns = ["multiUnique1", "multiUnique2", "multiUnique3"]),
-    multi_indexes(name = "specifiedNameIndex", columns = ["multiIndex1", "multiIndex2", "multiIndex3"]),
-    multi_indexes(columns = ["multiIndex1", "multiIndex2"])
-)]
-pub struct TableConstraintObject {
-    #[WCDBField(column_name = "multiPrimary1")]
-    multi_primary1: i32,
-    #[WCDBField(column_name = "multiPrimary2")]
-    multi_primary2: i32,
-    #[WCDBField(column_name = "multiPrimary3")]
-    multi_primary: i32,
-    #[WCDBField(column_name = "multiUnique1")]
-    multi_unique1: i32,
-    #[WCDBField(column_name = "multiUnique2")]
-    multi_unique2: i32,
-    #[WCDBField(column_name = "multiUnique3")]
-    multi_unique: i32,
-    #[WCDBField(column_name = "multiIndex1")]
-    multi_index1: i32,
-    #[WCDBField(column_name = "multiIndex2")]
-    multi_index2: i32,
-    #[WCDBField(column_name = "multiIndex3")]
-    multi_index: i32,
-}
 
 pub struct OrmTest {
     database_test_case: DatabaseTestCase,
@@ -229,6 +39,17 @@ impl OrmTest {
             .database_test_case
             .do_test_sql_vec(new_sql_vec, operation);
     }
+
+    fn do_test_auto_add_column<T>(
+        remove_filed: &Field<AutoAddColumnObject>,
+        succeed: bool,
+        operation: T,
+    ) where
+        T: TestOperation,
+    {
+        let column_name = remove_filed.get_name();
+        // let createTable = StatementCreateTable;
+    }
 }
 
 impl TestCaseTrait for OrmTest {
@@ -246,7 +67,20 @@ impl TestCaseTrait for OrmTest {
 #[cfg(test)]
 pub mod orm_test {
     use super::*;
-    use std::sync::{Arc, RwLock};
+    use crate::orm::testclass::all_type_object::{
+        AllTypeObjectHelper, DbAllTypeObject, DBALLTYPEOBJECT_INSTANCE,
+    };
+    use crate::orm::testclass::auto_add_column_object::DBAUTOADDCOLUMNOBJECT_INSTANCE;
+    use crate::orm::testclass::field_object::DbFieldObject;
+    use crate::orm::testclass::primary_enable_auto_increment_object::{
+        DbPrimaryEnableAutoIncrementObject, PrimaryEnableAutoIncrementObject,
+        DBPRIMARYENABLEAUTOINCREMENTOBJECT_INSTANCE,
+    };
+    use crate::orm::testclass::primary_not_auto_increment_object::{
+        DbPrimaryNotAutoIncrementObject, PrimaryNotAutoIncrementObject,
+        DBPRIMARYNOTAUTOINCREMENTOBJECT_INSTANCE,
+    };
+    use crate::orm::testclass::table_constraint_object::DBTABLECONSTRAINTOBJECT_INSTANCE;
 
     fn setup(orm_test: &OrmTest) {
         orm_test.setup().unwrap();
@@ -357,6 +191,22 @@ pub mod orm_test {
             Ok(())
         });
 
+        teardown(&orm_test);
+    }
+
+    #[test]
+    fn test_auto_add_column() {
+        let orm_test = OrmTest::new();
+        setup(&orm_test);
+
+        let fake_table = "fakeTable";
+        let fake_schema = "notExistSchema";
+        orm_test
+            .database_test_case
+            .create_table(fake_table, &*DBAUTOADDCOLUMNOBJECT_INSTANCE)
+            .unwrap();
+
+        // todo qixinbing
         teardown(&orm_test);
     }
 

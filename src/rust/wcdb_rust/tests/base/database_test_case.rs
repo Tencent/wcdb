@@ -313,3 +313,7 @@ pub enum Expect {
     FirstFewSQLs,
     SomeSQLs,
 }
+
+pub trait TestOperation {
+    fn execute(&self) -> WCDBResult<()>;
+}

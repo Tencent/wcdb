@@ -56,6 +56,10 @@ impl<T> Field<T> {
         &self.column
     }
 
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+
     pub fn get_field_id(&self) -> usize {
         self.field_id
     }
