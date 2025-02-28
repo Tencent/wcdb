@@ -86,8 +86,31 @@ impl RustCodeGenerator {
         match &self.table_constraint_info {
             None => {}
             Some(table_config_info) => {
-                // todo dengxudong 将 multi_indexes 逻辑挪过来
-                // table_config_info.multi_indexes()
+                match table_config_info.multi_indexes() {
+                    None => {}
+                    Some(multi_indexes) => {
+                        for multi_index in multi_indexes {
+                            let index_name_ident: Ident = multi_index.get_index_name_ident();
+                            let index_column_name_ident_vec: Vec<Ident> =
+                                multi_index.get_index_column_name_ident_vec(&all_columns_map);
+                            let mut is_full_name = true;
+                            if multi_index.name().is_empty() {
+                                is_full_name = false;
+                            }
+                            token_stream.extend(quote! {
+                                let create_index = wcdb_core::winq::statement_create_index::StatementCreateIndex::new();
+                                create_index.if_not_exist();
+                                create_index.indexed_by(
+                                    unsafe {vec![
+                                        #(
+                                            (*instance.#index_column_name_ident_vec).get_column(),
+                                        )*
+                                    ]});
+                                #binding_ident.add_index(stringify!(#index_name_ident), #is_full_name, create_index);
+                            });
+                        }
+                    }
+                }
 
                 match table_config_info.multi_primaries() {
                     None => {}

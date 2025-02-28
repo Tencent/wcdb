@@ -26,13 +26,13 @@ impl TableConfigInfo {
     pub fn resolve(table: &WCDBTable, fts_module_opt: Option<FTSModuleInfo>) -> TableConfigInfo {
         let mut resolved_annotation = TableConfigInfo::new();
         resolved_annotation.is_without_row_id = table.is_without_row_id();
-        // todo dengxudong 是否去掉？
-        // for multi_indexes_item in table.multi_indexes() {
-        //     resolved_annotation
-        //         .multi_indexes
-        //         .get_or_insert(vec![])
-        //         .push(MultiIndexesInfo::resolve(&multi_indexes_item));
-        // }
+        for multi_indexes_item in table.multi_indexes() {
+            resolved_annotation
+                .multi_indexes
+                .get_or_insert(vec![])
+                .push(MultiIndexesInfo::resolve(&multi_indexes_item));
+        }
+
         for multi_primary in table.get_multi_primary_vec() {
             resolved_annotation
                 .multi_primaries

@@ -46,7 +46,11 @@ impl MultiPrimaryInfo {
     pub fn columns_ident_vec(&self, all_columns_map: &HashMap<String, ColumnInfo>) -> Vec<Ident> {
         let mut ident_vec: Vec<Ident> = Vec::new();
         for column_item in self.columns.iter() {
-            let property_name = all_columns_map.get(column_item).unwrap().property_name();
+            let mut property_name = column_item.clone();
+            match all_columns_map.get(column_item) {
+                None => {}
+                Some(val) => property_name = val.property_name(),
+            }
             ident_vec.push(Ident::new(property_name.as_str(), Span::call_site()));
         }
         ident_vec

@@ -5,7 +5,9 @@ use syn::LitStr;
 
 #[derive(Debug, FromMeta, Clone)]
 pub struct MultiIndexes {
+    #[darling(default)]
     name: Option<LitStr>,
+    #[darling(default)]
     columns: Vec<LitStr>,
 }
 
@@ -49,5 +51,13 @@ impl MultiIndexes {
 
     pub fn get_is_full_name(&self) -> bool {
         self.name.is_some()
+    }
+
+    pub fn name(&self) -> &Option<LitStr> {
+        &self.name
+    }
+
+    pub fn columns(&self) -> &Vec<LitStr> {
+        &self.columns
     }
 }

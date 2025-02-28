@@ -18,45 +18,47 @@
  * limitations under the License.
  */
 use crate::compiler::resolved_info::column_info::ColumnInfo;
+use crate::macros::multi_indexes::MultiIndexes;
 use proc_macro2::{Ident, Span};
+use std::collections::HashMap;
 use syn::LitStr;
 
 pub struct MultiIndexesInfo {
-    name: Option<LitStr>,
-    columns: Vec<LitStr>,
+    name: String,
+    columns: Vec<String>,
 }
 
 impl MultiIndexesInfo {
+    pub fn new() -> Self {
+        MultiIndexesInfo {
+            name: "".to_string(),
+            columns: vec![],
+        }
+    }
+
     pub fn get_index_name_ident(&self) -> Ident {
-        let index_name = match &self.name {
-            None => {
-                let columns = &self.columns;
-                columns
-                    .iter()
-                    .flat_map(|s| vec!["_".to_string(), s.value().clone()])
-                    .collect::<String>()
-                    + "_index"
-            }
-            Some(index_name) => index_name.value(),
-        };
+        let mut index_name = self.name.clone();
+        if self.name.is_empty() {
+            let join_str = self.columns().join("_");
+            index_name = format!("{}{}{}", "_", join_str, "_index");
+        }
         Ident::new(&index_name, Span::call_site())
     }
 
     pub(crate) fn get_index_column_name_ident_vec(
         &self,
-        all_field_info_vec: &Vec<ColumnInfo>,
+        all_columns_map: &HashMap<String, ColumnInfo>,
     ) -> Vec<Ident> {
         if self.columns.is_empty() {
             return vec![];
         }
         let mut ret_vec = vec![];
         for column in self.columns.iter() {
-            let column_name = &column.value();
-            let mut property_name = column_name.clone();
-            for column_info in all_field_info_vec {
-                if column_info.column_name() == column_name.clone() {
-                    property_name = column_info.property_name();
-                    break;
+            let mut property_name = column.clone();
+            match all_columns_map.get(&property_name) {
+                None => {}
+                Some(val) => {
+                    property_name = val.property_name();
                 }
             }
             ret_vec.push(Ident::new(property_name.as_str(), Span::call_site()));
@@ -64,7 +66,26 @@ impl MultiIndexesInfo {
         ret_vec
     }
 
-    pub fn get_is_full_name(&self) -> bool {
-        self.name.is_some()
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn columns(&self) -> &Vec<String> {
+        &self.columns
+    }
+
+    pub fn resolve(multi_indexes: &MultiIndexes) -> MultiIndexesInfo {
+        let mut info = MultiIndexesInfo::new();
+        match multi_indexes.name() {
+            None => {}
+            Some(val) => {
+                info.name = val.value();
+            }
+        }
+        for lit_str in multi_indexes.columns() {
+            info.columns.push(lit_str.value());
+        }
+
+        info
     }
 }

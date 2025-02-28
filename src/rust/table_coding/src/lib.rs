@@ -192,16 +192,13 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
     let instance_ident = Ident::new(&instance, Span::call_site());
 
     let columns_statements = generate_columns(table)?;
-    let table_config_statements = generate_table_config(table, &binding_ident)?;
-
-    //
     let table_ident = table.ident();
     let mut code_gen = RustCodeGenerator::new();
     code_gen.set_class_name(table_ident.to_string());
     code_gen.set_orm_class_name(db_table_ident.to_string());
     code_gen.set_table_constraint_info(Option::from(TableConfigInfo::resolve(
         table,
-        Some(FTSModuleInfo::new()),
+        Some(FTSModuleInfo::new()), //TODO dengxudong fts module
     )));
     match table.data() {
         Data::Enum(_) => {}
@@ -213,7 +210,6 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
             code_gen.set_all_column_info(all_column_info);
         }
     }
-    // let generate_fields_statements = code_gen.generate_fields()?;
     let generate_table_config = code_gen.generate_table_config(&binding_ident)?;
 
     Ok(quote! {
@@ -225,8 +221,6 @@ fn generate_singleton(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream
             let instance_raw = unsafe { &instance as *const #db_table_ident };
 
             #columns_statements
-
-            #table_config_statements
             #generate_table_config
             instance
         });
@@ -433,42 +427,4 @@ fn generate_columns(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> 
     };
 
     Ok(columns_statements)
-}
-
-fn generate_table_config(
-    table: &WCDBTable,
-    binding_ident: &Ident,
-) -> syn::Result<proc_macro2::TokenStream> {
-    let all_field_info_vec = table.get_all_column_info_vec();
-
-    let multi_index_vec = table.get_multi_index_vec();
-    let multi_index_statements = if multi_index_vec.is_empty() {
-        quote! {}
-    } else {
-        let mut code = proc_macro2::TokenStream::new();
-
-        for multi_index in multi_index_vec {
-            let index_name_ident: Ident = multi_index.get_index_name_ident();
-            let index_column_name_ident_vec: Vec<Ident> =
-                multi_index.get_index_column_name_ident_vec(&all_field_info_vec);
-            let is_full_name = multi_index.get_is_full_name();
-
-            code.extend(quote! {
-                let create_index = wcdb_core::winq::statement_create_index::StatementCreateIndex::new();
-                create_index.if_not_exist();
-                create_index.indexed_by(
-                    unsafe {vec![
-                        #(
-                            (*instance.#index_column_name_ident_vec).get_column(),
-                        )*
-                    ]});
-                #binding_ident.add_index(stringify!(#index_name_ident), #is_full_name, create_index);
-            });
-        }
-        code
-    };
-
-    Ok(quote! {
-        #multi_index_statements
-    })
 }
