@@ -49,18 +49,16 @@ void WCDBRustColumnConstraintClassMethod(configAutoIncrement, void* constraint) 
     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigAutoIncrement(constraintStruct);
 }
-//
-// void WCDBRustColumnConstraintClassMethod(configNotNull, jlong constraint)
-//{
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBColumnConstraintConfigNotNull(constraintStruct);
-//}
-//
-// void WCDBRustColumnConstraintClassMethod(configUnique, jlong constraint)
-//{
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBColumnConstraintConfigUnique(constraintStruct);
-//}
+
+void WCDBRustColumnConstraintClassMethod(configNotNull, void* constraint) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBColumnConstraintConfigNotNull(constraintStruct);
+}
+
+void WCDBRustColumnConstraintClassMethod(configUnique, void* constraint) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBColumnConstraintConfigUnique(constraintStruct);
+}
 //
 // void WCDBRustColumnConstraintClassMethod(configCheck, jlong constraint, jlong expression)
 //{
@@ -94,8 +92,7 @@ void WCDBRustColumnConstraintClassMethod(configAutoIncrement, void* constraint) 
 //    WCDBColumnConstraintConfigForeignKey(constraintStruct, foreignKeyStruct);
 //}
 //
-// void WCDBRustColumnConstraintClassMethod(configUnindexed, jlong constraint)
-//{
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBColumnConstraintConfigUnIndexed(constraintStruct);
-//}
+void WCDBRustColumnConstraintClassMethod(configUnIndex, void* constraint) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBColumnConstraintConfigUnIndexed(constraintStruct);
+}

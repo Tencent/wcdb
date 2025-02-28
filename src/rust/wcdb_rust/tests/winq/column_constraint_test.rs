@@ -14,5 +14,17 @@ pub mod column_constraint_test {
             ColumnConstraint::new().primary_key().auto_increment(),
             "PRIMARY KEY AUTOINCREMENT",
         );
+        WinqTool::winq_equal(
+            ColumnConstraint::new_by_column_name("testColumnConstraint").not_null(),
+            "CONSTRAINT testColumnConstraint NOT NULL",
+        );
+        WinqTool::winq_equal(
+            ColumnConstraint::new_by_column_name("testColumnConstraint").unique(),
+            "CONSTRAINT testColumnConstraint UNIQUE",
+        );
+        WinqTool::winq_equal(
+            ColumnConstraint::new_by_column_name("testColumnConstraint").un_index(),
+            "CONSTRAINT testColumnConstraint UNINDEXED",
+        );
     }
 }

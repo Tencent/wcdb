@@ -40,10 +40,10 @@ void WCDBRustColumnConstraintClassMethod(configPrimaryKey, void* constraint);
 // conflictAction);
 //
 void WCDBRustColumnConstraintClassMethod(configAutoIncrement, void* constraint);
-//
-// void WCDBRustColumnConstraintClassMethod(configNotNull, jlong constraint);
-//
-// void WCDBRustColumnConstraintClassMethod(configUnique, jlong constraint);
+
+void WCDBRustColumnConstraintClassMethod(configNotNull, void* constraint);
+
+void WCDBRustColumnConstraintClassMethod(configUnique, void* constraint);
 //
 // void WCDBRustColumnConstraintClassMethod(configCheck, jlong constraint, jlong expression);
 //
@@ -55,4 +55,4 @@ void WCDBRustColumnConstraintClassMethod(configAutoIncrement, void* constraint);
 //
 // void WCDBRustColumnConstraintClassMethod(configForeignKey, jlong constraint, jlong foreignKey);
 //
-// void WCDBRustColumnConstraintClassMethod(configUnindexed, jlong constraint);
+void WCDBRustColumnConstraintClassMethod(configUnindexed, void* constraint);

@@ -381,9 +381,12 @@ fn generate_columns(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> 
                 );
             });
 
+            token_stream.extend(quote! {
+                let column_constraint = wcdb_core::winq::column_constraint::ColumnConstraint::new();
+            });
+
             if is_primary_key {
                 token_stream.extend(quote! {
-                    let column_constraint = wcdb_core::winq::column_constraint::ColumnConstraint::new();
                     column_constraint.primary_key();
                 });
                 if is_auto_increment {
@@ -391,10 +394,29 @@ fn generate_columns(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> 
                         column_constraint.auto_increment();
                     });
                 }
-                token_stream.extend(quote! {
-                    #field_def_ident.constraint(column_constraint);
-                })
             }
+
+            if field.is_unique() {
+                token_stream.extend(quote! {
+                    column_constraint.unique();
+                });
+            }
+
+            if field.is_not_null() {
+                token_stream.extend(quote! {
+                    column_constraint.not_null();
+                });
+            }
+
+            if field.is_not_indexed() {
+                token_stream.extend(quote! {
+                    column_constraint.un_index();
+                });
+            }
+
+            token_stream.extend(quote! {
+                #field_def_ident.constraint(column_constraint);
+            });
 
             token_stream.extend(quote! {
                 instance.#field_ident = unsafe { Box::into_raw(field) };

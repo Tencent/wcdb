@@ -8,6 +8,12 @@ extern "C" {
     pub fn WCDBRustColumnConstraint_configPrimaryKey(cpp_obj: *mut c_void);
 
     pub fn WCDBRustColumnConstraint_configAutoIncrement(cpp_obj: *mut c_void);
+
+    pub fn WCDBRustColumnConstraint_configNotNull(cpp_obj: *mut c_void);
+
+    pub fn WCDBRustColumnConstraint_configUnique(cpp_obj: *mut c_void);
+
+    pub fn WCDBRustColumnConstraint_configUnIndex(cpp_obj: *mut c_void);
 }
 
 pub struct ColumnConstraint {
@@ -66,6 +72,27 @@ impl ColumnConstraint {
     pub fn auto_increment(&self) -> &Self {
         unsafe {
             WCDBRustColumnConstraint_configAutoIncrement(self.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn not_null(&self) -> &Self {
+        unsafe {
+            WCDBRustColumnConstraint_configNotNull(self.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn unique(&self) -> &Self {
+        unsafe {
+            WCDBRustColumnConstraint_configUnique(self.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn un_index(&self) -> &Self {
+        unsafe {
+            WCDBRustColumnConstraint_configUnIndex(self.get_cpp_obj());
         }
         self
     }
