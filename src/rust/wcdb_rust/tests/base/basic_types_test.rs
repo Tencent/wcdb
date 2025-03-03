@@ -60,9 +60,20 @@ pub mod basic_types_test {
     #[test]
     pub fn test() {
         assert!(BasicTypesTest::is_integer(1i8));
+        assert!(BasicTypesTest::is_integer(i8::MAX));
+        assert!(BasicTypesTest::is_integer(i8::MIN));
+
         assert!(BasicTypesTest::is_integer(1i16));
+        assert!(BasicTypesTest::is_integer(i16::MAX));
+        assert!(BasicTypesTest::is_integer(i16::MIN));
+
         assert!(BasicTypesTest::is_integer(1i32));
+        assert!(BasicTypesTest::is_integer(i32::MAX));
+        assert!(BasicTypesTest::is_integer(i32::MIN));
+
         assert!(BasicTypesTest::is_integer(1i64));
+        assert!(BasicTypesTest::is_integer(i64::MAX));
+        assert!(BasicTypesTest::is_integer(i64::MIN));
 
         assert!(BasicTypesTest::is_bool(true));
         assert!(BasicTypesTest::is_bool(false));
@@ -71,6 +82,11 @@ pub mod basic_types_test {
         assert!(BasicTypesTest::is_string("2134".to_string()));
 
         assert!(BasicTypesTest::is_double(1.0f32));
+        assert!(BasicTypesTest::is_double(f32::MAX));
+        assert!(BasicTypesTest::is_double(f32::MIN));
+
         assert!(BasicTypesTest::is_double(1.0f64));
+        assert!(BasicTypesTest::is_double(f64::MAX));
+        assert!(BasicTypesTest::is_double(f64::MIN));
     }
 }
