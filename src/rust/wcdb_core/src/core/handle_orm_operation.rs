@@ -22,6 +22,9 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
         binding: &R,
     ) -> WCDBResult<bool>;
+
+    fn drop_table(&self, table_name: &str) -> WCDBResult<()>;
+
     fn insert_object<T>(
         &self,
         object: T,

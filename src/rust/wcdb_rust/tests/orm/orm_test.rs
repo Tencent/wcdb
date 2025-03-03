@@ -4,7 +4,7 @@ use crate::base::wrapped_value::WrappedValue;
 use crate::orm::testclass::auto_add_column_object::{AutoAddColumnObject, DbAutoAddColumnObject};
 use rand::Rng;
 use std::cmp::PartialEq;
-use wcdb_core::base::wcdb_exception::WCDBResult;
+use wcdb_core::base::wcdb_exception::{WCDBException, WCDBResult};
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb_core::core::table_orm_operation::TableORMOperationTrait;
 use wcdb_core::orm::field::Field;
@@ -46,14 +46,14 @@ impl OrmTest {
 
     fn do_test_auto_add_column(
         &self,
+        fake_table: &str,
         remove_filed: &Field<AutoAddColumnObject>,
         succeed: bool,
         operation: TestOperation,
     ) -> WCDBResult<()> {
-        // todo qixinbing
         let column_name = remove_filed.get_name();
-        let binding = StatementCreateTable::new();
-        let create_table = binding.create_table(self.table_name.as_str());
+        let statement = StatementCreateTable::new();
+        let create_table = statement.create_table(fake_table);
         let mut column_defs = vec![];
         DbAutoAddColumnObject::all_fields()
             .iter()
@@ -66,20 +66,32 @@ impl OrmTest {
             });
 
         let create_table = create_table.define(column_defs.iter().collect());
-        self.database_test_case
-            .get_database()
-            .read()
-            .unwrap()
-            .execute(create_table)?;
+        let _ = self.database_test_case.execute(create_table); // todo qixinbing 直接 ? 会报错
 
-        let added = WrappedValue::new();
-        // self.database_test_case
-        //     .get_database()
-        //     .read()
-        //     .unwrap()
-        //     .trace_exception(Some(move |exp| {
-        //         // todo qixinbing
-        //     }));
+        let mut added = WrappedValue::new();
+        added.bool_value = true;
+        self.database_test_case
+            .trace_exception(Some(move |exp: WCDBException| {
+                if exp.message() != "Auto add column".to_string() {
+                    return;
+                }
+                // added.bool_value = true;
+                // todo qixinbing
+            }));
+        let mut has_error = false;
+        let operation_ret = operation();
+        match operation_ret {
+            Ok(_) => {}
+            Err(exp) => {
+                let msg = exp.message();
+                println!("qxb operation_ret {}", msg);
+                has_error = true;
+            }
+        }
+        assert_eq!(succeed, !has_error);
+        assert_eq!(succeed, added.bool_value);
+        self.database_test_case.drop_table(fake_table)?;
+        // self.database_test_case.get_database().read().unwrap().trace_exception(None);
 
         Ok(())
     }
@@ -116,7 +128,6 @@ pub mod orm_test {
         DBPRIMARYNOTAUTOINCREMENTOBJECT_INSTANCE,
     };
     use crate::orm::testclass::table_constraint_object::DBTABLECONSTRAINTOBJECT_INSTANCE;
-    use wcdb_core::chaincall::insert;
 
     fn setup(orm_test: &OrmTest) {
         orm_test.setup().unwrap();
@@ -235,9 +246,6 @@ pub mod orm_test {
         let orm_test = OrmTest::new();
         setup(&orm_test);
 
-        let self_table_name = orm_test.table_name.clone();
-        // let self_table_name = self_table_name.as_str();
-
         let fake_table = "fakeTable";
         let fake_schema = "notExistSchema";
         orm_test
@@ -255,21 +263,40 @@ pub mod orm_test {
                 }
             });
 
+        let database_test_case_clone = orm_test.database_test_case.clone();
         orm_test
             .do_test_auto_add_column(
+                fake_table,
                 insert_value,
                 true,
-                Box::new(|| {
-                    // orm_test
-                    //     .database_test_case
-                    //     .get_database()
-                    //     .read()
-                    //     .unwrap()
-                    //     .insert_object(
-                    //         AutoAddColumnObject::new(),
-                    //         DbAutoAddColumnObject::all_fields(),
-                    //         self_table_name.as_str(),
-                    //     )?;
+                Box::new(move || {
+                    let self_table_name = fake_table.to_string();
+                    database_test_case_clone.insert_object(
+                        AutoAddColumnObject::new(),
+                        DbAutoAddColumnObject::all_fields(),
+                        self_table_name.as_str(),
+                    )?;
+                    Ok(())
+                }),
+            )
+            .unwrap();
+
+        let mut update_value = unsafe { &*obj.update_value };
+        DbAutoAddColumnObject::all_fields()
+            .iter()
+            .for_each(|field| {
+                if field.get_name() == "updateValue" {
+                    update_value = *field;
+                }
+            });
+
+        orm_test
+            .do_test_auto_add_column(
+                fake_table,
+                update_value,
+                true,
+                Box::new(move || {
+                    // todo qixinbing
                     Ok(())
                 }),
             )

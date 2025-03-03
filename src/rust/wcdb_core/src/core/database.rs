@@ -14,6 +14,7 @@ use crate::utils::ToCow;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
+use crate::winq::statement_drop_table::StatementDropTable;
 use lazy_static::lazy_static;
 use std::ffi::{c_char, c_double, c_void, CStr, CString};
 use std::ptr::null_mut;
@@ -356,6 +357,11 @@ impl HandleORMOperationTrait for Database {
     ) -> WCDBResult<bool> {
         let handle = self.get_handle(true);
         binding.base_binding().create_table(table_name, handle)
+    }
+
+    fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
+        let statement = StatementDropTable::new();
+        self.execute(statement.drop_table(table_name).if_exist())
     }
 
     fn insert_object<T>(

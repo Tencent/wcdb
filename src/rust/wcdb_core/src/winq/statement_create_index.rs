@@ -2,7 +2,7 @@ use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use crate::winq::statement::Statement;
+use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
@@ -45,6 +45,12 @@ impl IdentifierTrait for StatementCreateIndex {
 impl IdentifierStaticTrait for StatementCreateIndex {
     fn get_type() -> i32 {
         CPPType::CreateIndexSTMT as i32
+    }
+}
+
+impl StatementTrait for StatementCreateIndex {
+    fn is_write_statement(&self) -> bool {
+        self.statement.is_write_statement()
     }
 }
 

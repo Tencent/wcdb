@@ -4,11 +4,13 @@ use std::cmp::PartialEq;
 use std::fs::OpenOptions;
 use std::io::{Seek, SeekFrom, Write};
 use std::path::{Path, MAIN_SEPARATOR};
-use std::sync::{Arc, LockResult, Mutex, RwLock};
+use std::sync::{Arc, Mutex, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
-use wcdb_core::core::database::Database;
+use wcdb_core::core::database::{Database, TraceExceptionCallbackTrait};
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb_core::orm::field::Field;
 use wcdb_core::orm::table_binding::TableBinding;
+use wcdb_core::winq::statement::StatementTrait;
 
 #[derive(Clone)]
 pub struct DatabaseTestCase {
@@ -40,6 +42,33 @@ impl DatabaseTestCase {
             .unwrap()
             .create_table(table_name, binding)?;
         Ok(())
+    }
+
+    pub fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
+        self.get_database().read().unwrap().execute(statement)
+    }
+
+    pub fn trace_exception<CB>(&self, cb_opt: Option<CB>)
+    where
+        CB: TraceExceptionCallbackTrait + 'static,
+    {
+        self.get_database().read().unwrap().trace_exception(cb_opt);
+    }
+
+    pub fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
+        self.get_database().read().unwrap().drop_table(table_name)
+    }
+
+    pub fn insert_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.get_database()
+            .read()
+            .unwrap()
+            .insert_object(object, fields, table_name)
     }
 
     fn do_test_sql<CB>(&self, sql: String, operation: CB)

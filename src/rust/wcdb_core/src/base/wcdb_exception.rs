@@ -274,6 +274,14 @@ impl WCDBException {
             WCDBException::WCDBNormalException(ExceptionInner::new(level, code, cpp_obj))
         }
     }
+
+    pub fn message(&self) -> String {
+        match self {
+            WCDBException::WCDBNormalException(inner) => inner.message(),
+            WCDBException::WCDBInterruptException(inner) => inner.message(),
+            WCDBException::WCDBCorruptOrIOException(inner) => inner.message(),
+        }
+    }
 }
 
 pub struct ExceptionInner {
@@ -314,6 +322,19 @@ impl ExceptionInner {
             level,
             code,
             key_values,
+        }
+    }
+
+    pub fn message(&self) -> String {
+        let exception_obj_opt = self.key_values.get(&ExceptionKey::Message.to_string());
+        if exception_obj_opt.is_none() {
+            return String::new();
+        }
+        let exception_obj = exception_obj_opt.unwrap();
+        match exception_obj {
+            ExceptionObject::Long(value) => value.to_string(),
+            ExceptionObject::Double(value) => value.to_string(),
+            ExceptionObject::String(value) => value.to_string(),
         }
     }
 }
