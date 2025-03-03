@@ -1,4 +1,5 @@
 use crate::field_orm_info::{FieldORMInfo, FIELD_ORM_INFO_MAP};
+use crate::macros::field_attr::FieldAttr;
 use darling::FromField;
 use proc_macro2::{Ident, Span};
 use syn::spanned::Spanned;
@@ -23,6 +24,8 @@ pub struct WCDBField {
     is_not_null: bool,
     #[darling(default)]
     is_not_indexed: bool,
+    #[darling(default)]
+    attr: Option<FieldAttr>,
 }
 
 impl WCDBField {
@@ -60,6 +63,10 @@ impl WCDBField {
 
     pub fn is_not_indexed(&self) -> bool {
         self.is_not_indexed
+    }
+
+    pub fn attr(&self) -> &Option<FieldAttr> {
+        &self.attr
     }
 }
 
@@ -108,6 +115,15 @@ impl WCDBField {
             Some(field_orm_info) => field_orm_info.column_type == "Integer",
         }
     }
+
+    pub fn is_float(&self) -> bool {
+        let column_type_string = WCDBField::get_field_type_string(&self.ty).unwrap();
+        let field_info_opt = FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
+        match field_info_opt {
+            None => false,
+            Some(field_orm_info) => field_orm_info.column_type == "Float",
+        }
+    }
 }
 
 impl WCDBField {
@@ -118,6 +134,18 @@ impl WCDBField {
                 field.span(),
                 "WCDBTable's field type only works on Path",
             )),
+        }
+    }
+
+    pub fn get_property_type(field: &Type) -> syn::Result<String> {
+        let column_type_string = WCDBField::get_field_type_string(field)?;
+        let field_info_opt = FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
+        match field_info_opt {
+            None => Err(syn::Error::new(
+                field.span(),
+                "WCDBTable's field can't get ColumnType",
+            )),
+            Some(field_info) => Ok(field_info.column_type.clone()),
         }
     }
 }

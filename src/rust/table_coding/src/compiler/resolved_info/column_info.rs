@@ -70,7 +70,7 @@ impl ColumnInfo {
             .map(|field_name| field_name.to_string())
             .collect::<String>();
         column_info.property_type =
-            WCDBField::get_field_type_string(&field.ty()).unwrap_or(String::from(""));
+            WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
         column_info.nullable = field.is_not_null();
         column_info.column_name = field.column_name();
         column_info.is_primary = field.is_primary();
@@ -86,8 +86,8 @@ impl ColumnInfo {
         //     _ => panic!("WCDBTable only works on structs"),
         // }
 
-        // todo dengxudong default_data  怎么写？
-        // DefaultValueInfo::resolve(field.)
+        column_info.default_value = DefaultValueInfo::resolve(&field.attr());
+
         column_info
     }
 

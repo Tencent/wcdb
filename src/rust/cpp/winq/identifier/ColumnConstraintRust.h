@@ -47,9 +47,9 @@ void WCDBRustColumnConstraintClassMethod(configUnique, void* constraint);
 //
 // void WCDBRustColumnConstraintClassMethod(configCheck, jlong constraint, jlong expression);
 //
-// void WCDBRustColumnConstraintClassMethod(configDefaultValue,
-//                                        jlong constraint,
-//                                        WCDBRustCommonValueParameter(value));
+void WCDBRustColumnConstraintClassMethod(configDefaultValue,
+                                         void* constraint,
+                                         WCDBRustCommonValueParameter(value));
 //
 // void WCDBRustColumnConstraintClassMethod(configCollation, jlong constraint, jstring collation);
 //

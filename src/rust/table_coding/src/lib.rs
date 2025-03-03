@@ -20,16 +20,16 @@ use syn::parse::Parse;
 use syn::spanned::Spanned;
 use syn::{parse_macro_input, DeriveInput, Ident};
 #[proc_macro_derive(WCDBTableCoding, attributes(WCDBTable, WCDBField))]
-pub fn wcdb_table_coding(input: TokenStream) -> TokenStream {
+pub fn process(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let table = WCDBTable::from_derive_input(&input).unwrap();
-    match do_expand(&table) {
+    match create_orm_file(&table) {
         Ok(quote) => quote.into(),
         Err(e) => e.to_compile_error().into(),
     }
 }
 
-fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
+fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let table_ident = table.ident();
     let db_table_ident = table.get_db_table();
     let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
@@ -48,16 +48,7 @@ fn do_expand(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
         table,
         Some(FTSModuleInfo::new()), //TODO dengxudong fts module
     )));
-    match table.data() {
-        Data::Enum(_) => {}
-        Data::Struct(fields) => {
-            let mut all_column_info: Vec<ColumnInfo> = vec![];
-            for field in &fields.fields {
-                all_column_info.push(ColumnInfo::resolve(&field));
-            }
-            code_gen.set_all_column_info(all_column_info);
-        }
-    }
+    code_gen.set_all_column_info(table.data());
 
     let singleton_statements = code_gen.generate_singleton(&table)?;
     let generate_binding_type = code_gen.generate_binding_type(&table_ident)?;

@@ -1,12 +1,7 @@
-use darling::{FromField, FromMeta};
-use proc_macro2::Ident;
-use syn::Type;
+use darling::FromMeta;
 
 #[derive(Debug, FromMeta)]
-// #[darling(attributes(WCDBIndex))]
 pub struct WCDBIndex {
-    ident: Option<Ident>,
-    ty: Type,
     #[darling(default)]
     name: String,
     #[darling(default)]

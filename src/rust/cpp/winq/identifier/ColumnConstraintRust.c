@@ -67,15 +67,13 @@ void WCDBRustColumnConstraintClassMethod(configUnique, void* constraint) {
 //    WCDBColumnConstraintConfigCheck(constraintStruct, expressionStruct);
 //}
 //
-// void WCDBRustColumnConstraintClassMethod(configDefaultValue,
-//                                        jlong constraint,
-//                                        WCDBRustCommonValueParameter(value))
-//{
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBRustCreateCommonValue(value, true);
-//    WCDBColumnConstraintConfigDefaultValue2(constraintStruct, value_common);
-//    WCDBRustTryReleaseStringInCommonValue(value);
-//}
+void WCDBRustColumnConstraintClassMethod(configDefaultValue,
+                                         void* constraint,
+                                         WCDBRustCommonValueParameter(value)) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBRustCreateCommonValueWithIsCritical(value, true);
+    WCDBColumnConstraintConfigDefaultValue2(constraintStruct, value_common);
+}
 //
 // void WCDBRustColumnConstraintClassMethod(configCollation, jlong constraint, jstring collation)
 //{

@@ -1,7 +1,6 @@
-use darling::FromField;
+use darling::FromMeta;
 
-#[derive(Debug, FromField)]
-#[darling(attributes(WCDBDefault))]
+#[derive(FromMeta, Debug)]
 pub struct WCDBDefault {
     #[darling(default)]
     i32_value: i64,

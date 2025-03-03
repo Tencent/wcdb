@@ -3,6 +3,7 @@ use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
 use crate::field_orm_info::FIELD_ORM_INFO_MAP;
 use crate::macros::wcdb_field::WCDBField;
 use crate::macros::wcdb_table::WCDBTable;
+use darling::ast::Data;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use std::collections::HashMap;
@@ -74,8 +75,15 @@ impl RustCodeGenerator {
         self.table_constraint_info = table_constraint_info;
     }
 
-    pub(crate) fn set_all_column_info(&mut self, all_column_info: Vec<ColumnInfo>) {
-        self.all_column_info = all_column_info;
+    pub(crate) fn set_all_column_info(&mut self, data: &Data<(), WCDBField>) {
+        match data {
+            Data::Enum(_) => {}
+            Data::Struct(fields) => {
+                for field in &fields.fields {
+                    self.all_column_info.push(ColumnInfo::resolve(&field));
+                }
+            }
+        }
     }
 
     pub(crate) fn generate_fields(&self) -> syn::Result<proc_macro2::TokenStream> {
@@ -104,7 +112,7 @@ impl RustCodeGenerator {
         let instance_ident = Ident::new(&instance, Span::call_site());
 
         let generate_table_config = self.generate_table_config(&binding_ident)?;
-        let columns_statements = self.generate_columns(table)?;
+        let columns_statements = self.generate_columns(&table, &binding_ident)?;
 
         Ok(quote! {
             pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
@@ -121,100 +129,127 @@ impl RustCodeGenerator {
         })
     }
 
-    fn generate_columns(&self, table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
-        let db_table_ident = table.get_db_table();
-        let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
-        let binding_ident = Ident::new(&binding, Span::call_site());
+    fn generate_columns(
+        &self,
+        table: &WCDBTable,
+        binding_ident: &Ident,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        if self.all_column_info.is_empty() {
+            return Ok(quote::quote! {}.into());
+        }
 
-        let field_vec = table.get_field_vec();
-        let columns_statements = if field_vec.is_empty() {
-            quote! {}
-        } else {
-            let mut token_stream = proc_macro2::TokenStream::new();
-            let mut field_id: usize = 1;
-            for field in field_vec {
-                let column_name_ident = field.get_column_name_ident();
-                let field_ident = field.get_field_ident();
-                let field_def_ident = Ident::new(
-                    &format!("{}_def", field_ident.to_string()),
-                    Span::call_site(),
-                );
+        let mut token_stream = proc_macro2::TokenStream::new();
+        let mut field_id: usize = 1;
+        for column_info in &self.all_column_info {
+            let property_name = column_info.property_name();
+            let mut column_name = column_info.column_name();
+            if column_name.is_empty() {
+                column_name = property_name.clone();
+            }
 
-                let is_primary_key = field.is_primary();
-                let is_auto_increment = field.is_auto_increment();
-                let column_type_ident = field.get_column_type_ident()?;
+            // multiPrimary1
+            let column_name_ident = Ident::new(&*column_name, Span::call_site());
+            // Ident 等于 property_name
+            let field_ident = Ident::new(&*property_name, Span::call_site());
+            // multi_primary1_def
+            let field_def_ident = Ident::new(
+                &format!("{}_def", field_ident.to_string()),
+                Span::call_site(),
+            );
 
-                token_stream.extend(quote! {
-                    let field = Box::new(wcdb_core::orm::field::Field::new(
-                        stringify!(#column_name_ident),
-                        instance_raw,
-                        #field_id,
-                        #is_auto_increment,
-                        #is_primary_key
-                    ));
-                });
+            let is_primary_key = column_info.is_primary();
+            let is_auto_increment = column_info.is_auto_increment();
+            let column_type_ident = Ident::new(&*column_info.property_type(), Span::call_site());
 
-                field_id += 1;
+            token_stream.extend(quote! {
+                let field = Box::new(wcdb_core::orm::field::Field::new(
+                    stringify!(#column_name_ident),
+                    instance_raw,
+                    #field_id,
+                    #is_auto_increment,
+                    #is_primary_key
+                ));
+            });
+            field_id += 1;
 
-                token_stream.extend(quote! {
+            token_stream.extend(quote! {
                 let #field_def_ident = wcdb_core::winq::column_def::ColumnDef::new_with_column_type(
                     &field.get_column(),
                     wcdb_core::winq::column_type::ColumnType::#column_type_ident
                 );
             });
 
-                token_stream.extend(quote! {
+            token_stream.extend(quote! {
                 let column_constraint = wcdb_core::winq::column_constraint::ColumnConstraint::new();
             });
 
-                if is_primary_key {
-                    token_stream.extend(quote! {
-                        column_constraint.primary_key();
-                    });
-                    if is_auto_increment {
-                        token_stream.extend(quote! {
-                            column_constraint.auto_increment();
-                        });
-                    }
-                }
-
-                if field.is_unique() {
-                    token_stream.extend(quote! {
-                        column_constraint.unique();
-                    });
-                }
-
-                if field.is_not_null() {
-                    token_stream.extend(quote! {
-                        column_constraint.not_null();
-                    });
-                }
-
-                if field.is_not_indexed() {
-                    token_stream.extend(quote! {
-                        column_constraint.un_index();
-                    });
-                }
-
+            if is_primary_key {
                 token_stream.extend(quote! {
-                    #field_def_ident.constraint(column_constraint);
+                    column_constraint.primary_key();
                 });
-
-                token_stream.extend(quote! {
-                    instance.#field_ident = unsafe { Box::into_raw(field) };
-                    #binding_ident.add_column_def(#field_def_ident);
-                });
-
-                if table.get_enable_auto_increment_for_existing_table() {
+                if is_auto_increment {
                     token_stream.extend(quote! {
-                        #binding_ident.enable_auto_increment_for_existing_table();
+                        column_constraint.auto_increment();
                     });
                 }
             }
-            token_stream
-        };
 
-        Ok(columns_statements)
+            match column_info.default_value() {
+                None => {}
+                Some(default) => {
+                    if column_info.property_type() == "Integer" {
+                        let int_value = default.i32_value();
+                        token_stream.extend(quote::quote! {
+                            column_constraint.default_to(#int_value);
+                        });
+                    } else if column_info.property_type() == "Float" {
+                        let double_value = default.f64_value();
+                        token_stream.extend(quote::quote! {
+                            column_constraint.default_to(#double_value);
+                        });
+                    } else {
+                        let text_value = default.text_value();
+                        token_stream.extend(quote::quote! {
+                            column_constraint.default_to(#text_value);
+                        });
+                    }
+                }
+            }
+
+            if column_info.is_unique() {
+                token_stream.extend(quote! {
+                    column_constraint.unique();
+                });
+            }
+
+            if column_info.is_not_null() {
+                token_stream.extend(quote! {
+                    column_constraint.not_null();
+                });
+            }
+
+            if column_info.is_not_indexed() {
+                token_stream.extend(quote! {
+                    column_constraint.un_index();
+                });
+            }
+
+            token_stream.extend(quote! {
+                #field_def_ident.constraint(column_constraint);
+            });
+
+            token_stream.extend(quote! {
+                instance.#field_ident = unsafe { Box::into_raw(field) };
+                #binding_ident.add_column_def(#field_def_ident);
+            });
+
+            if column_info.enable_auto_increment_for_existing_table() {
+                token_stream.extend(quote! {
+                    #binding_ident.enable_auto_increment_for_existing_table();
+                });
+            }
+        }
+        Ok(token_stream)
     }
 
     fn generate_table_config(

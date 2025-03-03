@@ -1,3 +1,4 @@
+pub(crate) mod field_attr;
 pub(crate) mod fts_module;
 pub(crate) mod fts_version;
 pub(crate) mod multi_indexes;
