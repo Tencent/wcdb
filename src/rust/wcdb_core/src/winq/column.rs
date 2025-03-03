@@ -1,6 +1,8 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
+use crate::winq::column_def::ColumnDef;
+use crate::winq::column_type::ColumnType;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::ExpressionOperable;
@@ -1215,5 +1217,9 @@ impl Column {
 
     pub fn order(&self, order: Order) -> OrderingTerm {
         OrderingTerm::new(Self::get_type(), self).order(order)
+    }
+
+    pub fn as_def(&self, column_type: ColumnType) -> ColumnDef {
+        ColumnDef::new_with_column_type(self, column_type)
     }
 }

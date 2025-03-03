@@ -314,6 +314,4 @@ pub enum Expect {
     SomeSQLs,
 }
 
-pub trait TestOperation {
-    fn execute(&self) -> WCDBResult<()>;
-}
+pub type TestOperation = Box<dyn FnOnce() -> WCDBResult<()> + Send + 'static>;

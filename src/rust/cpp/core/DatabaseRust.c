@@ -379,16 +379,18 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
     WCDBDatabaseGlobalTraceError((WCDBErrorTracer)WCDBRustDatabaseErrorTrace, context,
                                  WCDBRustDestructContext);
 }
-//
-// void WCDBRustDatabaseClassMethod(traceError, jlong self, jobject tracer)
-//{
-//    WCDBRustTryGetVM;
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRef(tracer);
-//    WCDBDatabaseTraceError(
-//    selfStruct, tracer != NULL ? WCDBRustDatabaseErrorTrace : NULL, tracer,
-//    WCDBRustDestructContext);
-//}
+
+void WCDBRustDatabaseClassMethod(traceException,
+                                 void* self,
+                                 RustGlobalTraceTraceExceptionCallback rust_callback) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    size_t size = sizeof(RustGlobalTraceTraceExceptionCallback);
+    WCDBRustGlobalTraceExceptionContext* context =
+        (WCDBRustGlobalTraceExceptionContext*)WCDBRustCreateGlobalRef(size);
+    context->rust_callback = rust_callback;
+    WCDBDatabaseTraceError(selfStruct, (WCDBErrorTracer)WCDBRustDatabaseErrorTrace, context,
+                           WCDBRustDestructContext);
+}
 //
 // void WCDBRustDatabaseOperationTrace(jobject tracer, CPPDatabase database, long operation, const
 // void* info)

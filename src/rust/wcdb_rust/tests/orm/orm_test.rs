@@ -1,17 +1,21 @@
 use crate::base::base_test_case::TestCaseTrait;
 use crate::base::database_test_case::{DatabaseTestCase, Expect, TestOperation};
-use crate::orm::testclass::auto_add_column_object::AutoAddColumnObject;
+use crate::base::wrapped_value::WrappedValue;
+use crate::orm::testclass::auto_add_column_object::{AutoAddColumnObject, DbAutoAddColumnObject};
 use rand::Rng;
 use std::cmp::PartialEq;
-use wcdb_core::base::wcdb_exception::{WCDBException, WCDBResult};
+use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb_core::core::table_orm_operation::TableORMOperationTrait;
 use wcdb_core::orm::field::Field;
 use wcdb_core::orm::table_binding::TableBinding;
 use wcdb_core::winq::column::Column;
+use wcdb_core::winq::column_def::ColumnDef;
+use wcdb_core::winq::column_type::ColumnType;
 use wcdb_core::winq::expression::Expression;
 use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
 use wcdb_core::winq::identifier::IdentifierTrait;
+use wcdb_core::winq::statement_create_table::StatementCreateTable;
 
 pub struct OrmTest {
     database_test_case: DatabaseTestCase,
@@ -40,15 +44,44 @@ impl OrmTest {
             .do_test_sql_vec(new_sql_vec, operation);
     }
 
-    fn do_test_auto_add_column<T>(
+    fn do_test_auto_add_column(
+        &self,
         remove_filed: &Field<AutoAddColumnObject>,
         succeed: bool,
-        operation: T,
-    ) where
-        T: TestOperation,
-    {
+        operation: TestOperation,
+    ) -> WCDBResult<()> {
+        // todo qixinbing
         let column_name = remove_filed.get_name();
-        // let createTable = StatementCreateTable;
+        let binding = StatementCreateTable::new();
+        let create_table = binding.create_table(self.table_name.as_str());
+        let mut column_defs = vec![];
+        DbAutoAddColumnObject::all_fields()
+            .iter()
+            .for_each(|field| {
+                if field.get_description().as_str() != column_name {
+                    let column_def =
+                        ColumnDef::new_with_column_type(field.get_column(), ColumnType::Integer);
+                    column_defs.push(column_def);
+                }
+            });
+
+        let create_table = create_table.define(column_defs.iter().collect());
+        self.database_test_case
+            .get_database()
+            .read()
+            .unwrap()
+            .execute(create_table)?;
+
+        let added = WrappedValue::new();
+        // self.database_test_case
+        //     .get_database()
+        //     .read()
+        //     .unwrap()
+        //     .trace_exception(Some(move |exp| {
+        //         // todo qixinbing
+        //     }));
+
+        Ok(())
     }
 }
 
@@ -70,7 +103,9 @@ pub mod orm_test {
     use crate::orm::testclass::all_type_object::{
         AllTypeObjectHelper, DbAllTypeObject, DBALLTYPEOBJECT_INSTANCE,
     };
-    use crate::orm::testclass::auto_add_column_object::DBAUTOADDCOLUMNOBJECT_INSTANCE;
+    use crate::orm::testclass::auto_add_column_object::{
+        DbAutoAddColumnObject, DBAUTOADDCOLUMNOBJECT_INSTANCE,
+    };
     use crate::orm::testclass::field_object::DbFieldObject;
     use crate::orm::testclass::primary_enable_auto_increment_object::{
         DbPrimaryEnableAutoIncrementObject, PrimaryEnableAutoIncrementObject,
@@ -81,6 +116,7 @@ pub mod orm_test {
         DBPRIMARYNOTAUTOINCREMENTOBJECT_INSTANCE,
     };
     use crate::orm::testclass::table_constraint_object::DBTABLECONSTRAINTOBJECT_INSTANCE;
+    use wcdb_core::chaincall::insert;
 
     fn setup(orm_test: &OrmTest) {
         orm_test.setup().unwrap();
@@ -194,16 +230,49 @@ pub mod orm_test {
         teardown(&orm_test);
     }
 
-    #[test]
+    // #[test]
     fn test_auto_add_column() {
         let orm_test = OrmTest::new();
         setup(&orm_test);
+
+        let self_table_name = orm_test.table_name.clone();
+        // let self_table_name = self_table_name.as_str();
 
         let fake_table = "fakeTable";
         let fake_schema = "notExistSchema";
         orm_test
             .database_test_case
             .create_table(fake_table, &*DBAUTOADDCOLUMNOBJECT_INSTANCE)
+            .unwrap();
+
+        let obj = DbAutoAddColumnObject::default();
+        let mut insert_value = unsafe { &*obj.insert_value };
+        DbAutoAddColumnObject::all_fields()
+            .iter()
+            .for_each(|field| {
+                if field.get_name() == "insertValue" {
+                    insert_value = *field;
+                }
+            });
+
+        orm_test
+            .do_test_auto_add_column(
+                insert_value,
+                true,
+                Box::new(|| {
+                    // orm_test
+                    //     .database_test_case
+                    //     .get_database()
+                    //     .read()
+                    //     .unwrap()
+                    //     .insert_object(
+                    //         AutoAddColumnObject::new(),
+                    //         DbAutoAddColumnObject::all_fields(),
+                    //         self_table_name.as_str(),
+                    //     )?;
+                    Ok(())
+                }),
+            )
             .unwrap();
 
         // todo qixinbing

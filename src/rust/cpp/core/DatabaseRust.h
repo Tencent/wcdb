@@ -90,8 +90,10 @@ typedef void (*RustGlobalTraceTraceExceptionCallback)(void* exception);
 
 void WCDBRustDatabaseClassMethod(globalTraceException,
                                  RustGlobalTraceTraceExceptionCallback rust_callback);
-// void WCDBRustDatabaseClassMethod(traceError, jlong self, jobject tracer);
-//
+void WCDBRustDatabaseClassMethod(traceError,
+                                 void* self,
+                                 RustGlobalTraceTraceExceptionCallback rust_callback);
+
 // void WCDBRustDatabaseClassMethod(globalTraceOperation, jobject tracer);
 // void WCDBRustDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo);
 //

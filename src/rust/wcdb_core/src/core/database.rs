@@ -83,6 +83,8 @@ lazy_static! {
         Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
         Arc::new(Mutex::new(None));
+    static ref DATABASE_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
+        Arc::new(Mutex::new(None));
     static ref GLOBAL_CORRUPTION_NOTIFICATION_CALLBACK: Arc<Mutex<Option<CorruptionNotificationCallback>>> =
         Arc::new(Mutex::new(None));
     static ref GLOBAL_BACKUP_FILTER_CALLBACK: Arc<Mutex<Option<BackupFilterCallback>>> =
@@ -153,6 +155,11 @@ extern "C" {
 
     pub fn WCDBRustDatabase_globalTraceException(
         global_trace_exception_callback: extern "C" fn(*mut c_void),
+    );
+
+    pub fn WCDBRustDatabase_traceException(
+        cpp_obj: *mut c_void,
+        trace_exception_callback: extern "C" fn(*mut c_void),
     );
 
     pub fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
@@ -249,6 +256,13 @@ extern "C" fn trace_sql_callback(
 
 extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
     if let Some(callback) = &*GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() {
+        let ex = WCDBException::create_exception(exp_cpp_obj);
+        callback(ex);
+    }
+}
+
+extern "C" fn trace_exception_callback(exp_cpp_obj: *mut c_void) {
+    if let Some(callback) = &*DATABASE_TRACE_EXCEPTION_CALLBACK.lock().unwrap() {
         let ex = WCDBException::create_exception(exp_cpp_obj);
         callback(ex);
     }
@@ -1167,6 +1181,25 @@ impl Database {
                 *GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = Some(callback_box);
                 unsafe {
                     WCDBRustDatabase_globalTraceException(global_trace_exception_callback);
+                }
+            }
+        }
+    }
+
+    pub fn trace_exception<CB>(&self, cb_opt: Option<CB>)
+    where
+        CB: TraceExceptionCallbackTrait + 'static,
+    {
+        match cb_opt {
+            None => unsafe {
+                *DATABASE_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = None;
+                WCDBRustDatabase_traceException(self.get_cpp_obj(), trace_exception_callback);
+            },
+            Some(cb) => {
+                let callback_box = Box::new(cb) as TraceExceptionCallback;
+                *GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = Some(callback_box);
+                unsafe {
+                    WCDBRustDatabase_traceException(self.get_cpp_obj(), trace_exception_callback);
                 }
             }
         }
