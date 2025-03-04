@@ -332,12 +332,21 @@ if (WIN32)
         #add_definitions(-DWCDB_DLL -DWCDB_BUILD_DLL)
     endif ()
     
-    add_compile_options(
-        $<$<CONFIG:>:/MT> #---------|
-        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-        $<$<CONFIG:Release>:/MT> #--|
-        $<$<CONFIG:RelWithDebInfo>:/MT>
-    )
+    if (BUILD_SHARED_LIBS)
+        target_compile_options(sqlcipher PRIVATE 
+            $<$<CONFIG:>:/MD> #---------|
+            $<$<CONFIG:Debug>:/MDd> #---|-- Dynamic link the runtime libraries
+            $<$<CONFIG:Release>:/MD> #--|
+            $<$<CONFIG:RelWithDebInfo>:/MD>
+        )
+    else ()
+        target_compile_options(sqlcipher PRIVATE 
+            $<$<CONFIG:>:/MT> #---------|
+            $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+            $<$<CONFIG:Release>:/MT> #--|
+            $<$<CONFIG:RelWithDebInfo>:/MT>
+        )
+    endif()
     
     add_compile_options(/MP)
     add_compile_options(/wd4068)  # Disable unknown pragma warnings
