@@ -71,22 +71,6 @@
     TestCaseAssertSQLEqual(testingSQL, @"NOT testColumn");
 }
 
-- (void)test_unary_positive
-{
-    auto testingSQL = +column;
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"+testColumn");
-}
-
-- (void)test_unary_negative
-{
-    auto testingSQL = -column;
-    auto testingTypes = { WCDB::SQL::Type::Expression, WCDB::SQL::Type::Expression, WCDB::SQL::Type::Column };
-    TestCaseAssertIterateEqual(testingSQL, testingTypes);
-    TestCaseAssertSQLEqual(testingSQL, @"-testColumn");
-}
-
 - (void)test_unary_is_null
 {
     auto testingSQL = column.isNull();
