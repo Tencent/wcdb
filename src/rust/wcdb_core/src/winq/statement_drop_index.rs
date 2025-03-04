@@ -4,15 +4,15 @@ use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustStatementDropIndex_createCppObj() -> *mut c_void;
-    pub fn WCDBRustStatementDropIndex_configIndex(cpp_obj: *mut c_void, index_name: *const c_char);
-    pub fn WCDBRustStatementDropIndex_configSchema(
+    fn WCDBRustStatementDropIndex_createCppObj() -> *mut c_void;
+    fn WCDBRustStatementDropIndex_configIndex(cpp_obj: *mut c_void, index_name: *const c_char);
+    fn WCDBRustStatementDropIndex_configSchema(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         schema_cpp_obj: *mut c_void,
         schema_name: *const c_char,
     );
-    pub fn WCDBRustStatementDropIndex_configIfExist(cpp_obj: *mut c_void);
+    fn WCDBRustStatementDropIndex_configIfExist(cpp_obj: *mut c_void);
 }
 
 pub struct StatementDropIndex {

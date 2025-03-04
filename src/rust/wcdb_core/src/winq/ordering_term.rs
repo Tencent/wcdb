@@ -4,9 +4,9 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait};
 use std::ffi::{c_int, c_void};
 
 extern "C" {
-    pub fn WCDBRustOrderingTerm_create(cpp_type: c_int, expression: *mut c_void) -> *mut c_void;
+    fn WCDBRustOrderingTerm_create(cpp_type: c_int, expression: *mut c_void) -> *mut c_void;
 
-    pub fn WCDBRustOrderingTerm_configOrder(cpp_obj: *mut c_void, order: c_int);
+    fn WCDBRustOrderingTerm_configOrder(cpp_obj: *mut c_void, order: c_int);
 }
 
 pub enum Order {

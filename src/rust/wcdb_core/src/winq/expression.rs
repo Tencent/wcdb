@@ -15,8 +15,8 @@ use std::ffi::{c_char, c_double, c_int, c_void};
 use std::ptr::null;
 
 extern "C" {
-    pub fn WCDBRustExpression_create(value_type: c_int, cpp_obj: *mut c_void) -> *mut c_void;
-    // pub fn WCDBRustExpression_argument(
+    fn WCDBRustExpression_create(value_type: c_int, cpp_obj: *mut c_void) -> *mut c_void;
+    // fn WCDBRustExpression_argument(
     //     cpp_obj: *mut c_void,
     //     type_i: c_int,
     //     int_value: c_long,
@@ -24,9 +24,9 @@ extern "C" {
     //     string_value: *const c_char,
     // );
 
-    pub fn WCDBRustExpression_createWithFunction(func: *const c_char) -> *mut c_void;
+    fn WCDBRustExpression_createWithFunction(func: *const c_char) -> *mut c_void;
 
-    pub fn WCDBRustExpression_argument(
+    fn WCDBRustExpression_argument(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         // TODO(dengxudong, 02/14): 这里加一个 void_ptr: *mut c_void, 不要跟 int_value 共用，int_value 还保持 c_int 类型。
@@ -35,9 +35,9 @@ extern "C" {
         string_value: *const c_char,
     );
 
-    pub fn WCDBRustExpression_escapeWith(cpp_obj: *mut c_void, string_value: *const c_char);
+    fn WCDBRustExpression_escapeWith(cpp_obj: *mut c_void, string_value: *const c_char);
 
-    pub fn WCDBRustExpression_distinct(cpp_obj: *mut c_void);
+    fn WCDBRustExpression_distinct(cpp_obj: *mut c_void);
 }
 
 #[derive(Debug)]

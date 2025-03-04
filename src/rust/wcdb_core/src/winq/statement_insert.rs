@@ -7,20 +7,17 @@ use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
-    pub fn WCDBRustStatementInsert_create() -> *mut c_void;
-    pub fn WCDBRustStatementInsert_configTableName(cpp_obj: *mut c_void, table_name: *const c_char);
-    pub fn WCDBRustStatementInsert_configConflictAction(cpp_obj: *mut c_void, action: c_int);
-    pub fn WCDBRustStatementInsert_configColumns(
+    fn WCDBRustStatementInsert_create() -> *mut c_void;
+    fn WCDBRustStatementInsert_configTableName(cpp_obj: *mut c_void, table_name: *const c_char);
+    fn WCDBRustStatementInsert_configConflictAction(cpp_obj: *mut c_void, action: c_int);
+    fn WCDBRustStatementInsert_configColumns(
         cpp_obj: *mut c_void,
         columns_type: c_int,
         columns_void_vec: *const *mut c_void,
         columns_string_vec: *const *const c_char,
         columns_vec_len: c_int,
     );
-    pub fn WCDBRustStatementInsert_configValuesWithBindParameters(
-        cpp_obj: *mut c_void,
-        count: c_int,
-    );
+    fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: c_int);
 }
 
 #[derive(Debug)]

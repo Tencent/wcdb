@@ -15,7 +15,7 @@ use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 
 extern "C" {
-    pub fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;
+    fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;
 }
 
 pub struct Column {

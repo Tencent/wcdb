@@ -11,14 +11,14 @@ use std::os::raw::c_long;
 use std::ptr::null_mut;
 
 extern "C" {
-    pub fn WCDBRustStatementUpdate_create() -> *mut c_void;
-    pub fn WCDBRustStatementUpdate_configTable(
+    fn WCDBRustStatementUpdate_create() -> *mut c_void;
+    fn WCDBRustStatementUpdate_configTable(
         cpp_obj: *mut c_void,
         type_i: c_int,
         table: *mut c_void,
         table_name: *const c_char,
     );
-    pub fn WCDBRustStatementUpdate_configColumnsToBindParameters(
+    fn WCDBRustStatementUpdate_configColumnsToBindParameters(
         cpp_obj: *mut c_void,
         columns_type: c_int,
         columns_void_vec: *const *mut c_void,
@@ -26,19 +26,19 @@ extern "C" {
         columns_vec_len: c_int,
     );
 
-    pub fn WCDBRustStatementUpdate_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
+    fn WCDBRustStatementUpdate_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
 
-    pub fn WCDBRustStatementUpdate_configOrders(
+    fn WCDBRustStatementUpdate_configOrders(
         cpp_obj: *mut c_void,
         orders: *const *mut c_void,
         vec_len: c_size_t,
     );
-    pub fn WCDBRustStatementUpdate_configLimitCount(
+    fn WCDBRustStatementUpdate_configLimitCount(
         cpp_obj: *mut c_void,
         config_type: c_int,
         limit: c_long,
     );
-    pub fn WCDBRustStatementUpdate_configOffset(
+    fn WCDBRustStatementUpdate_configOffset(
         cpp_obj: *mut c_void,
         config_type: c_int,
         offset: c_long,

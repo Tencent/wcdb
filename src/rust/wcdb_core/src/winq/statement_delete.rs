@@ -9,25 +9,25 @@ use std::fmt::Debug;
 use std::os::raw::c_long;
 
 extern "C" {
-    pub fn WCDBRustStatementDelete_create() -> *mut c_void;
-    pub fn WCDBRustStatementDelete_configTable(
+    fn WCDBRustStatementDelete_create() -> *mut c_void;
+    fn WCDBRustStatementDelete_configTable(
         cpp_obj: *mut c_void,
         table_type: c_int,
         table_long: c_long,
         table_string: *const c_char,
     );
-    pub fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
-    pub fn WCDBRustStatementDelete_configOrders(
+    fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
+    fn WCDBRustStatementDelete_configOrders(
         cpp_obj: *mut c_void,
         orders: *const *mut c_void,
         vec_len: c_size_t,
     );
-    pub fn WCDBRustStatementDelete_configLimitCount(
+    fn WCDBRustStatementDelete_configLimitCount(
         cpp_obj: *mut c_void,
         config_type: c_int,
         limit: c_long,
     );
-    pub fn WCDBRustStatementDelete_configOffset(
+    fn WCDBRustStatementDelete_configOffset(
         cpp_obj: *mut c_void,
         config_type: c_int,
         offset: c_long,

@@ -4,10 +4,10 @@ use std::ffi::{c_char, c_void};
 use std::fmt::{Debug, Display, Formatter};
 
 extern "C" {
-    pub fn WCDBRustError_getLevel(cpp_obj: *mut c_void) -> i32;
-    pub fn WCDBRustError_getCode(cpp_obj: *mut c_void) -> i32;
-    pub fn WCDBRustError_getMessage(cpp_obj: *mut c_void) -> *const c_char;
-    pub fn WCDBRustError_enumerateInfo(cpp_obj: *mut c_void);
+    fn WCDBRustError_getLevel(cpp_obj: *mut c_void) -> i32;
+    fn WCDBRustError_getCode(cpp_obj: *mut c_void) -> i32;
+    fn WCDBRustError_getMessage(cpp_obj: *mut c_void) -> *const c_char;
+    fn WCDBRustError_enumerateInfo(cpp_obj: *mut c_void);
 }
 
 #[no_mangle]

@@ -6,14 +6,14 @@ use std::ffi::{c_char, c_float, c_int, c_long, c_void};
 use std::ptr::null;
 
 extern "C" {
-    pub fn WCDBRustStatementPragma_create() -> *mut c_void;
+    fn WCDBRustStatementPragma_create() -> *mut c_void;
 
-    pub fn WCDBRustStatementPragma_configPragma(
+    fn WCDBRustStatementPragma_configPragma(
         cpp_obj: *mut c_void,
         pragma: *mut c_void,
     ) -> *mut c_void;
 
-    pub fn WCDBRustStatementPragma_configToValue(
+    fn WCDBRustStatementPragma_configToValue(
         cpp_obj: *mut c_void,
         val_type: c_int,
         long_value: c_long,

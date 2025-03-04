@@ -4,16 +4,16 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, Identi
 use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustColumnConstraint_create(name: *const c_char) -> *mut c_void;
+    fn WCDBRustColumnConstraint_create(name: *const c_char) -> *mut c_void;
 
-    pub fn WCDBRustColumnConstraint_configPrimaryKey(cpp_obj: *mut c_void);
+    fn WCDBRustColumnConstraint_configPrimaryKey(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustColumnConstraint_configAutoIncrement(cpp_obj: *mut c_void);
+    fn WCDBRustColumnConstraint_configAutoIncrement(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustColumnConstraint_configNotNull(cpp_obj: *mut c_void);
+    fn WCDBRustColumnConstraint_configNotNull(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustColumnConstraint_configUnique(cpp_obj: *mut c_void);
-    pub fn WCDBRustColumnConstraint_configDefaultValue(
+    fn WCDBRustColumnConstraint_configUnique(cpp_obj: *mut c_void);
+    fn WCDBRustColumnConstraint_configDefaultValue(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         int_value: c_long,
@@ -21,7 +21,7 @@ extern "C" {
         string_value: *const c_char,
     );
 
-    pub fn WCDBRustColumnConstraint_configUnIndex(cpp_obj: *mut c_void);
+    fn WCDBRustColumnConstraint_configUnIndex(cpp_obj: *mut c_void);
 }
 
 pub struct ColumnConstraint {

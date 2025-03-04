@@ -4,7 +4,7 @@ use std::ops::{Deref, DerefMut};
 use std::ptr::null_mut;
 
 extern "C" {
-    pub fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
+    fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
 }
 
 #[derive(Debug, Clone)]

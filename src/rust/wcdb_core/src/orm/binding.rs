@@ -10,33 +10,30 @@ use std::ptr::null_mut;
 use std::sync::RwLock;
 
 extern "C" {
-    pub fn WCDBRustBinding_create() -> *mut c_void;
-    pub fn WCDBRustBinding_addColumnDef(cpp_obj: *mut c_void, column_def: *mut c_void);
-    pub fn WCDBRustBinding_enableAutoIncrementForExistingTable(cpp_obj: *mut c_void);
+    fn WCDBRustBinding_create() -> *mut c_void;
+    fn WCDBRustBinding_addColumnDef(cpp_obj: *mut c_void, column_def: *mut c_void);
+    fn WCDBRustBinding_enableAutoIncrementForExistingTable(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustBinding_addIndex(
+    fn WCDBRustBinding_addIndex(
         cpp_obj: *mut c_void,
         index_name_or_suffix: *const c_char,
         is_full_name: bool,
         create_index: *mut c_void,
     );
 
-    pub fn WCDBRustBinding_configWithoutRowId(cpp_obj: *mut c_void);
+    fn WCDBRustBinding_configWithoutRowId(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustBinding_addTableConstraint(cpp_obj: *mut c_void, table_constraint: *mut c_void);
-    pub fn WCDBRustBinding_configVirtualModule(cpp_obj: *mut c_void, module: *const c_char);
+    fn WCDBRustBinding_addTableConstraint(cpp_obj: *mut c_void, table_constraint: *mut c_void);
+    fn WCDBRustBinding_configVirtualModule(cpp_obj: *mut c_void, module: *const c_char);
 
-    pub fn WCDBRustBinding_configVirtualModuleArgument(
-        cpp_obj: *mut c_void,
-        argument: *const c_char,
-    );
+    fn WCDBRustBinding_configVirtualModuleArgument(cpp_obj: *mut c_void, argument: *const c_char);
 
-    pub fn WCDBRustBinding_createTable(
+    fn WCDBRustBinding_createTable(
         cpp_obj: *mut c_void,
         path: *const c_char,
         handle: *mut c_void,
     ) -> bool;
-    pub fn WCDBRustBinding_getBaseBinding(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustBinding_getBaseBinding(cpp_obj: *mut c_void) -> *mut c_void;
 }
 
 pub struct Binding {

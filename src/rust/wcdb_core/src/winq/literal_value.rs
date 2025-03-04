@@ -4,7 +4,7 @@ use std::ffi::{c_char, c_double, c_int, c_long, c_void};
 use std::ptr::null;
 
 extern "C" {
-    pub fn WCDBRustLiteralValue_create(
+    fn WCDBRustLiteralValue_create(
         value_type: c_int,
         value_long: c_long,
         value_double: c_double,

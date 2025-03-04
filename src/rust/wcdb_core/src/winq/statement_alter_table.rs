@@ -6,34 +6,34 @@ use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustStatementAlterTable_createCppObj() -> *mut c_void;
-    pub fn WCDBRustStatementAlterTable_configTable(cpp_obj: *mut c_void, table_name: *const c_char);
-    pub fn WCDBRustStatementAlterTable_configSchema(
+    fn WCDBRustStatementAlterTable_createCppObj() -> *mut c_void;
+    fn WCDBRustStatementAlterTable_configTable(cpp_obj: *mut c_void, table_name: *const c_char);
+    fn WCDBRustStatementAlterTable_configSchema(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         schema_cpp_obj: *mut c_void,
         schema_name: *const c_char,
     );
-    pub fn WCDBRustStatementAlterTable_configRenameToTable(
+    fn WCDBRustStatementAlterTable_configRenameToTable(
         cpp_obj: *mut c_void,
         table_name: *const c_char,
     );
 
-    pub fn WCDBRustStatementAlterTable_configRenameColumn(
+    fn WCDBRustStatementAlterTable_configRenameColumn(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         column_cpp_obj: *mut c_void,
         column_name: *const c_char,
     );
 
-    pub fn WCDBRustStatementAlterTable_configRenameToColumn(
+    fn WCDBRustStatementAlterTable_configRenameToColumn(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         column_cpp_obj: *mut c_void,
         column_name: *const c_char,
     );
 
-    pub fn WCDBRustStatementAlterTable_configAddColumn(
+    fn WCDBRustStatementAlterTable_configAddColumn(
         cpp_obj: *mut c_void,
         column_def_cpp_obj: *mut c_void,
     );

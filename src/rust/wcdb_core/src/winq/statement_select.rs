@@ -9,8 +9,8 @@ use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
-    pub fn WCDBRustStatementSelect_create() -> *mut c_void;
-    pub fn WCDBRustStatementSelect_configResultColumns(
+    fn WCDBRustStatementSelect_create() -> *mut c_void;
+    fn WCDBRustStatementSelect_configResultColumns(
         cpp_obj: *mut c_void,
         type_vec: *const c_int,
         void_vec: *const *mut c_void,
@@ -18,7 +18,7 @@ extern "C" {
         string_vec: *const *const c_char,
         vec_len: c_size_t,
     );
-    pub fn WCDBRustStatementSelect_configTableOrSubqueries(
+    fn WCDBRustStatementSelect_configTableOrSubqueries(
         cpp_obj: *mut c_void,
         type_vec: *const c_int,
         long_vec: *const c_long,
@@ -26,25 +26,21 @@ extern "C" {
         string_vec: *const *const c_char,
         vec_len: c_size_t,
     );
-    pub fn WCDBRustStatementSelect_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
+    fn WCDBRustStatementSelect_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
 
-    pub fn WCDBRustStatementSelect_configOrders(
+    fn WCDBRustStatementSelect_configOrders(
         cpp_obj: *mut c_void,
         orders: *const c_long,
         orders_length: c_int,
     );
 
-    pub fn WCDBRustStatementSelect_configLimitCount(
+    fn WCDBRustStatementSelect_configLimitCount(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         count: c_long,
     );
 
-    pub fn WCDBRustStatementSelect_configOffset(
-        cpp_obj: *mut c_void,
-        cpp_type: c_int,
-        count: c_long,
-    );
+    fn WCDBRustStatementSelect_configOffset(cpp_obj: *mut c_void, cpp_type: c_int, count: c_long);
 }
 
 #[derive(Debug)]

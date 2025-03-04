@@ -4,12 +4,12 @@ use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use std::ffi::{c_char, c_int, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustTableConstraint_create(name: *const c_char) -> *mut c_void;
-    pub fn WCDBRustTableConstraint_configPrimaryKey(cpp_obj: *mut c_void);
+    fn WCDBRustTableConstraint_create(name: *const c_char) -> *mut c_void;
+    fn WCDBRustTableConstraint_configPrimaryKey(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustTableConstraint_configUnique(cpp_obj: *mut c_void);
+    fn WCDBRustTableConstraint_configUnique(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustTableConstraint_configIndexedColumn(
+    fn WCDBRustTableConstraint_configIndexedColumn(
         cpp_obj: *mut c_void,
         columns_type: c_int,
         columns_void_vec: *const *mut c_void,

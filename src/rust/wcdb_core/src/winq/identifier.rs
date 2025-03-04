@@ -8,7 +8,7 @@ use std::ffi::{c_char, c_long, c_void};
 use std::fmt::Debug;
 
 extern "C" {
-    pub fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
+    fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
     pub fn WCDBRustWinq_isWriteStatement(statement: *mut c_void) -> bool;
 }
 

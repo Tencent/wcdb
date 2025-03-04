@@ -6,14 +6,14 @@ use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierStati
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
-    pub fn WCDBRustColumnDef_create(
+    fn WCDBRustColumnDef_create(
         cpp_type: c_int,
         column_cpp_obj: *mut c_void,
         name: *mut c_char,
         column_type: c_int,
     ) -> *mut c_void;
 
-    pub fn WCDBRustColumnDef_constraint(cpp_obj: *mut c_void, constraint_cpp_obj: *mut c_void);
+    fn WCDBRustColumnDef_constraint(cpp_obj: *mut c_void, constraint_cpp_obj: *mut c_void);
 }
 
 pub struct ColumnDef {

@@ -4,9 +4,9 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, Identi
 use std::ffi::{c_char, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustCommonTableExpression_createWithTable(table_name: *const c_char) -> *mut c_void;
-    pub fn WCDBRustCommonTableExpression_configColumn(self_obj: *mut c_void, column: *mut c_void);
-    pub fn WCDBRustCommonTableExpression_configSelect(self_obj: *mut c_void, select: *mut c_void);
+    fn WCDBRustCommonTableExpression_createWithTable(table_name: *const c_char) -> *mut c_void;
+    fn WCDBRustCommonTableExpression_configColumn(self_obj: *mut c_void, column: *mut c_void);
+    fn WCDBRustCommonTableExpression_configSelect(self_obj: *mut c_void, select: *mut c_void);
 }
 
 pub struct CommonTableExpression {

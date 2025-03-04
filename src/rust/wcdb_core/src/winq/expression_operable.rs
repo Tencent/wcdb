@@ -10,7 +10,7 @@ use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::ptr::null;
 
 extern "C" {
-    pub fn WCDBRustExpressionOperable_binaryOperate(
+    fn WCDBRustExpressionOperable_binaryOperate(
         left_type: c_int,
         left: *mut c_void,
         right_type: c_int,
@@ -21,7 +21,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    pub fn WCDBRustExpressionOperable_betweenOperate(
+    fn WCDBRustExpressionOperable_betweenOperate(
         operand_type: c_int,
         operand: *mut c_void,
         left_type: c_int,
@@ -35,7 +35,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    pub fn WCDBRustExpressionOperable_inOperate(
+    fn WCDBRustExpressionOperable_inOperate(
         operand_type: c_int,
         operand: *mut c_void,
         cpp_type: c_int,
@@ -46,7 +46,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    pub fn WCDBRustExpressionOperable_collateOperate(
+    fn WCDBRustExpressionOperable_collateOperate(
         cpp_type: c_int,
         operand: *mut c_void,
         collation: *const c_char,

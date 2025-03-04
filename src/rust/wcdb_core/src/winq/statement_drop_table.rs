@@ -4,18 +4,15 @@ use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustStatementDropTable_create() -> *mut c_void;
-    pub fn WCDBRustStatementDropTable_configTableName(
-        cpp_obj: *mut c_void,
-        table_name: *const c_char,
-    );
-    pub fn WCDBRustStatementDropTable_configSchema(
+    fn WCDBRustStatementDropTable_create() -> *mut c_void;
+    fn WCDBRustStatementDropTable_configTableName(cpp_obj: *mut c_void, table_name: *const c_char);
+    fn WCDBRustStatementDropTable_configSchema(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         schema_cpp_obj: *mut c_void,
         schema_name: *const c_char,
     );
-    pub fn WCDBRustStatementDropTable_configIfExist(cpp_obj: *mut c_void);
+    fn WCDBRustStatementDropTable_configIfExist(cpp_obj: *mut c_void);
 }
 
 pub struct StatementDropTable {

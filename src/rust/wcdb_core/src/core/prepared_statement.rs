@@ -10,31 +10,23 @@ use std::ffi::{c_char, c_double, c_long, c_void, CString};
 use std::sync::Arc;
 
 extern "C" {
-    pub fn WCDBRustHandleStatement_getError(cpp_obj: *mut c_void) -> *mut c_void;
-    pub fn WCDBRustHandleStatement_prepare(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
-    pub fn WCDBRustHandleStatement_step(cpp_obj: *mut c_void) -> bool;
-    pub fn WCDBRustHandleStatement_reset(cpp_obj: *mut c_void);
-    pub fn WCDBRustHandleStatement_finalize(cpp_obj: *mut c_void);
-    pub fn WCDBRustHandleStatement_isDone(cpp_obj: *mut c_void) -> bool;
-    pub fn WCDBRustHandleStatement_bindInteger(
-        cpp_obj: *mut c_void,
-        value: c_long,
-        index: c_size_t,
-    );
-    pub fn WCDBRustHandleStatement_bindDouble(
-        cpp_obj: *mut c_void,
-        value: c_double,
-        index: c_size_t,
-    );
-    pub fn WCDBRustHandleStatement_bindText(
+    fn WCDBRustHandleStatement_getError(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustHandleStatement_prepare(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
+    fn WCDBRustHandleStatement_step(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustHandleStatement_reset(cpp_obj: *mut c_void);
+    fn WCDBRustHandleStatement_finalize(cpp_obj: *mut c_void);
+    fn WCDBRustHandleStatement_isDone(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustHandleStatement_bindInteger(cpp_obj: *mut c_void, value: c_long, index: c_size_t);
+    fn WCDBRustHandleStatement_bindDouble(cpp_obj: *mut c_void, value: c_double, index: c_size_t);
+    fn WCDBRustHandleStatement_bindText(
         cpp_obj: *mut c_void,
         value: *const c_char,
         index: c_size_t,
     );
-    pub fn WCDBRustHandleStatement_bindNull(cpp_obj: *mut c_void, index: c_size_t);
-    pub fn WCDBRustHandleStatement_getInteger(cpp_obj: *mut c_void, index: c_size_t) -> c_long;
-    pub fn WCDBRustHandleStatement_getDouble(cpp_obj: *mut c_void, index: c_size_t) -> c_double;
-    pub fn WCDBRustHandleStatement_getText(cpp_obj: *mut c_void, index: c_size_t) -> *const c_char;
+    fn WCDBRustHandleStatement_bindNull(cpp_obj: *mut c_void, index: c_size_t);
+    fn WCDBRustHandleStatement_getInteger(cpp_obj: *mut c_void, index: c_size_t) -> c_long;
+    fn WCDBRustHandleStatement_getDouble(cpp_obj: *mut c_void, index: c_size_t) -> c_double;
+    fn WCDBRustHandleStatement_getText(cpp_obj: *mut c_void, index: c_size_t) -> *const c_char;
 }
 
 pub struct PreparedStatement {

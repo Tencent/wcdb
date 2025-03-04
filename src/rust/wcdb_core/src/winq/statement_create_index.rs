@@ -8,10 +8,10 @@ use std::ffi::{c_char, c_int, c_void};
 use std::ptr::null;
 
 extern "C" {
-    pub fn WCDBRustStatementCreateIndex_create() -> *mut c_void;
-    pub fn WCDBRustStatementCreateIndex_configIfNotExist(cpp_obj: *mut c_void);
+    fn WCDBRustStatementCreateIndex_create() -> *mut c_void;
+    fn WCDBRustStatementCreateIndex_configIfNotExist(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustStatementCreateIndex_configIndexedColumns(
+    fn WCDBRustStatementCreateIndex_configIndexedColumns(
         cpp_obj: *mut c_void,
         columns_type: c_int,
         columns_void_vec: *const *mut c_void,

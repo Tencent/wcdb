@@ -5,13 +5,13 @@ use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 
 extern "C" {
-    pub fn WCDBRustStatementCreateTable_create() -> *mut c_void;
-    pub fn WCDBRustStatementCreateTable_configTableName(
+    fn WCDBRustStatementCreateTable_create() -> *mut c_void;
+    fn WCDBRustStatementCreateTable_configTableName(
         cpp_obj: *mut c_void,
         table_name: *const c_char,
     );
 
-    pub fn WCDBRustStatementCreateTable_configColumns(
+    fn WCDBRustStatementCreateTable_configColumns(
         cpp_obj: *mut c_void,
         columns_void_vec: *const *mut c_void,
         columns_vec_len: c_int,

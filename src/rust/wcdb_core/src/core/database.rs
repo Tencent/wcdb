@@ -99,37 +99,37 @@ lazy_static! {
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
 extern "C" {
-    pub fn WCDBRustCore_createDatabase(path: *const c_char) -> *mut c_void;
-    pub fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
+    fn WCDBRustCore_createDatabase(path: *const c_char) -> *mut c_void;
+    fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
 
-    pub fn WCDBRustDatabase_removeFiles(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_removeFiles(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_close(
+    fn WCDBRustDatabase_close(
         cpp_obj: *mut c_void,
         context: *mut c_void,
         cb: DatabaseCloseCallback,
     );
 
-    pub fn WCDBRustDatabase_blockade(cpp_obj: *mut c_void);
+    fn WCDBRustDatabase_blockade(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustDatabase_unblockade(cpp_obj: *mut c_void);
+    fn WCDBRustDatabase_unblockade(cpp_obj: *mut c_void);
 
-    pub fn WCDBRustDatabase_isBlockaded(cpp_obj: *mut c_void) -> bool;
-    pub fn WCDBRustDatabase_canOpen(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_isBlockaded(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_canOpen(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_isOpened(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_isOpened(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
+    fn WCDBRustDatabase_getHandle(cpp_obj: *mut c_void, write_hint: bool) -> *mut c_void;
 
-    pub fn WCDBRustDatabase_vacuum(cpp_obj: *mut c_void, monitor: *const c_void) -> bool;
+    fn WCDBRustDatabase_vacuum(cpp_obj: *mut c_void, monitor: *const c_void) -> bool;
 
-    pub fn WCDBRustDatabase_enableAutoVacuum(cpp_obj: *mut c_void, incremental: bool);
+    fn WCDBRustDatabase_enableAutoVacuum(cpp_obj: *mut c_void, incremental: bool);
 
-    pub fn WCDBRustDatabase_incrementalVacuum(cpp_obj: *mut c_void, pages: i32) -> bool;
+    fn WCDBRustDatabase_incrementalVacuum(cpp_obj: *mut c_void, pages: i32) -> bool;
 
-    pub fn WCDBRustDatabase_getError(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustDatabase_getError(cpp_obj: *mut c_void) -> *mut c_void;
 
-    pub fn WCDBRustDatabase_globalTracePerformance(
+    fn WCDBRustDatabase_globalTracePerformance(
         global_trace_performance_callback: extern "C" fn(
             i64,
             *const c_char,
@@ -139,7 +139,7 @@ extern "C" {
         ),
     );
 
-    pub fn WCDBRustDatabase_globalTraceSQL(
+    fn WCDBRustDatabase_globalTraceSQL(
         global_trace_sql_callback: extern "C" fn(
             i64,
             *const c_char,
@@ -149,49 +149,49 @@ extern "C" {
         ),
     );
 
-    pub fn WCDBRustDatabase_traceSQL(
+    fn WCDBRustDatabase_traceSQL(
         cpp_obj: *mut c_void,
         trace_sql_callback: extern "C" fn(i64, *const c_char, i64, *const c_char, *const c_char),
     );
 
-    pub fn WCDBRustDatabase_globalTraceException(
+    fn WCDBRustDatabase_globalTraceException(
         global_trace_exception_callback: extern "C" fn(*mut c_void),
     );
 
-    pub fn WCDBRustDatabase_traceException(
+    fn WCDBRustDatabase_traceException(
         cpp_obj: *mut c_void,
         trace_exception_callback: extern "C" fn(*mut c_void),
     );
 
-    pub fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
 
-    pub fn WCDBRustDatabase_setTag(cpp_obj: *mut c_void, tag: i64);
+    fn WCDBRustDatabase_setTag(cpp_obj: *mut c_void, tag: i64);
 
-    pub fn WCDBRustDatabase_setNotificationWhenCorrupted(
+    fn WCDBRustDatabase_setNotificationWhenCorrupted(
         cpp_obj: *mut c_void,
         global_corruption_notification: *mut c_void,
     );
 
-    pub fn WCDBRustDatabase_checkIfCorrupted(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_checkIfCorrupted(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_checkIfIsAlreadyCorrupted(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_checkIfIsAlreadyCorrupted(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_enableAutoBackup(cpp_obj: *mut c_void, enable: bool);
+    fn WCDBRustDatabase_enableAutoBackup(cpp_obj: *mut c_void, enable: bool);
 
-    pub fn WCDBRustDatabase_backup(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_backup(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_filterBackup(cpp_obj: *mut c_void, filter: *const c_void);
+    fn WCDBRustDatabase_filterBackup(cpp_obj: *mut c_void, filter: *const c_void);
 
-    pub fn WCDBRustDatabase_retrieve(cpp_obj: *mut c_void, monitor: *const c_void) -> c_double;
+    fn WCDBRustDatabase_retrieve(cpp_obj: *mut c_void, monitor: *const c_void) -> c_double;
 
-    pub fn WCDBRustDatabase_deposit(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_deposit(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_removeDepositedFiles(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_removeDepositedFiles(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_containDepositedFiles(cpp_obj: *mut c_void) -> bool;
-    pub fn WCDBRustDatabase_truncateCheckpoint(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_containDepositedFiles(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_truncateCheckpoint(cpp_obj: *mut c_void) -> bool;
 
-    pub fn WCDBRustDatabase_setAutoCheckpointEnable(cpp_obj: *mut c_void, enable: bool);
+    fn WCDBRustDatabase_setAutoCheckpointEnable(cpp_obj: *mut c_void, enable: bool);
 }
 
 extern "C" fn close_callback_wrapper(context: *mut c_void) {
