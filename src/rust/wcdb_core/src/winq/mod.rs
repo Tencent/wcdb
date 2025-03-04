@@ -16,6 +16,7 @@ pub mod multi_type_array;
 pub mod ordering_term;
 pub mod pragma;
 pub mod statement;
+pub mod statement_alter_table;
 pub mod statement_create_index;
 pub mod statement_create_table;
 pub mod statement_delete;
