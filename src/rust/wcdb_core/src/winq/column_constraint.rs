@@ -1,4 +1,4 @@
-use crate::base::basic_types::BasicTypes;
+use crate::base::basic_types::WCDBBasicTypes;
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
@@ -98,7 +98,7 @@ impl ColumnConstraint {
         self
     }
 
-    pub fn default_to<T: BasicTypes>(&self, value: T) -> &Self {
+    pub fn default_to<T: WCDBBasicTypes>(&self, value: T) -> &Self {
         // let type_id = TypeId::of::<T>();
         // if type_id == TypeId::of::<bool>() {
         // let mut int_value = 1;
