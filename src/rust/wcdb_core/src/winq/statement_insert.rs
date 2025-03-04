@@ -18,6 +18,8 @@ extern "C" {
         columns_vec_len: c_int,
     );
     fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: c_int);
+
+    fn WCDBRustStatementInsert_configDefaultValues(cpp_obj: *mut c_void);
 }
 
 #[derive(Debug)]
@@ -151,6 +153,13 @@ impl StatementInsert {
                 parameters_count as i32,
             )
         };
+        self
+    }
+
+    pub fn default_values(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configDefaultValues(self.get_cpp_obj());
+        }
         self
     }
 }

@@ -32,6 +32,14 @@ extern "C" {
         config_type: c_int,
         offset: c_long,
     );
+
+    fn WCDBRustStatementDelete_configLimitRange(
+        cpp_obj: *mut c_void,
+        from_type: c_int,
+        from: c_long,
+        to_type: c_int,
+        to: c_long,
+    );
 }
 
 #[derive(Debug)]
@@ -134,6 +142,19 @@ impl StatementDelete {
     pub fn offset(&self, offset: i64) -> &Self {
         unsafe {
             WCDBRustStatementDelete_configOffset(self.get_cpp_obj(), CPPType::Int as i32, offset);
+        }
+        self
+    }
+
+    pub fn limit_range(&self, from: i64, to: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configLimitRange(
+                self.get_cpp_obj(),
+                CPPType::Int as i32,
+                from,
+                CPPType::Int as i32,
+                to,
+            );
         }
         self
     }

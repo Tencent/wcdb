@@ -98,12 +98,11 @@ void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* se
 //     WCDBStatementInsertConfigSelect(selfStruct, selectStruct);
 // }
 //
-// void WCDBRustStatementInsertClassMethod(configDefaultValues, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPStatementInsert, self);
-//     WCDBStatementInsertConfigDefaultValues(selfStruct);
-// }
-//
+void WCDBRustStatementInsertClassMethod(configDefaultValues, void* self) {
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBStatementInsertConfigDefaultValues(selfStruct);
+}
+
 // void WCDBRustStatementInsertClassMethod(configUpsert, jlong self, jlong upsert)
 //{
 //     WCDBRustBridgeStruct(CPPStatementInsert, self);

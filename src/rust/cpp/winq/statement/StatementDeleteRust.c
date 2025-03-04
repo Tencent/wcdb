@@ -62,18 +62,21 @@ void WCDBRustStatementDeleteClassMethod(configOrders, void* self, void** orders,
     //    WCDBRustReleaseCppPointerArrayCritical(orders);
 }
 
-// void WCDBRustStatementDeleteClassMethod(
-// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
-//{
-//     WCDBRustBridgeStruct(CPPStatementDelete, self);
-//     CPPCommonValue from_common;
-//     from_common.type = fromType;
-//     from_common.intValue = from;
-//     CPPCommonValue to_common;
-//     to_common.type = toType;
-//     to_common.intValue = to;
-//     WCDBStatementDeleteConfigLimitRange2(selfStruct, from_common, to_common);
-// }
+void WCDBRustStatementDeleteClassMethod(configLimitRange,
+                                        void* self,
+                                        int fromType,
+                                        long from,
+                                        int toType,
+                                        long to) {
+    WCDBRustBridgeStruct(CPPStatementDelete, self);
+    CPPCommonValue from_common;
+    from_common.type = fromType;
+    from_common.intValue = from;
+    CPPCommonValue to_common;
+    to_common.type = toType;
+    to_common.intValue = to;
+    WCDBStatementDeleteConfigLimitRange2(selfStruct, from_common, to_common);
+}
 
 void WCDBRustStatementDeleteClassMethod(configLimitCount, void* self, int type, long limit) {
     WCDBRustBridgeStruct(CPPStatementDelete, self);

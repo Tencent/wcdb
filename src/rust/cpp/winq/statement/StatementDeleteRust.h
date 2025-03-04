@@ -45,7 +45,11 @@ void WCDBRustStatementDeleteClassMethod(configCondition, void* self, void* condi
 
 void WCDBRustStatementDeleteClassMethod(configOrders, void* self, void** orders, size_t len);
 
-// void WCDBRustStatementDeleteClassMethod(
-// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
+void WCDBRustStatementDeleteClassMethod(configLimitRange,
+                                        void* self,
+                                        int fromType,
+                                        long from,
+                                        int toType,
+                                        long to);
 void WCDBRustStatementDeleteClassMethod(configLimitCount, void* self, int type, long limit);
 void WCDBRustStatementDeleteClassMethod(configOffset, void* self, int type, long offset);

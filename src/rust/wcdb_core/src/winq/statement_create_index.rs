@@ -3,7 +3,6 @@ use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use crate::winq::schema::Schema;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
 use std::ptr::null;
@@ -13,6 +12,11 @@ extern "C" {
     fn WCDBRustStatementCreateIndex_configIndex(cpp_obj: *mut c_void, index_name: *const c_char);
 
     fn WCDBRustStatementCreateIndex_configUnique(cpp_obj: *mut c_void);
+
+    fn WCDBRustStatementCreateIndex_configSchemaName(
+        cpp_obj: *mut c_void,
+        schema_name: *const c_char,
+    );
 
     fn WCDBRustStatementCreateIndex_configIfNotExist(cpp_obj: *mut c_void);
 
