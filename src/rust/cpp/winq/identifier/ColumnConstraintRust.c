@@ -38,13 +38,13 @@ void WCDBRustColumnConstraintClassMethod(configPrimaryKey, void* constraint) {
 //     WCDBColumnConstraintConfigOrder(constraintStruct, order);
 // }
 //
-// void WCDBRustColumnConstraintClassMethod(configConflictAction, jlong constraint, jint
-// conflictAction)
-//{
-//     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//     WCDBColumnConstraintConfigCoflictAction(constraintStruct, conflictAction);
-// }
-//
+void WCDBRustColumnConstraintClassMethod(configConflictAction,
+                                         void* constraint,
+                                         int conflictAction) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBColumnConstraintConfigCoflictAction(constraintStruct, conflictAction);
+}
+
 void WCDBRustColumnConstraintClassMethod(configAutoIncrement, void* constraint) {
     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigAutoIncrement(constraintStruct);
@@ -74,14 +74,11 @@ void WCDBRustColumnConstraintClassMethod(configDefaultValue,
     WCDBRustCreateCommonValueWithIsCritical(value, true);
     WCDBColumnConstraintConfigDefaultValue2(constraintStruct, value_common);
 }
-//
-// void WCDBRustColumnConstraintClassMethod(configCollation, jlong constraint, jstring collation)
-//{
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBRustGetStringCritical(collation);
-//    WCDBColumnConstraintConfigCollation(constraintStruct, collationString);
-//    WCDBRustReleaseStringCritical(collation);
-//}
+
+void WCDBRustColumnConstraintClassMethod(configCollation, void* constraint, const char* collation) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBColumnConstraintConfigCollation(constraintStruct, collation);
+}
 //
 // void WCDBRustColumnConstraintClassMethod(configForeignKey, jlong constraint, jlong foreignKey)
 //{

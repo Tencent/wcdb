@@ -33,14 +33,14 @@
     WCDBRustClassMethod(StatementCreateIndex, funcName, __VA_ARGS__)
 
 void* WCDBRustStatementCreateIndexClassMethodWithNoArg(create);
-// void WCDBRustStatementCreateIndexClassMethod(configIndex, jlong self, jstring name);
-// void WCDBRustStatementCreateIndexClassMethod(configSchema,
-//                                             jlong self,
-//                                             WCDBRustObjectOrStringParameter(schema));
-// void WCDBRustStatementCreateIndexClassMethod(configUnique, jlong self);
+void WCDBRustStatementCreateIndexClassMethod(configIndex, void* self, const char* name);
+void WCDBRustStatementCreateIndexClassMethod(configSchema,
+                                             void* self,
+                                             WCDBRustObjectOrStringParameter(schema));
+void WCDBRustStatementCreateIndexClassMethod(configUnique, void* self);
 void WCDBRustStatementCreateIndexClassMethod(configIfNotExist, void* self);
-// void WCDBRustStatementCreateIndexClassMethod(configTable, jlong self, jstring tableName);
+void WCDBRustStatementCreateIndexClassMethod(configTable, void* self, const char* tableName);
 void WCDBRustStatementCreateIndexClassMethod(configIndexedColumns,
                                              void* self,
                                              WCDBRustObjectOrStringArrayParameter(indexColumns));
-// void WCDBRustStatementCreateIndexClassMethod(configWhere, jlong self, jlong condition);
+void WCDBRustStatementCreateIndexClassMethod(configWhere, void* self, void* condition);

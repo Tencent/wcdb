@@ -1,14 +1,19 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
+use crate::winq::schema::Schema;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
 use std::ptr::null;
 
 extern "C" {
     fn WCDBRustStatementCreateIndex_create() -> *mut c_void;
+    fn WCDBRustStatementCreateIndex_configIndex(cpp_obj: *mut c_void, index_name: *const c_char);
+
+    fn WCDBRustStatementCreateIndex_configUnique(cpp_obj: *mut c_void);
+
     fn WCDBRustStatementCreateIndex_configIfNotExist(cpp_obj: *mut c_void);
 
     fn WCDBRustStatementCreateIndex_configIndexedColumns(
@@ -18,6 +23,16 @@ extern "C" {
         columns_string_vec: *const *const c_char,
         columns_vec_len: c_int,
     );
+
+    fn WCDBRustStatementCreateIndex_configSchema(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        schema: *mut c_void,
+        schema_name: *const c_char,
+    );
+
+    fn WCDBRustStatementCreateIndex_configTable(cpp_obj: *mut c_void, table_name: *const c_char);
+    fn WCDBRustStatementCreateIndex_configWhere(cpp_obj: *mut c_void, condition: *mut c_void);
 }
 
 pub struct StatementCreateIndex {
@@ -65,11 +80,14 @@ impl StatementCreateIndex {
     }
 
     pub fn create_index(&self, index_name: &str) -> &Self {
-        todo!("qixinbing")
+        let cstr = index_name.to_cstring();
+        unsafe { WCDBRustStatementCreateIndex_configIndex(self.get_cpp_obj(), cstr.as_ptr()) }
+        self
     }
 
     pub fn unique(&self) -> &Self {
-        todo!("qixinbing")
+        unsafe { WCDBRustStatementCreateIndex_configUnique(self.get_cpp_obj()) }
+        self
     }
 
     pub fn if_not_exist(&self) -> &Self {
@@ -80,15 +98,33 @@ impl StatementCreateIndex {
     }
 
     pub fn of(&self, schema_name: &str) -> &Self {
-        todo!("qixinbing")
+        unsafe {
+            WCDBRustStatementCreateIndex_configSchema(
+                self.get_cpp_obj(),
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                schema_name.to_cstring().as_ptr(),
+            )
+        }
+        self
     }
 
     // pub fn of_schema(&self,schema: Schema)-> &Self {
-    //     todo!("qixinbing")
+    //     unsafe {
+    //         WCDBRustStatementCreateIndex_configSchema(
+    //             self.get_cpp_obj(),
+    //             CPPType::String as c_int,
+    //             0 as *mut c_void,
+    //             schema_name.to_cstring().as_ptr(),
+    //         )
+    //     }
+    //     self
     // }
 
     pub fn on(&self, table_name: &str) -> &Self {
-        todo!("qixinbing")
+        let cstr = table_name.to_cstring();
+        unsafe { WCDBRustStatementCreateIndex_configTable(self.get_cpp_obj(), cstr.as_ptr()) }
+        self
     }
 
     pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
@@ -134,6 +170,9 @@ impl StatementCreateIndex {
     }
 
     pub fn where_expression(&self, condition: Expression) -> &Self {
-        todo!("qixinbing")
+        unsafe {
+            WCDBRustStatementCreateIndex_configWhere(self.get_cpp_obj(), CppObject::get(&condition))
+        }
+        self
     }
 }

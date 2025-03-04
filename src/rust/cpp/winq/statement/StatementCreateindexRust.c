@@ -26,43 +26,34 @@ void* WCDBRustStatementCreateIndexClassMethodWithNoArg(create) {
     return (void*)WCDBStatementCreateIndexCreate().innerValue;
 }
 
-// void WCDBRustStatementCreateIndexClassMethod(configIndex, jlong self, jstring name)
-//{
-//     WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
-//     WCDBRustGetStringCritical(name);
-//     WCDBStatementCreateIndexConfigIndexName(selfStruct, nameString);
-//     WCDBRustReleaseStringCritical(name);
-// }
-//
-// void WCDBRustStatementCreateIndexClassMethod(configSchema,
-//                                             jlong self,
-//                                             WCDBRustObjectOrStringParameter(schema))
-//{
-//     WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
-//     WCDBRustCreateObjectOrStringCommonValue(schema, true);
-//     WCDBStatementCreateIndexConfigSchema2(selfStruct, schema_common);
-//     WCDBRustTryReleaseStringInCommonValue(schema);
-// }
-//
-// void WCDBRustStatementCreateIndexClassMethod(configUnique, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
-//     WCDBStatementCreateIndexConfigUniqe(selfStruct);
-// }
-//
+void WCDBRustStatementCreateIndexClassMethod(configIndex, void* self, const char* name) {
+    WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
+    WCDBStatementCreateIndexConfigIndexName(selfStruct, name);
+}
+
+void WCDBRustStatementCreateIndexClassMethod(configSchema,
+                                             void* self,
+                                             WCDBRustObjectOrStringParameter(schema)) {
+    WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
+    WCDBRustCreateObjectOrStringCommonValue(schema, true);
+    WCDBStatementCreateIndexConfigSchema2(selfStruct, schema_common);
+}
+
+void WCDBRustStatementCreateIndexClassMethod(configUnique, void* self) {
+    WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
+    WCDBStatementCreateIndexConfigUniqe(selfStruct);
+}
+
 void WCDBRustStatementCreateIndexClassMethod(configIfNotExist, void* self) {
     WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
     WCDBStatementCreateIndexConfigIfNotExist(selfStruct);
 }
 
-// void WCDBRustStatementCreateIndexClassMethod(configTable, jlong self, jstring tableName)
-//{
-//     WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
-//     WCDBRustGetStringCritical(tableName);
-//     WCDBStatementCreateIndexConfigTable(selfStruct, tableNameString);
-//     WCDBRustReleaseStringCritical(tableName);
-// }
-//
+void WCDBRustStatementCreateIndexClassMethod(configTable, void* self, const char* tableName) {
+    WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
+    WCDBStatementCreateIndexConfigTable(selfStruct, tableName);
+}
+
 void WCDBRustStatementCreateIndexClassMethod(configIndexedColumns,
                                              void* self,
                                              WCDBRustObjectOrStringArrayParameter(indexColumns)) {
@@ -71,10 +62,9 @@ void WCDBRustStatementCreateIndexClassMethod(configIndexedColumns,
         indexColumns,
         WCDBStatementCreateIndexConfigIndexColumns2(selfStruct, indexColumns_commonArray));
 }
-//
-// void WCDBRustStatementCreateIndexClassMethod(configWhere, jlong self, jlong condition)
-//{
-//    WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
-//    WCDBRustBridgeStruct(CPPExpression, condition);
-//    WCDBStatementCreateIndexConfigWhere(selfStruct, conditionStruct);
-//}
+
+void WCDBRustStatementCreateIndexClassMethod(configWhere, void* self, void* condition) {
+    WCDBRustBridgeStruct(CPPStatementCreateIndex, self);
+    WCDBRustBridgeStruct(CPPExpression, condition);
+    WCDBStatementCreateIndexConfigWhere(selfStruct, conditionStruct);
+}

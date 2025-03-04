@@ -1,6 +1,9 @@
 use crate::base::basic_types::WCDBBasicTypes;
 use crate::base::cpp_object::CppObjectTrait;
+use crate::utils::ToCString;
+use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use std::any::TypeId;
 use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 
 extern "C" {
@@ -12,6 +15,8 @@ extern "C" {
 
     fn WCDBRustColumnConstraint_configNotNull(cpp_obj: *mut c_void);
 
+    fn WCDBRustColumnConstraint_configConflictAction(cpp_obj: *mut c_void, action: c_int);
+
     fn WCDBRustColumnConstraint_configUnique(cpp_obj: *mut c_void);
     fn WCDBRustColumnConstraint_configDefaultValue(
         cpp_obj: *mut c_void,
@@ -20,6 +25,8 @@ extern "C" {
         double_value: c_double,
         string_value: *const c_char,
     );
+
+    fn WCDBRustColumnConstraint_configCollation(cpp_obj: *mut c_void, collation: *const c_char);
 
     fn WCDBRustColumnConstraint_configUnIndex(cpp_obj: *mut c_void);
 }
@@ -91,6 +98,13 @@ impl ColumnConstraint {
         self
     }
 
+    pub fn conflict(&self, action: ConflictAction) -> &Self {
+        unsafe {
+            WCDBRustColumnConstraint_configConflictAction(self.get_cpp_obj(), action as c_int)
+        }
+        self
+    }
+
     pub fn unique(&self) -> &Self {
         unsafe {
             WCDBRustColumnConstraint_configUnique(self.get_cpp_obj());
@@ -99,28 +113,27 @@ impl ColumnConstraint {
     }
 
     pub fn default_to<T: WCDBBasicTypes>(&self, value: T) -> &Self {
-        // let type_id = TypeId::of::<T>();
-        // if type_id == TypeId::of::<bool>() {
-        // let mut int_value = 1;
-        // if value as bool {
-        //     int_value = 1;
-        // } else {
-        //     int_value = 0;
-        // }
-        // self.inner_default_to(CPPType::Bool, int_value, 0f64, std::ptr::null());
-        // } else
-        // if type_id == TypeId::of::<i8>()
-        //     || type_id == TypeId::of::<u8>()
-        //     || type_id == TypeId::of::<i32>()
-        //     || type_id == TypeId::of::<i64>()
-        // {
-        //     self.inner_default_to(CPPType::Int, value as i64, 0f64, std::ptr::null());
-        // } else if type_id == TypeId::of::<f32>() || type_id == TypeId::of::<f64>() {
-        //     self.inner_default_to(CPPType::Double, 0, value as f64, std::ptr::null());
-        // } else if type_id == TypeId::of::<&str>() {
-        //     let c_str = (value as &str).to_cstring();
-        //     self.inner_default_to(CPPType::Double, 0, 0f64, c_str.as_ptr());
-        // }
+        let type_id = TypeId::of::<T>();
+        if type_id == TypeId::of::<bool>() {
+            let mut int_value = 1;
+            if value.get_bool() {
+                int_value = 1;
+            } else {
+                int_value = 0;
+            }
+            self.inner_default_to(CPPType::Bool, int_value, 0f64, std::ptr::null());
+        } else if type_id == TypeId::of::<i8>()
+            || type_id == TypeId::of::<u8>()
+            || type_id == TypeId::of::<i32>()
+            || type_id == TypeId::of::<i64>()
+        {
+            self.inner_default_to(CPPType::Int, value.get_i64(), 0f64, std::ptr::null());
+        } else if type_id == TypeId::of::<f32>() || type_id == TypeId::of::<f64>() {
+            self.inner_default_to(CPPType::Double, 0, value.get_f64(), std::ptr::null());
+        } else if type_id == TypeId::of::<&str>() || type_id == TypeId::of::<String>() {
+            let c_str = value.get_string().to_cstring();
+            self.inner_default_to(CPPType::String, 0, 0f64, c_str.as_ptr());
+        }
         self
     }
 
@@ -140,6 +153,12 @@ impl ColumnConstraint {
                 string_value,
             );
         }
+    }
+
+    pub fn collate(&self, collation: &str) -> &Self {
+        let cstr = collation.to_cstring();
+        unsafe { WCDBRustColumnConstraint_configCollation(self.get_cpp_obj(), cstr.as_ptr()) }
+        self
     }
 
     pub fn un_index(&self) -> &Self {
