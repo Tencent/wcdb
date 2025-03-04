@@ -112,7 +112,7 @@ impl RustCodeGenerator {
         let instance_ident = Ident::new(&instance, Span::call_site());
 
         let generate_table_config = self.generate_table_config(&binding_ident)?;
-        let columns_statements = self.generate_columns(&table, &binding_ident)?;
+        let columns_statements = self.generate_columns(&binding_ident)?;
 
         Ok(quote! {
             pub static #binding_ident: once_cell::sync::Lazy<wcdb_core::orm::binding::Binding> = once_cell::sync::Lazy::new(|| {
@@ -129,11 +129,7 @@ impl RustCodeGenerator {
         })
     }
 
-    fn generate_columns(
-        &self,
-        table: &WCDBTable,
-        binding_ident: &Ident,
-    ) -> syn::Result<proc_macro2::TokenStream> {
+    fn generate_columns(&self, binding_ident: &Ident) -> syn::Result<proc_macro2::TokenStream> {
         if self.all_column_info.is_empty() {
             return Ok(quote::quote! {}.into());
         }
@@ -153,7 +149,7 @@ impl RustCodeGenerator {
             let field_ident = Ident::new(&*property_name, Span::call_site());
             // multi_primary1_def
             let field_def_ident = Ident::new(
-                &format!("{}_def", field_ident.to_string()),
+                &format!("{}Def", field_ident.to_string()),
                 Span::call_site(),
             );
 
@@ -248,6 +244,30 @@ impl RustCodeGenerator {
                     #binding_ident.enable_auto_increment_for_existing_table();
                 });
             }
+
+            if !column_info.has_index() {
+                continue;
+            }
+            let mut index_name = column_info.index_name();
+            let mut is_full_name: bool = true;
+            if index_name.is_empty() {
+                is_full_name = false;
+                index_name = format!("{}{}{}", "_", column_name.clone().as_str(), "_index");
+            }
+            let index_is_unique = column_info.index_is_unique();
+            let index_name_ident = Ident::new(&*index_name.clone(), Span::call_site());
+            let property_name_ident = Ident::new(&*property_name.clone(), Span::call_site());
+            token_stream.extend(quote::quote! {
+                let create_index = wcdb_core::winq::statement_create_index::StatementCreateIndex::new();
+                create_index.if_not_exist();
+                if #index_is_unique {
+                    create_index.unique();
+                }
+                let mut column_names: Vec<String> = Vec::new();
+                 column_names.push(stringify!(#property_name_ident).to_string());
+                create_index.indexed_by_column_names(&column_names);
+                #binding_ident.add_index(stringify!(#index_name_ident), #is_full_name, create_index);
+            });
         }
         Ok(token_stream)
     }

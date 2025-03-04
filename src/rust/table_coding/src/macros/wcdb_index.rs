@@ -1,6 +1,6 @@
 use darling::FromMeta;
 
-#[derive(Debug, FromMeta)]
+#[derive(FromMeta, Debug)]
 pub struct WCDBIndex {
     #[darling(default)]
     name: String,
@@ -9,12 +9,8 @@ pub struct WCDBIndex {
 }
 
 impl WCDBIndex {
-    // pub fn new() -> Self {
-    //     WCDBIndex { ident: None, ty: (), name: "".to_string(), is_unique: false }
-    // }
-
-    pub fn name(&self) -> &str {
-        &self.name
+    pub fn name(&self) -> String {
+        self.name.clone()
     }
 
     pub fn is_unique(&self) -> bool {

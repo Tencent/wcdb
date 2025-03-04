@@ -80,14 +80,23 @@ impl ColumnInfo {
         column_info.is_unique = field.is_unique();
         column_info.is_not_null = field.is_not_null();
         column_info.is_not_indexed = field.is_not_indexed();
-        // todo dengxudong WCDBIndex 怎么写？
-        // match &table.index_data() {
-        //     Data::Struct(index) => {}
-        //     _ => panic!("WCDBTable only works on structs"),
-        // }
-
         column_info.default_value = DefaultValueInfo::resolve(&field.attr());
 
+        match &field.attr() {
+            None => {
+                column_info.has_index = false;
+            }
+            Some(attr) => match attr.index() {
+                None => {
+                    column_info.has_index = false;
+                }
+                Some(index) => {
+                    column_info.has_index = true;
+                    column_info.index_name = index.name();
+                    column_info.index_is_unique = index.is_unique();
+                }
+            },
+        }
         column_info
     }
 
@@ -139,8 +148,8 @@ impl ColumnInfo {
         self.has_index
     }
 
-    pub fn index_name(&self) -> &str {
-        &self.index_name
+    pub fn index_name(&self) -> String {
+        self.index_name.clone()
     }
 
     pub fn index_is_unique(&self) -> bool {

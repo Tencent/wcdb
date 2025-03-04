@@ -1,9 +1,11 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
+use std::ptr::null;
 
 extern "C" {
     pub fn WCDBRustStatementCreateIndex_create() -> *mut c_void;
@@ -115,7 +117,20 @@ impl StatementCreateIndex {
     }
 
     pub fn indexed_by_column_names(&self, column_names: &Vec<String>) -> &Self {
-        todo!("qixinbing")
+        let mut c_string_array: Vec<*const c_char> = Vec::new();
+        for x in column_names {
+            c_string_array.push(x.to_cstring().into_raw());
+        }
+        unsafe {
+            WCDBRustStatementCreateIndex_configIndexedColumns(
+                self.get_cpp_obj(),
+                CPPType::String as c_int,
+                null(),
+                c_string_array.as_ptr(),
+                c_string_array.len() as c_int,
+            );
+        }
+        self
     }
 
     pub fn where_expression(&self, condition: Expression) -> &Self {
