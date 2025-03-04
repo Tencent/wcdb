@@ -364,8 +364,12 @@ public extension Database {
             }
             return invocationWrap.value(cppHandle)
         }
+
         let invocationBlock: (CPPHandle) -> Bool = {
-            cppHandle in
+            [weak self] cppHandle in
+            guard let self = self else {
+                return false
+            }
             let handle = Handle(withCPPHandle: cppHandle, database: self)
             var ret = true
             do {
@@ -381,7 +385,10 @@ public extension Database {
         var uninvocationWrapPointer: UnsafeMutableRawPointer?
         if let uninvocation = uninvocation {
             let uninvocationBlock: (CPPHandle) -> Bool = {
-                cppHandle in
+                [weak self] cppHandle in
+                guard let self = self else {
+                    return false
+                }
                 let handle = Handle(withCPPHandle: cppHandle, database: self)
                 var ret = true
                 do {
