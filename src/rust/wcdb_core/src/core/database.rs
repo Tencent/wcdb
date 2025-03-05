@@ -1235,6 +1235,21 @@ impl Database {
         }
     }
 
+    pub fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
+        let handle = self.get_handle(false);
+        let mut exception_opt = None;
+        if !Handle::execute_sql(handle.get_cpp_handle()?, sql) {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
+    }
+
     pub fn set_notification_when_corrupted<CB>(&self, monitor: Option<CB>)
     where
         CB: CorruptionNotificationTrait + 'static,

@@ -59,15 +59,11 @@ bool WCDBRustHandleClassMethod(execute, void* self, void* statement) {
     WCDBRustBridgeStruct(CPPHandle, self);
     return WCDBHandleExecute(selfStruct, (CPPObject*)statement);
 }
-//
-// jboolean WCDBRustHandleClassMethod(executeSQL, void* self, jstring sql)
-//{
-//    WCDBRustBridgeStruct(CPPHandle, self);
-//    WCDBRustGetString(sql);
-//    jlong ret = (jlong) WCDBHandleExecuteSQL(selfStruct, sqlString);
-//    WCDBRustReleaseString(sql);
-//    return ret;
-//}
+
+bool WCDBRustHandleClassMethod(executeSQL, void* self, const char* sql) {
+    WCDBRustBridgeStruct(CPPHandle, self);
+    return WCDBHandleExecuteSQL(selfStruct, sql);
+}
 //
 // jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table)
 //{

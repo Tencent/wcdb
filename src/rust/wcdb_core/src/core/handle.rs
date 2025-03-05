@@ -5,13 +5,14 @@ use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::winq::statement::StatementTrait;
-use std::ffi::{c_int, c_long, c_void};
+use std::ffi::{c_char, c_int, c_long, c_void, CString};
 use std::sync::{Arc, Mutex};
 
 extern "C" {
     fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
     fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
     fn WCDBRustHandle_execute(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
+    fn WCDBRustHandle_executeSQL(cpp_obj: *mut c_void, sql: *const c_char) -> bool;
     fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
     fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> c_long;
     fn WCDBRustHandle_runTransaction(
@@ -232,5 +233,10 @@ impl<'a> Handle<'a> {
             None => Ok(()),
             Some(exception) => Err(exception),
         }
+    }
+
+    pub fn execute_sql(cpp_obj: *mut c_void, sql: &str) -> bool {
+        let c_sql = CString::new(sql).unwrap_or_default();
+        unsafe { WCDBRustHandle_executeSQL(cpp_obj, c_sql.as_ptr()) }
     }
 }
