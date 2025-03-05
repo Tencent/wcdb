@@ -702,7 +702,7 @@ impl ExpressionOperable {
         Self::create_expression(cpp_obj)
     }
 
-    fn create_expression(cpp_obj: *mut c_void) -> Expression {
+    pub(crate) fn create_expression(cpp_obj: *mut c_void) -> Expression {
         let mut expression = Expression::new();
         expression.set_cpp_obj(cpp_obj);
         expression
@@ -1605,14 +1605,14 @@ impl ExpressionOperable {
     }
 
     pub fn substr_int(&self, left_cpp_type: i32, start: i32, length: i32) -> Expression {
-        Self::create_expression(Expression::function("SUBSTR"))
+        Expression::function("SUBSTR")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
             .argument_int(start)
             .argument_int(length)
     }
 
     pub fn substr_long(&self, left_cpp_type: i32, start: i64, length: i64) -> Expression {
-        Self::create_expression(Expression::function("SUBSTR"))
+        Expression::function("SUBSTR")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
             .argument_long(start)
             .argument_long(length)
@@ -1704,103 +1704,103 @@ impl ExpressionOperable {
     }
 
     pub fn avg(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("AVG"))
+        Expression::function("AVG")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn count(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("COUNT"))
+        Expression::function("COUNT")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn group_concat(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("GROUP_CONCAT"))
+        Expression::function("GROUP_CONCAT")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn group_concat_string(&self, left_cpp_type: i32, sperator: &str) -> Expression {
-        Self::create_expression(Expression::function("GROUP_CONCAT"))
+        Expression::function("GROUP_CONCAT")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
             .argument_string(sperator)
     }
 
     pub fn max(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("MAX"))
+        Expression::function("MAX")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn min(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("MIN"))
+        Expression::function("MIN")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn sum(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("SUM"))
+        Expression::function("SUM")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn total(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("TOTAL"))
+        Expression::function("TOTAL")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn abs(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("ABS"))
+        Expression::function("ABS")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn hex(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("HEX"))
+        Expression::function("HEX")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn length(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("LENGTH"))
+        Expression::function("LENGTH")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn lower(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("LOWER"))
+        Expression::function("LOWER")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn upper(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("UPPER"))
+        Expression::function("UPPER")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn round(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("ROUND"))
+        Expression::function("ROUND")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn match_info(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("matchInfo"))
+        Expression::function("matchInfo")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn offsets(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("offsets"))
+        Expression::function("offsets")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn snippet(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("snippet"))
+        Expression::function("snippet")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn bm25(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("bm25"))
+        Expression::function("bm25")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn highlight(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("highlight"))
+        Expression::function("highlight")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 
     pub fn substring_match_info(&self, left_cpp_type: i32) -> Expression {
-        Self::create_expression(Expression::function("substring_match_info"))
+        Expression::function("substring_match_info")
             .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
     }
 }

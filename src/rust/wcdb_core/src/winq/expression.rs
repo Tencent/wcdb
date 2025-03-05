@@ -1275,10 +1275,10 @@ impl Expression {
         &self.expression_operable
     }
 
-    pub(crate) fn function(func_name: &str) -> *mut c_void {
+    pub(crate) fn function(func_name: &str) -> Expression {
         let c_str = func_name.to_cstring();
         let cpp_obj = unsafe { WCDBRustExpression_createWithFunction(c_str.as_ptr()) };
-        cpp_obj
+        ExpressionOperable::create_expression(cpp_obj)
     }
 
     pub(crate) fn argument_expression_convertible_trait(
