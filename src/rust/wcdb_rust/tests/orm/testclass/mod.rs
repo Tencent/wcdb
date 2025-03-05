@@ -4,3 +4,4 @@ pub(crate) mod field_object;
 pub(crate) mod primary_enable_auto_increment_object;
 pub(crate) mod primary_not_auto_increment_object;
 pub(crate) mod table_constraint_object;
+pub(crate) mod table_primary_key_object;

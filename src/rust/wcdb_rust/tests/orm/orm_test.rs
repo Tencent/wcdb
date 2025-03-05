@@ -2,6 +2,10 @@ use crate::base::base_test_case::TestCaseTrait;
 use crate::base::database_test_case::{DatabaseTestCase, Expect, TestOperation};
 use crate::base::wrapped_value::WrappedValue;
 use crate::orm::testclass::auto_add_column_object::{AutoAddColumnObject, DbAutoAddColumnObject};
+use crate::orm::testclass::table_primary_key_object::{
+    DbTablePrimaryKeyObjectOld, TablePrimaryKeyObjectOld, DBTABLEPRIMARYKEYOBJECTNEW_INSTANCE,
+    DBTABLEPRIMARYKEYOBJECTOLD_INSTANCE,
+};
 use rand::Rng;
 use std::cmp::PartialEq;
 use wcdb_core::base::wcdb_exception::{WCDBException, WCDBResult};
@@ -15,6 +19,7 @@ use wcdb_core::winq::column_type::ColumnType;
 use wcdb_core::winq::expression::Expression;
 use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
 use wcdb_core::winq::identifier::IdentifierTrait;
+use wcdb_core::winq::statement_alter_table::StatementAlterTable;
 use wcdb_core::winq::statement_create_table::StatementCreateTable;
 
 pub struct OrmTest {
@@ -94,6 +99,71 @@ impl OrmTest {
         // self.database_test_case.get_database().read().unwrap().trace_exception(None);
 
         Ok(())
+    }
+
+    fn do_table_update_primary_key(&self, table_name: &str, table_name_back: &str, data_num: i32) {
+        // create old table
+        self.database_test_case
+            .get_database()
+            .read()
+            .unwrap()
+            .create_table(table_name, &*DBTABLEPRIMARYKEYOBJECTOLD_INSTANCE)
+            .unwrap();
+
+        // insert db to old table
+        let obj_vec = TablePrimaryKeyObjectOld::get_old_obj_vec(data_num);
+
+        self.database_test_case
+            .get_database()
+            .write()
+            .unwrap()
+            .insert_objects(
+                obj_vec,
+                DbTablePrimaryKeyObjectOld::all_fields(),
+                table_name,
+            )
+            .unwrap();
+
+        // rename old table
+        let statement_alert_table = StatementAlterTable::new();
+        self.database_test_case
+            .get_database()
+            .write()
+            .unwrap()
+            .execute(
+                statement_alert_table
+                    .alter_table(table_name)
+                    .rename_to(table_name_back),
+            )
+            .unwrap();
+
+        // create new table
+        self.database_test_case
+            .get_database()
+            .read()
+            .unwrap()
+            .create_table(table_name, &*DBTABLEPRIMARYKEYOBJECTNEW_INSTANCE)
+            .unwrap();
+
+        // insert old table to new table
+        let sql = format!(
+            "INSERT OR REPLACE INTO {} SELECT * FROM {};",
+            table_name, table_name_back
+        );
+        self.database_test_case
+            .get_database()
+            .write()
+            .unwrap()
+            .execute_sql(sql.as_str())
+            .unwrap();
+
+        // drop old table
+        self.database_test_case
+            .get_database()
+            .write()
+            .unwrap()
+            .drop_table(table_name_back)
+            .unwrap();
     }
 }
 
@@ -348,5 +418,32 @@ pub mod orm_test {
         assert_eq!(obj_vec.last().unwrap().id, 2);
 
         teardown(&orm_test);
+    }
+
+    #[test]
+    fn test_table_update_primary_key() {
+        // todo qixinbing 上线需要配合版本控制
+        let orm_test = OrmTest::new();
+        orm_test.setup().unwrap();
+
+        let mut sql_vec = vec![];
+        sql_vec.push("CREATE TABLE IF NOT EXISTS table_primary_key(id INTEGER , name TEXT , price REAL , desc TEXT , PRIMARY KEY(id))".to_string());
+        sql_vec.push("ALTER TABLE table_primary_key RENAME TO table_primary_key_back".to_string());
+        sql_vec.push("CREATE TABLE IF NOT EXISTS table_primary_key(id INTEGER , name TEXT , price REAL , desc TEXT , PRIMARY KEY(id, name))".to_string());
+        sql_vec.push(
+            "INSERT OR REPLACE INTO table_primary_key SELECT * FROM table_primary_key_back;"
+                .to_string(),
+        );
+        sql_vec.push("DROP TABLE IF EXISTS table_primary_key_back".to_string());
+
+        orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
+            let table_name = "table_primary_key";
+            let table_name_back = "table_primary_key_back";
+            let data_num = 15;
+            orm_test.do_table_update_primary_key(table_name, table_name_back, data_num);
+            Ok(())
+        });
+
+        orm_test.teardown().unwrap();
     }
 }
