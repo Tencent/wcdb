@@ -2,6 +2,10 @@ use crate::base::base_test_case::TestCaseTrait;
 use crate::base::database_test_case::{DatabaseTestCase, Expect, TestOperation};
 use crate::base::wrapped_value::WrappedValue;
 use crate::orm::testclass::auto_add_column_object::{AutoAddColumnObject, DbAutoAddColumnObject};
+use crate::orm::testclass::column_rename_object::{
+    ColumnRenameObjectOld, DbColumnRenameObjectNew, DbColumnRenameObjectOld,
+    DBCOLUMNRENAMEOBJECTNEW_INSTANCE, DBCOLUMNRENAMEOBJECTOLD_INSTANCE,
+};
 use crate::orm::testclass::table_primary_key_object::{
     DbTablePrimaryKeyObjectOld, TablePrimaryKeyObjectOld, DBTABLEPRIMARYKEYOBJECTNEW_INSTANCE,
     DBTABLEPRIMARYKEYOBJECTOLD_INSTANCE,
@@ -164,6 +168,71 @@ impl OrmTest {
             .unwrap()
             .drop_table(table_name_back)
             .unwrap();
+    }
+
+    fn do_column_rename(
+        &self,
+        table_name: &str,
+        data_num: i32,
+        column_name_old: &str,
+        column_name_new: &str,
+    ) {
+        // create old table
+        self.database_test_case
+            .get_database()
+            .read()
+            .unwrap()
+            .create_table(table_name, &*DBCOLUMNRENAMEOBJECTOLD_INSTANCE)
+            .unwrap();
+
+        // insert test date to old table
+        let obj_vec = ColumnRenameObjectOld::get_old_obj_vec(data_num);
+        self.database_test_case
+            .get_database()
+            .write()
+            .unwrap()
+            .insert_objects(obj_vec, DbColumnRenameObjectOld::all_fields(), table_name)
+            .unwrap();
+
+        // old table column rename
+        let statement_alert_table = StatementAlterTable::new();
+        let statement = statement_alert_table
+            .alter_table(table_name)
+            .rename_column_by_name(column_name_old)
+            .to_column_by_name(column_name_new);
+        self.database_test_case
+            .get_database()
+            .write()
+            .unwrap()
+            .execute(statement)
+            .unwrap();
+
+        // open new table
+        self.database_test_case
+            .get_database()
+            .read()
+            .unwrap()
+            .create_table(table_name, &*DBCOLUMNRENAMEOBJECTNEW_INSTANCE)
+            .unwrap();
+
+        // check
+        let ret = self
+            .database_test_case
+            .get_database()
+            .read()
+            .unwrap()
+            .get_all_objects(DbColumnRenameObjectNew::all_fields(), table_name);
+        match ret {
+            Ok(new_obj_vec) => {
+                assert_eq!(new_obj_vec.len(), data_num as usize);
+                for new_obj in new_obj_vec {
+                    assert!(new_obj.is_same());
+                }
+            }
+            Err(err) => {
+                assert!(false);
+            }
+        }
     }
 }
 
@@ -420,6 +489,7 @@ pub mod orm_test {
         teardown(&orm_test);
     }
 
+    // 新增的升级单测，Java 没有该用例
     #[test]
     fn test_table_update_primary_key() {
         // todo qixinbing 上线需要配合版本控制
@@ -441,6 +511,34 @@ pub mod orm_test {
             let table_name_back = "table_primary_key_back";
             let data_num = 15;
             orm_test.do_table_update_primary_key(table_name, table_name_back, data_num);
+            Ok(())
+        });
+
+        orm_test.teardown().unwrap();
+    }
+
+    // 新增的升级单测，Java 没有该用例
+    #[test]
+    fn test_column_rename() {
+        let orm_test = OrmTest::new();
+        orm_test.setup().unwrap();
+
+        let mut sql_vec = vec![];
+        sql_vec.push("CREATE TABLE IF NOT EXISTS column_rename_object(category INTEGER , target_id TEXT , channel_id TEXT )".to_string());
+        sql_vec.push(
+            "ALTER TABLE column_rename_object RENAME COLUMN category TO conversation_type"
+                .to_string(),
+        );
+        sql_vec.push(
+            "SELECT conversation_type, target_id, channel_id FROM column_rename_object".to_string(),
+        );
+
+        orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
+            let table_name = "column_rename_object";
+            let column_name_old = "category";
+            let column_name_new = "conversation_type";
+            let data_num = 8;
+            orm_test.do_column_rename(table_name, data_num, column_name_old, column_name_new);
             Ok(())
         });
 
