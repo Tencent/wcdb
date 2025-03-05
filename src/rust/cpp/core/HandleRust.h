@@ -39,8 +39,8 @@ void* WCDBRustHandleClassMethod(getMainStatement, void* self);
 bool WCDBRustHandleClassMethod(execute, void* self, void* statement);
 
 bool WCDBRustHandleClassMethod(executeSQL, void* self, const char* sql);
-// jint WCDBRustHandleClassMethod(tableExist, void* self, jstring table);
-//
+int WCDBRustHandleClassMethod(tableExist, void* self, const char* table);
+
 int WCDBRustHandleClassMethod(getChanges, void* self);
 
 // jint WCDBRustHandleClassMethod(getTotalChanges, void* self);

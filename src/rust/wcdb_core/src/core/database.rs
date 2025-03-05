@@ -359,6 +359,23 @@ impl HandleORMOperationTrait for Database {
         binding.base_binding().create_table(table_name, handle)
     }
 
+    fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
+        let handle = self.get_handle(false);
+        let ret = Handle::table_exist(handle.get_cpp_handle()?, table_name);
+        let mut exception_opt = None;
+        if ret > 1 {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        if exception_opt.is_some() {
+            let exception = exception_opt.unwrap();
+            return Err(exception);
+        }
+        Ok(ret == 1)
+    }
+
     fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
         let statement = StatementDropTable::new();
         self.execute(statement.drop_table(table_name).if_exist())

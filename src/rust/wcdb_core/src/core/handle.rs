@@ -11,6 +11,7 @@ use std::sync::{Arc, Mutex};
 extern "C" {
     fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
     fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustHandle_tableExist(cpp_obj: *mut c_void, table_name: *const c_char) -> c_int;
     fn WCDBRustHandle_execute(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
     fn WCDBRustHandle_executeSQL(cpp_obj: *mut c_void, sql: *const c_char) -> bool;
     fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
@@ -214,6 +215,11 @@ impl<'a> Handle<'a> {
     ) -> WCDBResult<Arc<PreparedStatement>> {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.prepared_with_main_statement(self.database, statement)
+    }
+
+    pub fn table_exist(cpp_obj: *mut c_void, table_name: &str) -> i32 {
+        let c_table_name = CString::new(table_name).unwrap_or_default();
+        unsafe { WCDBRustHandle_tableExist(cpp_obj, c_table_name.as_ptr()) }
     }
 
     pub fn execute_inner<T: StatementTrait>(cpp_obj: *mut c_void, statement: &T) -> bool {
