@@ -6,7 +6,7 @@ use wcdb_core::winq::identifier::IdentifierTrait;
 
 #[derive(WCDBTableCoding)]
 #[WCDBTable(
-    multi_indexes(name = "specifiedNameIndex", columns = ["item_i32", "item_i64"]),
+    multi_indexes(name = "specifiedNameIndex", columns = ["item_i32", "message_id"]),
 )]
 pub struct TableMessageBox {
     #[WCDBField]

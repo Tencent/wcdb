@@ -4,7 +4,7 @@ mod compiler;
 mod field_orm_info;
 mod macros;
 
-use crate::compiler::resolved_info::column_info::ColumnInfo;
+use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
 use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
 use crate::compiler::rust_code_generator::RustCodeGenerator;
@@ -14,14 +14,17 @@ use darling::ast::Data;
 use darling::{FromDeriveInput, FromField, FromMeta};
 use proc_macro::TokenStream;
 use proc_macro2::Span;
-use quote::{quote, ToTokens};
+use quote::ToTokens;
+use std::any::Any;
 use std::fmt::Debug;
 use syn::parse::Parse;
 use syn::spanned::Spanned;
 use syn::{parse_macro_input, DeriveInput, Ident};
+
 #[proc_macro_derive(WCDBTableCoding, attributes(WCDBTable, WCDBField))]
 pub fn process(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
+    check_class_element(&input);
     let table = WCDBTable::from_derive_input(&input).unwrap();
     match create_orm_file(&table) {
         Ok(quote) => quote.into(),
@@ -49,6 +52,7 @@ fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
         Some(FTSModuleInfo::new()), //TODO dengxudong fts module
     )));
     code_gen.set_all_column_info(table.data());
+    code_gen.check_column_in_table_constraint();
 
     let singleton_statements = code_gen.generate_singleton(&table)?;
     let generate_binding_type = code_gen.generate_binding_type(&table_ident)?;
@@ -126,6 +130,24 @@ fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     })
 }
 
+fn check_class_element(input: &DeriveInput) {
+    let is_struct = match &input.data {
+        syn::Data::Struct(_) => true,
+        syn::Data::Enum(_) => false,
+        _ => false,
+    };
+    if !is_struct {
+        panic!("@WCDBTableCoding is only valid for structure");
+    }
+
+    let vis_str = input.vis.to_token_stream().to_string();
+    if vis_str != "pub" {
+        panic!(
+            "The visibility of the structure with @WCDBTableCoding macro definition must be pub"
+        );
+    }
+}
+
 fn check_field_element(table: &WCDBTable) {
     let mut primary_key_count = 0;
     match &table.data() {
@@ -136,7 +158,7 @@ fn check_field_element(table: &WCDBTable) {
                 if field.is_primary() {
                     primary_key_count += 1;
                     if primary_key_count > 1 {
-                        panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ",field_key.unwrap())
+                        panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ", field_key.unwrap())
                     }
 
                     if field.is_auto_increment() {
@@ -144,9 +166,57 @@ fn check_field_element(table: &WCDBTable) {
                             panic!("#[WCDBField] Auto-increment field must be integer for \"{}\".", field_key.unwrap());
                         }
                     }
-                    // todo qixinbing check  @WCDBIndex
-                }else if field.is_auto_increment() {
+
+                    match field.attr() {
+                        None => {}
+                        Some(attr) => {
+                            match attr.index() {
+                                None => {}
+                                Some(_) => {
+                                    panic!("Restricted to primary key, so no @WCDBIndex configuration is required.field_key:  \"{}\".", field_key.unwrap());
+                                }
+                            }
+                        }
+                    }
+                } else if field.is_auto_increment() {
                     panic!("#[WCDBField] Auto-increment field must be primary key for \"{}\".", field_key.unwrap());
+                }
+                for field in &fields.fields {
+                    let mut value_count = 0;
+                    let mut type_miss_match = false;
+                    let column_type = WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
+                    let default_opt = DefaultValueInfo::resolve(&field.attr());
+                    if default_opt.is_none() {
+                        continue;
+                    }
+                    let default = default_opt.unwrap();
+                    if default.i32_value() != 0 {
+                        value_count = value_count + 1;
+                        if column_type != "Integer" {
+                            type_miss_match = true;
+                        }
+                    }
+                    if default.f64_value() != 0f64 {
+                        value_count = value_count + 1;
+                        if column_type != "Float" {
+                            type_miss_match = true;
+                        }
+                    }
+                    if !default.text_value().is_empty() {
+                        value_count = value_count + 1;
+                        if column_type != "Text" {
+                            type_miss_match = true;
+                        }
+                    }
+                    if value_count > 1 {
+                        panic!("Only one default value can be configured for a field. \"{}\".", field_key.unwrap());
+                    } else if type_miss_match {
+                        if column_type != "BLOB" {
+                            panic!("Assigning a default value to BLOB is unsupported. \"{}\".", field_key.unwrap());
+                        }else {
+                            panic!("Default value should be a \"{}\".", column_type);
+                        }
+                    }
                 }
             })
             .collect(),

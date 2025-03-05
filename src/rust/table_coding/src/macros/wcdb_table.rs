@@ -14,10 +14,13 @@ pub struct WCDBTable {
     ident: Ident,
     generics: Generics,
     data: Data<(), WCDBField>,
+    // For fields with columnName macro, specify MultiIndexes columns as columnName; otherwise use propertyName
     #[darling(default, multiple)]
     multi_indexes: Vec<MultiIndexes>,
+    // For fields with columnName macro, specify MultiPrimary columns as columnName; otherwise use propertyName
     #[darling(default, multiple)]
     multi_primaries: Vec<MultiPrimary>,
+    // For fields with columnName macro, specify MultiUnique columns as columnName; otherwise use propertyName
     #[darling(default, multiple)]
     multi_unique: Vec<MultiUnique>,
     #[darling(default)]

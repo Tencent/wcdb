@@ -6,7 +6,7 @@ use crate::macros::wcdb_table::WCDBTable;
 use darling::ast::Data;
 use proc_macro2::{Ident, Span};
 use quote::quote;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use syn::spanned::Spanned;
 use syn::Type;
 
@@ -543,6 +543,67 @@ impl RustCodeGenerator {
                         object.#field_ident = last_insert_row_id as #field_type_ident
                     }
                 })
+            }
+        }
+    }
+
+    /// The check method must be invoked after the set_all_column_info method
+    pub fn check_column_in_table_constraint(&self) {
+        match &self.table_constraint_info {
+            None => {
+                return;
+            }
+            Some(table_config_info) => {
+                let mut all_columns: HashSet<String> = HashSet::new();
+                for x in &self.all_column_info {
+                    let mut tmp_str: String;
+                    if x.column_name().is_empty() {
+                        tmp_str = x.property_name();
+                    } else {
+                        tmp_str = x.column_name();
+                    }
+                    all_columns.insert(tmp_str);
+                }
+
+                match &table_config_info.multi_indexes() {
+                    None => {}
+                    Some(indexes_info_vec) => {
+                        for indexes_info in indexes_info_vec {
+                            for str in indexes_info.columns() {
+                                if !all_columns.contains(str) {
+                                    panic!(
+                                        "Can't find column \"{}\" in class orm multi-index config.",
+                                        str
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+                match &table_config_info.multi_primaries() {
+                    None => {}
+                    Some(multi_primaries) => {
+                        for x in multi_primaries {
+                            for str in x.columns() {
+                                if !all_columns.contains(str) {
+                                    panic!("Can't find column \"{}\" in class orm multi-primaries config.", str);
+                                }
+                            }
+                        }
+                    }
+                }
+                match &table_config_info.multi_unique() {
+                    None => {}
+                    Some(multi_unique) => {
+                        for x in multi_unique {
+                            for str in x.columns() {
+                                if !all_columns.contains(str) {
+                                    panic!("Can't find column \"{}\" in class orm multi-unique config.", str);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
