@@ -1,7 +1,10 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::orm::field::Field;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
@@ -48,6 +51,20 @@ pub struct StatementSelect {
     statement: Statement,
 }
 
+impl IdentifierConvertibleTrait for StatementSelect {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
+    }
+}
+
+impl CppObjectConvertibleTrait for StatementSelect {
+    fn as_cpp_object(&self) -> *mut c_void {
+        self.statement.as_cpp_object()
+    }
+}
+
+impl IndexedColumnConvertibleTrait for StatementSelect {}
+
 impl CppObjectTrait for StatementSelect {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.statement.set_cpp_obj(cpp_obj);
@@ -86,6 +103,33 @@ impl StatementSelect {
         StatementSelect {
             statement: Statement::new_with_obj(cpp_obj),
         }
+    }
+
+    pub fn select_with_result_column_convertible_trait<T>(&self, result_columns: &Vec<T>) -> &Self
+    where
+        T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    {
+        if result_columns.is_empty() {
+            return self;
+        }
+        let size = result_columns.len();
+        let mut types: Vec<i32> = Vec::with_capacity(size);
+        let mut cpp_obj_vec: Vec<*mut c_void> = Vec::with_capacity(size);
+        for x in result_columns {
+            types.push(Identifier::get_cpp_type(x));
+            cpp_obj_vec.push(CppObject::get(x));
+        }
+        unsafe {
+            WCDBRustStatementSelect_configResultColumns(
+                self.get_cpp_obj(),
+                types.as_ptr(),
+                cpp_obj_vec.as_ptr(),
+                std::ptr::null(),
+                std::ptr::null(),
+                types.len(),
+            );
+        }
+        self
     }
 
     pub fn select<T>(&self, fields: &Vec<&Field<T>>) -> &Self {

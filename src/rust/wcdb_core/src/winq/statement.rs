@@ -1,5 +1,7 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::winq::identifier::{Identifier, IdentifierTrait, WCDBRustWinq_isWriteStatement};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::c_void;
 use std::fmt::Debug;
 
@@ -25,6 +27,18 @@ impl CppObjectTrait for Statement {
 impl IdentifierTrait for Statement {
     fn get_description(&self) -> String {
         self.identifier.get_description()
+    }
+}
+
+impl CppObjectConvertibleTrait for Statement {
+    fn as_cpp_object(&self) -> *mut c_void {
+        self.identifier.as_cpp_object()
+    }
+}
+
+impl IdentifierConvertibleTrait for Statement {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
     }
 }
 
