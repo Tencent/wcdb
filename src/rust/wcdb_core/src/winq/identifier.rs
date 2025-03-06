@@ -4,6 +4,7 @@ use crate::utils::ToCow;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier;
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use num_derive::FromPrimitive;
 use std::ffi::{c_char, c_long, c_void};
 use std::fmt::Debug;
 
@@ -12,7 +13,7 @@ extern "C" {
     pub fn WCDBRustWinq_isWriteStatement(statement: *mut c_void) -> bool;
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, FromPrimitive)]
 #[repr(i32)]
 pub enum CPPType {
     Invalid = 0,

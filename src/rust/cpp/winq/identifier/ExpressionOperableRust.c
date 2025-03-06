@@ -23,6 +23,7 @@
 #include "ExpressionOperatableBridge.h"
 
 #include <alloca.h>
+#include <stdint.h>
 
 // jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand,
 // jboolean isNot)
@@ -90,7 +91,7 @@ void* WCDBRustExpressionOperableClassMethod(inTableOperate,
                                             bool isNot) {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
-    operand_common.intValue = operand;
+    operand_common.intValue = (long long)(uintptr_t)operand;
     void* ret = (void*)WCDBExpressionInTableOperate2(operand_common, table, isNot).innerValue;
     return ret;
 }

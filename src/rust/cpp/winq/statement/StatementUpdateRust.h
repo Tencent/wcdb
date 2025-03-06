@@ -41,16 +41,17 @@ void WCDBRustStatementUpdateClassMethod(configTable,
                                         void* self,
                                         WCDBRustObjectOrStringParameter(table));
 
-// void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action);
-// void WCDBRustStatementUpdateClassMethod(configColumns,
-//                                        jlong self,
-//                                        WCDBRustObjectOrStringArrayParameter(columns));
-// void WCDBRustStatementUpdateClassMethod(configValue, jlong self,
-// WCDBRustCommonValueParameter(value)); void
-// WCDBRustStatementUpdateClassMethod(configColumnsToValues,
-//                                        jlong self,
-//                                        WCDBRustObjectOrStringArrayParameter(columns),
-//                                        WCDBRustMultiTypeArrayParameter(values));
+void WCDBRustStatementUpdateClassMethod(configConfliction, void* self, int action);
+void WCDBRustStatementUpdateClassMethod(configColumns,
+                                        void* self,
+                                        WCDBRustObjectOrStringArrayParameter(columns));
+void WCDBRustStatementUpdateClassMethod(configValue,
+                                        void* self,
+                                        WCDBRustCommonValueParameter(value));
+// void WCDBRustStatementUpdateClassMethod(configColumnsToValues,
+//                                         void* self,
+//                                         WCDBRustObjectOrStringArrayParameter(columns),
+//                                         WCDBRustMultiTypeArrayParameter(values));
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
                                         void* self,
                                         WCDBRustObjectOrStringArrayParameter(columns));

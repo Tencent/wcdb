@@ -1,3 +1,4 @@
+use crate::winq::column_type::ColumnType;
 use std::any::Any;
 
 /// support : i8、i16、i32、i64、f32、f64、bool、String、&str
@@ -7,6 +8,7 @@ pub trait WCDBBasicTypes: 'static {
     fn get_i64(&self) -> i64;
     fn get_f64(&self) -> f64;
     fn get_string(&self) -> String;
+    fn get_type(&self) -> ColumnType;
 }
 impl WCDBBasicTypes for i8 {
     fn get_value(&self) -> i8 {
@@ -39,6 +41,10 @@ impl WCDBBasicTypes for i8 {
     fn get_string(&self) -> String {
         let value = self.get_value();
         format!("{}", value)
+    }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Integer
     }
 }
 impl WCDBBasicTypes for i16 {
@@ -73,6 +79,10 @@ impl WCDBBasicTypes for i16 {
         let value = self.get_value();
         format!("{}", value)
     }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Integer
+    }
 }
 impl WCDBBasicTypes for i32 {
     fn get_value(&self) -> i32 {
@@ -105,6 +115,10 @@ impl WCDBBasicTypes for i32 {
     fn get_string(&self) -> String {
         let value = self.get_value();
         format!("{}", value)
+    }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Integer
     }
 }
 impl WCDBBasicTypes for i64 {
@@ -139,6 +153,10 @@ impl WCDBBasicTypes for i64 {
         let value = self.get_value();
         format!("{}", value)
     }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Integer
+    }
 }
 impl WCDBBasicTypes for f32 {
     fn get_value(&self) -> f32 {
@@ -172,6 +190,10 @@ impl WCDBBasicTypes for f32 {
         let value = self.get_value();
         format!("{}", value)
     }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Float
+    }
 }
 impl WCDBBasicTypes for f64 {
     fn get_value(&self) -> f64 {
@@ -204,6 +226,10 @@ impl WCDBBasicTypes for f64 {
     fn get_string(&self) -> String {
         let value = self.get_value();
         format!("{}", value)
+    }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Float
     }
 }
 impl WCDBBasicTypes for bool {
@@ -245,6 +271,10 @@ impl WCDBBasicTypes for bool {
             "false".to_string()
         }
     }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Integer
+    }
 }
 impl WCDBBasicTypes for String {
     fn get_value(&self) -> String {
@@ -269,6 +299,10 @@ impl WCDBBasicTypes for String {
 
     fn get_string(&self) -> String {
         self.get_value()
+    }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Text
     }
 }
 impl WCDBBasicTypes for &'static str {
@@ -295,5 +329,9 @@ impl WCDBBasicTypes for &'static str {
     fn get_string(&self) -> String {
         let value = self.get_value();
         value.to_string()
+    }
+
+    fn get_type(&self) -> ColumnType {
+        ColumnType::Text
     }
 }

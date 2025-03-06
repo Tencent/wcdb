@@ -1,14 +1,15 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::orm::field::Field;
+use crate::winq::column::Column;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_int, c_void, CString};
+use std::ffi::{c_char, c_int, c_longlong, c_void, CString};
 use std::fmt::Debug;
-use std::os::raw::c_long;
-use std::ptr::null_mut;
+use std::os::raw::{c_double, c_long};
+use std::ptr::{null, null_mut};
 
 extern "C" {
     fn WCDBRustStatementUpdate_create() -> *mut c_void;
@@ -43,6 +44,7 @@ extern "C" {
         config_type: c_int,
         offset: c_long,
     );
+    fn WCDBRustStatementUpdate_configConfliction(cpp_obj: *mut c_void, action: c_int);
 }
 
 #[derive(Debug)]
@@ -118,7 +120,7 @@ impl StatementUpdate {
                 self.get_cpp_obj(),
                 CPPType::Column as i32,
                 c_void_vec.as_ptr(),
-                std::ptr::null(),
+                null(),
                 columns_void_vec_len,
             );
         }

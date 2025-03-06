@@ -49,43 +49,40 @@ void WCDBRustStatementUpdateClassMethod(configTable,
     WCDBStatementUpdateConfigTable2(selfStruct, table_common);
 }
 
-//
-// void WCDBRustStatementUpdateClassMethod(configConfliction, jlong self, jint action)
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBStatementUpdateConfigConfiction(selfStruct, action);
-//}
-//
-// void WCDBRustStatementUpdateClassMethod(configColumns,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns))
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-//    columns, WCDBStatementUpdateConfigColumns2(selfStruct, columns_commonArray));
-//}
-//
-// void WCDBRustStatementUpdateClassMethod(configValue, jlong self,
-// WCDBRustCommonValueParameter(value))
-//{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustCreateCommonValue(value, true);
-//    WCDBStatementUpdateConfigValue2(selfStruct, value_common);
-//    WCDBRustTryReleaseStringInCommonValue(value);
-//}
-//
+void WCDBRustStatementUpdateClassMethod(configConfliction, void* self, int action) {
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBStatementUpdateConfigConfiction(selfStruct, action);
+}
+
+void WCDBRustStatementUpdateClassMethod(configColumns,
+                                        void* self,
+                                        WCDBRustObjectOrStringArrayParameter(columns)) {
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
+        columns, WCDBStatementUpdateConfigColumns2(selfStruct, columns_commonArray));
+}
+
+void WCDBRustStatementUpdateClassMethod(configValue,
+                                        void* self,
+                                        WCDBRustCommonValueParameter(value)) {
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBRustCreateCommonValue(value);
+    WCDBStatementUpdateConfigValue2(selfStruct, value_common);
+}
+
 // void WCDBRustStatementUpdateClassMethod(configColumnsToValues,
-//                                       jlong self,
-//                                       WCDBRustObjectOrStringArrayParameter(columns),
-//                                       WCDBRustMultiTypeArrayParameter(values))
+//                                         void* self,
+//                                         WCDBRustObjectOrStringArrayParameter(columns),
+//                                         WCDBRustMultiTypeArrayParameter(values))
 //{
-//    WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//    WCDBRustCreateMultiTypeArray(values);
-//    WCDBRustCreateObjectOrStringArrayCriticalWithAction(
-//    columns, WCDBStatementUpdateConfigColumnsToValues(selfStruct, columns_commonArray,
-//    valuesArray)); WCDBRustReleaseMultiTypeArray(values);
-//}
-//
+//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
+//     WCDBRustCreateMultiTypeArray(values);
+//     WCDBRustCreateObjectOrStringArrayCriticalWithAction(
+//         columns,
+//         WCDBStatementUpdateConfigColumnsToValues(selfStruct, columns_commonArray, valuesArray));
+//     WCDBRustReleaseMultiTypeArray(values);
+// }
+
 void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
                                         void* self,
                                         WCDBRustObjectOrStringArrayParameter(columns)) {

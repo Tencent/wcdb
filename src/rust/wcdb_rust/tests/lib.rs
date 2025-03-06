@@ -1,4 +1,5 @@
 pub(crate) mod base;
+mod core;
 pub(crate) mod crud;
 pub(crate) mod database;
 pub(crate) mod db_corrupted;

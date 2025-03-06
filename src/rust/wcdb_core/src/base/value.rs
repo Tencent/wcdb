@@ -1,6 +1,4 @@
 use crate::winq::column_type::ColumnType;
-use std::fmt::Display;
-use std::hash::Hash;
 use std::str::from_utf8;
 
 #[derive(Debug, Clone)]
@@ -25,10 +23,18 @@ impl From<bool> for Value {
     }
 }
 
-impl From<i32> for Value {
-    fn from(value: i32) -> Self {
+impl From<i64> for Value {
+    fn from(value: i64) -> Self {
         Self {
-            value: ValueObject::Long(value as i64),
+            value: ValueObject::Long(value),
+        }
+    }
+}
+
+impl From<f64> for Value {
+    fn from(value: f64) -> Self {
+        Self {
+            value: ValueObject::Double(value),
         }
     }
 }

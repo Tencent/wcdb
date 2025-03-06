@@ -1,12 +1,11 @@
 use crate::base::base_test_case::TestCaseTrait;
 use crate::base::database_test_case::DatabaseTestCase;
-use crate::base::test_object::{DbTestObject, TestObject, DBTESTOBJECT_INSTANCE};
+use crate::base::test_object::{TestObject, DBTESTOBJECT_INSTANCE};
 use lazy_static::lazy_static;
 use std::sync::{Arc, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::Database;
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
-use wcdb_core::core::table::Table;
 
 pub trait SelectingObjectOperationTrait {
     fn execute() -> Vec<TestObject>;
@@ -39,6 +38,14 @@ impl TableTestCase {
     pub fn new() -> Self {
         TableTestCase {
             table_name: "testTable".to_string(),
+            data_base_test_case: DatabaseTestCase::new(),
+            is_virtual_table: false,
+        }
+    }
+
+    pub fn new_with_table_name(table_name: &str) -> Self {
+        TableTestCase {
+            table_name: table_name.to_string(),
             data_base_test_case: DatabaseTestCase::new(),
             is_virtual_table: false,
         }

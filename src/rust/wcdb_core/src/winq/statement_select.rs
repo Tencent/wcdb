@@ -2,6 +2,7 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::orm::field::Field;
 use crate::utils::ToCString;
+use crate::winq::column::Column;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
@@ -155,6 +156,31 @@ impl StatementSelect {
         for field in fields {
             types_vec.push(Identifier::get_cpp_type((*field).get_column()));
             cpp_obj_vec.push((*field).get_cpp_obj());
+        }
+
+        unsafe {
+            WCDBRustStatementSelect_configResultColumns(
+                self.get_cpp_obj(),
+                types_vec.as_ptr(),
+                cpp_obj_vec.as_ptr(),
+                std::ptr::null(),
+                std::ptr::null(),
+                types_vec.len(),
+            );
+        }
+        self
+    }
+
+    pub fn select_columns(&self, columns: &Vec<&Column>) -> &Self {
+        if columns.is_empty() {
+            return self;
+        }
+
+        let mut types_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for column in columns {
+            types_vec.push(CPPType::Column as i32);
+            cpp_obj_vec.push(column.get_cpp_obj());
         }
 
         unsafe {
