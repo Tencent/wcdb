@@ -70,8 +70,8 @@ impl<T> BackupFilterCallbackTrait for T where T: Fn(&str) -> bool + Send {}
 pub type BackupFilterCallback = Box<dyn BackupFilterCallbackTrait>;
 
 // return True to continue current operation.
-pub trait ProgressMonitorTrait: Fn(f64, f64) -> bool + Send {}
-impl<T> ProgressMonitorTrait for T where T: Fn(f64, f64) -> bool + Send {}
+pub trait ProgressMonitorTrait: Fn(/*percentage*/f64, /*increment*/f64) -> bool + Send {}
+impl<T> ProgressMonitorTrait for T where T: Fn(/*percentage*/ f64, /*increment*/ f64) -> bool + Send {}
 pub type ProgressMonitorTraitCallback = Box<dyn ProgressMonitorTrait>;
 
 // 定义一个全局静态变量来存储闭包
@@ -1220,7 +1220,7 @@ impl Database {
             },
             Some(cb) => {
                 let callback_box = Box::new(cb) as TraceExceptionCallback;
-                *GLOBAL_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = Some(callback_box);
+                *DATABASE_TRACE_EXCEPTION_CALLBACK.lock().unwrap() = Some(callback_box);
                 unsafe {
                     WCDBRustDatabase_traceException(self.get_cpp_obj(), trace_exception_callback);
                 }
