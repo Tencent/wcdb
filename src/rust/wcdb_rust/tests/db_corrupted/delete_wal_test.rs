@@ -230,6 +230,7 @@ pub mod delete_wal_test {
         if !has_back_up {
             // 第一次插入 100 个数据
             delete_wal_test.setup(data_num);
+            // 主动备份
             delete_wal_test.database.backup().unwrap();
             assert_eq!(delete_wal_test.get_all_objects().len() as i32, data_num);
             // 把 wal shm 数据写回 db 文件，确保删除 wal shm 可以正常恢复数据
@@ -260,5 +261,57 @@ pub mod delete_wal_test {
         }
     }
 
-    // todo qixinbing 自动回写用例
+    // wal shm 回写主库之后，不管有没有开启备份，删除 wal shm，都可以正常恢复数据库
+    // 设置自动回写之后，超过 page_size 的 wal shm 文件，会自动回写主库，这部分数据不会丢
+    // 低于 page_size 的数据是存在 wal shm 文件中，需要手动回写主库，才能恢复数据，不会写则会丢失
+    // 第一次写入数据并关闭
+    // 第二次删除 wal，恢复数据库，并验证之前的数据恢复
+    // #[test] // todo qixinbing: 本地运行正常，ci 运行卡死，原因待查
+    pub fn test_retrieve_delete_wal_write_back_success() {
+        let db_name = "db_for_retrieve_delete_wal_page_size_success.db";
+        let delete_wal_test = DeleteWalTest::new(db_name, false);
+
+        // 100 * 4k = 400k，即超过 400k 的 wal shm 文件，会自动回写主库
+        let page_size = 100;
+        let sql = format!("PRAGMA wal_autocheckpoint={};", page_size);
+        delete_wal_test.database.execute_sql(sql.as_str()).unwrap();
+
+        let data_num = 1000;
+        delete_wal_test.setup(data_num);
+
+        // 第一次只插入 1000 个数据
+        if delete_wal_test.get_all_objects().len() <= (data_num as usize) {
+            return;
+        }
+
+        println!(
+            "database retrieve count before {}",
+            delete_wal_test.get_all_objects().len()
+        );
+
+        // 第二次运行手动删除 wal shm 文件，并验证是否恢复成功
+        delete_wal_test.delete_wal();
+        delete_wal_test
+            .database
+            .retrieve(Some(move |percentage: f64, increment: f64| {
+                println!(
+                    "Database retrieve percentage:{} , increment:{}",
+                    percentage, increment
+                );
+                if percentage >= 1.0 {
+                    println!("Database retrieve complete");
+                }
+                true
+            }))
+            .unwrap();
+
+        delete_wal_test.insert_objects(data_num);
+        println!(
+            "database retrieve count after {}",
+            delete_wal_test.get_all_objects().len()
+        );
+        assert_eq!(delete_wal_test.get_all_objects().len() as i32, data_num * 2);
+
+        delete_wal_test.teardown(true);
+    }
 }
