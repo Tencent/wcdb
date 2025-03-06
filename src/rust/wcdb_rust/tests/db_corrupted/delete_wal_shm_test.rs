@@ -69,14 +69,12 @@ impl DeleteWalTest {
         true
     }
 
-    pub fn delete_wal(&self) {
+    pub fn delete_wal_shm(&self) {
         let path = format!("./target/tmp/{}-wal", self.db_name);
         if std::path::Path::new(path.as_str()).exists() {
             std::fs::remove_file(path.as_str()).unwrap();
         }
-    }
 
-    pub fn delete_shm(&self) {
         let path = format!("./target/tmp/{}-shm", self.db_name);
         if std::path::Path::new(path.as_str()).exists() {
             std::fs::remove_file(path.as_str()).unwrap();
@@ -96,7 +94,7 @@ impl DeleteWalTest {
 
 #[cfg(test)]
 pub mod delete_wal_test {
-    use crate::db_corrupted::delete_wal_test::DeleteWalTest;
+    use crate::db_corrupted::delete_wal_shm_test::DeleteWalTest;
     use wcdb_core::base::wcdb_exception::WCDBException;
     use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
 
@@ -182,7 +180,7 @@ pub mod delete_wal_test {
             assert_eq!(delete_wal_test.get_all_objects().len() as i32, data_num);
             delete_wal_test.database.backup().unwrap();
         } else {
-            delete_wal_test.delete_wal();
+            delete_wal_test.delete_wal_shm();
 
             // 主动删除 wal 之后验证可以正常插入和查询数据
             delete_wal_test.insert_objects(data_num);
@@ -238,7 +236,7 @@ pub mod delete_wal_test {
             let sql = "PRAGMA wal_checkpoint(FULL);";
             delete_wal_test.database.execute_sql(sql).unwrap();
         } else {
-            delete_wal_test.delete_wal();
+            delete_wal_test.delete_wal_shm();
             delete_wal_test
                 .database
                 .retrieve(Some(move |percentage: f64, increment: f64| {
@@ -272,6 +270,7 @@ pub mod delete_wal_test {
         let delete_wal_test = DeleteWalTest::new(db_name, false);
 
         // 100 * 4k = 400k，即超过 400k 的 wal shm 文件，会自动回写主库
+        // 默认应该设置为 1000，可以根据设备硬件动态调整，比如低端硬件可以降低 page_size
         let page_size = 100;
         let sql = format!("PRAGMA wal_autocheckpoint={};", page_size);
         delete_wal_test.database.execute_sql(sql.as_str()).unwrap();
@@ -290,7 +289,7 @@ pub mod delete_wal_test {
         );
 
         // 第二次运行手动删除 wal shm 文件，并验证是否恢复成功
-        delete_wal_test.delete_wal();
+        delete_wal_test.delete_wal_shm();
         delete_wal_test
             .database
             .retrieve(Some(move |percentage: f64, increment: f64| {
