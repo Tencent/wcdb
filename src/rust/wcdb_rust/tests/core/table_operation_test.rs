@@ -58,16 +58,14 @@ pub mod table_operation_test_case {
     use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
 
     pub fn setup() {
-        println!("test_insert: -2");
         let arc_clone = Arc::clone(&TABLE_OPERATION_TEST);
-        let arc_test = arc_clone.write().expect("test read failure");
+        let arc_test = arc_clone.read().expect("test read failure");
         arc_test.setup().expect("setup failure");
-        println!("test_insert: -1");
     }
     pub fn teardown() {
         println!("test_insert: 111");
         let arc_clone = Arc::clone(&TABLE_OPERATION_TEST);
-        let arc_test = arc_clone.write().expect("test read failure");
+        let arc_test = arc_clone.read().expect("test read failure");
         arc_test.teardown().expect("teardown failure");
         println!("test_insert: 112");
     }
@@ -84,14 +82,11 @@ pub mod table_operation_test_case {
     // #[test]
     pub fn test_insert() {
         setup();
-        println!("test_insert: 0");
         let database_arc = get_arc_database();
         let database = database_arc.read().unwrap();
 
         let ret = database.create_table(TABLE_NAME, &*DBTABLEOPERATIONOBJECT_INSTANCE);
         assert!(ret.is_ok());
-
-        println!("test_insert: 1");
 
         let operation = TableOperation::new(TABLE_NAME, &database);
         let obj = TableOperationObject::get_obj();
@@ -104,7 +99,6 @@ pub mod table_operation_test_case {
             &DbTableOperationObject::all_fields(),
         );
         assert!(ret.is_ok());
-        println!("test_insert: 2");
 
         // insert row
         let ret = operation.insert_rows(
@@ -112,8 +106,6 @@ pub mod table_operation_test_case {
             &DbTableOperationObject::all_fields(),
         );
         assert!(!ret.is_ok());
-
-        println!("test_insert: 3");
 
         // insert or replace
         let ret = operation.insert_rows_or_replace(
@@ -127,8 +119,6 @@ pub mod table_operation_test_case {
         let values = objs.iter().map(|v| v.get_values_vec()).collect();
         let ret = operation.insert_rows_or_ignore(values, &DbTableOperationObject::all_fields());
         assert!(ret.is_ok());
-
-        println!("test_insert: 4");
 
         teardown();
     }

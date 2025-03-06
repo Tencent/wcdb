@@ -190,7 +190,7 @@ impl<'a> TableOperation<'a> {
             Err(err) => Err(err),
         };
         handler.invalidate();
-        return ret;
+        ret
     }
 }
 
@@ -217,7 +217,7 @@ impl<'a> TableOperation<'a> {
         if let Some(offset) = offset {
             binding.offset(offset);
         }
-        return self.database.get_handle(true).execute(&binding);
+        self.database.get_handle(true).execute(&binding)
     }
 }
 
@@ -258,6 +258,6 @@ impl TableOperation<'_> {
 
 impl<'a> TableOperation<'a> {
     pub fn get_handle(&self, write_hint: bool) -> Handle {
-        self.database.get_handle(false)
+        self.database.get_handle(write_hint)
     }
 }
