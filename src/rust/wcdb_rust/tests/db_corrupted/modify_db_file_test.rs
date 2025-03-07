@@ -97,10 +97,22 @@ impl ModifyDbFileTest {
 
         let _ = run_cmd(cmd.as_str());
     }
+
+    pub fn has_back_up(&self) -> bool {
+        let first_material = format!("./target/tmp/{}-first.material", self.db_name);
+        let incremental_material = format!("./target/tmp/{}-incremental.material", self.db_name);
+        if !std::path::Path::new(first_material.as_str()).exists() {
+            return false;
+        }
+        if !std::path::Path::new(incremental_material.as_str()).exists() {
+            return false;
+        }
+        true
+    }
 }
 
 #[cfg(test)]
-pub mod modify_db_file_test {
+pub mod modify_db_file_test_exception {
     use crate::db_corrupted::modify_db_file_test::ModifyDbFileTest;
 
     // #[test] // todo qixinbing: 本地运行正常，ci 运行卡死，原因待查
@@ -175,5 +187,55 @@ pub mod modify_db_file_test {
             },
         ));
         modify_db_file_test.teardown(true);
+    }
+}
+
+#[cfg(test)]
+pub mod test_modify_then_backup_success {
+    use crate::db_corrupted::modify_db_file_test::ModifyDbFileTest;
+
+    // 第一次运行，写入数据并手动备份
+    // 第二次运行，修改数据库文件并恢复数据，再写入数据并验证数据库有效性
+    // 该用例：单独运行两次可以成功，直接测试所有代码，第二次会失败
+    // #[test] // todo qixinbing: 本地运行正常，ci 运行卡死，原因待查
+    pub fn test() {
+        let db_name = "test_modify_then_backup_success.db";
+        let modify_db_file_test = ModifyDbFileTest::new(db_name, true);
+        modify_db_file_test.setup();
+
+        modify_db_file_test.trace_exception("");
+
+        let data_num = 10;
+        let has_back_up = modify_db_file_test.has_back_up();
+
+        if !has_back_up {
+            modify_db_file_test.insert_objects(data_num);
+
+            modify_db_file_test.database().backup().unwrap();
+        } else {
+            modify_db_file_test.modify_db_file();
+
+            let _ = modify_db_file_test.database().retrieve(Some(
+                move |percentage: f64, increment: f64| {
+                    println!(
+                        "Database retrieve percentage:{} , increment:{}",
+                        percentage, increment
+                    );
+                    if percentage >= 1.0 {
+                        println!("Database retrieve complete");
+                    }
+                    true
+                },
+            ));
+
+            modify_db_file_test.insert_objects(data_num);
+
+            assert_eq!(
+                modify_db_file_test.get_all_objects().len() as i32,
+                data_num * 2
+            );
+
+            modify_db_file_test.teardown(true);
+        }
     }
 }

@@ -93,7 +93,7 @@ impl DeleteWalTest {
 }
 
 #[cfg(test)]
-pub mod delete_wal_test {
+pub mod delete_wal_shm_exception_test {
     use crate::db_corrupted::delete_wal_shm_test::DeleteWalTest;
     use wcdb_core::base::wcdb_exception::WCDBException;
     use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
@@ -207,6 +207,11 @@ pub mod delete_wal_test {
             delete_wal_test.teardown(true);
         }
     }
+}
+
+pub mod delete_wal_shm_success_test {
+    use crate::db_corrupted::delete_wal_shm_test::DeleteWalTest;
+    use wcdb_core::base::wcdb_exception::WCDBException;
 
     // 手动回写用例连续调用两次做完整的测试
     // 第一次写入数据，并手动回写 wal 文件
