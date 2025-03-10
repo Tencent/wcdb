@@ -18,6 +18,8 @@ impl ModifyDbFileTest {
     }
 
     pub fn modify_db_file(&self) {
+        // # 示例：破坏文件头（高风险操作）
+        // echo "Corrupted" | dd of=test.db bs=1 seek=0 count=10 conv=notrunc
         let db_path = format!("target/tmp/{}", self.test_case.db_name());
         let cmd = format!(
             "echo \"Corrupted\" | dd of={} bs=1 seek=0 count=10 conv=notrunc",
