@@ -32,15 +32,12 @@ bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement) {
     return WCDBHandleStatementPrepare(selfStruct, (CPPObject*)statement);
 }
 
-// bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, jstring sql)
-//{
-//     WCDBRustBridgeStruct(CPPHandleStatement, self);
-//     WCDBRustGetString(sql);
-//     bool ret = WCDBHandleStatementPrepareSQL(selfStruct, sqlString);
-//     WCDBRustReleaseString(sql);
-//     return ret;
-// }
-//
+bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, const char* sql) {
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    bool ret = WCDBHandleStatementPrepareSQL(selfStruct, sql);
+    return ret;
+}
+
 // bool WCDBRustHandleStatementClassMethod(checkPrepared, void* self)
 //{
 //     WCDBRustBridgeStruct(CPPHandleStatement, self);
@@ -110,11 +107,10 @@ void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index) {
 //     return index;
 // }
 //
-// jint WCDBRustHandleStatementClassMethod(getColumnType, void* self, jint index)
-//{
-//     WCDBRustBridgeStruct(CPPHandleStatement, self);
-//     return WCDBHandleStatementGetColumnType(selfStruct, index);
-// }
+int WCDBRustHandleStatementClassMethod(getColumnType, void* self, int index) {
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return WCDBHandleStatementGetColumnType(selfStruct, index);
+}
 
 long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
@@ -130,28 +126,23 @@ const char* WCDBRustHandleStatementClassMethod(getText, void* self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);
     return WCDBHandleStatementGetText(selfStruct, index);
 }
-//
-// jbyteArray WCDBRustHandleStatementClassMethod(getBLOB, void* self, jint index)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    jbyte *buffer = (jbyte *) WCDBHandleStatementGetBlob(selfStruct, index);
-//    jsize size = (jsize) WCDBHandleStatementGetColumnSize(selfStruct, index);
-//    if (buffer == NULL || size == 0) {
-//        return (*env)->NewByteArray(env, 0);
-//    }
-//    jbyteArray array = (*env)->NewByteArray(env, size);
-//    if (array != NULL) {
-//        (*env)->SetByteArrayRegion(env, array, 0, size, buffer);
-//    }
-//    return array;
-//}
-//
-// jint WCDBRustHandleStatementClassMethod(getColumnCount, void* self)
-//{
-//    WCDBRustBridgeStruct(CPPHandleStatement, self);
-//    return WCDBHandleStatementGetColumnCount(selfStruct);
-//}
-//
+
+void WCDBRustHandleStatementClassMethod(getBLOB,
+                                        void* self,
+                                        int index,
+                                        const unsigned char** data,
+                                        signed long long* dataSize) {
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    signed long long length = WCDBHandleStatementGetColumnSize(selfStruct, index);
+    *data = WCDBHandleStatementGetBlob(selfStruct, index);
+    *dataSize = length;
+}
+
+int WCDBRustHandleStatementClassMethod(getColumnCount, void* self) {
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    return WCDBHandleStatementGetColumnCount(selfStruct);
+}
+
 // jstring WCDBRustHandleStatementClassMethod(getColumnName, void* self, jint index)
 //{
 //    WCDBRustBridgeStruct(CPPHandleStatement, self);

@@ -1,4 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::base::value::Value;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
@@ -7,6 +8,7 @@ use crate::chaincall::update::Update;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTrait};
+use crate::core::prepared_statement::PreparedStatement;
 use crate::core::table::Table;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
@@ -1237,6 +1239,44 @@ impl Database {
         unsafe { WCDBRustDatabase_getTag(self.get_cpp_obj()) as i64 }
     }
 
+    pub fn get_all_rows_from_statement<T: StatementTrait>(
+        &self,
+        statement: &T,
+    ) -> WCDBResult<(Vec<Vec<Value>>)> {
+        let handle = self.get_handle(false);
+        let result = handle.prepared_with_main_statement(statement);
+        match result {
+            Ok(mut val) => {
+                // todo dengxudong 不安全的调用
+                let prepared_statement = unsafe { Arc::get_mut_unchecked(&mut val) };
+                let result = prepared_statement.get_multi_rows();
+                prepared_statement.finalize_statement();
+                if self.auto_invalidate_handle() {
+                    handle.invalidate();
+                }
+                match result {
+                    Ok(values) => {
+                        let mut rows: Vec<Vec<Value>> = Vec::with_capacity(values.len());
+                        for x in values {
+                            let mut item: Vec<Value> = Vec::with_capacity(x.len());
+                            for v in x {
+                                item.push(v.clone());
+                            }
+                            rows.push(item)
+                        }
+                        Ok(rows)
+                    }
+                    Err(error) => {
+                        return Err(error);
+                    }
+                }
+            }
+            Err(error) => {
+                return Err(error);
+            }
+        }
+    }
+
     pub fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
         let handle = self.get_handle(statement.is_write_statement());
         let mut exception_opt = None;
@@ -1264,6 +1304,28 @@ impl Database {
         match exception_opt {
             None => Ok(()),
             Some(exception) => Err(exception),
+        }
+    }
+
+    pub fn get_value_from_sql(&self, sql: &str) -> WCDBResult<Value> {
+        let handle = self.get_handle(false);
+        let result = handle.prepared_with_main_statement_and_sql(sql);
+        match result {
+            Ok(val) => {
+                let prepared_statement = Arc::clone(&val);
+                prepared_statement.step().expect("TODO: panic message");
+                if !prepared_statement.is_done() {
+                    let ret = prepared_statement.get_value(0);
+                    prepared_statement.finalize_statement();
+                    if self.auto_invalidate_handle() {
+                        handle.invalidate();
+                    }
+                    Ok(ret)
+                } else {
+                    Ok(Value::new())
+                }
+            }
+            Err(error) => Err(error),
         }
     }
 

@@ -72,16 +72,14 @@ void WCDBRustStatementSelectClassMethod(configCondition, void* self, void* condi
     WCDBRustBridgeStruct(CPPExpression, condition);
     WCDBStatementSelectConfigWhere(selfStruct, conditionStruct);
 }
-//
-// void WCDBRustStatementSelectClassMethod(configGroups,
-//                                       jlong self,
-//                                       WCDBRustMultiTypeArrayParameter(groups))
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBRustCreateMultiTypeArray(groups);
-//    WCDBStatementSelectConfigGroups2(selfStruct, groupsArray);
-//    WCDBRustReleaseMultiTypeArray(groups);
-//}
+
+void WCDBRustStatementSelectClassMethod(configGroups,
+                                        void* self,
+                                        WCDBRustMultiTypeArrayParameter(groups)) {
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBRustCreateMultiTypeArray(groups);
+    WCDBStatementSelectConfigGroups2(selfStruct, groupsArray);
+}
 //
 // void WCDBRustStatementSelectClassMethod(configHaving, jlong self, jlong expression)
 //{

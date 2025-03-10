@@ -48,6 +48,30 @@ impl Value {
         }
     }
 
+    pub fn new_long(value: i64) -> Self {
+        Value {
+            value: ValueObject::Long(value),
+        }
+    }
+
+    pub fn new_double(value: f64) -> Self {
+        Value {
+            value: ValueObject::Double(value),
+        }
+    }
+
+    pub fn new_string(value: &str) -> Self {
+        Value {
+            value: ValueObject::String(value.to_string()),
+        }
+    }
+
+    pub fn new_blob(value: Vec<u8>) -> Self {
+        Value {
+            value: ValueObject::BLOB(value),
+        }
+    }
+
     pub fn get_type(&self) -> ColumnType {
         match self.value {
             ValueObject::None => ColumnType::Null,
@@ -96,11 +120,11 @@ impl Value {
         }
     }
 
-    pub fn get_text(&self) -> &str {
+    pub fn get_text(&self) -> String {
         match &self.value {
-            ValueObject::String(val) => val,
-            ValueObject::BLOB(val) => from_utf8(&val).unwrap_or_default(),
-            _ => "",
+            ValueObject::String(val) => val.to_string(),
+            ValueObject::BLOB(val) => from_utf8(&val).unwrap_or_default().to_string(),
+            _ => "".to_string(),
         }
     }
 

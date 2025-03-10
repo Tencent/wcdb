@@ -28,7 +28,7 @@
 #define WCDBRustColumnClassMethodWithNoArg(funcName) WCDBRustClassMethodWithNoArg(Column, funcName)
 #define WCDBRustColumnClassMethod(funcName, ...) WCDBRustClassMethod(Column, funcName, __VA_ARGS__)
 
-// jlong WCDBRustColumnClassMethodWithNoArg(createAll);
+void* WCDBRustColumnClassMethodWithNoArg(createAll);
 //
 // jlong WCDBRustColumnClassMethodWithNoArg(createRowId);
 

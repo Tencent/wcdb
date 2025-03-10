@@ -35,7 +35,7 @@
 void* WCDBRustHandleStatementClassMethod(getError, void* self);
 
 bool WCDBRustHandleStatementClassMethod(prepare, void* self, void* statement);
-// bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, jstring sql);
+bool WCDBRustHandleStatementClassMethod(prepareSQL, void* self, const char* sql);
 // bool WCDBRustHandleStatementClassMethod(checkPrepared, void* self);
 bool WCDBRustHandleStatementClassMethod(step, void* self);
 
@@ -56,14 +56,18 @@ void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value,
 void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index);
 
 // jint WCDBRustHandleStatementClassMethod(bindParameterIndex, void* self, jstring parameterName);
-// jint WCDBRustHandleStatementClassMethod(getColumnType, void* self, jint index);
+int WCDBRustHandleStatementClassMethod(getColumnType, void* self, int index);
 long long WCDBRustHandleStatementClassMethod(getInteger, void* self, int index);
 
 double WCDBRustHandleStatementClassMethod(getDouble, void* self, int index);
 
 const char* WCDBRustHandleStatementClassMethod(getText, void* self, int index);
-// jbyteArray WCDBRustHandleStatementClassMethod(getBLOB, void* self, jint index);
-// jint WCDBRustHandleStatementClassMethod(getColumnCount, void* self);
+void WCDBRustHandleStatementClassMethod(getBLOB,
+                                        void* self,
+                                        int index,
+                                        const unsigned char** data,
+                                        signed long long* dataSize);
+int WCDBRustHandleStatementClassMethod(getColumnCount, void* self);
 // jstring WCDBRustHandleStatementClassMethod(getColumnName, void* self, jint index);
 // jstring WCDBRustHandleStatementClassMethod(getOriginalColumnName, void* self, jint index);
 // jstring WCDBRustHandleStatementClassMethod(getColumnTableName, void* self, jint index);

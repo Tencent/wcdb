@@ -16,6 +16,8 @@ use std::ptr::null_mut;
 
 extern "C" {
     fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;
+
+    fn WCDBRustColumn_createAll() -> *mut c_void;
 }
 
 pub struct Column {
@@ -959,6 +961,10 @@ impl ExpressionOperableTrait for Column {
             .in_object(Option::Some(operands), Self::get_type(), true)
     }
 
+    fn in_table(&self, table: &str) -> Expression {
+        self.expression_operable.in_table(Self::get_type(), table)
+    }
+
     fn collate(&self, collation: &str) -> Expression {
         self.expression_operable
             .collate(Self::get_type(), collation)
@@ -1199,6 +1205,12 @@ impl ExpressionOperableTrait for Column {
 }
 
 impl Column {
+    fn create() -> Column {
+        Column {
+            expression_operable: ExpressionOperable::new(),
+        }
+    }
+
     pub fn new(name: &str) -> Column {
         let c_name = CString::new(name).unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustColumn_createWithName(c_name.as_ptr(), null_mut()) };
@@ -1221,5 +1233,12 @@ impl Column {
 
     pub fn as_def(&self, column_type: ColumnType) -> ColumnDef {
         ColumnDef::new_with_column_type(self, column_type)
+    }
+
+    pub fn all() -> Column {
+        let mut ret = Column::create();
+        let cpp_obj = unsafe { WCDBRustColumn_createAll() };
+        ret.set_cpp_obj(cpp_obj);
+        ret
     }
 }

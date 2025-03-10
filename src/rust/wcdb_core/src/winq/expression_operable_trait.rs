@@ -402,7 +402,8 @@ pub trait ExpressionOperableTrait {
     // public <T> Expression notIn(@NotNull Set<T> operands)
     // public <T> Expression notIn(@NotNull List<T> operands)
 
-    // public Expression inTable(@NotNull String table) {
+    fn in_table(&self, table: &str) -> Expression;
+
     // Expression notInTable(@NotNull String table)
     // Expression inFunction(@NotNull String table)
     // public Expression notInFunction(@NotNull String table)

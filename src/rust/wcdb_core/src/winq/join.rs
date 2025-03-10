@@ -144,6 +144,12 @@ impl IdentifierTrait for Join {
     }
 }
 
+impl IdentifierStaticTrait for Join {
+    fn get_type() -> i32 {
+        CPPType::JoinClause as i32
+    }
+}
+
 impl Join {
     pub fn new_with_table_name(table_name: &str) -> Self {
         let cstr = table_name.to_cstring();

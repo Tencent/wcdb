@@ -82,20 +82,19 @@ void* WCDBRustExpressionOperableClassMethod(inOperate,
         ret = (void*)WCDBExpressionInOperate(operand_common, values_commonArray, isNot).innerValue);
     return ret;
 }
-//
-// jlong WCDBRustExpressionOperableClassMethod(
-// inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot)
-//{
-//    CPPCommonValue operand_common;
-//    operand_common.type = operandType;
-//    operand_common.intValue = operand;
-//    WCDBRustGetStringCritical(table);
-//    jlong ret
-//    = (jlong) WCDBExpressionInTableOperate2(operand_common, tableString, isNot).innerValue;
-//    WCDBRustReleaseStringCritical(table);
-//    return ret;
-//}
-//
+
+void* WCDBRustExpressionOperableClassMethod(inTableOperate,
+                                            int operandType,
+                                            void* operand,
+                                            const char* table,
+                                            bool isNot) {
+    CPPCommonValue operand_common;
+    operand_common.type = operandType;
+    operand_common.intValue = operand;
+    void* ret = (void*)WCDBExpressionInTableOperate2(operand_common, table, isNot).innerValue;
+    return ret;
+}
+
 // jlong WCDBRustExpressionOperableClassMethod(
 // inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot)
 //{

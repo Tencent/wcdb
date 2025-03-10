@@ -51,6 +51,13 @@ extern "C" {
         operand: *mut c_void,
         collation: *const c_char,
     ) -> *mut c_void;
+
+    fn WCDBRustExpressionOperable_inTableOperate(
+        cpp_type: c_int,
+        operand: *mut c_void,
+        table: *const c_char,
+        is_not: bool,
+    ) -> *mut c_void;
 }
 
 #[derive(Debug)]
@@ -1590,6 +1597,23 @@ impl ExpressionOperable {
         //         }
         //     }
         // }
+    }
+
+    pub fn in_table(&self, left_cpp_type: i32, table: &str) -> Expression {
+        self.in_table_inner(left_cpp_type, table, false)
+    }
+
+    fn in_table_inner(&self, left_cpp_type: i32, table: &str, is_not: bool) -> Expression {
+        let c_string = table.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inTableOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                c_string.as_ptr(),
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
     }
 
     pub fn collate(&self, left_cpp_type: i32, collation: &str) -> Expression {

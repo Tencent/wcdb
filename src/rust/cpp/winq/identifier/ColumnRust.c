@@ -22,11 +22,10 @@
 
 #include "ColumnBridge.h"
 
-// jlong WCDBRustColumnClassMethodWithNoArg(createAll)
-//{
-//     return (jlong) WCDBColumnCreateAll().innerValue;
-// }
-//
+void* WCDBRustColumnClassMethodWithNoArg(createAll) {
+    return (void*)WCDBColumnCreateAll().innerValue;
+}
+
 // jlong WCDBRustColumnClassMethodWithNoArg(createRowId)
 //{
 //     return (jlong) WCDBColumnCreateRowId().innerValue;

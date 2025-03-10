@@ -99,6 +99,23 @@ impl HandleInner {
         main_statement.prepare(statement)?;
         Ok(main_statement.clone())
     }
+
+    pub fn prepared_with_main_statement_and_sql(
+        &mut self,
+        database: &Database,
+        sql: &str,
+    ) -> WCDBResult<Arc<PreparedStatement>> {
+        if self.main_statement.is_none() {
+            let cpp_obj =
+                unsafe { WCDBRustHandle_getMainStatement(self.get_cpp_handle(database)?) };
+            let mut prepared_statement = PreparedStatement::new(cpp_obj);
+            prepared_statement.auto_finalize = true;
+            self.main_statement = Some(Arc::new(prepared_statement));
+        }
+        let main_statement = self.main_statement.as_ref().unwrap();
+        main_statement.prepare_with_sql(sql)?;
+        Ok(main_statement.clone())
+    }
 }
 
 pub struct Handle<'a> {
@@ -215,6 +232,14 @@ impl<'a> Handle<'a> {
     ) -> WCDBResult<Arc<PreparedStatement>> {
         let mut handle_inner_lock = self.handle_inner.lock().unwrap();
         handle_inner_lock.prepared_with_main_statement(self.database, statement)
+    }
+
+    pub fn prepared_with_main_statement_and_sql(
+        &self,
+        sql: &str,
+    ) -> WCDBResult<Arc<PreparedStatement>> {
+        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
+        handle_inner_lock.prepared_with_main_statement_and_sql(self.database, sql)
     }
 
     pub fn table_exist(cpp_obj: *mut c_void, table_name: &str) -> i32 {

@@ -979,6 +979,10 @@ impl ExpressionOperableTrait for Expression {
             .in_object(Option::Some(operands), Self::get_type(), true)
     }
 
+    fn in_table(&self, table: &str) -> Expression {
+        self.expression_operable.in_table(Self::get_type(), table)
+    }
+
     fn collate(&self, collation: &str) -> Expression {
         self.expression_operable
             .collate(Self::get_type(), collation)

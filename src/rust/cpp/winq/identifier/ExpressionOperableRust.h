@@ -53,8 +53,11 @@ void* WCDBRustExpressionOperableClassMethod(inOperate,
                                             WCDBRustCommonArrayParameter(values),
                                             bool isNot);
 
-// jlong WCDBRustExpressionOperableClassMethod(
-// inTableOperate, jint operandType, jlong operand, jstring table, jboolean isNot);
+void* WCDBRustExpressionOperableClassMethod(inTableOperate,
+                                            int operandType,
+                                            void* operand,
+                                            const char* table,
+                                            bool isNot);
 //
 // jlong WCDBRustExpressionOperableClassMethod(
 // inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot);
