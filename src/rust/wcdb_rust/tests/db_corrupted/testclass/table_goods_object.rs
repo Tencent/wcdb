@@ -16,7 +16,7 @@ pub struct TableGoodsObject {
 }
 
 impl TableGoodsObject {
-    fn new() -> Self {
+    pub fn new() -> Self {
         let len = 1000;
         TableGoodsObject {
             id: 0,
