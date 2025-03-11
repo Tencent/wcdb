@@ -1,6 +1,7 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
+use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
 use crate::winq::column_type::ColumnType;
 use crate::winq::expression::Expression;
@@ -11,6 +12,8 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, Identi
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::{Order, OrderingTerm};
+use crate::winq::result_column::ResultColumn;
+use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use std::ffi::{c_char, c_void, CString};
 use std::ptr::null_mut;
 
@@ -18,6 +21,8 @@ extern "C" {
     fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;
 
     fn WCDBRustColumn_createAll() -> *mut c_void;
+
+    fn WCDBRustColumn_configAlias(app_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
 }
 
 pub struct Column {
@@ -1204,6 +1209,8 @@ impl ExpressionOperableTrait for Column {
     }
 }
 
+impl ResultColumnConvertibleTrait for Column {}
+
 impl Column {
     fn create() -> Column {
         Column {
@@ -1233,6 +1240,12 @@ impl Column {
 
     pub fn as_def(&self, column_type: ColumnType) -> ColumnDef {
         ColumnDef::new_with_column_type(self, column_type)
+    }
+
+    pub fn as_(&self, alias: &str) -> ResultColumn {
+        let cstr = alias.to_cstring();
+        let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), cstr.as_ptr()) };
+        ResultColumn::new_with_cpp_obj(cpp_obj)
     }
 
     pub fn all() -> Column {

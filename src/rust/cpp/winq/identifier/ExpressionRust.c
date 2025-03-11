@@ -89,20 +89,16 @@ void WCDBRustExpressionClassMethod(distinct, void* expression) {
 //    return ret;
 //}
 //
-// void WCDBRustExpressionClassMethod(as, jlong expression, jint type)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBExpressionAs(expressionStruct, type);
-//}
-//
-// jlong WCDBRustExpressionClassMethod(configAlias, jlong expression, jstring alias)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustGetString(alias);
-//    jlong ret = (jlong) WCDBExpressionConfigAlias(expressionStruct, aliasString).innerValue;
-//    WCDBRustReleaseString(alias);
-//    return ret;
-//}
+void WCDBRustExpressionClassMethod(as, void* expression, int type) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBExpressionAs(expressionStruct, type);
+}
+
+void* WCDBRustExpressionClassMethod(configAlias, void* expression, const char* alias) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    void* ret = (void*)WCDBExpressionConfigAlias(expressionStruct, alias).innerValue;
+    return ret;
+}
 //
 // jlong WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression))
 //{

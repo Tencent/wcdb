@@ -9,6 +9,7 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, Identi
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
+use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
@@ -121,7 +122,7 @@ impl StatementSelect {
 
     pub fn select_with_result_column_convertible_trait<T>(&self, result_columns: &Vec<T>) -> &Self
     where
-        T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+        T: ResultColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
     {
         if result_columns.is_empty() {
             return self;

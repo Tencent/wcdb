@@ -49,9 +49,9 @@ void WCDBRustExpressionClassMethod(argument,
 void WCDBRustExpressionClassMethod(distinct, void* expression);
 //
 // jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression));
-// void WCDBRustExpressionClassMethod(as, jlong expression, jint type);
-//
-// jlong WCDBRustExpressionClassMethod(configAlias, jlong expression, jstring alias);
+void WCDBRustExpressionClassMethod(as, void* expression, int type);
+
+void* WCDBRustExpressionClassMethod(configAlias, void* expression, const char* alias);
 //
 // jlong WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression));
 // void WCDBRustExpressionClassMethod(setWithWhenExp,

@@ -3,6 +3,7 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
+use crate::winq::column_type::ColumnType;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::expression_operable_trait::ExpressionOperableTrait;
@@ -10,6 +11,8 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, Identi
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::literal_value::LiteralValue;
+use crate::winq::result_column::ResultColumn;
+use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement_select::StatementSelect;
 use std::ffi::{c_char, c_double, c_int, c_void};
 use std::ptr::null;
@@ -38,6 +41,9 @@ extern "C" {
     fn WCDBRustExpression_escapeWith(cpp_obj: *mut c_void, string_value: *const c_char);
 
     fn WCDBRustExpression_distinct(cpp_obj: *mut c_void);
+
+    fn WCDBRustExpression_configAlias(cpp_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
+    fn WCDBRustExpression_as(cpp_obj: *mut c_void, column_type: c_int);
 }
 
 #[derive(Debug)]
@@ -1222,6 +1228,8 @@ impl ExpressionOperableTrait for Expression {
     }
 }
 
+impl ResultColumnConvertibleTrait for Expression {}
+
 impl Expression {
     pub fn new() -> Self {
         Expression {
@@ -1395,5 +1403,16 @@ impl Expression {
             WCDBRustExpression_distinct(cpp_obj);
         }
         self
+    }
+
+    pub fn as_with_column_type(&self, column_type: ColumnType) -> &Self {
+        unsafe { WCDBRustExpression_as(self.get_cpp_obj(), column_type as c_int) };
+        &self
+    }
+
+    pub fn as_(&self, alias: &str) -> ResultColumn {
+        let cstr = alias.to_cstring();
+        let cpp_obj = unsafe { WCDBRustExpression_configAlias(self.get_cpp_obj(), cstr.as_ptr()) };
+        ResultColumn::new_with_cpp_obj(cpp_obj)
     }
 }

@@ -6,6 +6,14 @@ pub mod expression_test {
     use wcdb_core::winq::identifier::IdentifierTrait;
 
     #[test]
+    pub fn test_expression() {
+        // todo dengxudong 重要不紧急
+        // winqEqual(Column.rowId().add(1).as("rowidAddOne"), "rowid + 1 AS rowidAddOne");
+        // WinqTool::winq_equal(
+        // );
+    }
+
+    #[test]
     pub fn test_expression_binary_operation() {
         let expression_left = Expression::new_with_column(Column::new("left"));
         let expression_right = Expression::new_with_column(Column::new("right"));

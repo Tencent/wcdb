@@ -45,8 +45,8 @@ impl JoinTest {
 #[derive(WCDBTableCoding)]
 #[WCDBTable()]
 pub struct MessageTagTable {
-    #[WCDBField(is_primary = true)]
-    msg_tag_id: String,
+    #[WCDBField]
+    tag_id: String,
     #[WCDBField]
     tag_name: String,
     #[WCDBField]
@@ -55,7 +55,7 @@ pub struct MessageTagTable {
 impl MessageTagTable {
     pub fn new() -> Self {
         MessageTagTable {
-            msg_tag_id: "".to_string(),
+            tag_id: "".to_string(),
             tag_name: "".to_string(),
             create_time: 0,
         }
@@ -116,6 +116,7 @@ pub mod join_test {
     use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
     use wcdb_core::winq::identifier::IdentifierTrait;
     use wcdb_core::winq::join::Join;
+    use wcdb_core::winq::result_column::ResultColumn;
     use wcdb_core::winq::statement_select::StatementSelect;
 
     #[test]
@@ -394,13 +395,13 @@ pub mod join_test {
 
         // 插入数据
         let mut tag = MessageTagTable::new();
-        tag.msg_tag_id = "10001".to_string();
+        tag.tag_id = "10001".to_string();
         tag.tag_name = "10001_name".to_string();
         tag.create_time = 1790000000;
         let _ = message_tag_table.insert_object(tag, DbMessageTagTable::all_fields());
 
         let mut tag = MessageTagTable::new();
-        tag.msg_tag_id = "10002".to_string();
+        tag.tag_id = "10002".to_string();
         tag.tag_name = "10002_name".to_string();
         tag.create_time = 1790000001;
         let ret = message_tag_table.insert_object(tag, DbMessageTagTable::all_fields());
@@ -422,10 +423,10 @@ pub mod join_test {
             .insert_object(conversation, DbConversationTagTable::all_fields());
 
         // 连表查询
-        let column_vec: Vec<Column> = vec![
-            Column::new("msg_tag_id"),
-            Column::new("tag_name"),
-            Column::new("create_time"),
+        let column_vec = vec![
+            ResultColumn::new_with_column_name("tag_id").as_("a_tag_id"),
+            ResultColumn::new_with_column_name("tag_name"),
+            ResultColumn::new_with_column_name("create_time"),
         ];
         let binding = StatementSelect::new();
         let tag_statement = binding
@@ -444,18 +445,14 @@ pub mod join_test {
             .from("ConversationTagTable");
 
         // 构建 join
-        let column1 = Column::new("msg_tag_id");
+        let column1 = Column::new("a_tag_id");
         let column2 = Column::new("tag_id");
         let join = Join::new_with_table_or_subquery_convertible(tag_statement);
         join.left_join_with_table_or_subquery_convertible(conversation_statement)
             .on(&column1.eq_expression_convertible(&column2));
-        // todo dengxudong 两个表同名字段问题
-        // .on(&column1
-        //     .in_table("MessageTagTable")
-        //     .eq_expression_convertible(&column2.in_table("ConversationTagTable")));
 
         // 构建查询需要的 StatementSelect
-        let column_tag_id = Column::new("msg_tag_id");
+        let column_tag_id = Column::new("tag_id");
         column_tag_id.in_table("MessageTagTable");
         let select = StatementSelect::new();
         select
@@ -464,8 +461,9 @@ pub mod join_test {
         // .group_by_with_expression_convertible_trait(&vec![column_tag_id]);
 
         let sql = select.get_description();
+
         assert_eq!(sql,
-        "SELECT * FROM ((SELECT msg_tag_id, tag_name, create_time FROM MessageTagTable) LEFT JOIN (SELECT tag_id, target_id, category_id, is_top FROM ConversationTagTable) ON msg_tag_id == tag_id)");
+        "SELECT * FROM ((SELECT tag_id AS a_tag_id, tag_name, create_time FROM MessageTagTable) LEFT JOIN (SELECT tag_id, target_id, category_id, is_top FROM ConversationTagTable) ON a_tag_id == tag_id)");
 
         let ret: WCDBResult<Vec<Vec<Value>>> = database.get_all_rows_from_statement(&select);
         let mut select_result_vec: Vec<SelectResult> = Vec::new();
@@ -476,7 +474,7 @@ pub mod join_test {
                     let mut tag = MessageTagTable::new();
                     let mut conversation = ConversationTagTable::new();
                     for v in x {
-                        tag.msg_tag_id = v.get_text();
+                        tag.tag_id = v.get_text();
                         tag.tag_name = v.get_text();
                         tag.create_time = v.get_long();
 
