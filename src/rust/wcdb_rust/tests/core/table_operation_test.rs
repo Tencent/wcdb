@@ -6,6 +6,7 @@ use std::sync::{Arc, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 
 static TABLE_NAME: &'static str = "table_option_test_case";
+static TABLE_NAME_X: &'static str = "table_option_test_case_x";
 
 pub struct TableOperationTest {
     table_test_case: TableTestCase,

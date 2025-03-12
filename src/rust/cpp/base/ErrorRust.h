@@ -33,4 +33,4 @@ int WCDBRustErrorClassMethod(getCode, void* error);
 
 const char* WCDBRustErrorClassMethod(getMessage, void* error);
 
-void WCDBRustErrorObjectMethod(enumerateInfo, void* error);
+void WCDBRustErrorObjectMethod(enumerateInfo, void* map, void* error);

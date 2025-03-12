@@ -65,8 +65,8 @@ void WCDBRustErrorEnumerateInfoCallback(void* context, const char* key, CPPCommo
     WCDBExceptionAddInfo(context, key, value.type, intValue, doubleValue, stringValue);
 }
 
-void WCDBRustErrorObjectMethod(enumerateInfo, void* error) {
+void WCDBRustErrorObjectMethod(enumerateInfo, void* map, void* error) {
     WCDBRustBridgeStruct(CPPError, error);
-    WCDBErrorEnumerateAllInfo(errorStruct, error,
+    WCDBErrorEnumerateAllInfo(errorStruct, map,
                               (StringViewMapEnumerator)&WCDBRustErrorEnumerateInfoCallback);
 }

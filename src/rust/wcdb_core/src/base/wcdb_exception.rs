@@ -1,13 +1,16 @@
 use crate::utils::ToCow;
+use num_derive::FromPrimitive;
+use num_traits::FromPrimitive;
 use std::collections::HashMap;
 use std::ffi::{c_char, c_void};
 use std::fmt::{Debug, Display, Formatter};
+use std::ops::Deref;
 
 extern "C" {
     fn WCDBRustError_getLevel(cpp_obj: *mut c_void) -> i32;
     fn WCDBRustError_getCode(cpp_obj: *mut c_void) -> i32;
     fn WCDBRustError_getMessage(cpp_obj: *mut c_void) -> *const c_char;
-    fn WCDBRustError_enumerateInfo(cpp_obj: *mut c_void);
+    fn WCDBRustError_enumerateInfo(map: *mut c_void, cpp_obj: *mut c_void);
 }
 
 #[no_mangle]
@@ -19,11 +22,11 @@ pub extern "C" fn WCDBExceptionAddInfo(
     double_value: f64,
     string_value: *const c_char,
 ) {
-    let key = unsafe { key.to_cow() };
+    let key = key.to_cow();
     let value = match value_type {
         3 => ExceptionObject::Long(int_value),
         5 => ExceptionObject::Double(double_value),
-        6 => ExceptionObject::String(unsafe { string_value.to_cow().to_string() }),
+        6 => ExceptionObject::String(string_value.to_cow().to_string()),
         _ => return,
     };
     let key_values: &mut HashMap<String, ExceptionObject> =
@@ -143,6 +146,7 @@ impl ExceptionCode {
     }
 }
 
+#[derive(Debug, PartialEq, FromPrimitive)]
 pub enum ExceptionExtendCode {
     ErrorMissingCollseq = 257,       // CodeError | (1 << 8)
     ErrorRetry = 513,                // Code.Error | (2 << 8)
@@ -274,14 +278,6 @@ impl WCDBException {
             WCDBException::WCDBNormalException(ExceptionInner::new(level, code, cpp_obj))
         }
     }
-
-    pub fn message(&self) -> String {
-        match self {
-            WCDBException::WCDBNormalException(inner) => inner.message(),
-            WCDBException::WCDBInterruptException(inner) => inner.message(),
-            WCDBException::WCDBCorruptOrIOException(inner) => inner.message(),
-        }
-    }
 }
 
 pub struct ExceptionInner {
@@ -315,9 +311,13 @@ impl ExceptionInner {
             ExceptionKey::Message.to_string(),
             ExceptionObject::String(message.to_cow().to_string()),
         );
+        let key_values_ptr: *mut c_void = Box::into_raw(Box::new(key_values)) as *mut c_void;
         unsafe {
-            WCDBRustError_enumerateInfo(cpp_obj);
+            WCDBRustError_enumerateInfo(key_values_ptr, cpp_obj);
         }
+        let key_values_box =
+            unsafe { Box::from_raw(key_values_ptr as *mut HashMap<String, ExceptionObject>) };
+        let key_values = *key_values_box;
         ExceptionInner {
             level,
             code,
@@ -325,16 +325,80 @@ impl ExceptionInner {
         }
     }
 
-    pub fn message(&self) -> String {
-        let exception_obj_opt = self.key_values.get(&ExceptionKey::Message.to_string());
-        if exception_obj_opt.is_none() {
-            return String::new();
+    pub fn tag(&self) -> i64 {
+        match self.key_values.get(&ExceptionKey::Tag.to_string()) {
+            Some(obj) => match obj {
+                ExceptionObject::Long(value) => *value,
+                _ => 0,
+            },
+            None => 0,
         }
-        let exception_obj = exception_obj_opt.unwrap();
-        match exception_obj {
-            ExceptionObject::Long(value) => value.to_string(),
-            ExceptionObject::Double(value) => value.to_string(),
-            ExceptionObject::String(value) => value.to_string(),
+    }
+
+    pub fn extend_code(&self) -> ExceptionExtendCode {
+        match self.key_values.get(&ExceptionKey::ExtendedCode.to_string()) {
+            Some(obj) => match obj {
+                ExceptionObject::Long(value) => {
+                    ExceptionExtendCode::from_i64(*value).unwrap_or(ExceptionExtendCode::Unknown)
+                }
+                _ => ExceptionExtendCode::Unknown,
+            },
+            None => ExceptionExtendCode::Unknown,
+        }
+    }
+
+    pub fn message(&self) -> String {
+        self.get_value_string_for_key(ExceptionKey::Message)
+    }
+
+    pub fn sql(&self) -> String {
+        self.get_value_string_for_key(ExceptionKey::SQL)
+    }
+
+    pub fn path(&self) -> String {
+        self.get_value_string_for_key(ExceptionKey::Path)
+    }
+
+    pub fn get_description(&self) -> String {
+        let mut message = format!("Code: {}", self.code as i32);
+        for (key, value) in &self.key_values {
+            let value_string = match value {
+                ExceptionObject::Long(value) => value.to_string(),
+                ExceptionObject::Double(value) => value.to_string(),
+                ExceptionObject::String(value) => value.to_string(),
+            };
+            message.push_str(&format!("; {}: {}", key, value_string));
+        }
+        message
+    }
+
+    fn get_value_string_for_key(&self, key: ExceptionKey) -> String {
+        match self.key_values.get(&key.to_string()) {
+            Some(obj) => match obj {
+                ExceptionObject::Long(value) => value.to_string(),
+                ExceptionObject::Double(value) => value.to_string(),
+                ExceptionObject::String(value) => value.to_string(),
+            },
+            None => "".to_string(),
+        }
+    }
+
+    pub fn to_string_for_log(&self) -> String {
+        format!(
+            "[WCDB] [{}] {}",
+            self.level.to_str(),
+            self.get_description()
+        )
+    }
+}
+impl Deref for WCDBException {
+    type Target = ExceptionInner;
+
+    fn deref(&self) -> &Self::Target {
+        match self {
+            WCDBException::WCDBNormalException(inner) => inner,
+            WCDBException::WCDBInterruptException(inner) => inner,
+            WCDBException::WCDBCorruptOrIOException(inner) => inner,
         }
     }
 }
