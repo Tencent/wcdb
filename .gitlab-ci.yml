@@ -1,4 +1,4 @@
-image: "harbor.rongcloud.net/library/rust/wcdb:0.1.3"
+image: "harbor.rongcloud.net/library/rust/wcdb:0.1.4"
 
 cache:
   paths:
