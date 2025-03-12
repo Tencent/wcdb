@@ -23,6 +23,8 @@
 #include "DatabaseBridge.h"
 #include "WCDBRust.h"
 
+#include <stdint.h>
+
 // #define WCDBRustDatabaseFuncName(funcName) WCDBRust(Database, funcName)
 // #def ine WCDBRustDatabaseObjectMethod(funcName, ...)                             \
 //    WCDBRustObjectMethod(Database, funcName, __VA_ARGS__)
@@ -57,8 +59,13 @@ void WCDBRustDatabaseClassMethod(blockade, void* self);
 void WCDBRustDatabaseClassMethod(unblockade, void* self);
 // void WCDBRustDatabaseClassMethod(purge, jlong self);
 //
-// void WCDBRustDatabaseClassMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize,
-// jint cipherVersion); void WCDBRustDatabaseClassMethod( config, jlong self, jstring name, jobject
+void WCDBRustDatabaseClassMethod(configCipher,
+                                 void* self,
+                                 uint8_t* cipherKey,
+                                 size_t len,
+                                 int pageSize,
+                                 int cipherVersion);
+// void WCDBRustDatabaseClassMethod( config, jlong self, jstring name, jobject
 // invocation, jobject unInvocation, jint priority);
 //
 // void WCDBRustDatabaseClassMethod(enableLiteMode, jlong self, jboolean enable);

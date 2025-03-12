@@ -25,3 +25,6 @@
 void* WCDBRustCoreClassMethod(createDatabase, const char* path) {
     return (void*)WCDBCoreCreateDatabase(path).innerValue;
 }
+void WCDBRustCoreClassMethod(setDefaultCipherConfig, int version) {
+    WCDBCoreSetDefaultCipherConfig(version);
+}

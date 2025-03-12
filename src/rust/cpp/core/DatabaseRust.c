@@ -147,15 +147,15 @@ void WCDBRustDatabaseClassMethod(unblockade, void* self) {
 //     WCDBDatabasePurge(selfStruct);
 // }
 //
-// void WCDBRustDatabaseClassMethod(configCipher, jlong self, jbyteArray cipherKey, jint pageSize,
-// jint cipherVersion)
-//{
-//     WCDBRustBridgeStruct(CPPDatabase, self);
-//     WCDBRustGetByteArrayCritical(cipherKey);
-//     WCDBDatabaseConfigCipher(
-//     selfStruct, cipherKeyArray, cipherKeyLength, pageSize, cipherVersion);
-//     WCDBRustReleaseByteArrayCritical(cipherKey);
-// }
+void WCDBRustDatabaseClassMethod(configCipher,
+                                 void* self,
+                                 uint8_t* cipherKey,
+                                 size_t len,
+                                 int pageSize,
+                                 int cipherVersion) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseConfigCipher(selfStruct, cipherKey, len, pageSize, cipherVersion);
+}
 //
 // bool WCDBRustDatabaseConfig(jobject config, CPPHandle handle)
 //{

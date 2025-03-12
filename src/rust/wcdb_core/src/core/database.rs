@@ -8,7 +8,6 @@ use crate::chaincall::update::Update;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTrait};
-use crate::core::prepared_statement::PreparedStatement;
 use crate::core::table::Table;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
@@ -18,7 +17,7 @@ use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_drop_table::StatementDropTable;
 use lazy_static::lazy_static;
-use std::ffi::{c_char, c_double, c_void, CStr, CString};
+use std::ffi::{c_char, c_double, c_int, c_void, CStr, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
 
@@ -105,6 +104,14 @@ extern "C" {
     fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
 
     fn WCDBRustDatabase_removeFiles(cpp_obj: *mut c_void) -> bool;
+    fn WCDBRustDatabase_configCipher(
+        cpp_obj: *mut c_void,
+        key: *const u8,
+        key_len: usize,
+        page_size: c_int,
+        version: c_int,
+    );
+    fn WCDBRustCore_setDefaultCipherConfig(version: c_int);
 
     fn WCDBRustDatabase_close(
         cpp_obj: *mut c_void,
@@ -1031,6 +1038,33 @@ impl Database {
         }
     }
 
+    pub fn set_cipher_key(
+        &self,
+        key: &Vec<u8>,
+        page_size: Option<i32>,
+        version: Option<CipherVersion>,
+    ) {
+        let key_ptr = key.as_ptr();
+        let key_len = key.len();
+        let page_size = page_size.unwrap_or(4096);
+        let version = version.unwrap_or(CipherVersion::DefaultVersion);
+        unsafe {
+            WCDBRustDatabase_configCipher(
+                self.get_cpp_obj(),
+                key_ptr,
+                key_len,
+                page_size,
+                version as i32,
+            );
+        }
+    }
+
+    pub fn set_default_cipher_version(version: CipherVersion) {
+        unsafe {
+            WCDBRustCore_setDefaultCipherConfig(version as i32);
+        }
+    }
+
     pub fn can_open(&self) -> bool {
         unsafe { WCDBRustDatabase_canOpen(self.get_cpp_obj()) }
     }
@@ -1478,4 +1512,12 @@ pub struct PerformanceInfo {
     pub overflow_page_read_count: i32,
     pub overflow_page_write_count: i32,
     pub cost_in_nanoseconds: u64,
+}
+
+pub enum CipherVersion {
+    DefaultVersion = 0,
+    Version1 = 1,
+    Version2 = 2,
+    Version3 = 3,
+    Version4 = 4,
 }
