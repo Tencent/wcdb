@@ -82,4 +82,8 @@ impl<T> Field<T> {
         let field = fields[0];
         Self::get_binding_from_field(field)
     }
+
+    pub fn is_primary_key(&self) -> bool {
+        self.is_primary_key
+    }
 }
