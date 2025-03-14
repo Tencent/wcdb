@@ -244,7 +244,7 @@ impl TableOperation<'_> {
             binding.where_expression(&expression);
         }
         if let Some(order) = order {
-            binding.order_by(order);
+            binding.order_by(&order);
         }
         if let Some(limit) = limit {
             binding.limit(limit);

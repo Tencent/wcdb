@@ -308,7 +308,7 @@ impl StatementSelect {
     // todo dengxudong 缺逻辑 重要不紧急
     // StatementSelect groupBy(@Nullable Object... expressions)
 
-    pub fn order_by(&self, orders: Vec<OrderingTerm>) -> &Self {
+    pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
         if orders.is_empty() {
             return self;
         }

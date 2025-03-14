@@ -54,7 +54,7 @@ impl<'a, T> Select<'a, T> {
     }
 
     pub fn order_by(self, order: OrderingTerm) -> Self {
-        self.chain_call.statement.order_by(vec![order]);
+        self.chain_call.statement.order_by(&vec![order]);
         self
     }
 
