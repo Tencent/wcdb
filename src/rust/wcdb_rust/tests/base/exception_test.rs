@@ -1,6 +1,7 @@
 use table_coding::WCDBTableCoding;
 use wcdb_core::base::basic_types::WCDBBasicTypes;
 use wcdb_core::base::value::Value;
+use wcdb_core::winq::column::Column;
 
 #[derive(WCDBTableCoding, Debug)]
 #[WCDBTable(
@@ -35,12 +36,20 @@ impl ExceptionObject {
             Value::from(self.value.as_str()),
         ]
     }
+
+    pub fn get_all_columns() -> Vec<Column> {
+        vec![
+            Column::new("category"),
+            Column::new("target_id"),
+            Column::new("channel_id"),
+            Column::new("value"),
+        ]
+    }
 }
 
 #[cfg(test)]
 pub mod exception_test {
-    use crate::base::exception_test::{DbExceptionObject, ExceptionObject};
-    use crate::core::table_operation_object::DBTABLEOPERATIONOBJECT_INSTANCE;
+    use crate::base::exception_test::{ExceptionObject, DBEXCEPTIONOBJECT_INSTANCE};
     use wcdb_core::base::wcdb_exception::ExceptionExtendCode;
     use wcdb_core::core::database::Database;
     use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
@@ -58,7 +67,7 @@ pub mod exception_test {
         /// 验证没有表的情况下，插入数据包错。
         let operation = TableOperation::new(table_name, &database);
         let obj = ExceptionObject::get_object();
-        let ret = operation.insert_rows(vec![obj.get_values()], &DbExceptionObject::all_fields());
+        let ret = operation.insert_rows(vec![obj.get_values()], ExceptionObject::get_all_columns());
         assert!(ret.is_err());
 
         let error = ret.unwrap_err();
@@ -71,18 +80,18 @@ pub mod exception_test {
         assert_eq!(error.extend_code(), ExceptionExtendCode::Unknown);
 
         // 创建表
-        let ret = database.create_table(table_name, &*DBTABLEOPERATIONOBJECT_INSTANCE);
+        let ret = database.create_table(table_name, &*DBEXCEPTIONOBJECT_INSTANCE);
         assert!(ret.is_ok());
 
         /// 验证重复插入数据。
         // 第一次插入数据。
         let values = obj.get_values();
-        let ret = operation.insert_rows(vec![values], &DbExceptionObject::all_fields());
+        let ret = operation.insert_rows(vec![values], ExceptionObject::get_all_columns());
         assert!(ret.is_ok());
 
         // 第二次插入数据。
         let values = obj.get_values();
-        let ret = operation.insert_rows(vec![values], &DbExceptionObject::all_fields());
+        let ret = operation.insert_rows(vec![values], ExceptionObject::get_all_columns());
         assert!(ret.is_err());
 
         let error = ret.unwrap_err();

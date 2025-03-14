@@ -2,8 +2,9 @@ use crate::base::random_tool::RandomTool;
 use std::time::SystemTime;
 use table_coding::WCDBTableCoding;
 use wcdb_core::base::value::Value;
+use wcdb_core::winq::column::Column;
 
-#[derive(WCDBTableCoding, Debug)]
+#[derive(WCDBTableCoding, Debug, Clone)]
 #[WCDBTable(
     multi_primaries(columns = ["category", "target_id", "channel_id"])
 )]
@@ -51,7 +52,7 @@ impl TableOperationObject {
             obj.category = 3;
             obj.target_id = format!("target_id-{}", RandomTool::string());
             obj.channel_id = (time * 10 + i as u128).to_string();
-            obj.value = format!("value-{}", RandomTool::string());
+            obj.value = time.to_string();
             obj_vec.push(obj);
         }
         obj_vec
@@ -63,6 +64,15 @@ impl TableOperationObject {
             Value::from(self.target_id.as_str()),
             Value::from(self.channel_id.as_str()),
             Value::from(self.value.as_str()),
+        ]
+    }
+
+    pub fn get_all_columns() -> Vec<Column> {
+        vec![
+            Column::new("category"),
+            Column::new("target_id"),
+            Column::new("channel_id"),
+            Column::new("value"),
         ]
     }
 }

@@ -4,10 +4,11 @@ use crate::base::wcdb_exception::WCDBException;
 use crate::core::database::Database;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
-use crate::orm::field::Field;
+use crate::winq::column::Column;
 use crate::winq::column_type::ColumnType;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::expression::Expression;
+use crate::winq::identifier::IdentifierTrait;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement_delete::StatementDelete;
 use crate::winq::statement_insert::StatementInsert;
@@ -38,34 +39,34 @@ impl<'a> TableOperation<'a> {
 
 /// Insert
 impl<'a> TableOperation<'a> {
-    pub fn insert_rows<T>(
+    pub fn insert_rows(
         &self,
         rows: Vec<Vec<Value>>,
-        columns: &Vec<&Field<T>>,
+        columns: Vec<Column>,
     ) -> Result<(), WCDBException> {
         self.insert_rows_with_conflict_action(rows, columns, ConflictAction::None)
     }
 
-    pub fn insert_rows_or_replace<T>(
+    pub fn insert_rows_or_replace(
         &self,
         rows: Vec<Vec<Value>>,
-        columns: &Vec<&Field<T>>,
+        columns: Vec<Column>,
     ) -> Result<(), WCDBException> {
         self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Replace)
     }
 
-    pub fn insert_rows_or_ignore<T>(
+    pub fn insert_rows_or_ignore(
         &self,
         rows: Vec<Vec<Value>>,
-        columns: &Vec<&Field<T>>,
+        columns: Vec<Column>,
     ) -> Result<(), WCDBException> {
         self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Ignore)
     }
 
-    fn insert_rows_with_conflict_action<T>(
+    fn insert_rows_with_conflict_action(
         &self,
         rows: Vec<Vec<Value>>,
-        columns: &Vec<&Field<T>>,
+        columns: Vec<Column>,
         action: ConflictAction,
     ) -> Result<(), WCDBException> {
         if rows.len() == 0 {
@@ -74,7 +75,7 @@ impl<'a> TableOperation<'a> {
         let binding = StatementInsert::new();
         let insert = binding
             .insert_into(self.table_name.as_ref())
-            .columns(columns)
+            .column_objs(&columns)
             .values_with_bind_parameters(columns.len());
         match action {
             ConflictAction::Replace => {
@@ -101,6 +102,7 @@ impl<'a> TableOperation<'a> {
         insert: &StatementInsert,
         handle: &Handle,
     ) -> Result<(), WCDBException> {
+        println!("statement: {:?}", insert.get_description());
         match handle.prepared_with_main_statement(insert) {
             Ok(prepared_stmt) => {
                 for row in rows {
@@ -118,19 +120,15 @@ impl<'a> TableOperation<'a> {
 
 /// Update
 impl<'a> TableOperation<'a> {
-    pub fn update_value<V: WCDBBasicTypes, T>(
+    pub fn update_value<V: WCDBBasicTypes>(
         &self,
         value: &V,
-        column: &Field<T>,
+        column: Column,
         expression: Option<Expression>,
         order: Option<Vec<OrderingTerm>>,
         limit: Option<i64>,
         offset: Option<i64>,
     ) -> Result<(), WCDBException> {
-        let binding = StatementUpdate::new();
-        binding
-            .update(self.table_name.as_ref())
-            .set_columns_to_bind_parameters(&vec![column]);
         let row_item = match value.get_type() {
             ColumnType::Integer => Value::from(value.get_i64()),
             ColumnType::Float => Value::from(value.get_f64()),
@@ -139,13 +137,20 @@ impl<'a> TableOperation<'a> {
                 panic!("basic types not define.")
             }
         };
-        self.execute_update(&vec![row_item], &binding, expression, order, limit, offset)
+        self.update_row(
+            &vec![row_item],
+            &vec![column],
+            expression,
+            order,
+            limit,
+            offset,
+        )
     }
 
-    pub fn update_row<T>(
+    pub fn update_row(
         &self,
         row: &Vec<Value>,
-        columns: &Vec<&Field<T>>,
+        columns: &Vec<Column>,
         expression: Option<Expression>,
         order: Option<Vec<OrderingTerm>>,
         limit: Option<i64>,
@@ -154,7 +159,7 @@ impl<'a> TableOperation<'a> {
         let binding = StatementUpdate::new();
         binding
             .update(self.table_name.as_ref())
-            .set_columns_to_bind_parameters(columns);
+            .set_column_objs_to_bind_parameters(columns);
         self.execute_update(row, &binding, expression, order, limit, offset)
     }
 
@@ -223,17 +228,18 @@ impl<'a> TableOperation<'a> {
 
 /// Select
 impl TableOperation<'_> {
-    pub fn get_values<T>(
+    pub fn get_values(
         &self,
-        columns: Vec<&Field<T>>,
+        columns: Vec<&Column>,
         expression: Option<Expression>,
         order: Option<Vec<OrderingTerm>>,
         limit: Option<i64>,
         offset: Option<i64>,
-    ) -> Result<Vec<T>, WCDBException> {
+    ) -> Result<Vec<Vec<Value>>, WCDBException> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
-        binding.from(self.table_name.as_ref()).select(&columns);
+        binding.from(self.table_name.as_ref());
+        binding.select_columns(&columns);
         if let Some(expression) = expression {
             binding.where_expression(&expression);
         }
@@ -247,7 +253,7 @@ impl TableOperation<'_> {
             binding.offset(offset);
         }
         match handle.prepared_with_main_statement(&binding) {
-            Ok(statement) => match statement.get_all_objects(&columns) {
+            Ok(statement) => match statement.get_all_values() {
                 Ok(ret) => Ok(ret),
                 Err(err) => Err(err),
             },

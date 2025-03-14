@@ -6,9 +6,9 @@ use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_int, c_longlong, c_void, CString};
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
-use std::os::raw::{c_double, c_long};
+use std::os::raw::c_long;
 use std::ptr::{null, null_mut};
 
 extern "C" {
@@ -122,6 +122,27 @@ impl StatementUpdate {
                 c_void_vec.as_ptr(),
                 null(),
                 columns_void_vec_len,
+            );
+        }
+        self
+    }
+
+    pub fn set_column_objs_to_bind_parameters(&self, columns: &Vec<Column>) -> &Self {
+        if columns.is_empty() {
+            return self;
+        }
+        let columns_vec_len = columns.len();
+        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(columns_vec_len);
+        for column in columns {
+            c_void_vec.push(column.get_cpp_obj());
+        }
+        unsafe {
+            WCDBRustStatementUpdate_configColumnsToBindParameters(
+                self.get_cpp_obj(),
+                CPPType::Column as i32,
+                c_void_vec.as_ptr(),
+                null(),
+                columns_vec_len as c_int,
             );
         }
         self

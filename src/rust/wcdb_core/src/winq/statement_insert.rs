@@ -1,5 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::orm::field::Field;
+use crate::winq::column::Column;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::statement::{Statement, StatementTrait};
@@ -141,6 +142,49 @@ impl StatementInsert {
                 c_void_vec.as_ptr(),
                 std::ptr::null(),
                 columns_void_vec_len,
+            );
+        }
+        self
+    }
+
+    pub fn column_objs(&self, columns: &Vec<Column>) -> &Self {
+        if columns.is_empty() {
+            return self;
+        }
+        let column_len = columns.len();
+        let mut c_vec: Vec<*mut c_void> = Vec::with_capacity(column_len);
+        for column in columns {
+            c_vec.push(column.get_cpp_obj());
+        }
+        unsafe {
+            WCDBRustStatementInsert_configColumns(
+                self.get_cpp_obj(),
+                CPPType::Column as i32,
+                c_vec.as_ptr(),
+                std::ptr::null(),
+                column_len as c_int,
+            );
+        }
+        self
+    }
+
+    pub fn column_names(&self, names: Vec<String>) -> &Self {
+        if names.is_empty() {
+            return self;
+        }
+        let column_len = names.len();
+        let mut c_vec: Vec<*const c_char> = Vec::with_capacity(column_len);
+        for name in names {
+            let c_name = CString::new(name).unwrap_or_default();
+            c_vec.push(c_name.as_ptr());
+        }
+        unsafe {
+            WCDBRustStatementInsert_configColumns(
+                self.get_cpp_obj(),
+                CPPType::String as i32,
+                std::ptr::null(),
+                c_vec.as_ptr(),
+                column_len as c_int,
             );
         }
         self

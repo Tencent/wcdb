@@ -4,10 +4,8 @@ use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::orm::field::Field;
 use crate::utils::{ToCString, ToCow};
 use crate::winq::column_type::ColumnType;
-use crate::winq::identifier::CPPType;
 use crate::winq::statement::StatementTrait;
 use core::ffi::c_size_t;
-use num_traits::FromPrimitive;
 use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::slice;
 use std::sync::Arc;
@@ -279,6 +277,25 @@ impl PreparedStatement {
         Ok(obj_vec)
     }
 
+    pub fn get_all_values(&self) -> WCDBResult<Vec<Vec<Value>>> {
+        let count = unsafe { WCDBRustHandleStatement_getColumnCount(*self.cpp_obj) as i32 };
+        if count == 0 {
+            return Ok(Vec::new());
+        }
+
+        let mut rows: Vec<Vec<Value>> = Vec::new();
+        self.step()?;
+        while !self.is_done() {
+            let mut row: Vec<Value> = Vec::new();
+            for i in 0..count {
+                row.push(self.get_value(i));
+            }
+            rows.push(row);
+            self.step()?;
+        }
+        Ok(rows)
+    }
+
     pub fn is_done(&self) -> bool {
         unsafe { WCDBRustHandleStatement_isDone(*self.cpp_obj) }
     }
@@ -310,7 +327,7 @@ impl PreparedStatement {
         row
     }
 
-    pub fn get_multi_rows(&mut self) -> WCDBResult<(Vec<Vec<Value>>)> {
+    pub fn get_multi_rows(&mut self) -> WCDBResult<Vec<Vec<Value>>> {
         let mut rows: Vec<Vec<Value>> = Vec::new();
         self.step()?;
         while !self.is_done() {

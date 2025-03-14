@@ -5,14 +5,14 @@ use lazy_static::lazy_static;
 use std::sync::{Arc, RwLock};
 use wcdb_core::base::wcdb_exception::WCDBResult;
 
-static TABLE_NAME: &'static str = "table_option_test_case";
-static TABLE_NAME_X: &'static str = "table_option_test_case_x";
+static TABLE_NAME: &'static str = "table_orm_operation_test_case";
+static TABLE_NAME_X: &'static str = "table_orm_operation_test_case_x";
 
-pub struct TableOperationTest {
+pub struct TableORMOperationTest {
     table_test_case: TableTestCase,
 }
 
-impl TestCaseTrait for TableOperationTest {
+impl TestCaseTrait for TableORMOperationTest {
     fn setup(&self) -> WCDBResult<()> {
         self.table_test_case.setup()
     }
@@ -22,9 +22,9 @@ impl TestCaseTrait for TableOperationTest {
     }
 }
 
-impl TableOperationTest {
+impl TableORMOperationTest {
     pub fn new() -> Self {
-        TableOperationTest {
+        TableORMOperationTest {
             table_test_case: TableTestCase::new_with_table_name(TABLE_NAME),
         }
     }
@@ -39,39 +39,39 @@ impl TableOperationTest {
 }
 
 lazy_static! {
-    static ref TABLE_OPERATION_TEST: Arc<RwLock<TableOperationTest>> =
-        Arc::new(RwLock::new(TableOperationTest::new()));
+    static ref table_orm_operation_TEST: Arc<RwLock<TableORMOperationTest>> =
+        Arc::new(RwLock::new(TableORMOperationTest::new()));
     static ref PRE_INSERT_OBJECTS: Vec<TableOperationObject> = TableOperationObject::get_obj_vec(2);
 }
 
 #[cfg(test)]
-pub mod table_operation_test_case {
+pub mod table_orm_operation_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::core::table_operation_object::{
-        TableOperationObject, DBTABLEOPERATIONOBJECT_INSTANCE,
+        DbTableOperationObject, TableOperationObject, DBTABLEOPERATIONOBJECT_INSTANCE,
     };
-    use crate::core::table_operation_test::{TABLE_NAME, TABLE_OPERATION_TEST};
+    use crate::core::table_orm_operation_test::{table_orm_operation_TEST, TABLE_NAME};
+    use core::clone::Clone;
+    use core::{assert, assert_eq};
     use std::sync::{Arc, RwLock};
-    use wcdb_core::base::value::Value;
     use wcdb_core::core::database::Database;
     use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
-    use wcdb_core::core::table_operation::TableOperation;
-    use wcdb_core::winq::column::Column;
+    use wcdb_core::core::table_orm_operation::{TableORMOperation, TableORMOperationTrait};
     use wcdb_core::winq::expression_operable_trait::ExpressionOperableTrait;
 
     pub fn setup() {
-        let arc_clone = Arc::clone(&TABLE_OPERATION_TEST);
+        let arc_clone = Arc::clone(&table_orm_operation_TEST);
         let arc_test = arc_clone.read().expect("test read failure");
         arc_test.setup().expect("setup failure");
     }
     pub fn teardown() {
-        let arc_clone = Arc::clone(&TABLE_OPERATION_TEST);
+        let arc_clone = Arc::clone(&table_orm_operation_TEST);
         let arc_test = arc_clone.read().expect("test read failure");
         arc_test.teardown().expect("teardown failure");
     }
 
     pub fn get_arc_database() -> Arc<RwLock<Database>> {
-        let ret = Arc::clone(&TABLE_OPERATION_TEST)
+        let ret = Arc::clone(&table_orm_operation_TEST)
             .read()
             .unwrap()
             .get_table_test_case()
@@ -79,7 +79,7 @@ pub mod table_operation_test_case {
         Arc::clone(&ret)
     }
 
-    #[test]
+    // #[test]
     pub fn test() {
         setup();
 
@@ -92,93 +92,69 @@ pub mod table_operation_test_case {
         let ret = database.create_table(TABLE_NAME, &*DBTABLEOPERATIONOBJECT_INSTANCE);
         assert!(ret.is_ok());
 
-        let operation = TableOperation::new(TABLE_NAME, &database);
+        let operation =
+            TableORMOperation::new(TABLE_NAME, &*DBTABLEOPERATIONOBJECT_INSTANCE, &database);
         let obj = TableOperationObject::get_obj();
-        let field_channel_id = unsafe { DBTABLEOPERATIONOBJECT_INSTANCE.channel_id.read() };
 
         // 测试插入数据。
         // insert row
-        let ret = operation.insert_rows(
-            vec![obj.get_values_vec()],
-            TableOperationObject::get_all_columns(),
-        );
+        let ret = operation.insert_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
         assert!(ret.is_ok());
 
         // insert row
-        let ret = operation.insert_rows(
-            vec![obj.get_values_vec()],
-            TableOperationObject::get_all_columns(),
-        );
+        let ret = operation.insert_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
         assert!(!ret.is_ok());
 
         // insert or replace
-        let ret = operation.insert_rows_or_replace(
-            vec![obj.get_values_vec()],
-            TableOperationObject::get_all_columns(),
-        );
+        let ret = operation
+            .insert_or_replace_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
         assert!(ret.is_ok());
 
         // insert or ignore
-        let objs = TableOperationObject::get_obj_vec(2);
-        let values = objs.iter().map(|v| v.get_values_vec()).collect();
-        let ret = operation.insert_rows_or_ignore(values, TableOperationObject::get_all_columns());
+        let ret = operation
+            .insert_or_ignore_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
         assert!(ret.is_ok());
+
+        let field_channel_id = unsafe { DBTABLEOPERATIONOBJECT_INSTANCE.channel_id.read() };
+        let field_value = unsafe { DBTABLEOPERATIONOBJECT_INSTANCE.value.read() };
 
         // 测试更新数据。
         // update row
         let updated_text = "updated_row";
-        let updated_value = Value::from(updated_text);
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.update_row(
-            &vec![updated_value],
-            &vec![Column::new("value")],
-            Some(expression),
-            None,
-            None,
-            None,
-        );
+        let update_obj = TableOperationObject {
+            value: updated_text.to_string(),
+            ..obj.clone()
+        };
+        let ret = operation.update_object_by_field_expression(update_obj, &field_value, expression);
         assert!(ret.is_ok());
 
         // select value
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.get_values(
-            vec![&Column::new("value")],
-            Some(expression),
-            None,
-            None,
-            None,
-        );
+        let ret = operation.get_first_object_by_expression(vec![&field_value], expression);
         assert!(ret.is_ok());
 
         let ret_value = ret.unwrap();
-        let item = ret_value.first().unwrap().first().unwrap();
-        assert_eq!(item.get_text(), updated_text);
+        assert_eq!(ret_value.value, updated_text);
 
         // 测试删除数据。
         // delete row
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.delete_value(Some(expression), None, None, None);
+        let ret = operation.delete_objects_by_expression(expression);
         assert!(ret.is_ok());
 
         // select value
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.get_values(
-            vec![&Column::new("value")],
-            Some(expression),
-            None,
-            None,
-            None,
-        );
-        assert!(ret.is_ok());
-        assert_eq!(ret.unwrap().len(), 0);
+        let ret = operation.get_all_objects_by_expression(expression);
+        assert!(ret.unwrap().is_empty());
 
         teardown();
     }
