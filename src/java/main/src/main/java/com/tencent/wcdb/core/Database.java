@@ -799,6 +799,7 @@ public class Database extends HandleORMOperation {
      *
      * @param tracer  The tracer of busy event.
      * @param timeOut Timeout in seconds for blocking database operation.
+     * @deprecated use {@link com.tencent.wcdb.tracer.WCDBConnectionPoolBusyTracer#registerGlobalTracer(BusyTracer)} instead.
      */
     public static native void globalTraceBusy(@Nullable BusyTracer tracer, double timeOut);
 
