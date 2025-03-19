@@ -100,9 +100,9 @@ impl<'a, T> Insert<'a, T> {
         Ok(self)
     }
 
-    // pub fn get_last_insert_row_id(&self) -> i64 {
-    //     *self.last_insert_row_id.borrow()
-    // }
+    pub fn get_last_insert_row_id(&self) -> i64 {
+        *self.last_insert_row_id.borrow()
+    }
 
     pub fn real_execute(&self) -> WCDBResult<()> {
         let binding: &dyn TableBinding<T> = Field::get_binding_from_fields(&self.fields);
