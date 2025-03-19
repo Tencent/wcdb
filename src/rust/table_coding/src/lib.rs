@@ -4,6 +4,7 @@ mod compiler;
 mod field_orm_info;
 mod macros;
 
+use crate::compiler::resolved_info::column_info::ColumnInfo;
 use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
 use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
@@ -179,6 +180,7 @@ fn check_field_element(table: &WCDBTable) {
                 } else if field.is_auto_increment() {
                     panic!("#[WCDBField] Auto-increment field must be primary key for \"{}\".", field_key.unwrap());
                 }
+                check_field_not_null(field, &field_key);
                 for field in &fields.fields {
                     let mut value_count = 0;
                     let mut type_miss_match = false;
@@ -223,5 +225,20 @@ fn check_field_element(table: &WCDBTable) {
             })
             .collect(),
         _ => panic!("WCDBTable only works on structs"),
+    }
+}
+
+fn check_field_not_null(field: &WCDBField, field_key: &Option<String>) {
+    let column_info = ColumnInfo::resolve(field);
+    let property_type = column_info.property_type();
+    let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
+    assert!(field_orm_info_opt.is_some());
+    let field_orm_info = field_orm_info_opt.unwrap();
+    if column_info.is_not_null() && field_orm_info.nullable {
+        panic!(
+            "#[WCDBField] Not null field cannot support \"{}: {}\".",
+            field_key.clone().unwrap(),
+            property_type.as_str(),
+        );
     }
 }
