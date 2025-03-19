@@ -372,7 +372,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for Table<'a, T, R> {
             .get_all_objects_by_fields_order_limit_offset(fields, order, limit, offset)
     }
 
-    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<T> {
+    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<Option<T>> {
         self.table_orm_operation.get_first_object(fields)
     }
 
@@ -380,7 +380,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for Table<'a, T, R> {
         &self,
         fields: Vec<&Field<T>>,
         expression: Expression,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.table_orm_operation
             .get_first_object_by_expression(fields, expression)
     }

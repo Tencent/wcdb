@@ -216,14 +216,18 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         offset: i64,
     ) -> WCDBResult<()>;
 
-    fn get_first_object<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<T>;
+    fn get_first_object<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<Option<T>>;
 
     fn get_first_object_by_expression<T>(
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
         expression: Expression,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 
     // todo dengxudong
     // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls)
@@ -233,7 +237,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         fields: Vec<&Field<T>>,
         table_name: &str,
         condition: Expression,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 
     // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
 
@@ -243,7 +247,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
         condition: Expression,
         order: OrderingTerm,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 
     //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
 
@@ -254,7 +258,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         condition: Expression,
         order: OrderingTerm,
         offset: i64,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 
     //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls)
 
@@ -263,7 +267,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         fields: Vec<&Field<T>>,
         table_name: &str,
         order: OrderingTerm,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 
     //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls)
 
@@ -273,7 +277,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
         order: OrderingTerm,
         offset: i64,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 
     // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls)
 

@@ -268,13 +268,13 @@ pub trait TableORMOperationTrait<T> {
 
     // public <R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
 
-    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<T>;
+    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<Option<T>>;
 
     fn get_first_object_by_expression(
         &self,
         fields: Vec<&Field<T>>,
         expression: Expression,
-    ) -> WCDBResult<T>;
+    ) -> WCDBResult<Option<T>>;
 }
 
 impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<'a, T, R> {
@@ -789,7 +789,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
             .all_objects()
     }
 
-    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<T> {
+    fn get_first_object(&self, fields: Vec<&Field<T>>) -> WCDBResult<Option<T>> {
         self.prepare_select().select(fields).first_object()
     }
 
@@ -797,7 +797,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         &self,
         fields: Vec<&Field<T>>,
         expression: Expression,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .where_expression(expression)

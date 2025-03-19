@@ -322,37 +322,31 @@ pub mod orm_test {
 
         let exp = Expression::new_with_column(Column::new("field_type"))
             .eq_string(max.field_type.as_str());
-        assert!(
-            max == table
-                .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
-                .unwrap()
-        );
+        let db_max_opt = table
+            .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
+            .unwrap();
+        assert!(max == db_max_opt.unwrap());
 
         let exp = Expression::new_with_column(Column::new("field_type"))
             .eq_string(min.field_type.as_str());
-        assert!(
-            min == table
-                .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
-                .unwrap()
-        );
+        let db_min_opt = table
+            .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
+            .unwrap();
+        assert!(min == db_min_opt.unwrap());
 
         let exp = Expression::new_with_column(Column::new("field_type"))
             .eq_string(empty.field_type.as_str());
-        assert!(
-            empty
-                == table
-                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
-                    .unwrap()
-        );
+        let db_empty_opt = table
+            .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
+            .unwrap();
+        assert!(empty == db_empty_opt.unwrap());
 
         let exp = Expression::new_with_column(Column::new("field_type"))
             .eq_string(random.field_type.as_str());
-        assert!(
-            random
-                == table
-                    .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
-                    .unwrap()
-        );
+        let db_random_opt = table
+            .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
+            .unwrap();
+        assert!(random == db_random_opt.unwrap());
 
         teardown(&orm_test);
     }

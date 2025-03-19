@@ -138,8 +138,8 @@ pub mod table_orm_operation_test_case {
         let ret = operation.get_first_object_by_expression(vec![&field_value], expression);
         assert!(ret.is_ok());
 
-        let ret_value = ret.unwrap();
-        assert_eq!(ret_value.value, updated_text);
+        let ret_value_opt = ret.unwrap();
+        assert_eq!(ret_value_opt.unwrap().value, updated_text);
 
         // 测试删除数据。
         // delete row

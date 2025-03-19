@@ -73,20 +73,17 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
-    pub fn first_object(&self) -> WCDBResult<T> {
+    pub fn first_object(&self) -> WCDBResult<Option<T>> {
         self.first_object_by_class()
     }
 
-    pub fn first_object_by_class(&self) -> WCDBResult<T> {
+    pub fn first_object_by_class(&self) -> WCDBResult<Option<T>> {
         let prepared_statement = self.prepare_statement()?;
         prepared_statement.step()?;
-        let ret: WCDBResult<T> = if !prepared_statement.is_done() {
-            prepared_statement.get_one_object(&self.fields)
-        } else {
-            Err(WCDBException::create_exception(
-                prepared_statement.get_cpp_obj(),
-            ))
-        };
+        let mut ret = Ok(None);
+        if !prepared_statement.is_done() {
+            ret = prepared_statement.get_one_object(&self.fields);
+        }
         prepared_statement.finalize_statement();
         self.chain_call.invalidate_handle();
         ret

@@ -369,13 +369,13 @@ impl PreparedStatement {
         unsafe { WCDBRustHandleStatement_finalize(*self.cpp_obj) }
     }
 
-    pub fn get_one_object<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<T> {
+    pub fn get_one_object<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<Option<T>> {
         assert!(fields.len() > 0);
         let field_opt = fields.first();
         match field_opt {
             Some(field) => {
                 let ret = field.get_table_binding().extract_object(fields, self);
-                Ok(ret)
+                Ok(Some(ret))
             }
             None => Err(WCDBException::create_exception(self.get_cpp_obj())),
         }

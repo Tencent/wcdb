@@ -843,7 +843,11 @@ impl HandleORMOperationTrait for Database {
         Ok(())
     }
 
-    fn get_first_object<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<T> {
+    fn get_first_object<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
@@ -855,7 +859,7 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
         expression: Expression,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
@@ -868,7 +872,7 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
         condition: Expression,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
@@ -882,7 +886,7 @@ impl HandleORMOperationTrait for Database {
         table_name: &str,
         condition: Expression,
         order: OrderingTerm,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
@@ -898,7 +902,7 @@ impl HandleORMOperationTrait for Database {
         condition: Expression,
         order: OrderingTerm,
         offset: i64,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
@@ -914,7 +918,7 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
         order: OrderingTerm,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
@@ -928,7 +932,7 @@ impl HandleORMOperationTrait for Database {
         table_name: &str,
         order: OrderingTerm,
         offset: i64,
-    ) -> WCDBResult<T> {
+    ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
             .from(table_name)
