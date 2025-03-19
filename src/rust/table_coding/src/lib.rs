@@ -8,6 +8,7 @@ use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
 use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
 use crate::compiler::rust_code_generator::RustCodeGenerator;
+use crate::field_orm_info::FIELD_ORM_INFO_MAP;
 use crate::macros::wcdb_field::WCDBField;
 use crate::macros::wcdb_table::WCDBTable;
 use darling::ast::Data;
@@ -40,7 +41,6 @@ fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
     let instance_ident = Ident::new(&instance, Span::call_site());
     let field_ident_vec = table.get_field_ident_vec();
-    let field_type_vec = table.get_field_type_vec();
 
     check_field_element(table);
 
@@ -59,10 +59,8 @@ fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
     let generate_binding_fields =
         code_gen.generate_binding_fields(&table_ident, &field_ident_vec)?;
     let generate_base_binding = code_gen.generate_base_binding(&binding_ident)?;
-    let generate_extract_object =
-        code_gen.generate_extract_object(&table_ident, &field_ident_vec, &field_type_vec)?;
-    let generate_bind_object =
-        code_gen.generate_bind_object(&table_ident, &field_ident_vec, &field_type_vec)?;
+    let generate_extract_object = code_gen.generate_extract_object(&table_ident)?;
+    let generate_bind_object = code_gen.generate_bind_object(&table_ident)?;
 
     let auto_increment_field_opt = table.get_auto_increment_ident_field();
     let generate_auto_increment_config =
@@ -184,7 +182,11 @@ fn check_field_element(table: &WCDBTable) {
                 for field in &fields.fields {
                     let mut value_count = 0;
                     let mut type_miss_match = false;
-                    let column_type = WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
+                    let property_type = WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
+                    let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
+                    assert!(field_orm_info_opt.is_some());
+                    let column_type = field_orm_info_opt.unwrap().column_type.clone();
+
                     let default_opt = DefaultValueInfo::resolve(&field.attr());
                     if default_opt.is_none() {
                         continue;

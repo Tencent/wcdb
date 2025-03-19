@@ -137,6 +137,9 @@ impl RustCodeGenerator {
         let mut token_stream = proc_macro2::TokenStream::new();
         let mut field_id: usize = 1;
         for column_info in &self.all_column_info {
+            let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(column_info.property_type().as_str());
+            assert!(field_orm_info_opt.is_some());
+            let field_orm_info = field_orm_info_opt.unwrap();
             let property_name = column_info.property_name();
             let mut column_name = column_info.column_name();
             if column_name.is_empty() {
@@ -155,7 +158,8 @@ impl RustCodeGenerator {
 
             let is_primary_key = column_info.is_primary();
             let is_auto_increment = column_info.is_auto_increment();
-            let column_type_ident = Ident::new(&*column_info.property_type(), Span::call_site());
+            let column_type_ident =
+                Ident::new(field_orm_info.column_type.as_str(), Span::call_site());
 
             token_stream.extend(quote! {
                 let field = Box::new(wcdb_core::orm::field::Field::new(
@@ -193,12 +197,16 @@ impl RustCodeGenerator {
             match column_info.default_value() {
                 None => {}
                 Some(default) => {
-                    if column_info.property_type() == "Integer" {
+                    let property_type = column_info.property_type();
+                    let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
+                    assert!(field_orm_info_opt.is_some());
+                    let field_orm_info = field_orm_info_opt.unwrap();
+                    if field_orm_info.column_type == "Integer" {
                         let int_value = default.i32_value();
                         token_stream.extend(quote::quote! {
                             column_constraint.default_to(#int_value);
                         });
-                    } else if column_info.property_type() == "Float" {
+                    } else if field_orm_info.column_type == "Float" {
                         let double_value = default.f64_value();
                         token_stream.extend(quote::quote! {
                             column_constraint.default_to(#double_value);
@@ -441,11 +449,36 @@ impl RustCodeGenerator {
     pub(crate) fn generate_extract_object(
         &self,
         table_ident: &&Ident,
-        field_ident_vec: &Vec<&Ident>,
-        field_type_vec: &Vec<&Type>,
     ) -> syn::Result<proc_macro2::TokenStream> {
-        let field_get_type_vec: Vec<_> = get_field_info_vec!(field_type_vec, field_getter);
-        let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
+        let all_column_info_vec = &self.all_column_info;
+        let mut index: usize = 1;
+        let mut extract_token_stream_vec = vec![];
+        for column_info in all_column_info_vec {
+            let property_type = column_info.property_type();
+            let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
+            assert!(field_orm_info_opt.is_some());
+            let field_orm_info = field_orm_info_opt.unwrap();
+            let field_name_ident =
+                Ident::new(column_info.property_name().as_str(), Span::call_site());
+            let extract_method_ident =
+                Ident::new(field_orm_info.field_getter.as_str(), Span::call_site());
+            if field_orm_info.nullable {
+                extract_token_stream_vec.push(quote! {
+                    #index => {
+                        if prepared_statement.get_column_type(index) != wcdb_core::winq::column_type::ColumnType::Null {
+                            new_one.#field_name_ident = prepared_statement.#extract_method_ident(#index - 1);
+                        } else {
+                            new_one.#field_name_ident = None;
+                        }
+                    }
+                });
+            } else {
+                extract_token_stream_vec.push(quote! {
+                    #index => new_one.#field_name_ident = prepared_statement.#extract_method_ident(#index - 1)
+                });
+            }
+            index += 1;
+        }
 
         Ok(quote::quote! {
              fn extract_object(
@@ -458,7 +491,7 @@ impl RustCodeGenerator {
                 for field in fields {
                     match field.get_field_id() {
                         #(
-                            #field_id_vec => new_one.#field_ident_vec = prepared_statement.#field_get_type_vec(index),
+                            #extract_token_stream_vec,
                         )*
                         _ => panic!("Unknown field id"),
                     }
@@ -472,28 +505,42 @@ impl RustCodeGenerator {
     pub(crate) fn generate_bind_object(
         &self,
         table_ident: &&Ident,
-        field_ident_vec: &Vec<&Ident>,
-        field_type_vec: &Vec<&Type>,
     ) -> syn::Result<proc_macro2::TokenStream> {
-        let field_id_vec: Vec<_> = (1..=field_type_vec.len()).collect();
-        let field_bind_type_vec: Vec<_> = field_type_vec
-            .iter()
-            .map(|field| {
-                let field_type_string = WCDBField::get_field_type_string(field)?;
-                let bind_type_string = match_field_info!(field_type_string, field, field_setter);
-                Ok(Ident::new(&bind_type_string, Span::call_site()))
-            })
-            .collect::<syn::Result<Vec<_>>>()?;
-        let as_ref_vec: Vec<_> = field_bind_type_vec
-            .iter()
-            .map(|bind_type| {
-                if &bind_type.to_string() == "bind_text" {
-                    quote!(.as_ref())
+        let all_column_info_vec = &self.all_column_info;
+        let mut index: usize = 1;
+        let mut bind_token_stream_vec = vec![];
+        for column_info in all_column_info_vec {
+            let property_type = column_info.property_type();
+            let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
+            assert!(field_orm_info_opt.is_some());
+            let field_orm_info = field_orm_info_opt.unwrap();
+            let field_name_ident =
+                Ident::new(column_info.property_name().as_str(), Span::call_site());
+            let bind_method_ident =
+                Ident::new(field_orm_info.field_setter.as_str(), Span::call_site());
+            if field_orm_info.nullable {
+                bind_token_stream_vec.push(quote::quote! {
+                    #index => {
+                        if object.#field_name_ident.is_some() {
+                             prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), #index);
+                        } else {
+                            prepared_statement.bind_null(#index);
+                        }
+                    }
+                });
+            } else {
+                if field_orm_info.column_type == "Text".to_string() {
+                    bind_token_stream_vec.push(quote::quote! {
+                        #index => prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), #index)
+                    });
                 } else {
-                    quote!()
+                    bind_token_stream_vec.push(quote::quote! {
+                        #index => prepared_statement.#bind_method_ident(object.#field_name_ident, #index)
+                    });
                 }
-            })
-            .collect();
+            }
+            index += 1;
+        }
         Ok(quote::quote! {
              fn bind_field(
                 &self,
@@ -504,7 +551,7 @@ impl RustCodeGenerator {
             ) {
                 match field.get_field_id() {
                     #(
-                        #field_id_vec => prepared_statement.#field_bind_type_vec(object.#field_ident_vec #as_ref_vec, index),
+                        #bind_token_stream_vec,
                     )*
                     _ => panic!("Invalid id {} of field {} in {}",
                         field.get_field_id(),

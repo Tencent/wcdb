@@ -79,33 +79,97 @@ impl PreparedStatement {
         self.bind_i64(if value { 1 } else { 0 }, index);
     }
 
+    pub fn bind_bool_opt(&self, value: Option<&bool>, index: usize) {
+        if let Some(v) = value {
+            self.bind_bool(*v, index);
+        } else {
+            self.bind_null(index);
+        }
+    }
+
     pub fn bind_i8(&self, value: i8, index: usize) {
         self.bind_i64(value as i64, index);
+    }
+
+    pub fn bind_i8_opt(&self, value: Option<&i8>, index: usize) {
+        if let Some(v) = value {
+            self.bind_i8(*v, index);
+        } else {
+            self.bind_null(index);
+        }
     }
 
     pub fn bind_i16(&self, value: i16, index: usize) {
         self.bind_i64(value as i64, index);
     }
 
+    pub fn bind_i16_opt(&self, value: Option<&i16>, index: usize) {
+        if let Some(v) = value {
+            self.bind_i16(*v, index);
+        } else {
+            self.bind_null(index);
+        }
+    }
+
     pub fn bind_i32(&self, value: i32, index: usize) {
         self.bind_i64(value as i64, index);
+    }
+
+    pub fn bind_i32_opt(&self, value: Option<&i32>, index: usize) {
+        if let Some(v) = value {
+            self.bind_i32(*v, index);
+        } else {
+            self.bind_null(index);
+        }
     }
 
     pub fn bind_i64(&self, value: i64, index: usize) {
         unsafe { WCDBRustHandleStatement_bindInteger(*self.cpp_obj, value, index) }
     }
 
+    pub fn bind_i64_opt(&self, value: Option<&i64>, index: usize) {
+        if let Some(v) = value {
+            self.bind_i64(*v, index);
+        } else {
+            self.bind_null(index);
+        }
+    }
+
     pub fn bind_f32(&self, value: f32, index: usize) {
         self.bind_f64(value as f64, index);
+    }
+
+    pub fn bind_f32_opt(&self, value: Option<&f32>, index: usize) {
+        if let Some(v) = value {
+            self.bind_f32(*v, index);
+        } else {
+            self.bind_null(index);
+        }
     }
 
     pub fn bind_f64(&self, value: f64, index: usize) {
         unsafe { WCDBRustHandleStatement_bindDouble(*self.cpp_obj, value, index) }
     }
 
+    pub fn bind_f64_opt(&self, value: Option<&f64>, index: usize) {
+        if let Some(v) = value {
+            self.bind_f64(*v, index);
+        } else {
+            self.bind_null(index);
+        }
+    }
+
     pub fn bind_text(&self, value: &str, index: usize) {
         let c_path = CString::new(value).unwrap_or_default();
         unsafe { WCDBRustHandleStatement_bindText(*self.cpp_obj, c_path.as_ptr(), index) }
+    }
+
+    pub fn bind_text_opt(&self, value: Option<&String>, index: usize) {
+        if let Some(v) = value {
+            self.bind_text(v.as_str(), index);
+        } else {
+            self.bind_null(index);
+        }
     }
 
     pub fn bind_blob(&self, value: &Vec<u8>, index: usize) {
@@ -161,37 +225,98 @@ impl PreparedStatement {
         }
     }
 
+    pub fn get_column_type(&self, index: usize) -> ColumnType {
+        let ret = unsafe { WCDBRustHandleStatement_getColumnType(*self.cpp_obj, index as c_int) };
+        ColumnType::value_of(ret)
+    }
+
     pub fn get_bool(&self, index: usize) -> bool {
         self.get_i64(index) == 1
+    }
+
+    pub fn get_bool_opt(&self, index: usize) -> Option<bool> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_bool(index))
     }
 
     pub fn get_i8(&self, index: usize) -> i8 {
         self.get_i64(index) as i8
     }
 
+    pub fn get_i8_opt(&self, index: usize) -> Option<i8> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_i8(index))
+    }
+
     pub fn get_i16(&self, index: usize) -> i16 {
         self.get_i64(index) as i16
+    }
+
+    pub fn get_i16_opt(&self, index: usize) -> Option<i16> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_i16(index))
     }
 
     pub fn get_i32(&self, index: usize) -> i32 {
         self.get_i64(index) as i32
     }
 
+    pub fn get_i32_opt(&self, index: usize) -> Option<i32> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_i32(index))
+    }
+
     pub fn get_i64(&self, index: usize) -> i64 {
         unsafe { WCDBRustHandleStatement_getInteger(*self.cpp_obj, index) }
+    }
+
+    pub fn get_i64_opt(&self, index: usize) -> Option<i64> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_i64(index))
     }
 
     pub fn get_f32(&self, index: usize) -> f32 {
         self.get_f64(index) as f32
     }
 
+    pub fn get_f32_opt(&self, index: usize) -> Option<f32> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_f32(index))
+    }
+
     pub fn get_f64(&self, index: usize) -> f64 {
         unsafe { WCDBRustHandleStatement_getDouble(*self.cpp_obj, index) }
+    }
+
+    pub fn get_f64_opt(&self, index: usize) -> Option<f64> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_f64(index))
     }
 
     pub fn get_text(&self, index: usize) -> String {
         let text = unsafe { WCDBRustHandleStatement_getText(*self.cpp_obj, index) };
         text.to_cow().to_string()
+    }
+
+    pub fn get_text_opt(&self, index: usize) -> Option<String> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_text(index))
     }
 
     pub fn get_blob(&self, index: usize) -> Vec<u8> {

@@ -18,4 +18,14 @@ impl ColumnType {
             ColumnType::BLOB => CPPType::BindParameter,
         }
     }
+
+    pub fn value_of(value: i32) -> Self {
+        match value {
+            1 => ColumnType::Integer,
+            2 => ColumnType::Float,
+            3 => ColumnType::Text,
+            4 => ColumnType::BLOB,
+            _ => ColumnType::Null,
+        }
+    }
 }

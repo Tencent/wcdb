@@ -1,9 +1,9 @@
-use crate::field_orm_info::{FieldORMInfo, FIELD_ORM_INFO_MAP};
+use crate::field_orm_info::FIELD_ORM_INFO_MAP;
 use crate::macros::field_attr::FieldAttr;
 use darling::FromField;
 use proc_macro2::{Ident, Span};
 use syn::spanned::Spanned;
-use syn::Type;
+use syn::{GenericArgument, Type};
 
 #[derive(Debug, FromField)]
 #[darling(attributes(WCDBField))]
@@ -129,7 +129,40 @@ impl WCDBField {
 impl WCDBField {
     pub fn get_field_type_string(field: &Type) -> syn::Result<String> {
         match field {
-            Type::Path(type_path) => Ok(type_path.path.segments[0].ident.to_string()),
+            Type::Path(type_path) => {
+                if let Some(segment) = type_path.path.segments.first() {
+                    let mut type_name = String::new();
+                    // 解析 Option<String> | Option<i64>
+                    if segment.ident == "Option" {
+                        type_name.push_str("Option");
+
+                        if let syn::PathArguments::AngleBracketed(args) = &segment.arguments {
+                            let generics: Vec<String> = args
+                                .args
+                                .iter()
+                                .filter_map(|arg| {
+                                    // 提取基础类型参数（如 String/i64）
+                                    if let GenericArgument::Type(Type::Path(ty)) = arg {
+                                        ty.path.segments.last().map(|s| s.ident.to_string())
+                                    } else {
+                                        None
+                                    }
+                                })
+                                .collect();
+
+                            if !generics.is_empty() {
+                                type_name.push('<');
+                                type_name.push_str(&generics.join(", "));
+                                type_name.push('>');
+                            }
+                        }
+                    }
+                    if !type_name.is_empty() {
+                        return Ok(type_name);
+                    }
+                }
+                Ok(type_path.path.segments[0].ident.to_string())
+            }
             _ => Err(syn::Error::new(
                 field.span(),
                 "WCDBTable's field type only works on Path",
@@ -139,13 +172,6 @@ impl WCDBField {
 
     pub fn get_property_type(field: &Type) -> syn::Result<String> {
         let column_type_string = WCDBField::get_field_type_string(field)?;
-        let field_info_opt = FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
-        match field_info_opt {
-            None => Err(syn::Error::new(
-                field.span(),
-                "WCDBTable's field can't get ColumnType",
-            )),
-            Some(field_info) => Ok(field_info.column_type.clone()),
-        }
+        Ok(column_type_string)
     }
 }
