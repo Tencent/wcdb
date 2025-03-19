@@ -11,7 +11,7 @@ use crate::core::handle_orm_operation::{HandleORMOperation, HandleORMOperationTr
 use crate::core::table::Table;
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
-use crate::utils::ToCow;
+use crate::utils::{ToCString, ToCow};
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
@@ -75,6 +75,10 @@ pub trait ProgressMonitorTrait: Fn(/*percentage*/f64, /*increment*/f64) -> bool 
 impl<T> ProgressMonitorTrait for T where T: Fn(/*percentage*/ f64, /*increment*/ f64) -> bool + Send {}
 pub type ProgressMonitorTraitCallback = Box<dyn ProgressMonitorTrait>;
 
+pub trait SetDatabaseConfigTrait: Fn(Handle) -> bool + Send + Sync {}
+pub type SetDatabaseConfigCallback = Box<dyn SetDatabaseConfigTrait>;
+impl<T> SetDatabaseConfigTrait for T where T: Fn(Handle) -> bool + Send + Sync {}
+
 // 定义一个全局静态变量来存储闭包
 lazy_static! {
     static ref GLOBAL_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
@@ -94,6 +98,10 @@ lazy_static! {
     static ref GLOBAL_PROGRESS_MONITOR_TRAIT_CALLBACK: Arc<Mutex<Option<ProgressMonitorTraitCallback>>> =
         Arc::new(Mutex::new(None));
     static ref GLOBAL_VACUUM_PROGRESS_MONITOR_TRAIT_CALLBACK: Arc<Mutex<Option<ProgressMonitorTraitCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_INVOCATION_CONFIG_CALLBACK: Arc<Mutex<Option<SetDatabaseConfigCallback>>> =
+        Arc::new(Mutex::new(None));
+    static ref GLOBAL_UN_INVOCATION_CONFIG_CALLBACK: Arc<Mutex<Option<SetDatabaseConfigCallback>>> =
         Arc::new(Mutex::new(None));
 }
 
@@ -117,6 +125,14 @@ extern "C" {
         cpp_obj: *mut c_void,
         context: *mut c_void,
         cb: DatabaseCloseCallback,
+    );
+
+    pub fn WCDBRustDatabase_config(
+        cpp_obj: *mut c_void,
+        config_name: *const c_char,
+        invocation: *const c_void,
+        un_invocation: *const c_void,
+        priority: c_int,
     );
 
     fn WCDBRustDatabase_blockade(cpp_obj: *mut c_void);
@@ -317,6 +333,38 @@ extern "C" fn vacuum_progress_monitor_trait_wrapper(
         return callback(percentage as f64, increment as f64);
     }
     return false;
+}
+
+extern "C" fn set_config_invocation_callback(cpp_handle: *mut c_void) -> bool {
+    if let Some(callback) = &*GLOBAL_INVOCATION_CONFIG_CALLBACK.lock().unwrap() {
+        let db = Database::create_invalid_database();
+        let handle = Handle::new_with_obj(cpp_handle, &db);
+        callback(handle)
+    } else {
+        true
+    }
+}
+
+extern "C" fn set_config_un_invocation_callback(cpp_handle: *mut c_void) -> bool {
+    if let Some(callback) = &*GLOBAL_UN_INVOCATION_CONFIG_CALLBACK.lock().unwrap() {
+        let db = Database::create_invalid_database();
+        let handle = Handle::new_with_obj(cpp_handle, &db);
+        let ret = callback(handle);
+        ret
+    } else {
+        true
+    }
+}
+
+/// Priority of config.
+/// The higher the priority, the earlier it will be executed.
+/// Note that the highest priority is only for cipher config.
+#[repr(i32)]
+pub enum ConfigPriority {
+    Low,
+    Default,
+    High,
+    Highest,
 }
 
 #[derive(Clone)]
@@ -1008,6 +1056,13 @@ impl HandleORMOperationTrait for Database {
 }
 
 impl Database {
+    pub(crate) fn create_invalid_database() -> Self {
+        Database {
+            handle_orm_operation: HandleORMOperation::new(),
+            close_callback: Arc::new(Mutex::new(None)),
+        }
+    }
+
     pub fn new(path: &str) -> Self {
         let c_path = CString::new(path).unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr()) };
@@ -1063,6 +1118,82 @@ impl Database {
         unsafe {
             WCDBRustCore_setDefaultCipherConfig(version as i32);
         }
+    }
+
+    pub fn set_config<I, U>(
+        &self,
+        config_name: &str,
+        invocation: Option<I>,
+        un_invocation: Option<U>,
+        priority: ConfigPriority,
+    ) where
+        I: SetDatabaseConfigTrait + 'static,
+        U: SetDatabaseConfigTrait + 'static,
+    {
+        let mut cpp_priority: i32 = 0;
+        match priority {
+            ConfigPriority::Low => {
+                cpp_priority = 100;
+            }
+            ConfigPriority::Default => {}
+            ConfigPriority::High => {
+                cpp_priority = -100;
+            }
+            ConfigPriority::Highest => {
+                cpp_priority = -2147483648;
+            }
+        }
+
+        let c_config_name = config_name.to_cstring();
+
+        match invocation {
+            None => {
+                *GLOBAL_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = None;
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as SetDatabaseConfigCallback;
+                *GLOBAL_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = Some(callback_box);
+            }
+        }
+
+        match un_invocation {
+            None => {
+                *GLOBAL_UN_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = None;
+            }
+            Some(cb) => {
+                let callback_box = Box::new(cb) as SetDatabaseConfigCallback;
+                *GLOBAL_UN_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = Some(callback_box);
+            }
+        }
+        unsafe {
+            WCDBRustDatabase_config(
+                self.get_cpp_obj(),
+                c_config_name.into_raw(),
+                set_config_invocation_callback as *mut c_void,
+                set_config_un_invocation_callback as *mut c_void,
+                cpp_priority as c_int,
+            );
+        }
+    }
+
+    pub fn set_config_with_invocation<I, U>(
+        &self,
+        config_name: &str,
+        invocation: Option<I>,
+        priority: ConfigPriority,
+    ) where
+        I: SetDatabaseConfigTrait + 'static,
+        U: SetDatabaseConfigTrait + 'static,
+    {
+        self.set_config::<I, U>(config_name, invocation, None, priority)
+    }
+
+    pub fn set_config_with_default_priority<I, U>(&self, config_name: &str, invocation: Option<I>)
+    where
+        I: SetDatabaseConfigTrait + 'static,
+        U: SetDatabaseConfigTrait + 'static,
+    {
+        self.set_config::<I, U>(config_name, invocation, None, ConfigPriority::Default)
     }
 
     pub fn can_open(&self) -> bool {
@@ -1338,6 +1469,28 @@ impl Database {
         match exception_opt {
             None => Ok(()),
             Some(exception) => Err(exception),
+        }
+    }
+
+    pub fn get_value_from_statement<T: StatementTrait>(&self, statement: &T) -> WCDBResult<Value> {
+        let handle = self.get_handle(false);
+        let result = handle.prepared_with_main_statement(statement);
+        match result {
+            Ok(val) => {
+                let prepared_statement = Arc::clone(&val);
+                prepared_statement.step().expect("TODO: panic message");
+                if !prepared_statement.is_done() {
+                    let ret = prepared_statement.get_value(0);
+                    prepared_statement.finalize_statement();
+                    if self.auto_invalidate_handle() {
+                        handle.invalidate();
+                    }
+                    Ok(ret)
+                } else {
+                    Ok(Value::new())
+                }
+            }
+            Err(error) => Err(error),
         }
     }
 

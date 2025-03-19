@@ -65,9 +65,16 @@ void WCDBRustDatabaseClassMethod(configCipher,
                                  size_t len,
                                  int pageSize,
                                  int cipherVersion);
-// void WCDBRustDatabaseClassMethod( config, jlong self, jstring name, jobject
-// invocation, jobject unInvocation, jint priority);
-//
+
+typedef bool (*RustSetConfigCallback)(void* cpp_handle);
+
+void WCDBRustDatabaseClassMethod(config,
+                                 void* self,
+                                 const char* name,
+                                 RustSetConfigCallback* invocation,
+                                 RustSetConfigCallback* unInvocation,
+                                 int priority);
+
 // void WCDBRustDatabaseClassMethod(enableLiteMode, jlong self, jboolean enable);
 //
 typedef void (*RustGlobalTracePerformanceCallback)(long,

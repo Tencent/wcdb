@@ -82,4 +82,18 @@ impl StatementPragma {
         }
         self
     }
+
+    pub fn to_value_bool(&self, value: bool) -> &StatementPragma {
+        let value = if value { 1 } else { 0 } as c_long;
+        unsafe {
+            WCDBRustStatementPragma_configToValue(
+                self.statement.get_cpp_obj(),
+                CPPType::Bool as c_int,
+                value,
+                0 as c_float,
+                null(),
+            );
+        }
+        self
+    }
 }

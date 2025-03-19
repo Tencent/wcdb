@@ -32,6 +32,10 @@ impl Drop for CppObject {
     }
 }
 
+unsafe impl Send for CppObject {}
+
+unsafe impl Sync for CppObject {}
+
 pub trait CppObjectTrait {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void);
     fn get_cpp_obj(&self) -> *mut c_void;

@@ -8,7 +8,7 @@ use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
-use std::os::raw::c_long;
+use std::os::raw::{c_double, c_long};
 use std::ptr::{null, null_mut};
 
 extern "C" {
@@ -45,6 +45,24 @@ extern "C" {
         offset: c_long,
     );
     fn WCDBRustStatementUpdate_configConfliction(cpp_obj: *mut c_void, action: c_int);
+
+    fn WCDBRustStatementUpdate_configValue(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        // todo denxudong 补充 *mut c_void
+        // arg_cpp_obj: *mut c_void,
+        int_value: c_long,
+        double_value: c_double,
+        string_value: *const c_char,
+    );
+
+    fn WCDBRustStatementUpdate_configColumns(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        columns: *const *mut c_void,
+        column_names: *const *const c_char,
+        vec_len: c_int,
+    );
 }
 
 #[derive(Debug)]
@@ -148,6 +166,26 @@ impl StatementUpdate {
         self
     }
 
+    pub fn set_columns(&self, columns: &Vec<Column>) -> &Self {
+        if columns.is_empty() {
+            return self;
+        }
+        let mut columns_void_vec: Vec<*mut c_void> = Vec::with_capacity(columns.len());
+        for x in columns {
+            columns_void_vec.push(CppObject::get(x));
+        }
+        unsafe {
+            WCDBRustStatementUpdate_configColumns(
+                self.get_cpp_obj(),
+                CPPType::Column as c_int,
+                columns_void_vec.as_ptr(),
+                null(),
+                columns_void_vec.len() as c_int,
+            )
+        }
+        self
+    }
+
     pub fn where_expression(&self, condition: Expression) -> &Self {
         unsafe {
             WCDBRustStatementUpdate_configCondition(
@@ -190,6 +228,33 @@ impl StatementUpdate {
     pub fn offset(&self, offset: i64) -> &Self {
         unsafe {
             WCDBRustStatementUpdate_configOffset(self.get_cpp_obj(), CPPType::Int as i32, offset);
+        }
+        self
+    }
+
+    pub fn to_bool(&self, arg: bool) -> &Self {
+        let ret = if arg { 1 } else { 0 } as c_long;
+        unsafe {
+            WCDBRustStatementUpdate_configValue(
+                self.get_cpp_obj(),
+                CPPType::Bool as i32,
+                ret,
+                0.0,
+                null(),
+            )
+        }
+        self
+    }
+
+    pub fn to_i32(&self, arg: i32) -> &Self {
+        unsafe {
+            WCDBRustStatementUpdate_configValue(
+                self.get_cpp_obj(),
+                CPPType::Int as i32,
+                arg as c_long,
+                0.0,
+                null(),
+            )
         }
         self
     }

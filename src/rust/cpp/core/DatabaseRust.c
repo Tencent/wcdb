@@ -156,39 +156,47 @@ void WCDBRustDatabaseClassMethod(configCipher,
     WCDBRustBridgeStruct(CPPDatabase, self);
     WCDBDatabaseConfigCipher(selfStruct, cipherKey, len, pageSize, cipherVersion);
 }
-//
-// bool WCDBRustDatabaseConfig(jobject config, CPPHandle handle)
-//{
-//     WCDBRustTryGetEnvOr(return false);
-//     WCDBRustTryGetDatabaseMethodId(
-//     "onConfig", "(J" WCDBRustDatabaseSignature "$Config;)Z", return false);
-//     jboolean ret = (*env)->CallStaticBooleanMethod(
-//     env, WCDBRustGetDatabaseClass(), g_methodId, (jlong) handle.innerValue, config);
-//     if ((*env)->ExceptionCheck(env)) {
-//         ret = false;
-//     }
-//     WCDBRustTryDetach;
-//     return ret;
-// }
-//
-// void WCDBRustDatabaseClassMethod(
-// config, jlong self, jstring name, jobject invocation, jobject unInvocation, jint priority)
-//{
-//     WCDBRustTryGetVM;
-//     WCDBRustBridgeStruct(CPPDatabase, self);
-//     WCDBRustCreateGlobalRef(invocation);
-//     WCDBRustCreateGlobalRef(unInvocation);
-//     WCDBRustGetString(name);
-//     WCDBDatabaseConfig(selfStruct,
-//                        nameString,
-//                        invocation != NULL ? WCDBRustDatabaseConfig : NULL,
-//                        invocation,
-//                        unInvocation != NULL ? WCDBRustDatabaseConfig : NULL,
-//                        unInvocation,
-//                        priority,
-//                        WCDBRustDestructContext);
-//     WCDBRustReleaseString(name);
-// }
+
+bool WCDBRustDatabaseConfigInvocationCallback(void* invocation, CPPHandle handle) {
+    bool ret = false;
+    if (invocation == NULL) {
+        return ret;
+    }
+    RustSetConfigCallback callback = (RustSetConfigCallback)invocation;
+    ret = callback((void*)handle.innerValue);
+    return ret;
+}
+
+bool WCDBRustDatabaseConfigUnInvocationCallback(void* unInvocation, CPPHandle handle) {
+    bool ret = false;
+    if (unInvocation == NULL) {
+        return ret;
+    }
+    RustSetConfigCallback callback = (RustSetConfigCallback)unInvocation;
+    ret = callback((void*)handle.innerValue);
+    return ret;
+}
+
+void WCDBRustSetConfigDestructContext(void* context) {
+    if (context != NULL) {
+        free(context);
+        context = NULL;
+    }
+}
+
+void WCDBRustDatabaseClassMethod(config,
+                                 void* self,
+                                 const char* name,
+                                 RustSetConfigCallback* invocation,
+                                 RustSetConfigCallback* unInvocation,
+                                 int priority) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseConfig(
+        selfStruct, name, invocation != NULL ? WCDBRustDatabaseConfigInvocationCallback : NULL,
+        invocation, unInvocation != NULL ? WCDBRustDatabaseConfigUnInvocationCallback : NULL,
+        unInvocation, priority, (WCDBContextDestructor)WCDBRustSetConfigDestructContext);
+}
+
 //
 // void WCDBRustDatabaseClassMethod(enableLiteMode, jlong self, jboolean enable)
 //{

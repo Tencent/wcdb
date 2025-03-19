@@ -13,7 +13,7 @@ pub trait SelectingObjectOperationTrait {
 
 pub struct TableTestCase {
     table_name: String,
-    data_base_test_case: DatabaseTestCase,
+    pub(crate) data_base_test_case: DatabaseTestCase,
     is_virtual_table: bool,
 }
 
@@ -23,7 +23,7 @@ impl TestCaseTrait for TableTestCase {
     }
 
     fn teardown(&self) -> WCDBResult<()> {
-        Ok(())
+        self.data_base_test_case.teardown()
     }
 }
 

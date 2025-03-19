@@ -71,11 +71,11 @@ impl DatabaseTestCase {
             .insert_object(object, fields, table_name)
     }
 
-    fn do_test_sql<CB>(&self, sql: String, operation: CB)
+    pub fn do_test_sql<CB>(&self, sql: &str, operation: CB)
     where
         CB: FnOnce() -> WCDBResult<()>,
     {
-        let vec = vec![sql];
+        let vec = vec![sql.to_string()];
         let _ = self.do_test_sql_vec(vec, operation);
     }
 

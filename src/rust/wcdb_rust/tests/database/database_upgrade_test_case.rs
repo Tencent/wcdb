@@ -256,18 +256,16 @@ pub mod database_upgrade_test {
         // insert
         let conversation_table =
             database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE);
-        conversation_table
-            .insert_object(
-                ConversationTableV1::insert("t1"),
-                DbConversationTableV1::all_fields(),
-            )
-            .unwrap();
-        conversation_table
-            .insert_object(
-                ConversationTableV1::insert("t2"),
-                DbConversationTableV1::all_fields(),
-            )
-            .unwrap();
+        let insert_result = conversation_table.insert_object(
+            ConversationTableV1::insert("t1"),
+            DbConversationTableV1::all_fields(),
+        );
+        assert!(insert_result.is_ok());
+        let insert_result = conversation_table.insert_object(
+            ConversationTableV1::insert("t2"),
+            DbConversationTableV1::all_fields(),
+        );
+        assert!(insert_result.is_ok());
         database.close(Some(|| {}));
 
         upgrade_to_v2();
@@ -394,12 +392,14 @@ pub mod database_upgrade_test {
             .unwrap();
         let msg_table = database.get_table("MessageTable", &*DBMESSAGETABLEV1_INSTANCE);
         // insert
-        msg_table
-            .insert_object(MessageTableV1::insert("t1"), DbMessageTableV1::all_fields())
-            .unwrap();
-        msg_table
-            .insert_object(MessageTableV1::insert("t2"), DbMessageTableV1::all_fields())
-            .unwrap();
+        let insert_result =
+            msg_table.insert_object(MessageTableV1::insert("t1"), DbMessageTableV1::all_fields());
+        assert!(insert_result.is_ok());
+
+        let insert_result =
+            msg_table.insert_object(MessageTableV1::insert("t2"), DbMessageTableV1::all_fields());
+        assert!(insert_result.is_ok());
+
         let result = msg_table.get_all_objects();
         assert!(result.is_ok());
         match result {
@@ -461,12 +461,11 @@ pub mod database_upgrade_test {
             .unwrap();
         let tag_table = database.get_table("TagTable", &*DBTAGTABLEV1_INSTANCE);
         // insert
-        tag_table
-            .insert_object(TagTableV1::new(), DbTagTableV1::all_fields())
-            .unwrap();
-        tag_table
-            .insert_object(TagTableV1::new(), DbTagTableV1::all_fields())
-            .unwrap();
+        let insert_result = tag_table.insert_object(TagTableV1::new(), DbTagTableV1::all_fields());
+        assert!(insert_result.is_ok());
+
+        let insert_result = tag_table.insert_object(TagTableV1::new(), DbTagTableV1::all_fields());
+        assert!(insert_result.is_ok());
 
         // 删除表
         let statement = StatementDropTable::new();
@@ -504,25 +503,22 @@ pub mod database_upgrade_test {
                 &*("x".to_string() + &*String::from(x.to_string())),
             ));
         }
-        conversation_table
-            .insert_objects(vec, DbConversationTableV1::all_fields())
-            .unwrap();
+        let insert_result =
+            conversation_table.insert_objects(vec, DbConversationTableV1::all_fields());
+        assert!(insert_result.is_ok());
+
         database.close(Some(|| {}));
 
         // 模拟升级崩溃，ConversationTableV1_1 结构体增加了3个字段，删除了2个字段
         let handle = thread::spawn(move || {
             let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
             let result = panic::catch_unwind(|| {
-                println!("bugtags->start");
                 database
                     .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_1_INSTANCE)
                     .unwrap();
-                println!("bugtags->create_table");
                 panic!("error");
             });
-            if let Err(e) = result {
-                println!("bugtags->thread panic error");
-            }
+            if let Err(e) = result {}
         });
         thread::sleep(std::time::Duration::from_millis(100));
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
@@ -562,9 +558,10 @@ pub mod database_upgrade_test {
                 &*("x".to_string() + &*String::from(x.to_string())),
             ));
         }
-        conversation_table
-            .insert_objects(vec, DbConversationTableV1::all_fields())
-            .unwrap();
+        let insert_result =
+            conversation_table.insert_objects(vec, DbConversationTableV1::all_fields());
+        assert!(insert_result.is_ok());
+
         database.close(Some(|| {}));
 
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
@@ -575,12 +572,11 @@ pub mod database_upgrade_test {
             database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_2_INSTANCE);
         let result = conversation_table.get_all_objects();
         assert!(result.is_ok());
-        conversation_table
-            .insert_object(
-                ConversationTableV1_2::new(),
-                DbConversationTableV1_2::all_fields(),
-            )
-            .unwrap();
+        let insert_result = conversation_table.insert_object(
+            ConversationTableV1_2::new(),
+            DbConversationTableV1_2::all_fields(),
+        );
+        assert!(insert_result.is_ok());
 
         let conversation_table =
             database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_2_INSTANCE);
