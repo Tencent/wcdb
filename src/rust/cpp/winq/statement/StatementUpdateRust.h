@@ -34,7 +34,10 @@
 
 void* WCDBRustStatementUpdateClassMethodWithNoArg(create);
 
-// void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions);
+void WCDBRustStatementUpdateClassMethod(configWith,
+                                        void* self,
+                                        void** expressions,
+                                        int expressionsLength);
 // void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self);
 //
 void WCDBRustStatementUpdateClassMethod(configTable,
@@ -57,7 +60,11 @@ void WCDBRustStatementUpdateClassMethod(configColumnsToBindParameters,
                                         WCDBRustObjectOrStringArrayParameter(columns));
 void WCDBRustStatementUpdateClassMethod(configCondition, void* self, void* condition);
 void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders, size_t len);
-// void WCDBRustStatementUpdateClassMethod(
-// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to);
+void WCDBRustStatementUpdateClassMethod(configLimitRange,
+                                        void* self,
+                                        int fromType,
+                                        long from,
+                                        int toType,
+                                        long to);
 void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit);
 void WCDBRustStatementUpdateClassMethod(configOffset, void* self, int type, long offset);

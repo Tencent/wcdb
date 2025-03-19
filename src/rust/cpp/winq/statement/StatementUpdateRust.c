@@ -26,15 +26,15 @@ void* WCDBRustStatementUpdateClassMethodWithNoArg(create) {
     return (void*)WCDBStatementUpdateCreate().innerValue;
 }
 
-// void WCDBRustStatementUpdateClassMethod(configWith, jlong self, jlongArray expressions)
-//{
-//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//     WCDBRustGetCppPointerArrayCritical(expressions);
-//     WCDBStatementUpdateConfigWith(
-//     selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
-//     WCDBRustReleaseCppPointerArrayCritical(expressions);
-// }
-//
+void WCDBRustStatementUpdateClassMethod(configWith,
+                                        void* self,
+                                        void** expressions,
+                                        int expressionsLength) {
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBStatementUpdateConfigWith(selfStruct, (const CPPCommonTableExpression*)expressions,
+                                  expressionsLength);
+}
+
 // void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self)
 //{
 //     WCDBRustBridgeStruct(CPPStatementUpdate, self);
@@ -104,18 +104,21 @@ void WCDBRustStatementUpdateClassMethod(configOrders, void* self, void** orders,
     //    WCDBRustReleaseCppPointerArrayCritical(orders);
 }
 
-// void WCDBRustStatementUpdateClassMethod(
-// configLimitRange, jlong self, jint fromType, jlong from, jint toType, jlong to)
-//{
-//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//     CPPCommonValue from_common;
-//     from_common.type = fromType;
-//     from_common.intValue = from;
-//     CPPCommonValue to_common;
-//     to_common.type = toType;
-//     to_common.intValue = to;
-//     WCDBStatementUpdateConfigLimitRange2(selfStruct, from_common, to_common);
-// }
+void WCDBRustStatementUpdateClassMethod(configLimitRange,
+                                        void* self,
+                                        int fromType,
+                                        long from,
+                                        int toType,
+                                        long to) {
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    CPPCommonValue from_common;
+    from_common.type = fromType;
+    from_common.intValue = from;
+    CPPCommonValue to_common;
+    to_common.type = toType;
+    to_common.intValue = to;
+    WCDBStatementUpdateConfigLimitRange2(selfStruct, from_common, to_common);
+}
 
 void WCDBRustStatementUpdateClassMethod(configLimitCount, void* self, int type, long limit) {
     WCDBRustBridgeStruct(CPPStatementUpdate, self);

@@ -17,6 +17,7 @@ pub mod literal_value;
 pub mod multi_type_array;
 pub mod ordering_term;
 pub mod pragma;
+pub mod qualified_table;
 pub mod result_column;
 pub mod result_column_convertible_trait;
 pub mod schema;
