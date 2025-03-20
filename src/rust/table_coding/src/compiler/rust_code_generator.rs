@@ -507,7 +507,7 @@ impl RustCodeGenerator {
         table_ident: &&Ident,
     ) -> syn::Result<proc_macro2::TokenStream> {
         let all_column_info_vec = &self.all_column_info;
-        let mut index: usize = 1;
+        let mut column_index: usize = 1;
         let mut bind_token_stream_vec = vec![];
         for column_info in all_column_info_vec {
             let property_type = column_info.property_type();
@@ -520,26 +520,26 @@ impl RustCodeGenerator {
                 Ident::new(field_orm_info.field_setter.as_str(), Span::call_site());
             if field_orm_info.nullable {
                 bind_token_stream_vec.push(quote::quote! {
-                    #index => {
+                    #column_index => {
                         if object.#field_name_ident.is_some() {
-                             prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), #index);
+                             prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), index);
                         } else {
-                            prepared_statement.bind_null(#index);
+                            prepared_statement.bind_null(index);
                         }
                     }
                 });
             } else {
                 if field_orm_info.column_type == "Text".to_string() {
                     bind_token_stream_vec.push(quote::quote! {
-                        #index => prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), #index)
+                        #column_index => prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), index)
                     });
                 } else {
                     bind_token_stream_vec.push(quote::quote! {
-                        #index => prepared_statement.#bind_method_ident(object.#field_name_ident, #index)
+                        #column_index => prepared_statement.#bind_method_ident(object.#field_name_ident, index)
                     });
                 }
             }
-            index += 1;
+            column_index += 1;
         }
         Ok(quote::quote! {
              fn bind_field(
