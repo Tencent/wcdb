@@ -57,6 +57,7 @@ fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
 
     let singleton_statements = code_gen.generate_singleton(&table)?;
     let generate_binding_type = code_gen.generate_binding_type(&table_ident)?;
+    let generate_fields = code_gen.generate_fields(&table)?;
     let generate_binding_fields =
         code_gen.generate_binding_fields(&table_ident, &field_ident_vec)?;
     let generate_base_binding = code_gen.generate_base_binding(&binding_ident)?;
@@ -125,6 +126,8 @@ fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
                     #(&*#instance_ident.#field_ident_vec,)*
                 ] }
             }
+
+            #generate_fields
         }
     })
 }

@@ -86,17 +86,24 @@ impl RustCodeGenerator {
         }
     }
 
-    pub(crate) fn generate_fields(&self) -> syn::Result<proc_macro2::TokenStream> {
+    pub(crate) fn generate_fields(
+        &self,
+        table: &WCDBTable,
+    ) -> syn::Result<proc_macro2::TokenStream> {
+        let table_ident = table.ident();
+        let db_table_ident = table.get_db_table();
+        let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
+        let instance_ident = Ident::new(&instance, Span::call_site());
+
         let mut token_stream = proc_macro2::TokenStream::new();
-        let class_name = &self.class_name;
         for column_info in &self.all_column_info {
             let name = &column_info.property_name();
-            // name: id ， class_name: ProcessorTest
-            let stream_tmp: proc_macro2::TokenStream = quote! {
-                pub(crate) #name: Field<#class_name>,
-            }
-            .into();
-            token_stream.extend(stream_tmp);
+            let name_ident = Ident::new(&*name, Span::call_site());
+            token_stream.extend(quote! {
+                pub fn #name_ident() -> &'static wcdb_core::orm::field::Field<#table_ident> {
+                    unsafe { &*#instance_ident.#name_ident }
+                }
+            });
         }
         Ok(token_stream)
     }
