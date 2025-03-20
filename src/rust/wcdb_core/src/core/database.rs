@@ -1411,7 +1411,7 @@ impl Database {
     pub fn get_all_rows_from_statement<T: StatementTrait>(
         &self,
         statement: &T,
-    ) -> WCDBResult<(Vec<Vec<Value>>)> {
+    ) -> WCDBResult<Vec<Vec<Value>>> {
         let handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement(statement);
         match result {

@@ -1246,9 +1246,9 @@ impl Expression {
         }
     }
 
-    pub fn new_with_column(column: Column) -> Self {
+    pub fn new_with_column(column: &Column) -> Self {
         let cpp_obj = unsafe {
-            WCDBRustExpression_create(Identifier::get_cpp_type(&column), CppObject::get(&column))
+            WCDBRustExpression_create(Identifier::get_cpp_type(column), CppObject::get(column))
         };
         Expression {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),

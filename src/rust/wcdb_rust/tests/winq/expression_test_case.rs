@@ -15,8 +15,8 @@ pub mod expression_test {
 
     #[test]
     pub fn test_expression_binary_operation() {
-        let expression_left = Expression::new_with_column(Column::new("left"));
-        let expression_right = Expression::new_with_column(Column::new("right"));
+        let expression_left = Expression::new_with_column(&Column::new("left"));
+        let expression_right = Expression::new_with_column(&Column::new("right"));
     }
 
     #[test]

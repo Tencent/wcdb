@@ -320,28 +320,28 @@ pub mod orm_test {
         let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
         let _ = table.insert_objects(obj_vec, DbAllTypeObject::all_fields());
 
-        let exp = Expression::new_with_column(Column::new("field_type"))
+        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
             .eq_string(max.field_type.as_str());
         let db_max_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
             .unwrap();
         assert!(max == db_max_opt.unwrap());
 
-        let exp = Expression::new_with_column(Column::new("field_type"))
+        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
             .eq_string(min.field_type.as_str());
         let db_min_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
             .unwrap();
         assert!(min == db_min_opt.unwrap());
 
-        let exp = Expression::new_with_column(Column::new("field_type"))
+        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
             .eq_string(empty.field_type.as_str());
         let db_empty_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
             .unwrap();
         assert!(empty == db_empty_opt.unwrap());
 
-        let exp = Expression::new_with_column(Column::new("field_type"))
+        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
             .eq_string(random.field_type.as_str());
         let db_random_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), exp)
