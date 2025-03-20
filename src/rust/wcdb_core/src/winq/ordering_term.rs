@@ -1,6 +1,6 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_int, c_void};
 
 extern "C" {
@@ -30,6 +30,12 @@ impl CppObjectTrait for OrderingTerm {
 
     fn release_cpp_object(&mut self) {
         self.identifier.release_cpp_object();
+    }
+}
+
+impl IdentifierTrait for OrderingTerm {
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
     }
 }
 
