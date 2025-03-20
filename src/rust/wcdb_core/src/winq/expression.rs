@@ -1255,9 +1255,9 @@ impl Expression {
         }
     }
 
-    pub fn new_with_statement_select(select: StatementSelect) -> Self {
+    pub fn new_with_statement_select(select: &StatementSelect) -> Self {
         let cpp_obj = unsafe {
-            WCDBRustExpression_create(Identifier::get_cpp_type(&select), CppObject::get(&select))
+            WCDBRustExpression_create(Identifier::get_cpp_type(select), CppObject::get(select))
         };
         Expression {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),

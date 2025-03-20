@@ -1235,7 +1235,7 @@ impl Column {
     }
 
     pub fn order(&self, order: Order) -> OrderingTerm {
-        OrderingTerm::new(Self::get_type(), self).order(order)
+        OrderingTerm::new(self).order(order)
     }
 
     pub fn as_def(&self, column_type: ColumnType) -> ColumnDef {
