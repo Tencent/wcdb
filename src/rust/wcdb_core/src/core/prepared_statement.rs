@@ -371,14 +371,9 @@ impl PreparedStatement {
 
     pub fn get_one_object<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<Option<T>> {
         assert!(fields.len() > 0);
-        let field_opt = fields.first();
-        match field_opt {
-            Some(field) => {
-                let ret = field.get_table_binding().extract_object(fields, self);
-                Ok(Some(ret))
-            }
-            None => Err(WCDBException::create_exception(self.get_cpp_obj())),
-        }
+        let binding = fields[0].get_table_binding();
+        let ret = binding.extract_object(fields, self);
+        Ok(Some(ret))
     }
 
     pub fn get_all_objects<T>(&self, fields: &Vec<&Field<T>>) -> WCDBResult<Vec<T>> {

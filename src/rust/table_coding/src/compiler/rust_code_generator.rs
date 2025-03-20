@@ -458,7 +458,7 @@ impl RustCodeGenerator {
         table_ident: &&Ident,
     ) -> syn::Result<proc_macro2::TokenStream> {
         let all_column_info_vec = &self.all_column_info;
-        let mut index: usize = 1;
+        let mut column_index: usize = 1;
         let mut extract_token_stream_vec = vec![];
         for column_info in all_column_info_vec {
             let property_type = column_info.property_type();
@@ -471,9 +471,9 @@ impl RustCodeGenerator {
                 Ident::new(field_orm_info.field_getter.as_str(), Span::call_site());
             if field_orm_info.nullable {
                 extract_token_stream_vec.push(quote! {
-                    #index => {
+                    #column_index => {
                         if prepared_statement.get_column_type(index) != wcdb_core::winq::column_type::ColumnType::Null {
-                            new_one.#field_name_ident = prepared_statement.#extract_method_ident(#index - 1);
+                            new_one.#field_name_ident = prepared_statement.#extract_method_ident(index);
                         } else {
                             new_one.#field_name_ident = None;
                         }
@@ -481,10 +481,10 @@ impl RustCodeGenerator {
                 });
             } else {
                 extract_token_stream_vec.push(quote! {
-                    #index => new_one.#field_name_ident = prepared_statement.#extract_method_ident(#index - 1)
+                    #column_index => new_one.#field_name_ident = prepared_statement.#extract_method_ident(index)
                 });
             }
-            index += 1;
+            column_index += 1;
         }
 
         Ok(quote::quote! {
