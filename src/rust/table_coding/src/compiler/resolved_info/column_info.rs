@@ -71,7 +71,7 @@ impl ColumnInfo {
             .map(|field_name| field_name.to_string())
             .collect::<String>();
         column_info.property_type =
-            WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
+            WCDBField::get_field_type_string(&field.ty()).unwrap_or(String::from("None"));
         column_info.nullable = field.is_not_null();
         column_info.column_name = field.column_name();
         column_info.is_primary = field.is_primary();

@@ -85,13 +85,14 @@ void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value,
     WCDBHandleStatementBindText(selfStruct, index, value);
 }
 
-// void WCDBRustHandleStatementClassMethod(bindBLOB, void* self, jbyteArray value, jint index)
-//{
-//     WCDBRustBridgeStruct(CPPHandleStatement, self);
-//     WCDBRustGetByteArrayCritical(value);
-//     WCDBHandleStatementBindBlob(selfStruct, index, valueArray, valueLength);
-//     WCDBRustReleaseByteArrayCritical(value);
-// }
+void WCDBRustHandleStatementClassMethod(bindBLOB,
+                                        void* self,
+                                        const unsigned char* data,
+                                        size_t len,
+                                        int index) {
+    WCDBRustBridgeStruct(CPPHandleStatement, self);
+    WCDBHandleStatementBindBlob(selfStruct, index, data, len);
+}
 
 void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index) {
     WCDBRustBridgeStruct(CPPHandleStatement, self);

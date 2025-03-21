@@ -77,51 +77,37 @@ impl WCDBField {
 }
 
 impl WCDBField {
-    pub fn get_field_type_string(field: &Type) -> syn::Result<String> {
-        match field {
-            Type::Path(type_path) => {
-                if let Some(segment) = type_path.path.segments.first() {
-                    let mut type_name = String::new();
-                    // 解析 Option<String> | Option<i64>
-                    if segment.ident == "Option" {
-                        type_name.push_str("Option");
-
-                        if let syn::PathArguments::AngleBracketed(args) = &segment.arguments {
-                            let generics: Vec<String> = args
-                                .args
-                                .iter()
-                                .filter_map(|arg| {
-                                    // 提取基础类型参数（如 String/i64）
-                                    if let GenericArgument::Type(Type::Path(ty)) = arg {
-                                        ty.path.segments.last().map(|s| s.ident.to_string())
-                                    } else {
-                                        None
-                                    }
-                                })
-                                .collect();
-
-                            if !generics.is_empty() {
-                                type_name.push('<');
-                                type_name.push_str(&generics.join(", "));
-                                type_name.push('>');
-                            }
+    fn extract_type_path(ty: &Type) -> Vec<String> {
+        let mut segments = Vec::new();
+        if let Type::Path(type_path) = ty {
+            for segment in &type_path.path.segments {
+                segments.push(segment.ident.to_string());
+                if let syn::PathArguments::AngleBracketed(args) = &segment.arguments {
+                    for arg in &args.args {
+                        if let GenericArgument::Type(inner_ty) = arg {
+                            segments.extend(Self::extract_type_path(inner_ty));
                         }
                     }
-                    if !type_name.is_empty() {
-                        return Ok(type_name);
-                    }
                 }
-                Ok(type_path.path.segments[0].ident.to_string())
             }
-            _ => Err(syn::Error::new(
-                field.span(),
-                "WCDBTable's field type only works on Path",
-            )),
         }
+        segments
     }
 
-    pub fn get_property_type(field: &Type) -> syn::Result<String> {
-        let column_type_string = WCDBField::get_field_type_string(field)?;
-        Ok(column_type_string)
+    pub fn get_field_type_string(field: &Type) -> syn::Result<String> {
+        let segments = Self::extract_type_path(field);
+        let mut value = segments.iter().fold(String::new(), |acc, s| {
+            if acc.is_empty() {
+                s.clone()
+            } else {
+                format!("{}<{}", acc, s)
+            }
+        });
+        if segments.len() > 1 {
+            for _ in 0..segments.len() - 1 {
+                value.push('>');
+            }
+        }
+        Ok(value)
     }
 }

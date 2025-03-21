@@ -300,7 +300,7 @@ pub mod orm_test {
 
         let mut sql_vec = vec![];
         // sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT, a_bool INTEGER, a_byte INTEGER, a_short INTEGER, a_int INTEGER, a_long INTEGER, a_float REAL, a_double REAL, a_string TEXT)".to_string());
-        sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT , a_bool INTEGER , a_bool2 INTEGER , a_byte INTEGER , a_byte2 INTEGER , a_short INTEGER , a_short2 INTEGER , a_int INTEGER , a_int2 INTEGER , a_long INTEGER , a_long2 INTEGER , a_float REAL , a_float2 REAL , a_double REAL , a_double2 REAL , a_string TEXT , a_string2 TEXT )".to_string());
+        sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT , a_bool INTEGER , a_bool2 INTEGER , a_byte INTEGER , a_byte2 INTEGER , a_short INTEGER , a_short2 INTEGER , a_int INTEGER , a_int2 INTEGER , a_long INTEGER , a_long2 INTEGER , a_float REAL , a_float2 REAL , a_double REAL , a_double2 REAL , a_string TEXT , a_string2 TEXT , a_blob BLOB , a_blob2 BLOB )".to_string());
 
         orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
             orm_test

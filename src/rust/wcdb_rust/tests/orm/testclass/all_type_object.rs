@@ -44,9 +44,12 @@ pub struct AllTypeObject {
     pub a_string: String,
     #[WCDBField]
     pub a_string2: Option<String>,
+
     // BLOB
-    // #[WCDBField] todo qixinbing 待实现
-    // a_blob : Vec<u8>,
+    #[WCDBField]
+    a_blob: Vec<u8>,
+    #[WCDBField]
+    pub a_blob2: Option<Vec<u8>>,
 }
 
 impl AllTypeObject {
@@ -69,7 +72,8 @@ impl AllTypeObject {
             a_double2: None,
             a_string: "".to_string(),
             a_string2: None,
-            // a_blob : Vec::new(),
+            a_blob: Vec::new(),
+            a_blob2: None,
         }
     }
 
@@ -90,6 +94,8 @@ impl AllTypeObject {
             && self.a_float2 == other.a_float2
             && self.a_double2 == other.a_double2
             && self.a_string2 == other.a_string2
+            && self.a_blob == other.a_blob
+            && self.a_blob2 == other.a_blob2
     }
 }
 
@@ -115,6 +121,8 @@ impl AllTypeObjectHelper {
             a_double2: Some(f64::MAX),
             a_string: RandomTool::string(),
             a_string2: Some(RandomTool::string()),
+            a_blob: RandomTool::bytes(),
+            a_blob2: Some(RandomTool::bytes()),
         }
     }
 
@@ -137,6 +145,8 @@ impl AllTypeObjectHelper {
             a_double2: Some(f64::MIN),
             a_string: RandomTool::string(),
             a_string2: Some(RandomTool::string()),
+            a_blob: RandomTool::bytes(),
+            a_blob2: Some(RandomTool::bytes()),
         }
     }
 
@@ -160,6 +170,8 @@ impl AllTypeObjectHelper {
             a_double2: Some(rng.gen::<f64>()),
             a_string: RandomTool::string(),
             a_string2: Some(RandomTool::string()),
+            a_blob: RandomTool::bytes(),
+            a_blob2: Some(RandomTool::bytes()),
         }
     }
 
@@ -182,6 +194,8 @@ impl AllTypeObjectHelper {
             a_double2: None,
             a_string: RandomTool::string(),
             a_string2: None,
+            a_blob: Vec::new(),
+            a_blob2: None,
         }
     }
 }

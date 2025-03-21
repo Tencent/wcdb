@@ -553,7 +553,9 @@ impl RustCodeGenerator {
                     }
                 });
             } else {
-                if field_orm_info.column_type == "Text".to_string() {
+                if field_orm_info.column_type == "Text".to_string()
+                    || field_orm_info.column_type == "BLOB".to_string()
+                {
                     bind_token_stream_vec.push(quote::quote! {
                         #column_index => prepared_statement.#bind_method_ident(object.#field_name_ident.as_ref(), index)
                     });

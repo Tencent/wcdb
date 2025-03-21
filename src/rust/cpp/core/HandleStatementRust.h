@@ -52,7 +52,11 @@ void WCDBRustHandleStatementClassMethod(bindDouble, void* self, double value, in
 
 void WCDBRustHandleStatementClassMethod(bindText, void* self, const char* value, int index);
 
-// void WCDBRustHandleStatementClassMethod(bindBLOB, void* self, jbyteArray value, jint index);
+void WCDBRustHandleStatementClassMethod(bindBLOB,
+                                        void* self,
+                                        const unsigned char* data,
+                                        size_t len,
+                                        int index);
 void WCDBRustHandleStatementClassMethod(bindNull, void* self, int index);
 
 // jint WCDBRustHandleStatementClassMethod(bindParameterIndex, void* self, jstring parameterName);

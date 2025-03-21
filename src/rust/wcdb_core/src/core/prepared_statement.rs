@@ -25,6 +25,12 @@ extern "C" {
         value: *const c_char,
         index: c_size_t,
     );
+    fn WCDBRustHandleStatement_bindBLOB(
+        cpp_obj: *mut c_void,
+        value: *const u8,
+        value_len: c_size_t,
+        index: c_size_t,
+    );
     fn WCDBRustHandleStatement_bindNull(cpp_obj: *mut c_void, index: c_size_t);
     fn WCDBRustHandleStatement_getInteger(cpp_obj: *mut c_void, index: c_size_t) -> c_long;
     fn WCDBRustHandleStatement_getDouble(cpp_obj: *mut c_void, index: c_size_t) -> c_double;
@@ -173,7 +179,18 @@ impl PreparedStatement {
     }
 
     pub fn bind_blob(&self, value: &Vec<u8>, index: usize) {
-        todo!("qixinbing")
+        let len = value.len();
+        unsafe {
+            WCDBRustHandleStatement_bindBLOB(*self.cpp_obj, value.as_ptr(), len, index);
+        }
+    }
+
+    pub fn bind_blob_opt(&self, value: Option<&Vec<u8>>, index: usize) {
+        if let Some(v) = value {
+            self.bind_blob(v, index);
+        } else {
+            self.bind_null(index);
+        }
     }
 
     pub fn bind_null(&self, index: usize) {
@@ -331,6 +348,13 @@ impl PreparedStatement {
         }
         let blob: &[u8] = unsafe { slice::from_raw_parts(blob_ptr, blob_len as usize) };
         blob.to_vec()
+    }
+
+    pub fn get_blob_opt(&self, index: usize) -> Option<Vec<u8>> {
+        if self.get_column_type(index) == ColumnType::Null {
+            return None;
+        }
+        Some(self.get_blob(index))
     }
 
     pub fn prepare<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {

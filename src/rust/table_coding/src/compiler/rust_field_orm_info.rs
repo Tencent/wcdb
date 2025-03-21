@@ -85,5 +85,13 @@ pub static RUST_FIELD_ORM_INFO_MAP: Lazy<HashMap<String, RustFieldORMInfo>> = La
         "Option<String>".to_string(),
         RustFieldORMInfo::new("Text", true, "bind_text_opt", "get_text_opt"),
     );
+    all_info.insert(
+        "Vec<u8>".to_string(),
+        RustFieldORMInfo::new("BLOB", false, "bind_blob", "get_blob"),
+    );
+    all_info.insert(
+        "Option<Vec<u8>>".to_string(),
+        RustFieldORMInfo::new("BLOB", true, "bind_blob_opt", "get_blob_opt"),
+    );
     all_info
 });
