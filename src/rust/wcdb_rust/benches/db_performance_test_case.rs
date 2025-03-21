@@ -42,7 +42,7 @@ pub struct FriendProfileTable {
     pub user_id: String,
     #[WCDBField]
     pub remark: String,
-    #[WCDBField(attr(default(i32_value = 1),))]
+    #[WCDBField(default(i32_value = 1))]
     pub friend_type: i32,
     #[WCDBField]
     pub is_top: bool,

@@ -44,11 +44,11 @@ pub struct ConversationTableV1_1 {
     pub channel_id: String,
     #[WCDBField]
     pub conversation_title: String,
-    #[WCDBField(attr(default(i32_value = 100),))]
+    #[WCDBField(default(i32_value = 100))]
     pub a1: i32,
     #[WCDBField]
     pub a2: i32,
-    #[WCDBField(attr(default(i32_value = 100),))]
+    #[WCDBField(default(i32_value = 100))]
     pub a3: i32,
 }
 
@@ -155,9 +155,9 @@ pub struct ConversationTableV3 {
     pub conversation_title: String,
     #[WCDBField]
     pub is_top: bool,
-    #[WCDBField(attr(default(i32_value = 3),))]
+    #[WCDBField(default(i32_value = 3))]
     pub status: i32,
-    #[WCDBField(attr(default(text_value = "default"),))]
+    #[WCDBField(default(text_value = "default"))]
     pub extra_column1: String,
 }
 impl ConversationTableV3 {

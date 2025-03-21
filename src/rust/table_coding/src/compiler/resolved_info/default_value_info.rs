@@ -17,7 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-use crate::macros::field_attr::FieldAttr;
 use crate::macros::wcdb_default::WCDBDefault;
 
 #[derive(Clone, Debug)]
@@ -48,13 +47,10 @@ impl DefaultValueInfo {
         self.text_value.clone()
     }
 
-    pub(crate) fn resolve(attr: &Option<FieldAttr>) -> Option<DefaultValueInfo> {
-        match attr {
+    pub(crate) fn resolve(default_opt: &Option<WCDBDefault>) -> Option<DefaultValueInfo> {
+        match default_opt {
             None => None,
-            Some(val) => match val.default() {
-                None => None,
-                Some(default) => Some(DefaultValueInfo::create(&default)),
-            },
+            Some(default) => Some(DefaultValueInfo::create(&default)),
         }
     }
 

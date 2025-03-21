@@ -4,14 +4,12 @@ mod compiler;
 mod macros;
 
 use crate::compiler::resolved_info::column_info::ColumnInfo;
-use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
 use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
 use crate::compiler::rust_code_generator::RustCodeGenerator;
 use crate::compiler::rust_field_orm_info::RUST_FIELD_ORM_INFO_MAP;
 use crate::macros::wcdb_field::WCDBField;
 use crate::macros::wcdb_table::WCDBTable;
-use darling::ast::Data;
 use darling::{FromDeriveInput, FromField, FromMeta};
 use proc_macro::TokenStream;
 use quote::ToTokens;
@@ -37,7 +35,8 @@ pub fn process(input: TokenStream) -> TokenStream {
     );
     let all_column_info = table.get_all_column_info();
 
-    check_field_element(&table);
+    check_field_element(&table, &all_column_info);
+    check_field_default(&all_column_info);
 
     check_column_in_table_constraint(&table_constraint_info, &all_column_info);
 
@@ -83,84 +82,108 @@ fn check_fts_module(table: &WCDBTable) {
     // todo qixinbing
 }
 
-fn check_field_element(table: &WCDBTable) {
+fn check_field_element(table: &WCDBTable, all_column_info: &Vec<ColumnInfo>) {
+    let column_type_vec: Vec<&String> = RUST_FIELD_ORM_INFO_MAP.keys().collect();
+
     let mut primary_key_count = 0;
-    match &table.data() {
-        Data::Struct(fields) => fields
+    for column_info in all_column_info {
+        let has_contain = column_type_vec
             .iter()
-            .map(|field| {
-                let field_key = field.ident().span().source_text();
-                if field.is_primary() {
-                    primary_key_count += 1;
-                    if primary_key_count > 1 {
-                        panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ", field_key.unwrap())
-                    }
+            .any(|x| *x == column_info.property_type().as_str());
+        if !has_contain {
+            panic!(
+                "The type {} of field {} in {} is Unsupported!",
+                column_info.property_type(),
+                column_info.property_name(),
+                table.get_struct_name()
+            );
+        }
 
-                    if field.is_auto_increment() {
-                        if !field.is_integer() {
-                            panic!("#[WCDBField] Auto-increment field must be integer for \"{}\".", field_key.unwrap());
-                        }
-                    }
+        let field_key = column_info.property_name();
+        let field_key = field_key.as_str();
+        if column_info.is_primary() {
+            primary_key_count += 1;
+            if primary_key_count > 1 {
+                panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ", field_key)
+            }
 
-                    match field.attr() {
-                        None => {}
-                        Some(attr) => {
-                            match attr.index() {
-                                None => {}
-                                Some(_) => {
-                                    panic!("Restricted to primary key, so no @WCDBIndex configuration is required.field_key:  \"{}\".", field_key.unwrap());
-                                }
-                            }
-                        }
-                    }
-                } else if field.is_auto_increment() {
-                    panic!("#[WCDBField] Auto-increment field must be primary key for \"{}\".", field_key.unwrap());
+            if column_info.is_auto_increment() {
+                let field_orm_info = column_info.get_field_orm_info();
+                if field_orm_info.column_type != "Integer" {
+                    panic!(
+                        "#[WCDBField] Auto-increment field must be integer for \"{}\".",
+                        field_key
+                    );
                 }
-                check_field_not_null(field, &field_key);
-                for field in &fields.fields {
-                    let mut value_count = 0;
-                    let mut type_miss_match = false;
-                    let property_type = WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
-                    let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
-                    assert!(field_orm_info_opt.is_some(), "filed not support {}",property_type.as_str());
-                    let column_type = field_orm_info_opt.unwrap().column_type.clone();
+            }
 
-                    let default_opt = DefaultValueInfo::resolve(&field.attr());
-                    if default_opt.is_none() {
-                        continue;
-                    }
-                    let default = default_opt.unwrap();
-                    if default.i32_value() != 0 {
-                        value_count = value_count + 1;
-                        if column_type != "Integer" {
-                            type_miss_match = true;
-                        }
-                    }
-                    if default.f64_value() != 0f64 {
-                        value_count = value_count + 1;
-                        if column_type != "Float" {
-                            type_miss_match = true;
-                        }
-                    }
-                    if !default.text_value().is_empty() {
-                        value_count = value_count + 1;
-                        if column_type != "Text" {
-                            type_miss_match = true;
-                        }
-                    }
-                    if value_count > 1 {
-                        panic!("Only one default value can be configured for a field. \"{}\".", field_key.unwrap());
-                    } else if type_miss_match {
-                        if column_type != "BLOB" {
-                            panic!("Assigning a default value to BLOB is unsupported. \"{}\".", field_key.unwrap());
-                        }else {
-                            panic!("Default value should be a \"{}\".", column_type);
-                        }
-                    }
-                }
-            })
-            .collect(),
-        _ => panic!("WCDBTable only works on structs"),
+            if column_info.has_index() {
+                panic!("Restricted to primary key, so no @WCDBIndex configuration is required.field_key:  \"{}\".", field_key);
+            }
+        } else if column_info.is_auto_increment() {
+            panic!(
+                "#[WCDBField] Auto-increment field must be primary key for \"{}\".",
+                field_key
+            );
+        }
+
+        let field_orm_info = column_info.get_field_orm_info();
+        if column_info.is_not_null() && field_orm_info.nullable {
+            panic!(
+                "#[WCDBField] Not null field cannot support \"{}: {}\".",
+                field_key,
+                column_info.property_type(),
+            );
+        }
+    }
+}
+
+fn check_field_default(all_column_info: &Vec<ColumnInfo>) {
+    for column_info in all_column_info {
+        let mut value_count = 0;
+        let mut type_miss_match = false;
+
+        let field_orm_info = column_info.get_field_orm_info();
+        let column_type = field_orm_info.column_type.clone();
+
+        let default_opt = column_info.default_value();
+        if default_opt.is_none() {
+            continue;
+        }
+        let default = default_opt.clone().unwrap();
+        if default.i32_value() != 0 {
+            value_count = value_count + 1;
+            if column_type != "Integer" {
+                type_miss_match = true;
+            }
+        }
+        if default.f64_value() != 0f64 {
+            value_count = value_count + 1;
+            if column_type != "Float" {
+                type_miss_match = true;
+            }
+        }
+        if !default.text_value().is_empty() {
+            value_count = value_count + 1;
+            if column_type != "Text" {
+                type_miss_match = true;
+            }
+        }
+        if value_count > 1 {
+            panic!(
+                "Only one default value can be configured for a field. \"{}\".",
+                column_info.property_name()
+            );
+        } else if type_miss_match {
+            if column_type != "BLOB" {
+                panic!(
+                    "Assigning a default value to BLOB is unsupported. \"{}\".",
+                    column_info.property_name()
+                );
+            } else {
+                panic!("Default value should be a \"{}\".", column_type);
+            }
+        }
     }
 }
 
@@ -222,24 +245,5 @@ fn check_column_in_table_constraint(
                 }
             }
         }
-    }
-}
-
-fn check_field_not_null(field: &WCDBField, field_key: &Option<String>) {
-    let column_info = ColumnInfo::resolve(field);
-    let property_type = column_info.property_type();
-    let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
-    assert!(
-        field_orm_info_opt.is_some(),
-        "filed not support {}",
-        property_type.as_str()
-    );
-    let field_orm_info = field_orm_info_opt.unwrap();
-    if column_info.is_not_null() && field_orm_info.nullable {
-        panic!(
-            "#[WCDBField] Not null field cannot support \"{}: {}\".",
-            field_key.clone().unwrap(),
-            property_type.as_str(),
-        );
     }
 }

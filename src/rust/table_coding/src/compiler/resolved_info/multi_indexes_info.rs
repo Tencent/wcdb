@@ -21,7 +21,6 @@ use crate::compiler::resolved_info::column_info::ColumnInfo;
 use crate::macros::multi_indexes::MultiIndexes;
 use proc_macro2::{Ident, Span};
 use std::collections::HashMap;
-use syn::LitStr;
 
 pub struct MultiIndexesInfo {
     name: String,

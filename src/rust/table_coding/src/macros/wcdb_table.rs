@@ -6,7 +6,7 @@ use crate::macros::wcdb_field::WCDBField;
 use darling::ast::Data;
 use darling::FromDeriveInput;
 use proc_macro2::{Ident, Span};
-use syn::{Generics, Type};
+use syn::Generics;
 
 #[derive(Debug, FromDeriveInput)]
 #[darling(attributes(WCDBTable))]

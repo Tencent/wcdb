@@ -1,7 +1,7 @@
-use crate::compiler::rust_field_orm_info::RUST_FIELD_ORM_INFO_MAP;
-use crate::macros::field_attr::FieldAttr;
+use crate::macros::wcdb_default::WCDBDefault;
+use crate::macros::wcdb_index::WCDBIndex;
 use darling::FromField;
-use proc_macro2::{Ident, Span};
+use proc_macro2::Ident;
 use syn::spanned::Spanned;
 use syn::{GenericArgument, Type};
 
@@ -25,7 +25,9 @@ pub struct WCDBField {
     #[darling(default)]
     is_not_indexed: bool,
     #[darling(default)]
-    attr: Option<FieldAttr>,
+    default: Option<WCDBDefault>,
+    #[darling(default)]
+    index: Option<WCDBIndex>,
 }
 
 impl WCDBField {
@@ -65,19 +67,12 @@ impl WCDBField {
         self.is_not_indexed
     }
 
-    pub fn attr(&self) -> &Option<FieldAttr> {
-        &self.attr
+    pub fn default(&self) -> &Option<WCDBDefault> {
+        &self.default
     }
-}
 
-impl WCDBField {
-    pub fn is_integer(&self) -> bool {
-        let column_type_string = WCDBField::get_field_type_string(&self.ty).unwrap();
-        let field_info_opt = RUST_FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
-        match field_info_opt {
-            None => false,
-            Some(field_orm_info) => field_orm_info.column_type == "Integer",
-        }
+    pub fn index(&self) -> &Option<WCDBIndex> {
+        &self.index
     }
 }
 

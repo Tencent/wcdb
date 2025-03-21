@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
+use crate::compiler::rust_field_orm_info::{RustFieldORMInfo, RUST_FIELD_ORM_INFO_MAP};
 use crate::macros::wcdb_field::WCDBField;
 
 #[derive(Clone, Debug)]
@@ -80,23 +81,19 @@ impl ColumnInfo {
         column_info.is_unique = field.is_unique();
         column_info.is_not_null = field.is_not_null();
         column_info.is_not_indexed = field.is_not_indexed();
-        column_info.default_value = DefaultValueInfo::resolve(&field.attr());
+        column_info.default_value = DefaultValueInfo::resolve(field.default());
 
-        match &field.attr() {
+        match field.index() {
             None => {
                 column_info.has_index = false;
             }
-            Some(attr) => match attr.index() {
-                None => {
-                    column_info.has_index = false;
-                }
-                Some(index) => {
-                    column_info.has_index = true;
-                    column_info.index_name = index.name();
-                    column_info.index_is_unique = index.is_unique();
-                }
-            },
+            Some(index) => {
+                column_info.has_index = true;
+                column_info.index_name = index.name();
+                column_info.index_is_unique = index.is_unique();
+            }
         }
+
         column_info
     }
 
@@ -154,6 +151,17 @@ impl ColumnInfo {
 
     pub fn index_is_unique(&self) -> bool {
         self.index_is_unique
+    }
+
+    pub fn get_field_orm_info(&self) -> &RustFieldORMInfo {
+        let property_type = self.property_type();
+        let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
+        assert!(
+            field_orm_info_opt.is_some(),
+            "filed not support {}",
+            property_type.as_str()
+        );
+        field_orm_info_opt.unwrap()
     }
 
     pub fn set_property_name(&mut self, property_name: String) {

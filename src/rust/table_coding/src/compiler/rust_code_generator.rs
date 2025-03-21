@@ -1,6 +1,5 @@
 use crate::compiler::resolved_info::column_info::ColumnInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
-use crate::compiler::rust_field_orm_info::RUST_FIELD_ORM_INFO_MAP;
 use crate::macros::wcdb_table::WCDBTable;
 use proc_macro2::{Ident, Span};
 use quote::quote;
@@ -190,14 +189,7 @@ impl RustCodeGenerator {
         let mut token_stream = proc_macro2::TokenStream::new();
         let mut field_id: usize = 1;
         for column_info in &self.all_column_info {
-            let property_type = column_info.property_type();
-            let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
-            assert!(
-                field_orm_info_opt.is_some(),
-                "filed not support {}",
-                property_type.as_str()
-            );
-            let field_orm_info = field_orm_info_opt.unwrap();
+            let field_orm_info = column_info.get_field_orm_info();
             let property_name = column_info.property_name();
             let mut column_name = column_info.column_name();
             if column_name.is_empty() {
@@ -252,14 +244,7 @@ impl RustCodeGenerator {
             match column_info.default_value() {
                 None => {}
                 Some(default) => {
-                    let property_type = column_info.property_type();
-                    let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
-                    assert!(
-                        field_orm_info_opt.is_some(),
-                        "filed not support {}",
-                        property_type.as_str()
-                    );
-                    let field_orm_info = field_orm_info_opt.unwrap();
+                    let field_orm_info = column_info.get_field_orm_info();
                     if field_orm_info.column_type == "Integer" {
                         let int_value = default.i32_value();
                         token_stream.extend(quote::quote! {
@@ -498,14 +483,7 @@ impl RustCodeGenerator {
         let mut extract_token_stream_vec = vec![];
 
         for column_info in all_column_info_vec {
-            let property_type = column_info.property_type();
-            let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
-            assert!(
-                field_orm_info_opt.is_some(),
-                "filed not support {}",
-                property_type.as_str()
-            );
-            let field_orm_info = field_orm_info_opt.unwrap();
+            let field_orm_info = column_info.get_field_orm_info();
 
             let field_name_ident =
                 Ident::new(column_info.property_name().as_str(), Span::call_site());
@@ -557,14 +535,7 @@ impl RustCodeGenerator {
         let mut column_index: usize = 1;
         let mut bind_token_stream_vec = vec![];
         for column_info in all_column_info_vec {
-            let property_type = column_info.property_type();
-            let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
-            assert!(
-                field_orm_info_opt.is_some(),
-                "filed not support {}",
-                property_type.as_str()
-            );
-            let field_orm_info = field_orm_info_opt.unwrap();
+            let field_orm_info = column_info.get_field_orm_info();
 
             let field_name_ident =
                 Ident::new(column_info.property_name().as_str(), Span::call_site());
