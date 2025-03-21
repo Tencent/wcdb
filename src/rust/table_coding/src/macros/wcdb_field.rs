@@ -1,4 +1,4 @@
-use crate::field_orm_info::FIELD_ORM_INFO_MAP;
+use crate::compiler::rust_field_orm_info::RUST_FIELD_ORM_INFO_MAP;
 use crate::macros::field_attr::FieldAttr;
 use darling::FromField;
 use proc_macro2::{Ident, Span};
@@ -71,57 +71,12 @@ impl WCDBField {
 }
 
 impl WCDBField {
-    pub fn get_column_name_ident(&self) -> Ident {
-        let mut ident = self.ident.clone().unwrap();
-        if self.column_name.len() > 0 {
-            // 使用 column_name 当做表名
-            ident = Ident::new(self.column_name.as_str(), ident.span());
-        }
-        ident
-    }
-
-    pub fn get_column_type_ident(&self) -> syn::Result<Ident> {
-        let column_type_string = WCDBField::get_field_type_string(&self.ty)?;
-        let field_info_opt = FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
-        match field_info_opt {
-            None => Err(syn::Error::new(
-                self.ty.span(),
-                "WCDBTable's field can't get ColumnType",
-            )),
-            Some(field_info) => Ok(Ident::new(
-                field_info.column_type.as_str(),
-                Span::call_site(),
-            )),
-        }
-    }
-
-    pub fn get_field_type_ident(&self) -> &Ident {
-        let field_type: &Type = &self.ty;
-        match field_type {
-            Type::Path(type_path) => &type_path.path.segments[0].ident,
-            _ => panic!("WCDBTable's field type only works on Path"),
-        }
-    }
-
-    pub fn get_field_ident(&self) -> Ident {
-        self.ident.clone().unwrap()
-    }
-
     pub fn is_integer(&self) -> bool {
         let column_type_string = WCDBField::get_field_type_string(&self.ty).unwrap();
-        let field_info_opt = FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
+        let field_info_opt = RUST_FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
         match field_info_opt {
             None => false,
             Some(field_orm_info) => field_orm_info.column_type == "Integer",
-        }
-    }
-
-    pub fn is_float(&self) -> bool {
-        let column_type_string = WCDBField::get_field_type_string(&self.ty).unwrap();
-        let field_info_opt = FIELD_ORM_INFO_MAP.get(column_type_string.as_str());
-        match field_info_opt {
-            None => false,
-            Some(field_orm_info) => field_orm_info.column_type == "Float",
         }
     }
 }

@@ -33,29 +33,50 @@ impl TableConfigInfo {
                 .push(MultiIndexesInfo::resolve(&multi_indexes_item));
         }
 
-        for multi_primary in table.get_multi_primary_vec() {
+        for multi_primary in table.multi_primaries() {
             resolved_annotation
                 .multi_primaries
                 .get_or_insert(vec![])
-                .push(MultiPrimaryInfo::resolve(&multi_primary));
+                .push(MultiPrimaryInfo::resolve(multi_primary));
         }
-        for x in table.get_multi_unique_vec() {
+        for multi_unique in table.multi_unique() {
             resolved_annotation
                 .multi_unique
                 .get_or_insert(vec![])
-                .push(MultiUniqueInfo::resolve(&x))
+                .push(MultiUniqueInfo::resolve(multi_unique))
         }
         // todo dengxudong fts 逻辑补全
         // resolved_annotation.fts_module = fts_module_opt;
         resolved_annotation
     }
 
+    pub fn multi_indexes_is_empty(&self) -> bool {
+        if let Some(multi_indexes) = &self.multi_indexes {
+            return multi_indexes.is_empty();
+        }
+        true
+    }
+
     pub fn multi_indexes(&self) -> &Option<Vec<MultiIndexesInfo>> {
         &self.multi_indexes
     }
 
+    pub fn multi_primaries_is_empty(&self) -> bool {
+        if let Some(multi_primaries) = &self.multi_primaries {
+            return multi_primaries.is_empty();
+        }
+        true
+    }
+
     pub fn multi_primaries(&self) -> &Option<Vec<MultiPrimaryInfo>> {
         &self.multi_primaries
+    }
+
+    pub fn multi_unique_is_empty(&self) -> bool {
+        if let Some(multi_unique) = &self.multi_unique {
+            return multi_unique.is_empty();
+        }
+        true
     }
 
     pub fn multi_unique(&self) -> &Option<Vec<MultiUniqueInfo>> {

@@ -30,32 +30,27 @@ pub struct WCDBTable {
 }
 
 impl WCDBTable {
-    pub fn get_db_table(&self) -> Ident {
+    pub fn get_db_table_ident(&self) -> Ident {
         Ident::new(&format!("Db{}", self.ident), Span::call_site())
     }
 
-    pub fn get_field_vec(&self) -> Vec<&WCDBField> {
-        match &self.data {
-            Data::Struct(fields) => fields.iter().collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
+    pub fn get_struct_name(&self) -> String {
+        self.ident.to_string()
     }
 
-    pub fn get_all_column_info_vec(&self) -> Vec<ColumnInfo> {
+    pub fn get_db_table_name(&self) -> String {
+        format!("Db{}", self.get_struct_name())
+    }
+
+    pub fn get_all_column_info(&self) -> Vec<ColumnInfo> {
         match &self.data {
-            Data::Struct(fields) => fields
-                .iter()
-                .map(|field| {
-                    let mut info = ColumnInfo::new();
-                    info.set_property_name(field.ident().as_ref().unwrap().to_string().clone());
-                    info.set_column_name(if field.column_name().is_empty() {
-                        info.property_name().clone()
-                    } else {
-                        field.column_name().clone()
-                    });
-                    info
-                })
-                .collect(),
+            Data::Struct(fields) => {
+                let mut all_column_info = Vec::new();
+                for field in &fields.fields {
+                    all_column_info.push(ColumnInfo::resolve(&field));
+                }
+                all_column_info
+            }
             _ => panic!("WCDBTable only works on structs"),
         }
     }
@@ -68,94 +63,6 @@ impl WCDBTable {
                 .collect(),
             _ => panic!("WCDBTable only works on structs"),
         }
-    }
-
-    pub fn get_field_column_name_ident_vec(&self) -> Vec<Ident> {
-        match &self.data {
-            Data::Struct(fields) => {
-                fields
-                    .iter()
-                    .map(|field| {
-                        let mut ident = field.ident().clone().unwrap();
-                        if field.column_name().len() > 0 {
-                            // 使用 column_name 当做表名
-                            ident = Ident::new(field.column_name().as_str(), ident.span());
-                        }
-                        ident
-                    })
-                    .collect()
-            }
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_field_is_auto_increment_vec(&self) -> Vec<bool> {
-        match &self.data {
-            Data::Struct(fields) => fields
-                .iter()
-                .map(|field| field.is_auto_increment())
-                .collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_field_is_primary_key_vec(&self) -> Vec<bool> {
-        match &self.data {
-            Data::Struct(fields) => fields.iter().map(|field| field.is_primary()).collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_enable_auto_increment_for_existing_table(&self) -> bool {
-        match &self.data {
-            Data::Struct(fields) => {
-                for field in fields.iter() {
-                    if field.enable_auto_increment_for_existing_table() {
-                        return true;
-                    }
-                }
-                false
-            }
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_field_type_vec(&self) -> Vec<&Type> {
-        match &self.data {
-            Data::Struct(fields) => fields.iter().map(|field| field.ty()).collect(),
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_auto_increment_ident_field(&self) -> Option<&WCDBField> {
-        match &self.data {
-            Data::Struct(fields) => {
-                let mut ret = None;
-                for field in fields.iter() {
-                    if field.is_primary() && field.is_auto_increment() {
-                        ret = Some(field);
-                        break;
-                    }
-                }
-                ret
-            }
-            _ => panic!("WCDBTable only works on structs"),
-        }
-    }
-
-    pub fn get_multi_index_vec(&self) -> Vec<MultiIndexes> {
-        self.multi_indexes.iter().map(|item| item.clone()).collect()
-    }
-
-    pub fn get_multi_primary_vec(&self) -> Vec<MultiPrimary> {
-        self.multi_primaries
-            .iter()
-            .map(|item| item.clone())
-            .collect()
-    }
-
-    pub fn get_multi_unique_vec(&self) -> Vec<MultiUnique> {
-        self.multi_unique.iter().map(|item| item.clone()).collect()
     }
 
     pub(crate) fn ident(&self) -> &Ident {

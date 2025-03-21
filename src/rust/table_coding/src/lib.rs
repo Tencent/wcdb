@@ -1,7 +1,6 @@
 #![feature(proc_macro_quote)]
 
 mod compiler;
-mod field_orm_info;
 mod macros;
 
 use crate::compiler::resolved_info::column_info::ColumnInfo;
@@ -9,127 +8,57 @@ use crate::compiler::resolved_info::default_value_info::DefaultValueInfo;
 use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
 use crate::compiler::rust_code_generator::RustCodeGenerator;
-use crate::field_orm_info::FIELD_ORM_INFO_MAP;
+use crate::compiler::rust_field_orm_info::RUST_FIELD_ORM_INFO_MAP;
 use crate::macros::wcdb_field::WCDBField;
 use crate::macros::wcdb_table::WCDBTable;
 use darling::ast::Data;
 use darling::{FromDeriveInput, FromField, FromMeta};
 use proc_macro::TokenStream;
-use proc_macro2::Span;
 use quote::ToTokens;
 use std::any::Any;
+use std::collections::HashSet;
 use std::fmt::Debug;
 use syn::parse::Parse;
 use syn::spanned::Spanned;
-use syn::{parse_macro_input, DeriveInput, Ident};
+use syn::{parse_macro_input, DeriveInput};
 
 #[proc_macro_derive(WCDBTableCoding, attributes(WCDBTable, WCDBField))]
 pub fn process(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     check_class_element(&input);
+
     let table = WCDBTable::from_derive_input(&input).unwrap();
-    match create_orm_file(&table) {
+
+    check_fts_module(&table);
+
+    let table_constraint_info = TableConfigInfo::resolve(
+        &table,
+        Some(FTSModuleInfo::new()), //TODO dengxudong fts module
+    );
+    let all_column_info = table.get_all_column_info();
+
+    check_field_element(&table);
+
+    check_column_in_table_constraint(&table_constraint_info, &all_column_info);
+
+    match create_orm_file(&table, table_constraint_info, all_column_info) {
         Ok(quote) => quote.into(),
         Err(e) => e.to_compile_error().into(),
     }
 }
 
-fn create_orm_file(table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
-    let table_ident = table.ident();
-    let db_table_ident = table.get_db_table();
-    let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
-    let binding_ident = Ident::new(&binding, Span::call_site());
-    let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
-    let instance_ident = Ident::new(&instance, Span::call_site());
-    let field_ident_vec = table.get_field_ident_vec();
-
-    check_field_element(table);
-
+fn create_orm_file(
+    table: &WCDBTable,
+    table_constraint_info: TableConfigInfo,
+    all_column_info: Vec<ColumnInfo>,
+) -> syn::Result<proc_macro2::TokenStream> {
     let mut code_gen = RustCodeGenerator::new();
-    code_gen.set_class_name(table_ident.to_string());
-    code_gen.set_orm_class_name(db_table_ident.to_string());
-    code_gen.set_table_constraint_info(Option::from(TableConfigInfo::resolve(
-        table,
-        Some(FTSModuleInfo::new()), //TODO dengxudong fts module
-    )));
-    code_gen.set_all_column_info(table.data());
-    code_gen.check_column_in_table_constraint();
+    code_gen.set_class_name(table.get_struct_name());
+    code_gen.set_orm_class_name(table.get_db_table_name());
+    code_gen.set_table_constraint_info(Option::from(table_constraint_info));
+    code_gen.set_all_column_info(all_column_info);
 
-    let singleton_statements = code_gen.generate_singleton(&table)?;
-    let generate_binding_type = code_gen.generate_binding_type(&table_ident)?;
-    let generate_fields = code_gen.generate_fields(&table)?;
-    let generate_binding_fields =
-        code_gen.generate_binding_fields(&table_ident, &field_ident_vec)?;
-    let generate_base_binding = code_gen.generate_base_binding(&binding_ident)?;
-    let generate_extract_object = code_gen.generate_extract_object(&table_ident)?;
-    let generate_bind_object = code_gen.generate_bind_object(&table_ident)?;
-
-    let auto_increment_field_opt = table.get_auto_increment_ident_field();
-    let generate_auto_increment_config =
-        code_gen.generate_auto_increment_config(&table_ident, &auto_increment_field_opt)?;
-
-    Ok(quote::quote! {
-        #singleton_statements
-
-        impl Default for #table_ident {
-            fn default() -> Self {
-                Self {
-                    #(#field_ident_vec: Default::default()),*
-                }
-            }
-        }
-
-        pub struct #db_table_ident {
-            #(pub #field_ident_vec: *const wcdb_core::orm::field::Field<#table_ident>),*
-        }
-
-        impl Default for #db_table_ident {
-            fn default() -> Self {
-                Self {
-                    #(#field_ident_vec: std::ptr::null()),*
-                }
-            }
-        }
-
-        impl Drop for #db_table_ident {
-            fn drop(&mut self) {
-                unsafe {
-                    #(
-                        if !self.#field_ident_vec.is_null() {
-                            Box::from_raw(self.#field_ident_vec as *mut wcdb_core::orm::field::Field<#table_ident>);
-                        }
-                    )*
-                }
-            }
-        }
-
-        unsafe impl Send for #db_table_ident {}
-        unsafe impl Sync for #db_table_ident {}
-
-        impl wcdb_core::orm::table_binding::TableBinding<#table_ident> for #db_table_ident {
-            #generate_binding_type
-
-            #generate_binding_fields
-
-            #generate_base_binding
-
-            #generate_extract_object
-
-            #generate_bind_object
-
-            #generate_auto_increment_config
-        }
-
-        impl #db_table_ident {
-            pub fn all_fields() -> Vec<&'static wcdb_core::orm::field::Field<#table_ident>> {
-                unsafe { vec![
-                    #(&*#instance_ident.#field_ident_vec,)*
-                ] }
-            }
-
-            #generate_fields
-        }
-    })
+    code_gen.generate(&table)
 }
 
 fn check_class_element(input: &DeriveInput) {
@@ -148,6 +77,10 @@ fn check_class_element(input: &DeriveInput) {
             "The visibility of the structure with @WCDBTableCoding macro definition must be pub"
         );
     }
+}
+
+fn check_fts_module(table: &WCDBTable) {
+    // todo qixinbing
 }
 
 fn check_field_element(table: &WCDBTable) {
@@ -188,8 +121,8 @@ fn check_field_element(table: &WCDBTable) {
                     let mut value_count = 0;
                     let mut type_miss_match = false;
                     let property_type = WCDBField::get_property_type(&field.ty()).unwrap_or(String::from("None"));
-                    let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
-                    assert!(field_orm_info_opt.is_some());
+                    let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
+                    assert!(field_orm_info_opt.is_some(), "filed not support {}",property_type.as_str());
                     let column_type = field_orm_info_opt.unwrap().column_type.clone();
 
                     let default_opt = DefaultValueInfo::resolve(&field.attr());
@@ -231,11 +164,76 @@ fn check_field_element(table: &WCDBTable) {
     }
 }
 
+fn check_column_in_table_constraint(
+    table_config_info: &TableConfigInfo,
+    all_column_info: &Vec<ColumnInfo>,
+) {
+    if table_config_info.multi_indexes_is_empty()
+        && table_config_info.multi_primaries_is_empty()
+        && table_config_info.multi_unique_is_empty()
+    {
+        return;
+    }
+
+    let mut all_columns: HashSet<String> = HashSet::new();
+    for column_info in all_column_info {
+        let name = if column_info.column_name().is_empty() {
+            column_info.property_name()
+        } else {
+            column_info.column_name()
+        };
+        all_columns.insert(name);
+    }
+
+    if let Some(indexes_info_vec) = table_config_info.multi_indexes() {
+        for indexes_info in indexes_info_vec {
+            for str in indexes_info.columns() {
+                if !all_columns.contains(str) {
+                    panic!(
+                        "Can't find column \"{}\" in class orm multi-index config.",
+                        str
+                    );
+                }
+            }
+        }
+    }
+
+    if let Some(multi_primary_vec) = table_config_info.multi_primaries() {
+        for primary_info in multi_primary_vec {
+            for name in primary_info.columns() {
+                if !all_columns.contains(name) {
+                    panic!(
+                        "Can't find column \"{}\" in class orm multi-primaries config.",
+                        name
+                    );
+                }
+            }
+        }
+    }
+
+    if let Some(multi_unique_vec) = table_config_info.multi_unique() {
+        for unique_info in multi_unique_vec {
+            for name in unique_info.columns() {
+                if !all_columns.contains(name) {
+                    panic!(
+                        "Can't find column \"{}\" in class orm multi-unique config.",
+                        name
+                    );
+                }
+            }
+        }
+    }
+}
+
 fn check_field_not_null(field: &WCDBField, field_key: &Option<String>) {
     let column_info = ColumnInfo::resolve(field);
     let property_type = column_info.property_type();
-    let field_orm_info_opt = FIELD_ORM_INFO_MAP.get(property_type.as_str());
-    assert!(field_orm_info_opt.is_some());
+    let field_orm_info_opt = RUST_FIELD_ORM_INFO_MAP.get(property_type.as_str());
+    assert!(
+        field_orm_info_opt.is_some(),
+        "filed not support {}",
+        property_type.as_str()
+    );
     let field_orm_info = field_orm_info_opt.unwrap();
     if column_info.is_not_null() && field_orm_info.nullable {
         panic!(
