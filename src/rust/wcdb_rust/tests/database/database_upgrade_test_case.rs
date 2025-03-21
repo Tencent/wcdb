@@ -516,7 +516,6 @@ pub mod database_upgrade_test {
                 database
                     .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_1_INSTANCE)
                     .unwrap();
-                panic!("error");
             });
             if let Err(e) = result {}
         });

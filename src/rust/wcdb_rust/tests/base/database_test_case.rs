@@ -5,6 +5,8 @@ use std::fs::OpenOptions;
 use std::io::{Seek, SeekFrom, Write};
 use std::path::{Path, MAIN_SEPARATOR};
 use std::sync::{Arc, Mutex, RwLock};
+use std::thread;
+use std::thread::ThreadId;
 use wcdb_core::base::wcdb_exception::WCDBResult;
 use wcdb_core::core::database::{Database, TraceExceptionCallbackTrait};
 use wcdb_core::core::handle_orm_operation::HandleORMOperationTrait;
@@ -85,14 +87,25 @@ impl DatabaseTestCase {
     {
         assert!(sql_vec.len() > 0);
         loop {
-            let mut trace = WrappedValue::new();
-            trace.bool_value = true;
+            let mut trace = Arc::new(Mutex::new(WrappedValue::new()));
+            {
+                trace.lock().unwrap().bool_value = false;
+            }
             let expected_sql_vec_mutex = Arc::new(Mutex::new(sql_vec.clone()));
             let expected_sql_vec_mutex_clone = expected_sql_vec_mutex.clone();
             let mode_ref = self.get_expect_mode().clone();
-            self.get_database().write().unwrap().trace_sql(Some(
+            let current_id: ThreadId = thread::current().id();
+            let current_thread = Arc::new(format!("{:?}", current_id));
+            let trace_clone = Arc::clone(&trace);
+            let current_thread_clone = Arc::clone(&current_thread);
+            self.get_database().read().unwrap().trace_sql(Some(
                 move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
-                    if !trace.bool_value {
+                    let current_id_trace = format!("{:?}", thread::current().id());
+                    if current_thread_clone.as_str() != current_id_trace {
+                        return;
+                    }
+
+                    if !trace_clone.lock().unwrap().bool_value {
                         return;
                     }
                     DatabaseTestCase::do_test_sql_as_expected(
@@ -112,20 +125,27 @@ impl DatabaseTestCase {
                     }
                 }
             }
-            trace.bool_value = true;
+            let trace_clone = Arc::clone(&trace);
+            {
+                trace_clone.lock().unwrap().bool_value = true;
+            }
             operation()?;
             let expected_sql_vec_mutex_clone2 = expected_sql_vec_mutex.clone();
             let expected_sql_vec_mutex_clone_lock = expected_sql_vec_mutex_clone2.lock().unwrap();
             if expected_sql_vec_mutex_clone_lock.len() != 0 {
                 eprintln!("Reminding: {:?}", expected_sql_vec_mutex_clone_lock);
-                // todo dengxudong
-                // assert!(false);
+                assert!(false, "expectedSQLs not empty");
+                break;
             }
-            trace.bool_value = false;
+            {
+                trace_clone.lock().unwrap().bool_value = false;
+            }
             break;
         }
         {
-            // self.get_database_lock().trace_sql::<TraceSqlCallback>(None);
+            self.get_database().read().unwrap().trace_sql(Some(
+                move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {},
+            ));
         }
         Ok(())
     }

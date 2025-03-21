@@ -244,7 +244,7 @@ impl TestCaseTrait for OrmTest {
     }
 
     fn teardown(&self) -> WCDBResult<()> {
-        Ok(())
+        self.database_test_case.teardown()
     }
 }
 
@@ -299,7 +299,8 @@ pub mod orm_test {
         let table_name = "table_all_type".to_string();
 
         let mut sql_vec = vec![];
-        sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT, a_bool INTEGER, a_byte INTEGER, a_short INTEGER, a_int INTEGER, a_long INTEGER, a_float REAL, a_double REAL, a_string TEXT)".to_string());
+        // sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT, a_bool INTEGER, a_byte INTEGER, a_short INTEGER, a_int INTEGER, a_long INTEGER, a_float REAL, a_double REAL, a_string TEXT)".to_string());
+        sql_vec.push("CREATE TABLE IF NOT EXISTS table_all_type(field_type TEXT , a_bool INTEGER , a_bool2 INTEGER , a_byte INTEGER , a_byte2 INTEGER , a_short INTEGER , a_short2 INTEGER , a_int INTEGER , a_int2 INTEGER , a_long INTEGER , a_long2 INTEGER , a_float REAL , a_float2 REAL , a_double REAL , a_double2 REAL , a_string TEXT , a_string2 TEXT )".to_string());
 
         orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
             orm_test
@@ -359,7 +360,7 @@ pub mod orm_test {
         let table_name = orm_test.table_name.as_str();
 
         let mut sql_vec = vec![];
-        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(multiPrimary1 INTEGER, multiPrimary2 INTEGER, multiPrimary3 INTEGER, multiUnique1 INTEGER, multiUnique2 INTEGER, multiUnique3 INTEGER, multiIndex1 INTEGER, multiIndex2 INTEGER, multiIndex3 INTEGER)".to_string());
+        sql_vec.push("CREATE TABLE IF NOT EXISTS testTable(multiPrimary1 INTEGER , multiPrimary2 INTEGER , multiPrimary3 INTEGER , multiUnique1 INTEGER , multiUnique2 INTEGER , multiUnique3 INTEGER , multiIndex1 INTEGER , multiIndex2 INTEGER , multiIndex3 INTEGER , UNIQUE(multiUnique1, multiUnique2, multiUnique3), PRIMARY KEY(multiPrimary1, multiPrimary2, multiPrimary3))".to_string());
         sql_vec.push("CREATE INDEX IF NOT EXISTS specifiedNameIndex ON testTable(multiIndex1, multiIndex2, multiIndex3)".to_string());
         sql_vec.push("CREATE INDEX IF NOT EXISTS testTable_multiIndex1_multiIndex2_index ON testTable(multiIndex1, multiIndex2)".to_string());
 

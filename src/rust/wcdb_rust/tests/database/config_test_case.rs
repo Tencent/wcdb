@@ -18,17 +18,12 @@ impl TestCaseTrait for ConfigTest {
     }
 
     fn teardown(&self) -> WCDBResult<()> {
-        // let database = self.table_test_case.get_database().clone();
-
-        // database.read().unwrap().set_config(&self.table_test_case.get_table_name(), Some(|handle: Handle|{
-        //     return true
-        // }),Some(|handle: Handle|{
-        //     return true
-        // }),ConfigPriority::Default);
-
-        // database.read().unwrap().set_config_with_default_priority::
-        // <Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>
-        // (&self.table_test_case.get_table_name(), None);
+        {
+            let database = self.table_test_case.get_database().clone();
+            database.read().unwrap().set_config_with_default_priority::
+            <Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>
+            (&self.table_test_case.get_table_name(), None);
+        }
         self.table_test_case.teardown()
     }
 }
@@ -69,6 +64,7 @@ pub mod config_test_case {
     use crate::base::wrapped_value::WrappedValue;
     use crate::database::config_test_case::CONFIG_TEST;
     use std::sync::{Arc, Mutex, RwLock, RwLockReadGuard};
+    use std::thread;
     use wcdb_core::core::database::{
         CipherVersion, ConfigPriority, Database, SetDatabaseConfigTrait,
     };
@@ -107,10 +103,6 @@ pub mod config_test_case {
     }
 
     #[test]
-    pub fn test_config2() {}
-
-    // todo dengxudong set_config 崩溃 问题待查
-    // #[test]
     pub fn test_config() {
         setup();
         let set_secure_delete = Arc::new(Mutex::new(StatementPragma::new()));
@@ -159,9 +151,7 @@ pub mod config_test_case {
                 .table_test_case
                 .data_base_test_case
                 .set_expect_mode(Expect::SomeSQLs);
-            database.can_open();
         }
-
         {
             let config_test_clone = Arc::clone(&CONFIG_TEST);
             let config_test = config_test_clone.read().unwrap();
@@ -171,7 +161,7 @@ pub mod config_test_case {
                 || {
                     let database = binding.read().unwrap();
                     database.close(Some(|| {}));
-                    assert_eq!(database.can_open(), true);
+                    assert!(database.can_open());
                     Ok(())
                 },
             );
@@ -185,6 +175,7 @@ pub mod config_test_case {
                 .get_value_from_statement(get_secure_delete)
                 .expect("get_value_from_statement failure")
                 .get_bool());
+
             database.set_config_with_default_priority::<Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>(&*config_test.get_config_name(), None);
             assert!(database.can_open());
             let un_invoked_clone = Arc::clone(&un_invoked);

@@ -349,8 +349,7 @@ extern "C" fn set_config_un_invocation_callback(cpp_handle: *mut c_void) -> bool
     if let Some(callback) = &*GLOBAL_UN_INVOCATION_CONFIG_CALLBACK.lock().unwrap() {
         let db = Database::create_invalid_database();
         let handle = Handle::new_with_obj(cpp_handle, &db);
-        let ret = callback(handle);
-        ret
+        callback(handle)
     } else {
         true
     }
@@ -1150,9 +1149,12 @@ impl Database {
 
         let c_config_name = config_name.to_cstring();
 
+        let mut invocation_raw: *const c_void = set_config_invocation_callback as *mut c_void;
+        let mut un_invocation_raw: *const c_void = set_config_un_invocation_callback as *mut c_void;
         match invocation {
             None => {
                 *GLOBAL_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = None;
+                invocation_raw = null_mut();
             }
             Some(cb) => {
                 let callback_box = Box::new(cb) as SetDatabaseConfigCallback;
@@ -1163,18 +1165,20 @@ impl Database {
         match un_invocation {
             None => {
                 *GLOBAL_UN_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = None;
+                un_invocation_raw = null_mut();
             }
             Some(cb) => {
                 let callback_box = Box::new(cb) as SetDatabaseConfigCallback;
                 *GLOBAL_UN_INVOCATION_CONFIG_CALLBACK.lock().unwrap() = Some(callback_box);
             }
         }
+
         unsafe {
             WCDBRustDatabase_config(
                 self.get_cpp_obj(),
-                c_config_name.into_raw(),
-                set_config_invocation_callback as *mut c_void,
-                set_config_un_invocation_callback as *mut c_void,
+                c_config_name.as_ptr(),
+                invocation_raw,
+                un_invocation_raw,
                 cpp_priority as c_int,
             );
         }

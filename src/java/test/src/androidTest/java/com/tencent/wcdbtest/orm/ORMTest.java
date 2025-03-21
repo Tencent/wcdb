@@ -189,7 +189,7 @@ public class ORMTest extends DatabaseTestCase {
     }
 
     @Test
-    public void testTableConstraint() {
+    public void testTableConstraint() {//bugtags
         doTestCreateTableAndIndexSQLsAsExpected(new String[]{
                 "CREATE TABLE IF NOT EXISTS testTable(multiPrimary1 INTEGER, multiPrimary2 INTEGER, multiPrimary3 INTEGER, " +
                         "multiUnique1 INTEGER, multiUnique2 INTEGER, multiUnique3 INTEGER, " +

@@ -38,12 +38,12 @@ impl BaseTestCase {
     }
 
     pub fn global_set_up() {
-        Database::global_trace_performance(Some(|tag, path, handle_id, sql, info| {
-            println!(
-                "global_trace_performance tag:{} path:{} handle_id:{} sql:{} info:{:?}",
-                tag, path, handle_id, sql, info
-            );
-        }));
+        // Database::global_trace_performance(Some(|tag, path, handle_id, sql, info| {
+        //     println!(
+        //         "global_trace_performance tag:{} path:{} handle_id:{} sql:{} info:{:?}",
+        //         tag, path, handle_id, sql, info
+        //     );
+        // }));
 
         Database::global_trace_sql(Some(|tag, path, handle_id, sql, info| {
             println!(

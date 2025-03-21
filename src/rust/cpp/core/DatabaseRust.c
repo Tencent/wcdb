@@ -157,22 +157,31 @@ void WCDBRustDatabaseClassMethod(configCipher,
     WCDBDatabaseConfigCipher(selfStruct, cipherKey, len, pageSize, cipherVersion);
 }
 
-bool WCDBRustDatabaseConfigInvocationCallback(void* invocation, CPPHandle handle) {
+typedef struct WCDBRustGlobalSetConfigContext {
+    RustSetConfigCallback rust_callback;
+} WCDBRustGlobalSetConfigContext;
+
+bool WCDBRustDatabaseConfigInvocationCallback(WCDBRustGlobalSetConfigContext* invocation,
+                                              CPPHandle handle) {
     bool ret = false;
-    if (invocation == NULL) {
+    if (invocation == NULL || invocation->rust_callback == NULL) {
         return ret;
     }
-    RustSetConfigCallback callback = (RustSetConfigCallback)invocation;
+    RustSetConfigCallback callback = (RustSetConfigCallback)invocation->rust_callback;
     ret = callback((void*)handle.innerValue);
     return ret;
 }
 
-bool WCDBRustDatabaseConfigUnInvocationCallback(void* unInvocation, CPPHandle handle) {
+bool WCDBRustDatabaseConfigUnInvocationCallback(WCDBRustGlobalSetConfigContext* unInvocation,
+                                                CPPHandle handle) {
     bool ret = false;
-    if (unInvocation == NULL) {
+    if (unInvocation == NULL || unInvocation->rust_callback == NULL) {
         return ret;
     }
-    RustSetConfigCallback callback = (RustSetConfigCallback)unInvocation;
+    RustSetConfigCallback callback = (RustSetConfigCallback)unInvocation->rust_callback;
+    if (callback == NULL) {
+        return ret;
+    }
     ret = callback((void*)handle.innerValue);
     return ret;
 }
@@ -191,10 +200,20 @@ void WCDBRustDatabaseClassMethod(config,
                                  RustSetConfigCallback* unInvocation,
                                  int priority) {
     WCDBRustBridgeStruct(CPPDatabase, self);
+
+    size_t size = sizeof(RustSetConfigCallback);
+    WCDBRustGlobalSetConfigContext* invocationContext =
+        (WCDBRustGlobalSetConfigContext*)WCDBRustCreateGlobalRef(size);
+    invocationContext->rust_callback = invocation;
+
+    WCDBRustGlobalSetConfigContext* unInvocationContext =
+        (WCDBRustGlobalSetConfigContext*)WCDBRustCreateGlobalRef(size);
+    unInvocationContext->rust_callback = unInvocation;
+
     WCDBDatabaseConfig(
         selfStruct, name, invocation != NULL ? WCDBRustDatabaseConfigInvocationCallback : NULL,
-        invocation, unInvocation != NULL ? WCDBRustDatabaseConfigUnInvocationCallback : NULL,
-        unInvocation, priority, (WCDBContextDestructor)WCDBRustSetConfigDestructContext);
+        invocationContext, unInvocation != NULL ? WCDBRustDatabaseConfigUnInvocationCallback : NULL,
+        unInvocationContext, priority, (WCDBContextDestructor)WCDBRustSetConfigDestructContext);
 }
 
 //
