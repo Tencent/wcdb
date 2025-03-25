@@ -211,8 +211,11 @@ void WCDBRustDatabaseClassMethod(config,
     unInvocationContext->rust_callback = unInvocation;
 
     WCDBDatabaseConfig(
-        selfStruct, name, invocation != NULL ? WCDBRustDatabaseConfigInvocationCallback : NULL,
-        invocationContext, unInvocation != NULL ? WCDBRustDatabaseConfigUnInvocationCallback : NULL,
+        selfStruct, name,
+        (WCDBConfigCallback)(invocation != NULL ? WCDBRustDatabaseConfigInvocationCallback : NULL),
+        invocationContext,
+        (WCDBConfigCallback)(unInvocation != NULL ? WCDBRustDatabaseConfigUnInvocationCallback
+                                                  : NULL),
         unInvocationContext, priority, (WCDBContextDestructor)WCDBRustSetConfigDestructContext);
 }
 
