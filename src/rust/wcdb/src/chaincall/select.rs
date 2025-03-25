@@ -58,6 +58,11 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
+    pub fn order_by_vec(self, order_vec: &Vec<OrderingTerm>) -> Self {
+        self.chain_call.statement.order_by(order_vec);
+        self
+    }
+
     pub fn limit(self, count: i64) -> Self {
         self.chain_call.statement.limit(count);
         self
