@@ -549,7 +549,7 @@ impl HandleORMOperationTrait for Database {
     fn delete_objects_by_expression(
         &self,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<()> {
         self.prepare_delete()
             .from_table(table_name)
@@ -561,7 +561,7 @@ impl HandleORMOperationTrait for Database {
     fn delete_objects_by_expression_order_limit(
         &self,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<()> {
@@ -577,7 +577,7 @@ impl HandleORMOperationTrait for Database {
     fn delete_objects_by_expression_order_limit_offset(
         &self,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
@@ -641,7 +641,7 @@ impl HandleORMOperationTrait for Database {
         object: T,
         field: &Field<T>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<()> {
         self.prepare_update::<T>()
             .table(table_name)
@@ -657,7 +657,7 @@ impl HandleORMOperationTrait for Database {
         object: T,
         field: &Field<T>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<()> {
@@ -677,7 +677,7 @@ impl HandleORMOperationTrait for Database {
         object: T,
         field: &Field<T>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
@@ -751,7 +751,7 @@ impl HandleORMOperationTrait for Database {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<()> {
         self.prepare_update::<T>()
             .table(table_name)
@@ -767,7 +767,7 @@ impl HandleORMOperationTrait for Database {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<()> {
@@ -787,7 +787,7 @@ impl HandleORMOperationTrait for Database {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
@@ -857,7 +857,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
@@ -870,7 +870,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
     ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
@@ -883,7 +883,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
     ) -> WCDBResult<Option<T>> {
         self.prepare_select()
@@ -898,7 +898,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
         offset: i64,
     ) -> WCDBResult<Option<T>> {
@@ -952,7 +952,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
@@ -965,7 +965,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
@@ -980,7 +980,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<Vec<T>> {
@@ -997,7 +997,7 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,

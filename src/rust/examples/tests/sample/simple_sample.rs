@@ -50,7 +50,7 @@ pub mod simple_sample {
         let filed_content = unsafe { &*content };
         let express_content = filed_content.get_column().eq_string("updateContent");
         let express = filed_id.get_column().eq_long(100).and(&express_content);
-        let ret = table.update_object_by_field_expression(test_table, filed_id, express);
+        let ret = table.update_object_by_field_expression(test_table, filed_id, &express);
         match ret {
             Ok(_) => {}
             Err(error) => {

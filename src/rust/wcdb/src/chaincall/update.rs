@@ -59,7 +59,7 @@ impl<'a, T> Update<'a, T> {
         self
     }
 
-    pub fn where_expression(self, condition: Expression) -> Self {
+    pub fn where_expression(self, condition: &Expression) -> Self {
         self.chain_call.statement.where_expression(condition);
         self
     }

@@ -182,7 +182,7 @@ impl<'a> TableOperation<'a> {
             update.offset(offset);
         }
         if let Some(expression) = expression {
-            update.where_expression(expression);
+            update.where_expression(&expression);
         }
         let handler = self.database.get_handle(true);
         let ret = match handler.prepared_with_main_statement(update) {
@@ -211,7 +211,7 @@ impl<'a> TableOperation<'a> {
         let binding = StatementDelete::new();
         binding.delete_from(self.table_name.as_ref());
         if let Some(expression) = expression {
-            binding.where_expression(expression);
+            binding.where_expression(&expression);
         }
         if let Some(order) = order {
             binding.order_by(&vec![order]);

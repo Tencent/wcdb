@@ -48,8 +48,8 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
-    pub fn where_expression(self, condition: Expression) -> Self {
-        self.chain_call.statement.where_expression(&condition);
+    pub fn where_expression(self, condition: &Expression) -> Self {
+        self.chain_call.statement.where_expression(condition);
         self
     }
 

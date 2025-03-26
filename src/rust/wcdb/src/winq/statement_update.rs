@@ -467,7 +467,7 @@ impl StatementUpdate {
         self
     }
 
-    pub fn where_expression(&self, condition: Expression) -> &Self {
+    pub fn where_expression(&self, condition: &Expression) -> &Self {
         unsafe {
             WCDBRustStatementUpdate_configCondition(
                 self.get_cpp_obj(),

@@ -128,14 +128,15 @@ pub mod table_orm_operation_test_case {
             value: updated_text.to_string(),
             ..obj.clone()
         };
-        let ret = operation.update_object_by_field_expression(update_obj, &field_value, expression);
+        let ret =
+            operation.update_object_by_field_expression(update_obj, &field_value, &expression);
         assert!(ret.is_ok());
 
         // select value
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.get_first_object_by_expression(vec![&field_value], expression);
+        let ret = operation.get_first_object_by_expression(vec![&field_value], &expression);
         assert!(ret.is_ok());
 
         let ret_value_opt = ret.unwrap();
@@ -146,14 +147,14 @@ pub mod table_orm_operation_test_case {
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.delete_objects_by_expression(expression);
+        let ret = operation.delete_objects_by_expression(&expression);
         assert!(ret.is_ok());
 
         // select value
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.get_all_objects_by_expression(expression);
+        let ret = operation.get_all_objects_by_expression(&expression);
         assert!(ret.unwrap().is_empty());
 
         teardown();

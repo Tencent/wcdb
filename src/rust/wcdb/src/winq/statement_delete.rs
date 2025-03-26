@@ -100,7 +100,7 @@ impl StatementDelete {
         self
     }
 
-    pub fn where_expression(&self, condition: Expression) -> &Self {
+    pub fn where_expression(&self, condition: &Expression) -> &Self {
         unsafe {
             WCDBRustStatementDelete_configCondition(
                 self.get_cpp_obj(),

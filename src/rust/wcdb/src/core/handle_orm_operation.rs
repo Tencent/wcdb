@@ -71,13 +71,13 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
     fn delete_objects_by_expression(
         &self,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<()>;
 
     fn delete_objects_by_expression_order_limit(
         &self,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<()>;
@@ -85,7 +85,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
     fn delete_objects_by_expression_order_limit_offset(
         &self,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
@@ -118,7 +118,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         object: T,
         field: &Field<T>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<()>;
 
     fn update_object_by_field_expression_order_limit<T>(
@@ -126,7 +126,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         object: T,
         field: &Field<T>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<()>;
@@ -136,7 +136,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         object: T,
         field: &Field<T>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
@@ -173,7 +173,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<()>;
 
     fn update_object_by_fields_expression_order_limit<T>(
@@ -181,7 +181,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<()>;
@@ -191,7 +191,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
@@ -226,7 +226,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: Expression,
+        expression: &Expression,
     ) -> WCDBResult<Option<T>>;
 
     // todo dengxudong
@@ -236,7 +236,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
     ) -> WCDBResult<Option<T>>;
 
     // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
@@ -245,7 +245,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
     ) -> WCDBResult<Option<T>>;
 
@@ -255,7 +255,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
         offset: i64,
     ) -> WCDBResult<Option<T>>;
@@ -289,7 +289,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
     ) -> WCDBResult<Vec<T>>;
 
     //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
@@ -298,7 +298,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
     ) -> WCDBResult<Vec<T>>;
 
@@ -308,7 +308,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
         limit: i64,
     ) -> WCDBResult<Vec<T>>;
@@ -319,7 +319,7 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition: Expression,
+        condition: &Expression,
         order: OrderingTerm,
         limit: i64,
         offset: i64,
