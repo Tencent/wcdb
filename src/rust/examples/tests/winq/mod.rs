@@ -15,3 +15,4 @@ pub(crate) mod statement_insert_test;
 pub(crate) mod statement_pragma_test;
 pub(crate) mod statement_select_test;
 pub(crate) mod statement_update_test;
+pub(crate) mod upsert_test_case;

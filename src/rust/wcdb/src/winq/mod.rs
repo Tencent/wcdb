@@ -34,3 +34,4 @@ pub mod statement_select;
 pub mod statement_update;
 pub mod table_constraint;
 pub mod table_or_subquery_convertible_trait;
+pub mod upsert;
