@@ -1524,6 +1524,34 @@ impl Database {
         }
     }
 
+    pub fn get_objects_from_sql<T>(&self, fields: Vec<&Field<T>>, sql: &str) -> WCDBResult<Vec<T>> {
+        let handle = self.get_handle(false);
+        let result = handle.prepared_with_main_statement_and_sql(sql);
+        match result {
+            Ok(val) => {
+                let mut ret_vec: Vec<T> = Vec::new();
+                let prepared_statement = Arc::clone(&val);
+                if prepared_statement.step().is_ok() {
+                    while !prepared_statement.is_done() {
+                        let ret = prepared_statement.get_one_object(&fields);
+                        prepared_statement.finalize_statement();
+                        if self.auto_invalidate_handle() {
+                            handle.invalidate();
+                        }
+                        if let Ok(Some(val)) = ret {
+                            ret_vec.push(val);
+                        }
+                        if prepared_statement.step().is_err() {
+                            break;
+                        }
+                    }
+                }
+                Ok(ret_vec)
+            }
+            Err(error) => Err(error),
+        }
+    }
+
     pub fn set_notification_when_corrupted<CB>(&self, monitor: Option<CB>)
     where
         CB: CorruptionNotificationTrait + 'static,
