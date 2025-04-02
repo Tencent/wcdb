@@ -291,13 +291,13 @@ impl StatementUpdate {
     // todo dengxudong 重要不紧急
     // public StatementUpdate setColumnsToValues(@NotNull Column[] columns, @NotNull Object[] values)
 
-    pub fn set_columns(&self, columns: &Vec<Column>) -> &Self {
+    pub fn set_columns(&self, columns: &Vec<&Column>) -> &Self {
         if columns.is_empty() {
             return self;
         }
         let mut columns_void_vec: Vec<*mut c_void> = Vec::with_capacity(columns.len());
         for x in columns {
-            columns_void_vec.push(CppObject::get(x));
+            columns_void_vec.push(CppObject::get(*x));
         }
         unsafe {
             WCDBRustStatementUpdate_configColumns(

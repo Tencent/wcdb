@@ -8,10 +8,12 @@ pub mod statement_update_test {
 
     #[test]
     pub fn test() {
+        let column1 = Column::new("column1");
+        let column2 = Column::new("column2");
         let test_table_str = String::from("testTable");
         let column_vec = vec![Column::new("column1"), Column::new("column2")];
-        let column1_vec = vec![Column::new("column1")];
-        let column2_vec = vec![Column::new("column2")];
+        let column1_vec = vec![&column1];
+        let column2_vec = vec![&column2];
 
         WinqTool::winq_equal(
             StatementUpdate::new()
