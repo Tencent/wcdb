@@ -1,7 +1,10 @@
 #[cfg(test)]
 pub mod statement_insert_test {
     use crate::base::winq_tool::WinqTool;
+    use wcdb::winq::column::Column;
+    use wcdb::winq::object::Object;
     use wcdb::winq::statement_insert::StatementInsert;
+    use wcdb::winq::upsert::Upsert;
 
     #[test]
     pub fn test() {
@@ -24,6 +27,19 @@ pub mod statement_insert_test {
             .values_with_bind_parameters(1)
             .or_replace();
         WinqTool::winq_equal(test, "INSERT OR REPLACE INTO testTable VALUES(?1)");
+
+        let upsert = Upsert::new();
+        upsert.on_conflict().do_no_thing();
+        let statement = StatementInsert::new();
+        statement
+            .insert_into("testTable")
+            .column_objs(&vec![Column::new("testColumn")])
+            .values(Some(vec![Object::Int(1)]))
+            .upsert(&upsert);
+        WinqTool::winq_equal(
+            &statement,
+            "INSERT INTO testTable(testColumn) VALUES(1) ON CONFLICT DO NOTHING",
+        );
     }
 
     #[test]

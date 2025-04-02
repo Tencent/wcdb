@@ -48,10 +48,10 @@ void WCDBRustStatementInsertClassMethod(configColumns,
                                         void* self,
                                         WCDBRustObjectOrStringArrayParameter(columns));
 
-// void WCDBRustStatementInsertClassMethod(configValues,
-//                                        jlong self,
-//                                        WCDBRustMultiTypeArrayParameter(value));
+void WCDBRustStatementInsertClassMethod(configValues,
+                                        void* self,
+                                        WCDBRustMultiTypeArrayParameter(value));
 void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count);
 // void WCDBRustStatementInsertClassMethod(configSelect, jlong self, jlong select);
 void WCDBRustStatementInsertClassMethod(configDefaultValues, void* self);
-// void WCDBRustStatementInsertClassMethod(configUpsert, jlong self, jlong upsert);
+void WCDBRustStatementInsertClassMethod(configUpsert, void* self, void* upsert);

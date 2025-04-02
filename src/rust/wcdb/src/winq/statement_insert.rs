@@ -1,10 +1,13 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::orm::field::Field;
 use crate::winq::column::Column;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::multi_type_array::MultiTypeArray;
+use crate::winq::object::Object;
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::{c_char, c_int, c_void, CString};
+use crate::winq::upsert::Upsert;
+use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
@@ -21,6 +24,16 @@ extern "C" {
     fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: c_int);
 
     fn WCDBRustStatementInsert_configDefaultValues(cpp_obj: *mut c_void);
+
+    fn WCDBRustStatementInsert_configValues(
+        cpp_obj: *mut c_void,
+        types: *const c_int,
+        long_values: *const c_long,
+        double_values: *const c_double,
+        string_values: *const *const c_char,
+        value_len: c_int,
+    );
+    fn WCDBRustStatementInsert_configUpsert(cpp_obj: *mut c_void, upsert: *mut c_void);
 }
 
 #[derive(Debug)]
@@ -203,6 +216,52 @@ impl StatementInsert {
     pub fn default_values(&self) -> &Self {
         unsafe {
             WCDBRustStatementInsert_configDefaultValues(self.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn values(&self, values: Option<Vec<Object>>) -> &Self {
+        match values {
+            None => return self,
+            Some(v) if v.is_empty() => return self,
+            Some(v) => {
+                let array = MultiTypeArray::new_with_objects(&v);
+                let mut c_vec: Vec<*const c_char> = Vec::new();
+                let mut string_values_len: usize = 0;
+                match array.string_values {
+                    None => {}
+                    Some(val) => {
+                        string_values_len = val.len();
+                        for x in val {
+                            let c_name = CString::new(x).unwrap_or_default();
+                            c_vec.push(c_name.as_ptr());
+                        }
+                    }
+                }
+                let value_len = array
+                    .types
+                    .len()
+                    .max(array.long_values.len())
+                    .max(array.double_values.len())
+                    .max(string_values_len);
+                unsafe {
+                    WCDBRustStatementInsert_configValues(
+                        self.get_cpp_obj(),
+                        array.types.as_ptr(),
+                        array.long_values.as_ptr(),
+                        array.double_values.as_ptr(),
+                        c_vec.as_ptr(),
+                        value_len as c_int,
+                    );
+                }
+            }
+        }
+        self
+    }
+
+    pub fn upsert(&self, upsert: &Upsert) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configUpsert(self.get_cpp_obj(), CppObject::get(upsert));
         }
         self
     }

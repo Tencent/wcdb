@@ -77,14 +77,13 @@ void WCDBRustStatementInsertClassMethod(configColumns,
         columns, WCDBStatementInsertConfigColumns2(selfStruct, columns_commonArray));
 }
 
-// void WCDBRustStatementInsertClassMethod(configValues, jlong self,
-// WCDBRustMultiTypeArrayParameter(value))
-//{
-//     WCDBRustBridgeStruct(CPPStatementInsert, self);
-//     WCDBRustCreateMultiTypeArray(value);
-//     WCDBStatementInsertConfigValuesWithMultiTypeArray(selfStruct, valueArray);
-//     WCDBRustReleaseMultiTypeArray(value);
-// }
+void WCDBRustStatementInsertClassMethod(configValues,
+                                        void* self,
+                                        WCDBRustMultiTypeArrayParameter(value)) {
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBRustCreateMultiTypeArray(value);
+    WCDBStatementInsertConfigValuesWithMultiTypeArray(selfStruct, valueArray);
+}
 
 void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count) {
     WCDBRustBridgeStruct(CPPStatementInsert, self);
@@ -103,9 +102,8 @@ void WCDBRustStatementInsertClassMethod(configDefaultValues, void* self) {
     WCDBStatementInsertConfigDefaultValues(selfStruct);
 }
 
-// void WCDBRustStatementInsertClassMethod(configUpsert, jlong self, jlong upsert)
-//{
-//     WCDBRustBridgeStruct(CPPStatementInsert, self);
-//     WCDBRustBridgeStruct(CPPUpsert, upsert);
-//     WCDBStatementInsertConfigUpsert(selfStruct, upsertStruct);
-// }
+void WCDBRustStatementInsertClassMethod(configUpsert, void* self, void* upsert) {
+    WCDBRustBridgeStruct(CPPStatementInsert, self);
+    WCDBRustBridgeStruct(CPPUpsert, upsert);
+    WCDBStatementInsertConfigUpsert(selfStruct, upsertStruct);
+}

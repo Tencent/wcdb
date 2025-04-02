@@ -81,7 +81,7 @@ pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
     T::get_type()
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Identifier {
     cpp_obj: CppObject,
 }
