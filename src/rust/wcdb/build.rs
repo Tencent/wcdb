@@ -1,3 +1,5 @@
+use std::process::Command;
+
 fn main() {
     let dst = cmake::Config::new("../cpp")
         .define("CMAKE_CXX_FLAGS", "-D_Nullable= -D_Nonnull=")
@@ -6,6 +8,11 @@ fn main() {
         .build_arg(format!("-j{}", num_cpus::get()))
         .build_target("all")
         .build();
+
+    Command::new("git")
+        .arg("submodule update --init sqlcipher zstd")
+        .output()
+        .expect("failed to execute cmd: git submodule update --init sqlcipher zstd");
 
     println!("cargo:rerun-if-changed=cpp");
     println!("cargo:rustc-link-lib=z");
