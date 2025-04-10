@@ -10,9 +10,9 @@ fn main() {
         .build();
 
     Command::new("git")
-        .arg("submodule update --init sqlcipher zstd")
+        .arg("submodule update --init openssl sqlcipher zstd")
         .output()
-        .expect("failed to execute cmd: git submodule update --init sqlcipher zstd");
+        .expect("failed to execute cmd: git submodule update --init openssl sqlcipher zstd");
 
     println!("cargo:rerun-if-changed=cpp");
     println!("cargo:rustc-link-lib=z");
