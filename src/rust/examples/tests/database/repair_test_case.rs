@@ -273,7 +273,8 @@ pub mod repair_test_case {
 
         let database_arc = get_arc_database();
         let database = database_arc.read().unwrap();
-        database.filter_backup::<Box<dyn BackupFilterCallbackTrait>>(None);
+        let ret = database.filter_backup::<Box<dyn BackupFilterCallbackTrait>>(None);
+        assert!(ret.is_ok());
         database
             .backup()
             .expect("The backup method failed to be executed");
@@ -299,9 +300,10 @@ pub mod repair_test_case {
                 false
             );
         }
-        database.filter_backup(Some(|table_name: &str| {
+        let ret = database.filter_backup(Some(|table_name: &str| {
             return false;
         }));
+        assert!(ret.is_ok());
         thread::sleep(std::time::Duration::from_millis(1000));
         database
             .backup()

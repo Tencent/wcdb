@@ -278,6 +278,19 @@ impl WCDBException {
             WCDBException::WCDBNormalException(ExceptionInner::new(level, code, cpp_obj))
         }
     }
+
+    pub fn new(level: ExceptionLevel, code: ExceptionCode, message: String) -> Self {
+        let mut key_values = HashMap::new();
+        key_values.insert(
+            "Message".to_string(),
+            ExceptionObject::String(message.clone()),
+        );
+        WCDBException::WCDBNormalException(ExceptionInner::new_with_message(
+            level,
+            code,
+            message.clone(),
+        ))
+    }
 }
 
 pub struct ExceptionInner {
@@ -322,6 +335,19 @@ impl ExceptionInner {
             level,
             code,
             key_values,
+        }
+    }
+
+    pub fn new_with_message(level: ExceptionLevel, code: ExceptionCode, message: String) -> Self {
+        let mut map: HashMap<String, ExceptionObject> = HashMap::new();
+        map.insert(
+            ExceptionKey::Message.to_string(),
+            ExceptionObject::String(message.to_string()),
+        );
+        ExceptionInner {
+            level,
+            code,
+            key_values: map,
         }
     }
 

@@ -1555,7 +1555,7 @@ impl ExpressionOperable {
         //         self.in_long(left_cpp_type, Vec::new(), is_not)
         //     }
         //     Some(val) => {
-        //         let first = val.first().unwrap();
+        //         let first = val.first();
         //         let data_type: ObjectType = MultiTypeArray::get_object_type(Box::new(first));
         //         match data_type {
         //             ObjectType::Identifier => {

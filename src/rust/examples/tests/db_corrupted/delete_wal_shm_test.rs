@@ -48,7 +48,7 @@ pub mod delete_wal_shm_exception_test {
         let table_name = delete_wal_test.test_case().table_name().clone();
         let data_num = 100;
 
-        delete_wal_test.test_case().database().trace_exception(Some(
+        let ret = delete_wal_test.test_case().database().trace_exception(Some(
             move |exception: WCDBException| {
                 let msg = exception.message();
                 // println!("trace_exception: {}",msg);
@@ -71,6 +71,7 @@ pub mod delete_wal_shm_exception_test {
                 assert!(false);
             },
         ));
+        assert!(ret.is_ok());
 
         delete_wal_test.test_case().setup();
         delete_wal_test.test_case().insert_objects(data_num);
@@ -101,7 +102,7 @@ pub mod delete_wal_shm_exception_test {
         let has_back_up = delete_wal_test.test_case().has_back_up();
         let data_num = 100;
 
-        delete_wal_test.test_case().database().trace_exception(Some(
+        let ret = delete_wal_test.test_case().database().trace_exception(Some(
             move |exception: WCDBException| {
                 let msg = exception.message();
                 println!("trace_exception: {}", msg);
@@ -112,6 +113,7 @@ pub mod delete_wal_shm_exception_test {
                 // trace_exception: Acquired page number: 6 exceeds the page count: 1.
             },
         ));
+        assert!(ret.is_ok());
 
         delete_wal_test.test_case().setup();
         delete_wal_test.test_case().insert_objects(data_num);
@@ -171,12 +173,13 @@ pub mod delete_wal_shm_success_test {
         let has_back_up = delete_wal_test.test_case().has_back_up();
         let data_num = 100;
 
-        delete_wal_test.test_case().database().trace_exception(Some(
+        let ret = delete_wal_test.test_case().database().trace_exception(Some(
             move |exception: WCDBException| {
                 let msg = exception.message();
                 println!("trace_exception: {}", msg);
             },
         ));
+        assert!(ret.is_ok());
 
         if !has_back_up {
             // 第一次插入 100 个数据

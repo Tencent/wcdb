@@ -45,12 +45,13 @@ impl BaseTestCase {
         //     );
         // }));
 
-        Database::global_trace_sql(Some(|tag, path, handle_id, sql, info| {
+        let ret = Database::global_trace_sql(Some(|tag, path, handle_id, sql, info| {
             println!(
                 "global_trace_sql tag:{} path:{} handle_id:{} sql:{} info:{:?}",
                 tag, path, handle_id, sql, info
             );
         }));
+        assert!(ret.is_ok());
 
         // Database::global_trace_exception(Some(|exception| {
         //     println!("global_trace_exception exception:{:?}", exception);

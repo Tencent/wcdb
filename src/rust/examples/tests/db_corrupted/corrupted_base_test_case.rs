@@ -81,7 +81,8 @@ impl CorruptedBaseTestCase {
 
     pub fn trace_exception(&self, exp_msg: &str) {
         let exp_msg_string = exp_msg.to_string();
-        self.database()
+        let ret = self
+            .database()
             .trace_exception(Some(move |exception: WCDBException| {
                 let msg = exception.message();
                 println!("trace_exception: {}", msg);
@@ -89,6 +90,7 @@ impl CorruptedBaseTestCase {
                     assert!(true);
                 }
             }));
+        assert!(ret.is_ok());
     }
 
     pub fn has_back_up(&self) -> bool {

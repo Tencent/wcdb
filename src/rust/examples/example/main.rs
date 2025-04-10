@@ -58,7 +58,7 @@ fn main() {
 }
 
 fn global_trace() {
-    Database::global_trace_sql(Some(
+    let ret = Database::global_trace_sql(Some(
         |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
             println!(
                 "global_trace_sql tag: {}, path: {}, handle_id: {}, sql: {}, info: {}",
@@ -66,12 +66,14 @@ fn global_trace() {
             );
         },
     ));
+    assert!(ret.is_ok());
 
-    Database::global_trace_exception(Some(|exception: WCDBException| {
+    let ret = Database::global_trace_exception(Some(|exception: WCDBException| {
         println!("global_trace_exception: {}", exception.message())
     }));
+    assert!(ret.is_ok());
 
-    Database::global_trace_performance(Some(
+    let ret = Database::global_trace_performance(Some(
         |tag: i64, path: String, handle_id: i64, sql: String, info: PerformanceInfo| {
             println!(
                 "global_trace_performance tag: {}, path: {}, handle_id: {}, sql: {}, info: {:?}",
@@ -79,6 +81,7 @@ fn global_trace() {
             );
         },
     ));
+    assert!(ret.is_ok());
 }
 
 fn test_func(db: &Database) {

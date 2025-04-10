@@ -1,5 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
-use crate::base::wcdb_exception::{WCDBException, WCDBResult};
+use crate::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException, WCDBResult};
 use crate::core::database::Database;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
@@ -204,8 +204,15 @@ impl<'a> Handle<'a> {
     }
 
     pub fn get_cpp_handle(&self) -> WCDBResult<*mut c_void> {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.get_cpp_handle(self.database)
+        let mut handle_inner_lock = self.handle_inner.lock();
+        match handle_inner_lock {
+            Ok(mut handle) => handle.get_cpp_handle(self.database),
+            Err(error) => Err(WCDBException::new(
+                ExceptionLevel::Error,
+                ExceptionCode::Error,
+                error.to_string(),
+            )),
+        }
     }
 
     pub fn create_exception(&self) -> WCDBException {

@@ -20,7 +20,7 @@ impl TestCaseTrait for ConfigTest {
     fn teardown(&self) -> WCDBResult<()> {
         {
             let database = self.table_test_case.get_database().clone();
-            database.read().unwrap().set_config_with_default_priority::
+            let ret = database.read().unwrap().set_config_with_default_priority::
             <Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>
             (&self.table_test_case.get_table_name(), None);
         }
@@ -108,17 +108,17 @@ pub mod config_test_case {
             set_secure_delete
                 .lock()
                 .unwrap()
-                .pragma(Pragma::secure_delete())
+                .pragma(Pragma::secure_delete().unwrap())
                 .to_value_bool(true);
         }
         let unset_secure_delete = Arc::new(StatementPragma::new());
         {
             unset_secure_delete
-                .pragma(Pragma::secure_delete())
+                .pragma(Pragma::secure_delete().unwrap())
                 .to_value_bool(false);
         }
         let binding = StatementPragma::new();
-        let get_secure_delete = binding.pragma(Pragma::secure_delete());
+        let get_secure_delete = binding.pragma(Pragma::secure_delete().unwrap());
         let un_invoked = Arc::new(Mutex::new(WrappedValue::new()));
         let database_arc = get_arc_database();
         {
@@ -129,7 +129,7 @@ pub mod config_test_case {
             let set_secure_delete_clone = Arc::clone(&set_secure_delete);
             let unset_secure_delete_clone = Arc::clone(&unset_secure_delete);
             let wrapped_value_clone = Arc::clone(&un_invoked);
-            database.set_config(
+            let ret = database.set_config(
                 &*config_test.get_config_name(),
                 Some(move |handle: Handle| {
                     let tmp = set_secure_delete_clone.lock().unwrap();
@@ -174,7 +174,7 @@ pub mod config_test_case {
                 .expect("get_value_from_statement failure")
                 .get_bool());
 
-            database.set_config_with_default_priority::<Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>(&*config_test.get_config_name(), None);
+            let ret = database.set_config_with_default_priority::<Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>(&*config_test.get_config_name(), None);
             assert!(database.can_open());
             let un_invoked_clone = Arc::clone(&un_invoked);
             assert!(un_invoked_clone.lock().unwrap().bool_value);

@@ -54,7 +54,8 @@ impl DatabaseTestCase {
     where
         CB: TraceExceptionCallbackTrait + 'static,
     {
-        self.get_database().read().unwrap().trace_exception(cb_opt);
+        let ret = self.get_database().read().unwrap().trace_exception(cb_opt);
+        assert!(ret.is_ok());
     }
 
     pub fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
@@ -98,7 +99,7 @@ impl DatabaseTestCase {
             let current_thread = Arc::new(format!("{:?}", current_id));
             let trace_clone = Arc::clone(&trace);
             let current_thread_clone = Arc::clone(&current_thread);
-            self.get_database().read().unwrap().trace_sql(Some(
+            let ret = self.get_database().read().unwrap().trace_sql(Some(
                 move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
                     let current_id_trace = format!("{:?}", thread::current().id());
                     if current_thread_clone.as_str() != current_id_trace {
@@ -115,6 +116,7 @@ impl DatabaseTestCase {
                     );
                 },
             ));
+            assert!(ret.is_ok());
 
             let mode_ref = self.get_expect_mode();
             if mode_ref != Expect::SomeSQLs {
@@ -143,9 +145,10 @@ impl DatabaseTestCase {
             break;
         }
         {
-            self.get_database().read().unwrap().trace_sql(Some(
+            let ret = self.get_database().read().unwrap().trace_sql(Some(
                 move |tag: i64, path: String, handle_id: i64, sql: String, info: String| {},
             ));
+            assert!(ret.is_ok());
         }
         Ok(())
     }
