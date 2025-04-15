@@ -5,8 +5,9 @@ use crate::core::handle_operation::HandleOperationTrait;
 use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::winq::statement::StatementTrait;
+use std::cell::RefCell;
 use std::ffi::{c_char, c_int, c_long, c_void, CString};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
 extern "C" {
     fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
@@ -119,24 +120,24 @@ impl HandleInner {
 }
 
 pub struct Handle<'a> {
-    handle_inner: Arc<Mutex<HandleInner>>,
+    handle_inner: Arc<RefCell<HandleInner>>,
     database: &'a Database,
 }
 
 impl<'a> CppObjectTrait for Handle<'a> {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.set_cpp_obj(cpp_obj);
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.set_cpp_obj(cpp_obj);
     }
 
     fn get_cpp_obj(&self) -> *mut c_void {
-        let handle_inner_lock = self.handle_inner.lock().unwrap();
+        let handle_inner_lock = self.handle_inner.borrow_mut();
         handle_inner_lock.get_cpp_obj()
     }
 
     fn release_cpp_object(&mut self) {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.release_cpp_object();
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.release_cpp_object();
     }
 }
 
@@ -180,7 +181,7 @@ impl<'a> HandleOperationTrait for Handle<'a> {
 
 impl<'a> Handle<'a> {
     pub fn new(database: &'a Database, write_hint: bool) -> Self {
-        let handle_inner = Arc::new(Mutex::new(HandleInner {
+        let handle_inner = Arc::new(RefCell::new(HandleInner {
             handle_orm_operation: HandleORMOperation::new(),
             main_statement: None,
             write_hint,
@@ -192,7 +193,7 @@ impl<'a> Handle<'a> {
     }
 
     pub fn new_with_obj(cpp_obj: *mut c_void, database: &'a Database) -> Self {
-        let handle_inner = Arc::new(Mutex::new(HandleInner {
+        let handle_inner = Arc::new(RefCell::new(HandleInner {
             handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             main_statement: None,
             write_hint: false,
@@ -204,15 +205,8 @@ impl<'a> Handle<'a> {
     }
 
     pub fn get_cpp_handle(&self) -> WCDBResult<*mut c_void> {
-        let mut handle_inner_lock = self.handle_inner.lock();
-        match handle_inner_lock {
-            Ok(mut handle) => handle.get_cpp_handle(self.database),
-            Err(error) => Err(WCDBException::new(
-                ExceptionLevel::Error,
-                ExceptionCode::Error,
-                error.to_string(),
-            )),
-        }
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.get_cpp_handle(self.database)
     }
 
     pub fn create_exception(&self) -> WCDBException {
@@ -220,13 +214,13 @@ impl<'a> Handle<'a> {
     }
 
     pub fn invalidate(&self) {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.invalidate();
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.invalidate();
     }
 
     pub fn get_changes(&self) -> WCDBResult<i32> {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.get_changes(self.database)
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.get_changes(self.database)
     }
 
     pub fn get_last_inserted_row_id(&self) -> WCDBResult<i64> {
@@ -237,16 +231,16 @@ impl<'a> Handle<'a> {
         &self,
         statement: &T,
     ) -> WCDBResult<Arc<PreparedStatement>> {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.prepared_with_main_statement(self.database, statement)
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.prepared_with_main_statement(self.database, statement)
     }
 
     pub fn prepared_with_main_statement_and_sql(
         &self,
         sql: &str,
     ) -> WCDBResult<Arc<PreparedStatement>> {
-        let mut handle_inner_lock = self.handle_inner.lock().unwrap();
-        handle_inner_lock.prepared_with_main_statement_and_sql(self.database, sql)
+        let mut handle_inner = self.handle_inner.borrow_mut();
+        handle_inner.prepared_with_main_statement_and_sql(self.database, sql)
     }
 
     pub fn table_exist(cpp_obj: *mut c_void, table_name: &str) -> i32 {
