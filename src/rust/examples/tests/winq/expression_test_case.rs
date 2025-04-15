@@ -1,5 +1,6 @@
 #[cfg(test)]
 pub mod expression_test {
+    use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
     use wcdb::winq::expression::Expression;
     use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
@@ -11,6 +12,14 @@ pub mod expression_test {
         // winqEqual(Column.rowId().add(1).as("rowidAddOne"), "rowid + 1 AS rowidAddOne");
         // WinqTool::winq_equal(
         // );
+    }
+
+    #[test]
+    pub fn test_unary_operation() {
+        let column = Column::new("testColumn");
+        let expression = Expression::new_with_column(&column);
+        WinqTool::winq_equal(&expression.is_null(), "testColumn ISNULL");
+        WinqTool::winq_equal(&expression.not_null(), "testColumn NOTNULL");
     }
 
     #[test]

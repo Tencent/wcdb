@@ -1,6 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
+use crate::winq::expression;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable_trait::ExpressionOperableTrait;
@@ -10,6 +11,11 @@ use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
 use std::ptr::null;
 
 extern "C" {
+    fn WCDBRustExpressionOperable_nullOperate(
+        operand_type: c_int,
+        operand: *mut c_void,
+        is_not: bool,
+    ) -> *mut c_void;
     fn WCDBRustExpressionOperable_binaryOperate(
         left_type: c_int,
         left: *mut c_void,
@@ -715,9 +721,13 @@ impl ExpressionOperable {
         expression
     }
 
-    fn null_operate() -> Expression {
-        // todo dengxudong
-        Expression::new()
+    pub(crate) fn null_operate(&self, is_not: bool) -> Expression {
+        let mut expression = Expression::new();
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_nullOperate(Self::get_type(), self.get_cpp_obj(), is_not)
+        };
+        expression.set_cpp_obj(cpp_obj);
+        expression
     }
 
     pub fn between_operate_with_expression_convertible<T>(

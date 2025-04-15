@@ -30,9 +30,11 @@
 #define WCDBRustExpressionOperableClassMethod(funcName, ...) \
     WCDBRustClassMethod(ExpressionOperable, funcName, __VA_ARGS__)
 
-// jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand,
-// jboolean isNot);
-//
+void* WCDBRustExpressionOperableClassMethod(nullOperate,
+                                            int operandType,
+                                            void* operand,
+                                            bool isNot);
+
 void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             int leftType,
                                             long left,

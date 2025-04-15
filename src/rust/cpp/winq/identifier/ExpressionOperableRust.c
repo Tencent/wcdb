@@ -25,15 +25,16 @@
 #include <alloca.h>
 #include <stdint.h>
 
-// jlong WCDBRustExpressionOperableClassMethod(nullOperate, jint operandType, jlong operand,
-// jboolean isNot)
-//{
-//     CPPCommonValue operand_common;
-//     operand_common.type = operandType;
-//     operand_common.intValue = operand;
-//     return (jlong) WCDBExpressionNullOperate2(operand_common, isNot).innerValue;
-// }
-//
+void* WCDBRustExpressionOperableClassMethod(nullOperate,
+                                            int operandType,
+                                            void* operand,
+                                            bool isNot) {
+    CPPCommonValue operand_common;
+    operand_common.type = operandType;
+    operand_common.intValue = (long long)(uintptr_t)operand;
+    return (void*)WCDBExpressionNullOperate2(operand_common, isNot).innerValue;
+}
+
 void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             int leftType,
                                             long left,

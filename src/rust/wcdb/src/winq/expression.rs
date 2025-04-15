@@ -94,11 +94,11 @@ impl ExpressionConvertibleTrait for Expression {}
 
 impl ExpressionOperableTrait for Expression {
     fn is_null(&self) -> Expression {
-        todo!()
+        self.expression_operable.null_operate(false)
     }
 
     fn not_null(&self) -> Expression {
-        todo!()
+        self.expression_operable.null_operate(true)
     }
 
     fn or<T>(&self, operand: &T) -> Expression
