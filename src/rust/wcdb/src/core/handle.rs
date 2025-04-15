@@ -90,15 +90,31 @@ impl HandleInner {
         statement: &T,
     ) -> WCDBResult<Arc<PreparedStatement>> {
         if self.main_statement.is_none() {
-            let cpp_obj =
-                unsafe { WCDBRustHandle_getMainStatement(self.get_cpp_handle(database)?) };
-            let mut prepared_statement = PreparedStatement::new(cpp_obj);
-            prepared_statement.auto_finalize = true;
-            self.main_statement = Some(Arc::new(prepared_statement));
+            match self.get_cpp_handle(database) {
+                Ok(handle_cpp) => {
+                    let cpp_obj = unsafe { WCDBRustHandle_getMainStatement(handle_cpp) };
+                    let mut prepared_statement = PreparedStatement::new(cpp_obj);
+                    prepared_statement.auto_finalize = true;
+                    self.main_statement = Some(Arc::new(prepared_statement));
+                }
+                Err(error) => {
+                    return Err(error.into());
+                }
+            }
         }
-        let main_statement = self.main_statement.as_ref().unwrap();
-        main_statement.prepare(statement)?;
-        Ok(main_statement.clone())
+        match self.main_statement.as_ref() {
+            None => Err(WCDBException::new_with_message(
+                ExceptionLevel::Error,
+                ExceptionCode::Error,
+                String::from(
+                    "Method :prepared_with_main_statement error, cause :main_statement is none",
+                ),
+            )),
+            Some(main_statement) => {
+                main_statement.prepare(statement)?;
+                Ok(main_statement.clone())
+            }
+        }
     }
 
     pub fn prepared_with_main_statement_and_sql(
@@ -113,9 +129,19 @@ impl HandleInner {
             prepared_statement.auto_finalize = true;
             self.main_statement = Some(Arc::new(prepared_statement));
         }
-        let main_statement = self.main_statement.as_ref().unwrap();
-        main_statement.prepare_with_sql(sql)?;
-        Ok(main_statement.clone())
+        match self.main_statement.as_ref() {
+            None => {
+                Err(WCDBException::new_with_message(
+                    ExceptionLevel::Error,
+                    ExceptionCode::Error,
+                    String::from("Method :prepared_with_main_statement_and_sql error, cause :main_statement is none"),
+                ))
+            }
+            Some(statement) => {
+                statement.prepare_with_sql(sql)?;
+                Ok(statement.clone())
+            }
+        }
     }
 }
 

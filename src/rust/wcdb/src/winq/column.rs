@@ -1,6 +1,7 @@
 use crate::base::cpp_object::CppObjectTrait;
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
+use crate::base::wcdb_exception::WCDBResult;
 use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
 use crate::winq::column_type::ColumnType;
@@ -22,7 +23,7 @@ extern "C" {
 
     fn WCDBRustColumn_createAll() -> *mut c_void;
 
-    fn WCDBRustColumn_configAlias(app_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
+    fn WCDBRustColumn_configAlias(cpp_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
 }
 
 pub struct Column {

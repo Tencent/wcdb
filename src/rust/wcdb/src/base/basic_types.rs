@@ -286,15 +286,18 @@ impl WCDBBasicTypes for String {
     }
 
     fn get_bool(&self) -> bool {
-        panic!("WCDB BasicTypes: String can't convert to bool");
+        eprintln!("WCDB BasicTypes: String can't convert to bool");
+        return false;
     }
 
     fn get_i64(&self) -> i64 {
-        panic!("WCDB BasicTypes: String can't convert to i64");
+        eprintln!("WCDB BasicTypes: String can't convert to i64");
+        return -1;
     }
 
     fn get_f64(&self) -> f64 {
-        panic!("WCDB BasicTypes: String can't convert to f64");
+        eprintln!("WCDB BasicTypes: String can't convert to f64");
+        return -1f64;
     }
 
     fn get_string(&self) -> String {
@@ -315,15 +318,18 @@ impl WCDBBasicTypes for &'static str {
     }
 
     fn get_bool(&self) -> bool {
-        panic!("WCDB BasicTypes: &'static str can't convert to bool");
+        eprintln!("WCDB BasicTypes: &'static str can't convert to bool");
+        return false;
     }
 
     fn get_i64(&self) -> i64 {
-        panic!("WCDB BasicTypes: &'static str can't convert to i64");
+        eprintln!("WCDB BasicTypes: &'static str can't convert to i64");
+        return -1i64;
     }
 
     fn get_f64(&self) -> f64 {
-        panic!("WCDB BasicTypes: &'static str can't convert to f64");
+        eprintln!("WCDB BasicTypes: &'static str can't convert to f64");
+        return -1f64;
     }
 
     fn get_string(&self) -> String {

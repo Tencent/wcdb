@@ -406,7 +406,10 @@ impl PreparedStatement {
         if field_opt.is_none() {
             return Err(WCDBException::create_exception(self.get_cpp_obj()));
         }
-        let field = field_opt.unwrap();
+        let field = match field_opt {
+            Some(f) => f,
+            None => return Err(WCDBException::create_exception(self.get_cpp_obj())),
+        };
         let tb = field.get_table_binding();
 
         let mut obj_vec: Vec<T> = Vec::new();

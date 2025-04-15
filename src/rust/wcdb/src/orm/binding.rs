@@ -1,5 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
-use crate::base::wcdb_exception::WCDBResult;
+use crate::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException, WCDBResult};
 use crate::core::handle::Handle;
 use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
@@ -114,11 +114,28 @@ impl Binding {
     }
 
     pub fn get_base_binding(&self) -> *mut c_void {
-        if self.base_binding.read().unwrap().is_null() {
-            let base_binding =
-                unsafe { WCDBRustBinding_getBaseBinding(self.cpp_obj.get_cpp_obj()) };
-            *self.base_binding.write().unwrap() = base_binding;
+        // 先检查是否为空，但不保持读锁
+        let is_null = match self.base_binding.read() {
+            Ok(guard) => guard.is_null(),
+            Err(_) => false, // 如果读取失败，假设不为空
+        };
+
+        // 如果为空，则获取写锁并设置值
+        if is_null {
+            if let Ok(mut write_guard) = self.base_binding.write() {
+                // 再次检查是否为空，因为可能在我们释放读锁和获取写锁之间被其他线程修改
+                if write_guard.is_null() {
+                    let base_binding =
+                        unsafe { WCDBRustBinding_getBaseBinding(self.cpp_obj.get_cpp_obj()) };
+                    *write_guard = base_binding;
+                }
+            }
         }
-        *self.base_binding.read().unwrap()
+
+        // 最后再读取一次返回值
+        match self.base_binding.read() {
+            Ok(guard) => *guard,
+            Err(_) => std::ptr::null_mut(), // 如果读取失败，返回空指针
+        }
     }
 }

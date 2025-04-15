@@ -62,7 +62,8 @@ pub mod exception_test {
 
         let table_name = "test_table";
         // 需要删除表，验证没有表的情况。
-        let _ = database.drop_table(table_name);
+        let ret = database.drop_table(table_name);
+        assert!(ret.is_ok());
 
         /// 验证没有表的情况下，插入数据包错。
         let operation = TableOperation::new(table_name, &database);

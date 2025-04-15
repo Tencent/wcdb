@@ -8,10 +8,23 @@ cache:
     - src/rust/Cargo.lock
 
 stages:
+  - check
   - test
 
 variables:
   GIT_DEPTH: 1
+
+run_check_unsafe_keywords:
+  stage: check
+  script: |
+    echo "Check danger function..."
+    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\.unwrap()\|\.expect(\|unreachable!'; then
+      echo "Error: banned unwrap/expect/unreachable!"
+      exit 1
+    fi
+  rules:
+    - changes:
+       - "src/rust/wcdb/src/**/*.rs"
 
 run_test:
   stage: test

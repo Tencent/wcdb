@@ -134,7 +134,8 @@ impl<'a> TableOperation<'a> {
             ColumnType::Float => Value::from(value.get_f64()),
             ColumnType::Text => Value::from(value.get_string().as_ref()),
             _ => {
-                panic!("basic types not define.")
+                eprintln!("basic types not define.");
+                return Ok(());
             }
         };
         self.update_row(

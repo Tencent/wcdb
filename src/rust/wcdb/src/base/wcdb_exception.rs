@@ -279,10 +279,15 @@ impl WCDBException {
         }
     }
 
-    pub fn new(level: ExceptionLevel, code: ExceptionCode, message: String) -> Self {
+    pub fn new_with_message(level: ExceptionLevel, code: ExceptionCode, message: String) -> Self {
+        println!(
+            "bugtags.new_with_message: {:?}, {:?}",
+            level,
+            message.clone()
+        );
         let mut key_values = HashMap::new();
         key_values.insert(
-            "Message".to_string(),
+            ExceptionKey::Message.to_string(),
             ExceptionObject::String(message.clone()),
         );
         WCDBException::WCDBNormalException(ExceptionInner::new_with_message(

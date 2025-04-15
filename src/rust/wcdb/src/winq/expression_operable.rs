@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::wcdb_exception::WCDBResult;
 use crate::utils::ToCString;
 use crate::winq::expression;
 use crate::winq::expression::Expression;
@@ -8,7 +9,7 @@ use crate::winq::expression_operable_trait::ExpressionOperableTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
-use std::ptr::null;
+use std::ptr::{null, null_mut};
 
 extern "C" {
     fn WCDBRustExpressionOperable_nullOperate(
@@ -1534,7 +1535,7 @@ impl ExpressionOperable {
     pub fn in_string(&self, left_cpp_type: i32, operands: Vec<&str>, is_not: bool) -> Expression {
         let mut c_string_array: Vec<*const c_char> = Vec::new();
         for x in operands {
-            let c_string = CString::new(x).expect("Failed to create CString");
+            let c_string = CString::new(x).unwrap_or_default();
             c_string_array.push(c_string.into_raw());
         }
         let cpp_obj = unsafe {

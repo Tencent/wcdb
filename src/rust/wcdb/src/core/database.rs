@@ -1298,7 +1298,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1319,7 +1319,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1436,7 +1436,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1488,7 +1488,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1521,7 +1521,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1554,7 +1554,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1587,7 +1587,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1620,7 +1620,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1717,7 +1717,7 @@ impl Database {
         match result {
             Ok(val) => {
                 let prepared_statement = Arc::clone(&val);
-                prepared_statement.step().expect("TODO: panic message");
+                prepared_statement.step()?;
                 if !prepared_statement.is_done() {
                     let ret = prepared_statement.get_value(0);
                     prepared_statement.finalize_statement();
@@ -1739,7 +1739,7 @@ impl Database {
         match result {
             Ok(val) => {
                 let prepared_statement = Arc::clone(&val);
-                prepared_statement.step().expect("TODO: panic message");
+                prepared_statement.step()?;
                 if !prepared_statement.is_done() {
                     let ret = prepared_statement.get_value(0);
                     prepared_statement.finalize_statement();
@@ -1802,7 +1802,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1864,7 +1864,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),
@@ -1896,7 +1896,7 @@ impl Database {
                     }
                 },
                 Err(error) => {
-                    return Err(WCDBException::new(
+                    return Err(WCDBException::new_with_message(
                         ExceptionLevel::Error,
                         ExceptionCode::Error,
                         error.to_string(),

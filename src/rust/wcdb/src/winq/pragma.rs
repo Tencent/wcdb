@@ -35,7 +35,7 @@ impl Pragma {
                     identifier: Identifier::new_with_obj(cpp_obj),
                 })
             }
-            Err(error) => Err(WCDBException::new(
+            Err(error) => Err(WCDBException::new_with_message(
                 ExceptionLevel::Error,
                 ExceptionCode::Error,
                 error.to_string(),
