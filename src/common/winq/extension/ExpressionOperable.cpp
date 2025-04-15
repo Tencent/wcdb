@@ -31,18 +31,6 @@ ExpressionOperable::~ExpressionOperable() = default;
 #pragma mark - Unary
 ExpressionUnaryOperable::~ExpressionUnaryOperable() = default;
 
-#ifndef __linux__
-Expression ExpressionUnaryOperable::operator-() const
-{
-    return unaryOperate(Expression::SyntaxType::UnaryOperator::Negative);
-}
-
-Expression ExpressionUnaryOperable::operator+() const
-{
-    return unaryOperate(Expression::SyntaxType::UnaryOperator::Positive);
-}
-#endif
-
 Expression ExpressionUnaryOperable::operator!() const
 {
     return unaryOperate(Expression::SyntaxType::UnaryOperator::Not);

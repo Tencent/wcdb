@@ -154,7 +154,7 @@ const std::function<bool(const UnsafeStringView &, const UnsafeStringView &, boo
 
     return true;
 }
-#ifndef __ANDROID__
+#if !defined(__OHOS__) && !defined(__ANDROID__)
 bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeStringView &to)
 {
 #ifndef _WIN32
@@ -475,7 +475,7 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
                 break;
             }
             if (isDirectory) {
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(__OHOS__)
                 if (::rename(pairedPath.first.data(), newPath.data()) != 0) {
 #else
                 if (!createDirectoryHardLink(pairedPath.first, newPath)) {
@@ -484,7 +484,7 @@ bool FileManager::moveItems(const std::list<std::pair<StringView, StringView>> &
                     break;
                 }
             } else {
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(__OHOS__)
                 if (::rename(pairedPath.first.data(), newPath.data()) != 0) {
 #else
                 if (!createFileHardLink(pairedPath.first, newPath)) {
@@ -545,7 +545,7 @@ bool FileManager::setFileProtectionCompleteUntilFirstUserAuthenticationIfNeeded(
     return true;
 }
 
-#ifndef __ANDROID__
+#if !defined(__OHOS__) && !defined(__ANDROID__)
 bool FileManager::createDirectoryHardLink(const UnsafeStringView &from,
                                           const UnsafeStringView &to)
 {

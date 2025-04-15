@@ -754,6 +754,22 @@ public:
      */
     void enableLiteMode(bool enable);
 
+#ifndef _WIN32
+    /**
+     @brief Register an open interface to replace the default one.
+     You can use it to implement file descriptor sanitizer, file open error monitoring, etc.
+     */
+    typedef int (*POSIXOpen)(const char *, int, int);
+    static void registerPOSIXOpen(POSIXOpen open);
+
+    /**
+     @brief Register an close interface to replace the default one.
+     You can use it to implement file descriptor sanitizer, file open error monitoring, etc.
+     */
+    typedef int (*POSIXClose)(int);
+    static void registerPOSIXClose(POSIXClose close);
+#endif
+
 #pragma mark - Migration
     typedef struct MigrationInfo {
         StringView table;           // Target table of migration

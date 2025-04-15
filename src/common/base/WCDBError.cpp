@@ -301,7 +301,8 @@ bool Error::isOK() const
 
 bool Error::isCorruption() const
 {
-    return m_code == Error::Code::Corrupt || m_code == Error::Code::NotADatabase;
+    return m_code == Error::Code::Corrupt || m_code == Error::Code::NotADatabase
+           || (m_code == Error::Code::Error && m_message.contain(Syntax::malformedSchemaMsg));
 }
 
 #pragma mark - ExtCode

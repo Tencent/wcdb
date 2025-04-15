@@ -67,6 +67,7 @@ Global::Global()
 
     {
 #ifndef _WIN32
+        m_open = nullptr;
         sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
         WCTAssert(vfs != nullptr);
         int rc = vfs->xSetSystemCall(vfs, "open", (sqlite3_syscall_ptr) Global::open);
@@ -127,7 +128,13 @@ void Global::setNotificationWhenFileOpened(const UnsafeStringView &name,
 
 int Global::open(const char *path, int flags, int mode)
 {
-    int fd = ::open(path, flags, mode);
+    int fd = 0;
+    POSIXOpen openFunc = Global::shared().m_open;
+    if (openFunc != nullptr) {
+        fd = openFunc(path, flags, mode);
+    } else {
+        fd = ::open(path, flags, mode);
+    }
     Global::shared().postFileOpenedNotification(fd, path, flags, mode);
     return fd;
 }
@@ -140,6 +147,21 @@ void Global::postFileOpenedNotification(int fd, const char *path, int flags, int
         iter.second(fd, path, flags, mode);
     }
 }
+
+void Global::registerPOSIXOpen(POSIXOpen open)
+{
+    m_open = open;
+}
+
+void Global::registerPOSIXClose(POSIXClose close)
+{
+    sqlite3_vfs *vfs = sqlite3_vfs_find(nullptr);
+    WCTAssert(vfs != nullptr);
+    int rc = vfs->xSetSystemCall(vfs, "close", (sqlite3_syscall_ptr) close);
+    WCTAssert(rc == SQLITE_OK);
+    staticAPIExit(rc);
+}
+
 #endif
 #pragma mark - Lock
 void Global::setNotificationForLockEvent(const UnsafeStringView &name,

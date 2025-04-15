@@ -1,3 +1,12 @@
+## v2.1.10
+
+* Disable checkpoint fullsync in apple platform, it will significantly reduce disk IO
+* Add main db file protection to windows
+* Reduce memory cost of data compression
+* Reduce handle usage of data backup
+* Support to detect schema corruption
+* Fix some known bugs and compile issues
+
 ## v2.1.9
 
 * Add lite mode (Set journal mode and synchronous flag to OFF)

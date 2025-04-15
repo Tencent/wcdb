@@ -151,7 +151,7 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
      * {@link Handle#invalidate()} will internally call the current function.
      */
     public void finalizeAllStatements() {
-        if (cppObj > 0) {
+        if (cppObj != 0) {
             finalizeAllStatements(cppObj);
         }
     }

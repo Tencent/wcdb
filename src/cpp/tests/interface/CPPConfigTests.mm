@@ -30,6 +30,21 @@
 
 @end
 
+bool g_hasOpened = false;
+bool g_hasClosed = false;
+
+int newOpen(const char* path, int flag, int mode)
+{
+    g_hasOpened = true;
+    return ::open(path, flag, mode);
+}
+
+int newClose(int fd)
+{
+    g_hasClosed = true;
+    return ::close(fd);
+}
+
 @implementation CPPConfigTests {
     NSString* _configName;
 }
@@ -48,6 +63,22 @@
 {
     self.database->removeConfig(self.configName.UTF8String);
     [super tearDown];
+}
+
+- (void)test_open_close
+{
+    WCDB::Database::registerPOSIXOpen(newOpen);
+    WCDB::Database::registerPOSIXClose(newClose);
+    TestCaseAssertTrue(self.database->canOpen());
+    self.database->close();
+    TestCaseAssertTrue(g_hasOpened && g_hasClosed);
+    WCDB::Database::registerPOSIXOpen(nullptr);
+    WCDB::Database::registerPOSIXClose(nullptr);
+    g_hasOpened = false;
+    g_hasClosed = false;
+    TestCaseAssertTrue(self.database->canOpen());
+    self.database->close();
+    TestCaseAssertTrue(!g_hasOpened && !g_hasClosed);
 }
 
 - (void)test_config
