@@ -1,3 +1,4 @@
+
 image: "harbor.rongcloud.net/library/rust/wcdb:0.1.4"
 
 cache:
@@ -18,8 +19,8 @@ run_check_unsafe_keywords:
   stage: check
   script: |
     echo "Check danger function..."
-    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\.unwrap()\|\.expect(\|unreachable!'; then
-      echo "Error: banned unwrap/expect/unreachable!"
+    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\.unwrap()\|\.expect(\|unreachable!\|panic!'; then
+      echo "Error: banned unwrap/expect/unreachable!/panic!"
       exit 1
     fi
   rules:
