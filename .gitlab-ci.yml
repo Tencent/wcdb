@@ -16,7 +16,10 @@ variables:
 run_test:
   stage: test
   before_script:
-    - git submodule update --init sqlcipher zstd
+    - export http_proxy=http://172.19.23.87:7890
+    - export https_proxy=http://172.19.23.87:7890
+    - export NO_PROXY=localhost,127.0.0.1,rsproxy.cn
+    - git submodule update --init openssl sqlcipher zstd
     - npm config set registry https://registry.npmmirror.com
     - npm install --save-dev @commitlint/config-conventional @commitlint/cli
   script:
