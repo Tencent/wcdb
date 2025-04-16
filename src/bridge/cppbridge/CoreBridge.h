@@ -28,7 +28,8 @@
 
 WCDB_EXTERN_C_BEGIN
 
-CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path, bool readonly);
+CPPDatabase
+WCDBCoreCreateDatabase(const char* _Nullable path, bool readonly, bool inMemory);
 void WCDBCoreSetDefaultCipherConfig(int version);
 void WCDBCorePurgeAllDatabase(void);
 bool WCDBCoreSetDefaultTemporaryDirectory(const char* _Nullable dir);

@@ -868,7 +868,7 @@ static const JNINativeMethod g_handleMethods[] = {
 };
 
 static const JNINativeMethod g_databaseMethods[] = {
-    { "createDatabase", "(" WCDBJNIStringSignature "Z)J", (void *) WCDBJNICoreFuncName(createDatabase) },
+    { "createDatabase", "(" WCDBJNIStringSignature "ZZ)J", (void *) WCDBJNICoreFuncName(createDatabase) },
     { "setDefaultCipherVersion", "(I)V", (void *) WCDBJNICoreFuncName(setDefaultCipherConfig) },
     { "getNumberOfAliveHandle", "(J)I", (void *) WCDBJNIDatabaseFuncName(getNumberOfAliveHandle) },
     { "getError", "(J)J", (void *) WCDBJNIDatabaseFuncName(getError) },

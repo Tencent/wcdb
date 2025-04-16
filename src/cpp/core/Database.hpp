@@ -53,6 +53,13 @@ public:
     Database &operator=(const Database &);
     ~Database() override;
 
+    /**
+     @brief Init a in-memory database.
+     @Note  Since In-memory database share one DB handle among all threads, it does not support multi-threaded concurrent operation.
+     @return WCTDatabase
+     */
+    static Database createInMemoryDatabase();
+
 protected:
     Database(Recyclable<InnerDatabase *> database);
 

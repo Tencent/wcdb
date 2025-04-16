@@ -24,10 +24,10 @@
 #include "CoreJNI.h"
 #include "CoreBridge.h"
 
-jlong WCDBJNICoreClassMethod(createDatabase, jstring path, jboolean readonly)
+jlong WCDBJNICoreClassMethod(createDatabase, jstring path, jboolean readonly, jboolean inMemory)
 {
     WCDBJNIGetString(path);
-    jlong ret = (jlong) WCDBCoreCreateDatabase(pathString, readonly).innerValue;
+    jlong ret = (jlong) WCDBCoreCreateDatabase(pathString, readonly, inMemory).innerValue;
     WCDBJNIReleaseString(path);
     return ret;
 }

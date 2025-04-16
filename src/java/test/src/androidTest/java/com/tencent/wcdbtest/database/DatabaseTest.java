@@ -30,6 +30,7 @@ import com.tencent.wcdb.core.Database;
 import com.tencent.wcdb.winq.Column;
 import com.tencent.wcdb.winq.Pragma;
 import com.tencent.wcdb.winq.StatementPragma;
+import com.tencent.wcdbtest.base.DBTestObject;
 import com.tencent.wcdbtest.base.FileTool;
 import com.tencent.wcdbtest.base.RandomTool;
 import com.tencent.wcdbtest.base.TableTestCase;
@@ -43,6 +44,7 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest extends TableTestCase {
@@ -233,5 +235,18 @@ public class DatabaseTest extends TableTestCase {
             return (int) ((size - walHeaderSize()) / walFrameSize());
         }
         return 0;
+    }
+
+    @Test
+    public void testInMemoryDatabase() {
+        Database database = Database.createInMemoryDatabase();
+        String tableName = "testTable";
+        database.createTable(tableName, tableBinding);
+        List<TestObject> objects = RandomTool.autoIncrementTestCaseObjects(100);
+        database.insertObjects(objects, DBTestObject.allFields(), tableName);
+        assertEquals(100, Objects.requireNonNull(database.getValue(Column.all().count(), tableName)).getInt());
+
+        Database database2 = Database.createInMemoryDatabase();
+        assertFalse(database2.tableExist(tableName));
     }
 }

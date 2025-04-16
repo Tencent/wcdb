@@ -494,4 +494,27 @@
     TestCaseAssertTrue(cost1 > cost2);
 }
 
+- (void)test_in_memory_db
+{
+    NSString* tableName = @"testTable";
+    {
+        auto database = WCDB::Database::createInMemoryDatabase();
+
+        auto object = [[Random shared] autoIncrementTestCaseObject];
+
+        TestCaseAssertTrue(database.createTable<CPPTestCaseObject>(tableName.UTF8String));
+        for (int i = 0; i < 100; i++) {
+            TestCaseAssertTrue(database.insertObject(object, tableName.UTF8String));
+        }
+        TestCaseAssertTrue(database.selectValue(CPPTestCaseObject::allFields().count(), tableName.UTF8String).value().intValue() == 100);
+        TestCaseAssertTrue(database.passiveCheckpoint());
+        database.close();
+        TestCaseAssertFalse([self.fileManager fileExistsAtPath:[NSString stringWithCString:database.getPath().data() encoding:NSUTF8StringEncoding]]);
+    }
+    {
+        auto database = WCDB::Database::createInMemoryDatabase();
+        TestCaseAssertTrue(database.selectValue(CPPTestCaseObject::allFields().count(), tableName.UTF8String).failed());
+    }
+}
+
 @end

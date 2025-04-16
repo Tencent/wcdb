@@ -47,7 +47,7 @@ public class Database extends HandleORMOperation {
      * @param path Path to your database
      */
     public Database(@NotNull String path) {
-        cppObj = createDatabase(path, false);
+        cppObj = createDatabase(path, false, false);
     }
 
     /**
@@ -61,10 +61,21 @@ public class Database extends HandleORMOperation {
      * @param path Path to your database
      */
     public Database(@NotNull String path, boolean readonly) {
-        cppObj = createDatabase(path, readonly);
+        cppObj = createDatabase(path, readonly, false);
     }
 
-    private static native long createDatabase(String path, boolean readonly);
+    /**
+     * Init a in-memory database.
+     * Since In-memory database share one DB handle among all threads, it does not support multi-threaded concurrent operation.
+     */
+    public static Database createInMemoryDatabase() {
+        long cppObj = createDatabase("", false, true);
+        Database database = new Database();
+        database.cppObj = cppObj;
+        return database;
+    }
+
+    private static native long createDatabase(String path, boolean readonly, boolean inMemory);
 
     /**
      * Get the file path of the database.

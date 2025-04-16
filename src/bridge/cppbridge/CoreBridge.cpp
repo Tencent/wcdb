@@ -28,12 +28,20 @@
 #include "Path.hpp"
 #include "ThreadedErrors.hpp"
 
-CPPDatabase WCDBCoreCreateDatabase(const char* _Nonnull path, bool readOnly)
+CPPDatabase WCDBCoreCreateDatabase(const char* _Nullable path, bool readOnly, bool inMemory)
 {
-    WCDB::RecyclableDatabase database
-    = WCDB::CommonCore::shared().getOrCreateDatabase(WCDB::Path::normalize(path));
-    if (readOnly) {
-        database->setReadOnly();
+    WCDB::RecyclableDatabase database;
+    if (!inMemory) {
+        database
+        = WCDB::CommonCore::shared().getOrCreateDatabase(WCDB::Path::normalize(path));
+        if (readOnly) {
+            database->setReadOnly();
+        }
+    } else {
+        database
+        = WCDB::RecyclableDatabase(new WCDB::InnerDatabase(":memory:"),
+                                   [](WCDB::InnerDatabase* db) { delete db; });
+        database->setInMemory();
     }
     return WCDBCreateRecylableCPPObject(CPPDatabase, database);
 }

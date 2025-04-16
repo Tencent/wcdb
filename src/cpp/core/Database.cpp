@@ -65,6 +65,15 @@ Database::Database(InnerDatabase* database) : m_innerDatabase(database)
     m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
 }
 
+Database Database::createInMemoryDatabase()
+{
+    InnerDatabase* database = new InnerDatabase(":memory:");
+    database->setInMemory();
+    RecyclableDatabase databaseHolder
+    = RecyclableDatabase(database, [](WCDB::InnerDatabase* db) { delete db; });
+    return Database(databaseHolder);
+}
+
 RecyclableHandle Database::getHandleHolder(bool writeHint)
 {
     return m_databaseHolder->getHandle(writeHint);

@@ -55,8 +55,16 @@ public class Database {
 #else
         WCDBError.fatalError("Swift 5 is required.")
 #endif
-        let database = WCDBCoreCreateDatabase(url.standardizedFileURL.path, readOnly)
+        let database = WCDBCoreCreateDatabase(url.standardizedFileURL.path, readOnly, false)
         self.init(with: database)
+    }
+
+    /// Init a in-memory database.
+    /// Since In-memory database share one DB handle among all threads,
+    /// it does not support multi-threaded concurrent operation.
+    public static func createInMemoryDatabase() -> Database {
+        let database = WCDBCoreCreateDatabase("", false, true)
+        return Database(with: database)
     }
 
     internal init(with cppDatabase: CPPDatabase) {
