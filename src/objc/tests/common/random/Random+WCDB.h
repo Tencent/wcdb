@@ -35,10 +35,10 @@
 
 - (long)tag;
 
-- (NSString*)tableName;
+- (NSString *)tableName;
 
-- (NSString*)tableNameWithPrefix:(NSString*)prefix;
+- (NSString *)tableNameWithPrefix:(NSString *)prefix;
 
-- (NSArray<NSString*>*)tableNamesWithCount:(int)count;
+- (NSArray<NSString *> *)tableNamesWithCount:(int)count;
 
 @end

@@ -127,28 +127,23 @@ public:
 
 #pragma mark - ColumnInfo
 template<typename T, typename Enable = void>
-struct ColumnInfo {
-};
+struct ColumnInfo {};
 //Float
 template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsFloatType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Float> {
-};
+: public ColumnTypeInfo<ColumnType::Float> {};
 //Integer
 template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsIntegerType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Integer> {
-};
+: public ColumnTypeInfo<ColumnType::Integer> {};
 //Text
 template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsTextType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::Text> {
-};
+: public ColumnTypeInfo<ColumnType::Text> {};
 //BLOB
 template<typename T>
 struct ColumnInfo<T, typename std::enable_if<ColumnIsBLOBType<T>::value>::type>
-: public ColumnTypeInfo<ColumnType::BLOB> {
-};
+: public ColumnTypeInfo<ColumnType::BLOB> {};
 
 #pragma mark - Builtin Type
 //Float
@@ -262,8 +257,7 @@ public:
 
 template<typename T>
 struct ColumnIsTextType<T, std::enable_if_t<std::is_function<T>::value>>
-: public std::false_type {
-};
+: public std::false_type {};
 
 //BLOB
 template<>

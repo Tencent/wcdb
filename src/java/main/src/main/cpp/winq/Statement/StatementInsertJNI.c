@@ -34,7 +34,7 @@ void WCDBJNIStatementInsertClassMethod(configWith, jlong self, jlongArray expres
     WCDBJNIBridgeStruct(CPPStatementInsert, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementInsertConfigWith(
-    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+    selfStruct, (const CPPCommonTableExpression *) expressionsArray, expressionsLength);
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 

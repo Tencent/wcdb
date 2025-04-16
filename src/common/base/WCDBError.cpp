@@ -205,7 +205,7 @@ bool Error::isError(int rc)
 
 Error::Code Error::rc2c(int rc)
 {
-    return (Error::Code)(rc & 0xff);
+    return (Error::Code) (rc & 0xff);
 }
 
 int Error::c2rc(Error::Code code)

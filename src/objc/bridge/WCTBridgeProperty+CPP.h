@@ -27,8 +27,8 @@
 
 @interface WCTBridgeProperty (CPP)
 
-+ (WCTBridgeProperty*)creatBridgeProperty:(const WCTProperty&)wctProperty;
++ (WCTBridgeProperty *)creatBridgeProperty:(const WCTProperty &)wctProperty;
 
-- (const WCTProperty&)wctProperty;
+- (const WCTProperty &)wctProperty;
 
 @end

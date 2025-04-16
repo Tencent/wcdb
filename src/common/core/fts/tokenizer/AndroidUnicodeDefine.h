@@ -195,7 +195,7 @@ typedef enum {
  * @return true or false
  * @stable ICU 2.4
  */
-#define U8_IS_LEAD(c) ((uint8_t) ((c) -0xc2) <= 0x32)
+#define U8_IS_LEAD(c) ((uint8_t) ((c) - 0xc2) <= 0x32)
 // 0x32=0xf4-0xc2
 
 /**
@@ -251,7 +251,7 @@ typedef enum {
             } else if (/* handle U+0080..U+07FF inline */                                                        \
                        ((c) < 0xe0 && (c) >= 0xc2) && ((i) < (length))                                           \
                        && (__t1 = (uint8_t) ((s)[i] - 0x80)) <= 0x3f) {                                          \
-                (c) = (UChar) ((((c) &0x1f) << 6) | __t1);                                                       \
+                (c) = (UChar) ((((c) & 0x1f) << 6) | __t1);                                                      \
                 ++(i);                                                                                           \
             } else if (U8_IS_LEAD(c)) {                                                                          \
                 /* function call for "complicated" and error cases */                                            \
@@ -305,7 +305,7 @@ typedef enum {
             (s)[(i)++] = (uint16_t) (c);                                       \
         } else if ((uint32_t) (c) <= 0x10ffff && (i) + 1 < (capacity)) {       \
             (s)[(i)++] = (uint16_t) (((c) >> 10) + 0xd7c0);                    \
-            (s)[(i)++] = (uint16_t) (((c) &0x3ff) | 0xdc00);                   \
+            (s)[(i)++] = (uint16_t) (((c) & 0x3ff) | 0xdc00);                  \
         } else /* c>0x10ffff or not enough space */ {                          \
             (isError) = true;                                                  \
         }                                                                      \
@@ -318,7 +318,7 @@ typedef enum {
  * @return true or false
  * @stable ICU 2.4
  */
-#define U16_IS_LEAD(c) (((c) &0xfffffc00) == 0xd800)
+#define U16_IS_LEAD(c) (((c) & 0xfffffc00) == 0xd800)
 
 /**
  * Does the error code indicate success?

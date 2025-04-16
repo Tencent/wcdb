@@ -31,7 +31,7 @@ NSString *getDescriptionOfType(WCDB::Syntax::Identifier::Type type);
 NSString *getDescriptionOfTypes(const std::list<WCDB::Syntax::Identifier::Type> &);
 std::list<WCDB::Syntax::Identifier::Type> getTypesOfSQL(WCDB::SQL &sql);
 
-}
+} // namespace WCDB
 
 #define TestCaseAssertIterateEqual(_sql, _expected)                                    \
     {                                                                                  \

@@ -38,9 +38,9 @@ enum class CompressedType {
 #define WCDBMergeCompressionType(compressedType, columnType)                   \
     ((((int) (compressedType)) << 1) | ((columnType) == WCDB::ColumnType::Text ? 0 : 1))
 #define WCDBGetCompressedType(mergeType)                                       \
-    ((WCDB::CompressedType)((mergeType) >> 1))
+    ((WCDB::CompressedType) ((mergeType) >> 1))
 #define WCDBGetOriginType(mergeType)                                           \
-    ((((mergeType) &0x1) > 0) ? WCDB::ColumnType::BLOB : WCDB::ColumnType::Text)
+    ((((mergeType) & 0x1) > 0) ? WCDB::ColumnType::BLOB : WCDB::ColumnType::Text)
 
 WCDBLiteralStringDefine(DecompressFunctionName, "wcdb_decompress");
 

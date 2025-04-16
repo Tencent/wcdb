@@ -46,7 +46,7 @@
     WCDB::Statement statement2 = statement;
     TestCaseAssertSQLEqual(statement2, @"INSERT INTO testTable VALUES(1)");
 
-    WCDB::StatementInsert statement3((const WCDB::StatementInsert&) statement);
+    WCDB::StatementInsert statement3((const WCDB::StatementInsert &) statement);
     TestCaseAssertSQLEqual(statement3, @"INSERT INTO testTable VALUES(1)");
 }
 

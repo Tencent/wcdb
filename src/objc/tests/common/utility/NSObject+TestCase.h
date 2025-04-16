@@ -33,39 +33,39 @@
 
 @interface NSObject (TestCase)
 
-+ (BOOL)isObject:(NSObject*)left nilEqualToObject:(NSObject*)right;
++ (BOOL)isObject:(NSObject *)left nilEqualToObject:(NSObject *)right;
 
 @end
 
 @interface NSArray (TestCase)
 
-- (NSArray*)reversedArray;
+- (NSArray *)reversedArray;
 
 @end
 
 @interface NSString (TestCase)
 
-+ (NSArray<NSString*>*)pathsByReplacingPaths:(NSArray<NSString*>*)paths withDirectory:(NSString*)directory;
-+ (NSString*)pathByReplacingPath:(NSString*)path withDirectory:(NSString*)directory;
-- (NSString*)test_stringByStandardizingPath;
-+ (NSString*)createPreciseStringFromDouble:(double)doubleValue;
++ (NSArray<NSString *> *)pathsByReplacingPaths:(NSArray<NSString *> *)paths withDirectory:(NSString *)directory;
++ (NSString *)pathByReplacingPath:(NSString *)path withDirectory:(NSString *)directory;
+- (NSString *)test_stringByStandardizingPath;
++ (NSString *)createPreciseStringFromDouble:(double)doubleValue;
 
 @end
 
 @interface NSFileManager (TestCase)
 
-- (unsigned long long)getFileSizeIfExists:(NSString*)path;
-- (void)copyItemsIfExistsAtPath:(NSString*)path toPath:(NSString*)destination;
-- (void)removeItemIfExistsAtPath:(NSString*)path;
-- (void)removeItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
-- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPath:(NSString*)path;
-- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString*>*)paths;
-- (BOOL)isFileImmutableOfItemAtPath:(NSString*)path;
-- (NSArray*)getAllFilesAtDirectory:(NSString*)directory;
+- (unsigned long long)getFileSizeIfExists:(NSString *)path;
+- (void)copyItemsIfExistsAtPath:(NSString *)path toPath:(NSString *)destination;
+- (void)removeItemIfExistsAtPath:(NSString *)path;
+- (void)removeItemsIfExistsAtPaths:(NSArray<NSString *> *)paths;
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPath:(NSString *)path;
+- (void)setFileImmutable:(BOOL)immutable ofItemsIfExistsAtPaths:(NSArray<NSString *> *)paths;
+- (BOOL)isFileImmutableOfItemAtPath:(NSString *)path;
+- (NSArray *)getAllFilesAtDirectory:(NSString *)directory;
 
 #if TARGET_OS_IPHONE && !TARGET_IPHONE_SIMULATOR
-- (void)setFileProtectionOfPath:(NSString*)path to:(NSFileProtectionType)type;
-- (NSFileProtectionType)getFileProtection:(NSString*)path;
+- (void)setFileProtectionOfPath:(NSString *)path to:(NSFileProtectionType)type;
+- (NSFileProtectionType)getFileProtection:(NSString *)path;
 #endif
 
 @end

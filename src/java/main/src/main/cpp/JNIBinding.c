@@ -85,10 +85,7 @@
 #define WCDBJNIMultiTypeArraySignature "[I[J[D[Ljava/lang/String;"
 
 #define WCDBJNIRegister(className, methodList)                                 \
-    {                                                                          \
-        className, (JNINativeMethod *) &methodList,                            \
-        sizeof(methodList) / sizeof(JNINativeMethod)                           \
-    }
+    { className, (JNINativeMethod *) &methodList, sizeof(methodList) / sizeof(JNINativeMethod) }
 
 typedef struct JNIBinding {
     const char *className;

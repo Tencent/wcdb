@@ -120,4 +120,4 @@ Optional<FileProtection> FileManager::getFileProtection(const UnsafeStringView &
 }
 #endif
 
-}
+} // namespace WCDB

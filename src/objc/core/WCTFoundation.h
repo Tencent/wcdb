@@ -29,8 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSString (WCDB)
 
-+ (NSString*)stringWithView:(const WCDB::UnsafeStringView&)string;
-- (NSString*)wcdb_stringByStandardizingPath;
++ (NSString *)stringWithView:(const WCDB::UnsafeStringView &)string;
+- (NSString *)wcdb_stringByStandardizingPath;
 
 @end
 

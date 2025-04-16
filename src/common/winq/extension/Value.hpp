@@ -33,21 +33,17 @@
 namespace WCDB {
 
 template<class T>
-struct IsSTDSharedPtr : std::false_type {
-};
+struct IsSTDSharedPtr : std::false_type {};
 
 template<class T>
-struct IsSTDSharedPtr<std::shared_ptr<T>> : std::true_type {
-};
+struct IsSTDSharedPtr<std::shared_ptr<T>> : std::true_type {};
 
 #if defined(__cplusplus) && __cplusplus > 201402L
 template<class T>
-struct IsSTDOptional : std::false_type {
-};
+struct IsSTDOptional : std::false_type {};
 
 template<class T>
-struct IsSTDOptional<std::optional<T>> : std::true_type {
-};
+struct IsSTDOptional<std::optional<T>> : std::true_type {};
 #endif
 
 class WCDB_API Value {

@@ -68,7 +68,7 @@ internal final class FTSBridge {
             return ObjectBridge.getUntypeSwiftObject(tokenizer)
         })
         WCDBSwiftSetTokenizerLoadInputFunction({
-            (obj: UnsafeMutableRawPointer, input: UnsafePointer<Int8>?, length: Int32, flag: Int32) -> Void in
+            (obj: UnsafeMutableRawPointer, input: UnsafePointer<Int8>?, length: Int32, flag: Int32) in
             let tokenizer: Tokenizer? = ObjectBridge.extractTypedSwiftObject(obj)
             guard let tokenizer = tokenizer else {
                 return

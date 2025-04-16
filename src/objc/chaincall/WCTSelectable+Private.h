@@ -31,6 +31,6 @@ WCDB_API @interface WCTSelectable() {
 
 - (BOOL)lazyPrepare;
 
-- (void)willPrepare:(WCDB::StatementSelect&)statement;
+- (void)willPrepare:(WCDB::StatementSelect &)statement;
 
 @end

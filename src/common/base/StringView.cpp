@@ -514,8 +514,7 @@ bool UnsafeStringView::tryRetrievePreAllocatedMemory(const char* string)
         g_preAllocatedMemory.memory[i] = nullptr;
         if (g_preAllocatedMemory.usedCount == i + 1) {
             int j = i - 1;
-            for (; j >= 0 && g_preAllocatedMemory.memory[j] == nullptr; j--)
-                ;
+            for (; j >= 0 && g_preAllocatedMemory.memory[j] == nullptr; j--);
             g_preAllocatedMemory.usedCount = j + 1;
         }
         WCTAssert(g_preAllocatedMemory.usedCount >= 0);

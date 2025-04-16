@@ -198,8 +198,8 @@ Wal::calculateChecksum(const MappedData &data, const std::pair<uint32_t, uint32_
     } else {
         do {
 #define BYTESWAP32(x)                                                          \
-    ((((x) &0x000000FF) << 24) + (((x) &0x0000FF00) << 8)                      \
-     + (((x) &0x00FF0000) >> 8) + (((x) &0xFF000000) >> 24))
+    ((((x) & 0x000000FF) << 24) + (((x) & 0x0000FF00) << 8)                    \
+     + (((x) & 0x00FF0000) >> 8) + (((x) & 0xFF000000) >> 24))
             result.first += BYTESWAP32(iter[0]) + result.second;
             result.second += BYTESWAP32(iter[1]) + result.first;
             iter += 2;

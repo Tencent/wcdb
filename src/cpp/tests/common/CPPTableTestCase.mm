@@ -210,15 +210,15 @@
 {
     TestCaseAssertTrue(sql != nil);
     [self doTestRows:{ { value } }
-    andSQLs:@[ sql ]
-    bySelecting:^WCDB::OptionalMultiRows {
-        WCDB::OptionalValue result = block();
-        TestCaseAssertTrue(result.succeed());
-        static_assert(std::is_constructible<WCDB::MultiRowsValue, std::vector<std::vector<WCDB::Value>>>::value, "");
-        WCDB::MultiRowsValue values = { { result.value() } };
+             andSQLs:@[ sql ]
+         bySelecting:^WCDB::OptionalMultiRows {
+             WCDB::OptionalValue result = block();
+             TestCaseAssertTrue(result.succeed());
+             static_assert(std::is_constructible<WCDB::MultiRowsValue, std::vector<std::vector<WCDB::Value>>>::value, "");
+             WCDB::MultiRowsValue values = { { result.value() } };
 
-        return values;
-    }];
+             return values;
+         }];
 }
 
 - (void)doTestRows:(const WCDB::MultiRowsValue&)rows

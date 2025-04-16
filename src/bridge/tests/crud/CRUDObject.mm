@@ -32,7 +32,7 @@
 #endif
 
 @implementation CRUDObject
-- (BOOL)isEqual:(CRUDObject*)object
+- (BOOL)isEqual:(CRUDObject *)object
 {
     return _variable1 == object.variable1 && ((_variable2 == nil && object.variable2 == nil) || [_variable2 isEqualToString:object.variable2]);
 }

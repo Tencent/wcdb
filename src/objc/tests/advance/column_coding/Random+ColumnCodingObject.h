@@ -27,6 +27,6 @@
 
 @interface Random (ColumnCodingObject)
 
-- (ColumnCodingObject*)columnCodingObject;
+- (ColumnCodingObject *)columnCodingObject;
 
 @end

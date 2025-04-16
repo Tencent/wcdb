@@ -168,7 +168,7 @@ void Handle::detachCancellationSignal()
 }
 
 Handle::CancellationSignal::CancellationSignal()
-: m_signal(std::make_shared<bool>(false)){};
+: m_signal(std::make_shared<bool>(false)) {};
 
 Handle::CancellationSignal::~CancellationSignal() = default;
 

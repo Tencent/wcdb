@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 #ifdef WCDB_SWIFT
 
 @required
-+ (WCTBridgeProperties*)allBridgeProperties NS_SWIFT_NAME(allProperties());
++ (WCTBridgeProperties *)allBridgeProperties NS_SWIFT_NAME(allProperties());
 
 #elif __cplusplus
 

@@ -33,7 +33,7 @@ JavaVM* g_vm = NULL;
 
 void WCDBJNIDestructContext(jobject config)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     (*env)->DeleteGlobalRef(env, config);
     WCDBJNITryDetach;
 }

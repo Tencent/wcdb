@@ -125,7 +125,7 @@ uint64_t Thread::getCurrentThreadId()
 #elif __linux__
     return (uint64_t) syscall(SYS_gettid);
 #else
-    return (uint64_t)::gettid();
+    return (uint64_t) ::gettid();
 #endif
 }
 

@@ -349,49 +349,49 @@
 #pragma mark - Database - Get Rows
 - (void)test_database_get_rows
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content },
-                        { self.object2.identifier, self.object2.content } }
-    andSQL:@"SELECT identifier, content FROM testTable"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content },
+                       { self.object2.identifier, self.object2.content } }
+              andSQL:@"SELECT identifier, content FROM testTable"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String);
+         }];
 }
 
 - (void)test_database_get_rows_where
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
+         }];
 }
 
 - (void)test_database_get_rows_where_orders
 {
-    [self doTestRows:{ {self.object2.identifier, self.object2.content },
-                        { self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
-    }];
+    [self doTestRows:{ { self.object2.identifier, self.object2.content },
+                       { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
+         }];
 }
 
 - (void)test_database_get_rows_where_orders_limit
 {
-    [self doTestRows:{ {self.object2.identifier, self.object2.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
-    }];
+    [self doTestRows:{ { self.object2.identifier, self.object2.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
+         }];
 }
 
 - (void)test_database_get_rows_where_orders_limit_offset
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
+         }];
 }
 
 #pragma mark - Database - Get From Statement
@@ -721,49 +721,49 @@
 #pragma mark - Table - Get Rows
 - (void)test_table_get_rows
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content },
-                        { self.object2.identifier, self.object2.content } }
-    andSQL:@"SELECT identifier, content FROM testTable"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.table.selectAllRow(CPPTestCaseObject::allFields());
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content },
+                       { self.object2.identifier, self.object2.content } }
+              andSQL:@"SELECT identifier, content FROM testTable"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.table.selectAllRow(CPPTestCaseObject::allFields());
+         }];
 }
 
 - (void)test_table_get_rows_where
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
+         }];
 }
 
 - (void)test_table_get_rows_where_orders
 {
-    [self doTestRows:{ {self.object2.identifier, self.object2.content },
-                        { self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
-    }];
+    [self doTestRows:{ { self.object2.identifier, self.object2.content },
+                       { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
+         }];
 }
 
 - (void)test_table_get_rows_where_orders_limit
 {
-    [self doTestRows:{ {self.object2.identifier, self.object2.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
-    }];
+    [self doTestRows:{ { self.object2.identifier, self.object2.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
+         }];
 }
 
 - (void)test_table_get_rows_where_orders_limit_offset
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.table.selectAllRow(CPPTestCaseObject::allFields(), WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
+         }];
 }
 
 #pragma mark - Table - Get From Statement
@@ -1093,49 +1093,49 @@
 #pragma mark - Handle - Get Rows
 - (void)test_handle_get_rows
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content },
-                        { self.object2.identifier, self.object2.content } }
-    andSQL:@"SELECT identifier, content FROM testTable"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content },
+                       { self.object2.identifier, self.object2.content } }
+              andSQL:@"SELECT identifier, content FROM testTable"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String);
+         }];
 }
 
 - (void)test_handle_get_rows_where
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier == 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) == 1);
+         }];
 }
 
 - (void)test_handle_get_rows_where_orders
 {
-    [self doTestRows:{ {self.object2.identifier, self.object2.content },
-                        { self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
-    }];
+    [self doTestRows:{ { self.object2.identifier, self.object2.content },
+                       { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC));
+         }];
 }
 
 - (void)test_handle_get_rows_where_orders_limit
 {
-    [self doTestRows:{ {self.object2.identifier, self.object2.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
-    }];
+    [self doTestRows:{ { self.object2.identifier, self.object2.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1);
+         }];
 }
 
 - (void)test_handle_get_rows_where_orders_limit_offset
 {
-    [self doTestRows:{ {self.object1.identifier, self.object1.content } }
-    andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
-    }];
+    [self doTestRows:{ { self.object1.identifier, self.object1.content } }
+              andSQL:@"SELECT identifier, content FROM testTable WHERE identifier > 0 ORDER BY identifier DESC LIMIT 1 OFFSET 1"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return self.database->getHandle().selectAllRow(CPPTestCaseObject::allFields(), self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier) > 0, WCDB_FIELD(CPPTestCaseObject::identifier).asOrder(WCDB::Order::DESC), 1, 1);
+         }];
 }
 
 #pragma mark - Handle - Get From Statement

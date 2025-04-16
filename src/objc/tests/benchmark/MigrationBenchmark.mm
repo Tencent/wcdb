@@ -102,8 +102,7 @@
     self.factory.quality = 100000;
     [self
     doMeasure:^{
-        while ([self.database stepMigration] && ![self.database isMigrated])
-            ;
+        while ([self.database stepMigration] && ![self.database isMigrated]);
     }
     setUp:^{
         [self setUpDatabase];

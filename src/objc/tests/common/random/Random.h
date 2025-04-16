@@ -55,19 +55,19 @@ typedef enum : NSUInteger {
 
 - (BOOL)boolean;
 
-- (NSNumber*)number;
+- (NSNumber *)number;
 
-- (NSString*)string;
-- (NSString*)stringWithLength:(UInt32)length;
-- (NSString*)chineseString;
-- (NSString*)chineseStringWithLength:(UInt32)length;
-- (NSString*)englishString;
-- (NSString*)englishStringWithLength:(UInt32)length;
+- (NSString *)string;
+- (NSString *)stringWithLength:(UInt32)length;
+- (NSString *)chineseString;
+- (NSString *)chineseStringWithLength:(UInt32)length;
+- (NSString *)englishString;
+- (NSString *)englishStringWithLength:(UInt32)length;
 
-- (NSData*)data;
-- (NSData*)dataWithLength:(NSInteger)length;
-- (NSData*)dataOtherThan:(NSData*)other;
+- (NSData *)data;
+- (NSData *)dataWithLength:(NSInteger)length;
+- (NSData *)dataOtherThan:(NSData *)other;
 
-- (NSDate*)date;
+- (NSDate *)date;
 
 @end

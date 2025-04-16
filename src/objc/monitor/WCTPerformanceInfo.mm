@@ -27,7 +27,7 @@
 
 @implementation WCTPerformanceInfo
 
-- (instancetype)initWithPerformanceInfo:(const WCDB::InnerHandle::PerformanceInfo&)info
+- (instancetype)initWithPerformanceInfo:(const WCDB::InnerHandle::PerformanceInfo &)info
 {
     if (self = [super init]) {
         _tablePageReadCount = info.tablePageReadCount;

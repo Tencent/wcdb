@@ -74,7 +74,7 @@ public protocol StatementInterfaceForObjc {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - type: Type of table decodable object
     /// - Returns: Table decodable objects.
-    func extractAllObjects<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws-> [Object]
+    func extractAllObjects<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws -> [Object]
 }
 
 extension StatementInterfaceForObjc where Self: RawStatementmentRepresentable {
@@ -105,7 +105,7 @@ extension StatementInterfaceForObjc where Self: RawStatementmentRepresentable {
         return WCTAPIBridge.extractObject(onResultColumns: properties, from: getRawStatement()) as! Object
     }
 
-    public func extractAllObjects<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws-> [Object] {
+    public func extractAllObjects<Object: WCTTableCoding>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws -> [Object] {
         let properties: [WCTBridgeProperty] = propertyConvertibleList?.asWCTBridgeProperties() ?? Object.allProperties()
         var objects: [Object] = []
         let rawStatment = getRawStatement()

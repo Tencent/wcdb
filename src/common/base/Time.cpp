@@ -55,14 +55,14 @@ Time::Time(Super &&super) : Super(std::move(super))
 
 Time::Time(const struct timespec &ts)
 : Super(std::chrono::system_clock::time_point{
-std::chrono::duration_cast<std::chrono::system_clock::duration>(
-std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
+  std::chrono::duration_cast<std::chrono::system_clock::duration>(
+  std::chrono::seconds{ ts.tv_sec } + std::chrono::nanoseconds{ ts.tv_nsec }) })
 {
 }
 
 Time::Time(const uint64_t &second)
 : Super(std::chrono::system_clock::time_point{
-std::chrono::duration_cast<std::chrono::system_clock::duration>(std::chrono::seconds{ second }) })
+  std::chrono::duration_cast<std::chrono::system_clock::duration>(std::chrono::seconds{ second }) })
 {
 }
 

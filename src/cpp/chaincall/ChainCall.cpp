@@ -35,7 +35,7 @@ BaseChainCall::BaseChainCall(Recyclable<InnerDatabase*> databaseHolder)
 }
 
 BaseChainCall::BaseChainCall(const BaseChainCall& other)
-: m_handle(other.m_handle){
+: m_handle(other.m_handle) {
 
 };
 

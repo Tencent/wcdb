@@ -47,17 +47,17 @@
     _rows = { self.row1, self.row2 };
 }
 
-- (CPPTestCaseObject&)object1
+- (CPPTestCaseObject &)object1
 {
     return _object1;
 }
 
-- (CPPTestCaseObject&)object2
+- (CPPTestCaseObject &)object2
 {
     return _object2;
 }
 
-- (WCDB::ValueArray<CPPTestCaseObject>&)objects
+- (WCDB::ValueArray<CPPTestCaseObject> &)objects
 {
     return _objects;
 }

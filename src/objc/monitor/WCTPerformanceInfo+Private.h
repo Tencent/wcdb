@@ -27,6 +27,6 @@
 
 @interface WCTPerformanceInfo ()
 
-- (instancetype)initWithPerformanceInfo:(const WCDB::InnerHandle::PerformanceInfo&)info;
+- (instancetype)initWithPerformanceInfo:(const WCDB::InnerHandle::PerformanceInfo &)info;
 
 @end

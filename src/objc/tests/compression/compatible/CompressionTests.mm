@@ -539,8 +539,7 @@
         [WCTDatabase simulateIOError:WCTSimulateWriteIOError];
 
         // wait until auto migrate stopped
-        while (numberOfFailures.value < WCDB::OperationQueueTolerableFailuresForCompression)
-            ;
+        while (numberOfFailures.value < WCDB::OperationQueueTolerableFailuresForCompression);
 
         // wait to confirm migration is stopped.
         [NSThread sleepForTimeInterval:2 * WCDB::OperationQueueTolerableFailuresForCompression];

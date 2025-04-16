@@ -29,9 +29,9 @@
 
 namespace WCDB {
 
-Binding::Binding() : BaseBinding(){};
+Binding::Binding() : BaseBinding() {};
 
-Binding::~Binding(){};
+Binding::~Binding() {};
 
 #pragma mark - Inherit
 void Binding::inherit(const Binding &binding)

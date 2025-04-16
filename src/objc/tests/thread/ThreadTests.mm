@@ -191,13 +191,11 @@
         // it will not reuse transactioned handle.
         TestCaseAssertTrue([handle validate]);
         [began makeYES];
-        while ([tested isNO])
-            ;
+        while ([tested isNO]);
         [handle invalidate];
     }];
 
-    while ([began isNO])
-        ;
+    while ([began isNO]);
 
     // it will reuse transactioned handle.
     TestCaseAssertTrue([self.database isInTransaction]);

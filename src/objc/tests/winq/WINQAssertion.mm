@@ -161,4 +161,4 @@ NSString* getDescriptionOfTypes(const std::list<WCDB::Syntax::Identifier::Type>&
     return description;
 }
 
-}
+} // namespace WCDB

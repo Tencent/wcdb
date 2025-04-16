@@ -33,5 +33,5 @@ jlong WCDBJNIStatementExplainClassMethodWithNoArg(createCppObj)
 void WCDBJNIStatementExplainClassMethod(explain, jlong self, jlong statement, jboolean queryPlan)
 {
     WCDBJNIBridgeStruct(CPPStatementExplain, self);
-    WCDBStatementExplain(selfStruct, (CPPObject*) statement, queryPlan);
+    WCDBStatementExplain(selfStruct, (CPPObject *) statement, queryPlan);
 }

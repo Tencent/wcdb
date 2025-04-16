@@ -135,8 +135,7 @@ public:
 
     template<typename T>
     struct Convertible<T, std::enable_if_t<std::is_function<T>::value>>
-    : public std::false_type {
-    };
+    : public std::false_type {};
 
     template<typename T, typename Enable = typename std::enable_if<Convertible<T>::value>::type>
     UnsafeStringView(const T& t)
