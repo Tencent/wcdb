@@ -65,6 +65,15 @@ WCDB_API @interface WCTDatabase : NSObject
 - (instancetype)initWithPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
 
 /**
+ @brief Init a readonly database from path.
+ @warning Once a database is opened in read-only mode, it cannot be writable in the current process any more.
+ @see `-[WCTDatabase initWithPath:]
+ @param path Path to your database
+ @return WCTDatabase
+ */
+- (instancetype)initReadOnlyDatabaseWithPath:(NSString *)path NS_DESIGNATED_INITIALIZER;
+
+/**
  @brief Init a in-memory database.
  @Note  Since In-memory database share one DB handle among all threads, it does not support multi-threaded concurrent operation.
  @return WCTDatabase

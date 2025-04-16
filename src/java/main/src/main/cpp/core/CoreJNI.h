@@ -34,7 +34,7 @@
 #define WCDBJNICoreClassMethod(funcName, ...)                                  \
     WCDBJNIClassMethod(Core, funcName, __VA_ARGS__)
 
-jlong WCDBJNICoreClassMethod(createDatabase, jstring path);
+jlong WCDBJNICoreClassMethod(createDatabase, jstring path, jboolean readonly);
 void WCDBJNICoreClassMethod(setDefaultCipherConfig, jint version);
 void WCDBJNICoreClassMethodWithNoArg(purgeAllDatabase);
 void WCDBJNICoreClassMethod(releaseSQLiteMemory, jint bytes);

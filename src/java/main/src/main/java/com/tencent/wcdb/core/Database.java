@@ -47,10 +47,24 @@ public class Database extends HandleORMOperation {
      * @param path Path to your database
      */
     public Database(@NotNull String path) {
-        cppObj = createDatabase(path);
+        cppObj = createDatabase(path, false);
     }
 
-    private static native long createDatabase(String path);
+    /**
+     * Init a database from path.
+     * All database objects with same path share the same core. So you can create multiple database objects. WCDB will manage them automatically.
+     * WCDB will not generate a sqlite db handle until the first operation, which is also called as lazy initialization.
+     *
+     * Note that once a database is opened in read-only mode,
+     * it cannot be writable in the current process any more.
+     *
+     * @param path Path to your database
+     */
+    public Database(@NotNull String path, boolean readonly) {
+        cppObj = createDatabase(path, readonly);
+    }
+
+    private static native long createDatabase(String path, boolean readonly);
 
     /**
      * Get the file path of the database.

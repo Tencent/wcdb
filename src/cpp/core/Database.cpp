@@ -40,10 +40,13 @@ namespace WCDB {
 
 #pragma mark - Basic
 
-Database::Database(const UnsafeStringView& path)
+Database::Database(const UnsafeStringView& path, bool readOnly)
 {
     m_databaseHolder = CommonCore::shared().getOrCreateDatabase(Path::normalize(path));
     m_innerDatabase = m_databaseHolder.get();
+    if (readOnly) {
+        m_innerDatabase->setReadOnly();
+    }
 }
 
 Database::Database(const Database&) = default;

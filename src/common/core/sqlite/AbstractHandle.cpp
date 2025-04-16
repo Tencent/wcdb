@@ -38,6 +38,7 @@ AbstractHandle::AbstractHandle()
 , m_customOpenFlag(0)
 , m_tag(Tag::invalid())
 , m_enableLiteMode(false)
+, m_isReadOnly(false)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_cacheTransactionError(TransactionError::Allowed)
@@ -104,7 +105,10 @@ bool AbstractHandle::open()
 {
     bool succeed = true;
     if (!isOpened()) {
-        if (m_customOpenFlag == 0) {
+        if (m_isReadOnly) {
+            succeed = APIExit(
+            sqlite3_open_v2(m_path.data(), &m_handle, SQLITE_OPEN_READONLY, 0));
+        } else if (m_customOpenFlag == 0) {
             succeed = APIExit(sqlite3_open_v2(
             m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MAINDB_READONLY, 0));
         } else {
@@ -219,6 +223,11 @@ bool AbstractHandle::isReadonly()
 {
     WCTAssert(isOpened());
     return sqlite3_db_readonly(m_handle, NULL) == 1;
+}
+
+void AbstractHandle::setReadOnly()
+{
+    m_isReadOnly = true;
 }
 
 bool AbstractHandle::isInTransaction()

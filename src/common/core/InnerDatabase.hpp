@@ -75,9 +75,11 @@ public:
     using HandlePool::unblockade;
     using HandlePool::isBlockaded;
     using HandlePool::numberOfAliveHandles;
+    void setReadOnly();
 
 protected:
     Tag m_tag;
+    bool m_isReadOnly = false;
 
     void didDrain() override final;
     bool checkShouldInterruptWhenClosing(const UnsafeStringView &sourceType);

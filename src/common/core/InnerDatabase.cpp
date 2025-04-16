@@ -60,6 +60,7 @@ InnerDatabase::InnerDatabase(const UnsafeStringView &path)
 , m_initialized(false)
 , m_closing(0)
 , m_tag(Tag::invalid())
+, m_isReadOnly(false)
 , m_fullSQLTrace(false)
 , m_liteModeEnable(false)
 , m_factory(path)
@@ -149,6 +150,14 @@ void InnerDatabase::close(const ClosedCallback &onClosed)
     CommonCore::shared().stopAllDatabaseEvent(getPath());
     drain(onClosed);
     --m_closing;
+}
+
+void InnerDatabase::setReadOnly()
+{
+    close([this] {
+        m_isReadOnly = true;
+        CommonCore::shared().enableAutoCheckpoint(this, false);
+    });
 }
 
 bool InnerDatabase::isOpened() const
@@ -379,7 +388,9 @@ bool InnerDatabase::willReuseSlotedHandle(HandleType type, InnerHandle *handle)
 bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
 {
     WCTAssert(handle != nullptr);
-
+    if (m_isReadOnly) {
+        handle->setReadOnly();
+    }
     handle->setTag(getTag());
     handle->setType(type);
     handle->setLiteModeEnable(m_liteModeEnable);

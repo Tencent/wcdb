@@ -86,6 +86,7 @@ public:
     //    Error::Code getResultCode();
     int getChanges();
     int getTotalChange();
+    void setReadOnly();
     bool isReadonly();
     bool isInTransaction();
 
@@ -99,6 +100,7 @@ protected:
     int m_customOpenFlag;
     Tag m_tag;
     bool m_enableLiteMode = false;
+    bool m_isReadOnly = false;
 
 #pragma mark - Statement
 public:
