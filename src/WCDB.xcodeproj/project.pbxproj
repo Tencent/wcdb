@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -824,6 +824,7 @@
 		0D249BC12542B8E900B43BD9 /* MergeFTSIndexLogic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0D249BC02542B8E900B43BD9 /* MergeFTSIndexLogic.hpp */; };
 		0D249BC92542B90600B43BD9 /* MergeFTSIndexLogic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D249BC82542B90600B43BD9 /* MergeFTSIndexLogic.cpp */; };
 		0D2789D92B21995800F60E2D /* CompressionTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0D2789D82B21995800F60E2D /* CompressionTests.mm */; };
+		0D28FD312DB09E6F00D85025 /* WCDB.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 239326611E836D7300D677CC /* WCDB.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0D32815F2B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
 		0D3281602B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
 		0D3281612B04A8E60027B973 /* DecorativeHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0D32815D2B04A8E60027B973 /* DecorativeHandle.cpp */; };
@@ -3600,6 +3601,16 @@
 				0D22E7B72B298EB200AA44D2 /* zstd.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D28FD302DB09E6300D85025 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0D28FD312DB09E6F00D85025 /* WCDB.framework in CopyFiles */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -9655,6 +9666,7 @@
 				239E8A6C2160A5B100BCB308 /* Sources */,
 				239E8A6D2160A5B100BCB308 /* Frameworks */,
 				239E8A6E2160A5B100BCB308 /* Resources */,
+				0D28FD302DB09E6300D85025 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -12043,7 +12055,11 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -12055,7 +12071,11 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
