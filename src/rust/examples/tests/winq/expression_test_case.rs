@@ -20,6 +20,9 @@ pub mod expression_test {
         let expression = Expression::new_with_column(&column);
         WinqTool::winq_equal(&expression.is_null(), "testColumn ISNULL");
         WinqTool::winq_equal(&expression.not_null(), "testColumn NOTNULL");
+
+        WinqTool::winq_equal(&column.is_null(), "testColumn ISNULL");
+        WinqTool::winq_equal(&column.not_null(), "testColumn NOTNULL");
     }
 
     #[test]

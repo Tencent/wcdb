@@ -722,11 +722,10 @@ impl ExpressionOperable {
         expression
     }
 
-    pub(crate) fn null_operate(&self, is_not: bool) -> Expression {
+    pub(crate) fn null_operate(&self, cpp_type: i32, is_not: bool) -> Expression {
         let mut expression = Expression::new();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_nullOperate(Self::get_type(), self.get_cpp_obj(), is_not)
-        };
+        let cpp_obj =
+            unsafe { WCDBRustExpressionOperable_nullOperate(cpp_type, self.get_cpp_obj(), is_not) };
         expression.set_cpp_obj(cpp_obj);
         expression
     }

@@ -74,11 +74,13 @@ impl IndexedColumnConvertibleTrait for Column {}
 
 impl ExpressionOperableTrait for Column {
     fn is_null(&self) -> Expression {
-        todo!()
+        self.expression_operable
+            .null_operate(Self::get_type(), false)
     }
 
     fn not_null(&self) -> Expression {
-        todo!()
+        self.expression_operable
+            .null_operate(Self::get_type(), true)
     }
 
     fn or<T>(&self, operand: &T) -> Expression
