@@ -1,3 +1,9 @@
+## v2.1.11
+
+* Support to open database in readonly mode
+* Support to create in-memory database in java/c++/swift
+* Fix the exception problem of tableExist method in Java/Kotlin
+
 ## v2.1.10
 
 * Disable checkpoint fullsync in apple platform, it will significantly reduce disk IO
