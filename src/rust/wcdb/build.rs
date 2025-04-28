@@ -1,3 +1,5 @@
+use std::env;
+use std::path::PathBuf;
 use std::process::Command;
 
 fn main() {
@@ -32,8 +34,16 @@ fn main() {
         );
         println!("cargo:rustc-link-lib=framework=WCDB");
     } else if cfg!(target_os = "linux") {
+        let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+        let openssl_path = manifest_dir.join("../../../tools/prebuild/openssl/linux/x86_64");
+        println!(
+            "cargo:warning=WCDB MANIFEST_DIR: {}",
+            manifest_dir.display()
+        );
+        println!("cargo:warning=WCDB crypto path: {}", openssl_path.display());
+        println!("cargo:warning=WCDB crypto exist: {}", openssl_path.exists());
         println!("cargo:rustc-link-lib=stdc++");
-        println!("cargo:rustc-link-search=native=../../tools/prebuild/openssl/linux/x86_64");
+        println!("cargo:rustc-link-search=native={}", openssl_path.display());
         println!("cargo:rustc-link-lib=static=crypto");
         println!(
             "cargo:rustc-link-search=native={}/build/wcdb/",
