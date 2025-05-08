@@ -471,7 +471,7 @@ char** UnsafeStringView::preAllocStringMemorySlot(int count)
 
 void UnsafeStringView::allocStringMemory(char** slot, int size)
 {
-    if (size == 0 || slot == nullptr) {
+    if (slot == nullptr) {
         return;
     }
     char* buffer = (char*) malloc((size + 1 + kReferenceSize) * sizeof(char));
@@ -479,6 +479,7 @@ void UnsafeStringView::allocStringMemory(char** slot, int size)
         return;
     }
     *slot = buffer + kReferenceSize;
+    *(*slot + size) = '\0';
 }
 
 void UnsafeStringView::clearAllocatedMemory(int count)

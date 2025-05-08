@@ -45,6 +45,14 @@ public class StatementInsertTest {
                 "INSERT INTO testTable VALUES(1, 'value')");
 
         winqEqual(new StatementInsert().insertInto("testTable")
+                        .values(1, null),
+                "INSERT INTO testTable VALUES(1, NULL)");
+
+        winqEqual(new StatementInsert().insertInto("testTable")
+                        .values(1, ""),
+                "INSERT INTO testTable VALUES(1, '')");
+
+        winqEqual(new StatementInsert().insertInto("testTable")
                         .values(null, true, 'a', 1, 1L, 1.1f, 1.1, "value", BindParameter._1),
                 "INSERT INTO testTable VALUES(NULL, TRUE, 97, 1, 1, 1.1000000238418579, 1.1000000000000001, 'value', ?1)");
 

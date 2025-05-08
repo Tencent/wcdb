@@ -36,6 +36,8 @@ import org.junit.runner.RunWith;
 public class StatementPragmaTest {
     @Test
     public void test() {
+        winqEqual(new StatementPragma().pragma(Pragma.secureDelete).toValue(""),
+                "PRAGMA secure_delete = ''");
         winqEqual(new StatementPragma().pragma(Pragma.pageSize), "PRAGMA page_size");
         winqEqual(new StatementPragma().pragma(Pragma.secureDelete).toValue(true),
                 "PRAGMA secure_delete = TRUE");
