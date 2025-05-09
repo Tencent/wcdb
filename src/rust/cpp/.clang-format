@@ -1,0 +1,12 @@
+BasedOnStyle: Chromium
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^".*\.h"'
+    Priority: 1
+  - Regex: '^<.*\.h>'
+    Priority: 2
+AllowShortFunctionsOnASingleLine: None
+ColumnLimit: 100
