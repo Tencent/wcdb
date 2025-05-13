@@ -83,6 +83,8 @@ impl<T> SetDatabaseConfigTrait for T where T: Fn(Handle) -> bool + Send + Sync {
 lazy_static! {
     static ref GLOBAL_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
         Arc::new(Mutex::new(None));
+    static ref DATABASE_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
+        Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
         Arc::new(Mutex::new(None));
     static ref DATABASE_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
@@ -156,6 +158,11 @@ extern "C" {
 
     fn WCDBRustDatabase_globalTracePerformance(global_trace_performance_callback: *mut c_void);
 
+    fn WCDBRustDatabase_tracePerformance(
+        cpp_obj: *mut c_void,
+        trace_performance_callback: *mut c_void,
+    );
+
     fn WCDBRustDatabase_globalTraceSQL(global_trace_sql_callback: *mut c_void);
 
     fn WCDBRustDatabase_traceSQL(cpp_obj: *mut c_void, trace_sql_callback: *mut c_void);
@@ -227,6 +234,37 @@ extern "C" fn global_trace_performance_callback(
         Err(error) => {
             eprintln!(
                 "Method: global_trace_performance_callback, Failed to acquire lock: {:?}",
+                error
+            );
+        }
+    }
+}
+
+extern "C" fn trace_performance_callback(
+    tag: i64,
+    path: *const c_char,
+    handle_id: i64,
+    sql: *const c_char,
+    info: PerformanceInfo,
+) {
+    let database_callback = DATABASE_TRACE_PERFORMANCE_CALLBACK.lock();
+    match database_callback {
+        Ok(callback) => {
+            if let Some(cb) = &*callback {
+                cb(
+                    tag,
+                    path.to_cow().to_string(),
+                    handle_id,
+                    sql.to_cow().to_string(),
+                    info,
+                );
+            } else {
+                eprintln!("Method: trace_performance_callback, No callback found.");
+            }
+        }
+        Err(error) => {
+            eprintln!(
+                "Method: trace_performance_callback, Failed to acquire lock: {:?}",
                 error
             );
         }
@@ -1498,6 +1536,39 @@ impl Database {
         }
         unsafe {
             WCDBRustDatabase_globalTracePerformance(cb_raw);
+        }
+        Ok(())
+    }
+
+    pub fn trace_performance<CB>(&self, cb_opt: Option<CB>) -> WCDBResult<()>
+    where
+        CB: TracePerformanceCallbackTrait + 'static,
+    {
+        let mut cb_raw: *mut c_void = null_mut();
+        {
+            match DATABASE_TRACE_PERFORMANCE_CALLBACK.lock() {
+                Ok(mut database_callback) => match cb_opt {
+                    None => {
+                        *database_callback = None;
+                        cb_raw = trace_performance_callback as *mut c_void;
+                    }
+                    Some(cb) => {
+                        let callback_box = Box::new(cb) as TracePerformanceCallback;
+                        *database_callback = Some(callback_box);
+                        cb_raw = trace_performance_callback as *mut c_void;
+                    }
+                },
+                Err(error) => {
+                    return Err(WCDBException::new_with_message(
+                        ExceptionLevel::Error,
+                        ExceptionCode::Error,
+                        error.to_string(),
+                    ));
+                }
+            }
+        }
+        unsafe {
+            WCDBRustDatabase_tracePerformance(self.get_cpp_obj(), cb_raw);
         }
         Ok(())
     }

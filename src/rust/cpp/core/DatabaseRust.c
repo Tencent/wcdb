@@ -262,12 +262,12 @@ typedef struct WCDBRustGlobalTracePerformanceContext {
     RustGlobalTracePerformanceCallback rust_callback;
 } WCDBRustGlobalTracePerformanceContext;
 
-void WCDBRustDatabasePerformanceTrace(WCDBRustGlobalTracePerformanceContext* context,
-                                      long tag,
-                                      const char* path,
-                                      unsigned long long handleId,
-                                      const char* sql,
-                                      const CPPPerformanceInfo* info) {
+void WCDBRustGlobalDatabasePerformanceTrace(WCDBRustGlobalTracePerformanceContext* context,
+                                            long tag,
+                                            const char* path,
+                                            unsigned long long handleId,
+                                            const char* sql,
+                                            const CPPPerformanceInfo* info) {
     if (context == NULL || context->rust_callback == NULL) {
         return;
     }
@@ -287,19 +287,39 @@ void WCDBRustDatabaseClassMethod(globalTracePerformance,
     WCDBRustGlobalTracePerformanceContext* context =
         (WCDBRustGlobalTracePerformanceContext*)WCDBRustCreateGlobalRef(size);
     context->rust_callback = rust_callback;
-    WCDBDatabaseGlobalTracePerformance((WCDBPerformanceTracer)WCDBRustDatabasePerformanceTrace,
-                                       context, (WCDBContextDestructor)WCDBRustDestructContext);
+    WCDBDatabaseGlobalTracePerformance(
+        (WCDBPerformanceTracer)WCDBRustGlobalDatabasePerformanceTrace, context,
+        (WCDBContextDestructor)WCDBRustDestructContext);
 }
-//
-// void WCDBRustDatabaseClassMethod(tracePerformance, jlong self, jobject tracer)
-//{
-//    WCDBRustTryGetVM;
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustCreateGlobalRef(tracer);
-//    WCDBDatabaseTracePerformance(
-//    selfStruct, tracer != NULL ? WCDBRustDatabasePerformanceTrace : NULL, tracer,
-//    WCDBRustDestructContext);
-//}
+
+typedef struct WCDBRustTracePerformanceContext {
+    RustTracePerformanceCallback rust_callback;
+} WCDBRustTracePerformanceContext;
+
+void WCDBRustDatabasePerformanceTrace(WCDBRustTracePerformanceContext* context,
+                                      long tag,
+                                      const char* path,
+                                      unsigned long long handleId,
+                                      const char* sql,
+                                      const CPPPerformanceInfo* info) {
+    if (context == NULL || context->rust_callback == NULL) {
+        return;
+    }
+    context->rust_callback(tag, path, handleId, sql, info);
+}
+
+void WCDBRustDatabaseClassMethod(tracePerformance,
+                                 void* self,
+                                 RustTracePerformanceCallback rust_callback) {
+    size_t size = sizeof(WCDBRustTracePerformanceContext);
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBRustTracePerformanceContext* context =
+        (WCDBRustTracePerformanceContext*)WCDBRustCreateGlobalRef(size);
+    context->rust_callback = rust_callback;
+    WCDBDatabaseTracePerformance(selfStruct,
+                                 (WCDBPerformanceTracer)WCDBRustDatabasePerformanceTrace, context,
+                                 WCDBRustDestructContext);
+}
 //
 // void WCDBRustDatabaseSQLTrace(jobject tracer,
 //                             long tag,

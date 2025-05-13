@@ -86,8 +86,16 @@ typedef void (*RustGlobalTracePerformanceCallback)(long,
 void WCDBRustDatabaseClassMethod(globalTracePerformance,
                                  RustGlobalTracePerformanceCallback rust_callback);
 
-// void WCDBRustDatabaseClassMethod(tracePerformance, jlong self, jobject tracer);
-//
+typedef void (*RustTracePerformanceCallback)(long,
+                                             const char*,
+                                             unsigned long long,
+                                             const char*,
+                                             const CPPPerformanceInfo*);
+
+void WCDBRustDatabaseClassMethod(tracePerformance,
+                                 void* self,
+                                 RustTracePerformanceCallback rust_callback);
+
 typedef void (
     *RustGlobalTraceSQLCallback)(long, const char*, unsigned long long, const char*, const char*);
 
