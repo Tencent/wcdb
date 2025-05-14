@@ -104,19 +104,24 @@ typedef void (
 void WCDBRustDatabaseClassMethod(globalTraceSQL, RustGlobalTraceSQLCallback rust_callback);
 
 typedef void (
-    *RustTraceSQLCallback)(long, const char*, unsigned long long, const char*, const char*);
+    *RustTraceSQLCallback)(void*, long, const char*, unsigned long long, const char*, const char*);
 
-void WCDBRustDatabaseClassMethod(traceSQL, void* self, RustTraceSQLCallback rust_callback);
+void WCDBRustDatabaseClassMethod(traceSQL,
+                                 void* self,
+                                 RustTraceSQLCallback rust_callback,
+                                 void* cb_ptr);
 // void WCDBRustDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enable);
 //
 
 typedef void (*RustGlobalTraceTraceExceptionCallback)(void* exception);
-
 void WCDBRustDatabaseClassMethod(globalTraceException,
                                  RustGlobalTraceTraceExceptionCallback rust_callback);
+
+typedef void (*RustTraceTraceExceptionCallback)(void* cb_ptr, void* exception);
 void WCDBRustDatabaseClassMethod(traceError,
                                  void* self,
-                                 RustGlobalTraceTraceExceptionCallback rust_callback);
+                                 RustTraceTraceExceptionCallback rust_callback,
+                                 void* cb_ptr);
 
 // void WCDBRustDatabaseClassMethod(globalTraceOperation, jobject tracer);
 // void WCDBRustDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo);

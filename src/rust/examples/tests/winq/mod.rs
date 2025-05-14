@@ -2,6 +2,7 @@ pub(crate) mod column_constraint_test;
 pub(crate) mod expression_test_case;
 pub(crate) mod join_test;
 pub(crate) mod ordering_term_test;
+pub(crate) mod pragma_test;
 pub(crate) mod qualified_table_test;
 pub(crate) mod result_column_test;
 pub(crate) mod schema_test;

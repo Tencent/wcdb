@@ -210,7 +210,7 @@ pub mod data_base_test {
             let database = database_clone.read().unwrap();
             let statement_pragma = StatementPragma::new();
             let statement_pragma = statement_pragma
-                .pragma(Pragma::user_version().unwrap())
+                .pragma(Pragma::user_version())
                 .to_value(123);
             let ret = database.execute(statement_pragma);
             assert!(ret.is_ok());

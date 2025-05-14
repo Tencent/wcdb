@@ -86,11 +86,7 @@ lazy_static! {
         Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
         Arc::new(Mutex::new(None));
-    static ref DATABASE_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
-        Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
-        Arc::new(Mutex::new(None));
-    static ref DATABASE_TRACE_EXCEPTION_CALLBACK: Arc<Mutex<Option<TraceExceptionCallback>>> =
         Arc::new(Mutex::new(None));
     static ref GLOBAL_CORRUPTION_NOTIFICATION_CALLBACK: Arc<Mutex<Option<CorruptionNotificationCallback>>> =
         Arc::new(Mutex::new(None));
@@ -172,11 +168,26 @@ extern "C" {
 
     fn WCDBRustDatabase_globalTraceSQL(global_trace_sql_callback: *mut c_void);
 
-    fn WCDBRustDatabase_traceSQL(cpp_obj: *mut c_void, trace_sql_callback: *mut c_void);
+    fn WCDBRustDatabase_traceSQL(
+        cpp_obj: *mut c_void,
+        trace_sql_callback: extern "C" fn(
+            cb_raw: *mut c_void,
+            tag: i64,
+            path: *const c_char,
+            handle_id: i64,
+            sql: *const c_char,
+            info: *const c_char,
+        ),
+        cb_ptr: *mut c_void,
+    );
 
     fn WCDBRustDatabase_globalTraceException(global_trace_exception_callback: *mut c_void);
 
-    fn WCDBRustDatabase_traceException(cpp_obj: *mut c_void, trace_exception_callback: *mut c_void);
+    fn WCDBRustDatabase_traceException(
+        cpp_obj: *mut c_void,
+        trace_exception_callback: extern "C" fn(cb_raw: *mut c_void, exp_cpp_obj: *mut c_void),
+        cb_ptr: *mut c_void,
+    );
 
     fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
 
@@ -255,6 +266,9 @@ extern "C" fn trace_performance_callback(
     sql: *const c_char,
     info: PerformanceInfo,
 ) {
+    if cb_raw.is_null() {
+        return;
+    }
     let closure = unsafe { &*(cb_raw as *mut Box<dyn TracePerformanceCallbackTrait>) };
     closure(
         tag,
@@ -297,34 +311,24 @@ extern "C" fn global_trace_sql_callback(
 }
 
 extern "C" fn trace_sql_callback(
+    cb_raw: *mut c_void,
     tag: i64,
     path: *const c_char,
     handle_id: i64,
     sql: *const c_char,
     info: *const c_char,
 ) {
-    let global_callback = DATABASE_TRACE_SQL_CALLBACK.lock();
-    match global_callback {
-        Ok(callback) => {
-            if let Some(cb) = &*callback {
-                cb(
-                    tag,
-                    path.to_cow().to_string(),
-                    handle_id,
-                    sql.to_cow().to_string(),
-                    info.to_cow().to_string(),
-                );
-            } else {
-                eprintln!("Method: trace_sql_callback, No callback found.");
-            }
-        }
-        Err(error) => {
-            eprintln!(
-                "Method: trace_sql_callback, Failed to acquire lock: {:?}",
-                error
-            );
-        }
+    if cb_raw.is_null() {
+        return;
     }
+    let closure = unsafe { &*(cb_raw as *mut Box<dyn TraceSqlCallbackTrait>) };
+    closure(
+        tag,
+        path.to_cow().to_string(),
+        handle_id,
+        sql.to_cow().to_string(),
+        info.to_cow().to_string(),
+    );
 }
 
 extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
@@ -347,24 +351,13 @@ extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
     }
 }
 
-extern "C" fn trace_exception_callback(exp_cpp_obj: *mut c_void) {
-    let global_callback = DATABASE_TRACE_EXCEPTION_CALLBACK.lock();
-    match global_callback {
-        Ok(callback) => {
-            if let Some(cb) = &*callback {
-                let ex = WCDBException::create_exception(exp_cpp_obj);
-                cb(ex);
-            } else {
-                eprintln!("Method: trace_exception_callback, No callback found.");
-            }
-        }
-        Err(error) => {
-            eprintln!(
-                "Method: trace_exception_callback, Failed to acquire lock: {:?}",
-                error
-            );
-        }
+extern "C" fn trace_exception_callback(cb_raw: *mut c_void, exp_cpp_obj: *mut c_void) {
+    if cb_raw.is_null() {
+        return;
     }
+    let closure = unsafe { &*(cb_raw as *mut Box<dyn TraceExceptionCallbackTrait>) };
+    let ex = WCDBException::create_exception(exp_cpp_obj);
+    closure(ex);
 }
 
 extern "C" fn global_corruption_notification_callback_wrapper(cpp_obj: *mut c_void) {
@@ -532,6 +525,7 @@ pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
     trace_callback_ref: Arc<RefCell<*mut c_void>>,
+    trace_sql_ref: Arc<RefCell<*mut c_void>>,
 }
 
 unsafe impl Send for Database {}
@@ -1241,6 +1235,7 @@ impl Database {
             handle_orm_operation: HandleORMOperation::new(),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
+            trace_sql_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1251,6 +1246,7 @@ impl Database {
             handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
+            trace_sql_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1259,6 +1255,7 @@ impl Database {
             handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
+            trace_sql_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1607,31 +1604,15 @@ impl Database {
     where
         CB: TraceSqlCallbackTrait + 'static,
     {
-        let mut cb_raw: *mut c_void = null_mut();
-        {
-            match DATABASE_TRACE_SQL_CALLBACK.lock() {
-                Ok(mut global_callback) => match cb_opt {
-                    None => {
-                        *global_callback = None;
-                        cb_raw = trace_sql_callback as *mut c_void;
-                    }
-                    Some(cb) => {
-                        let callback_box = Box::new(cb) as TraceSqlCallback;
-                        *global_callback = Some(callback_box);
-                        cb_raw = trace_sql_callback as *mut c_void;
-                    }
-                },
-                Err(error) => {
-                    return Err(WCDBException::new_with_message(
-                        ExceptionLevel::Error,
-                        ExceptionCode::Error,
-                        error.to_string(),
-                    ));
-                }
-            }
+        let mut closure_raw = null_mut();
+        if let Some(cb) = cb_opt {
+            let closure_box = Box::new(Box::new(cb) as Box<dyn TraceSqlCallbackTrait>);
+            closure_raw = Box::into_raw(closure_box) as *mut c_void;
+            let mut value = self.trace_sql_ref.borrow_mut();
+            *value = closure_raw;
         }
         unsafe {
-            WCDBRustDatabase_traceSQL(self.get_cpp_obj(), cb_raw);
+            WCDBRustDatabase_traceSQL(self.get_cpp_obj(), trace_sql_callback, closure_raw);
         }
         Ok(())
     }
@@ -1642,7 +1623,7 @@ impl Database {
     {
         let mut cb_raw: *mut c_void = null_mut();
         {
-            match DATABASE_TRACE_EXCEPTION_CALLBACK.lock() {
+            match GLOBAL_TRACE_EXCEPTION_CALLBACK.lock() {
                 Ok(mut global_callback) => match cb_opt {
                     None => {
                         *global_callback = None;
@@ -1673,31 +1654,19 @@ impl Database {
     where
         CB: TraceExceptionCallbackTrait + 'static,
     {
-        let mut cb_raw: *mut c_void = null_mut();
-        {
-            match DATABASE_TRACE_EXCEPTION_CALLBACK.lock() {
-                Ok(mut global_callback) => match cb_opt {
-                    None => {
-                        *global_callback = None;
-                        cb_raw = null_mut();
-                    }
-                    Some(cb) => {
-                        let callback_box = Box::new(cb) as TraceExceptionCallback;
-                        *global_callback = Some(callback_box);
-                        cb_raw = trace_exception_callback as *mut c_void;
-                    }
-                },
-                Err(error) => {
-                    return Err(WCDBException::new_with_message(
-                        ExceptionLevel::Error,
-                        ExceptionCode::Error,
-                        error.to_string(),
-                    ));
-                }
-            }
+        let mut closure_raw = null_mut();
+        if let Some(cb) = cb_opt {
+            let closure_box = Box::new(Box::new(cb) as Box<dyn TraceExceptionCallbackTrait>);
+            closure_raw = Box::into_raw(closure_box) as *mut c_void;
+            let mut value = self.trace_callback_ref.borrow_mut();
+            *value = closure_raw;
         }
         unsafe {
-            WCDBRustDatabase_traceException(self.get_cpp_obj(), cb_raw);
+            WCDBRustDatabase_traceException(
+                self.get_cpp_obj(),
+                trace_exception_callback,
+                closure_raw,
+            );
         };
         Ok(())
     }

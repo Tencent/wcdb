@@ -108,17 +108,17 @@ pub mod config_test_case {
             set_secure_delete
                 .lock()
                 .unwrap()
-                .pragma(Pragma::secure_delete().unwrap())
+                .pragma(Pragma::secure_delete())
                 .to_value_bool(true);
         }
         let unset_secure_delete = Arc::new(StatementPragma::new());
         {
             unset_secure_delete
-                .pragma(Pragma::secure_delete().unwrap())
+                .pragma(Pragma::secure_delete())
                 .to_value_bool(false);
         }
         let binding = StatementPragma::new();
-        let get_secure_delete = binding.pragma(Pragma::secure_delete().unwrap());
+        let get_secure_delete = binding.pragma(Pragma::secure_delete());
         let un_invoked = Arc::new(Mutex::new(WrappedValue::new()));
         let database_arc = get_arc_database();
         {

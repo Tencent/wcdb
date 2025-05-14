@@ -147,6 +147,30 @@ impl StatementSelect {
         self
     }
 
+    pub fn select_with_result_column_names(&self, result_columns: &Vec<String>) -> &Self {
+        if result_columns.is_empty() {
+            return self;
+        }
+        let column_len = result_columns.len();
+        let mut types = vec![];
+        let mut cstr_vector: Vec<*const c_char> = Vec::with_capacity(column_len);
+        for name in result_columns {
+            types.push(CPPType::String as i32);
+            cstr_vector.push(name.to_cstring().into_raw());
+        }
+        unsafe {
+            WCDBRustStatementSelect_configResultColumns(
+                self.get_cpp_obj(),
+                types.as_ptr(),
+                std::ptr::null(),
+                std::ptr::null(),
+                cstr_vector.as_ptr(),
+                result_columns.len(),
+            );
+        }
+        self
+    }
+
     pub fn select<T>(&self, fields: &Vec<&Field<T>>) -> &Self {
         if fields.is_empty() {
             return self;

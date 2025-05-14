@@ -68,7 +68,7 @@ impl TableTestCase {
         self.do_test_objects_by_selecting(vec![object], vec![sql], operation);
     }
 
-    pub fn create_table(&mut self) -> WCDBResult<()> {
+    pub fn create_table(&self) -> WCDBResult<()> {
         let database_clone = Arc::clone(&self.data_base_test_case.get_database());
         let database = database_clone.read().unwrap();
         if !self.is_virtual_table {

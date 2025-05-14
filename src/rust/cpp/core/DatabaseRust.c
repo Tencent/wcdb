@@ -319,10 +319,9 @@ void WCDBRustDatabaseClassMethod(tracePerformance,
         (WCDBRustTracePerformanceContext*)WCDBRustCreateGlobalRef(size);
     context->rust_callback = rust_callback;
     context->cb_ptr = cb_ptr;
-    WCDBDatabaseTracePerformance(
-        selfStruct,
-        rust_callback != NULL ? (WCDBPerformanceTracer)WCDBRustDatabasePerformanceTrace : NULL,
-        context, WCDBRustDestructContext);
+    WCDBDatabaseTracePerformance(selfStruct,
+                                 (WCDBPerformanceTracer)WCDBRustDatabasePerformanceTrace, context,
+                                 WCDBRustDestructContext);
 }
 //
 // void WCDBRustDatabaseSQLTrace(jobject tracer,
@@ -373,6 +372,7 @@ void WCDBRustDatabaseClassMethod(globalTraceSQL, RustGlobalTraceSQLCallback rust
 
 typedef struct WCDBRustTraceSQLContext {
     RustTraceSQLCallback rust_callback;
+    void* cb_ptr;
 } WCDBRustTraceSQLContext;
 
 void WCDBRustDatabaseSQLTrace(WCDBRustTraceSQLContext* context,
@@ -384,14 +384,18 @@ void WCDBRustDatabaseSQLTrace(WCDBRustTraceSQLContext* context,
     if (context == NULL || context->rust_callback == NULL) {
         return;
     }
-    context->rust_callback(tag, path, handleId, sql, info);
+    context->rust_callback(context->cb_ptr, tag, path, handleId, sql, info);
 }
 
-void WCDBRustDatabaseClassMethod(traceSQL, void* self, RustTraceSQLCallback rust_callback) {
+void WCDBRustDatabaseClassMethod(traceSQL,
+                                 void* self,
+                                 RustTraceSQLCallback rust_callback,
+                                 void* cb_ptr) {
     WCDBRustBridgeStruct(CPPDatabase, self);
     size_t size = sizeof(WCDBRustTraceSQLContext);
     WCDBRustTraceSQLContext* context = (WCDBRustTraceSQLContext*)WCDBRustCreateGlobalRef(size);
     context->rust_callback = rust_callback;
+    context->cb_ptr = cb_ptr;
     WCDBDatabaseTraceSQL(selfStruct, (WCDBSQLTracer)WCDBRustDatabaseSQLTrace, context,
                          WCDBRustDestructContext);
 }
@@ -417,7 +421,8 @@ typedef struct WCDBRustGlobalTraceExceptionContext {
     RustGlobalTraceTraceExceptionCallback rust_callback;
 } WCDBRustGlobalTraceExceptionContext;
 
-void WCDBRustDatabaseErrorTrace(WCDBRustGlobalTraceExceptionContext* context, CPPError error) {
+void WCDBRustDatabaseErrorGlobalTrace(WCDBRustGlobalTraceExceptionContext* context,
+                                      CPPError error) {
     if (context == NULL || context->rust_callback == NULL) {
         return;
     }
@@ -430,18 +435,32 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
     WCDBRustGlobalTraceExceptionContext* context =
         (WCDBRustGlobalTraceExceptionContext*)WCDBRustCreateGlobalRef(size);
     context->rust_callback = rust_callback;
-    WCDBDatabaseGlobalTraceError((WCDBErrorTracer)WCDBRustDatabaseErrorTrace, context,
+    WCDBDatabaseGlobalTraceError((WCDBErrorTracer)WCDBRustDatabaseErrorGlobalTrace, context,
                                  WCDBRustDestructContext);
+}
+
+typedef struct WCDBRustTraceExceptionContext {
+    RustTraceTraceExceptionCallback rust_callback;
+    void* cb_ptr
+} WCDBRustTraceExceptionContext;
+
+void WCDBRustDatabaseErrorTrace(WCDBRustTraceExceptionContext* context, CPPError error) {
+    if (context == NULL || context->rust_callback == NULL) {
+        return;
+    }
+    context->rust_callback(context->cb_ptr, error.innerValue);
 }
 
 void WCDBRustDatabaseClassMethod(traceException,
                                  void* self,
-                                 RustGlobalTraceTraceExceptionCallback rust_callback) {
+                                 RustTraceTraceExceptionCallback rust_callback,
+                                 void* cb_ptr) {
     WCDBRustBridgeStruct(CPPDatabase, self);
     size_t size = sizeof(RustGlobalTraceTraceExceptionCallback);
-    WCDBRustGlobalTraceExceptionContext* context =
-        (WCDBRustGlobalTraceExceptionContext*)WCDBRustCreateGlobalRef(size);
+    WCDBRustTraceExceptionContext* context =
+        (WCDBRustTraceExceptionContext*)WCDBRustCreateGlobalRef(size);
     context->rust_callback = rust_callback;
+    context->cb_ptr = cb_ptr;
     WCDBDatabaseTraceError(selfStruct, (WCDBErrorTracer)WCDBRustDatabaseErrorTrace, context,
                            WCDBRustDestructContext);
 }
