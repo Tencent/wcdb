@@ -17,6 +17,7 @@ use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_drop_table::StatementDropTable;
 use lazy_static::lazy_static;
+use std::cell::RefCell;
 use std::ffi::{c_char, c_double, c_int, c_void, CStr, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
@@ -82,8 +83,6 @@ impl<T> SetDatabaseConfigTrait for T where T: Fn(Handle) -> bool + Send + Sync {
 // 定义一个全局静态变量来存储闭包
 lazy_static! {
     static ref GLOBAL_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
-        Arc::new(Mutex::new(None));
-    static ref DATABASE_TRACE_PERFORMANCE_CALLBACK: Arc<Mutex<Option<TracePerformanceCallback>>> =
         Arc::new(Mutex::new(None));
     static ref GLOBAL_TRACE_SQL_CALLBACK: Arc<Mutex<Option<TraceSqlCallback>>> =
         Arc::new(Mutex::new(None));
@@ -160,7 +159,15 @@ extern "C" {
 
     fn WCDBRustDatabase_tracePerformance(
         cpp_obj: *mut c_void,
-        trace_performance_callback: *mut c_void,
+        trace_performance_callback: extern "C" fn(
+            cb_raw: *mut c_void,
+            tag: i64,
+            path: *const c_char,
+            handle_id: i64,
+            sql: *const c_char,
+            info: PerformanceInfo,
+        ),
+        cb_ptr: *mut c_void,
     );
 
     fn WCDBRustDatabase_globalTraceSQL(global_trace_sql_callback: *mut c_void);
@@ -241,34 +248,21 @@ extern "C" fn global_trace_performance_callback(
 }
 
 extern "C" fn trace_performance_callback(
+    cb_raw: *mut c_void,
     tag: i64,
     path: *const c_char,
     handle_id: i64,
     sql: *const c_char,
     info: PerformanceInfo,
 ) {
-    let database_callback = DATABASE_TRACE_PERFORMANCE_CALLBACK.lock();
-    match database_callback {
-        Ok(callback) => {
-            if let Some(cb) = &*callback {
-                cb(
-                    tag,
-                    path.to_cow().to_string(),
-                    handle_id,
-                    sql.to_cow().to_string(),
-                    info,
-                );
-            } else {
-                eprintln!("Method: trace_performance_callback, No callback found.");
-            }
-        }
-        Err(error) => {
-            eprintln!(
-                "Method: trace_performance_callback, Failed to acquire lock: {:?}",
-                error
-            );
-        }
-    }
+    let closure = unsafe { &*(cb_raw as *mut Box<dyn TracePerformanceCallbackTrait>) };
+    closure(
+        tag,
+        path.to_cow().to_string(),
+        handle_id,
+        sql.to_cow().to_string(),
+        info,
+    );
 }
 
 extern "C" fn global_trace_sql_callback(
@@ -537,11 +531,23 @@ pub enum ConfigPriority {
 pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
+    trace_callback_ref: Arc<RefCell<*mut c_void>>,
 }
 
 unsafe impl Send for Database {}
 
 unsafe impl Sync for Database {}
+
+impl Drop for Database {
+    fn drop(&mut self) {
+        let raw_ptr = *self.trace_callback_ref.borrow_mut();
+        if !raw_ptr.is_null() {
+            unsafe {
+                let _ = Box::from_raw(raw_ptr);
+            }
+        }
+    }
+}
 
 impl CppObjectTrait for Database {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
@@ -1234,6 +1240,7 @@ impl Database {
         Database {
             handle_orm_operation: HandleORMOperation::new(),
             close_callback: Arc::new(Mutex::new(None)),
+            trace_callback_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1243,6 +1250,7 @@ impl Database {
         Database {
             handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             close_callback: Arc::new(Mutex::new(None)),
+            trace_callback_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1250,6 +1258,7 @@ impl Database {
         Database {
             handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             close_callback: Arc::new(Mutex::new(None)),
+            trace_callback_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1544,31 +1553,19 @@ impl Database {
     where
         CB: TracePerformanceCallbackTrait + 'static,
     {
-        let mut cb_raw: *mut c_void = null_mut();
-        {
-            match DATABASE_TRACE_PERFORMANCE_CALLBACK.lock() {
-                Ok(mut database_callback) => match cb_opt {
-                    None => {
-                        *database_callback = None;
-                        cb_raw = trace_performance_callback as *mut c_void;
-                    }
-                    Some(cb) => {
-                        let callback_box = Box::new(cb) as TracePerformanceCallback;
-                        *database_callback = Some(callback_box);
-                        cb_raw = trace_performance_callback as *mut c_void;
-                    }
-                },
-                Err(error) => {
-                    return Err(WCDBException::new_with_message(
-                        ExceptionLevel::Error,
-                        ExceptionCode::Error,
-                        error.to_string(),
-                    ));
-                }
-            }
+        let mut closure_raw = null_mut();
+        if let Some(cb) = cb_opt {
+            let closure_box = Box::new(Box::new(cb) as Box<dyn TracePerformanceCallbackTrait>);
+            closure_raw = Box::into_raw(closure_box) as *mut c_void;
+            let mut value = self.trace_callback_ref.borrow_mut();
+            *value = closure_raw;
         }
         unsafe {
-            WCDBRustDatabase_tracePerformance(self.get_cpp_obj(), cb_raw);
+            WCDBRustDatabase_tracePerformance(
+                self.get_cpp_obj(),
+                trace_performance_callback,
+                closure_raw,
+            );
         }
         Ok(())
     }

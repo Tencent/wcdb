@@ -300,7 +300,7 @@
     }                                                                       \
     assert(valueName != NULL);
 
-#define WCDBRustCreateGlobalRef(size) malloc(sizeof(size))
+void* WCDBRustCreateGlobalRef(size_t size);
 
 // extern JavaVM *g_vm;
 //

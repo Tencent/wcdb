@@ -41,6 +41,12 @@ void WCDBRustBase_releaseObject(void* cppObject) {
     WCDBReleaseCPPObject((CPPObject*)cppObject);
 }
 
+void* WCDBRustCreateGlobalRef(size_t size) {
+    void* ptr = malloc(size);
+    memset(ptr, 0, size);
+    return ptr;
+}
+
 // jclass g_databaseClass = NULL;
 // jclass g_handleClass = NULL;
 // jclass g_exceptionClass = NULL;

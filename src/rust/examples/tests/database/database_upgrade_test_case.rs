@@ -231,6 +231,7 @@ pub mod database_upgrade_test {
         DBMESSAGETABLEV1_1_INSTANCE, DBMESSAGETABLEV1_INSTANCE, DBTAGTABLEV1_INSTANCE,
     };
     use std::fmt::Pointer;
+    use std::panic::AssertUnwindSafe;
     use std::{panic, thread};
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
@@ -512,11 +513,11 @@ pub mod database_upgrade_test {
         // 模拟升级崩溃，ConversationTableV1_1 结构体增加了3个字段，删除了2个字段
         let handle = thread::spawn(move || {
             let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
-            let result = panic::catch_unwind(|| {
+            let result = panic::catch_unwind(AssertUnwindSafe(|| {
                 database
                     .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_1_INSTANCE)
                     .unwrap();
-            });
+            }));
             if let Err(e) = result {}
         });
         thread::sleep(std::time::Duration::from_millis(100));
