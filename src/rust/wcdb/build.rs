@@ -20,7 +20,7 @@ fn main() {
     println!("cargo:rustc-link-lib=z");
     println!("cargo:rustc-link-lib=static=sqlcipher");
     println!("cargo:rustc-link-lib=static=zstd");
-    if cfg!(target_os = "macos") {
+    if env::var("TARGET").unwrap().contains("apple") {
         println!("cargo:rustc-link-lib=c++");
         println!("cargo:rustc-link-lib=framework=CoreFoundation");
         println!("cargo:rustc-link-lib=framework=Security");
@@ -33,7 +33,9 @@ fn main() {
             dst.display()
         );
         println!("cargo:rustc-link-lib=framework=WCDB");
-    } else if cfg!(target_os = "linux") {
+    } else if (env::var("TARGET").unwrap().contains("linux")
+        || env::var("TARGET").unwrap().contains("android"))
+    {
         let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
         let openssl_path = manifest_dir.join("../../../tools/prebuild/openssl/linux/x86_64");
         println!(
