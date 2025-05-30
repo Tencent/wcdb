@@ -22,8 +22,6 @@
 
 #include "BindingBridge.h"
 
-#include <printf.h>
-
 void* WCDBRustBindingClassMethodWithNoArg(create) {
     return (void*)WCDBBindingCreate().innerValue;
 }
