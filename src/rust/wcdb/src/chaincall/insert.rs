@@ -17,6 +17,12 @@ pub struct Insert<'a, T> {
     last_insert_row_id: RefCell<i64>,
 }
 
+impl<'a, T> Drop for Insert<'a, T> {
+    fn drop(&mut self) {
+        self.values.borrow_mut().clear();
+    }
+}
+
 impl<'a, T> ChainCallTrait for Insert<'a, T> {
     fn update_changes(&self) -> WCDBResult<()> {
         self.chain_call.update_changes()
