@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Convenient interface for deleting
 public protocol DeleteInterface: AnyObject {

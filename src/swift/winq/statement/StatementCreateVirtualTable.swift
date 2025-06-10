@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementCreateVirtualTable: Identifier<CPPStatementCreateVirtualTable>, Statement {
     public init() {
         super.init(with: WCDBStatementCreateVirtualTableCreate())

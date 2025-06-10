@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Convenient interface for row selecting
 public protocol RowSelectInterface: AnyObject {

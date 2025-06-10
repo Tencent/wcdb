@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public final class Column: Identifier<CPPColumn> {
 

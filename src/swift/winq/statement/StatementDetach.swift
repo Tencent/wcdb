@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementDetach: Identifier<CPPStatementDetach>, Statement {
     public init() {
         super.init(with: WCDBStatementDetachCreate())

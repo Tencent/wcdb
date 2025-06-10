@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementBegin: Identifier<CPPStatementBegin>, Statement {
     public init() {
         super.init(with: WCDBStatementBeginCreate())

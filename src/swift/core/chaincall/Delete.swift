@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Chain call for deleting
 public final class Delete {

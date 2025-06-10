@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public final class QualifiedTable: Identifier<CPPQualifiedTable> {
     public init(with name: String) {

@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 // TODO: Refactor
 internal class Recyclable<Value> {

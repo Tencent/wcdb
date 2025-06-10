@@ -25,7 +25,6 @@
 #if WCDB_SWIFT_BRIDGE_OBJC
 
 import Foundation
-import WCDB_Private
 
 /// Convenient interface for selecting
 public protocol SelectInterfaceForObjc: AnyObject {

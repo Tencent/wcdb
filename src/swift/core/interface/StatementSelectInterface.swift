@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Convenient interface for getting result with statement
 public protocol StatementSelectInterface: AnyObject {

@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 internal enum UnaryOperateType {
     case negative
