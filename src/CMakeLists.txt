@@ -295,7 +295,7 @@ else ()
 endif ()
 
 if (NOT DEFINED WCONAN_LIB_NAME)
-    set(WCONAN_LIB_NAME "WCDB")
+    set(WCONAN_LIB_NAME "wcdb2")
 endif ()
 
 if (NOT DEFINED TARGET_NAME)
