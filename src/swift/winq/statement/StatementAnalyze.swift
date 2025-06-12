@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public final class StatementAnalyze: Identifier<CPPStatementAnalyze>, Statement {
     public init() {

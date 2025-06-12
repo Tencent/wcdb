@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public final class StatementAlterTable: Identifier<CPPStatementAlterTable>, Statement {
     public init() {

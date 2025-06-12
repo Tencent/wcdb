@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementRelease: Identifier<CPPStatementRelease>, Statement {
     public init() {
         super.init(with: WCDBStatementReleaseCreate())

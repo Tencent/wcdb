@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public enum TokenizerErrorCode {
     case OK

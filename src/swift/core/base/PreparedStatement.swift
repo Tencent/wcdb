@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class PreparedStatement {
     internal let recyclableStmt: RecyclableCPPHandleStatement
 

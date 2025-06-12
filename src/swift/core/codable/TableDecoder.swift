@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 final class TableDecoder: Decoder {
 

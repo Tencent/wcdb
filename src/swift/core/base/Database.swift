@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Thread-safe Database object
 public class Database {

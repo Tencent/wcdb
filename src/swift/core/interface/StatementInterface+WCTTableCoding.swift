@@ -25,7 +25,6 @@
 #if WCDB_SWIFT_BRIDGE_OBJC
 
 import Foundation
-import WCDB_Private
 
 public protocol StatementInterfaceForObjc {
     /// The wrapper of `sqlite3_bind_*` for binding property of object to index.

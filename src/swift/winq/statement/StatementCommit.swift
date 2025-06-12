@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementCommit: Identifier<CPPStatementCommit>, Statement {
     public init() {
         super.init(with: WCDBStatementCommitCreate())

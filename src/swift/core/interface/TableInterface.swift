@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Convenient interface for table related operation
 public protocol TableInterface: AnyObject {

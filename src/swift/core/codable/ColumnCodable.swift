@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 // Column 
 public protocol ColumnCodableBase {

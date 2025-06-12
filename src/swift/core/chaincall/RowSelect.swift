@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Chain call for row-selecting
 public final class RowSelect: Selectable {

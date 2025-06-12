@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public class Selectable {
     public final let statement: StatementSelect

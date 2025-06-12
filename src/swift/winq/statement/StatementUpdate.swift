@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementUpdate: Identifier<CPPStatementUpdate>, Statement {
 
     public init() {

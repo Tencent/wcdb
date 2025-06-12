@@ -23,7 +23,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public protocol StatementInterface: AnyObject {
     /// The wrapper of `sqlite3_finalize`

@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public protocol CodingTableKeyBase: CodingKey {
     var rootType: TableCodableBase.Type {get}

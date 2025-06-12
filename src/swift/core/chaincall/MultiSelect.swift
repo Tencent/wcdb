@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /// Chain call for multi-selecting
 public final class MultiSelect: Selectable {

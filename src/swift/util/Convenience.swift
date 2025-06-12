@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 internal extension Array {
     func joined(_ map: (Element) -> String, separateBy separator: String = ", ") -> String {

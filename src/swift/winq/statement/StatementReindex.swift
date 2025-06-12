@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementReindex: Identifier<CPPStatementReIndex>, Statement {
     public init() {
         super.init(with: WCDBStatementReIndexCreate())

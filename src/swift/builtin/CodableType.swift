@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 /*
  * Builtin codable implementation

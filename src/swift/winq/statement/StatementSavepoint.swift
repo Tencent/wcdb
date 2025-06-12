@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 public final class StatementSavepoint: Identifier<CPPStatementSavepoint>, Statement {
     public init() {
         super.init(with: WCDBStatementSavepointCreate())

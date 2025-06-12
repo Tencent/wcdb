@@ -19,7 +19,6 @@
  */
 
 import Foundation
-import WCDB_Private
 
 public final class OrderingTerm: Identifier<CPPOrderingTerm> {
     public init(with expressionConvertible: ExpressionConvertible) {
