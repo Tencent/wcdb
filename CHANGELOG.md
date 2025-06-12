@@ -1,3 +1,9 @@
+## v2.1.12
+
+* Fix build error on Xcode 26 beta
+* Fix empty string crash in java/kotlin winq
+* Fix linking error on linux x86
+
 ## v2.1.11
 
 * Support to open database in readonly mode
