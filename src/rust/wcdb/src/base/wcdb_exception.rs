@@ -306,8 +306,8 @@ pub struct ExceptionInner {
 
 impl Debug for ExceptionInner {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Level: {:?}", self.level)?;
-        write!(f, "Code: {:?}", self.code)?;
+        write!(f, "Level: {:?}, ", self.level)?;
+        write!(f, "Code: {:?}, ", self.code)?;
         let mut debug_struct = f.debug_struct("Exception");
         for (key, value) in &self.key_values {
             match value {
