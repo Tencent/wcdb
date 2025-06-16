@@ -1792,6 +1792,27 @@ impl Database {
         }
     }
 
+    pub fn get_values_from_sql(&self, sql: &str) -> WCDBResult<Vec<Vec<Value>>> {
+        let handle = self.get_handle(false);
+        let result = handle.prepared_with_main_statement_and_sql(sql);
+        match result {
+            Ok(val) => {
+                let mut ret_vec = Vec::new();
+                let prepared_statement = Arc::clone(&val);
+                if !prepared_statement.is_done() {
+                    let ret = prepared_statement.get_all_values()?;
+                    prepared_statement.finalize_statement();
+                    if self.auto_invalidate_handle() {
+                        handle.invalidate();
+                    }
+                    ret_vec = ret;
+                }
+                Ok(ret_vec)
+            }
+            Err(error) => Err(error),
+        }
+    }
+
     pub fn get_objects_from_sql<T>(&self, fields: Vec<&Field<T>>, sql: &str) -> WCDBResult<Vec<T>> {
         let handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement_and_sql(sql);
