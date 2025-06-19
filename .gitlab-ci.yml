@@ -39,6 +39,7 @@ run_test:
   script:
     - export CARGO_HOME=${CI_PROJECT_DIR}/CargoHome
     - export RUSTFLAGS="-D warnings -A unused -A deprecated"
+    - export clang=`which cc`
     - cd src/rust
     - echo "${CI_COMMIT_MESSAGE}" | npx commitlint
     - autocorrect --lint
