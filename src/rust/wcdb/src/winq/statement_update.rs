@@ -25,7 +25,7 @@ extern "C" {
         expressions_length: c_int,
     );
 
-    fn WCDBRustStatementUpdate_configRecursive(cpp_obj: *mut c_void);
+    // fn WCDBRustStatementUpdate_configRecursive(cpp_obj: *mut c_void);
 
     fn WCDBRustStatementUpdate_configTable(
         cpp_obj: *mut c_void,
@@ -151,24 +151,24 @@ impl StatementUpdate {
         self
     }
 
-    pub fn with_recursive(&self, expressions: &Vec<CommonTableExpression>) -> &Self {
-        if expressions.is_empty() {
-            return self;
-        }
-        let mut cpp_obj_vec: Vec<*mut c_void> = Vec::with_capacity(expressions.len());
-        for x in expressions {
-            cpp_obj_vec.push(CppObject::get(x));
-        }
-        unsafe {
-            WCDBRustStatementUpdate_configWith(
-                self.get_cpp_obj(),
-                cpp_obj_vec.as_ptr(),
-                cpp_obj_vec.len() as c_int,
-            );
-        }
-        unsafe { WCDBRustStatementUpdate_configRecursive(self.get_cpp_obj()) }
-        self
-    }
+    // pub fn with_recursive(&self, expressions: &Vec<CommonTableExpression>) -> &Self {
+    //     if expressions.is_empty() {
+    //         return self;
+    //     }
+    //     let mut cpp_obj_vec: Vec<*mut c_void> = Vec::with_capacity(expressions.len());
+    //     for x in expressions {
+    //         cpp_obj_vec.push(CppObject::get(x));
+    //     }
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configWith(
+    //             self.get_cpp_obj(),
+    //             cpp_obj_vec.as_ptr(),
+    //             cpp_obj_vec.len() as c_int,
+    //         );
+    //     }
+    //     unsafe { WCDBRustStatementUpdate_configRecursive(self.get_cpp_obj()) }
+    //     self
+    // }
 
     pub fn update(&self, table_name: &str) -> &Self {
         let c_table_name = CString::new(table_name).unwrap_or_default();

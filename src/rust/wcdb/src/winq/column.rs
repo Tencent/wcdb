@@ -23,7 +23,7 @@ extern "C" {
 
     fn WCDBRustColumn_createAll() -> *mut c_void;
 
-    fn WCDBRustColumn_configAlias(cpp_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
+    // fn WCDBRustColumn_configAlias(cpp_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
 }
 
 pub struct Column {
@@ -1245,11 +1245,11 @@ impl Column {
         ColumnDef::new_with_column_type(self, column_type)
     }
 
-    pub fn as_(&self, alias: &str) -> ResultColumn {
-        let cstr = alias.to_cstring();
-        let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), cstr.as_ptr()) };
-        ResultColumn::new_with_cpp_obj(cpp_obj)
-    }
+    // pub fn as_(&self, alias: &str) -> ResultColumn {
+    //     let cstr = alias.to_cstring();
+    //     let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), cstr.as_ptr()) };
+    //     ResultColumn::new_with_cpp_obj(cpp_obj)
+    // }
 
     pub fn all() -> Column {
         let mut ret = Column::create();
