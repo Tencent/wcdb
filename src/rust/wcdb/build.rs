@@ -67,6 +67,9 @@ fn config_cmake(target: &str) -> PathBuf {
             .define("CMAKE_C_COMPILER", &cc)
             .define("CMAKE_CXX_COMPILER", &cxx);
     }
+    if target.contains("android") {
+        config_cmake_for_android(target, &mut cmake);
+    }
 
     let dst = cmake
         .define("CMAKE_CXX_FLAGS", "-D_Nullable= -D_Nonnull=")
@@ -76,6 +79,28 @@ fn config_cmake(target: &str) -> PathBuf {
         .build_target("all")
         .build();
     dst
+}
+
+fn config_cmake_for_android(target: &str, cmake: &mut cmake::Config) {
+    let toolchain_file = env::var("CMAKE_TOOLCHAIN_FILE")
+        .expect(&format!("{} is not set CMAKE_TOOLCHAIN_FILE", &target));
+    cmake.define("CMAKE_TOOLCHAIN_FILE", toolchain_file);
+
+    let abi = android_abi_from_target(target).expect(&format!("{} can not find abi", &target));
+    cmake.define("ANDROID_ABI", abi);
+
+    // ✅ 设置平台版本（例如 android-21）
+    cmake.define("ANDROID_PLATFORM", "android-21");
+}
+
+fn android_abi_from_target(target: &str) -> Option<&'static str> {
+    match target {
+        "aarch64-linux-android" => Some("arm64-v8a"),
+        "armv7-linux-androideabi" => Some("armeabi-v7a"),
+        "i686-linux-android" => Some("x86"),
+        "x86_64-linux-android" => Some("x86_64"),
+        _ => None,
+    }
 }
 
 fn openssl_search_path_from_target(target: &str) -> Option<&'static str> {
