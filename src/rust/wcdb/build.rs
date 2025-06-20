@@ -31,12 +31,8 @@ fn main() {
         println!("cargo:rustc-link-lib=framework=WCDB");
     } else if target.contains("ohos") || target.contains("android") || target.contains("linux") {
         let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-        let (platform, abi) = platform_abi_from_target(&target).unwrap();
-        // ../../../tools/prebuild/openssl/ohos/arm64-v8a"
-        let openssl_path = manifest_dir
-            .join("../../../tools/prebuild/openssl")
-            .join(platform)
-            .join(abi);
+        let openssl_search_path = openssl_search_path_from_target(&target).unwrap();
+        let openssl_path = manifest_dir.join(openssl_search_path);
         println!(
             "cargo:warning=WCDB MANIFEST_DIR: {}",
             manifest_dir.display()
@@ -82,20 +78,21 @@ fn config_cmake(target: &str) -> PathBuf {
     dst
 }
 
-// 通过 target 获取 platform abi，用于找到 tools/prebuild/openssl/{platform}/{abi}/libcrypto.a
-fn platform_abi_from_target(target: &str) -> Option<(&'static str, &'static str)> {
+fn openssl_search_path_from_target(target: &str) -> Option<&'static str> {
     match target {
         // android
-        "aarch64-unknown-linux-android" => Some(("android", "arm64-v8a")),
-        "armv7-linux-androideabi" => Some(("android", "armeabi-v7a")),
-        "i686-linux-android" => Some(("android", "x86")),
-        "x86_64-linux-android" => Some(("android", "x86_64")),
+        "aarch64-unknown-linux-android" => {
+            Some("../../../tools/prebuild/openssl/android/arm64-v8a")
+        }
+        "armv7-linux-androideabi" => Some("../../../tools/prebuild/openssl/android/armeabi-v7a"),
+        "i686-linux-android" => Some("../../../tools/prebuild/openssl/android/x86"),
+        "x86_64-linux-android" => Some("../../../tools/prebuild/openssl/android/x86_64"),
         // ohos
-        "aarch64-unknown-linux-ohos" => Some(("ohos", "arm64-v8a")),
-        "x86_64-unknown-linux-ohos" => Some(("ohos", "x86_64")),
+        "aarch64-unknown-linux-ohos" => Some("../../../tools/prebuild/openssl/ohos/arm64-v8a"),
+        "x86_64-unknown-linux-ohos" => Some("../../../tools/prebuild/openssl/ohos/x86_64"),
         // linux
-        "aarch64-unknown-linux-gnu" => Some(("linux", "arm64")),
-        "x86_64-unknown-linux-gnu" => Some(("linux", "x86_64")),
+        "aarch64-unknown-linux-gnu" => Some("../../../tools/prebuild/openssl/linux/arm64"),
+        "x86_64-unknown-linux-gnu" => Some("../../../tools/prebuild/openssl/linux/x86_64"),
         _ => None,
     }
 }
