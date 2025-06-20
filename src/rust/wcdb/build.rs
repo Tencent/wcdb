@@ -81,9 +81,7 @@ fn config_cmake(target: &str) -> PathBuf {
 fn openssl_search_path_from_target(target: &str) -> Option<&'static str> {
     match target {
         // android
-        "aarch64-unknown-linux-android" => {
-            Some("../../../tools/prebuild/openssl/android/arm64-v8a")
-        }
+        "aarch64-linux-android" => Some("../../../tools/prebuild/openssl/android/arm64-v8a"),
         "armv7-linux-androideabi" => Some("../../../tools/prebuild/openssl/android/armeabi-v7a"),
         "i686-linux-android" => Some("../../../tools/prebuild/openssl/android/x86"),
         "x86_64-linux-android" => Some("../../../tools/prebuild/openssl/android/x86_64"),
