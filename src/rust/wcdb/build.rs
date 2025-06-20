@@ -59,8 +59,8 @@ fn config_cmake(target: &str) -> PathBuf {
     if !target.contains("apple") {
         // apple 平台会直接使用 mac 系统内置的 asm/C/C++ 编译器
         // 非 apple 平台需要指明 asm/C/C++ 编译器
-        let cc = env::var("clang").expect(&format!("{} is not set clang", &target));
-        let cxx = env::var("clang++").unwrap_or_else(|_| cc.replace("clang", "clang++"));
+        let cc = env::var("CC").expect(&format!("{} is not set CC", &target));
+        let cxx = env::var("CXX").expect(&format!("{} is not set CXX", &target));
 
         // 指定 asm 编译器：zstd huf_decompress_amd64.S 是汇编
         // 指定 C 编译器：openssl 主要是 C
@@ -68,8 +68,8 @@ fn config_cmake(target: &str) -> PathBuf {
         cmake
             .define("CMAKE_ASM_COMPILER", &cc)
             .define("CMAKE_ASM_FLAGS", "-x assembler-with-cpp")
-            .define("CMAKE_C_COMPILER", &cc);
-        // .define("CMAKE_CXX_COMPILER", &cxx);
+            .define("CMAKE_C_COMPILER", &cc)
+            .define("CMAKE_CXX_COMPILER", &cxx);
     }
 
     let dst = cmake
