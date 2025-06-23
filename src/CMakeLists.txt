@@ -519,12 +519,21 @@ elseif (APPLE AND NOT WCONAN_MODE)
     target_sources(${TARGET_NAME} PUBLIC ${WCDB_PUBLIC_HEADERS})
     file(STRINGS "../VERSION" WCDB_VERSION)
     message(STATUS "Xcode ${TARGET_NAME}.framework version ${WCDB_VERSION}")
-    set_target_properties(${TARGET_NAME} PROPERTIES
-        FRAMEWORK TRUE
-        FRAMEWORK_VERSION ${WCDB_VERSION}
-        MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
-        PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
-    )
+    if(BUILD_FROM_CARGO)
+        message(STATUS "---- BUILD FOR APPLE FROM CARGO ----")
+        if (BUILD_SHARED_LIBS)
+            target_link_libraries(${TARGET_NAME} PRIVATE crypto z)
+        else()
+            target_link_libraries(${TARGET_NAME} PUBLIC crypto z)
+        endif()
+    else()
+        set_target_properties(${TARGET_NAME} PROPERTIES
+            FRAMEWORK TRUE
+            FRAMEWORK_VERSION ${WCDB_VERSION}
+            MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
+            PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
+        )
+    endif()
 elseif (OHOS)
     message(STATUS "---- BUILD FOR OPENHARMONY ----")
     target_link_libraries(${TARGET_NAME} PUBLIC

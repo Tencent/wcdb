@@ -28,7 +28,7 @@ fn main() {
             "cargo:rustc-link-search=framework={}/build/wcdb/",
             dst.display()
         );
-        println!("cargo:rustc-link-lib=framework=WCDB");
+        println!("cargo:rustc-link-lib=static=WCDB");
     } else if target.contains("ohos") || target.contains("android") || target.contains("linux") {
         let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
         let openssl_search_path = openssl_search_path_from_target(&target).unwrap();
@@ -75,6 +75,7 @@ fn config_cmake(target: &str) -> PathBuf {
         .define("CMAKE_CXX_FLAGS", "-D_Nullable= -D_Nonnull=")
         .define("CMAKE_C_FLAGS", "-D_Nullable= -D_Nonnull=")
         .define("CMAKE_BUILD_TYPE", "Release")
+        .define("BUILD_FROM_CARGO", "ON")
         .build_arg(format!("-j{}", num_cpus::get()))
         .build_target("all")
         .build();
