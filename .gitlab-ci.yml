@@ -19,8 +19,8 @@ run_check_unsafe_keywords:
   stage: check
   script: |
     echo "Check danger function..."
-    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\.unwrap()\|\.expect(\|unreachable!\|panic!'; then
-      echo "Error: banned unwrap/expect/unreachable!/panic!"
+    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\bc_long\b|\.unwrap()\|\.expect(\|unreachable!\|panic!'; then
+      echo "Error: banned c_long/unwrap/expect/unreachable!/panic!"
       exit 1
     fi
   rules:

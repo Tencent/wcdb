@@ -7,7 +7,7 @@ use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_long, c_void};
+use std::ffi::{c_char, c_double, c_int, c_void};
 use std::ptr::{null, null_mut};
 
 extern "C" {
@@ -122,16 +122,16 @@ impl Upsert {
             return self;
         }
         let len = indexed_columns.len();
-        let mut c_long_vec: Vec<*mut c_void> = Vec::with_capacity(len);
+        let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
         let cpp_type = Identifier::get_cpp_type(indexed_columns[0]);
         for x in indexed_columns {
-            c_long_vec.push(CppObject::get(x));
+            i64_vec.push(CppObject::get(x));
         }
         unsafe {
             WCDBRustUpsert_configIndexedColumn(
                 self.get_cpp_obj(),
                 cpp_type,
-                c_long_vec.as_ptr(),
+                i64_vec.as_ptr(),
                 null(),
                 len as c_int,
             );
@@ -184,15 +184,15 @@ impl Upsert {
     pub fn set_with_columns(&self, columns: &Vec<Column>) -> &Self {
         let cpp_type = Identifier::get_cpp_type(&columns[0]);
         let len = columns.len();
-        let mut c_long_vec: Vec<*mut c_void> = Vec::with_capacity(len);
+        let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
         for x in columns {
-            c_long_vec.push(CppObject::get(x));
+            i64_vec.push(CppObject::get(x));
         }
         unsafe {
             WCDBRustUpsert_configSetColumns(
                 self.get_cpp_obj(),
                 cpp_type,
-                c_long_vec.as_ptr(),
+                i64_vec.as_ptr(),
                 null_mut(),
                 len as c_int,
             )

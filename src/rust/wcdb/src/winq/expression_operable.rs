@@ -8,8 +8,8 @@ use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable_trait::ExpressionOperableTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
-use std::ptr::{null, null_mut};
+use std::ffi::{c_char, c_double, c_int, c_void, CString};
+use std::ptr::null;
 
 extern "C" {
     fn WCDBRustExpressionOperable_nullOperate(
@@ -21,7 +21,7 @@ extern "C" {
         left_type: c_int,
         left: *mut c_void,
         right_type: c_int,
-        right_long: c_long,
+        right_long: i64,
         right_double: c_double,
         right_string: *const c_char,
         operator_type: c_int,
@@ -46,7 +46,7 @@ extern "C" {
         operand_type: c_int,
         operand: *mut c_void,
         cpp_type: c_int,
-        long_array: *const c_long,
+        long_array: *const i64,
         double_array: *const c_double,
         string_array: *const *const c_char,
         array_length: c_int,
@@ -706,7 +706,7 @@ impl ExpressionOperable {
                 left_cpp_type,
                 CppObject::get(self),
                 CPPType::Bool as i32,
-                operand as c_long,
+                operand as i64,
                 0.0,
                 std::ptr::null(),
                 binary_operator_type as i32,

@@ -6,14 +6,13 @@ use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
-use std::os::raw::c_long;
 
 extern "C" {
     fn WCDBRustStatementDelete_create() -> *mut c_void;
     fn WCDBRustStatementDelete_configTable(
         cpp_obj: *mut c_void,
         table_type: c_int,
-        table_long: c_long,
+        table_long: i64,
         table_string: *const c_char,
     );
     fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
@@ -25,20 +24,16 @@ extern "C" {
     fn WCDBRustStatementDelete_configLimitCount(
         cpp_obj: *mut c_void,
         config_type: c_int,
-        limit: c_long,
+        limit: i64,
     );
-    fn WCDBRustStatementDelete_configOffset(
-        cpp_obj: *mut c_void,
-        config_type: c_int,
-        offset: c_long,
-    );
+    fn WCDBRustStatementDelete_configOffset(cpp_obj: *mut c_void, config_type: c_int, offset: i64);
 
     fn WCDBRustStatementDelete_configLimitRange(
         cpp_obj: *mut c_void,
         from_type: c_int,
-        from: c_long,
+        from: i64,
         to_type: c_int,
-        to: c_long,
+        to: i64,
     );
 }
 

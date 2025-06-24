@@ -22,7 +22,7 @@ extern "C" {
     // fn WCDBRustExpression_argument(
     //     cpp_obj: *mut c_void,
     //     type_i: c_int,
-    //     int_value: c_long,
+    //     int_value: i64,
     //     double_value: c_double,
     //     string_value: *const c_char,
     // );

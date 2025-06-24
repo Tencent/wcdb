@@ -2,7 +2,7 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::winq::identifier::{CPPType, IdentifierTrait};
 use crate::winq::pragma::Pragma;
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::{c_char, c_float, c_int, c_long, c_void};
+use std::ffi::{c_char, c_float, c_int, c_void};
 use std::ptr::null;
 
 extern "C" {
@@ -16,7 +16,7 @@ extern "C" {
     fn WCDBRustStatementPragma_configToValue(
         cpp_obj: *mut c_void,
         val_type: c_int,
-        long_value: c_long,
+        long_value: i64,
         double_value: c_float,
         string_value: *const c_char,
     );
@@ -75,7 +75,7 @@ impl StatementPragma {
             WCDBRustStatementPragma_configToValue(
                 self.statement.get_cpp_obj(),
                 CPPType::Int as c_int,
-                value as c_long,
+                value as i64,
                 0 as c_float,
                 null(),
             );
@@ -84,7 +84,7 @@ impl StatementPragma {
     }
 
     pub fn to_value_bool(&self, value: bool) -> &StatementPragma {
-        let value = if value { 1 } else { 0 } as c_long;
+        let value = if value { 1 } else { 0 } as i64;
         unsafe {
             WCDBRustStatementPragma_configToValue(
                 self.statement.get_cpp_obj(),

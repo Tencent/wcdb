@@ -13,7 +13,7 @@ use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::fmt::Debug;
 use std::ptr::null;
 
@@ -30,7 +30,7 @@ extern "C" {
     fn WCDBRustStatementSelect_configTableOrSubqueries(
         cpp_obj: *mut c_void,
         type_vec: *const c_int,
-        long_vec: *const c_long,
+        long_vec: *const i64,
         double_vec: *const c_double,
         string_vec: *const *const c_char,
         vec_len: c_size_t,
@@ -39,7 +39,7 @@ extern "C" {
 
     fn WCDBRustStatementSelect_configOrders(
         cpp_obj: *mut c_void,
-        orders: *const c_long,
+        orders: *const i64,
         orders_length: c_int,
     );
 
@@ -52,13 +52,9 @@ extern "C" {
         length: c_int,
     );
 
-    fn WCDBRustStatementSelect_configLimitCount(
-        cpp_obj: *mut c_void,
-        cpp_type: c_int,
-        count: c_long,
-    );
+    fn WCDBRustStatementSelect_configLimitCount(cpp_obj: *mut c_void, cpp_type: c_int, count: i64);
 
-    fn WCDBRustStatementSelect_configOffset(cpp_obj: *mut c_void, cpp_type: c_int, count: c_long);
+    fn WCDBRustStatementSelect_configOffset(cpp_obj: *mut c_void, cpp_type: c_int, count: i64);
 }
 
 #[derive(Debug)]
@@ -260,7 +256,7 @@ impl StatementSelect {
             WCDBRustStatementSelect_configTableOrSubqueries(
                 self.get_cpp_obj(),
                 types.as_ptr(),
-                cpp_objs.as_ptr() as *const c_long,
+                cpp_objs.as_ptr() as *const i64,
                 std::ptr::null(),
                 std::ptr::null(),
                 total_count,
@@ -344,7 +340,7 @@ impl StatementSelect {
         unsafe {
             WCDBRustStatementSelect_configOrders(
                 self.get_cpp_obj(),
-                cpp_orders.as_ptr() as *const c_long,
+                cpp_orders.as_ptr() as *const i64,
                 orders_length,
             )
         }
@@ -356,7 +352,7 @@ impl StatementSelect {
             WCDBRustStatementSelect_configLimitCount(
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
-                count as c_long,
+                count as i64,
             )
         }
         self
@@ -367,7 +363,7 @@ impl StatementSelect {
             WCDBRustStatementSelect_configOffset(
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
-                offset as c_long,
+                offset as i64,
             )
         }
         self

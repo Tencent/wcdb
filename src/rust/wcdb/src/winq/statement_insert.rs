@@ -7,7 +7,7 @@ use crate::winq::multi_type_array::MultiTypeArray;
 use crate::winq::object::Object;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::upsert::Upsert;
-use std::ffi::{c_char, c_double, c_int, c_long, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
@@ -28,7 +28,7 @@ extern "C" {
     fn WCDBRustStatementInsert_configValues(
         cpp_obj: *mut c_void,
         types: *const c_int,
-        long_values: *const c_long,
+        long_values: *const i64,
         double_values: *const c_double,
         string_values: *const *const c_char,
         value_len: c_int,

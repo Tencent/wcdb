@@ -6,7 +6,7 @@ use crate::core::handle_orm_operation::HandleORMOperation;
 use crate::core::prepared_statement::PreparedStatement;
 use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
-use std::ffi::{c_char, c_int, c_long, c_void, CString};
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::sync::Arc;
 
 extern "C" {
@@ -16,7 +16,7 @@ extern "C" {
     fn WCDBRustHandle_execute(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
     fn WCDBRustHandle_executeSQL(cpp_obj: *mut c_void, sql: *const c_char) -> bool;
     fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
-    fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> c_long;
+    fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
     fn WCDBRustHandle_runTransaction(
         cpp_obj: *mut c_void,
         transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> bool,

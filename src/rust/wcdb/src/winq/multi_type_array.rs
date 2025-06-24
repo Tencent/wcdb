@@ -4,8 +4,7 @@ use crate::winq::column_type::ColumnType;
 use crate::winq::identifier::{CPPType, Identifier};
 use crate::winq::object::Object;
 use std::any::Any;
-use std::ffi::{c_double, c_long};
-use std::os::raw::c_void;
+use std::ffi::c_double;
 
 #[repr(i32)]
 pub enum ObjectType {
@@ -26,7 +25,7 @@ pub enum ObjectType {
 
 pub struct MultiTypeArray {
     pub(crate) types: Vec<i32>,
-    pub(crate) long_values: Vec<c_long>,
+    pub(crate) long_values: Vec<i64>,
     pub(crate) double_values: Vec<c_double>,
     pub(crate) string_values: Option<Vec<String>>,
 }
@@ -36,7 +35,7 @@ impl MultiTypeArray {
         let value_count = values.len();
 
         let mut types: Vec<i32> = vec![0; value_count];
-        let mut long_values: Vec<c_long> = vec![0; value_count];
+        let mut long_values: Vec<i64> = vec![0; value_count];
         let mut double_values = vec![0.0; value_count];
         let mut string_values = vec![String::new(); value_count];
 
@@ -52,32 +51,32 @@ impl MultiTypeArray {
                 }
                 Object::Bool(b) => {
                     types[i] = CPPType::Bool as i32;
-                    long_values[long_index] = if *b { 1 } else { 0 } as c_long;
+                    long_values[long_index] = if *b { 1 } else { 0 } as i64;
                     long_index += 1;
                 }
                 Object::Byte(b) => {
                     types[i] = CPPType::Int as i32;
-                    long_values[long_index] = *b as c_long;
+                    long_values[long_index] = *b as i64;
                     long_index += 1;
                 }
                 Object::Char(c) => {
                     types[i] = CPPType::Int as i32;
-                    long_values[long_index] = *c as c_long;
+                    long_values[long_index] = *c as i64;
                     long_index += 1;
                 }
                 Object::Short(s) => {
                     types[i] = CPPType::Int as i32;
-                    long_values[long_index] = *s as c_long;
+                    long_values[long_index] = *s as i64;
                     long_index += 1;
                 }
                 Object::Int(int) => {
                     types[i] = CPPType::Int as i32;
-                    long_values[long_index] = *int as c_long;
+                    long_values[long_index] = *int as i64;
                     long_index += 1;
                 }
                 Object::Long(l) => {
                     types[i] = CPPType::Int as i32;
-                    long_values[long_index] = *l as c_long;
+                    long_values[long_index] = *l as i64;
                     long_index += 1;
                 }
                 Object::Float(f) => {
@@ -97,7 +96,7 @@ impl MultiTypeArray {
                 }
                 Object::Identifier(identifier) => {
                     types[i] = Identifier::get_cpp_type(identifier);
-                    long_values[long_index] = CppObject::get(identifier) as c_long;
+                    long_values[long_index] = CppObject::get(identifier) as i64;
                     long_index += 1;
                 }
                 Object::Value(value_obj) => match value_obj.get_type() {
@@ -107,7 +106,7 @@ impl MultiTypeArray {
                     }
                     ColumnType::Integer => {
                         types[i] = CPPType::Int as i32;
-                        long_values[long_index] = value_obj.get_long() as c_long;
+                        long_values[long_index] = value_obj.get_long() as i64;
                         long_index += 1;
                     }
                     ColumnType::Float => {
@@ -174,7 +173,7 @@ impl MultiTypeArray {
         &self.types
     }
 
-    pub fn long_values(&self) -> &Vec<c_long> {
+    pub fn long_values(&self) -> &Vec<i64> {
         &self.long_values
     }
 

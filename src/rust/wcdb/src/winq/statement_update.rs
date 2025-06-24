@@ -13,7 +13,7 @@ use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
-use std::os::raw::{c_double, c_long};
+use std::os::raw::c_double;
 use std::ptr::{null, null_mut};
 
 extern "C" {
@@ -52,13 +52,9 @@ extern "C" {
     fn WCDBRustStatementUpdate_configLimitCount(
         cpp_obj: *mut c_void,
         config_type: c_int,
-        limit: c_long,
+        limit: i64,
     );
-    fn WCDBRustStatementUpdate_configOffset(
-        cpp_obj: *mut c_void,
-        config_type: c_int,
-        offset: c_long,
-    );
+    fn WCDBRustStatementUpdate_configOffset(cpp_obj: *mut c_void, config_type: c_int, offset: i64);
     fn WCDBRustStatementUpdate_configConfliction(cpp_obj: *mut c_void, action: c_int);
 
     fn WCDBRustStatementUpdate_configValue(
@@ -82,9 +78,9 @@ extern "C" {
     fn WCDBRustStatementUpdate_configLimitRange(
         cpp_obj: *mut c_void,
         from_type: c_int,
-        from: c_long,
+        from: i64,
         to_type: c_int,
-        to: c_long,
+        to: i64,
     );
 }
 
@@ -500,9 +496,9 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configLimitRange(
                 self.get_cpp_obj(),
                 CPPType::Int as i32,
-                from as c_long,
+                from as i64,
                 CPPType::Int as i32,
-                to as c_long,
+                to as i64,
             )
         }
         self
@@ -516,9 +512,9 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configLimitRange(
                 self.get_cpp_obj(),
                 CPPType::Int as i32,
-                from as c_long,
+                from as i64,
                 Identifier::get_cpp_type(to),
-                CppObject::get(to) as c_long,
+                CppObject::get(to) as i64,
             )
         }
         self
@@ -532,9 +528,9 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configLimitRange(
                 self.get_cpp_obj(),
                 Identifier::get_cpp_type(from),
-                CppObject::get(from) as c_long,
+                CppObject::get(from) as i64,
                 Identifier::get_cpp_type(to),
-                CppObject::get(to) as c_long,
+                CppObject::get(to) as i64,
             )
         }
         self
@@ -548,9 +544,9 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configLimitRange(
                 self.get_cpp_obj(),
                 Identifier::get_cpp_type(from),
-                CppObject::get(from) as c_long,
+                CppObject::get(from) as i64,
                 CPPType::Int as i32,
-                to as c_long,
+                to as i64,
             )
         }
         self
@@ -575,7 +571,7 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configLimitCount(
                 self.get_cpp_obj(),
                 Identifier::get_cpp_type(count),
-                CppObject::get(count) as c_long,
+                CppObject::get(count) as i64,
             );
         }
         self
@@ -596,7 +592,7 @@ impl StatementUpdate {
             WCDBRustStatementUpdate_configOffset(
                 self.get_cpp_obj(),
                 Identifier::get_cpp_type(offset),
-                CppObject::get(offset) as c_long,
+                CppObject::get(offset) as i64,
             );
         }
         self
