@@ -185,7 +185,7 @@ public:
     static StringView makeConstant(const char* string);
     static StringView createConstant(const char* string, size_t length = 0);
 #ifdef _WIN32
-    static StringView createFromWString(const wchar_t* string);
+    static StringView createFromWString(const wchar_t* string, size_t length = 0);
 #endif
 
 protected:
