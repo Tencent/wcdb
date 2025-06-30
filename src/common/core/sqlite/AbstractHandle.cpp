@@ -592,20 +592,18 @@ void AbstractHandle::rollbackTransaction()
         commitTransaction();
         return;
     }
-    bool succeed = true;
+    /*
+     It is unnecessary to check whether the rollback operation is successful or not.
+     If the rollback fails and the transaction level can not be decreased,
+     db won't be able to exit the transaction under abnormal circumstances.
+     */
     if (m_transactionLevel > 1) {
         if (m_transactionError == TransactionError::Allowed && isInTransaction()) {
             sqlite3_unimpeded(m_handle, true);
-            succeed = executeStatement(StatementRollback().rollbackToSavepoint(
-            getSavepointName(m_transactionLevel)));
-            if (!succeed && getError().getMessage().hasPrefix("no such savepoint:")) {
-                succeed = true;
-            }
+            executeStatement(StatementRollback().rollbackToSavepoint(getSavepointName(m_transactionLevel)));
             sqlite3_unimpeded(m_handle, false);
         }
-        if (succeed) {
-            --m_transactionLevel;
-        }
+        --m_transactionLevel;
         return;
     }
     /*
@@ -620,13 +618,11 @@ void AbstractHandle::rollbackTransaction()
         static const StatementRollback *s_rollback
         = new StatementRollback(StatementRollback().rollback());
         sqlite3_unimpeded(m_handle, true);
-        succeed = executeStatement(*s_rollback);
+        executeStatement(*s_rollback);
         sqlite3_unimpeded(m_handle, false);
     }
-    if (succeed) {
-        m_transactionLevel = 0;
-        m_transactionError = TransactionError::Allowed;
-    }
+    m_transactionLevel = 0;
+    m_transactionError = TransactionError::Allowed;
 }
 
 #pragma mark - Wal
