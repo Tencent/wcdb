@@ -266,7 +266,7 @@ bool InnerDatabase::liteModeEnable()
 }
 
 #pragma mark - Handle
-RecyclableHandle InnerDatabase::getHandle(bool writeHint)
+RecyclableHandle InnerDatabase::getHandle(bool writeHint, bool threaded)
 {
     HandleType type = HandleType::Normal;
     if (m_isInMemory) {
@@ -276,21 +276,11 @@ RecyclableHandle InnerDatabase::getHandle(bool writeHint)
         }
         return RecyclableHandle(m_sharedInMemoryHandle, nullptr);
     }
-    // Additional shared lock is not needed because the threadedHandles is always empty when it's blocked. So threaded handles is thread safe.
-    auto handle = m_transactionedHandles.getOrCreate();
-    if (handle.get() != nullptr) {
-        handle->configTransactionEvent(this);
-        WCTAssert(m_concurrency.readSafety());
-        return handle;
-    }
     InitializedGuard initializedGuard = initialize();
     if (!initializedGuard.valid()) {
         return nullptr;
     }
-    handle = flowOut(type, writeHint);
-    if (handle != nullptr) {
-        handle->configTransactionEvent(this);
-    }
+    auto handle = flowOut(type, writeHint, threaded);
     return handle;
 }
 
@@ -481,29 +471,14 @@ bool InnerDatabase::setupHandle(HandleType type, InnerHandle *handle)
     return true;
 }
 
-#pragma mark - Threaded
-void InnerDatabase::markHandleAsTransactioned(InnerHandle *handle)
-{
-    WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
-    RecyclableHandle currentHandle = getHandle();
-    WCTAssert(currentHandle.get() == handle);
-    m_transactionedHandles.getOrCreate() = currentHandle;
-    WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
-}
-
-void InnerDatabase::markHandleAsUntransactioned()
-{
-    WCTAssert(m_transactionedHandles.getOrCreate().get() != nullptr);
-    m_transactionedHandles.getOrCreate() = nullptr;
-    WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr);
-}
-
 #pragma mark - Transaction
 bool InnerDatabase::isInTransaction()
 {
-    WCTAssert(m_transactionedHandles.getOrCreate().get() == nullptr
-              || m_transactionedHandles.getOrCreate().get()->isInTransaction());
-    return m_transactionedHandles.getOrCreate().get() != nullptr;
+    auto threadedHandle = getHandle(false, true);
+    if(threadedHandle.get() == nullptr || !threadedHandle->isInTransaction()) {
+        return false;
+    }
+    return true;
 }
 
 bool InnerDatabase::beginTransaction()

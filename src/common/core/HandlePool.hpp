@@ -77,7 +77,7 @@ private:
 #pragma mark - Handle
 public:
     typedef unsigned int Slot;
-    RecyclableHandle flowOut(HandleType type, bool writeHint = false);
+    RecyclableHandle flowOut(HandleType type, bool writeHint = false, bool threaded = false);
     void purge();
     size_t numberOfAliveHandles() const;
     size_t numberOfAliveHandlesInSlot(HandleSlot slot) const;
