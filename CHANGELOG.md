@@ -1,3 +1,9 @@
+## v2.1.13
+
+* Fix compile error of Swift Package Manager
+* Fix crash caused by in-transaction handle
+* Convert ANSI error msg in windows to UTF8
+
 ## v2.1.12
 
 * Fix build error on Xcode 26 beta
