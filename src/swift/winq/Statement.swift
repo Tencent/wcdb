@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public protocol Statement: AnyObject, CustomStringConvertible {
     var rawCPPObj: UnsafeMutablePointer<CPPObject> { get }

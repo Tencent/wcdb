@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementVacuum: Identifier<CPPStatementVacuum>, Statement {
     public init() {
         super.init(with: WCDBStatementVacuumCreate())

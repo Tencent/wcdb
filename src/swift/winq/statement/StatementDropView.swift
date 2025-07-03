@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementDropView: Identifier<CPPStatementDropView>, Statement {
     public init() {
         super.init(with: WCDBStatementDropViewCreate())

@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public enum Order {
     case ascending

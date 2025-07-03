@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementExplain: Identifier<CPPStatementExplain>, Statement {
     public init() {
         super.init(with: WCDBStatementExplainCreate())

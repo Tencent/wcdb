@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementInsert: Identifier<CPPStatementInsert>, Statement {
     public init() {
         super.init(with: WCDBStatementInsertCreate())

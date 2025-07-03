@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public final class VirtualTableConfig: TableConfiguration {
     let module: String

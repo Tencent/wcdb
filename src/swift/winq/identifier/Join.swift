@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class Join: Identifier<CPPJoin> {
 
     public init(with subqueryConvertible: TableOrSubqueryConvertible) {

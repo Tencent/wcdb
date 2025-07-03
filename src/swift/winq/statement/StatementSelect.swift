@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class StatementSelect: Identifier<CPPStatementSelect>, Statement {
 
     public init() {

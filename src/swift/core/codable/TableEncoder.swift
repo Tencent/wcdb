@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 final class TableEncoder: Encoder {
 

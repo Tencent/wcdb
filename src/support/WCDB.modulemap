@@ -18,8 +18,12 @@ framework module WCDB {
         header "WCTTableCoding.h"
 		export *
 	}
+}
 
-    module WCDB_Private {
+framework module WCDB_Private {
+    requires objc
+
+    module BridgeHeader {
         umbrella header "WCDBBridging.h"
         export *
     }

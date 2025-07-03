@@ -25,6 +25,7 @@
 #if WCDB_SWIFT_BRIDGE_OBJC
 
 import Foundation
+import WCDB_Private
 
 /// Convenient table interface
 extension Table {

@@ -1,11 +1,13 @@
 framework module WCDBSwift {
-    requires objc
-
     module All {
         export *
     }
+}
 
-    module WCDB_Private {
+framework module WCDB_Private {
+    requires objc
+
+    module BridgeHeader {
         umbrella header "WCDBBridging.h"
         export *
     }

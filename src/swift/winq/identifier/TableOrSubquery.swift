@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 public final class TableOrSubquery: Identifier<CPPTableOrSubquery> {
 
     public convenience init(withTable table: String) {

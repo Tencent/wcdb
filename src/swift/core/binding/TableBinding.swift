@@ -19,6 +19,7 @@
  */
 
 import Foundation
+import WCDB_Private
 
 public class TableBindingBase {
     private let recyclableBinding: Recyclable<CPPBinding>
