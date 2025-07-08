@@ -31,7 +31,7 @@
 //    WCDBRustClassMethodWithNoArg(Core, funcName)
 #define WCDBRustCoreClassMethod(funcName, ...) WCDBRustClassMethod(Core, funcName, __VA_ARGS__)
 
-void* WCDBRustCoreClassMethod(createDatabase, const char* path);
+void* WCDBRustCoreClassMethod(createDatabase, const char* path, bool readonly, bool inMemory);
 void WCDBRustCoreClassMethod(setDefaultCipherConfig, int version);
 // void WCDBRustCoreClassMethodWithNoArg(purgeAllDatabase);
 // void WCDBRustCoreClassMethod(releaseSQLiteMemory, jint bytes);

@@ -22,8 +22,8 @@
 
 #include "CoreBridge.h"
 
-void* WCDBRustCoreClassMethod(createDatabase, const char* path) {
-    return (void*)WCDBCoreCreateDatabase(path).innerValue;
+void* WCDBRustCoreClassMethod(createDatabase, const char* path, bool readonly, bool inMemory) {
+    return (void*)WCDBCoreCreateDatabase(path, readonly, inMemory).innerValue;
 }
 void WCDBRustCoreClassMethod(setDefaultCipherConfig, int version) {
     WCDBCoreSetDefaultCipherConfig(version);

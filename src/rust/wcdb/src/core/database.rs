@@ -105,7 +105,11 @@ lazy_static! {
 pub type DatabaseCloseCallback = extern "C" fn(context: *mut c_void);
 
 extern "C" {
-    fn WCDBRustCore_createDatabase(path: *const c_char) -> *mut c_void;
+    fn WCDBRustCore_createDatabase(
+        path: *const c_char,
+        readonly: bool,
+        in_memory: bool,
+    ) -> *mut c_void;
     fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
 
     fn WCDBRustDatabase_removeFiles(cpp_obj: *mut c_void) -> bool;
@@ -1241,7 +1245,29 @@ impl Database {
 
     pub fn new(path: &str) -> Self {
         let c_path = CString::new(path).unwrap_or_default();
-        let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr()) };
+        let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr(), false, false) };
+        Database {
+            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            close_callback: Arc::new(Mutex::new(None)),
+            trace_callback_ref: Arc::new(RefCell::new(null_mut())),
+            trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+        }
+    }
+
+    pub fn new_by_readonly(path: &str, readonly: bool) -> Self {
+        let c_path = CString::new(path).unwrap_or_default();
+        let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr(), readonly, false) };
+        Database {
+            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            close_callback: Arc::new(Mutex::new(None)),
+            trace_callback_ref: Arc::new(RefCell::new(null_mut())),
+            trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+        }
+    }
+
+    pub fn create_in_memory_database() -> Self {
+        let c_path = CString::new("").unwrap_or_default();
+        let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr(), false, true) };
         Database {
             handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
             close_callback: Arc::new(Mutex::new(None)),
