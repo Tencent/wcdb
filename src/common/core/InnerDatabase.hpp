@@ -32,7 +32,6 @@
 #include "Migration.hpp"
 #include "Tag.hpp"
 #include "ThreadLocal.hpp"
-#include "TransactionGuard.hpp"
 #include "WINQ.h"
 
 namespace WCDB {
@@ -44,8 +43,7 @@ class BaseOperation;
 class InnerDatabase final : private HandlePool,
                             public MigrationEvent,
                             public CompressionEvent,
-                            public MergeFTSIndexHandleProvider,
-                            public TransactionEvent {
+                            public MergeFTSIndexHandleProvider {
     friend BaseOperation;
 #pragma mark - Initializer
 public:
@@ -75,16 +73,18 @@ public:
     using HandlePool::unblockade;
     using HandlePool::isBlockaded;
     using HandlePool::numberOfAliveHandles;
+    void setReadOnly();
 
 protected:
     Tag m_tag;
+    bool m_isReadOnly = false;
 
     void didDrain() override final;
     bool checkShouldInterruptWhenClosing(const UnsafeStringView &sourceType);
 
 #pragma mark - Handle
 public:
-    RecyclableHandle getHandle(bool writeHint = false);
+    RecyclableHandle getHandle(bool writeHint = false, bool threaded = false);
     bool execute(const Statement &statement);
     bool execute(const UnsafeStringView &sql);
     Optional<bool> tableExists(const UnsafeStringView &table);
@@ -112,13 +112,6 @@ private:
     Configs m_configs;
     bool m_fullSQLTrace = false;
     bool m_liteModeEnable = false;
-
-#pragma mark - Threaded
-private:
-    void markHandleAsTransactioned(InnerHandle *handle) override final;
-    void markHandleAsUntransactioned() override final;
-
-    ThreadLocal<RecyclableHandle> m_transactionedHandles;
 
 #pragma mark - Transaction
 public:

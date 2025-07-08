@@ -27,11 +27,11 @@
 
 @interface Random (RepairTestObject)
 
-- (NSObject<RepairTestObject>*)repairObjectWithClass:(Class<RepairTestObject>)objectClass
-                                       andIdentifier:(int)identifier;
+- (NSObject<RepairTestObject> *)repairObjectWithClass:(Class<RepairTestObject>)objectClass
+                                        andIdentifier:(int)identifier;
 
-- (NSArray<NSObject<RepairTestObject>*>*)repairObjectsWithClass:(Class<RepairTestObject>)objectClass
-                                                       andCount:(int)count
-                                         startingFromIdentifier:(int)identifier;
+- (NSArray<NSObject<RepairTestObject> *> *)repairObjectsWithClass:(Class<RepairTestObject>)objectClass
+                                                         andCount:(int)count
+                                           startingFromIdentifier:(int)identifier;
 
 @end

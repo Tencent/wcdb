@@ -471,7 +471,7 @@ char** UnsafeStringView::preAllocStringMemorySlot(int count)
 
 void UnsafeStringView::allocStringMemory(char** slot, int size)
 {
-    if (size == 0 || slot == nullptr) {
+    if (slot == nullptr) {
         return;
     }
     char* buffer = (char*) malloc((size + 1 + kReferenceSize) * sizeof(char));
@@ -479,6 +479,7 @@ void UnsafeStringView::allocStringMemory(char** slot, int size)
         return;
     }
     *slot = buffer + kReferenceSize;
+    *(*slot + size) = '\0';
 }
 
 void UnsafeStringView::clearAllocatedMemory(int count)
@@ -514,8 +515,7 @@ bool UnsafeStringView::tryRetrievePreAllocatedMemory(const char* string)
         g_preAllocatedMemory.memory[i] = nullptr;
         if (g_preAllocatedMemory.usedCount == i + 1) {
             int j = i - 1;
-            for (; j >= 0 && g_preAllocatedMemory.memory[j] == nullptr; j--)
-                ;
+            for (; j >= 0 && g_preAllocatedMemory.memory[j] == nullptr; j--);
             g_preAllocatedMemory.usedCount = j + 1;
         }
         WCTAssert(g_preAllocatedMemory.usedCount >= 0);
@@ -693,15 +693,25 @@ StringView StringView::createConstant(const char* string, size_t length)
     return ret;
 }
 #ifdef _WIN32
-StringView StringView::createFromWString(const wchar_t* string)
+StringView StringView::createFromWString(const wchar_t* string, size_t length)
 {
-    int length = WideCharToMultiByte(CP_UTF8, 0, string, -1, NULL, 0, NULL, NULL);
-    if (length <= 1) {
+    if (!string || (length == 0 && string[0] == L'\0')) {
         return StringView();
     }
-    char buffer[_MAX_PATH];
-    WideCharToMultiByte(CP_UTF8, 0, string, -1, buffer, length, NULL, NULL);
-    return StringView(buffer, length - 1);
+
+    int srcLen = (length > 0) ? length : -1;
+    int utf8Size = WideCharToMultiByte(CP_UTF8, 0, string, srcLen, nullptr, 0, nullptr, nullptr);
+    if (utf8Size <= 0) {
+        return StringView();
+    }
+
+    std::string utf8Str(utf8Size, 0);
+    WideCharToMultiByte(CP_UTF8, 0, string, srcLen, &utf8Str[0], utf8Size, nullptr, nullptr);
+
+    if (srcLen == -1) {
+        utf8Str.resize(utf8Size - 1);
+    }
+    return utf8Str;
 }
 #endif
 

@@ -127,7 +127,7 @@ void WCDBJNIDatabaseCloseCallback(CloseDatabaseContext* context)
 {
     JNIEnv* env = context->env;
     WCDBJNITryGetDatabaseMethodId(
-    "onClose", "(" WCDBJNIDatabaseSignature "$CloseCallBack;)V", return );
+    "onClose", "(" WCDBJNIDatabaseSignature "$CloseCallBack;)V", return);
     (*env)->CallStaticVoidMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, context->callback);
 }
@@ -218,11 +218,11 @@ void WCDBJNIDatabasePerformanceTrace(jobject tracer,
                                      const char* sql,
                                      const CPPPerformanceInfo* info)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId("onTracePerformance",
                                   "(" WCDBJNIDatabaseSignature "$PerformanceTracer;J" WCDBJNIStringSignature
                                   "J" WCDBJNIStringSignature "J[I)V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     jint size = sizeof(CPPPerformanceInfo) / sizeof(int) - 2;
@@ -267,11 +267,11 @@ void WCDBJNIDatabaseSQLTrace(jobject tracer,
                              const char* sql,
                              const char* info)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId("onTraceSQL",
                                   "(" WCDBJNIDatabaseSignature "$SQLTracer;J" WCDBJNIStringSignature
                                   "J" WCDBJNIStringSignature WCDBJNIStringSignature ")V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     WCDBJNICreateJavaString(info);
@@ -305,9 +305,9 @@ void WCDBJNIDatabaseClassMethod(setFullSQLTraceEnable, jlong self, jboolean enab
 
 void WCDBJNIDatabaseErrorTrace(jobject tracer, CPPError error)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId(
-    "onTraceException", "(" WCDBJNIDatabaseSignature "$ExceptionTracer;J)V", return );
+    "onTraceException", "(" WCDBJNIDatabaseSignature "$ExceptionTracer;J)V", return);
     (*env)->CallStaticVoidMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, tracer, (jlong) error.innerValue);
     WCDBJNITryDetach;
@@ -332,9 +332,9 @@ void WCDBJNIDatabaseClassMethod(traceError, jlong self, jobject tracer)
 
 void WCDBJNIDatabaseOperationTrace(jobject tracer, CPPDatabase database, long operation, const void* info)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId(
-    "onTraceOperation", "(" WCDBJNIDatabaseSignature "$OperationTracer;JIJ)V", return );
+    "onTraceOperation", "(" WCDBJNIDatabaseSignature "$OperationTracer;JIJ)V", return);
     (*env)->CallStaticVoidMethod(env,
                                  WCDBJNIGetDatabaseClass(),
                                  g_methodId,
@@ -384,7 +384,7 @@ void WCDBJNIDatabaseEnumerateInfoCallback(JNIEnumerateInfoContext* context,
     WCDBJNITryGetDatabaseMethodId("onEnumerateInfo",
                                   "(Ljava/util/HashMap;" WCDBJNIStringSignature
                                   "IJD" WCDBJNIStringSignature ")V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(key);
     WCDBJNICreateJavaString(stringValue);
     (*env)->CallStaticVoidMethod(env,
@@ -410,11 +410,11 @@ void WCDBJNIDatabaseClassMethod(enumerateInfo, jobject javaInfo, jlong cppInfo)
 
 void WCDBJNIDatabaseBusyTrace(jobject tracer, long tag, const char* path, jlong tid, const char* sql)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId("onBusyTrace",
                                   "(" WCDBJNIDatabaseSignature "$BusyTracer;J" WCDBJNIStringSignature
                                   "J" WCDBJNIStringSignature ")V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(path);
     WCDBJNICreateJavaString(sql);
     (*env)->CallStaticVoidMethod(
@@ -470,9 +470,9 @@ void WCDBJNIDatabaseClassMethod(addAuxiliaryFunction, jlong self, jstring auxili
 
 void WCDBJNIDatabaseCorrupted(jobject notification, CPPDatabase database)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId(
-    "onCorrupted", "(" WCDBJNIDatabaseSignature "$CorruptionNotification;J)V", return );
+    "onCorrupted", "(" WCDBJNIDatabaseSignature "$CorruptionNotification;J)V", return);
     (*env)->CallStaticVoidMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, notification, (jlong) database.innerValue);
     WCDBJNITryDetach;
@@ -625,11 +625,11 @@ void WCDBJNIDatabaseClassMethod(setAutoCheckpointEnable, jlong self, jboolean en
 
 void WCDBJNIDatabaseFilterMigrate(jobject filter, const char* table, void* info, WCDBMigrationInfoSetter setter)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId("filterMigrate",
                                   "(" WCDBJNIDatabaseSignature
                                   "$MigrationFilter;JJ" WCDBJNIStringSignature ")V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(table);
     (*env)->CallStaticVoidMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, filter, (jlong) setter, (jlong) info, jtable);
@@ -679,12 +679,12 @@ void WCDBJNIDatabaseOnTableMigrate(jobject notification,
                                    const char* table,
                                    const char* sourceTable)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId(
     "onTableMigrated",
     "(" WCDBJNIDatabaseSignature
     "$MigrationNotification;J" WCDBJNIStringSignature WCDBJNIStringSignature ")V",
-    return );
+    return);
     WCDBJNICreateJavaString(table);
     WCDBJNICreateJavaString(sourceTable);
     (*env)->CallStaticVoidMethod(
@@ -856,11 +856,11 @@ void WCDBJNIDatabaseClassMethod(enableReplaceCompression, jlong info)
 
 void WCDBJNIDatabaseFilterCompress(jobject filter, const char* table, void* info)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId("filterCompress",
                                   "(" WCDBJNIDatabaseSignature
                                   "$CompressionFilter;J" WCDBJNIStringSignature ")V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(table);
     (*env)->CallStaticVoidMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, filter, (jlong) info, jtable);
@@ -895,11 +895,11 @@ void WCDBJNIDatabaseClassMethod(enableAutoCompression, jlong self, jboolean enab
 
 void WCDBJNIDatabaseOnTableCompressed(jobject notification, CPPDatabase database, const char* table)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     WCDBJNITryGetDatabaseMethodId("onTableCompressed",
                                   "(" WCDBJNIDatabaseSignature
                                   "$CompressionNotification;J" WCDBJNIStringSignature ")V",
-                                  return );
+                                  return);
     WCDBJNICreateJavaString(table);
     (*env)->CallStaticVoidMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, notification, (jlong) database.innerValue, jtable);

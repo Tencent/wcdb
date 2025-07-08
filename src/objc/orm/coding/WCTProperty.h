@@ -68,4 +68,4 @@ private:
     static bool isEqual(const WCTProperty& left, const WCTProperty& right);
 };
 
-}
+} // namespace WCDB

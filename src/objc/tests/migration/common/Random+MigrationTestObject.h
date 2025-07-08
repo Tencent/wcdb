@@ -27,14 +27,14 @@
 
 @interface Random (MigrationTestObject)
 
-- (NSObject<MigrationTestObject>*)autoIncrementMigrationObjectWithClass:(Class<MigrationTestObject>)objectClass;
+- (NSObject<MigrationTestObject> *)autoIncrementMigrationObjectWithClass:(Class<MigrationTestObject>)objectClass;
 
-- (NSObject<MigrationTestObject>*)migrationObjectWithClass:(Class<MigrationTestObject>)objectClass
-                                             andIdentifier:(int)identifier;
+- (NSObject<MigrationTestObject> *)migrationObjectWithClass:(Class<MigrationTestObject>)objectClass
+                                              andIdentifier:(int)identifier;
 
-- (NSArray<NSObject<MigrationTestObject>*>*)migrationObjectsWithClass:(Class<MigrationTestObject>)objectClass
-                                                             andCount:(int)count
-                                               startingFromIdentifier:(int)identifier
-                                                       withoutContent:(bool)noContent;
+- (NSArray<NSObject<MigrationTestObject> *> *)migrationObjectsWithClass:(Class<MigrationTestObject>)objectClass
+                                                               andCount:(int)count
+                                                 startingFromIdentifier:(int)identifier
+                                                         withoutContent:(bool)noContent;
 
 @end

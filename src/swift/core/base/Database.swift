@@ -42,17 +42,29 @@ public class Database {
     /// Init a database from file url.
     /// Note that all database objects with same path share the same core.
     /// So you can create multiple database objects. WCDB will manage them automatically.
+    ///
     /// Note that WCDB will not generate a sqlite handle until the first operation,
     /// which is also called as lazy initialization.
     ///
+    /// Note that once a database is opened in read-only mode,
+    /// it cannot be writable in the current process any more.
+    ///
     /// - Parameter url: File url to your database
-    public convenience init(at url: URL) {
+    public convenience init(at url: URL, readOnly: Bool = false) {
 #if swift(>=5)
 #else
         WCDBError.fatalError("Swift 5 is required.")
 #endif
-        let database = WCDBCoreCreateDatabase(url.standardizedFileURL.path)
+        let database = WCDBCoreCreateDatabase(url.standardizedFileURL.path, readOnly, false)
         self.init(with: database)
+    }
+
+    /// Init a in-memory database.
+    /// Since In-memory database share one DB handle among all threads,
+    /// it does not support multi-threaded concurrent operation.
+    public static func createInMemoryDatabase() -> Database {
+        let database = WCDBCoreCreateDatabase("", false, true)
+        return Database(with: database)
     }
 
     internal init(with cppDatabase: CPPDatabase) {
@@ -1169,7 +1181,7 @@ public extension Database {
     /// - Parameter dictId: id of the dict. It can not be zero.
     /// - Throws: `Error`
     static func register(dict: Data, with dictId: DictId) throws {
-        try dict.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> Void in
+        try dict.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) in
             if !WCDBDatabaseRegisterDict(bytes.bindMemory(to: UInt8.self).baseAddress, dict.count, dictId) {
                 let cppError = WCDBCoreGetThreadedError()
                 throw ErrorBridge.getErrorFrom(cppError: cppError)

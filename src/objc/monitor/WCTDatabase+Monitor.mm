@@ -42,7 +42,7 @@ void CommonCore::print(const UnsafeStringView& message)
 #endif
 }
 
-}
+} // namespace WCDB
 
 NSString* const WCTDatabaseMonitorInfoKeyHandleCount = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleCount];
 NSString* const WCTDatabaseMonitorInfoKeyHandleOpenTime = [NSString stringWithUTF8String:WCDB::k_MonitorInfoKeyHandleOpenTime];

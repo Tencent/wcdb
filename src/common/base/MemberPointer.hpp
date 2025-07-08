@@ -28,19 +28,17 @@
 namespace WCDB {
 
 template<class T, typename Enable = void>
-struct IsFieldMemberPointer : std::false_type {
-};
+struct IsFieldMemberPointer : std::false_type {};
 
 template<class T>
 struct IsFieldMemberPointer<T, typename std::enable_if<std::is_member_pointer<T>::value && !std::is_member_function_pointer<T>::value>::type>
-: std::true_type {
-};
+: std::true_type {};
 
 template<typename T, typename O>
-void* castMemberPointer(T O::*memberPointer)
+void* castMemberPointer(T O::* memberPointer)
 {
     union {
-        T O::*memberp;
+        T O::* memberp;
         void* voidp;
     };
     voidp = nullptr;

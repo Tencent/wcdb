@@ -37,7 +37,7 @@
     }
 
 #define WCDBGetObjectOrReturn(rawObj, objType, typedObjName)                   \
-    __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, return )
+    __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, return)
 
 #define WCDBGetObjectOrReturnValue(rawObj, objType, typedObjName, value)       \
     __WCDBGetObjectOrReturn(rawObj, objType, typedObjName, return value)

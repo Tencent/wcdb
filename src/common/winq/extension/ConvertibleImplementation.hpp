@@ -56,27 +56,21 @@ public:
 };
 
 template<class T, bool = std::is_enum<T>::value>
-struct SafeUnderlyingType : std::underlying_type<T> {
-};
+struct SafeUnderlyingType : std::underlying_type<T> {};
 template<class T>
-struct SafeUnderlyingType<T, false> {
-};
+struct SafeUnderlyingType<T, false> {};
 
 template<typename T, typename Enable = void>
-struct Is64BitUnsignedInteger : public std::false_type {
-};
+struct Is64BitUnsignedInteger : public std::false_type {};
 template<typename T>
 struct Is64BitUnsignedInteger<T, typename std::enable_if<std::is_integral<T>::value && (sizeof(T) > 4) && std::is_unsigned<T>::value>::type>
-: public std::true_type {
-};
+: public std::true_type {};
 
 template<typename T, typename Enable = void>
-struct Is64BitUnsignedEnum : public std::false_type {
-};
+struct Is64BitUnsignedEnum : public std::false_type {};
 template<typename T>
 struct Is64BitUnsignedEnum<T, typename std::enable_if<std::is_enum<T>::value && (sizeof(T) > 4) && std::is_unsigned<typename SafeUnderlyingType<T>::type>::value>::type>
-: public std::true_type {
-};
+: public std::true_type {};
 
 template<typename T>
 class LiteralValueConvertible<

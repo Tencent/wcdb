@@ -43,7 +43,7 @@ public:
     ~Field() override;
 
     template<class ORMType, typename FieldType>
-    Field(FieldType ORMType::*memberPointer)
+    Field(FieldType ORMType::* memberPointer)
     {
         static_assert(ORMType::isObjectRelationMapped, "This class has no ORM configuration.");
         static_assert(IsFieldMemberPointer<FieldType ORMType::*>::value,

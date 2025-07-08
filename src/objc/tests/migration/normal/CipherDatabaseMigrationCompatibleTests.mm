@@ -73,7 +73,7 @@
     [self doTestSubqueryWithinUpdate];
 }
 
-- (NSArray<NSObject<WCTTableCoding>*>*)getAllObjects
+- (NSArray<NSObject<WCTTableCoding> *> *)getAllObjects
 {
     return [self.table getObjectsOrders:MigrationObject.identifier.asOrder(WCTOrderedAscending)];
 }

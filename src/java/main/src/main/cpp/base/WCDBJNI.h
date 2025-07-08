@@ -73,6 +73,7 @@
 #define WCDBJNIGetByteArray(value)                                                \
     const unsigned char *value##Array = NULL;                                     \
     int value##Length = 0;                                                        \
+    WCDB_UNUSED(value##Length);                                                   \
     if (value != NULL) {                                                          \
         value##Length = (*env)->GetArrayLength(env, value);                       \
         value##Array                                                              \
@@ -87,6 +88,7 @@
 #define WCDBJNIGetByteArrayCritical(value)                                             \
     const unsigned char *value##Array = NULL;                                          \
     int value##Length = 0;                                                             \
+    WCDB_UNUSED(value##Length);                                                        \
     if (value != NULL) {                                                               \
         value##Length = (*env)->GetArrayLength(env, value);                            \
         value##Array                                                                   \
@@ -101,6 +103,7 @@
 #define WCDBJNIGetLongArray(value)                                             \
     const jlong *value##Array = NULL;                                          \
     int value##Length = 0;                                                     \
+    WCDB_UNUSED(value##Length);                                                \
     if (value != NULL) {                                                       \
         value##Array = (*env)->GetLongArrayElements(env, value, NULL);         \
         value##Length = (*env)->GetArrayLength(env, value);                    \
@@ -115,6 +118,7 @@
     const void **value##Array = NULL;                                          \
     const jlong *value##LongArray = NULL;                                      \
     int value##Length = 0;                                                     \
+    WCDB_UNUSED(value##Length);                                                \
     if (value != NULL) {                                                       \
         value##Length = (*env)->GetArrayLength(env, value);                    \
         value##LongArray                                                       \
@@ -137,6 +141,7 @@
 #define WCDBJNIGetIntArray(value)                                              \
     const jint *value##Array = NULL;                                           \
     int value##Length = 0;                                                     \
+    WCDB_UNUSED(value##Length);                                                \
     if (value != NULL) {                                                       \
         value##Array = (*env)->GetIntArrayElements(env, value, NULL);          \
         value##Length = (*env)->GetArrayLength(env, value);                    \
@@ -150,6 +155,7 @@
 #define WCDBJNIGetDoubleArray(value)                                           \
     const jdouble *value##Array = NULL;                                        \
     int value##Length = 0;                                                     \
+    WCDB_UNUSED(value##Length);                                                \
     if (value != NULL) {                                                       \
         value##Array = (*env)->GetDoubleArrayElements(env, value, NULL);       \
         value##Length = (*env)->GetArrayLength(env, value);                    \
@@ -162,6 +168,7 @@
 
 #define WCDBJNIGetStringArray(value)                                           \
     int value##Length = 0;                                                     \
+    WCDB_UNUSED(value##Length);                                                \
     char **value##CharArray = NULL;                                            \
     WCDBJNIGetUTF8StringArray(env, value, &value##CharArray, &value##Length);
 

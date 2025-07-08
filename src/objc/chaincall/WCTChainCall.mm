@@ -29,7 +29,7 @@
 
 @implementation WCTChainCall
 
-- (instancetype)initWithHandle:(WCTHandle*)handle
+- (instancetype)initWithHandle:(WCTHandle *)handle
 {
     WCTAssert(handle != nil);
     if (self = [super init]) {
@@ -39,7 +39,7 @@
     return self;
 }
 
-- (WCTError*)error
+- (WCTError *)error
 {
     return _error;
 }

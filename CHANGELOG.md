@@ -1,3 +1,21 @@
+## v2.1.13
+
+* Fix compile error of Swift Package Manager
+* Fix crash caused by in-transaction handle
+* Convert ANSI error msg in windows to UTF8
+
+## v2.1.12
+
+* Fix build error on Xcode 26 beta
+* Fix empty string crash in java/kotlin winq
+* Fix linking error on linux x86
+
+## v2.1.11
+
+* Support to open database in readonly mode
+* Support to create in-memory database in java/c++/swift
+* Fix the exception problem of tableExist method in Java/Kotlin
+
 ## v2.1.10
 
 * Disable checkpoint fullsync in apple platform, it will significantly reduce disk IO

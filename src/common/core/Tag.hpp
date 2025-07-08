@@ -52,6 +52,5 @@ private:
 
 namespace std {
 template<>
-struct is_integral<WCDB::Tag> : public std::true_type {
-};
+struct is_integral<WCDB::Tag> : public std::true_type {};
 } // namespace std

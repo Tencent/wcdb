@@ -116,7 +116,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_object3, &self->_object4 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_object3, &self->_object4 };
              return self.database->insertObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String);
          }];
 }
@@ -158,7 +158,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_renewedObject1, &self->_renewedObject2 };
              return self.database->insertOrReplaceObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String);
          }];
 }
@@ -202,7 +202,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_renewedObject1, &self->_renewedObject2 };
              return self.database->insertOrIgnoreObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String);
          }];
 }
@@ -246,7 +246,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT INTO testTable(identifier) VALUES(?1)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_object3, &self->_object4 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_object3, &self->_object4 };
              return self.database->insertObjects<CPPTestCaseObject>(objects, self.tableName.UTF8String, WCDB_FIELD(CPPTestCaseObject::identifier));
          }];
 }
@@ -333,7 +333,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_object3, &self->_object4 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_object3, &self->_object4 };
              return self.table.insertObjects(objects);
          }];
 }
@@ -376,7 +376,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT OR REPLACE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_renewedObject1, &self->_renewedObject2 };
              return self.table.insertOrReplaceObjects(objects);
          }];
 }
@@ -419,7 +419,7 @@
               andNumber:2
            ofInsertSQLs:@"INSERT OR IGNORE INTO testTable(identifier, content) VALUES(?1, ?2)"
          afterInsertion:^BOOL {
-             WCDB::ValueArray<CPPTestCaseObject*> objects = { &self->_renewedObject1, &self->_renewedObject2 };
+             WCDB::ValueArray<CPPTestCaseObject *> objects = { &self->_renewedObject1, &self->_renewedObject2 };
              return self.table.insertOrIgnoreObjects(objects);
          }];
 }

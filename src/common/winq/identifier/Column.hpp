@@ -59,9 +59,13 @@ public:
 
     IndexedColumn asIndex() const;
     IndexedColumn asIndex(const Order& order) const;
+    IndexedColumn asAscIndex() const;
+    IndexedColumn asDescIndex() const;
 
     OrderingTerm asOrder() const;
     OrderingTerm asOrder(const Order& order) const;
+    OrderingTerm asAscOrder() const;
+    OrderingTerm asDescOrder() const;
 
     static Column rowid();
     static Column all();

@@ -133,6 +133,16 @@ ResultColumn Expression::as(const UnsafeStringView& alias)
     return ResultColumn(*this).as(alias);
 }
 
+OrderingTerm Expression::asAscOrder() const
+{
+    return OrderingTerm(*this).order(WCDB::Order::ASC);
+}
+
+OrderingTerm Expression::asDescOrder() const
+{
+    return OrderingTerm(*this).order(WCDB::Order::DESC);
+}
+
 Expression Expression::exists(const StatementSelect& select)
 {
     Expression expression;

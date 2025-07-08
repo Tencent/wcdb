@@ -48,7 +48,8 @@ public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: T
                 isNotNull: Bool = false,
                 isUnique: Bool = false,
                 defaultTo defaultValue: LiteralValue? = nil,
-                isNotIndexed: Bool = false) {
+                isNotIndexed: Bool = false,
+                collate: String? = nil) {
         self.codingKey = codingKey
         if isPrimary {
             let constrant = ColumnConstraint()
@@ -75,6 +76,9 @@ public final class ColumnConstraintConfig<CodingTableKeyType: CodingTableKey>: T
         }
         if isNotIndexed {
             columnConstraints.append(ColumnConstraint().unIndexed())
+        }
+        if let collate = collate, !collate.isEmpty {
+            columnConstraints.append(ColumnConstraint().collate(with: collate))
         }
         self.enableAutoIncrementForExistingTable = enableAutoIncrementForExistingTable
     }

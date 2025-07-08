@@ -85,10 +85,7 @@
 #define WCDBJNIMultiTypeArraySignature "[I[J[D[Ljava/lang/String;"
 
 #define WCDBJNIRegister(className, methodList)                                 \
-    {                                                                          \
-        className, (JNINativeMethod *) &methodList,                            \
-        sizeof(methodList) / sizeof(JNINativeMethod)                           \
-    }
+    { className, (JNINativeMethod *) &methodList, sizeof(methodList) / sizeof(JNINativeMethod) }
 
 typedef struct JNIBinding {
     const char *className;
@@ -871,7 +868,7 @@ static const JNINativeMethod g_handleMethods[] = {
 };
 
 static const JNINativeMethod g_databaseMethods[] = {
-    { "createDatabase", "(" WCDBJNIStringSignature ")J", (void *) WCDBJNICoreFuncName(createDatabase) },
+    { "createDatabase", "(" WCDBJNIStringSignature "ZZ)J", (void *) WCDBJNICoreFuncName(createDatabase) },
     { "setDefaultCipherVersion", "(I)V", (void *) WCDBJNICoreFuncName(setDefaultCipherConfig) },
     { "getNumberOfAliveHandle", "(J)I", (void *) WCDBJNIDatabaseFuncName(getNumberOfAliveHandle) },
     { "getError", "(J)J", (void *) WCDBJNIDatabaseFuncName(getError) },

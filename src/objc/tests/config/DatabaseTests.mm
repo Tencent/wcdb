@@ -118,6 +118,24 @@
     }
 }
 
+- (void)test_readonly_database
+{
+    NSString* tableName = @"testTable";
+
+    TestCaseObject* object = [Random.shared autoIncrementTestCaseObject];
+
+    TestCaseAssertTrue([self.database createTable:tableName withClass:TestCaseObject.class]);
+    TestCaseAssertTrue([self.database insertObject:object intoTable:tableName]);
+
+    WCTDatabase* readOnlyDatabase = [[WCTDatabase alloc] initReadOnlyDatabaseWithPath:self.path];
+
+    TestCaseAssertTrue([readOnlyDatabase canOpen]);
+    TestCaseAssertTrue([readOnlyDatabase getObjectOfClass:TestCaseObject.class fromTable:tableName] != nil);
+    TestCaseAssertFalse([readOnlyDatabase insertObject:object intoTable:tableName]);
+
+    TestCaseAssertFalse([self.database insertObject:object intoTable:tableName]);
+}
+
 - (void)test_get_error
 {
     TestCaseAssertFalse([self.database insertObject:[[TestCaseObject alloc] init] intoTable:@"notExistTable"]);

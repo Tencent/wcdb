@@ -34,7 +34,7 @@ void WCDBJNIStatementSelectClassMethod(configWith, jlong self, jlongArray expres
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementSelectConfigWith(
-    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+    selfStruct, (const CPPCommonTableExpression *) expressionsArray, expressionsLength);
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
@@ -123,7 +123,7 @@ void WCDBJNIStatementSelectClassMethod(configOrders, jlong self, jlongArray orde
     WCDBJNIBridgeStruct(CPPStatementSelect, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
     WCDBStatementSelectConfigOrders(
-    selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
+    selfStruct, (const CPPOrderingTerm *) ordersArray, ordersLength);
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 

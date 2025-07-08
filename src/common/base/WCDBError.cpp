@@ -205,7 +205,7 @@ bool Error::isError(int rc)
 
 Error::Code Error::rc2c(int rc)
 {
-    return (Error::Code)(rc & 0xff);
+    return (Error::Code) (rc & 0xff);
 }
 
 int Error::c2rc(Error::Code code)
@@ -252,7 +252,11 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStr
         code = codeIfUnresolved;
         break;
     }
+#ifdef _WIN32
+    setCode(code, message.empty() ? StringView::createFromWString(_wcserror(systemCode)) : message);
+#else
     setCode(code, message.empty() ? strerror(systemCode) : message);
+#endif
     infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSystem);
     infos.insert_or_assign(ErrorIntKeyExtCode, systemCode);
 }
@@ -260,7 +264,24 @@ void Error::setSystemCode(int systemCode, Code codeIfUnresolved, const UnsafeStr
 #ifdef _WIN32
 void Error::setWinSystemCode(int systemCode, Code code, const UnsafeStringView& message)
 {
-    setCode(code, message.empty() ? std::system_category().message(systemCode).data() : message);
+    if (!message.empty()) {
+        setCode(code, message);
+    } else if (systemCode != 0) {
+        LPWSTR buffer = nullptr;
+        DWORD size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                                    nullptr,
+                                    systemCode,
+                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                    reinterpret_cast<LPWSTR>(&buffer),
+                                    0,
+                                    nullptr);
+        if (size == 0) {
+            setCode(code, "FormatMessageW failed");
+        } else {
+            setCode(code, StringView::createFromWString(buffer, size));
+            LocalFree(buffer);
+        }
+    }
     infos.insert_or_assign(ErrorStringKeySource, ErrorSourceSystem);
     infos.insert_or_assign(ErrorIntKeyExtCode, systemCode);
 }
@@ -283,8 +304,20 @@ void Error::setSQLiteCode(int rc, const UnsafeStringView& message)
 #else
         int err = GetLastError();
         infos.insert_or_assign("SystemErrno", err);
-        infos.insert_or_assign("SystemErrMsg",
-                               std::system_category().message(err).data());
+        LPWSTR buffer = nullptr;
+        DWORD size = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                                    nullptr,
+                                    err,
+                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                    reinterpret_cast<LPWSTR>(&buffer),
+                                    0,
+                                    nullptr);
+        if (size == 0) {
+            infos.insert_or_assign("SystemErrMsg", "FormatMessageW failed");
+        } else {
+            infos.insert_or_assign("SystemErrMsg", StringView::createFromWString(buffer, size));
+            LocalFree(buffer);
+        }
 #endif
     }
 }

@@ -55,13 +55,13 @@
 
 - (void)reset
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->reset();
 }
 
 - (void)clearBindings
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->clearBindings();
 }
 
@@ -81,37 +81,37 @@
 #pragma mark - Bind
 - (void)bindInteger:(const int64_t &)value toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->bindInteger(value, index);
 }
 
 - (void)bindDouble:(const double &)value toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->bindDouble(value, index);
 }
 
 - (void)bindNullToIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->bindNull(index);
 }
 
 - (void)bindString:(NSString *)string toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->bindText(WCDB::UnsafeStringView(string), index);
 }
 
 - (void)bindData:(NSData *)data toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     _handleStatement->bindBLOB(data, index);
 }
 
 - (void)bindNumber:(NSNumber *)number toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     if (number == nil || CFNumberIsFloatType((CFNumberRef) number)) {
         _handleStatement->bindDouble(number.doubleValue, index);
     } else {
@@ -122,7 +122,7 @@
 - (void)bindValue:(WCTColumnCodingValue *)value
           toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     WCTValue *archivedValue = [value archivedWCTValue];
     switch ([value.class columnType]) {
     case WCTColumnTypeNull:
@@ -147,7 +147,7 @@
             ofObject:(WCTObject *)object
              toIndex:(int)index
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     const std::shared_ptr<const WCTBaseAccessor> &accessor = property.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {
@@ -211,7 +211,7 @@
 - (void)bindProperties:(const WCTProperties &)properties
               ofObject:(WCTObject *)object
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     int index = 1;
     for (const auto &property : properties) {
         [self bindProperty:property ofObject:object toIndex:index];
@@ -362,7 +362,7 @@
       toColumnBindingHolder:(const WCTColumnBindingHolder &)columnBindingHolder
                    ofObject:(WCTObject *)object
 {
-    WCTPreparedStatementAssert(return );
+    WCTPreparedStatementAssert(return);
     const std::shared_ptr<const WCTBaseAccessor> &accessor = columnBindingHolder.getColumnBinding().getAccessor();
     switch (accessor->getAccessorType()) {
     case WCTAccessorCpp: {

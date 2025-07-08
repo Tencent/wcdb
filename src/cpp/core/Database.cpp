@@ -40,10 +40,13 @@ namespace WCDB {
 
 #pragma mark - Basic
 
-Database::Database(const UnsafeStringView& path)
+Database::Database(const UnsafeStringView& path, bool readOnly)
 {
     m_databaseHolder = CommonCore::shared().getOrCreateDatabase(Path::normalize(path));
     m_innerDatabase = m_databaseHolder.get();
+    if (readOnly) {
+        m_innerDatabase->setReadOnly();
+    }
 }
 
 Database::Database(const Database&) = default;
@@ -60,6 +63,15 @@ Database::Database(Recyclable<InnerDatabase*> database)
 Database::Database(InnerDatabase* database) : m_innerDatabase(database)
 {
     m_databaseHolder = RecyclableDatabase(m_innerDatabase, nullptr);
+}
+
+Database Database::createInMemoryDatabase()
+{
+    InnerDatabase* database = new InnerDatabase(":memory:");
+    database->setInMemory();
+    RecyclableDatabase databaseHolder
+    = RecyclableDatabase(database, [](WCDB::InnerDatabase* db) { delete db; });
+    return Database(databaseHolder);
 }
 
 RecyclableHandle Database::getHandleHolder(bool writeHint)

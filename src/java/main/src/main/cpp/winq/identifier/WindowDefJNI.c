@@ -43,7 +43,7 @@ void WCDBJNIWindowDefClassMethod(configOrders, jlong self, jlongArray orders)
 {
     WCDBJNIBridgeStruct(CPPWindowDef, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
-    WCDBWindowDefConfigOrder(selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
+    WCDBWindowDefConfigOrder(selfStruct, (const CPPOrderingTerm *) ordersArray, ordersLength);
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 

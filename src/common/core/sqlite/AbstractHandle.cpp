@@ -38,6 +38,7 @@ AbstractHandle::AbstractHandle()
 , m_customOpenFlag(0)
 , m_tag(Tag::invalid())
 , m_enableLiteMode(false)
+, m_isReadOnly(false)
 , m_transactionLevel(0)
 , m_transactionError(TransactionError::Allowed)
 , m_cacheTransactionError(TransactionError::Allowed)
@@ -104,7 +105,10 @@ bool AbstractHandle::open()
 {
     bool succeed = true;
     if (!isOpened()) {
-        if (m_customOpenFlag == 0) {
+        if (m_isReadOnly) {
+            succeed = APIExit(
+            sqlite3_open_v2(m_path.data(), &m_handle, SQLITE_OPEN_READONLY, 0));
+        } else if (m_customOpenFlag == 0) {
             succeed = APIExit(sqlite3_open_v2(
             m_path.data(), &m_handle, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MAINDB_READONLY, 0));
         } else {
@@ -219,6 +223,11 @@ bool AbstractHandle::isReadonly()
 {
     WCTAssert(isOpened());
     return sqlite3_db_readonly(m_handle, NULL) == 1;
+}
+
+void AbstractHandle::setReadOnly()
+{
+    m_isReadOnly = true;
 }
 
 bool AbstractHandle::isInTransaction()
@@ -583,20 +592,18 @@ void AbstractHandle::rollbackTransaction()
         commitTransaction();
         return;
     }
-    bool succeed = true;
+    /*
+     It is unnecessary to check whether the rollback operation is successful or not.
+     If the rollback fails and the transaction level can not be decreased,
+     db won't be able to exit the transaction under abnormal circumstances.
+     */
     if (m_transactionLevel > 1) {
         if (m_transactionError == TransactionError::Allowed && isInTransaction()) {
             sqlite3_unimpeded(m_handle, true);
-            succeed = executeStatement(StatementRollback().rollbackToSavepoint(
-            getSavepointName(m_transactionLevel)));
-            if (!succeed && getError().getMessage().hasPrefix("no such savepoint:")) {
-                succeed = true;
-            }
+            executeStatement(StatementRollback().rollbackToSavepoint(getSavepointName(m_transactionLevel)));
             sqlite3_unimpeded(m_handle, false);
         }
-        if (succeed) {
-            --m_transactionLevel;
-        }
+        --m_transactionLevel;
         return;
     }
     /*
@@ -611,13 +618,11 @@ void AbstractHandle::rollbackTransaction()
         static const StatementRollback *s_rollback
         = new StatementRollback(StatementRollback().rollback());
         sqlite3_unimpeded(m_handle, true);
-        succeed = executeStatement(*s_rollback);
+        executeStatement(*s_rollback);
         sqlite3_unimpeded(m_handle, false);
     }
-    if (succeed) {
-        m_transactionLevel = 0;
-        m_transactionError = TransactionError::Allowed;
-    }
+    m_transactionLevel = 0;
+    m_transactionError = TransactionError::Allowed;
 }
 
 #pragma mark - Wal

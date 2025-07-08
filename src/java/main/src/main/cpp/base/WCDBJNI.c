@@ -33,7 +33,7 @@ JavaVM* g_vm = NULL;
 
 void WCDBJNIDestructContext(jobject config)
 {
-    WCDBJNITryGetEnvOr(return );
+    WCDBJNITryGetEnvOr(return);
     (*env)->DeleteGlobalRef(env, config);
     WCDBJNITryDetach;
 }
@@ -89,10 +89,6 @@ void WCDBJNIGetUTF8String(JNIEnv* env, jstring value, char** utf8String, const j
         return;
     }
     jsize utf16Length = (*env)->GetStringLength(env, value);
-    if (UNLIKELY(utf16Length == 0)) {
-        *utf8String = NULL;
-        return;
-    }
     if (LIKELY(critical)) {
         *utf16String = (*env)->GetStringCritical(env, value, 0);
     } else {

@@ -162,10 +162,10 @@
 
     // bad case
     [self doTestRows:{}
-    andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Hello' ORDER BY rowid ASC"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS5Object::content).match("Hello")).value());
-    }];
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH 'Hello' ORDER BY rowid ASC"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS5Object::content).match("Hello")).value());
+         }];
 }
 
 - (void)test_number
@@ -191,10 +191,10 @@
 
     // bad case
     [self doTestRows:{}
-    andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '567' ORDER BY rowid ASC"
-    bySelecting:^WCDB::OptionalMultiRows {
-        return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS5Object::content).match("567")).value());
-    }];
+              andSQL:@"SELECT content, extension FROM testTable WHERE content MATCH '567' ORDER BY rowid ASC"
+         bySelecting:^WCDB::OptionalMultiRows {
+             return CPPMultiRowValueExtract(self.ftsTable.getAllObjects(WCDB_FIELD(CPPFTS5Object::content).match("567")).value());
+         }];
 }
 
 - (void)test_mixed

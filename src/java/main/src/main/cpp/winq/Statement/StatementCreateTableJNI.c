@@ -78,7 +78,7 @@ void WCDBJNIStatementCreateTableClassMethod(configColumns, jlong self, jlongArra
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIGetCppPointerArrayCritical(columns);
     WCDBStatementCreateTableConfigColumns(
-    selfStruct, (const CPPColumnDef*) columnsArray, columnsLength);
+    selfStruct, (const CPPColumnDef *) columnsArray, columnsLength);
     WCDBJNIReleaseCppPointerArrayCritical(columns);
 }
 
@@ -87,7 +87,7 @@ void WCDBJNIStatementCreateTableClassMethod(configConstraints, jlong self, jlong
     WCDBJNIBridgeStruct(CPPStatementCreateTable, self);
     WCDBJNIGetCppPointerArrayCritical(constraints);
     WCDBStatementCreateTableConfigTableConstraints(
-    selfStruct, (const CPPTableConstraint*) constraintsArray, constraintsLength);
+    selfStruct, (const CPPTableConstraint *) constraintsArray, constraintsLength);
     WCDBJNIReleaseCppPointerArrayCritical(constraints)
 }
 

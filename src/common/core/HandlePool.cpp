@@ -167,7 +167,7 @@ size_t HandlePool::numberOfAliveHandlesInSlot(HandleSlot slot) const
     return m_handles[slot].size();
 }
 
-RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
+RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint, bool threaded)
 {
     HandleSlot slot = slotOfHandleType(type);
     WCTAssert(slot < HandleSlotCount);
@@ -179,12 +179,14 @@ RecyclableHandle HandlePool::flowOut(HandleType type, bool writeHint)
         // threaded handles is thread safe.
         if (referencedHandle.handle != nullptr) {
             WCTAssert(m_concurrency.readSafety());
-            WCTAssert(referencedHandle.reference > 0);
+            WCTAssert(referencedHandle.reference > 0 || referencedHandle.handle->isInTransaction());
             WCTAssert(referencedHandle.handle->isUsingInThread(Thread::getCurrentThreadId()));
             ++referencedHandle.reference;
             return RecyclableHandle(
             referencedHandle.handle,
             std::bind(&HandlePool::flowBack, this, type, std::placeholders::_1));
+        } else if (threaded) {
+            return nullptr;
         }
     }
 
@@ -266,7 +268,9 @@ void HandlePool::flowBack(HandleType type, const std::shared_ptr<InnerHandle> &h
     WCTAssert(referencedHandle.handle == handle);
     WCTAssert(referencedHandle.reference > 0);
     if (--referencedHandle.reference == 0) {
-        handle->configTransactionEvent(nullptr);
+        if(handle->isOpened() && handle->isInTransaction()){
+            return;
+        }
         referencedHandle.handle = nullptr;
         bool writeHint = handle->getWriteHint();
         WCTRemedialAssert(

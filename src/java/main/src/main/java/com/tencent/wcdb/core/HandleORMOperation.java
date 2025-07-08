@@ -95,7 +95,7 @@ public abstract class HandleORMOperation extends HandleOperation {
      */
     public boolean tableExist(@NotNull String tableName) throws WCDBException {
         Handle handle = getHandle(false);
-        int ret = Handle.tableExist(handle.cppObj, tableName);
+        int ret = Handle.tableExist(handle.getCppHandle(), tableName);
         WCDBException exception = null;
         if (ret > 1) {
             exception = handle.createException();

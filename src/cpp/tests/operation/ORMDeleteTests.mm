@@ -41,10 +41,10 @@
 - (void)test_database_delete
 {
     [self doTestObjects:{}
-    andSQL:@"DELETE FROM testTable"
-    afterModification:^BOOL {
-        return self.database->deleteObjects(self.tableName.UTF8String);
-    }];
+                 andSQL:@"DELETE FROM testTable"
+      afterModification:^BOOL {
+          return self.database->deleteObjects(self.tableName.UTF8String);
+      }];
 }
 
 - (void)test_database_delete_where
@@ -69,10 +69,10 @@
 - (void)test_table_delete
 {
     [self doTestObjects:{}
-    andSQL:@"DELETE FROM testTable"
-    afterModification:^BOOL {
-        return self.table.deleteObjects();
-    }];
+                 andSQL:@"DELETE FROM testTable"
+      afterModification:^BOOL {
+          return self.table.deleteObjects();
+      }];
 }
 
 - (void)test_table_delete_where

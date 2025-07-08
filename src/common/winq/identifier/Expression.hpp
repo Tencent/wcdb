@@ -73,6 +73,9 @@ public:
 
     ResultColumn as(const UnsafeStringView& alias);
 
+    OrderingTerm asAscOrder() const;
+    OrderingTerm asDescOrder() const;
+
     static Expression exists(const StatementSelect& select);
     static Expression notExists(const StatementSelect& select);
 

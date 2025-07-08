@@ -34,7 +34,7 @@ void WCDBJNIStatementUpdateClassMethod(configWith, jlong self, jlongArray expres
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNIGetCppPointerArrayCritical(expressions);
     WCDBStatementUpdateConfigWith(
-    selfStruct, (const CPPCommonTableExpression*) expressionsArray, expressionsLength);
+    selfStruct, (const CPPCommonTableExpression *) expressionsArray, expressionsLength);
     WCDBJNIReleaseCppPointerArrayCritical(expressions);
 }
 
@@ -108,7 +108,7 @@ void WCDBJNIStatementUpdateClassMethod(configOrders, jlong self, jlongArray orde
     WCDBJNIBridgeStruct(CPPStatementUpdate, self);
     WCDBJNIGetCppPointerArrayCritical(orders);
     WCDBStatementUpdateConfigOrders(
-    selfStruct, (const CPPOrderingTerm*) ordersArray, ordersLength);
+    selfStruct, (const CPPOrderingTerm *) ordersArray, ordersLength);
     WCDBJNIReleaseCppPointerArrayCritical(orders);
 }
 

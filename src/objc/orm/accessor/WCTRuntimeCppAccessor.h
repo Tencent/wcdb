@@ -26,8 +26,7 @@
 #import "WCTRuntimeBaseAccessor.h"
 
 template<typename PropertyType, typename Enable = void>
-class WCTRuntimeCppAccessor final {
-};
+class WCTRuntimeCppAccessor final {};
 
 template<typename PropertyType>
 class WCTRuntimeCppAccessor<PropertyType, typename std::enable_if<WCDB::ColumnInfo<PropertyType>::isBaseType>::type> final

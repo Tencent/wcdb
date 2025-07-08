@@ -27,7 +27,6 @@
 #include "AbstractHandle.hpp"
 #include "Configs.hpp"
 #include "CoreConst.h"
-#include "TransactionGuard.hpp"
 
 namespace WCDB {
 
@@ -123,20 +122,12 @@ protected:
 public:
     typedef std::function<bool(InnerHandle *)> TransactionCallback;
     typedef std::function<bool(InnerHandle *, bool &, bool)> TransactionCallbackForOneLoop;
-    bool beginTransaction() override final;
-    void rollbackTransaction() override;
 
     bool checkMainThreadBusyRetry();
     bool checkHasBusyRetry();
     bool runTransaction(const TransactionCallback &transaction);
     bool runTransactionIfNotInTransaction(const TransactionCallback &transaction);
     bool runPausableTransactionWithOneLoop(const TransactionCallbackForOneLoop &transaction);
-
-    void configTransactionEvent(TransactionEvent *event);
-    bool commitTransaction() override;
-
-private:
-    TransactionEvent *m_transactionEvent;
 };
 
 class ConfiguredHandle final : public InnerHandle {

@@ -49,7 +49,7 @@ void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *obse
     CFBridgingRelease(observer);
 }
 
-}
+} // namespace WCDB
 #else // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
 namespace WCDB {
@@ -63,7 +63,7 @@ void OperationQueueForMemory::unregisterNotificationWhenMemoryWarning(void *)
 {
 }
 
-}
+} // namespace WCDB
 
 #endif // TARGET_OS_IPHONE && !TARGET_OS_WATCH
 
@@ -76,4 +76,4 @@ void OperationQueueForMemory::executeOperationWithAutoMemoryRelease(std::functio
     }
 }
 
-}
+} // namespace WCDB

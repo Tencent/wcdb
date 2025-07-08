@@ -366,8 +366,7 @@ void Pager::tryPurgeCache()
         }
     } else {
         m_cache.purge(m_cache.size());
-        while (m_highWater->getCurrent() > allowedSize && m_fileHandle.purgeOne())
-            ;
+        while (m_highWater->getCurrent() > allowedSize && m_fileHandle.purgeOne());
     }
 }
 

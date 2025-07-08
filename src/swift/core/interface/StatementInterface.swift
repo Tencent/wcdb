@@ -138,7 +138,7 @@ public protocol StatementInterface: AnyObject {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - type: Type of table decodable object
     /// - Returns: Table decodable object.
-    func extractObject<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws-> Object
+    func extractObject<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws -> Object
 
     /// The wrapper of `sqlite3_column_*` for getting  all objects.
     ///
@@ -146,7 +146,7 @@ public protocol StatementInterface: AnyObject {
     ///   - propertyConvertibleList: `Property` or `CodingTableKey` list
     ///   - type: Type of table decodable object
     /// - Returns: Table decodable objects.
-    func extractAllObjects<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws-> [Object]
+    func extractAllObjects<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]?, of type: Object.Type) throws -> [Object]
 
     /// Get index by column name.
     ///
@@ -379,13 +379,13 @@ extension StatementInterface where Self: RawStatementmentRepresentable {
         return rows
     }
 
-    public func extractObject<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws-> Object {
+    public func extractObject<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws -> Object {
         let keys: [CodingTableKeyBase] = propertyConvertibleList?.asCodingTableKeys() ?? Object.Properties.all.asCodingTableKeys()
         let decoder = TableDecoder(keys, on: self)
         return try Object.init(from: decoder)
     }
 
-    public func extractAllObjects<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws-> [Object] {
+    public func extractAllObjects<Object: TableDecodable>(on propertyConvertibleList: [PropertyConvertible]? = nil, of type: Object.Type = Object.self) throws -> [Object] {
         let keys: [CodingTableKeyBase] = propertyConvertibleList?.asCodingTableKeys() ?? Object.Properties.all.asCodingTableKeys()
         let decoder = TableDecoder(keys, on: self)
         var objects: [Object] = []

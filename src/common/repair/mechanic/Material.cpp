@@ -225,7 +225,7 @@ bool Material::Info::deserialize(Deserialization &deserialization)
 }
 
 #pragma mark - Content
-Material::Page::Page(uint32_t n, uint32_t h) : number(n), hash(h){};
+Material::Page::Page(uint32_t n, uint32_t h) : number(n), hash(h) {};
 
 Material::Page::~Page() = default;
 

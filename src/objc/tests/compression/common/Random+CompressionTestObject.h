@@ -27,12 +27,12 @@
 
 @interface Random (Compression)
 
-- (CompressionTestObject*)autoIncrementCompressionObject;
+- (CompressionTestObject *)autoIncrementCompressionObject;
 
-- (CompressionTestObject*)compressionObjectWithId:(int)identifier;
+- (CompressionTestObject *)compressionObjectWithId:(int)identifier;
 
-- (NSArray<CompressionTestObject*>*)autoIncrementCompressionObjectWithCount:(int)count;
+- (NSArray<CompressionTestObject *> *)autoIncrementCompressionObjectWithCount:(int)count;
 
-- (NSArray<NSString*>*)compressionStringWithCount:(int)count;
+- (NSArray<NSString *> *)compressionStringWithCount:(int)count;
 
 @end

@@ -44,13 +44,21 @@ public:
      @brief Init a database from path.
      @note  All database objects with same path share the same core. So you can create multiple database objects. WCDB will manage them automatically.
             WCDB will not generate a sqlite db handle until the first operation, which is also called as lazy initialization.
+     @warning Once a database is opened in read-only mode, it cannot be writable in the current process any more.
      @param path Path to your database
      */
-    Database(const UnsafeStringView &path);
+    Database(const UnsafeStringView &path, bool readOnly = false);
     Database() = delete;
     Database(const Database &);
     Database &operator=(const Database &);
     ~Database() override;
+
+    /**
+     @brief Init a in-memory database.
+     @Note  Since In-memory database share one DB handle among all threads, it does not support multi-threaded concurrent operation.
+     @return WCTDatabase
+     */
+    static Database createInMemoryDatabase();
 
 protected:
     Database(Recyclable<InnerDatabase *> database);
