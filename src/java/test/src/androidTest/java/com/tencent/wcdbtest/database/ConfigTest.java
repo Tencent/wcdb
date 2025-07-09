@@ -164,6 +164,21 @@ public class ConfigTest extends TableTestCase {
     }
 
     @Test
+    public void testDatabasePageSize() {
+        byte[] cipher = "123".getBytes();
+        byte[] wrongCipher = "456".getBytes();
+        database.setCipherKey(cipher);
+        database.setConfig("page_size", new Database.Config() {
+            @Override
+            public void onInvocation(@NotNull Handle handle) throws WCDBException {
+                handle.execute(new StatementPragma().pragma(Pragma.pageSize).toValue(16 * 1024));
+            };
+        }, Database.ConfigPriority.highest);
+        assertTrue(database.canOpen());
+        assertTrue(database.getValueFromStatement(new StatementPragma().pragma(Pragma.pageSize)).getInt() == 16 * 1024);
+    }
+
+    @Test
     public void testCipherWithPageSize() {
         byte[] cipher = "123".getBytes();
         int pageSize = 8 * 1024;
