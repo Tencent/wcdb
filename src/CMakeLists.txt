@@ -55,6 +55,10 @@ file(GLOB_RECURSE WCDB_BRIDGE_SRC
     ${WCDB_SRC_DIR}/bridge/winqbridge/*.[ch]pp
 )
 recursive_subdirs(WCDB_BRIDGE_INCLUDES ${WCDB_SRC_DIR}/bridge)
+if (WIN32) 
+    # Ignore symlinks in src/brideg/include for windows to avoid redefinition errors
+    list(FILTER WCDB_BRIDGE_INCLUDES EXCLUDE REGEX ".*[\\\\/]include")
+endif()
 
 # Copy all headers to include folder
 file(GLOB_RECURSE WCDB_PUBLIC_HEADERS

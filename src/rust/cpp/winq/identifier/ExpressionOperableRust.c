@@ -22,7 +22,6 @@
 
 #include "ExpressionOperatableBridge.h"
 
-#include <alloca.h>
 #include <stdint.h>
 
 void* WCDBRustExpressionOperableClassMethod(nullOperate,

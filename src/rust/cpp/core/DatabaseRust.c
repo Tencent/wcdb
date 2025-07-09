@@ -441,7 +441,7 @@ void WCDBRustDatabaseClassMethod(globalTraceException,
 
 typedef struct WCDBRustTraceExceptionContext {
     RustTraceTraceExceptionCallback rust_callback;
-    void* cb_ptr
+    void* cb_ptr;
 } WCDBRustTraceExceptionContext;
 
 void WCDBRustDatabaseErrorTrace(WCDBRustTraceExceptionContext* context, CPPError error) {
