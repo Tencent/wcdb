@@ -8,6 +8,7 @@ use crate::winq::statement::StatementTrait;
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::slice;
+use std::sync::atomic::{AtomicI32, Ordering};
 use std::sync::Arc;
 
 extern "C" {
@@ -49,7 +50,7 @@ extern "C" {
 pub struct PreparedStatement {
     cpp_obj: CppObject,
     pub auto_finalize: bool,
-    column_count: i32,
+    column_count: AtomicI32,
 }
 
 impl CppObjectTrait for PreparedStatement {
@@ -71,7 +72,7 @@ impl PreparedStatement {
         PreparedStatement {
             cpp_obj: CppObject::new_with_obj(cpp_obj),
             auto_finalize: false,
-            column_count: -1,
+            column_count: AtomicI32::new(-1),
         }
     }
 
@@ -462,7 +463,7 @@ impl PreparedStatement {
         }
     }
 
-    pub fn get_one_row(&mut self) -> Vec<Value> {
+    pub fn get_one_row(&self) -> Vec<Value> {
         let count = self.get_column_count();
         let mut row: Vec<Value> = Vec::new();
         if count == 0 {
@@ -474,7 +475,7 @@ impl PreparedStatement {
         row
     }
 
-    pub fn get_multi_rows(&mut self) -> WCDBResult<Vec<Vec<Value>>> {
+    pub fn get_multi_rows(&self) -> WCDBResult<Vec<Vec<Value>>> {
         let mut rows: Vec<Vec<Value>> = Vec::new();
         self.step()?;
         while !self.is_done() {
@@ -484,11 +485,14 @@ impl PreparedStatement {
         Ok(rows)
     }
 
-    pub fn get_column_count(&mut self) -> i32 {
-        if self.column_count == -1 {
-            self.column_count =
-                unsafe { WCDBRustHandleStatement_getColumnCount(*self.cpp_obj) as i32 };
+    pub fn get_column_count(&self) -> i32 {
+        let count = self.column_count.load(Ordering::SeqCst);
+        if count == -1 {
+            let real_count = unsafe { WCDBRustHandleStatement_getColumnCount(self.get_cpp_obj()) };
+            self.column_count.store(real_count, Ordering::SeqCst);
+            real_count
+        } else {
+            count
         }
-        self.column_count
     }
 }

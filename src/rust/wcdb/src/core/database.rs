@@ -1713,9 +1713,8 @@ impl Database {
         let handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement(statement);
         match result {
-            Ok(mut val) => {
-                // todo dengxudong 不安全的调用
-                let prepared_statement = unsafe { Arc::get_mut_unchecked(&mut val) };
+            Ok(val) => {
+                let prepared_statement = Arc::clone(&val);
                 let result = prepared_statement.get_multi_rows();
                 prepared_statement.finalize_statement();
                 if self.auto_invalidate_handle() {
