@@ -2,6 +2,7 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
 use crate::utils::ToCString;
+use crate::winq::bind_parameter::BindParameter;
 use crate::winq::column::Column;
 use crate::winq::column_type::ColumnType;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
@@ -1242,6 +1243,18 @@ impl Expression {
     pub fn new_with_literal_value(value: LiteralValue) -> Self {
         let cpp_obj = unsafe {
             WCDBRustExpression_create(Identifier::get_cpp_type(&value), CppObject::get(&value))
+        };
+        Expression {
+            expression_operable: ExpressionOperable::new_with_obj(cpp_obj),
+        }
+    }
+
+    pub fn new_with_bind_parameter(bind_parameter: BindParameter) -> Self {
+        let cpp_obj = unsafe {
+            WCDBRustExpression_create(
+                Identifier::get_cpp_type(&bind_parameter),
+                CppObject::get(&bind_parameter),
+            )
         };
         Expression {
             expression_operable: ExpressionOperable::new_with_obj(cpp_obj),

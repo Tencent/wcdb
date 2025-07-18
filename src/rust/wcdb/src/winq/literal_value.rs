@@ -1,4 +1,5 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use std::ffi::{c_char, c_double, c_int, c_void};
 use std::ptr::null;
@@ -93,15 +94,11 @@ impl LiteralValue {
     pub fn new_with_str(value_opt: Option<&str>) -> Self {
         let cpp_obj = match value_opt {
             None => unsafe {
-                WCDBRustLiteralValue_create(CPPType::Null as i32, 0i64, 0f64, null())
+                WCDBRustLiteralValue_create(CPPType::Null as c_int, 0i64, 0f64, null())
             },
             Some(value) => unsafe {
-                WCDBRustLiteralValue_create(
-                    CPPType::String as i32,
-                    0i64,
-                    0f64,
-                    value.as_ptr() as *const c_char,
-                )
+                let cstr = value.to_cstring();
+                WCDBRustLiteralValue_create(CPPType::String as c_int, 0i64, 0f64, cstr.as_ptr())
             },
         };
         LiteralValue {

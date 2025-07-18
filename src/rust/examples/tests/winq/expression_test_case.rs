@@ -1,17 +1,32 @@
 #[cfg(test)]
 pub mod expression_test {
     use crate::base::winq_tool::WinqTool;
+    use wcdb::winq::bind_parameter::BindParameter;
     use wcdb::winq::column::Column;
     use wcdb::winq::expression::Expression;
     use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
     use wcdb::winq::identifier::IdentifierTrait;
+    use wcdb::winq::literal_value::LiteralValue;
 
     #[test]
     pub fn test_expression() {
-        // todo dengxudong 重要不紧急
-        // winqEqual(Column.rowId().add(1).as("rowidAddOne"), "rowid + 1 AS rowidAddOne");
-        // WinqTool::winq_equal(
-        // );
+        let column = Column::new("testColumn");
+        let expression = Expression::new_with_literal_value(LiteralValue::new_with_i32(1));
+        WinqTool::winq_equal(&expression, "1");
+        let expression = Expression::new_with_literal_value(LiteralValue::new_with_f64(1.1));
+        WinqTool::winq_equal(&expression, "1.1000000000000001");
+        let expression =
+            Expression::new_with_literal_value(LiteralValue::new_with_str(Option::from("abc")));
+        WinqTool::winq_equal(&expression, "'abc'");
+        let expression = Expression::new_with_literal_value(LiteralValue::new_with_bool(false));
+        WinqTool::winq_equal(&expression, "FALSE");
+        let expression = Expression::new_with_literal_value(LiteralValue::new_with_bool(true));
+        WinqTool::winq_equal(&expression, "TRUE");
+        let expression = Expression::new_with_column(&column);
+        WinqTool::winq_equal(&expression, "testColumn");
+        let expression = Expression::new_with_bind_parameter(BindParameter::new_with_i32(1));
+        WinqTool::winq_equal(&expression, "?1");
+        // todo dengxudong 需要补全  exists 、cast等函数
     }
 
     #[test]
