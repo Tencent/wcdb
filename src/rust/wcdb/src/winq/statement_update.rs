@@ -434,15 +434,18 @@ impl StatementUpdate {
                     null(),
                 )
             },
-            Some(str) => unsafe {
-                WCDBRustStatementUpdate_configValue(
-                    self.get_cpp_obj(),
-                    CPPType::String as i32,
-                    0 as *mut c_void,
-                    0 as c_double,
-                    str.to_cstring().as_ptr(),
-                )
-            },
+            Some(str) => {
+                let c_str = str.to_cstring();
+                unsafe {
+                    WCDBRustStatementUpdate_configValue(
+                        self.get_cpp_obj(),
+                        CPPType::String as i32,
+                        0 as *mut c_void,
+                        0 as c_double,
+                        c_str.as_ptr(),
+                    )
+                }
+            }
         }
         self
     }

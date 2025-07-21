@@ -102,12 +102,13 @@ impl StatementCreateIndex {
     }
 
     pub fn of(&self, schema_name: &str) -> &Self {
+        let c_str = schema_name.to_cstring();
         unsafe {
             WCDBRustStatementCreateIndex_configSchema(
                 self.get_cpp_obj(),
                 CPPType::String as c_int,
                 0 as *mut c_void,
-                schema_name.to_cstring().as_ptr(),
+                c_str.as_ptr(),
             )
         }
         self

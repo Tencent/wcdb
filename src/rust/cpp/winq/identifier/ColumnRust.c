@@ -26,10 +26,9 @@ void* WCDBRustColumnClassMethodWithNoArg(createAll) {
     return (void*)WCDBColumnCreateAll().innerValue;
 }
 
-// jlong WCDBRustColumnClassMethodWithNoArg(createRowId)
-//{
-//     return (jlong) WCDBColumnCreateRowId().innerValue;
-// }
+void* WCDBRustColumnClassMethodWithNoArg(createRowId) {
+    return (void*)WCDBColumnCreateRowId().innerValue;
+}
 
 void* WCDBRustColumn_createWithName(const char* name, void* binding) {
     return (void*)WCDBColumnCreateWithName2(name, (const void*)binding).innerValue;

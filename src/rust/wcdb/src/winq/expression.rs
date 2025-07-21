@@ -15,7 +15,9 @@ use crate::winq::literal_value::LiteralValue;
 use crate::winq::result_column::ResultColumn;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement_select::StatementSelect;
-use std::ffi::{c_char, c_double, c_int, c_void};
+use crate::winq::window_def::WindowDef;
+use num_traits::FromPrimitive;
+use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::ptr::null;
 
 extern "C" {
@@ -33,16 +35,59 @@ extern "C" {
     fn WCDBRustExpression_argument(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
-        // TODO(dengxudong, 02/14): 这里加一个 void_ptr: *mut c_void, 不要跟 int_value 共用，int_value 还保持 c_int 类型。
+        // 这里无法加一个 void_ptr: *mut c_void, 为了和 int_value 区分开，int_value 还保持 c_int 类型。
+        // 因为 C 层宏WCDBRustCommonValueParameter用的地方太多，改动太大
         int_value: *mut c_void,
         double_value: c_double,
         string_value: *const c_char,
     );
 
     fn WCDBRustExpression_escapeWith(cpp_obj: *mut c_void, string_value: *const c_char);
+    fn WCDBRustExpression_createWithExistStatement(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustExpression_createWithNotExistStatement(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustExpression_cast(
+        cpp_type: c_int,
+        object: *mut c_void,
+        column_name: *const c_char,
+    ) -> *mut c_void;
 
+    fn WCDBRustExpression_caseWithExp(
+        cpp_type: c_int,
+        object: *mut c_void,
+        column_name: *const c_char,
+    ) -> *mut c_void;
+
+    fn WCDBRustExpression_setWithWhenExp(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        int_value: *mut c_void,
+        double_value: c_double,
+        string_value: *const c_char,
+    );
+
+    fn WCDBRustExpression_setWithThenExp(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        int_value: *mut c_void,
+        double_value: c_double,
+        string_value: *const c_char,
+    );
+
+    fn WCDBRustExpression_setWithElseExp(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        int_value: *mut c_void,
+        double_value: c_double,
+        string_value: *const c_char,
+    );
+
+    fn WCDBRustExpression_createWithWindowFunction(func_name: *const c_char) -> *mut c_void;
+    fn WCDBRustExpression_filter(cpp_obj: *mut c_void, condition: *mut c_void);
+    fn WCDBRustExpression_overWindow(cpp_obj: *mut c_void, window: *const c_char);
+    fn WCDBRustExpression_overWindowDef(cpp_obj: *mut c_void, window_def: *mut c_void);
     fn WCDBRustExpression_distinct(cpp_obj: *mut c_void);
-
+    fn WCDBRustExpression_invoke(cpp_obj: *mut c_void);
+    fn WCDBRustExpression_invokeAll(cpp_obj: *mut c_void);
     fn WCDBRustExpression_configAlias(cpp_obj: *mut c_void, alias: *const c_char) -> *mut c_void;
     fn WCDBRustExpression_as(cpp_obj: *mut c_void, column_type: c_int);
 }
@@ -1240,6 +1285,26 @@ impl Expression {
         }
     }
 
+    // 通用的私有方法来处理 when/then/else 的值设置
+    fn set_expression_value(
+        &self,
+        set_func: unsafe extern "C" fn(*mut c_void, c_int, *mut c_void, c_double, *const c_char),
+        cpp_type: c_int,
+        int_value: *mut c_void,
+        double_value: c_double,
+        string_value: *const c_char,
+    ) {
+        unsafe {
+            set_func(
+                self.get_cpp_obj(),
+                cpp_type,
+                int_value,
+                double_value,
+                string_value,
+            );
+        }
+    }
+
     pub fn new_with_literal_value(value: LiteralValue) -> Self {
         let cpp_obj = unsafe {
             WCDBRustExpression_create(Identifier::get_cpp_type(&value), CppObject::get(&value))
@@ -1279,24 +1344,40 @@ impl Expression {
         }
     }
 
-    // pub fn argument_i64(self, value: i64) -> Self {
-    //     self.argument(CPPType::Int, value, 0.0, "".to_string());
-    //     self
-    // }
-    //
-    // // todo qixinbing: 怎么用？
-    // fn argument(&self, type_i: CPPType, int_value: i64, double_value: f64, string_value: String) {
-    //     let c_str = CString::new(string_value).unwrap_or_default();
-    //     unsafe {
-    //         WCDBRustExpression_argument(
-    //             self.get_cpp_obj(),
-    //             type_i as i32,
-    //             int_value,
-    //             double_value,
-    //             c_str.as_ptr(),
-    //         );
-    //     }
-    // }
+    pub fn argument_with_expression_convertible<T>(self, arg: &T) -> Self
+    where
+        T: IdentifierStaticTrait
+            + IdentifierConvertibleTrait
+            + ExpressionConvertibleTrait
+            + CppObjectTrait,
+    {
+        self.argument(
+            Identifier::get_cpp_type(arg),
+            CppObject::get(arg),
+            0f64,
+            None,
+        );
+        self
+    }
+
+    fn argument(
+        &self,
+        type_i: i32,
+        int_value: *mut c_void,
+        double_value: f64,
+        string_value: Option<&str>,
+    ) {
+        let cpp_obj = self.get_cpp_obj();
+        let _cstring; // 用于保持CString的生命周期
+        let mut cstr: *const c_char = null();
+        if let Some(string_val) = string_value {
+            _cstring = string_val.to_cstring();
+            cstr = _cstring.as_ptr();
+        }
+        unsafe {
+            WCDBRustExpression_argument(cpp_obj, type_i, int_value, double_value as c_double, cstr);
+        }
+    }
 
     pub(crate) fn get_expression_operable(&self) -> &ExpressionOperable {
         &self.expression_operable
@@ -1412,10 +1493,69 @@ impl Expression {
         self
     }
 
+    pub fn exists(select: &StatementSelect) -> Expression {
+        let mut exp = Expression::new();
+        let cpp_obj = unsafe { WCDBRustExpression_createWithExistStatement(select.get_cpp_obj()) };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn not_exists(select: &StatementSelect) -> Expression {
+        let mut exp = Expression::new();
+        let cpp_obj =
+            unsafe { WCDBRustExpression_createWithNotExistStatement(select.get_cpp_obj()) };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn cast(column_name: &str) -> Expression {
+        let mut exp = Expression::new();
+        let cstr = column_name.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpression_cast(CPPType::String as c_int, 0 as *mut c_void, cstr.as_ptr())
+        };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn cast_with_expression_convertible<T>(expression: &T) -> Expression
+    where
+        T: IdentifierStaticTrait
+            + IdentifierConvertibleTrait
+            + ExpressionConvertibleTrait
+            + CppObjectTrait,
+    {
+        let mut exp = Expression::new();
+        let cpp_obj = unsafe {
+            WCDBRustExpression_cast(
+                Identifier::get_cpp_type(expression),
+                CppObject::get(expression),
+                null(),
+            )
+        };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
     pub fn distinct(mut self) -> Expression {
         let cpp_obj = self.get_cpp_obj();
         unsafe {
             WCDBRustExpression_distinct(cpp_obj);
+        }
+        self
+    }
+
+    pub fn invoke(self) -> Expression {
+        let cpp_obj = self.get_cpp_obj();
+        unsafe {
+            WCDBRustExpression_invoke(cpp_obj);
+        }
+        self
+    }
+
+    pub fn invoke_all(self) -> Expression {
+        let cpp_obj = self.get_cpp_obj();
+        unsafe {
+            WCDBRustExpression_invokeAll(cpp_obj);
         }
         self
     }
@@ -1429,5 +1569,368 @@ impl Expression {
         let cstr = alias.to_cstring();
         let cpp_obj = unsafe { WCDBRustExpression_configAlias(self.get_cpp_obj(), cstr.as_ptr()) };
         ResultColumn::new_with_cpp_obj(cpp_obj)
+    }
+
+    pub fn _case() -> Expression {
+        let mut exp = Expression::new();
+        let cpp_obj = unsafe {
+            WCDBRustExpression_caseWithExp(CPPType::Invalid as c_int, 0 as *mut c_void, null())
+        };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn _cast_with_column_name(column_name: &str) -> Expression {
+        if column_name.is_empty() {
+            return Expression::_case();
+        }
+        let mut exp = Expression::new();
+        let cstr = column_name.to_cstring();
+        let cpp_obj = unsafe {
+            WCDBRustExpression_caseWithExp(
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                cstr.as_ptr(),
+            )
+        };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn _cast_with_expression_convertible<T>(expression: &T) -> Expression
+    where
+        T: IdentifierStaticTrait
+            + IdentifierConvertibleTrait
+            + ExpressionConvertibleTrait
+            + CppObjectTrait,
+    {
+        let mut exp = Expression::new();
+        let cpp_obj = unsafe {
+            WCDBRustExpression_caseWithExp(
+                Identifier::get_cpp_type(expression),
+                CppObject::get(expression),
+                null(),
+            )
+        };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn when_with_bool(self, arg: bool) -> Expression {
+        let int_val = if arg { 1 } else { 0 };
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Bool as c_int,
+            int_val as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_i8(self, arg: i8) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_i16(self, arg: i16) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_i32(self, arg: i32) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_i64(self, arg: i64) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_f32(self, arg: f32) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Double as c_int,
+            0 as *mut c_void,
+            arg as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_f64(self, arg: f64) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            CPPType::Double as c_int,
+            0 as *mut c_void,
+            arg as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn when_with_string(self, arg: &str) -> Expression {
+        if arg.is_empty() {
+            self.set_expression_value(
+                WCDBRustExpression_setWithWhenExp,
+                CPPType::Null as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                null(),
+            );
+        } else {
+            let cstr = arg.to_cstring();
+            self.set_expression_value(
+                WCDBRustExpression_setWithWhenExp,
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                cstr.as_ptr(),
+            );
+        }
+        self
+    }
+    pub fn when_with_expression_convertible<T>(self, arg: &T) -> Expression
+    where
+        T: IdentifierStaticTrait
+            + IdentifierConvertibleTrait
+            + ExpressionConvertibleTrait
+            + CppObjectTrait,
+    {
+        self.set_expression_value(
+            WCDBRustExpression_setWithWhenExp,
+            Identifier::get_cpp_type(arg),
+            CppObject::get(arg),
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+
+    pub fn then_with_bool(self, arg: bool) -> Expression {
+        let int_val = if arg { 1 } else { 0 };
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Bool as c_int,
+            int_val as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_i8(self, arg: i8) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_i16(self, arg: i16) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_i32(self, arg: i32) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_i64(self, arg: i64) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_f32(self, arg: f32) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Double as c_int,
+            0 as *mut c_void,
+            arg as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_f64(self, arg: f64) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithThenExp,
+            CPPType::Double as c_int,
+            0 as *mut c_void,
+            arg as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn then_with_string(self, arg: &str) -> Expression {
+        if arg.is_empty() {
+            self.set_expression_value(
+                WCDBRustExpression_setWithThenExp,
+                CPPType::Null as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                null(),
+            );
+        } else {
+            let cstr = arg.to_cstring();
+            self.set_expression_value(
+                WCDBRustExpression_setWithThenExp,
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                cstr.as_ptr(),
+            );
+        }
+        self
+    }
+
+    pub fn else_with_bool(self, arg: bool) -> Expression {
+        let int_val = if arg { 1 } else { 0 };
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Bool as c_int,
+            int_val as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_i8(self, arg: i8) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_i16(self, arg: i16) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_i32(self, arg: i32) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_i64(self, arg: i64) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Int as c_int,
+            arg as *mut c_void,
+            0 as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_f32(self, arg: f32) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Double as c_int,
+            0 as *mut c_void,
+            arg as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_f64(self, arg: f64) -> Expression {
+        self.set_expression_value(
+            WCDBRustExpression_setWithElseExp,
+            CPPType::Double as c_int,
+            0 as *mut c_void,
+            arg as c_double,
+            null(),
+        );
+        self
+    }
+    pub fn else_with_string(self, arg: &str) -> Expression {
+        if arg.is_empty() {
+            self.set_expression_value(
+                WCDBRustExpression_setWithElseExp,
+                CPPType::Null as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                null(),
+            );
+        } else {
+            let cstr = arg.to_cstring();
+            self.set_expression_value(
+                WCDBRustExpression_setWithElseExp,
+                CPPType::String as c_int,
+                0 as *mut c_void,
+                0 as c_double,
+                cstr.as_ptr(),
+            );
+        }
+        self
+    }
+    pub fn window_function(func_name: &str) -> Expression {
+        let mut exp = Expression::new();
+        let cstr = func_name.to_cstring();
+        let cpp_obj = unsafe { WCDBRustExpression_createWithWindowFunction(cstr.as_ptr()) };
+        exp.set_cpp_obj(cpp_obj);
+        exp
+    }
+
+    pub fn filter(self, condition: &Expression) -> Expression {
+        unsafe { WCDBRustExpression_filter(self.get_cpp_obj(), condition.get_cpp_obj()) };
+        self
+    }
+
+    pub fn over_with_window_def(self, window_def: &WindowDef) -> Expression {
+        unsafe { WCDBRustExpression_overWindowDef(self.get_cpp_obj(), CppObject::get(window_def)) };
+        self
+    }
+
+    pub fn over_with_string(self, window: &str) -> Expression {
+        let cstr = window.to_cstring();
+        unsafe { WCDBRustExpression_overWindow(self.get_cpp_obj(), cstr.as_ptr()) }
+        self
     }
 }

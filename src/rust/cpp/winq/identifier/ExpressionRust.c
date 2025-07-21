@@ -39,13 +39,17 @@ void* WCDBRustExpressionClassMethod(createWithFunction, const char* func) {
 //     WCDBRustBridgeStruct(CPPStatementSelect, select);
 //     return (jlong) WCDBExpressionCreateWithExistStatement(selectStruct).innerValue;
 // }
-//
-// jlong WCDBRustExpressionClassMethod(createWithNotExistStatement, jlong select)
-//{
-//     WCDBRustBridgeStruct(CPPStatementSelect, select);
-//     return (jlong) WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
-// }
-//
+
+void* WCDBRustExpressionClassMethod(createWithExistStatement, void* select) {
+    WCDBRustBridgeStruct(CPPStatementSelect, select);
+    return (void*)WCDBExpressionCreateWithExistStatement(selectStruct).innerValue;
+}
+
+void* WCDBRustExpressionClassMethod(createWithNotExistStatement, void* select) {
+    WCDBRustBridgeStruct(CPPStatementSelect, select);
+    return (void*)WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
+}
+
 // void WCDBRustExpressionClassMethod(setWithSchema,
 //                                   jlong expression,
 //                                   WCDBRustObjectOrStringParameter(schema))
@@ -64,31 +68,28 @@ void WCDBRustExpressionClassMethod(argument,
     WCDBExpressionSetArgument(expressionStruct, argument_common);
     //    WCDBRustTryReleaseStringInCommonValue(argument); // todo qixinbing : 需要释放？
 }
-//
-// void WCDBRustExpressionClassMethod(invoke, jlong expression)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBExpressionInvoke(expressionStruct);
-//}
-//
-// void WCDBRustExpressionClassMethod(invokeAll, jlong expression)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBExpressionInvokeAll(expressionStruct);
-//}
+
+void WCDBRustExpressionClassMethod(invoke, void* expression) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBExpressionInvoke(expressionStruct);
+}
+
+void WCDBRustExpressionClassMethod(invokeAll, void* expression) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBExpressionInvokeAll(expressionStruct);
+}
 void WCDBRustExpressionClassMethod(distinct, void* expression) {
     WCDBRustBridgeStruct(CPPExpression, expression);
     WCDBExpressionDistinct(expressionStruct);
 }
-//
-// jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression))
-//{
-//    WCDBRustCreateObjectOrStringCommonValue(expression, true);
-//    jlong ret = (jlong) WCDBExpressionCast2(expression_common).innerValue;
-//    WCDBRustTryReleaseStringInCommonValue(expression);
-//    return ret;
-//}
-//
+
+void* WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression)) {
+    WCDBRustCreateObjectOrStringCommonValue(expression, true);
+    void* ret = (void*)WCDBExpressionCast2(expression_common).innerValue;
+    // WCDBRustTryReleaseStringInCommonValue(expression);
+    return ret;
+}
+
 void WCDBRustExpressionClassMethod(as, void* expression, int type) {
     WCDBRustBridgeStruct(CPPExpression, expression);
     WCDBExpressionAs(expressionStruct, type);
@@ -99,49 +100,47 @@ void* WCDBRustExpressionClassMethod(configAlias, void* expression, const char* a
     void* ret = (void*)WCDBExpressionConfigAlias(expressionStruct, alias).innerValue;
     return ret;
 }
-//
-// jlong WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression))
-//{
-//    if (expression_type == 0) {
-//        return (jlong) WCDBExpressionCase().innerValue;
-//    }
-//    WCDBRustCreateObjectOrStringCommonValue(expression, true);
-//    jlong ret = (jlong) WCDBExpressionCaseWithExp2(expression_common).innerValue;
-//    WCDBRustTryReleaseStringInCommonValue(expression);
-//    return ret;
-//}
-//
-// jlong WCDBRustExpressionClassMethodWithNoArg(case_)
-//{
-//    return (jlong) WCDBExpressionCase().innerValue;
-//}
-//
-// void WCDBRustExpressionClassMethod(setWithWhenExp, jlong expression,
-// WCDBRustCommonValueParameter(when))
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustCreateCommonValue(when, true);
-//    WCDBExpressionSetWithWhenExp2(expressionStruct, when_common);
-//    WCDBRustTryReleaseStringInCommonValue(when);
-//}
-//
-// void WCDBRustExpressionClassMethod(setWithThenExp, jlong expression,
-// WCDBRustCommonValueParameter(then))
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustCreateCommonValue(then, true);
-//    WCDBExpressionSetWithThenExp2(expressionStruct, then_common);
-//    WCDBRustTryReleaseStringInCommonValue(then);
-//}
-//
-// void WCDBRustExpressionClassMethod(setWithElseExp, jlong expression,
-// WCDBRustCommonValueParameter(else_))
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustCreateCommonValue(else_, true);
-//    WCDBExpressionSetWithElseExp2(expressionStruct, else__common);
-//    WCDBRustTryReleaseStringInCommonValue(else_);
-//}
+
+void* WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression)) {
+    if (expression_type == 0) {
+        return (void*)WCDBExpressionCase().innerValue;
+    }
+    WCDBRustCreateObjectOrStringCommonValue(expression, true);
+    void* ret = (void*)WCDBExpressionCaseWithExp2(expression_common).innerValue;
+    // WCDBRustTryReleaseStringInCommonValue(expression);
+    return ret;
+}
+
+void* WCDBRustExpressionClassMethodWithNoArg(case_) {
+    return (void*)WCDBExpressionCase().innerValue;
+}
+
+void WCDBRustExpressionClassMethod(setWithWhenExp,
+                                   void* expression,
+                                   WCDBRustCommonValueParameter(when)) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustCreateCommonValue(when);
+    WCDBExpressionSetWithWhenExp2(expressionStruct, when_common);
+    // WCDBRustTryReleaseStringInCommonValue(when);
+}
+
+void WCDBRustExpressionClassMethod(setWithThenExp,
+                                   void* expression,
+                                   WCDBRustCommonValueParameter(then)) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustCreateCommonValue(then);
+    WCDBExpressionSetWithThenExp2(expressionStruct, then_common);
+    // WCDBRustTryReleaseStringInCommonValue(then);
+}
+
+void WCDBRustExpressionClassMethod(setWithElseExp,
+                                   void* expression,
+                                   WCDBRustCommonValueParameter(else_)) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustCreateCommonValue(else_);
+    WCDBExpressionSetWithElseExp2(expressionStruct, else__common);
+    // WCDBRustTryReleaseStringInCommonValue(else_);
+}
 
 void WCDBRustExpressionClassMethod(escapeWith, void* expression, const char* content) {
     WCDBRustBridgeStruct(CPPExpression, expression);
@@ -156,32 +155,28 @@ void WCDBRustExpressionClassMethod(escapeWith, void* expression, const char* con
 //    WCDBRustReleaseStringCritical(content);
 //}
 //
-// jlong WCDBRustExpressionClassMethod(createWithWindowFunction, jstring funcName)
-//{
-//    WCDBRustGetStringCritical(funcName);
-//    jlong ret = (jlong) WCDBExpressionCreateWithWindowFunction(funcNameString).innerValue;
-//    WCDBRustReleaseStringCritical(funcName);
-//    return ret;
-//}
-//
-// void WCDBRustExpressionClassMethod(filter, jlong expression, jlong condition)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustBridgeStruct(CPPExpression, condition);
-//    WCDBExpressionFilter(expressionStruct, conditionStruct);
-//}
-//
-// void WCDBRustExpressionClassMethod(overWindowDef, jlong expression, jlong def)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustBridgeStruct(CPPWindowDef, def);
-//    WCDBExpressionOverWindowDef(expressionStruct, defStruct);
-//}
-//
-// void WCDBRustExpressionClassMethod(overWindow, jlong expression, jstring window)
-//{
-//    WCDBRustBridgeStruct(CPPExpression, expression);
-//    WCDBRustGetStringCritical(window);
-//    WCDBExpressionOverWindow(expressionStruct, windowString);
-//    WCDBRustReleaseStringCritical(window);
-//}
+void* WCDBRustExpressionClassMethod(createWithWindowFunction, const char* funcName) {
+    // WCDBRustGetStringCritical(funcName);
+    void* ret = (void*)WCDBExpressionCreateWithWindowFunction(funcName).innerValue;
+    // WCDBRustReleaseStringCritical(funcName);
+    return ret;
+}
+
+void WCDBRustExpressionClassMethod(filter, void* expression, void* condition) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustBridgeStruct(CPPExpression, condition);
+    WCDBExpressionFilter(expressionStruct, conditionStruct);
+}
+
+void WCDBRustExpressionClassMethod(overWindowDef, void* expression, void* def) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustBridgeStruct(CPPWindowDef, def);
+    WCDBExpressionOverWindowDef(expressionStruct, defStruct);
+}
+
+void WCDBRustExpressionClassMethod(overWindow, void* expression, const char* windowString) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    // WCDBRustGetStringCritical(window);
+    WCDBExpressionOverWindow(expressionStruct, windowString);
+    // WCDBRustReleaseStringCritical(window);
+}

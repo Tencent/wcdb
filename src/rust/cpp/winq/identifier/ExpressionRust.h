@@ -33,8 +33,8 @@
 void* WCDBRustExpressionClassMethod(create, int type, void* object);
 
 void* WCDBRustExpressionClassMethod(createWithFunction, const char* func);
-// jlong WCDBRustExpressionClassMethod(createWithExistStatement, jlong select);
-// jlong WCDBRustExpressionClassMethod(createWithNotExistStatement, jlong select);
+void* WCDBRustExpressionClassMethod(createWithExistStatement, void* select);
+void* WCDBRustExpressionClassMethod(createWithNotExistStatement, void* select);
 //
 // void WCDBRustExpressionClassMethod(setWithSchema,
 //                                   jlong expression,
@@ -42,31 +42,31 @@ void* WCDBRustExpressionClassMethod(createWithFunction, const char* func);
 void WCDBRustExpressionClassMethod(argument,
                                    void* expression,
                                    WCDBRustCommonValueParameter(argument));
-//
-// void WCDBRustExpressionClassMethod(invoke, jlong expression);
-// void WCDBRustExpressionClassMethod(invokeAll, jlong expression);
-//
+
+void WCDBRustExpressionClassMethod(invoke, void* expression);
+void WCDBRustExpressionClassMethod(invokeAll, void* expression);
+
 void WCDBRustExpressionClassMethod(distinct, void* expression);
-//
-// jlong WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression));
+
+void* WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression));
 void WCDBRustExpressionClassMethod(as, void* expression, int type);
 
 void* WCDBRustExpressionClassMethod(configAlias, void* expression, const char* alias);
-//
-// jlong WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression));
-// void WCDBRustExpressionClassMethod(setWithWhenExp,
-//                                  jlong expression,
-//                                  WCDBRustCommonValueParameter(when));
-// void WCDBRustExpressionClassMethod(setWithThenExp,
-//                                  jlong expression,
-//                                  WCDBRustCommonValueParameter(then));
-// void WCDBRustExpressionClassMethod(setWithElseExp,
-//                                  jlong expression,
-//                                  WCDBRustCommonValueParameter(else_));
-//
+
+void* WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression));
+void WCDBRustExpressionClassMethod(setWithWhenExp,
+                                   void* expression,
+                                   WCDBRustCommonValueParameter(when));
+void WCDBRustExpressionClassMethod(setWithThenExp,
+                                   void* expression,
+                                   WCDBRustCommonValueParameter(then));
+void WCDBRustExpressionClassMethod(setWithElseExp,
+                                   void* expression,
+                                   WCDBRustCommonValueParameter(else_));
+
 void WCDBRustExpressionClassMethod(escapeWith, void* expression, const char* content);
-//
-// jlong WCDBRustExpressionClassMethod(createWithWindowFunction, jstring func);
-// void WCDBRustExpressionClassMethod(filter, jlong expression, jlong condition);
-// void WCDBRustExpressionClassMethod(overWindowDef, jlong expression, jlong def);
-// void WCDBRustExpressionClassMethod(overWindow, jlong expression, jstring window);
+
+void* WCDBRustExpressionClassMethod(createWithWindowFunction, const char* func);
+void WCDBRustExpressionClassMethod(filter, void* expression, void* condition);
+void WCDBRustExpressionClassMethod(overWindowDef, void* expression, void* def);
+void WCDBRustExpressionClassMethod(overWindow, void* expression, const char* window);

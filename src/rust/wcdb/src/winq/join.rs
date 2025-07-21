@@ -8,7 +8,7 @@ use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_int, c_void};
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::ptr::null;
 
 extern "C" {
@@ -539,10 +539,9 @@ impl Join {
     }
 
     pub fn using_with_column_name_vector(&self, column_vec: &Vec<String>) -> &Join {
-        let mut vec: Vec<*const c_char> = Vec::new();
-        for x in column_vec {
-            vec.push(x.to_cstring().as_ptr());
-        }
+        let c_strings: Vec<CString> = column_vec.iter().map(|x| x.to_cstring()).collect();
+        let vec: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
+
         unsafe {
             WCDBRustJoin_configUsingColumn(
                 self.get_cpp_obj(),

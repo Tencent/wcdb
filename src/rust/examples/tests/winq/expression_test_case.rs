@@ -2,11 +2,15 @@
 pub mod expression_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::bind_parameter::BindParameter;
+    use wcdb::winq::column;
     use wcdb::winq::column::Column;
+    use wcdb::winq::column_type::ColumnType;
     use wcdb::winq::expression::Expression;
     use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
     use wcdb::winq::identifier::IdentifierTrait;
     use wcdb::winq::literal_value::LiteralValue;
+    use wcdb::winq::statement_select::StatementSelect;
+    use wcdb::winq::window_def::WindowDef;
 
     #[test]
     pub fn test_expression() {
@@ -26,7 +30,99 @@ pub mod expression_test {
         WinqTool::winq_equal(&expression, "testColumn");
         let expression = Expression::new_with_bind_parameter(BindParameter::new_with_i32(1));
         WinqTool::winq_equal(&expression, "?1");
-        // todo dengxudong 需要补全  exists 、cast等函数
+
+        let binding = StatementSelect::new();
+        let select = binding.select_columns(&vec![&Column::new("testColumn")]);
+        let expression = Expression::exists(select);
+        WinqTool::winq_equal(&expression, "EXISTS(SELECT testColumn)");
+
+        let binding = StatementSelect::new();
+        let select = binding.select_columns(&vec![&Column::new("testColumn")]);
+        let expression = Expression::not_exists(select);
+        WinqTool::winq_equal(&expression, "NOT EXISTS(SELECT testColumn)");
+
+        let expression = Expression::cast("testColumn");
+        expression.as_with_column_type(ColumnType::Integer);
+        WinqTool::winq_equal(&expression, "CAST(testColumn AS INTEGER)");
+
+        let expression = Expression::cast_with_expression_convertible(&column);
+        expression.as_with_column_type(ColumnType::Integer);
+        WinqTool::winq_equal(&expression, "CAST(testColumn AS INTEGER)");
+
+        let column_row = Column::row_id().add_int(1).as_("rowidAddOne");
+        WinqTool::winq_equal(&column_row, "rowid + 1 AS rowidAddOne");
+
+        let expression = Expression::_case()
+            .when_with_expression_convertible(&column.eq_int(1))
+            .then_with_string("a")
+            .when_with_expression_convertible(&column.eq_int(2))
+            .then_with_string("b")
+            .else_with_string("c");
+        WinqTool::winq_equal(
+            &expression,
+            "CASE WHEN testColumn == 1 THEN 'a' WHEN testColumn == 2 THEN 'b' ELSE 'c' END",
+        );
+
+        let expression = Expression::_case()
+            .when_with_expression_convertible(&column.eq_string("a"))
+            .then_with_i32(1)
+            .when_with_expression_convertible(&column.eq_string("b"))
+            .then_with_i32(2)
+            .else_with_i32(3);
+        WinqTool::winq_equal(
+            &expression,
+            "CASE WHEN testColumn == 'a' THEN 1 WHEN testColumn == 'b' THEN 2 ELSE 3 END",
+        );
+
+        let expression = Expression::_cast_with_expression_convertible(&column)
+            .when_with_string("a")
+            .then_with_i32(1)
+            .when_with_string("b")
+            .then_with_i32(2)
+            .else_with_i32(3);
+        WinqTool::winq_equal(
+            &expression,
+            "CASE testColumn WHEN 'a' THEN 1 WHEN 'b' THEN 2 ELSE 3 END",
+        );
+
+        let expression = Expression::_cast_with_expression_convertible(&column)
+            .when_with_i32(1)
+            .then_with_string("a")
+            .then_with_i32(2)
+            .then_with_string("b")
+            .else_with_string("c");
+        WinqTool::winq_equal(
+            &expression,
+            "CASE testColumn WHEN 1 THEN 'a' WHEN 2 THEN 'b' ELSE 'c' END",
+        );
+
+        let expression = Expression::window_function("testWindowFunction")
+            .invoke()
+            .argument_with_expression_convertible(&column)
+            .filter(&column.not_eq_int(0));
+        WinqTool::winq_equal(
+            &expression,
+            "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0)",
+        );
+
+        let expression = Expression::window_function("testWindowFunction")
+            .invoke()
+            .argument_with_expression_convertible(&column)
+            .filter(&column.not_eq_int(0))
+            .over_with_string("testWindow");
+        WinqTool::winq_equal(
+            &expression,
+            "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER testWindow",
+        );
+
+        let window_def = WindowDef::new().partition_by_with_expression_convertible(&vec![&column]);
+        println!("bugtags>>>{:?}", window_def.get_description());
+        let expression = Expression::window_function("testWindowFunction")
+            .invoke()
+            .argument_with_expression_convertible(&column)
+            .filter(&column.not_eq_int(0))
+            .over_with_window_def(&window_def);
+        WinqTool::winq_equal(&expression, "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER(PARTITION BY testColumn)");
     }
 
     #[test]
