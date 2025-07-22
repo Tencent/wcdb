@@ -640,6 +640,7 @@ void WCDBJNIDatabaseClassMethod(
 addMigrationSource, jlong self, jstring sourcePath, jbyteArray cipherKey, jobject filter)
 {
     WCDBJNIBridgeStruct(CPPDatabase, self);
+    WCDBJNITryGetVM;
     WCDBJNICreateGlobalRel(filter);
     WCDBJNIGetString(sourcePath);
     WCDBJNIGetByteArrayCritical(cipherKey);
