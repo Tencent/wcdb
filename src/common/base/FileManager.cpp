@@ -167,6 +167,9 @@ bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeS
     if (CreateHardLinkW(GetPathString(to), GetPathString(from), NULL)) {
         return true;
     }
+    if (CopyFile(GetPathString(from), GetPathString(to), true)) {
+        return true;
+    }
     setThreadedWinError(to);
     return false;
 #endif
