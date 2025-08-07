@@ -105,7 +105,7 @@ pub mod join_test {
     use crate::base::winq_tool::WinqTool;
     use crate::winq::join_test::{
         ConversationTagTable, DbConversationTagTable, DbMessageTagTable, JoinTest, MessageTagTable,
-        SelectResult, DBCONVERSATIONTAGTABLE_INSTANCE, DBMESSAGETAGTABLE_INSTANCE,
+        SelectResult, DB_CONVERSATION_TAG_TABLE_INSTANCE, DB_MESSAGE_TAG_TABLE_INSTANCE,
     };
     use wcdb::base::value::Value;
     use wcdb::base::wcdb_exception::WCDBResult;
@@ -384,14 +384,15 @@ pub mod join_test {
     pub fn join_test1() {
         let database = Database::new("./tests/winq/custom/JoinDatabase.sqlite3");
         database
-            .create_table("MessageTagTable", &*DBMESSAGETAGTABLE_INSTANCE)
+            .create_table("MessageTagTable", &*DB_MESSAGE_TAG_TABLE_INSTANCE)
             .unwrap();
         database
-            .create_table("ConversationTagTable", &*DBCONVERSATIONTAGTABLE_INSTANCE)
+            .create_table("ConversationTagTable", &*DB_CONVERSATION_TAG_TABLE_INSTANCE)
             .unwrap();
-        let message_tag_table = database.get_table("MessageTagTable", &*DBMESSAGETAGTABLE_INSTANCE);
+        let message_tag_table =
+            database.get_table("MessageTagTable", &*DB_MESSAGE_TAG_TABLE_INSTANCE);
         let conversation_tag_table =
-            database.get_table("ConversationTagTable", &*DBCONVERSATIONTAGTABLE_INSTANCE);
+            database.get_table("ConversationTagTable", &*DB_CONVERSATION_TAG_TABLE_INSTANCE);
 
         // 插入数据
         let mut tag = MessageTagTable::new();

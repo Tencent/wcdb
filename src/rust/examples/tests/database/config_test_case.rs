@@ -60,7 +60,7 @@ pub mod config_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::base::database_test_case::Expect;
     use crate::base::random_tool::RandomTool;
-    use crate::base::test_object::{DbTestObject, TestObject, DBTESTOBJECT_INSTANCE};
+    use crate::base::test_object::{DbTestObject, TestObject, DB_TEST_OBJECT_INSTANCE};
     use crate::base::wrapped_value::WrappedValue;
     use crate::database::config_test_case::CONFIG_TEST;
     use std::sync::{Arc, Mutex, RwLock, RwLockReadGuard};
@@ -277,7 +277,7 @@ pub mod config_test_case {
                 config_test.get_table_test_case().get_database();
             let database_clone = Arc::clone(&database_arc);
             let database: RwLockReadGuard<Database> = database_clone.read().unwrap();
-            let table = database.get_table(table_name, &*DBTESTOBJECT_INSTANCE);
+            let table = database.get_table(table_name, &*DB_TEST_OBJECT_INSTANCE);
             let table_clone = Arc::clone(&table);
 
             table_clone

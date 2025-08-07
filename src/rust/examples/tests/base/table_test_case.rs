@@ -1,6 +1,6 @@
 use crate::base::base_test_case::TestCaseTrait;
 use crate::base::database_test_case::DatabaseTestCase;
-use crate::base::test_object::{TestObject, DBTESTOBJECT_INSTANCE};
+use crate::base::test_object::{TestObject, DB_TEST_OBJECT_INSTANCE};
 use lazy_static::lazy_static;
 use std::sync::{Arc, RwLock};
 use wcdb::base::wcdb_exception::WCDBResult;
@@ -72,7 +72,7 @@ impl TableTestCase {
         let database_clone = Arc::clone(&self.data_base_test_case.get_database());
         let database = database_clone.read().unwrap();
         if !self.is_virtual_table {
-            database.create_table(&*self.table_name, &*DBTESTOBJECT_INSTANCE)?;
+            database.create_table(&*self.table_name, &*DB_TEST_OBJECT_INSTANCE)?;
         } else {
             // todo dengxudong
             // database.createVirtualTable(tableName, tableBinding);

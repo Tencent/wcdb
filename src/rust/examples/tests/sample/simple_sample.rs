@@ -1,7 +1,7 @@
 #[cfg(test)]
 pub mod simple_sample {
     use crate::base::random_tool::RandomTool;
-    use crate::base::test_object::{DbTestObject, TestObject, DBTESTOBJECT_INSTANCE};
+    use crate::base::test_object::{DbTestObject, TestObject, DB_TEST_OBJECT_INSTANCE};
     use wcdb::core::database::Database;
     use wcdb::core::handle::Handle;
     use wcdb::core::handle_operation::HandleOperationTrait;
@@ -23,9 +23,9 @@ pub mod simple_sample {
         //         });
         // 建表，不用判断表是否存在，底下会判断
         database
-            .create_table("testTable", &*DBTESTOBJECT_INSTANCE)
+            .create_table("testTable", &*DB_TEST_OBJECT_INSTANCE)
             .unwrap();
-        let table = database.get_table("testTable", &*DBTESTOBJECT_INSTANCE);
+        let table = database.get_table("testTable", &*DB_TEST_OBJECT_INSTANCE);
 
         let test_table = TestObject::new(String::from("abc"));
         table
@@ -44,9 +44,9 @@ pub mod simple_sample {
 
         // 更新，可以用一个数据、一行数据、一个对象为单位去更新，后面还可以跟 order，limit，offset 参数
         let test_table = TestObject::create_object(200, String::from("updateContent2"));
-        let id = DBTESTOBJECT_INSTANCE.id;
+        let id = DB_TEST_OBJECT_INSTANCE.id;
         let filed_id = unsafe { &*id };
-        let content = DBTESTOBJECT_INSTANCE.content;
+        let content = DB_TEST_OBJECT_INSTANCE.content;
         let filed_content = unsafe { &*content };
         let express_content = filed_content.get_column().eq_string("updateContent");
         let express = filed_id.get_column().eq_long(100).and(&express_content);
@@ -59,7 +59,7 @@ pub mod simple_sample {
         }
 
         // 删除
-        let id = DBTESTOBJECT_INSTANCE.id;
+        let id = DB_TEST_OBJECT_INSTANCE.id;
         let filed_id = unsafe { &*id };
         let express = filed_id.get_column().lt_int(10);
         // table.delete_objects_by_expression(express).unwrap();
@@ -76,7 +76,7 @@ pub mod simple_sample {
         let data = table
             .get_all_objects_by_fields(DbTestObject::all_fields())
             .unwrap();
-        // let id = DBTESTOBJECT_INSTANCE.id;
+        // let id = DB_TEST_OBJECT_INSTANCE.id;
         // let filed_id = unsafe { &*id };
         // let expression = filed_id.get_column().gt_int(100);
         // table

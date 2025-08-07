@@ -5,6 +5,60 @@ use proc_macro2::{Ident, Span};
 use quote::quote;
 use std::collections::HashMap;
 
+/// 将驼峰命名转换为下划线命名
+fn camel_to_snake_upper(s: &str) -> String {
+    let mut result = String::new();
+    let chars: Vec<char> = s.chars().collect();
+    let mut i = 0;
+
+    while i < chars.len() {
+        let ch = chars[i];
+        if ch.is_uppercase() {
+            // 检查是否有连续的大写字母
+            let mut consecutive_uppercase = 1;
+            let mut j = i + 1;
+            // 计算连续大写字母的数量
+            while j < chars.len() && chars[j].is_uppercase() {
+                consecutive_uppercase += 1;
+                j += 1;
+            }
+            // 情况1: 连续大写字母不在最后，且前面有字符
+            if consecutive_uppercase > 1 && j < chars.len() && i > 0 {
+                // 将前面的大写字母跟最后一位以下划线分割
+                for k in 0..consecutive_uppercase - 1 {
+                    result.push(chars[i + k]);
+                }
+                result.push('_');
+                result.push(chars[i + consecutive_uppercase - 1]);
+                i += consecutive_uppercase;
+            }
+            // 情况2: 连续大写字母在最后
+            else if consecutive_uppercase > 1 && j >= chars.len() {
+                // 全部作为整体跟前面的字符以下划线分割
+                if i > 0 {
+                    result.push('_');
+                }
+                for k in 0..consecutive_uppercase {
+                    result.push(chars[i + k]);
+                }
+                i += consecutive_uppercase;
+            }
+            // 情况3: 单个大写字母
+            else {
+                if i != 0 {
+                    result.push('_');
+                }
+                result.push(ch);
+                i += 1;
+            }
+        } else {
+            result.push(ch.to_ascii_uppercase());
+            i += 1;
+        }
+    }
+    result
+}
+
 pub struct RustCodeGenerator {
     class_name: String,     // StructName
     orm_class_name: String, // DB{StructName}
@@ -46,9 +100,11 @@ impl RustCodeGenerator {
     pub(crate) fn generate(&self, table: &WCDBTable) -> syn::Result<proc_macro2::TokenStream> {
         let table_ident = table.ident();
         let db_table_ident = table.get_db_table_ident();
-        let binding = format!("{}_BINDING", db_table_ident.to_string().to_uppercase());
+
+        let table_name_snake = camel_to_snake_upper(&db_table_ident.to_string());
+        let binding = format!("{}_BINDING", table_name_snake);
         let binding_ident = Ident::new(&binding, Span::call_site());
-        let instance = format!("{}_INSTANCE", db_table_ident.to_string().to_uppercase());
+        let instance = format!("{}_INSTANCE", table_name_snake);
         let instance_ident = Ident::new(&instance, Span::call_site());
         let field_ident_vec = table.get_field_ident_vec();
 

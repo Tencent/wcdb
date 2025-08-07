@@ -48,7 +48,7 @@ lazy_static! {
 pub mod table_operation_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::core::table_operation_object::{
-        TableOperationObject, DBTABLEOPERATIONOBJECT_INSTANCE,
+        TableOperationObject, DB_TABLE_OPERATION_OBJECT_INSTANCE,
     };
     use crate::core::table_operation_test::{TABLE_NAME, TABLE_OPERATION_TEST};
     use std::sync::{Arc, RwLock};
@@ -89,12 +89,12 @@ pub mod table_operation_test_case {
         // 删除表
         let _ = database.drop_table(TABLE_NAME);
 
-        let ret = database.create_table(TABLE_NAME, &*DBTABLEOPERATIONOBJECT_INSTANCE);
+        let ret = database.create_table(TABLE_NAME, &*DB_TABLE_OPERATION_OBJECT_INSTANCE);
         assert!(ret.is_ok());
 
         let operation = TableOperation::new(TABLE_NAME, &database);
         let obj = TableOperationObject::get_obj();
-        let field_channel_id = unsafe { DBTABLEOPERATIONOBJECT_INSTANCE.channel_id.read() };
+        let field_channel_id = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.channel_id.read() };
 
         // 测试插入数据。
         // insert row

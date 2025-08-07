@@ -1,5 +1,5 @@
 use crate::db_corrupted::testclass::table_goods_object::{
-    DbTableGoodsObject, TableGoodsObject, DBTABLEGOODSOBJECT_INSTANCE,
+    DbTableGoodsObject, TableGoodsObject, DB_TABLE_GOODS_OBJECT_INSTANCE,
 };
 use wcdb::base::wcdb_exception::WCDBException;
 use wcdb::core::database::Database;
@@ -39,7 +39,7 @@ impl CorruptedBaseTestCase {
 
     pub fn setup(&self) {
         self.database
-            .create_table(self.table_name.as_str(), &*DBTABLEGOODSOBJECT_INSTANCE)
+            .create_table(self.table_name.as_str(), &*DB_TABLE_GOODS_OBJECT_INSTANCE)
             .unwrap();
     }
 
@@ -54,7 +54,7 @@ impl CorruptedBaseTestCase {
 
         let table = self
             .database
-            .get_table(self.table_name.as_str(), &*DBTABLEGOODSOBJECT_INSTANCE);
+            .get_table(self.table_name.as_str(), &*DB_TABLE_GOODS_OBJECT_INSTANCE);
         table
             .insert_objects(obj_vec, DbTableGoodsObject::all_fields())
             .unwrap();
@@ -63,7 +63,7 @@ impl CorruptedBaseTestCase {
     pub fn get_all_objects(&self) -> Vec<TableGoodsObject> {
         let table = self
             .database
-            .get_table(self.table_name.as_str(), &*DBTABLEGOODSOBJECT_INSTANCE);
+            .get_table(self.table_name.as_str(), &*DB_TABLE_GOODS_OBJECT_INSTANCE);
 
         table.get_all_objects().unwrap()
     }

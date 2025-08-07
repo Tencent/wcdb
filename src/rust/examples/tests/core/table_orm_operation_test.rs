@@ -48,7 +48,7 @@ lazy_static! {
 pub mod table_orm_operation_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::core::table_operation_object::{
-        DbTableOperationObject, TableOperationObject, DBTABLEOPERATIONOBJECT_INSTANCE,
+        DbTableOperationObject, TableOperationObject, DB_TABLE_OPERATION_OBJECT_INSTANCE,
     };
     use crate::core::table_orm_operation_test::{table_orm_operation_TEST, TABLE_NAME};
     use core::clone::Clone;
@@ -89,11 +89,11 @@ pub mod table_orm_operation_test_case {
         // 删除表
         let _ = database.drop_table(TABLE_NAME);
 
-        let ret = database.create_table(TABLE_NAME, &*DBTABLEOPERATIONOBJECT_INSTANCE);
+        let ret = database.create_table(TABLE_NAME, &*DB_TABLE_OPERATION_OBJECT_INSTANCE);
         assert!(ret.is_ok());
 
         let operation =
-            TableORMOperation::new(TABLE_NAME, &*DBTABLEOPERATIONOBJECT_INSTANCE, &database);
+            TableORMOperation::new(TABLE_NAME, &*DB_TABLE_OPERATION_OBJECT_INSTANCE, &database);
         let obj = TableOperationObject::get_obj();
 
         // 测试插入数据。
@@ -115,8 +115,8 @@ pub mod table_orm_operation_test_case {
             .insert_or_ignore_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
         assert!(ret.is_ok());
 
-        let field_channel_id = unsafe { DBTABLEOPERATIONOBJECT_INSTANCE.channel_id.read() };
-        let field_value = unsafe { DBTABLEOPERATIONOBJECT_INSTANCE.value.read() };
+        let field_channel_id = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.channel_id.read() };
+        let field_value = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.value.read() };
 
         // 测试更新数据。
         // update row

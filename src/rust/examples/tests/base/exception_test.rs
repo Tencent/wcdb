@@ -49,7 +49,7 @@ impl ExceptionObject {
 
 #[cfg(test)]
 pub mod exception_test {
-    use crate::base::exception_test::{ExceptionObject, DBEXCEPTIONOBJECT_INSTANCE};
+    use crate::base::exception_test::{ExceptionObject, DB_EXCEPTION_OBJECT_INSTANCE};
     use wcdb::base::wcdb_exception::ExceptionExtendCode;
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
@@ -81,7 +81,7 @@ pub mod exception_test {
         assert_eq!(error.extend_code(), ExceptionExtendCode::Unknown);
 
         // 创建表
-        let ret = database.create_table(table_name, &*DBEXCEPTIONOBJECT_INSTANCE);
+        let ret = database.create_table(table_name, &*DB_EXCEPTION_OBJECT_INSTANCE);
         assert!(ret.is_ok());
 
         /// 验证重复插入数据。

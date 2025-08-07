@@ -47,7 +47,7 @@ pub mod repair_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::base::file_tool::FileTool;
     use crate::base::random_tool::RandomTool;
-    use crate::base::test_object::{DbTestObject, TestObject, DBTESTOBJECT_INSTANCE};
+    use crate::base::test_object::{DbTestObject, TestObject, DB_TEST_OBJECT_INSTANCE};
     use crate::base::wrapped_value::WrappedValue;
     use crate::database::repair_test_case::{PRE_INSERT_OBJECTS, REPAIR_TEST};
     use std::sync::{Arc, RwLock};
@@ -102,7 +102,7 @@ pub mod repair_test_case {
                 repair_test.get_table_test_case().get_database();
             let database_clone = Arc::clone(&database_arc);
             let database = database_clone.read().unwrap();
-            let table = database.get_table(table_name, &*DBTESTOBJECT_INSTANCE);
+            let table = database.get_table(table_name, &*DB_TEST_OBJECT_INSTANCE);
             let table_clone = Arc::clone(&table);
 
             let mut tmp_vec: Vec<TestObject> = Vec::new();
@@ -135,7 +135,7 @@ pub mod repair_test_case {
                 repair_test.get_table_test_case().get_database();
             let database_clone = Arc::clone(&database_arc);
             let database = database_clone.read().unwrap();
-            let table = database.get_table(table_name, &*DBTESTOBJECT_INSTANCE);
+            let table = database.get_table(table_name, &*DB_TEST_OBJECT_INSTANCE);
             let table_clone = Arc::clone(&table);
 
             let mut tmp_vec: Vec<TestObject> = Vec::new();
@@ -260,7 +260,7 @@ pub mod repair_test_case {
                 repair_test.get_table_test_case().get_database();
             let database_clone = Arc::clone(&database_arc);
             let database = database_clone.read().unwrap();
-            let table = database.get_table(table_name, &*DBTESTOBJECT_INSTANCE);
+            let table = database.get_table(table_name, &*DB_TEST_OBJECT_INSTANCE);
             let table_clone = Arc::clone(&table);
 
             table_clone

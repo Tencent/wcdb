@@ -225,10 +225,10 @@ pub mod database_upgrade_test {
     use crate::database::database_upgrade_test_case::{
         ConversationTableV1, ConversationTableV1_2, DbConversationTableV1, DbConversationTableV1_2,
         DbMessageTableV1, DbTagTableV1, MessageTableV1, TagTableV1,
-        DBCONVERSATIONTABLEV1_1_INSTANCE, DBCONVERSATIONTABLEV1_2_INSTANCE,
-        DBCONVERSATIONTABLEV1_INSTANCE, DBCONVERSATIONTABLEV2_1_INSTANCE,
-        DBCONVERSATIONTABLEV2_INSTANCE, DBCONVERSATIONTABLEV3_INSTANCE,
-        DBMESSAGETABLEV1_1_INSTANCE, DBMESSAGETABLEV1_INSTANCE, DBTAGTABLEV1_INSTANCE,
+        DB_CONVERSATION_TABLE_V1_1_INSTANCE, DB_CONVERSATION_TABLE_V1_2_INSTANCE,
+        DB_CONVERSATION_TABLE_V1_INSTANCE, DB_CONVERSATION_TABLE_V2_1_INSTANCE,
+        DB_CONVERSATION_TABLE_V2_INSTANCE, DB_CONVERSATION_TABLE_V3_INSTANCE,
+        DB_MESSAGE_TABLE_V1_1_INSTANCE, DB_MESSAGE_TABLE_V1_INSTANCE, DB_TAG_TABLE_V1_INSTANCE,
     };
     use std::fmt::Pointer;
     use std::panic::AssertUnwindSafe;
@@ -252,11 +252,11 @@ pub mod database_upgrade_test {
         }
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE)
             .unwrap();
         // insert
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE);
         let insert_result = conversation_table.insert_object(
             ConversationTableV1::insert("t1"),
             DbConversationTableV1::all_fields(),
@@ -288,10 +288,10 @@ pub mod database_upgrade_test {
     fn upgrade_to_v2() {
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV2_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V2_INSTANCE)
             .unwrap();
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV2_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V2_INSTANCE);
         let result = conversation_table.get_all_objects();
         assert!(result.is_ok());
         match result {
@@ -308,9 +308,9 @@ pub mod database_upgrade_test {
         // id 字段增加自增主键约束
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV2_1_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V2_1_INSTANCE)
             .unwrap();
-        let field_id = unsafe { &*(&*DBCONVERSATIONTABLEV2_1_INSTANCE).id };
+        let field_id = unsafe { &*(&*DB_CONVERSATION_TABLE_V2_1_INSTANCE).id };
         assert!(field_id.is_auto_increment());
         assert!(field_id.is_primary_key());
         database.close(Some(|| {}));
@@ -346,10 +346,10 @@ pub mod database_upgrade_test {
     fn upgrade_to_v3() {
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV3_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V3_INSTANCE)
             .unwrap();
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV3_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V3_INSTANCE);
         let result = conversation_table.get_all_objects();
         assert!(result.is_ok());
         match result {
@@ -363,7 +363,7 @@ pub mod database_upgrade_test {
         }
 
         // 删除字段检查
-        let fields = unsafe { &*DBCONVERSATIONTABLEV3_INSTANCE.all_binding_fields() };
+        let fields = unsafe { &*DB_CONVERSATION_TABLE_V3_INSTANCE.all_binding_fields() };
         for x in fields {
             assert_ne!(x.get_name(), "last_time");
         }
@@ -389,9 +389,9 @@ pub mod database_upgrade_test {
     fn upgrade_to_v4() {
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("MessageTable", &*DBMESSAGETABLEV1_INSTANCE)
+            .create_table("MessageTable", &*DB_MESSAGE_TABLE_V1_INSTANCE)
             .unwrap();
-        let msg_table = database.get_table("MessageTable", &*DBMESSAGETABLEV1_INSTANCE);
+        let msg_table = database.get_table("MessageTable", &*DB_MESSAGE_TABLE_V1_INSTANCE);
         // insert
         let insert_result =
             msg_table.insert_object(MessageTableV1::insert("t1"), DbMessageTableV1::all_fields());
@@ -416,10 +416,10 @@ pub mod database_upgrade_test {
         // 2.给表增加主键
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("MessageTable", &*DBMESSAGETABLEV1_1_INSTANCE)
+            .create_table("MessageTable", &*DB_MESSAGE_TABLE_V1_1_INSTANCE)
             .unwrap();
 
-        let target_id = unsafe { &*(*&DBMESSAGETABLEV1_1_INSTANCE.target_id) };
+        let target_id = unsafe { &*(*&DB_MESSAGE_TABLE_V1_1_INSTANCE.target_id) };
         assert!(target_id.is_primary_key());
 
         // 3.修改表名
@@ -432,7 +432,7 @@ pub mod database_upgrade_test {
         statement.alter_table("MessageTable").rename_to("MsgTable");
         database.execute(&statement).unwrap();
 
-        let msg_table = database.get_table("MsgTable", &*DBMESSAGETABLEV1_1_INSTANCE);
+        let msg_table = database.get_table("MsgTable", &*DB_MESSAGE_TABLE_V1_1_INSTANCE);
         let result = msg_table.get_all_objects();
         assert!(result.is_ok());
         match result {
@@ -458,9 +458,9 @@ pub mod database_upgrade_test {
     fn upgrade_to_v5() {
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("TagTable", &*DBTAGTABLEV1_INSTANCE)
+            .create_table("TagTable", &*DB_TAG_TABLE_V1_INSTANCE)
             .unwrap();
-        let tag_table = database.get_table("TagTable", &*DBTAGTABLEV1_INSTANCE);
+        let tag_table = database.get_table("TagTable", &*DB_TAG_TABLE_V1_INSTANCE);
         // insert
         let insert_result = tag_table.insert_object(TagTableV1::new(), DbTagTableV1::all_fields());
         assert!(insert_result.is_ok());
@@ -492,11 +492,11 @@ pub mod database_upgrade_test {
         }
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE)
             .unwrap();
         // insert
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE);
         let mut vec: Vec<ConversationTableV1> = Vec::with_capacity(100);
         let length = 10000;
         for x in 0..length {
@@ -515,7 +515,7 @@ pub mod database_upgrade_test {
             let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
             let result = panic::catch_unwind(AssertUnwindSafe(|| {
                 database
-                    .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_1_INSTANCE)
+                    .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_1_INSTANCE)
                     .unwrap();
             }));
             if let Err(e) = result {}
@@ -526,7 +526,7 @@ pub mod database_upgrade_test {
         assert!(is_exist);
         handle.join().unwrap();
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_1_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_1_INSTANCE);
         let result = conversation_table.get_all_objects();
         assert!(result.is_ok());
         match result {
@@ -546,11 +546,11 @@ pub mod database_upgrade_test {
         statement.drop_table("ConversationTable").if_exist();
         database.execute(&statement).unwrap();
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE)
             .unwrap();
         // insert
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE);
         let mut vec: Vec<ConversationTableV1> = Vec::with_capacity(100);
         let length = 10;
         for x in 0..length {
@@ -566,10 +566,10 @@ pub mod database_upgrade_test {
 
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         database
-            .create_table("ConversationTable", &*DBCONVERSATIONTABLEV1_2_INSTANCE)
+            .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_2_INSTANCE)
             .unwrap();
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_2_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_2_INSTANCE);
         let result = conversation_table.get_all_objects();
         assert!(result.is_ok());
         let insert_result = conversation_table.insert_object(
@@ -579,7 +579,7 @@ pub mod database_upgrade_test {
         assert!(insert_result.is_ok());
 
         let conversation_table =
-            database.get_table("ConversationTable", &*DBCONVERSATIONTABLEV1_2_INSTANCE);
+            database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_2_INSTANCE);
         let result = conversation_table.get_all_objects();
         assert!(result.is_ok());
 

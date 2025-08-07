@@ -24,22 +24,16 @@ use syn::{parse_macro_input, DeriveInput};
 pub fn process(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     check_class_element(&input);
-
     let table = WCDBTable::from_derive_input(&input).unwrap();
-
     check_fts_module(&table);
-
     let table_constraint_info = TableConfigInfo::resolve(
         &table,
         Some(FTSModuleInfo::new()), //TODO dengxudong fts module
     );
     let all_column_info = table.get_all_column_info();
-
     check_field_element(&table, &all_column_info);
     check_field_default(&all_column_info);
-
     check_column_in_table_constraint(&table_constraint_info, &all_column_info);
-
     match create_orm_file(&table, table_constraint_info, all_column_info) {
         Ok(quote) => quote.into(),
         Err(e) => e.to_compile_error().into(),
@@ -56,7 +50,6 @@ fn create_orm_file(
     code_gen.set_orm_class_name(table.get_db_table_name());
     code_gen.set_table_constraint_info(Option::from(table_constraint_info));
     code_gen.set_all_column_info(all_column_info);
-
     code_gen.generate(&table)
 }
 
@@ -69,7 +62,6 @@ fn check_class_element(input: &DeriveInput) {
     if !is_struct {
         panic!("@WCDBTableCoding is only valid for structure");
     }
-
     let vis_str = input.vis.to_token_stream().to_string();
     if vis_str != "pub" {
         panic!(
@@ -84,7 +76,6 @@ fn check_fts_module(table: &WCDBTable) {
 
 fn check_field_element(table: &WCDBTable, all_column_info: &Vec<ColumnInfo>) {
     let column_type_vec: Vec<&String> = RUST_FIELD_ORM_INFO_MAP.keys().collect();
-
     let mut primary_key_count = 0;
     for column_info in all_column_info {
         let has_contain = column_type_vec
@@ -106,7 +97,6 @@ fn check_field_element(table: &WCDBTable, all_column_info: &Vec<ColumnInfo>) {
             if primary_key_count > 1 {
                 panic!("#[WCDBField] can only configure one primary key for \"{}\". If multiple primary keys are required, configure multiPrimaries in #[WCDBTableCoding]. ", field_key)
             }
-
             if column_info.is_auto_increment() {
                 let field_orm_info = column_info.get_field_orm_info();
                 if field_orm_info.column_type != "Integer" {
@@ -116,7 +106,6 @@ fn check_field_element(table: &WCDBTable, all_column_info: &Vec<ColumnInfo>) {
                     );
                 }
             }
-
             if column_info.has_index() {
                 panic!("Restricted to primary key, so no @WCDBIndex configuration is required.field_key:  \"{}\".", field_key);
             }
@@ -142,10 +131,8 @@ fn check_field_default(all_column_info: &Vec<ColumnInfo>) {
     for column_info in all_column_info {
         let mut value_count = 0;
         let mut type_miss_match = false;
-
         let field_orm_info = column_info.get_field_orm_info();
         let column_type = field_orm_info.column_type.clone();
-
         let default_opt = column_info.default_value();
         if default_opt.is_none() {
             continue;

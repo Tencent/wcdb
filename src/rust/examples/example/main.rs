@@ -52,7 +52,7 @@ impl TableMessageBox {
 fn main() {
     global_trace();
     let db = Database::new("./target/tmp/test.db");
-    db.create_table("rct_message_box", &*DBTABLEMESSAGEBOX_INSTANCE)
+    db.create_table("rct_message_box", &*DB_TABLE_MESSAGE_BOX_INSTANCE)
         .unwrap();
     test_func(&db);
 }

@@ -4,11 +4,11 @@ use crate::base::wrapped_value::WrappedValue;
 use crate::orm::testclass::auto_add_column_object::{AutoAddColumnObject, DbAutoAddColumnObject};
 use crate::orm::testclass::column_rename_object::{
     ColumnRenameObjectOld, DbColumnRenameObjectNew, DbColumnRenameObjectOld,
-    DBCOLUMNRENAMEOBJECTNEW_INSTANCE, DBCOLUMNRENAMEOBJECTOLD_INSTANCE,
+    DB_COLUMN_RENAME_OBJECT_NEW_INSTANCE, DB_COLUMN_RENAME_OBJECT_OLD_INSTANCE,
 };
 use crate::orm::testclass::table_primary_key_object::{
-    DbTablePrimaryKeyObjectOld, TablePrimaryKeyObjectOld, DBTABLEPRIMARYKEYOBJECTNEW_INSTANCE,
-    DBTABLEPRIMARYKEYOBJECTOLD_INSTANCE,
+    DbTablePrimaryKeyObjectOld, TablePrimaryKeyObjectOld, DB_TABLE_PRIMARY_KEY_OBJECT_NEW_INSTANCE,
+    DB_TABLE_PRIMARY_KEY_OBJECT_OLD_INSTANCE,
 };
 use rand::Rng;
 use std::cmp::PartialEq;
@@ -111,7 +111,7 @@ impl OrmTest {
             .get_database()
             .read()
             .unwrap()
-            .create_table(table_name, &*DBTABLEPRIMARYKEYOBJECTOLD_INSTANCE)
+            .create_table(table_name, &*DB_TABLE_PRIMARY_KEY_OBJECT_OLD_INSTANCE)
             .unwrap();
 
         // insert db to old table
@@ -146,7 +146,7 @@ impl OrmTest {
             .get_database()
             .read()
             .unwrap()
-            .create_table(table_name, &*DBTABLEPRIMARYKEYOBJECTNEW_INSTANCE)
+            .create_table(table_name, &*DB_TABLE_PRIMARY_KEY_OBJECT_NEW_INSTANCE)
             .unwrap();
 
         // insert old table to new table
@@ -182,7 +182,7 @@ impl OrmTest {
             .get_database()
             .read()
             .unwrap()
-            .create_table(table_name, &*DBCOLUMNRENAMEOBJECTOLD_INSTANCE)
+            .create_table(table_name, &*DB_COLUMN_RENAME_OBJECT_OLD_INSTANCE)
             .unwrap();
 
         // insert test date to old table
@@ -212,7 +212,7 @@ impl OrmTest {
             .get_database()
             .read()
             .unwrap()
-            .create_table(table_name, &*DBCOLUMNRENAMEOBJECTNEW_INSTANCE)
+            .create_table(table_name, &*DB_COLUMN_RENAME_OBJECT_NEW_INSTANCE)
             .unwrap();
 
         // check
@@ -252,21 +252,21 @@ impl TestCaseTrait for OrmTest {
 pub mod orm_test {
     use super::*;
     use crate::orm::testclass::all_type_object::{
-        AllTypeObjectHelper, DbAllTypeObject, DBALLTYPEOBJECT_INSTANCE,
+        AllTypeObjectHelper, DbAllTypeObject, DB_ALL_TYPE_OBJECT_INSTANCE,
     };
     use crate::orm::testclass::auto_add_column_object::{
-        DbAutoAddColumnObject, DBAUTOADDCOLUMNOBJECT_INSTANCE,
+        DbAutoAddColumnObject, DB_AUTO_ADD_COLUMN_OBJECT_INSTANCE,
     };
     use crate::orm::testclass::field_object::DbFieldObject;
     use crate::orm::testclass::primary_enable_auto_increment_object::{
         DbPrimaryEnableAutoIncrementObject, PrimaryEnableAutoIncrementObject,
-        DBPRIMARYENABLEAUTOINCREMENTOBJECT_INSTANCE,
+        DB_PRIMARY_ENABLE_AUTO_INCREMENT_OBJECT_INSTANCE,
     };
     use crate::orm::testclass::primary_not_auto_increment_object::{
         DbPrimaryNotAutoIncrementObject, PrimaryNotAutoIncrementObject,
-        DBPRIMARYNOTAUTOINCREMENTOBJECT_INSTANCE,
+        DB_PRIMARY_NOT_AUTO_INCREMENT_OBJECT_INSTANCE,
     };
-    use crate::orm::testclass::table_constraint_object::DBTABLECONSTRAINTOBJECT_INSTANCE;
+    use crate::orm::testclass::table_constraint_object::DB_TABLE_CONSTRAINT_OBJECT_INSTANCE;
 
     fn setup(orm_test: &OrmTest) {
         orm_test.setup().unwrap();
@@ -305,13 +305,13 @@ pub mod orm_test {
         orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
             orm_test
                 .database_test_case
-                .create_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE)?;
+                .create_table(table_name.as_str(), &*DB_ALL_TYPE_OBJECT_INSTANCE)?;
             Ok(())
         });
 
         let binding = orm_test.database_test_case.get_database();
         let database_lock = binding.read().unwrap();
-        let table = database_lock.get_table(table_name.as_str(), &*DBALLTYPEOBJECT_INSTANCE);
+        let table = database_lock.get_table(table_name.as_str(), &*DB_ALL_TYPE_OBJECT_INSTANCE);
 
         let max = AllTypeObjectHelper::max_object();
         let min = AllTypeObjectHelper::min_object();
@@ -367,7 +367,7 @@ pub mod orm_test {
         orm_test.do_test_create_table_and_index_sqls_as_expected(sql_vec, || {
             orm_test
                 .database_test_case
-                .create_table(table_name, &*DBTABLECONSTRAINTOBJECT_INSTANCE)
+                .create_table(table_name, &*DB_TABLE_CONSTRAINT_OBJECT_INSTANCE)
                 .unwrap();
             Ok(())
         });
@@ -384,7 +384,7 @@ pub mod orm_test {
         let fake_schema = "notExistSchema";
         orm_test
             .database_test_case
-            .create_table(fake_table, &*DBAUTOADDCOLUMNOBJECT_INSTANCE)
+            .create_table(fake_table, &*DB_AUTO_ADD_COLUMN_OBJECT_INSTANCE)
             .unwrap();
 
         let obj = DbAutoAddColumnObject::default();
@@ -451,7 +451,7 @@ pub mod orm_test {
         let table_name = "testTable2";
 
         database_lock
-            .create_table(table_name, &*DBPRIMARYNOTAUTOINCREMENTOBJECT_INSTANCE)
+            .create_table(table_name, &*DB_PRIMARY_NOT_AUTO_INCREMENT_OBJECT_INSTANCE)
             .unwrap();
         let mut obj1 = PrimaryNotAutoIncrementObject::new();
         obj1.id = 1;
@@ -464,7 +464,10 @@ pub mod orm_test {
             .unwrap();
 
         database_lock
-            .create_table(table_name, &*DBPRIMARYENABLEAUTOINCREMENTOBJECT_INSTANCE)
+            .create_table(
+                table_name,
+                &*DB_PRIMARY_ENABLE_AUTO_INCREMENT_OBJECT_INSTANCE,
+            )
             .unwrap();
         database_lock.delete_objects(table_name).unwrap();
 
