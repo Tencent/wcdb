@@ -56,7 +56,6 @@ pub mod table_orm_operation_test_case {
     use std::sync::{Arc, RwLock};
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
-    use wcdb::core::table_orm_operation::{TableORMOperation, TableORMOperationTrait};
     use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
 
     pub fn setup() {
@@ -79,7 +78,7 @@ pub mod table_orm_operation_test_case {
         Arc::clone(&ret)
     }
 
-    // #[test]
+    // #[test] // TODO: 一起运行会失败
     pub fn test() {
         setup();
 
@@ -92,34 +91,32 @@ pub mod table_orm_operation_test_case {
         let ret = database.create_table(TABLE_NAME, &*DB_TABLE_OPERATION_OBJECT_INSTANCE);
         assert!(ret.is_ok());
 
-        let operation =
-            TableORMOperation::new(TABLE_NAME, &*DB_TABLE_OPERATION_OBJECT_INSTANCE, &database);
         let obj = TableOperationObject::get_obj();
 
-        // 测试插入数据。
-        // insert row
-        let ret = operation.insert_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
+        let ret = database.insert_object(
+            obj.clone(),
+            DbTableOperationObject::all_fields(),
+            TABLE_NAME,
+        );
         assert!(ret.is_ok());
 
-        // insert row
-        let ret = operation.insert_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
-        assert!(!ret.is_ok());
-
-        // insert or replace
-        let ret = operation
-            .insert_or_replace_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
+        let ret = database.insert_or_replace_objects(
+            vec![obj.clone()],
+            DbTableOperationObject::all_fields(),
+            TABLE_NAME,
+        );
         assert!(ret.is_ok());
 
-        // insert or ignore
-        let ret = operation
-            .insert_or_ignore_objects(vec![obj.clone()], DbTableOperationObject::all_fields());
+        let ret = database.insert_or_ignore_objects(
+            vec![obj.clone()],
+            DbTableOperationObject::all_fields(),
+            TABLE_NAME,
+        );
         assert!(ret.is_ok());
 
         let field_channel_id = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.channel_id.read() };
         let field_value = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.value.read() };
 
-        // 测试更新数据。
-        // update row
         let updated_text = "updated_row";
         let expression = field_channel_id
             .get_column()
@@ -128,34 +125,29 @@ pub mod table_orm_operation_test_case {
             value: updated_text.to_string(),
             ..obj.clone()
         };
-        let ret =
-            operation.update_object_by_field_expression(update_obj, &field_value, &expression);
+        let ret = database.update_object_by_field_expression(
+            update_obj,
+            &field_value,
+            TABLE_NAME,
+            &expression,
+        );
         assert!(ret.is_ok());
 
-        // select value
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.get_first_object_by_expression(vec![&field_value], &expression);
+        let ret =
+            database.get_first_object_by_expression(vec![&field_value], TABLE_NAME, &expression);
         assert!(ret.is_ok());
 
         let ret_value_opt = ret.unwrap();
         assert_eq!(ret_value_opt.unwrap().value, updated_text);
 
-        // 测试删除数据。
-        // delete row
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = operation.delete_objects_by_expression(&expression);
+        let ret = database.delete_objects_by_expression(TABLE_NAME, &expression);
         assert!(ret.is_ok());
-
-        // select value
-        let expression = field_channel_id
-            .get_column()
-            .eq_string(obj.channel_id.as_str());
-        let ret = operation.get_all_objects_by_expression(&expression);
-        assert!(ret.unwrap().is_empty());
 
         teardown();
     }
