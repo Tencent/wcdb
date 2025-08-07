@@ -114,8 +114,8 @@ pub mod table_orm_operation_test_case {
         );
         assert!(ret.is_ok());
 
-        let field_channel_id = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.channel_id.read() };
-        let field_value = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.value.read() };
+        let field_channel_id = DbTableOperationObject::channel_id();
+        let field_value = DbTableOperationObject::value();
 
         let updated_text = "updated_row";
         let expression = field_channel_id

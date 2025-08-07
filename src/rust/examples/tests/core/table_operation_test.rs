@@ -48,7 +48,7 @@ lazy_static! {
 pub mod table_operation_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::core::table_operation_object::{
-        TableOperationObject, DB_TABLE_OPERATION_OBJECT_INSTANCE,
+        DbTableOperationObject, TableOperationObject, DB_TABLE_OPERATION_OBJECT_INSTANCE,
     };
     use crate::core::table_operation_test::{TABLE_NAME, TABLE_OPERATION_TEST};
     use std::sync::{Arc, RwLock};
@@ -94,7 +94,7 @@ pub mod table_operation_test_case {
 
         let operation = TableOperation::new(TABLE_NAME, &database);
         let obj = TableOperationObject::get_obj();
-        let field_channel_id = unsafe { DB_TABLE_OPERATION_OBJECT_INSTANCE.channel_id.read() };
+        let field_channel_id = DbTableOperationObject::channel_id();
 
         // 测试插入数据。
         // insert row
