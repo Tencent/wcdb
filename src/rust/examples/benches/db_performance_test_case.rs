@@ -85,27 +85,28 @@ fn select_data_performance(database: &Database, size: i64) {
         Column::new("add_time"),
     ];
     let binding = StatementSelect::new();
+    let condition = Column::new("add_time").gt_int(1);
     let statement = binding
         .select_with_result_column_convertible_trait(&column_vec)
         .from("FriendProfileTable")
-        .where_expression(&Column::new("add_time").gt_int(1))
+        .where_expression(&condition)
         .limit(size);
     // SELECT user_id, remark, friend_type, is_top, add_time FROM FriendProfileTable WHERE add_time > 1 LIMIT 1
     let ret: WCDBResult<Vec<Vec<Value>>> = database.get_all_rows_from_statement(statement);
 }
 
 fn update_data_performance(database: &Database, size: i64) {
-    let column_vec: Vec<Column> = vec![Column::new("is_top")];
+    let column = Column::new("is_top");
+    let column_vec: Vec<&Column> = vec![&column];
     let statement = StatementUpdate::new();
+    let condition = Column::new("is_top")
+        .not_eq_bool(true)
+        .and(&Column::new("add_time").gt_int(1));
     statement
         .update("FriendProfileTable")
         .set_columns(&column_vec)
         .to_bool(true)
-        .where_expression(
-            Column::new("is_top")
-                .not_eq_bool(true)
-                .and(&Column::new("add_time").gt_int(1)),
-        )
+        .where_expression(&condition)
         .limit(size);
     // UPDATE FriendProfileTable SET is_top = TRUE WHERE (is_top != TRUE) AND (add_time > 1) LIMIT 1
     let ret = database.execute(&statement);
@@ -113,9 +114,10 @@ fn update_data_performance(database: &Database, size: i64) {
 
 fn delete_data_performance(database: &Database, size: i64) {
     let statement = StatementDelete::new();
+    let condition = Column::new("add_time").gt_int(1);
     statement
         .delete_from("FriendProfileTable")
-        .where_expression(Column::new("add_time").gt_int(1))
+        .where_expression(&condition)
         .limit(size);
     // DELETE FROM FriendProfileTable WHERE add_time > 1 LIMIT 1
     let ret = database.execute(&statement);
@@ -139,10 +141,10 @@ fn benchmark_function(c: &mut Criterion) {
     }
     let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
     database
-        .create_table("FriendProfileTable", &*DBFRIENDPROFILETABLE_INSTANCE)
+        .create_table("FriendProfileTable", &*DB_FRIEND_PROFILE_TABLE_INSTANCE)
         .unwrap();
     let conversation_table =
-        database.get_table("FriendProfileTable", &*DBFRIENDPROFILETABLE_INSTANCE);
+        database.get_table("FriendProfileTable", &*DB_FRIEND_PROFILE_TABLE_INSTANCE);
 
     // 插入测试
     let mut group = c.benchmark_group("db-performance-example");

@@ -116,6 +116,7 @@ impl IdentifierTrait for Expression {
         self.expression_operable.get_description()
     }
 }
+
 impl CppObjectConvertibleTrait for Expression {
     fn as_cpp_object(&self) -> *mut c_void {
         self.expression_operable.get_cpp_obj()

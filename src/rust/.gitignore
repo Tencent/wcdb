@@ -1,4 +1,4 @@
 target/
-Cargo.lock
-cmake-build-debug
+cmake-build-*/
+
 demoDatabase.sqlite3*

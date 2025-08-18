@@ -1,15 +1,12 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::wcdb_exception::WCDBResult;
 use crate::utils::ToCString;
-use crate::winq::expression;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable_trait::ExpressionOperableTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_void, CString};
-use std::ptr::null;
 
 extern "C" {
     fn WCDBRustExpressionOperable_nullOperate(
@@ -847,11 +844,11 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 Identifier::get_cpp_type_with_option(&end_option),
                 end_cpp_obj,
                 0.0,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -866,11 +863,11 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 CPPType::Int as c_int,
                 end as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -885,11 +882,11 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 end,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -905,7 +902,7 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 CPPType::String as c_int,
                 0 as *mut c_void,
                 0.0,
@@ -929,11 +926,11 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin as c_double,
-                null(),
+                std::ptr::null(),
                 Identifier::get_cpp_type_with_option(&end_option),
                 end_cpp_obj,
                 0.0,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -948,11 +945,11 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin,
-                null(),
+                std::ptr::null(),
                 CPPType::Int as c_int,
                 end as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -967,11 +964,11 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin,
-                null(),
+                std::ptr::null(),
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 end,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -987,7 +984,7 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin,
-                null(),
+                std::ptr::null(),
                 CPPType::String as c_int,
                 0 as *mut c_void,
                 0.0,
@@ -1016,7 +1013,7 @@ impl ExpressionOperable {
                 Identifier::get_cpp_type_with_option(&end_option),
                 end_cpp_obj,
                 0.0,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -1036,7 +1033,7 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 end as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -1056,7 +1053,7 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 end,
-                null(),
+                std::ptr::null(),
                 false,
             )
         };
@@ -1196,11 +1193,11 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 Identifier::get_cpp_type_with_option(&end_option),
                 end_cpp_obj,
                 0.0,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1215,11 +1212,11 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 CPPType::Int as c_int,
                 end as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1234,11 +1231,11 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 end,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1254,7 +1251,7 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 begin as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 CPPType::String as c_int,
                 0 as *mut c_void,
                 0.0,
@@ -1278,11 +1275,11 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin as c_double,
-                null(),
+                std::ptr::null(),
                 Identifier::get_cpp_type_with_option(&end_option),
                 end_cpp_obj,
                 0.0,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1297,11 +1294,11 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin,
-                null(),
+                std::ptr::null(),
                 CPPType::Int as c_int,
                 end as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1321,11 +1318,11 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin,
-                null(),
+                std::ptr::null(),
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 end,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1346,7 +1343,7 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 begin,
-                null(),
+                std::ptr::null(),
                 CPPType::String as c_int,
                 0 as *mut c_void,
                 0.0,
@@ -1375,7 +1372,7 @@ impl ExpressionOperable {
                 Identifier::get_cpp_type_with_option(&end_option),
                 end_cpp_obj,
                 0.0,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1395,7 +1392,7 @@ impl ExpressionOperable {
                 CPPType::Int as c_int,
                 end as *mut c_void,
                 0.0,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1420,7 +1417,7 @@ impl ExpressionOperable {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 end,
-                null(),
+                std::ptr::null(),
                 true,
             )
         };
@@ -1479,8 +1476,8 @@ impl ExpressionOperable {
                 CppObject::get(self),
                 CPPType::Int as c_int,
                 operands.as_ptr(),
-                null(),
-                null(),
+                std::ptr::null(),
+                std::ptr::null(),
                 operands.len() as c_int,
                 is_not,
             )
@@ -1501,8 +1498,8 @@ impl ExpressionOperable {
                 CppObject::get(self),
                 cpp_type as c_int,
                 operands.as_ptr(),
-                null(),
-                null(),
+                std::ptr::null(),
+                std::ptr::null(),
                 operands.len() as c_int,
                 is_not,
             )
@@ -1521,9 +1518,9 @@ impl ExpressionOperable {
                 left_cpp_type as c_int,
                 CppObject::get(self),
                 CPPType::Double as c_int,
-                null(),
+                std::ptr::null(),
                 operands.as_ptr(),
-                null(),
+                std::ptr::null(),
                 operands.len() as c_int,
                 is_not,
             )
@@ -1544,8 +1541,8 @@ impl ExpressionOperable {
                 left_cpp_type as c_int,
                 CppObject::get(self),
                 CPPType::String as c_int,
-                null(),
-                null(),
+                std::ptr::null(),
+                std::ptr::null(),
                 c_string_array.as_ptr(),
                 c_string_array.len() as c_int,
                 is_not,
