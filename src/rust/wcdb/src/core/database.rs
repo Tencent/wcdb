@@ -530,6 +530,7 @@ pub struct Database {
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,
     trace_callback_ref: Arc<RefCell<*mut c_void>>,
     trace_sql_ref: Arc<RefCell<*mut c_void>>,
+    trace_exception_ref: Arc<RefCell<*mut c_void>>,
 }
 
 unsafe impl Send for Database {}
@@ -1240,6 +1241,7 @@ impl Database {
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+            trace_exception_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1251,6 +1253,7 @@ impl Database {
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+            trace_exception_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1262,6 +1265,7 @@ impl Database {
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+            trace_exception_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1273,6 +1277,7 @@ impl Database {
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+            trace_exception_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1282,6 +1287,7 @@ impl Database {
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
+            trace_exception_ref: Arc::new(RefCell::new(null_mut())),
         }
     }
 
@@ -1684,7 +1690,7 @@ impl Database {
         if let Some(cb) = cb_opt {
             let closure_box = Box::new(Box::new(cb) as Box<dyn TraceExceptionCallbackTrait>);
             closure_raw = Box::into_raw(closure_box) as *mut c_void;
-            let mut value = self.trace_callback_ref.borrow_mut();
+            let mut value = self.trace_exception_ref.borrow_mut();
             *value = closure_raw;
         }
         unsafe {
