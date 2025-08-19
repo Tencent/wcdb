@@ -1532,10 +1532,12 @@ impl ExpressionOperable {
     }
 
     pub fn in_string(&self, left_cpp_type: i32, operands: Vec<&str>, is_not: bool) -> Expression {
+        let mut c_strings = Vec::new();
         let mut c_string_array: Vec<*const c_char> = Vec::new();
         for x in operands {
             let c_string = CString::new(x).unwrap_or_default();
             c_string_array.push(c_string.as_ptr());
+            c_strings.push(c_string);
         }
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_inOperate(

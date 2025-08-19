@@ -149,10 +149,12 @@ impl StatementSelect {
         }
         let column_len = result_columns.len();
         let mut types = vec![];
+        let mut c_strings = Vec::new();
         let mut cstr_vector: Vec<*const c_char> = Vec::with_capacity(column_len);
         for name in result_columns {
             types.push(CPPType::String as i32);
             cstr_vector.push(name.to_cstring().as_ptr());
+            c_strings.push(name.to_cstring());
         }
         unsafe {
             WCDBRustStatementSelect_configResultColumns(
@@ -305,10 +307,12 @@ impl StatementSelect {
             return self;
         }
         let len = column_names.len();
+        let mut c_strings = Vec::new();
         let mut cstr_vector: Vec<*const c_char> = Vec::with_capacity(len);
         let mut types = Vec::with_capacity(len);
         for x in column_names {
             cstr_vector.push(x.to_cstring().as_ptr());
+            c_strings.push(x.to_cstring());
             types.push(CPPType::String as i32);
         }
         let length = len as c_int;

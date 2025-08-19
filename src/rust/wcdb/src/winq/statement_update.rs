@@ -312,9 +312,11 @@ impl StatementUpdate {
             return self;
         }
 
+        let mut c_strings = Vec::new();
         let mut columns_void_vec: Vec<*const c_char> = Vec::with_capacity(columns.len());
         for x in columns {
             columns_void_vec.push(x.to_cstring().as_ptr());
+            c_strings.push(x.to_cstring());
         }
 
         unsafe {

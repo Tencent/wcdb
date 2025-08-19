@@ -158,9 +158,11 @@ impl StatementCreateIndex {
     }
 
     pub fn indexed_by_column_names(&self, column_names: &Vec<String>) -> &Self {
+        let mut c_strings = Vec::new();
         let mut c_string_array: Vec<*const c_char> = Vec::new();
         for x in column_names {
             c_string_array.push(x.to_cstring().as_ptr());
+            c_strings.push(x.to_cstring());
         }
         unsafe {
             WCDBRustStatementCreateIndex_configIndexedColumns(
