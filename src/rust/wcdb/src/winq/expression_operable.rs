@@ -1535,7 +1535,7 @@ impl ExpressionOperable {
         let mut c_string_array: Vec<*const c_char> = Vec::new();
         for x in operands {
             let c_string = CString::new(x).unwrap_or_default();
-            c_string_array.push(c_string.into_raw());
+            c_string_array.push(c_string.as_ptr());
         }
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_inOperate(

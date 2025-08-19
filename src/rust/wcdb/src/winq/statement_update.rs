@@ -314,7 +314,7 @@ impl StatementUpdate {
 
         let mut columns_void_vec: Vec<*const c_char> = Vec::with_capacity(columns.len());
         for x in columns {
-            columns_void_vec.push(x.to_cstring().into_raw());
+            columns_void_vec.push(x.to_cstring().as_ptr());
         }
 
         unsafe {
