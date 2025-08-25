@@ -115,6 +115,8 @@ Tutorials of different languages can be found below:
 
 If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
 
+WCDB 正式加入[TDS 腾讯端服务产品联盟](https://tds-union.qq.com/)，携手联盟其他成员，共同致力于构建开放共赢的大前端技术产品生态。
+
 # 信息公示
 
 * 开发者: 深圳市腾讯计算机系统有限公司
