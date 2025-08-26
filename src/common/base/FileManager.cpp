@@ -322,20 +322,6 @@ Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
         setThreadedWinError(path);
         return NullOpt;
     }
-    FILE_ID_INFO fileIdInfo;
-    if (GetFileInformationByHandleEx(hFile, FileIdInfo, &fileIdInfo, sizeof(fileIdInfo))) {
-        CloseHandle(hFile);
-
-        constexpr size_t size
-        = sizeof(fileIdInfo.FileId) + sizeof(fileIdInfo.VolumeSerialNumber);
-        unsigned char buffer[size];
-        memcpy(buffer, &fileIdInfo.FileId, sizeof(fileIdInfo.FileId));
-        memcpy(buffer + sizeof(fileIdInfo.FileId),
-               &fileIdInfo.VolumeSerialNumber,
-               sizeof(fileIdInfo.VolumeSerialNumber));
-        return UnsafeData(buffer, size).hash();
-    }
-
     BY_HANDLE_FILE_INFORMATION fileInfo;
     if (GetFileInformationByHandle(hFile, &fileInfo)) {
         CloseHandle(hFile);
