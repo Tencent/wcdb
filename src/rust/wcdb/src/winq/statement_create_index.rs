@@ -1,14 +1,16 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
-use std::ptr::null;
 
 extern "C" {
     fn WCDBRustStatementCreateIndex_create() -> *mut c_void;
+
     fn WCDBRustStatementCreateIndex_configIndex(cpp_obj: *mut c_void, index_name: *const c_char);
 
     fn WCDBRustStatementCreateIndex_configUnique(cpp_obj: *mut c_void);
@@ -36,6 +38,7 @@ extern "C" {
     );
 
     fn WCDBRustStatementCreateIndex_configTable(cpp_obj: *mut c_void, table_name: *const c_char);
+
     fn WCDBRustStatementCreateIndex_configWhere(cpp_obj: *mut c_void, condition: *mut c_void);
 }
 
@@ -57,15 +60,25 @@ impl CppObjectTrait for StatementCreateIndex {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementCreateIndex {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementCreateIndex {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementCreateIndex {
-    fn get_type() -> i32 {
-        CPPType::CreateIndexSTMT as i32
+impl IdentifierConvertibleTrait for StatementCreateIndex {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -79,13 +92,17 @@ impl StatementCreateIndex {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementCreateIndex_create() };
         StatementCreateIndex {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::CreateIndexSTMT, Some(cpp_obj)),
         }
     }
 
     pub fn create_index(&self, index_name: &str) -> &Self {
-        let cstr = index_name.to_cstring();
-        unsafe { WCDBRustStatementCreateIndex_configIndex(self.get_cpp_obj(), cstr.as_ptr()) }
+        unsafe {
+            WCDBRustStatementCreateIndex_configIndex(
+                self.get_cpp_obj(),
+                index_name.to_cstring().as_ptr(),
+            )
+        }
         self
     }
 
@@ -102,13 +119,12 @@ impl StatementCreateIndex {
     }
 
     pub fn of(&self, schema_name: &str) -> &Self {
-        let c_str = schema_name.to_cstring();
         unsafe {
             WCDBRustStatementCreateIndex_configSchema(
                 self.get_cpp_obj(),
                 CPPType::String as c_int,
-                0 as *mut c_void,
-                c_str.as_ptr(),
+                std::ptr::null_mut(),
+                schema_name.to_cstring().as_ptr(),
             )
         }
         self
@@ -127,35 +143,39 @@ impl StatementCreateIndex {
     // }
 
     pub fn on(&self, table_name: &str) -> &Self {
-        let cstr = table_name.to_cstring();
-        unsafe { WCDBRustStatementCreateIndex_configTable(self.get_cpp_obj(), cstr.as_ptr()) }
+        unsafe {
+            WCDBRustStatementCreateIndex_configTable(
+                self.get_cpp_obj(),
+                table_name.to_cstring().as_ptr(),
+            )
+        }
         self
     }
 
-    pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
-    where
-        T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        if column_convertible_vec.is_empty() {
-            return self;
-        }
-        let columns_void_vec_len = column_convertible_vec.len() as i32;
-        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(column_convertible_vec.len());
-        let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]);
-        for column_convertible in column_convertible_vec {
-            c_void_vec.push(column_convertible.get_cpp_obj());
-        }
-        unsafe {
-            WCDBRustStatementCreateIndex_configIndexedColumns(
-                self.get_cpp_obj(),
-                cpp_type,
-                c_void_vec.as_ptr(),
-                std::ptr::null(),
-                columns_void_vec_len,
-            );
-        }
-        self
-    }
+    // pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
+    // where
+    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     if column_convertible_vec.is_empty() {
+    //         return self;
+    //     }
+    //     let columns_void_vec_len = column_convertible_vec.len() as i32;
+    //     let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(column_convertible_vec.len());
+    //     let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]);
+    //     for column_convertible in column_convertible_vec {
+    //         c_void_vec.push(column_convertible.get_cpp_obj());
+    //     }
+    //     unsafe {
+    //         WCDBRustStatementCreateIndex_configIndexedColumns(
+    //             self.get_cpp_obj(),
+    //             cpp_type,
+    //             c_void_vec.as_ptr(),
+    //             std::ptr::null(),
+    //             columns_void_vec_len,
+    //         );
+    //     }
+    //     self
+    // }
 
     pub fn indexed_by_column_names(&self, column_names: &Vec<String>) -> &Self {
         let mut c_strings = Vec::new();
@@ -169,7 +189,7 @@ impl StatementCreateIndex {
             WCDBRustStatementCreateIndex_configIndexedColumns(
                 self.get_cpp_obj(),
                 CPPType::String as c_int,
-                null(),
+                std::ptr::null(),
                 c_string_array.as_ptr(),
                 c_string_array.len() as c_int,
             );
@@ -177,7 +197,7 @@ impl StatementCreateIndex {
         self
     }
 
-    pub fn where_expression(&self, condition: Expression) -> &Self {
+    pub fn r#where(&self, condition: Expression) -> &Self {
         unsafe {
             WCDBRustStatementCreateIndex_configWhere(self.get_cpp_obj(), CppObject::get(&condition))
         }

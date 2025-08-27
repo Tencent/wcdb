@@ -7,6 +7,6 @@ pub mod schema_test {
     pub fn test() {
         WinqTool::winq_equal(&Schema::main(), "main");
         WinqTool::winq_equal(&Schema::temp(), "temp");
-        WinqTool::winq_equal(&Schema::new_with_table_name("testSchema"), "testSchema");
+        WinqTool::winq_equal(&Schema::new("testSchema"), "testSchema");
     }
 }

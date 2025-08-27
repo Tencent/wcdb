@@ -4,11 +4,10 @@ use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_void, CString};
-use std::ptr::{null, null_mut};
 
 extern "C" {
     fn WCDBRustUpsert_createCppObj() -> *mut c_void;
@@ -24,6 +23,7 @@ extern "C" {
     fn WCDBRustUpsert_configWhere(cpp_obj: *mut c_void, condition: *mut c_void);
 
     fn WCDBRustUpsert_configDoNothing(cpp_obj: *mut c_void);
+
     fn WCDBRustUpsert_configDoUpdate(cpp_obj: *mut c_void);
 
     fn WCDBRustUpsert_configSetColumns(
@@ -42,32 +42,9 @@ extern "C" {
         string_value: *const c_char,
     );
 }
+
 pub struct Upsert {
     identifier: Identifier,
-}
-
-impl CppObjectConvertibleTrait for Upsert {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.identifier.as_cpp_object()
-    }
-}
-
-impl IdentifierConvertibleTrait for Upsert {
-    fn as_identifier(&self) -> &Identifier {
-        self.identifier.as_identifier()
-    }
-}
-
-impl IdentifierTrait for Upsert {
-    fn get_description(&self) -> String {
-        self.identifier.get_description()
-    }
-}
-
-impl IdentifierStaticTrait for Upsert {
-    fn get_type() -> i32 {
-        CPPType::UpsertClause as i32
-    }
 }
 
 impl CppObjectTrait for Upsert {
@@ -84,11 +61,33 @@ impl CppObjectTrait for Upsert {
     }
 }
 
+impl CppObjectConvertibleTrait for Upsert {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
+impl IdentifierTrait for Upsert {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for Upsert {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
 impl Upsert {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustUpsert_createCppObj() };
         Upsert {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::UpsertClause, Some(cpp_obj)),
         }
     }
 
@@ -105,7 +104,7 @@ impl Upsert {
             WCDBRustUpsert_configIndexedColumn(
                 self.get_cpp_obj(),
                 CPPType::String as c_int,
-                null_mut(),
+                std::ptr::null_mut(),
                 c_char_vec.as_ptr(),
                 len as c_int,
             );
@@ -113,30 +112,30 @@ impl Upsert {
         self
     }
 
-    pub fn indexed_by_indexed_column_convertible_trait<T>(&self, indexed_columns: Vec<&T>) -> &Self
-    where
-        T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        if indexed_columns.is_empty() {
-            return self;
-        }
-        let len = indexed_columns.len();
-        let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
-        let cpp_type = Identifier::get_cpp_type(indexed_columns[0]);
-        for x in indexed_columns {
-            i64_vec.push(CppObject::get(x));
-        }
-        unsafe {
-            WCDBRustUpsert_configIndexedColumn(
-                self.get_cpp_obj(),
-                cpp_type,
-                i64_vec.as_ptr(),
-                null(),
-                len as c_int,
-            );
-        }
-        self
-    }
+    // pub fn indexed_by_indexed_column_convertible_trait<T>(&self, indexed_columns: Vec<&T>) -> &Self
+    // where
+    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     if indexed_columns.is_empty() {
+    //         return self;
+    //     }
+    //     let len = indexed_columns.len();
+    //     let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
+    //     let cpp_type = Identifier::get_cpp_type(indexed_columns[0]);
+    //     for x in indexed_columns {
+    //         i64_vec.push(CppObject::get(x));
+    //     }
+    //     unsafe {
+    //         WCDBRustUpsert_configIndexedColumn(
+    //             self.get_cpp_obj(),
+    //             cpp_type as c_int,
+    //             i64_vec.as_ptr(),
+    //             std::ptr::null(),
+    //             len as c_int,
+    //         );
+    //     }
+    //     self
+    // }
 
     pub fn where_(&self, condition: &Expression) -> &Self {
         unsafe {
@@ -171,7 +170,7 @@ impl Upsert {
             WCDBRustUpsert_configSetColumns(
                 self.get_cpp_obj(),
                 CPPType::String as c_int,
-                null_mut(),
+                std::ptr::null_mut(),
                 c_char_vec.as_ptr(),
                 len as c_int,
             )
@@ -189,9 +188,9 @@ impl Upsert {
         unsafe {
             WCDBRustUpsert_configSetColumns(
                 self.get_cpp_obj(),
-                cpp_type,
+                cpp_type as c_int,
                 i64_vec.as_ptr(),
-                null_mut(),
+                std::ptr::null_mut(),
                 len as c_int,
             )
         }
@@ -205,8 +204,8 @@ impl Upsert {
                 self.get_cpp_obj(),
                 CPPType::Bool as c_int,
                 value as *mut c_void,
-                0.0,
-                null_mut(),
+                0 as c_double,
+                std::ptr::null_mut(),
             );
         }
         self
@@ -218,8 +217,8 @@ impl Upsert {
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
                 value as *mut c_void,
-                0.0,
-                null_mut(),
+                0 as c_double,
+                std::ptr::null_mut(),
             );
         }
         self
@@ -231,8 +230,8 @@ impl Upsert {
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
                 value as *mut c_void,
-                0.0,
-                null_mut(),
+                0 as c_double,
+                std::ptr::null_mut(),
             );
         }
         self
@@ -244,8 +243,8 @@ impl Upsert {
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
                 value as *mut c_void,
-                0.0,
-                null_mut(),
+                0 as c_double,
+                std::ptr::null_mut(),
             );
         }
         self
@@ -257,8 +256,8 @@ impl Upsert {
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
                 value as *mut c_void,
-                0.0,
-                null_mut(),
+                0 as c_double,
+                std::ptr::null_mut(),
             );
         }
         self
@@ -271,7 +270,7 @@ impl Upsert {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 value as c_double,
-                null_mut(),
+                std::ptr::null_mut(),
             );
         }
         self
@@ -284,7 +283,7 @@ impl Upsert {
                 CPPType::Double as c_int,
                 0 as *mut c_void,
                 value as c_double,
-                null_mut(),
+                std::ptr::null_mut(),
             );
         }
         self
@@ -298,7 +297,7 @@ impl Upsert {
                     self.get_cpp_obj(),
                     CPPType::String as c_int,
                     0 as *mut c_void,
-                    0.0,
+                    0 as c_double,
                     c_str.as_ptr(),
                 );
             }
@@ -308,38 +307,38 @@ impl Upsert {
                     self.get_cpp_obj(),
                     CPPType::Null as c_int,
                     0 as *mut c_void,
-                    0.0,
-                    null_mut(),
+                    0 as c_double,
+                    std::ptr::null_mut(),
                 );
             }
         }
         self
     }
 
-    pub fn to_expression_convertible_trait<T>(&self, value: Option<T>) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        match value {
-            None => unsafe {
-                WCDBRustUpsert_configToValue(
-                    self.get_cpp_obj(),
-                    CPPType::Null as c_int,
-                    0 as *mut c_void,
-                    0.0,
-                    null_mut(),
-                );
-            },
-            Some(value) => unsafe {
-                WCDBRustUpsert_configToValue(
-                    self.get_cpp_obj(),
-                    Identifier::get_cpp_type(&value) as c_int,
-                    CppObject::get(&value),
-                    0.0,
-                    null_mut(),
-                );
-            },
-        }
-        self
-    }
+    // pub fn to_expression_convertible_trait<T>(&self, value: Option<T>) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     match value {
+    //         None => unsafe {
+    //             WCDBRustUpsert_configToValue(
+    //                 self.get_cpp_obj(),
+    //                 CPPType::Null as c_int,
+    //                 0 as *mut c_void,
+    //                 0 as c_double,
+    //                 std::ptr::null_mut(),
+    //             );
+    //         },
+    //         Some(value) => unsafe {
+    //             WCDBRustUpsert_configToValue(
+    //                 self.get_cpp_obj(),
+    //                 Identifier::get_cpp_type(&value) as c_int,
+    //                 CppObject::get(&value),
+    //                 0 as c_double,
+    //                 std::ptr::null_mut(),
+    //             );
+    //         },
+    //     }
+    //     self
+    // }
 }

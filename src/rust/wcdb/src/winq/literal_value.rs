@@ -1,8 +1,9 @@
-use crate::base::cpp_object::CppObjectTrait;
-use crate::utils::ToCString;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::winq::expression_operable::OperateParam;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_void};
-use std::ptr::null;
 
 extern "C" {
     fn WCDBRustLiteralValue_create(
@@ -31,78 +32,36 @@ impl CppObjectTrait for LiteralValue {
     }
 }
 
+impl CppObjectConvertibleTrait for LiteralValue {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for LiteralValue {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.identifier.get_description()
     }
 }
 
-impl IdentifierStaticTrait for LiteralValue {
-    fn get_type() -> i32 {
-        CPPType::LiteralValue as i32
+impl IdentifierConvertibleTrait for LiteralValue {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
     }
 }
 
 impl LiteralValue {
-    pub fn new_with_i32(value: i32) -> Self {
-        let cpp_obj =
-            unsafe { WCDBRustLiteralValue_create(CPPType::Int as i32, value as i64, 0f64, null()) };
-        LiteralValue {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_with_i64(value: i64) -> Self {
-        let cpp_obj =
-            unsafe { WCDBRustLiteralValue_create(CPPType::Int as i32, value, 0f64, null()) };
-        LiteralValue {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_with_f32(value: f32) -> Self {
+    pub fn new<T: OperateParam>(param: T) -> Self {
+        let (arg_type, arg_long, arg_double, arg_string) = param.get_params();
         let cpp_obj = unsafe {
-            WCDBRustLiteralValue_create(CPPType::Double as i32, 0i64, value as f64, null())
+            WCDBRustLiteralValue_create(arg_type as c_int, arg_long, arg_double, arg_string)
         };
         LiteralValue {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_with_f64(value: f64) -> Self {
-        let cpp_obj =
-            unsafe { WCDBRustLiteralValue_create(CPPType::Double as i32, 0i64, value, null()) };
-        LiteralValue {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_with_bool(value: bool) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustLiteralValue_create(
-                CPPType::Bool as i32,
-                if value { 1 } else { 0 } as i64,
-                0f64,
-                null(),
-            )
-        };
-        LiteralValue {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_with_str(value_opt: Option<&str>) -> Self {
-        let cpp_obj = match value_opt {
-            None => unsafe {
-                WCDBRustLiteralValue_create(CPPType::Null as c_int, 0i64, 0f64, null())
-            },
-            Some(value) => unsafe {
-                let cstr = value.to_cstring();
-                WCDBRustLiteralValue_create(CPPType::String as c_int, 0i64, 0f64, cstr.as_ptr())
-            },
-        };
-        LiteralValue {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::LiteralValue, Some(cpp_obj)),
         }
     }
 }

@@ -1,17 +1,23 @@
-use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::utils::ToCString;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::{c_char, c_int, c_void, CString};
+use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustStatementDropTable_create() -> *mut c_void;
+
     fn WCDBRustStatementDropTable_configTableName(cpp_obj: *mut c_void, table_name: *const c_char);
+
     fn WCDBRustStatementDropTable_configSchema(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         schema_cpp_obj: *mut c_void,
         schema_name: *const c_char,
     );
+
     fn WCDBRustStatementDropTable_configIfExist(cpp_obj: *mut c_void);
 }
 
@@ -33,15 +39,25 @@ impl CppObjectTrait for StatementDropTable {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementDropTable {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementDropTable {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementDropTable {
-    fn get_type() -> i32 {
-        CPPType::DropTableSTMT as i32
+impl IdentifierConvertibleTrait for StatementDropTable {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -55,26 +71,27 @@ impl StatementDropTable {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementDropTable_create() };
         StatementDropTable {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::DropTableSTMT, Some(cpp_obj)),
         }
     }
 
     pub fn drop_table(&self, table_name: &str) -> &Self {
-        let c_table_name = CString::new(table_name).unwrap_or_default();
         unsafe {
-            WCDBRustStatementDropTable_configTableName(self.get_cpp_obj(), c_table_name.as_ptr());
+            WCDBRustStatementDropTable_configTableName(
+                self.get_cpp_obj(),
+                table_name.to_cstring().as_ptr(),
+            );
         }
         self
     }
 
     pub fn of(&self, schema_name: &str) -> &Self {
-        let c_schema_name = CString::new(schema_name).unwrap_or_default();
         unsafe {
             WCDBRustStatementDropTable_configSchema(
                 self.get_cpp_obj(),
                 CPPType::String as i32,
                 std::ptr::null_mut(),
-                c_schema_name.as_ptr(),
+                schema_name.to_cstring().as_ptr(),
             )
         }
         self

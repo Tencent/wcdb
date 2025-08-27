@@ -1,4 +1,5 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
@@ -33,41 +34,52 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
     fn insert_or_replace_object<T>(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
     fn insert_or_ignore_object<T>(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
     fn insert_objects<T>(
         &self,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
     fn insert_or_replace_objects<T>(
         &self,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
     fn insert_or_ignore_objects<T>(
         &self,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()>;
+
     fn prepare_insert<T>(&self) -> Insert<T>;
+
     fn prepare_update<T>(&self) -> Update<T>;
+
     fn prepare_select<T>(&self) -> Select<T>;
+
     fn prepare_delete(&self) -> Delete;
+
     fn delete_objects(&self, table_name: &str) -> WCDBResult<()>;
+
     fn delete_objects_by_expression(
         &self,
         table_name: &str,
@@ -372,16 +384,16 @@ impl CppObjectTrait for HandleORMOperation {
     }
 }
 
-impl HandleORMOperation {
-    pub fn new() -> Self {
-        HandleORMOperation {
-            handle_operation: HandleOperation::new(),
-        }
+impl CppObjectConvertibleTrait for HandleORMOperation {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.handle_operation.as_cpp_object()
     }
+}
 
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
+impl HandleORMOperation {
+    pub fn new(cpp_obj_opt: Option<*mut c_void>) -> Self {
         HandleORMOperation {
-            handle_operation: HandleOperation::new_with_obj(cpp_obj),
+            handle_operation: HandleOperation::new(cpp_obj_opt),
         }
     }
 }

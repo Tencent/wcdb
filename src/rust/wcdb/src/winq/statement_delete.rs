@@ -1,26 +1,32 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::winq::expression::Expression;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 
 extern "C" {
     fn WCDBRustStatementDelete_create() -> *mut c_void;
+
     fn WCDBRustStatementDelete_configTable(
         cpp_obj: *mut c_void,
         table_type: c_int,
         table_long: i64,
         table_string: *const c_char,
     );
+
     fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
+
     fn WCDBRustStatementDelete_configOrders(
         cpp_obj: *mut c_void,
         orders: *const *mut c_void,
         vec_len: c_size_t,
     );
+
     fn WCDBRustStatementDelete_configLimitCount(
         cpp_obj: *mut c_void,
         config_type: c_int,
@@ -56,15 +62,25 @@ impl CppObjectTrait for StatementDelete {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementDelete {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementDelete {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementDelete {
-    fn get_type() -> i32 {
-        CPPType::DeleteSTMT as i32
+impl IdentifierConvertibleTrait for StatementDelete {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -78,7 +94,7 @@ impl StatementDelete {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementDelete_create() };
         StatementDelete {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::DeleteSTMT, Some(cpp_obj)),
         }
     }
 

@@ -22,7 +22,6 @@ pub extern "C" fn WCDBExceptionAddInfo(
     double_value: f64,
     string_value: *const c_char,
 ) {
-    let key = key.to_cow();
     let value = match value_type {
         3 => ExceptionObject::Long(int_value),
         5 => ExceptionObject::Double(double_value),
@@ -31,7 +30,7 @@ pub extern "C" fn WCDBExceptionAddInfo(
     };
     let key_values: &mut HashMap<String, ExceptionObject> =
         unsafe { &mut *(key_values_raw as *mut HashMap<String, ExceptionObject>) };
-    key_values.insert(key.to_string(), value);
+    key_values.insert(key.to_cow().to_string(), value);
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

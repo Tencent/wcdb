@@ -1,18 +1,17 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCow;
-use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use num_derive::FromPrimitive;
 use std::ffi::{c_char, c_void};
 use std::fmt::Debug;
 
 extern "C" {
-    fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
     pub fn WCDBRustWinq_isWriteStatement(statement: *mut c_void) -> bool;
+    fn WCDBRustWinq_getDescription(statement: *mut c_void) -> *const c_char;
 }
 
-#[derive(Debug, PartialEq, Eq, FromPrimitive)]
+#[derive(Clone, Debug, Eq, FromPrimitive, PartialEq)]
 #[repr(i32)]
 pub enum CPPType {
     Invalid = 0,
@@ -76,12 +75,9 @@ pub enum CPPType {
     ExplainSTMT = 56,
 }
 
-pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
-    T::get_type()
-}
-
 #[derive(Debug, Clone)]
 pub struct Identifier {
+    cpp_type: CPPType,
     cpp_obj: CppObject,
 }
 
@@ -99,30 +95,25 @@ impl CppObjectTrait for Identifier {
     }
 }
 
-pub trait IdentifierTrait: CppObjectTrait {
+impl CppObjectConvertibleTrait for Identifier {
+    fn as_cpp_object(&self) -> &CppObject {
+        &self.cpp_obj
+    }
+}
+
+pub trait IdentifierTrait: IdentifierConvertibleTrait {
+    fn get_type(&self) -> CPPType;
     fn get_description(&self) -> String;
 }
 
 impl IdentifierTrait for Identifier {
+    fn get_type(&self) -> CPPType {
+        self.cpp_type.clone()
+    }
+
     fn get_description(&self) -> String {
         let c_description = unsafe { WCDBRustWinq_getDescription(self.get_cpp_obj()) };
         c_description.to_cow().to_string()
-    }
-}
-
-pub trait IdentifierStaticTrait {
-    fn get_type() -> i32;
-}
-
-impl IdentifierStaticTrait for Identifier {
-    fn get_type() -> i32 {
-        CPPType::Invalid as i32
-    }
-}
-
-impl CppObjectConvertibleTrait for Identifier {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.cpp_obj.get_cpp_obj()
     }
 }
 
@@ -133,35 +124,14 @@ impl IdentifierConvertibleTrait for Identifier {
 }
 
 impl Identifier {
-    pub fn new() -> Self {
+    pub(crate) fn new(cpp_type: CPPType, cpp_obj_opt: Option<*mut c_void>) -> Self {
         Identifier {
-            cpp_obj: CppObject::new(),
+            cpp_type,
+            cpp_obj: CppObject::new(cpp_obj_opt),
         }
     }
 
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
-        Identifier {
-            cpp_obj: CppObject::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn get_cpp_type<T: IdentifierStaticTrait>(_: &T) -> i32 {
-        T::get_type()
-    }
-
-    pub fn get_cpp_type_with_option<
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    >(
-        identifier: &Option<&T>,
-    ) -> i32 {
-        if let Some(val) = identifier {
-            T::get_type()
-        } else {
-            CPPType::Null as i32
-        }
-    }
-
-    fn get_type(&self) -> i32 {
-        CPPType::Invalid as i32
+    pub(crate) fn get_cpp_type<T: IdentifierTrait>(identifier: &T) -> CPPType {
+        identifier.get_type()
     }
 }

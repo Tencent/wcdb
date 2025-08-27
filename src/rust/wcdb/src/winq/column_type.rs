@@ -8,6 +8,7 @@ pub enum ColumnType {
     Text = 3,
     BLOB = 4,
 }
+
 impl ColumnType {
     pub fn cpp_type(&self) -> CPPType {
         match self {

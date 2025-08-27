@@ -23,35 +23,34 @@
 #include "BindParameterBridge.h"
 
 void* WCDBRustBindParameterClassMethod(createQuestionSignType, int num) {
-    return (void*)WCDBBindparameterCreateQuestionSignType(num).innerValue;
+    return WCDBBindparameterCreateQuestionSignType(num).innerValue;
 }
 
 void* WCDBRustBindParameterClassMethod(createAtSignType, const char* name) {
     // WCDBRustGetStringCritical(name);
-    void* ret = (void*)WCDBBindparameterCreateAtSignType(name).innerValue;
+    void* ret = WCDBBindparameterCreateAtSignType(name).innerValue;
     // WCDBRustReleaseStringCritical(name);
     return ret;
 }
 
 void* WCDBRustBindParameterClassMethod(createColonSignType, const char* name) {
     // WCDBRustGetStringCritical(name);
-    void* ret = (void*)WCDBBindparameterCreateColonSignType(name).innerValue;
+    void* ret = WCDBBindparameterCreateColonSignType(name).innerValue;
     // WCDBRustReleaseStringCritical(name);
     return ret;
 }
 
 void* WCDBRustBindParameterClassMethod(createDollarSignType, const char* name) {
     // WCDBRustGetStringCritical(name);
-    void* ret = (void*)WCDBBindparameterCreateDollarSignType(name).innerValue;
+    void* ret = WCDBBindparameterCreateDollarSignType(name).innerValue;
     // WCDBRustReleaseStringCritical(name);
     return ret;
 }
 
-void WCDBRustBindParameterClassMethod(bindParameters, long long* buffers, int size) {
-    if (buffers == NULL) {
-        return;
-    }
+void** WCDBRustBindParameterClassMethod(bindParameters, int size) {
+    void** ret = malloc(sizeof(void*) * size);
     for (int i = 0; i < size; i++) {
-        buffers[i] = (long)WCDBBindparameterCreateQuestionSignType(i + 1).innerValue;
+        ret[i] = WCDBBindparameterCreateQuestionSignType(i + 1).innerValue;
     }
+    return ret;
 }

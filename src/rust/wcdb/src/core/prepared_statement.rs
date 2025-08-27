@@ -10,6 +10,7 @@ use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::slice;
 use std::sync::atomic::{AtomicI32, Ordering};
 use std::sync::Arc;
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 
 extern "C" {
     fn WCDBRustHandleStatement_getError(cpp_obj: *mut c_void) -> *mut c_void;
@@ -67,10 +68,16 @@ impl CppObjectTrait for PreparedStatement {
     }
 }
 
+impl CppObjectConvertibleTrait for PreparedStatement {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.cpp_obj.as_cpp_object()
+    }
+}
+
 impl PreparedStatement {
-    pub fn new(cpp_obj: *mut c_void) -> PreparedStatement {
+    pub fn new(cpp_obj_opt: Option<*mut c_void>) -> PreparedStatement {
         PreparedStatement {
-            cpp_obj: CppObject::new_with_obj(cpp_obj),
+            cpp_obj: CppObject::new(cpp_obj_opt),
             auto_finalize: false,
             column_count: AtomicI32::new(-1),
         }

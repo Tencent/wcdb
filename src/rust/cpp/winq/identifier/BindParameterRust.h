@@ -31,4 +31,4 @@ void* WCDBRustBindParameterClassMethod(createQuestionSignType, int num);
 void* WCDBRustBindParameterClassMethod(createAtSignType, const char* name);
 void* WCDBRustBindParameterClassMethod(createColonSignType, const char* name);
 void* WCDBRustBindParameterClassMethod(createDollarSignType, const char* name);
-void WCDBRustBindParameterClassMethod(bindParameters, long long* buffers, int size);
+void** WCDBRustBindParameterClassMethod(bindParameters, int size);

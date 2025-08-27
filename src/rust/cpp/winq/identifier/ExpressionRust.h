@@ -35,10 +35,10 @@ void* WCDBRustExpressionClassMethod(create, int type, void* object);
 void* WCDBRustExpressionClassMethod(createWithFunction, const char* func);
 void* WCDBRustExpressionClassMethod(createWithExistStatement, void* select);
 void* WCDBRustExpressionClassMethod(createWithNotExistStatement, void* select);
-//
-// void WCDBRustExpressionClassMethod(setWithSchema,
-//                                   jlong expression,
-//                                   WCDBRustObjectOrStringParameter(schema));
+
+void WCDBRustExpressionClassMethod(setWithSchema,
+                                  void* expression,
+                                  WCDBRustObjectOrStringParameter(schema));
 void WCDBRustExpressionClassMethod(argument,
                                    void* expression,
                                    WCDBRustCommonValueParameter(argument));

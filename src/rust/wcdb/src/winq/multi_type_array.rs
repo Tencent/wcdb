@@ -95,7 +95,7 @@ impl MultiTypeArray {
                     string_index += 1;
                 }
                 Object::Identifier(identifier) => {
-                    types[i] = Identifier::get_cpp_type(identifier);
+                    types[i] = Identifier::get_cpp_type(identifier) as i32;
                     long_values[long_index] = CppObject::get(identifier) as i64;
                     long_index += 1;
                 }
@@ -166,7 +166,7 @@ impl MultiTypeArray {
         } else if val.is::<Value>() {
             return ObjectType::Value;
         }
-        return ObjectType::Unknown;
+        ObjectType::Unknown
     }
 
     pub fn types(&self) -> &Vec<i32> {

@@ -1,10 +1,16 @@
-use crate::base::cpp_object::CppObjectTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::utils::ToCString;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use std::ffi::{c_char, c_int, c_void, CString};
+use core::ffi::c_size_t;
+use std::borrow::Cow;
+use std::ffi::{c_char, c_int, c_longlong, c_void};
 
 extern "C" {
     fn WCDBRustTableConstraint_create(name: *const c_char) -> *mut c_void;
+
     fn WCDBRustTableConstraint_configPrimaryKey(cpp_obj: *mut c_void);
 
     fn WCDBRustTableConstraint_configUnique(cpp_obj: *mut c_void);
@@ -12,9 +18,9 @@ extern "C" {
     fn WCDBRustTableConstraint_configIndexedColumn(
         cpp_obj: *mut c_void,
         columns_type: c_int,
-        columns_void_vec: *const *mut c_void,
-        columns_string_vec: *const *const c_char,
-        columns_vec_len: c_int,
+        column_vec: *const c_longlong,
+        column_name_vec: *const *const c_char,
+        column_vec_len: c_size_t,
     );
 }
 
@@ -36,31 +42,77 @@ impl CppObjectTrait for TableConstraint {
     }
 }
 
+impl CppObjectConvertibleTrait for TableConstraint {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for TableConstraint {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.identifier.get_description()
     }
 }
 
-impl IdentifierStaticTrait for TableConstraint {
-    fn get_type() -> i32 {
-        CPPType::TableConstraint as i32
+impl IdentifierConvertibleTrait for TableConstraint {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
+pub trait TableConstraintIndexedByParam {
+    fn get_params(
+        &self,
+        column_vec: &mut Vec<*const c_longlong>,
+        column_name_vec: &mut Vec<*const c_char>,
+    ) -> CPPType;
+}
+
+impl<'a, T, R> TableConstraintIndexedByParam for T
+where
+    T: IntoIterator<Item = Cow<'a, R>>,
+    R: IndexedColumnConvertibleTrait,
+{
+    fn get_params(
+        &self,
+        column_vec: &mut Vec<*const c_longlong>,
+        column_name_vec: &mut Vec<*const c_char>,
+    ) -> CPPType {
+        for item in self {
+            column_vec.push(item.get_cpp_obj());
+        }
+        CPPType::String
+    }
+}
+
+impl<'a, T> TableConstraintIndexedByParam for T
+where
+    T: IntoIterator<Item = Cow<'a, str>>,
+{
+    fn get_params(
+        &self,
+        column_vec: &mut Vec<*const c_longlong>,
+        column_name_vec: &mut Vec<*const c_char>,
+    ) -> CPPType {
+        for item in self {
+
+        }
+        CPPType::String
     }
 }
 
 impl TableConstraint {
-    pub fn new() -> Self {
-        let cpp_obj = unsafe { WCDBRustTableConstraint_create(std::ptr::null_mut()) };
+    pub fn new(name_opt: Option<&str>) -> Self {
+        let cpp_obj = match name_opt {
+            Some(name) => unsafe { WCDBRustTableConstraint_create(name.to_cstring().as_ptr()) },
+            None => unsafe { WCDBRustTableConstraint_create(std::ptr::null_mut()) },
+        };
         Self {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_by_constraint_name(constraint_name: &str) -> Self {
-        let c_name = CString::new(constraint_name).unwrap_or_default();
-        let cpp_obj = unsafe { WCDBRustTableConstraint_create(c_name.as_ptr()) };
-        Self {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::TableConstraint, Some(cpp_obj)),
         }
     }
 
@@ -78,28 +130,30 @@ impl TableConstraint {
         self
     }
 
-    pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
-    where
-        T: IndexedColumnConvertibleTrait + IdentifierStaticTrait,
-    {
-        if column_convertible_vec.is_empty() {
-            return self;
-        }
-        let columns_void_vec_len = column_convertible_vec.len() as i32;
-        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(column_convertible_vec.len());
-        let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]);
-        for item in column_convertible_vec {
-            c_void_vec.push(item.as_identifier().get_cpp_obj());
-        }
-        unsafe {
-            WCDBRustTableConstraint_configIndexedColumn(
-                self.get_cpp_obj(),
-                cpp_type,
-                c_void_vec.as_ptr(),
-                std::ptr::null(),
-                columns_void_vec_len,
-            );
-        }
-        self
-    }
+    // pub fn indexed_by<'a, T, R>(&self, param_vec: T)
+    // where
+    //     T: IntoIterator<Item = Cow<'a, R>>,
+    //     R: TableConstraintIndexedByParam,
+    // {
+    //     let mut cpp_type = param_vec[0];
+    //     let mut cpp_obj_vec = vec![];
+    //     let mut cstr_vec = vec![];
+    //     for param in param_vec {
+    //         let params = param.get_params();
+    //         match params.0 {
+    //             CPPType::String => cstr_vec.push(params.1 as *const c_char),
+    //             _ => cpp_obj_vec.push(params.1 as c_longlong),
+    //         }
+    //     }
+    //     unsafe {
+    //         WCDBRustTableConstraint_configIndexedColumn(
+    //             self.get_cpp_obj(),
+    //             cpp_type as c_int,
+    //             c_void_vec.as_ptr(),
+    //             std::ptr::null(),
+    //             columns_void_vec_len,
+    //         );
+    //     }
+    //     self
+    // }
 }

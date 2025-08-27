@@ -35,9 +35,9 @@ void* WCDBRustColumnClassMethodWithNoArg(createRowId);
 void* WCDBRustColumnClassMethod(createWithName, const char* name, void* binding);
 
 // jlong WCDBRustColumnClassMethod(copy, jlong column);
-//
-// void WCDBRustColumnClassMethod(inTable, jlong column, jstring table);
-//
-// void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema));
-//
-// jlong WCDBRustColumnClassMethod(configAlias, jlong column, jstring alias);
+
+void WCDBRustColumnClassMethod(inTable, void* column, const char* table);
+
+void WCDBRustColumnClassMethod(ofSchema, void* column, WCDBRustObjectOrStringParameter(schema));
+
+void* WCDBRustColumnClassMethod(configAlias, void* column, const char* alias);

@@ -1,11 +1,15 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
-use std::ffi::{c_char, c_int, c_void, CString};
+use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustStatementCreateTable_create() -> *mut c_void;
+
     fn WCDBRustStatementCreateTable_configTableName(
         cpp_obj: *mut c_void,
         table_name: *const c_char,
@@ -36,15 +40,25 @@ impl CppObjectTrait for StatementCreateTable {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementCreateTable {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementCreateTable {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementCreateTable {
-    fn get_type() -> i32 {
-        CPPType::CreateTableSTMT as i32
+impl IdentifierConvertibleTrait for StatementCreateTable {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -58,14 +72,16 @@ impl StatementCreateTable {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementCreateTable_create() };
         StatementCreateTable {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::CreateTableSTMT, Some(cpp_obj)),
         }
     }
 
     pub fn create_table(&self, table_name: &str) -> &Self {
-        let c_table_name = CString::new(table_name).unwrap_or_default();
         unsafe {
-            WCDBRustStatementCreateTable_configTableName(self.get_cpp_obj(), c_table_name.as_ptr());
+            WCDBRustStatementCreateTable_configTableName(
+                self.get_cpp_obj(),
+                table_name.to_cstring().as_ptr(),
+            );
         }
         self
     }

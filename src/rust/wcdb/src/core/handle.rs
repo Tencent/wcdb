@@ -8,6 +8,7 @@ use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::sync::Arc;
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 
 extern "C" {
     fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
@@ -41,6 +42,12 @@ pub struct HandleInner {
     handle_orm_operation: HandleORMOperation,
     main_statement: Option<Arc<PreparedStatement>>,
     write_hint: bool,
+}
+
+impl CppObjectConvertibleTrait for HandleInner {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.handle_orm_operation.as_cpp_object()
+    }
 }
 
 impl CppObjectTrait for HandleInner {
@@ -93,7 +100,7 @@ impl HandleInner {
             match self.get_cpp_handle(database) {
                 Ok(handle_cpp) => {
                     let cpp_obj = unsafe { WCDBRustHandle_getMainStatement(handle_cpp) };
-                    let mut prepared_statement = PreparedStatement::new(cpp_obj);
+                    let mut prepared_statement = PreparedStatement::new(Some(cpp_obj));
                     prepared_statement.auto_finalize = true;
                     self.main_statement = Some(Arc::new(prepared_statement));
                 }
@@ -125,7 +132,7 @@ impl HandleInner {
         if self.main_statement.is_none() {
             let cpp_obj =
                 unsafe { WCDBRustHandle_getMainStatement(self.get_cpp_handle(database)?) };
-            let mut prepared_statement = PreparedStatement::new(cpp_obj);
+            let mut prepared_statement = PreparedStatement::new(Some(cpp_obj));
             prepared_statement.auto_finalize = true;
             self.main_statement = Some(Arc::new(prepared_statement));
         }
@@ -148,6 +155,12 @@ impl HandleInner {
 pub struct Handle<'a> {
     handle_inner: Arc<RefCell<HandleInner>>,
     database: &'a Database,
+}
+
+impl CppObjectConvertibleTrait for Handle<'a> {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.handle_inner.as_cpp_object()
+    }
 }
 
 impl<'a> CppObjectTrait for Handle<'a> {
@@ -208,7 +221,7 @@ impl<'a> HandleOperationTrait for Handle<'a> {
 impl<'a> Handle<'a> {
     pub fn new(database: &'a Database, write_hint: bool) -> Self {
         let handle_inner = Arc::new(RefCell::new(HandleInner {
-            handle_orm_operation: HandleORMOperation::new(),
+            handle_orm_operation: HandleORMOperation::new(None),
             main_statement: None,
             write_hint,
         }));
@@ -220,7 +233,7 @@ impl<'a> Handle<'a> {
 
     pub fn new_with_obj(cpp_obj: *mut c_void, database: &'a Database) -> Self {
         let handle_inner = Arc::new(RefCell::new(HandleInner {
-            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            handle_orm_operation: HandleORMOperation::new(Some(cpp_obj)),
             main_statement: None,
             write_hint: false,
         }));

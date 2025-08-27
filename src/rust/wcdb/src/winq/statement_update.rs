@@ -6,15 +6,17 @@ use crate::winq::common_table_expression::CommonTableExpression;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::qualified_table::QualifiedTable;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_int, c_void, CString};
+use std::ffi::{c_char, c_int, c_longlong, c_void, CString};
 use std::fmt::Debug;
 use std::os::raw::c_double;
 use std::ptr::{null, null_mut};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 
 extern "C" {
     fn WCDBRustStatementUpdate_create() -> *mut c_void;
@@ -39,7 +41,7 @@ extern "C" {
         columns_type: c_int,
         columns_void_vec: *const *mut c_void,
         columns_string_vec: *const *const c_char,
-        columns_vec_len: c_int,
+        columns_vec_len: c_size_t,
     );
 
     fn WCDBRustStatementUpdate_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
@@ -54,7 +56,9 @@ extern "C" {
         config_type: c_int,
         limit: i64,
     );
+
     fn WCDBRustStatementUpdate_configOffset(cpp_obj: *mut c_void, config_type: c_int, offset: i64);
+
     fn WCDBRustStatementUpdate_configConfliction(cpp_obj: *mut c_void, action: c_int);
 
     fn WCDBRustStatementUpdate_configValue(
@@ -72,15 +76,15 @@ extern "C" {
         cpp_type: c_int,
         columns: *const *mut c_void,
         column_names: *const *const c_char,
-        vec_len: c_int,
+        vec_len: c_size_t,
     );
 
     fn WCDBRustStatementUpdate_configLimitRange(
         cpp_obj: *mut c_void,
         from_type: c_int,
-        from: i64,
+        from: c_longlong,
         to_type: c_int,
-        to: i64,
+        to: c_longlong,
     );
 }
 
@@ -103,15 +107,25 @@ impl CppObjectTrait for StatementUpdate {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementUpdate {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementUpdate {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementUpdate {
-    fn get_type() -> i32 {
-        CPPType::UpdateSTMT as i32
+impl IdentifierConvertibleTrait for StatementUpdate {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -125,7 +139,7 @@ impl StatementUpdate {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementUpdate_create() };
         StatementUpdate {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::UpdateSTMT, Some(cpp_obj)),
         }
     }
 
@@ -171,7 +185,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configTable(
                 self.get_cpp_obj(),
-                CPPType::String as i32,
+                CPPType::String as c_int,
                 null_mut(),
                 c_table_name.as_ptr(),
             );
@@ -183,7 +197,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configTable(
                 self.get_cpp_obj(),
-                Identifier::get_cpp_type(&table),
+                Identifier::get_cpp_type(&table) as c_int,
                 CppObject::get(&table),
                 null(),
             )
@@ -195,7 +209,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configConfliction(
                 self.get_cpp_obj(),
-                ConflictAction::Replace as i32,
+                ConflictAction::Replace as c_int,
             )
         }
         self
@@ -205,7 +219,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configConfliction(
                 self.get_cpp_obj(),
-                ConflictAction::Rollback as i32,
+                ConflictAction::Rollback as c_int,
             )
         }
         self
@@ -215,7 +229,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configConfliction(
                 self.get_cpp_obj(),
-                ConflictAction::Abort as i32,
+                ConflictAction::Abort as c_int,
             )
         }
         self
@@ -225,7 +239,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configConfliction(
                 self.get_cpp_obj(),
-                ConflictAction::Fail as i32,
+                ConflictAction::Fail as c_int,
             )
         }
         self
@@ -235,7 +249,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configConfliction(
                 self.get_cpp_obj(),
-                ConflictAction::Ignore as i32,
+                ConflictAction::Ignore as c_int,
             )
         }
         self
@@ -245,16 +259,15 @@ impl StatementUpdate {
         if fields.is_empty() {
             return self;
         }
-        let columns_void_vec_len = fields.len() as i32;
+        let columns_void_vec_len = fields.len();
         let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(fields.len());
         for field in fields {
             c_void_vec.push(field.get_cpp_obj());
         }
-
         unsafe {
             WCDBRustStatementUpdate_configColumnsToBindParameters(
                 self.get_cpp_obj(),
-                CPPType::Column as i32,
+                CPPType::Column as c_int,
                 c_void_vec.as_ptr(),
                 null(),
                 columns_void_vec_len,
@@ -278,7 +291,7 @@ impl StatementUpdate {
                 CPPType::Column as i32,
                 c_void_vec.as_ptr(),
                 null(),
-                columns_vec_len as c_int,
+                columns_vec_len,
             );
         }
         self
@@ -301,7 +314,7 @@ impl StatementUpdate {
                 CPPType::Column as c_int,
                 columns_void_vec.as_ptr(),
                 null(),
-                columns_void_vec.len() as c_int,
+                columns_void_vec.len(),
             )
         }
         self
@@ -326,7 +339,7 @@ impl StatementUpdate {
                 CPPType::String as c_int,
                 null(),
                 columns_void_vec.as_ptr(),
-                columns_void_vec.len() as c_int,
+                columns_void_vec.len(),
             )
         }
         self
@@ -339,7 +352,7 @@ impl StatementUpdate {
                 self.get_cpp_obj(),
                 CPPType::Bool as i32,
                 ret,
-                0.0,
+                0 as c_double,
                 null(),
             )
         }
@@ -353,7 +366,7 @@ impl StatementUpdate {
                 self.get_cpp_obj(),
                 CPPType::Int as i32,
                 ret,
-                0.0,
+                0 as c_double,
                 null(),
             )
         }
@@ -367,7 +380,7 @@ impl StatementUpdate {
                 self.get_cpp_obj(),
                 CPPType::Int as i32,
                 ret,
-                0.0,
+                0 as c_double,
                 null(),
             )
         }
@@ -380,7 +393,7 @@ impl StatementUpdate {
                 self.get_cpp_obj(),
                 CPPType::Int as i32,
                 arg as *mut c_void,
-                0.0,
+                0 as c_double,
                 null(),
             )
         }
@@ -393,7 +406,7 @@ impl StatementUpdate {
                 self.get_cpp_obj(),
                 CPPType::Int as i32,
                 arg as *mut c_void,
-                0.0,
+                0 as c_double,
                 null(),
             )
         }
@@ -453,21 +466,21 @@ impl StatementUpdate {
         self
     }
 
-    pub fn to_expression_convertible<T>(&self, arg: &T) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(arg),
-                CppObject::get(arg),
-                0 as c_double,
-                null(),
-            )
-        }
-        self
-    }
+    // pub fn to_expression_convertible<T>(&self, arg: &T) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configValue(
+    //             self.get_cpp_obj(),
+    //             Identifier::get_cpp_type(arg) as c_int,
+    //             CppObject::get(arg),
+    //             0 as c_double,
+    //             null(),
+    //         )
+    //     }
+    //     self
+    // }
 
     pub fn where_expression(&self, condition: &Expression) -> &Self {
         unsafe {
@@ -510,53 +523,53 @@ impl StatementUpdate {
         self
     }
 
-    pub fn limit_i64_expression_convertible<T>(&self, from: i64, to: &T) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        unsafe {
-            WCDBRustStatementUpdate_configLimitRange(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                from as i64,
-                Identifier::get_cpp_type(to),
-                CppObject::get(to) as i64,
-            )
-        }
-        self
-    }
-
-    pub fn limit_expression_convertible<T>(&self, from: &T, to: &T) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        unsafe {
-            WCDBRustStatementUpdate_configLimitRange(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(from),
-                CppObject::get(from) as i64,
-                Identifier::get_cpp_type(to),
-                CppObject::get(to) as i64,
-            )
-        }
-        self
-    }
-
-    pub fn limit_expression_convertible_i64<T>(&self, from: &T, to: i64) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        unsafe {
-            WCDBRustStatementUpdate_configLimitRange(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(from),
-                CppObject::get(from) as i64,
-                CPPType::Int as i32,
-                to as i64,
-            )
-        }
-        self
-    }
+    // pub fn limit_i64_expression_convertible<T>(&self, from: i64, to: &T) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configLimitRange(
+    //             self.get_cpp_obj(),
+    //             CPPType::Int as c_int,
+    //             from,
+    //             Identifier::get_cpp_type(to) as c_int,
+    //             CppObject::get(to) as c_longlong,
+    //         )
+    //     }
+    //     self
+    // }
+    //
+    // pub fn limit_expression_convertible<T>(&self, from: &T, to: &T) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configLimitRange(
+    //             self.get_cpp_obj(),
+    //             Identifier::get_cpp_type(from),
+    //             CppObject::get(from) as i64,
+    //             Identifier::get_cpp_type(to),
+    //             CppObject::get(to) as i64,
+    //         )
+    //     }
+    //     self
+    // }
+    //
+    // pub fn limit_expression_convertible_i64<T>(&self, from: &T, to: i64) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configLimitRange(
+    //             self.get_cpp_obj(),
+    //             Identifier::get_cpp_type(from) as c_int,
+    //             CppObject::get(from) as i64,
+    //             CPPType::Int as i32,
+    //             to as i64,
+    //         )
+    //     }
+    //     self
+    // }
 
     pub fn limit(&self, count: i64) -> &Self {
         unsafe {
@@ -569,38 +582,38 @@ impl StatementUpdate {
         self
     }
 
-    pub fn limit_count_expression_convertible<T>(&self, count: &T) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        unsafe {
-            WCDBRustStatementUpdate_configLimitCount(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(count),
-                CppObject::get(count) as i64,
-            );
-        }
-        self
-    }
+    // pub fn limit_count_expression_convertible<T>(&self, count: &T) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configLimitCount(
+    //             self.get_cpp_obj(),
+    //             Identifier::get_cpp_type(count) as c_int,
+    //             CppObject::get(count) as i64,
+    //         );
+    //     }
+    //     self
+    // }
 
     pub fn offset(&self, offset: i64) -> &Self {
         unsafe {
-            WCDBRustStatementUpdate_configOffset(self.get_cpp_obj(), CPPType::Int as i32, offset);
+            WCDBRustStatementUpdate_configOffset(self.get_cpp_obj(), CPPType::Int as c_int, offset);
         }
         self
     }
 
-    pub fn offset_expression_convertible<T>(&self, offset: &T) -> &Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        unsafe {
-            WCDBRustStatementUpdate_configOffset(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(offset),
-                CppObject::get(offset) as i64,
-            );
-        }
-        self
-    }
+    // pub fn offset_expression_convertible<T>(&self, offset: &T) -> &Self
+    // where
+    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+    // {
+    //     unsafe {
+    //         WCDBRustStatementUpdate_configOffset(
+    //             self.get_cpp_obj(),
+    //             Identifier::get_cpp_type(offset) as c_int,
+    //             CppObject::get(offset) as i64,
+    //         );
+    //     }
+    //     self
+    // }
 }

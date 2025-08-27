@@ -1,6 +1,6 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::winq::identifier::{Identifier, IdentifierTrait, WCDBRustWinq_isWriteStatement};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait, WCDBRustWinq_isWriteStatement};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::c_void;
 use std::fmt::Debug;
@@ -24,15 +24,19 @@ impl CppObjectTrait for Statement {
     }
 }
 
-impl IdentifierTrait for Statement {
-    fn get_description(&self) -> String {
-        self.identifier.get_description()
+impl CppObjectConvertibleTrait for Statement {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
     }
 }
 
-impl CppObjectConvertibleTrait for Statement {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.identifier.as_cpp_object()
+impl IdentifierTrait for Statement {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
     }
 }
 
@@ -53,9 +57,9 @@ impl StatementTrait for Statement {
 }
 
 impl Statement {
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> Statement {
+    pub fn new(cpp_type: CPPType, cpp_obj_opt: Option<*mut c_void>) -> Statement {
         Statement {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(cpp_type, cpp_obj_opt),
         }
     }
 }

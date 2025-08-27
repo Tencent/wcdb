@@ -240,9 +240,9 @@ impl TableOperation<'_> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
         binding.from(self.table_name.as_ref());
-        binding.select_columns(&columns);
+        binding.select(&columns);
         if let Some(expression) = expression {
-            binding.where_expression(&expression);
+            binding.r#where(&expression);
         }
         if let Some(order) = order {
             binding.order_by(&order);

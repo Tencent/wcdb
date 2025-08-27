@@ -1,19 +1,24 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::winq::column::Column;
 use crate::winq::column_def::ColumnDef;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void, CString};
 
 extern "C" {
     fn WCDBRustStatementAlterTable_createCppObj() -> *mut c_void;
+
     fn WCDBRustStatementAlterTable_configTable(cpp_obj: *mut c_void, table_name: *const c_char);
+
     fn WCDBRustStatementAlterTable_configSchema(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         schema_cpp_obj: *mut c_void,
         schema_name: *const c_char,
     );
+
     fn WCDBRustStatementAlterTable_configRenameToTable(
         cpp_obj: *mut c_void,
         table_name: *const c_char,
@@ -57,15 +62,25 @@ impl CppObjectTrait for StatementAlterTable {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementAlterTable {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementAlterTable {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementAlterTable {
-    fn get_type() -> i32 {
-        CPPType::AlterTableSTMT as i32
+impl IdentifierConvertibleTrait for StatementAlterTable {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -79,7 +94,7 @@ impl StatementAlterTable {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementAlterTable_createCppObj() };
         StatementAlterTable {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::AlterTableSTMT, Some(cpp_obj)),
         }
     }
 
@@ -136,7 +151,7 @@ impl StatementAlterTable {
         unsafe {
             WCDBRustStatementAlterTable_configRenameColumn(
                 self.get_cpp_obj(),
-                Identifier::get_cpp_type(column),
+                Identifier::get_cpp_type(column) as c_int,
                 column.get_cpp_obj(),
                 std::ptr::null(),
             );
@@ -161,7 +176,7 @@ impl StatementAlterTable {
         unsafe {
             WCDBRustStatementAlterTable_configRenameToColumn(
                 self.get_cpp_obj(),
-                Identifier::get_cpp_type(column),
+                Identifier::get_cpp_type(column) as c_int,
                 column.get_cpp_obj(),
                 std::ptr::null(),
             );

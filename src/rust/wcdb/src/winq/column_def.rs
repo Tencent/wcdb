@@ -1,15 +1,19 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::column_constraint::ColumnConstraint;
 use crate::winq::column_type::ColumnType;
-use crate::winq::identifier::{get_cpp_type, CPPType, Identifier, IdentifierStaticTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use std::borrow::Cow;
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustColumnDef_create(
         cpp_type: c_int,
         column_cpp_obj: *mut c_void,
-        name: *mut c_char,
+        name: *const c_char,
         column_type: c_int,
     ) -> *mut c_void;
 
@@ -34,30 +38,74 @@ impl CppObjectTrait for ColumnDef {
     }
 }
 
-impl IdentifierStaticTrait for ColumnDef {
-    fn get_type() -> i32 {
-        CPPType::ColumnDef as i32
+impl CppObjectConvertibleTrait for ColumnDef {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
     }
 }
 
+impl IdentifierTrait for ColumnDef {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for ColumnDef {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
+pub enum ColumnDefParam<'a> {
+    String(&'a str, Option<ColumnType>),
+    Column(&'a Column, Option<ColumnType>),
+}
+
 impl ColumnDef {
-    pub fn new_with_column_type(column: &Column, column_type: ColumnType) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustColumnDef_create(
-                get_cpp_type(column),
-                column.get_cpp_obj(),
-                std::ptr::null_mut(),
-                column_type as i32,
-            )
+    pub fn new(param: ColumnDefParam) -> ColumnDef {
+        let cpp_obj = match param {
+            ColumnDefParam::String(str, column_type_opt) => {
+                let cpp_type = match column_type_opt {
+                    Some(column_type) => column_type as c_int,
+                    None => 0,
+                };
+                let c_name = str.to_cstring();
+                unsafe {
+                    WCDBRustColumnDef_create(
+                        CPPType::String as c_int,
+                        std::ptr::null_mut(),
+                        c_name.as_ptr(),
+                        cpp_type,
+                    )
+                }
+            }
+            ColumnDefParam::Column(column, column_type_opt) => {
+                let cpp_type = match column_type_opt {
+                    Some(column_type) => column_type as c_int,
+                    None => 0,
+                };
+                unsafe {
+                    WCDBRustColumnDef_create(
+                        Identifier::get_cpp_type(column) as c_int,
+                        CppObject::get(column),
+                        std::ptr::null_mut(),
+                        cpp_type,
+                    )
+                }
+            }
         };
         Self {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::ColumnDef, Some(cpp_obj)),
         }
     }
 
-    pub fn constraint(&self, constraint: ColumnConstraint) -> &Self {
+    pub fn constraint(&self, constraint: &ColumnConstraint) -> &Self {
         unsafe {
-            WCDBRustColumnDef_constraint(self.get_cpp_obj(), constraint.get_cpp_obj());
+            WCDBRustColumnDef_constraint(self.get_cpp_obj(), CppObject::get(constraint));
         }
         self
     }

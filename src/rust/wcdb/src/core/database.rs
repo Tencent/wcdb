@@ -1,4 +1,4 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::value::Value;
 use crate::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException, WCDBResult};
 use crate::chaincall::delete::Delete;
@@ -21,6 +21,7 @@ use std::cell::RefCell;
 use std::ffi::{c_char, c_double, c_int, c_void, CStr, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 
 // 定义性能跟踪回调的特性
 pub trait TracePerformanceCallbackTrait:
@@ -414,7 +415,6 @@ extern "C" fn backup_filter_callback_wrapper(table_name: *const c_char) -> bool 
             return false;
         }
     }
-    false
 }
 
 // True to continue current operation.
@@ -440,7 +440,6 @@ extern "C" fn retrieve_progress_monitor_trait_wrapper(
             return false;
         }
     }
-    false
 }
 
 // True to continue current operation.
@@ -466,7 +465,6 @@ extern "C" fn vacuum_progress_monitor_trait_wrapper(
             return false;
         }
     }
-    false
 }
 
 extern "C" fn set_config_invocation_callback(cpp_handle: *mut c_void) -> bool {
@@ -559,6 +557,12 @@ impl CppObjectTrait for Database {
 
     fn release_cpp_object(&mut self) {
         self.handle_orm_operation.release_cpp_object();
+    }
+}
+
+impl CppObjectConvertibleTrait for Database {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.handle_orm_operation.as_cpp_object()
     }
 }
 
@@ -1237,7 +1241,7 @@ impl HandleORMOperationTrait for Database {
 impl Database {
     pub(crate) fn create_invalid_database() -> Self {
         Database {
-            handle_orm_operation: HandleORMOperation::new(),
+            handle_orm_operation: HandleORMOperation::new(None),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
@@ -1249,7 +1253,7 @@ impl Database {
         let c_path = CString::new(path).unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr(), false, false) };
         Database {
-            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            handle_orm_operation: HandleORMOperation::new(Some(cpp_obj)),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
@@ -1261,7 +1265,7 @@ impl Database {
         let c_path = CString::new(path).unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr(), readonly, false) };
         Database {
-            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            handle_orm_operation: HandleORMOperation::new(Some(cpp_obj)),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
@@ -1273,7 +1277,7 @@ impl Database {
         let c_path = CString::new("").unwrap_or_default();
         let cpp_obj = unsafe { WCDBRustCore_createDatabase(c_path.as_ptr(), false, true) };
         Database {
-            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            handle_orm_operation: HandleORMOperation::new(Some(cpp_obj)),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),
@@ -1283,7 +1287,7 @@ impl Database {
 
     pub fn from(cpp_obj: *mut c_void) -> Self {
         Database {
-            handle_orm_operation: HandleORMOperation::new_with_obj(cpp_obj),
+            handle_orm_operation: HandleORMOperation::new(Some(cpp_obj)),
             close_callback: Arc::new(Mutex::new(None)),
             trace_callback_ref: Arc::new(RefCell::new(null_mut())),
             trace_sql_ref: Arc::new(RefCell::new(null_mut())),

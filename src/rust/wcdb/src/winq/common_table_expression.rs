@@ -1,11 +1,16 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::utils::ToCString;
 use crate::winq::column::Column;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
-use std::ffi::{c_char, c_void, CString};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use std::ffi::{c_char, c_void};
 
 extern "C" {
     fn WCDBRustCommonTableExpression_createWithTable(table_name: *const c_char) -> *mut c_void;
+
     fn WCDBRustCommonTableExpression_configColumn(self_obj: *mut c_void, column: *mut c_void);
+
     fn WCDBRustCommonTableExpression_configSelect(self_obj: *mut c_void, select: *mut c_void);
 }
 
@@ -27,25 +32,35 @@ impl CppObjectTrait for CommonTableExpression {
     }
 }
 
+impl CppObjectConvertibleTrait for CommonTableExpression {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for CommonTableExpression {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.identifier.get_description()
     }
 }
 
-impl IdentifierStaticTrait for CommonTableExpression {
-    fn get_type() -> i32 {
-        CPPType::CommonTableExpression as i32
+impl IdentifierConvertibleTrait for CommonTableExpression {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
     }
 }
 
 impl CommonTableExpression {
     pub fn new(table_name: &str) -> Self {
-        let c_table_name = CString::new(table_name).unwrap_or_default();
+        let c_table_name = table_name.to_cstring();
         let cpp_obj =
             unsafe { WCDBRustCommonTableExpression_createWithTable(c_table_name.as_ptr()) };
         Self {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::CommonTableExpression, Some(cpp_obj)),
         }
     }
 
@@ -58,19 +73,4 @@ impl CommonTableExpression {
         }
         self
     }
-
-    // fn config_column(self_obj: i64, column: i64) {
-    //     // 调用本地方法
-    //     unimplemented!()
-    // }
-    //
-    // pub fn as_select(&mut self, select: Option<&StatementSelect>) -> &mut Self {
-    //     Self::config_select(self.cpp_obj, select.map_or(0, |s| s.get_cpp_obj()));
-    //     self
-    // }
-    //
-    // fn config_select(self_obj: i64, select: i64) {
-    //     // 调用本地方法
-    //     unimplemented!()
-    // }
 }

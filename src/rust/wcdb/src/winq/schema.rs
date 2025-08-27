@@ -1,7 +1,7 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_void};
 
@@ -9,34 +9,11 @@ extern "C" {
     fn WCDBRustSchema_createWithName(table_name: *const c_char) -> *mut c_void;
 
     fn WCDBRustSchema_main() -> *mut c_void;
+
     fn WCDBRustSchema_temp() -> *mut c_void;
 }
 pub struct Schema {
     identifier: Identifier,
-}
-
-impl CppObjectConvertibleTrait for Schema {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.identifier.as_cpp_object()
-    }
-}
-
-impl IdentifierConvertibleTrait for Schema {
-    fn as_identifier(&self) -> &Identifier {
-        self.identifier.as_identifier()
-    }
-}
-
-impl IdentifierTrait for Schema {
-    fn get_description(&self) -> String {
-        self.identifier.get_description()
-    }
-}
-
-impl IdentifierStaticTrait for Schema {
-    fn get_type() -> i32 {
-        CPPType::Schema as i32
-    }
 }
 
 impl CppObjectTrait for Schema {
@@ -53,18 +30,40 @@ impl CppObjectTrait for Schema {
     }
 }
 
+impl CppObjectConvertibleTrait for Schema {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
+impl IdentifierTrait for Schema {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for Schema {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
 impl Schema {
-    pub fn new_with_table_name(name: &str) -> Self {
+    pub fn new(name: &str) -> Self {
         let cstr = name.to_cstring();
         let cpp_obj = unsafe { WCDBRustSchema_createWithName(cstr.as_ptr()) };
         Schema {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::Schema, Some(cpp_obj)),
         }
     }
 
-    pub fn new_with_cpp_obj(cpp_obj: *mut c_void) -> Self {
+    pub(crate) fn new_with_cpp_obj(cpp_obj: *mut c_void) -> Self {
         Schema {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::Schema, Some(cpp_obj)),
         }
     }
 

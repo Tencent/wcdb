@@ -173,16 +173,6 @@
             break;                                                       \
     }
 
-#define WCDBRustTryReleaseStringInCommonValue(parameter)                                     \
-    if (parameter##_type == WCDBBridgedType_String && parameter##_common.intValue != 0 &&    \
-        parameter##_utf16String != NULL) {                                                   \
-        if (parameter##_isCritical) {                                                        \
-            (*env)->ReleaseStringCritical(env, parameter##_string, parameter##_utf16String); \
-        } else {                                                                             \
-            (*env)->ReleaseStringChars(env, parameter##_string, parameter##_utf16String);    \
-        }                                                                                    \
-    }
-
 #define WCDBRustCreateCommonValue(parameter)                             \
     CPPCommonValue parameter##_common;                                   \
     parameter##_common.type = parameter##_type;                          \

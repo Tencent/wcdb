@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::ffi::{c_char, CStr, CString};
+use paste::paste;
 
 pub(crate) trait ToCow {
     fn to_cow(&self) -> Cow<str>;
@@ -34,5 +35,11 @@ impl ToCString for String {
     /// 根据 String 创建新的 CString 对象，返回 *const c_char 指针和所有权
     fn to_cstring(&self) -> CString {
         self.as_str().to_cstring()
+    }
+}
+
+impl<'a> ToCString for Cow<'a, str> {
+    fn to_cstring(&self) -> CString {
+        self.as_ref().to_cstring()
     }
 }

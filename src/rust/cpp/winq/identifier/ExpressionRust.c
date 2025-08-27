@@ -26,11 +26,11 @@ void* WCDBRustExpressionClassMethod(create, int type, void* object) {
     CPPCommonValue commonValue;
     commonValue.type = type;
     commonValue.intValue = (long long)object;
-    return (void*)WCDBExpressionCreate(commonValue).innerValue;
+    return WCDBExpressionCreate(commonValue).innerValue;
 }
 
 void* WCDBRustExpressionClassMethod(createWithFunction, const char* func) {
-    return (void*)WCDBExpressionCreateWithFunction(func).innerValue;
+    return WCDBExpressionCreateWithFunction(func).innerValue;
 }
 
 //
@@ -42,24 +42,24 @@ void* WCDBRustExpressionClassMethod(createWithFunction, const char* func) {
 
 void* WCDBRustExpressionClassMethod(createWithExistStatement, void* select) {
     WCDBRustBridgeStruct(CPPStatementSelect, select);
-    return (void*)WCDBExpressionCreateWithExistStatement(selectStruct).innerValue;
+    return WCDBExpressionCreateWithExistStatement(selectStruct).innerValue;
 }
 
 void* WCDBRustExpressionClassMethod(createWithNotExistStatement, void* select) {
     WCDBRustBridgeStruct(CPPStatementSelect, select);
-    return (void*)WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
+    return WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
 }
 
-// void WCDBRustExpressionClassMethod(setWithSchema,
-//                                   jlong expression,
-//                                   WCDBRustObjectOrStringParameter(schema))
-//{
-//     WCDBRustBridgeStruct(CPPExpression, expression);
-//     WCDBRustCreateObjectOrStringCommonValue(schema, true);
-//     WCDBExpressionSetWithSchema2(expressionStruct, schema_common);
-//     WCDBRustTryReleaseStringInCommonValue(schema);
-// }
-//
+ void WCDBRustExpressionClassMethod(setWithSchema,
+                                   void* expression,
+                                   WCDBRustObjectOrStringParameter(schema))
+{
+     WCDBRustBridgeStruct(CPPExpression, expression);
+     WCDBRustCreateObjectOrStringCommonValue(schema, true);
+     WCDBExpressionSetWithSchema2(expressionStruct, schema_common);
+     // WCDBRustTryReleaseStringInCommonValue(schema);
+ }
+
 void WCDBRustExpressionClassMethod(argument,
                                    void* expression,
                                    WCDBRustCommonValueParameter(argument)) {
@@ -85,7 +85,7 @@ void WCDBRustExpressionClassMethod(distinct, void* expression) {
 
 void* WCDBRustExpressionClassMethod(cast, WCDBRustObjectOrStringParameter(expression)) {
     WCDBRustCreateObjectOrStringCommonValue(expression, true);
-    void* ret = (void*)WCDBExpressionCast2(expression_common).innerValue;
+    void* ret = WCDBExpressionCast2(expression_common).innerValue;
     // WCDBRustTryReleaseStringInCommonValue(expression);
     return ret;
 }
@@ -97,16 +97,16 @@ void WCDBRustExpressionClassMethod(as, void* expression, int type) {
 
 void* WCDBRustExpressionClassMethod(configAlias, void* expression, const char* alias) {
     WCDBRustBridgeStruct(CPPExpression, expression);
-    void* ret = (void*)WCDBExpressionConfigAlias(expressionStruct, alias).innerValue;
+    void* ret = WCDBExpressionConfigAlias(expressionStruct, alias).innerValue;
     return ret;
 }
 
 void* WCDBRustExpressionClassMethod(caseWithExp, WCDBRustObjectOrStringParameter(expression)) {
     if (expression_type == 0) {
-        return (void*)WCDBExpressionCase().innerValue;
+        return WCDBExpressionCase().innerValue;
     }
     WCDBRustCreateObjectOrStringCommonValue(expression, true);
-    void* ret = (void*)WCDBExpressionCaseWithExp2(expression_common).innerValue;
+    void* ret = WCDBExpressionCaseWithExp2(expression_common).innerValue;
     // WCDBRustTryReleaseStringInCommonValue(expression);
     return ret;
 }

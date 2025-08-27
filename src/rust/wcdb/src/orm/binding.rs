@@ -1,5 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
-use crate::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException, WCDBResult};
+use crate::base::wcdb_exception::WCDBResult;
 use crate::core::handle::Handle;
 use crate::utils::ToCString;
 use crate::winq::column_def::ColumnDef;
@@ -47,7 +47,7 @@ unsafe impl Sync for Binding {}
 impl Binding {
     pub fn new() -> Binding {
         Binding {
-            cpp_obj: CppObject::new_with_obj(unsafe { WCDBRustBinding_create() }),
+            cpp_obj: CppObject::new(Some(unsafe { WCDBRustBinding_create() })),
             base_binding: RwLock::new(null_mut()),
         }
     }

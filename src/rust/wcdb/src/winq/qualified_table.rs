@@ -1,11 +1,10 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::schema::Schema;
 use std::ffi::{c_char, c_int, c_void};
-use std::ptr::null;
 
 extern "C" {
     fn WCDBRustQualifiedTable_create(table_name: *const c_char) -> *mut c_void;
@@ -27,30 +26,6 @@ pub struct QualifiedTable {
     identifier: Identifier,
 }
 
-impl CppObjectConvertibleTrait for QualifiedTable {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.identifier.as_cpp_object()
-    }
-}
-
-impl IdentifierConvertibleTrait for QualifiedTable {
-    fn as_identifier(&self) -> &Identifier {
-        self.identifier.as_identifier()
-    }
-}
-
-impl IdentifierTrait for QualifiedTable {
-    fn get_description(&self) -> String {
-        self.identifier.get_description()
-    }
-}
-
-impl IdentifierStaticTrait for QualifiedTable {
-    fn get_type() -> i32 {
-        CPPType::QualifiedTableName as i32
-    }
-}
-
 impl CppObjectTrait for QualifiedTable {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.identifier.set_cpp_obj(cpp_obj)
@@ -65,22 +40,43 @@ impl CppObjectTrait for QualifiedTable {
     }
 }
 
+impl CppObjectConvertibleTrait for QualifiedTable {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
+impl IdentifierTrait for QualifiedTable {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for QualifiedTable {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
 impl QualifiedTable {
-    pub fn new_with_table_name(table_name: &str) -> Self {
-        let cstr = table_name.to_cstring();
-        let cpp_obj = unsafe { WCDBRustQualifiedTable_create(cstr.as_ptr()) };
+    pub fn new(table_name: &str) -> Self {
+        let cpp_obj = unsafe { WCDBRustQualifiedTable_create(table_name.to_cstring().as_ptr()) };
         QualifiedTable {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::QualifiedTableName, Some(cpp_obj)),
         }
     }
+
     pub fn of_string(&self, schema: &str) -> &Self {
-        let cstr = schema.to_cstring();
         unsafe {
             WCDBRustQualifiedTable_configSchema(
                 self.get_cpp_obj(),
                 CPPType::String as i32,
-                0 as *mut c_void,
-                cstr.as_ptr(),
+                std::ptr::null_mut(),
+                schema.to_cstring().as_ptr(),
             )
         }
         self
@@ -90,23 +86,25 @@ impl QualifiedTable {
         unsafe {
             WCDBRustQualifiedTable_configSchema(
                 self.get_cpp_obj(),
-                Identifier::get_cpp_type(&schema),
+                Identifier::get_cpp_type(&schema) as c_int,
                 CppObject::get(&schema),
-                null(),
+                std::ptr::null(),
             )
         }
         self
     }
 
-    pub fn as_(&self, alias: &str) -> &Self {
-        let cstr = alias.to_cstring();
-        unsafe { WCDBRustQualifiedTable_configAlias(self.get_cpp_obj(), cstr.as_ptr()) }
+    pub fn r#as(&self, alias: &str) -> &Self {
+        unsafe {
+            WCDBRustQualifiedTable_configAlias(self.get_cpp_obj(), alias.to_cstring().as_ptr())
+        }
         self
     }
 
     pub fn indexed(&self, index_name: &str) -> &Self {
-        let cstr = index_name.to_cstring();
-        unsafe { WCDBRustQualifiedTable_configIndex(self.get_cpp_obj(), cstr.as_ptr()) }
+        unsafe {
+            WCDBRustQualifiedTable_configIndex(self.get_cpp_obj(), index_name.to_cstring().as_ptr())
+        }
         self
     }
 

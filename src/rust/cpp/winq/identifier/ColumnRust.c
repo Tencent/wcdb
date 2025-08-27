@@ -39,15 +39,13 @@ void* WCDBRustColumn_createWithName(const char* name, void* binding) {
 //     WCDBRustBridgeStruct(CPPColumn, column);
 //     return (jlong) WCDBColumnCopy(columnStruct).innerValue;
 // }
-//
-// void WCDBRustColumnClassMethod(inTable, jlong column, jstring table)
-//{
-//     WCDBRustGetStringCritical(table);
-//     WCDBRustBridgeStruct(CPPColumn, column);
-//     WCDBColumnInTable(columnStruct, tableString);
-//     WCDBRustReleaseStringCritical(table);
-// }
-//
+
+void WCDBRustColumnClassMethod(inTable, void* column, const char* table)
+{
+     WCDBRustBridgeStruct(CPPColumn, column);
+     WCDBColumnInTable(columnStruct, table);
+ }
+
 // void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema))
 //{
 //     WCDBRustBridgeStruct(CPPColumn, column);
@@ -55,12 +53,9 @@ void* WCDBRustColumn_createWithName(const char* name, void* binding) {
 //     WCDBColumnOfSchema2(columnStruct, schema_common);
 //     WCDBRustTryReleaseStringInCommonValue(schema);
 // }
-//
-// jlong WCDBRustColumnClassMethod(configAlias, jlong column, jstring alias)
-//{
-//     WCDBRustBridgeStruct(CPPColumn, column);
-//     WCDBRustGetString(alias);
-//     jlong ret = (jlong) WCDBColumnConfigAlias(columnStruct, aliasString).innerValue;
-//     WCDBRustReleaseString(alias);
-//     return ret;
-// }
+
+void* WCDBRustColumnClassMethod(configAlias, void* column, const char* alias)
+{
+     WCDBRustBridgeStruct(CPPColumn, column);
+     return WCDBColumnConfigAlias(columnStruct, alias).innerValue;
+ }

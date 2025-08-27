@@ -1,10 +1,12 @@
 use crate::base::basic_types::WCDBBasicTypes;
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::any::TypeId;
-use std::ffi::{c_char, c_double, c_int, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 
 extern "C" {
     fn WCDBRustColumnConstraint_create(name: *const c_char) -> *mut c_void;
@@ -21,7 +23,7 @@ extern "C" {
     fn WCDBRustColumnConstraint_configDefaultValue(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
-        int_value: i64,
+        int_value: c_longlong,
         double_value: c_double,
         string_value: *const c_char,
     );
@@ -49,31 +51,39 @@ impl CppObjectTrait for ColumnConstraint {
     }
 }
 
+impl CppObjectConvertibleTrait for ColumnConstraint {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for ColumnConstraint {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.identifier.get_description()
     }
 }
 
-impl IdentifierStaticTrait for ColumnConstraint {
-    fn get_type() -> i32 {
-        CPPType::ColumnConstraint as i32
+impl IdentifierConvertibleTrait for ColumnConstraint {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
     }
 }
 
 impl ColumnConstraint {
-    pub fn new() -> Self {
-        let cpp_obj = unsafe { WCDBRustColumnConstraint_create(std::ptr::null_mut()) };
+    pub fn new(column_name_opt: Option<&str>) -> Self {
+        let cpp_obj = match column_name_opt {
+            Some(column_name) => {
+                let c_name = column_name.to_cstring();
+                unsafe { WCDBRustColumnConstraint_create(c_name.as_ptr()) }
+            }
+            None => unsafe { WCDBRustColumnConstraint_create(std::ptr::null_mut()) },
+        };
         Self {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn new_by_column_name(column_name: &str) -> Self {
-        let c_name = CString::new(column_name).unwrap_or_default();
-        let cpp_obj = unsafe { WCDBRustColumnConstraint_create(c_name.as_ptr()) };
-        Self {
-            identifier: Identifier::new_with_obj(cpp_obj),
+            identifier: Identifier::new(CPPType::ColumnConstraint, Some(cpp_obj)),
         }
     }
 
@@ -148,7 +158,7 @@ impl ColumnConstraint {
             WCDBRustColumnConstraint_configDefaultValue(
                 self.get_cpp_obj(),
                 cpp_type as i32,
-                int_value as i64,
+                int_value,
                 double_value as c_double,
                 string_value,
             );

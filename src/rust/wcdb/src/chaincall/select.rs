@@ -1,5 +1,4 @@
-use crate::base::cpp_object::CppObjectTrait;
-use crate::base::wcdb_exception::{WCDBException, WCDBResult};
+use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
 use crate::core::prepared_statement::PreparedStatement;

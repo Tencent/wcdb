@@ -1,80 +1,74 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::orm::field::Field;
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_double, c_int, c_void, CString};
+use std::borrow::Cow;
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 use std::fmt::Debug;
-use std::ptr::null;
 
 extern "C" {
     fn WCDBRustStatementSelect_create() -> *mut c_void;
+
     fn WCDBRustStatementSelect_configResultColumns(
         cpp_obj: *mut c_void,
         type_vec: *const c_int,
-        void_vec: *const *mut c_void,
-        double_vec: *const c_double,
-        string_vec: *const *const c_char,
+        column_vec: *const c_longlong,
+        unused_vec: *const c_double,
+        column_name_vec: *const *const c_char,
         vec_len: c_size_t,
     );
+
     fn WCDBRustStatementSelect_configTableOrSubqueries(
         cpp_obj: *mut c_void,
         type_vec: *const c_int,
-        long_vec: *const i64,
-        double_vec: *const c_double,
-        string_vec: *const *const c_char,
+        long_vec: *const c_longlong,
+        unused_vec: *const c_double,
+        table_name_vec: *const *const c_char,
         vec_len: c_size_t,
     );
+
     fn WCDBRustStatementSelect_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
 
     fn WCDBRustStatementSelect_configOrders(
         cpp_obj: *mut c_void,
-        orders: *const i64,
-        orders_length: c_int,
+        order_vec: *const c_longlong,
+        orders_length: c_size_t,
     );
 
     fn WCDBRustStatementSelect_configGroups(
         cpp_obj: *mut c_void,
-        types: *const c_int,
-        exps: *const *mut c_void,
-        unused: *const c_double,
-        colum_names: *const *const c_char,
-        length: c_int,
+        type_vec: *const c_int,
+        exps_vec: *const c_longlong,
+        unused_vec: *const c_double,
+        colum_name_vec: *const *const c_char,
+        length: c_size_t,
     );
 
-    fn WCDBRustStatementSelect_configLimitCount(cpp_obj: *mut c_void, cpp_type: c_int, count: i64);
+    fn WCDBRustStatementSelect_configLimitCount(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        count: c_longlong,
+    );
 
-    fn WCDBRustStatementSelect_configOffset(cpp_obj: *mut c_void, cpp_type: c_int, count: i64);
+    fn WCDBRustStatementSelect_configOffset(
+        cpp_obj: *mut c_void,
+        cpp_type: c_int,
+        count: c_longlong,
+    );
 }
 
 #[derive(Debug)]
 pub struct StatementSelect {
     statement: Statement,
 }
-
-impl IdentifierConvertibleTrait for StatementSelect {
-    fn as_identifier(&self) -> &Identifier {
-        self.statement.as_identifier()
-    }
-}
-
-impl CppObjectConvertibleTrait for StatementSelect {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.statement.as_cpp_object()
-    }
-}
-
-impl IndexedColumnConvertibleTrait for StatementSelect {}
 
 impl CppObjectTrait for StatementSelect {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
@@ -90,15 +84,25 @@ impl CppObjectTrait for StatementSelect {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementSelect {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementSelect {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementSelect {
-    fn get_type() -> i32 {
-        CPPType::SelectSTMT as i32
+impl IdentifierConvertibleTrait for StatementSelect {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -108,27 +112,79 @@ impl StatementTrait for StatementSelect {
     }
 }
 
+impl TableOrSubqueryConvertibleTrait for StatementSelect {}
+
+pub trait StatementSelectSelectParam {
+    fn get_params(&self) -> (CPPType, *mut c_void);
+}
+
+impl<T: ResultColumnConvertibleTrait> StatementSelectSelectParam for T {
+    fn get_params(&self) -> (CPPType, *mut c_void) {
+        (Identifier::get_type(self), CppObject::get(self))
+    }
+}
+
+impl StatementSelectSelectParam for &str {
+    fn get_params(&self) -> (CPPType, *mut c_void) {
+        (CPPType::String, self.to_cstring().as_ptr() as *mut c_void)
+    }
+}
+
+pub trait StatementSelectFromParam {
+    fn get_params(&self) -> (CPPType, *mut c_void);
+}
+
+impl<T: TableOrSubqueryConvertibleTrait> StatementSelectFromParam for T {
+    fn get_params(&self) -> (CPPType, *mut c_void) {
+        (Identifier::get_type(self), CppObject::get(self))
+    }
+}
+
+impl StatementSelectFromParam for &str {
+    fn get_params(&self) -> (CPPType, *mut c_void) {
+        (CPPType::String, self.to_cstring().as_ptr() as *mut c_void)
+    }
+}
+
+pub trait StatementSelectGroupByParam {
+    fn get_params(&self) -> (CPPType, *mut c_void);
+}
+
+impl<T: ExpressionConvertibleTrait> StatementSelectGroupByParam for T {
+    fn get_params(&self) -> (CPPType, *mut c_void) {
+        (Identifier::get_type(self), CppObject::get(self))
+    }
+}
+
+impl StatementSelectGroupByParam for &str {
+    fn get_params(&self) -> (CPPType, *mut c_void) {
+        (CPPType::String, self.to_cstring().as_ptr() as *mut c_void)
+    }
+}
+
 impl StatementSelect {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementSelect_create() };
         StatementSelect {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::SelectSTMT, Some(cpp_obj)),
         }
     }
 
-    pub fn select_with_result_column_convertible_trait<T>(&self, result_columns: &Vec<T>) -> &Self
+    pub fn select<'a, T, R>(&self, param_vec: T)
     where
-        T: ResultColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+        T: IntoIterator<Item = Cow<'a, R>>,
+        R: StatementSelectSelectParam,
     {
-        if result_columns.is_empty() {
-            return self;
-        }
-        let size = result_columns.len();
-        let mut types: Vec<i32> = Vec::with_capacity(size);
-        let mut cpp_obj_vec: Vec<*mut c_void> = Vec::with_capacity(size);
-        for x in result_columns {
-            types.push(Identifier::get_cpp_type(x));
-            cpp_obj_vec.push(CppObject::get(x));
+        let mut types = vec![];
+        let mut cpp_obj_vec = vec![];
+        let mut column_name_vec = vec![];
+        for param in param_vec {
+            let params = param.get_params();
+            match params.0 {
+                CPPType::String => column_name_vec.push(params.1 as *const c_char),
+                _ => cpp_obj_vec.push(params.1 as c_longlong),
+            }
+            types.push(params.0 as c_int);
         }
         unsafe {
             WCDBRustStatementSelect_configResultColumns(
@@ -136,217 +192,88 @@ impl StatementSelect {
                 types.as_ptr(),
                 cpp_obj_vec.as_ptr(),
                 std::ptr::null(),
-                std::ptr::null(),
+                column_name_vec.as_ptr(),
                 types.len(),
             );
         }
-        self
     }
 
-    pub fn select_with_result_column_names(&self, result_columns: &Vec<String>) -> &Self {
-        if result_columns.is_empty() {
-            return self;
-        }
-        let column_len = result_columns.len();
+    pub fn from<'a, T, R>(&self, param_vec: T)
+    where
+        T: IntoIterator<Item = Cow<'a, R>>,
+        R: StatementSelectFromParam,
+    {
         let mut types = vec![];
-        let mut c_strings = Vec::new();
-        let mut cstr_vector: Vec<*const c_char> = Vec::with_capacity(column_len);
-        for name in result_columns {
-            types.push(CPPType::String as i32);
-            let c_string = name.to_cstring();
-            cstr_vector.push(c_string.as_ptr());
-            c_strings.push(c_string);
-        }
-        unsafe {
-            WCDBRustStatementSelect_configResultColumns(
-                self.get_cpp_obj(),
-                types.as_ptr(),
-                std::ptr::null(),
-                std::ptr::null(),
-                cstr_vector.as_ptr(),
-                result_columns.len(),
-            );
-        }
-        self
-    }
-
-    pub fn select<T>(&self, fields: &Vec<&Field<T>>) -> &Self {
-        if fields.is_empty() {
-            return self;
-        }
-
-        let mut types_vec = vec![];
         let mut cpp_obj_vec = vec![];
-        for field in fields {
-            types_vec.push(Identifier::get_cpp_type((*field).get_column()));
-            cpp_obj_vec.push((*field).get_cpp_obj());
-        }
-
-        unsafe {
-            WCDBRustStatementSelect_configResultColumns(
-                self.get_cpp_obj(),
-                types_vec.as_ptr(),
-                cpp_obj_vec.as_ptr(),
-                std::ptr::null(),
-                std::ptr::null(),
-                types_vec.len(),
-            );
-        }
-        self
-    }
-
-    pub fn select_columns(&self, columns: &Vec<&Column>) -> &Self {
-        if columns.is_empty() {
-            return self;
-        }
-
-        let mut types_vec = vec![];
-        let mut cpp_obj_vec = vec![];
-        for column in columns {
-            types_vec.push(CPPType::Column as i32);
-            cpp_obj_vec.push(column.get_cpp_obj());
-        }
-
-        unsafe {
-            WCDBRustStatementSelect_configResultColumns(
-                self.get_cpp_obj(),
-                types_vec.as_ptr(),
-                cpp_obj_vec.as_ptr(),
-                std::ptr::null(),
-                std::ptr::null(),
-                types_vec.len(),
-            );
-        }
-        self
-    }
-
-    pub fn from(&self, table_name: &str) -> &Self {
-        let types_vec = vec![CPPType::String as i32];
-
-        let c_table_name = CString::new(table_name).unwrap_or_default();
-        let str_vec = vec![c_table_name.as_ptr()];
-        unsafe {
-            WCDBRustStatementSelect_configTableOrSubqueries(
-                self.get_cpp_obj(),
-                types_vec.as_ptr(),
-                std::ptr::null(),
-                std::ptr::null(),
-                str_vec.as_ptr(),
-                types_vec.len(),
-            );
-        }
-        self
-    }
-
-    pub fn from_with_table_or_subquery_convertible_trait<T>(
-        &self,
-        table_or_subqueries: &Vec<T>,
-    ) -> &Self
-    where
-        T: TableOrSubqueryConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    {
-        if table_or_subqueries.is_empty() {
-            return self;
-        }
-        let total_count = table_or_subqueries.len();
-        let mut cpp_objs: Vec<*mut c_void> = Vec::with_capacity(total_count);
-        let mut types = Vec::with_capacity(total_count);
-        for x in table_or_subqueries {
-            types.push(Identifier::get_cpp_type(x));
-            cpp_objs.push(CppObject::get(x));
+        let mut cstr_vec = vec![];
+        for param in param_vec {
+            let params = param.get_params();
+            match params.0 {
+                CPPType::String => cstr_vec.push(params.1 as *const c_char),
+                _ => cpp_obj_vec.push(params.1 as c_longlong),
+            }
+            types.push(params.0 as c_int);
         }
         unsafe {
             WCDBRustStatementSelect_configTableOrSubqueries(
                 self.get_cpp_obj(),
                 types.as_ptr(),
-                cpp_objs.as_ptr() as *const i64,
+                cpp_obj_vec.as_ptr(),
                 std::ptr::null(),
-                std::ptr::null(),
-                total_count,
-            )
+                cstr_vec.as_ptr(),
+                types.len(),
+            );
         }
-        self
     }
 
-    pub fn where_expression(&self, condition: &Expression) -> &Self {
+    pub fn r#where(&self, condition: &Expression) -> &Self {
         unsafe {
-            WCDBRustStatementSelect_configCondition(self.get_cpp_obj(), condition.get_cpp_obj());
+            WCDBRustStatementSelect_configCondition(self.get_cpp_obj(), CppObject::get(condition));
         }
         self
     }
 
-    pub fn group_by_with_expression_convertible_trait<T>(&self, column_names: &Vec<T>) -> &Self
+    pub fn group_by<'a, T, R>(&self, param_vec: T)
     where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
+        T: IntoIterator<Item = Cow<'a, R>>,
+        R: StatementSelectGroupByParam,
     {
-        if column_names.is_empty() {
-            return self;
+        let mut type_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        let mut colum_name_vec = vec![];
+        for param in param_vec {
+            let params = param.get_params();
+            match params.0 {
+                CPPType::String => colum_name_vec.push(params.1 as *const c_char),
+                _ => cpp_obj_vec.push(params.1 as c_longlong),
+            }
+            type_vec.push(params.0 as c_int);
         }
-        let len = column_names.len();
-        let mut cpp_objs: Vec<*mut c_void> = Vec::with_capacity(len);
-        let mut types = Vec::with_capacity(len);
-        for x in column_names {
-            types.push(Identifier::get_cpp_type(x));
-            cpp_objs.push(CppObject::get(x));
-        }
-        let length = len as c_int;
         unsafe {
             WCDBRustStatementSelect_configGroups(
                 self.get_cpp_obj(),
-                types.as_ptr(),
-                cpp_objs.as_ptr(),
-                null(),
-                null(),
-                length,
+                type_vec.as_ptr(),
+                cpp_obj_vec.as_ptr(),
+                std::ptr::null(),
+                colum_name_vec.as_ptr(),
+                type_vec.len(),
             );
         }
-        self
     }
-
-    pub fn group_by(&self, column_names: &Vec<String>) -> &Self {
-        if column_names.is_empty() {
-            return self;
-        }
-        let len = column_names.len();
-        let mut c_strings = Vec::new();
-        let mut cstr_vector: Vec<*const c_char> = Vec::with_capacity(len);
-        let mut types = Vec::with_capacity(len);
-        for x in column_names {
-            let c_string = x.to_cstring();
-            cstr_vector.push(c_string.as_ptr());
-            c_strings.push(c_string);
-            types.push(CPPType::String as i32);
-        }
-        let length = len as c_int;
-        unsafe {
-            WCDBRustStatementSelect_configGroups(
-                self.get_cpp_obj(),
-                types.as_ptr(),
-                null(),
-                null(),
-                cstr_vector.as_ptr(),
-                length,
-            );
-        }
-        self
-    }
-
-    // todo dengxudong 缺逻辑 重要不紧急
-    // StatementSelect groupBy(@Nullable Object... expressions)
 
     pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
         if orders.is_empty() {
             return self;
         }
-        let mut cpp_orders: Vec<*mut c_void> = Vec::new();
+        let mut cpp_orders = vec![];
         for x in orders {
-            cpp_orders.push(x.get_cpp_obj());
+            cpp_orders.push(x.get_cpp_obj() as c_longlong);
         }
-        let orders_length = cpp_orders.len() as c_int;
+        let orders_length = cpp_orders.len();
         unsafe {
             WCDBRustStatementSelect_configOrders(
                 self.get_cpp_obj(),
-                cpp_orders.as_ptr() as *const i64,
+                cpp_orders.as_ptr(),
                 orders_length,
             )
         }
@@ -358,7 +285,7 @@ impl StatementSelect {
             WCDBRustStatementSelect_configLimitCount(
                 self.get_cpp_obj(),
                 CPPType::Int as c_int,
-                count as i64,
+                count,
             )
         }
         self
@@ -366,11 +293,7 @@ impl StatementSelect {
 
     pub fn offset(&self, offset: i64) -> &Self {
         unsafe {
-            WCDBRustStatementSelect_configOffset(
-                self.get_cpp_obj(),
-                CPPType::Int as c_int,
-                offset as i64,
-            )
+            WCDBRustStatementSelect_configOffset(self.get_cpp_obj(), CPPType::Int as c_int, offset)
         }
         self
     }

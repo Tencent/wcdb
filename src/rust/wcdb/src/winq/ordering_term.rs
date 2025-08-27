@@ -1,6 +1,8 @@
-use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_int, c_void};
 
 extern "C" {
@@ -33,28 +35,37 @@ impl CppObjectTrait for OrderingTerm {
     }
 }
 
+impl CppObjectConvertibleTrait for OrderingTerm {
+    fn as_cpp_object(&self) -> &CppObject {}
+}
+
 impl IdentifierTrait for OrderingTerm {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.identifier.get_description()
     }
 }
 
-impl IdentifierStaticTrait for OrderingTerm {
-    fn get_type() -> i32 {
-        CPPType::OrderingTerm as i32
+impl IdentifierConvertibleTrait for OrderingTerm {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
     }
 }
 
 impl OrderingTerm {
-    pub fn new<T>(expression: &T) -> Self
-    where
-        T: ExpressionConvertibleTrait + IdentifierStaticTrait,
-    {
-        let left_cpp_obj = expression.as_cpp_object();
-        let left_cpp_type = Identifier::get_cpp_type(expression);
-        let cpp_obj = unsafe { WCDBRustOrderingTerm_create(left_cpp_type, left_cpp_obj) };
-        let identifier = Identifier::new_with_obj(cpp_obj);
-        OrderingTerm { identifier }
+    pub fn new<T: ExpressionConvertibleTrait>(expression: &T) -> Self {
+        let cpp_obj = unsafe {
+            WCDBRustOrderingTerm_create(
+                Identifier::get_cpp_type(expression) as c_int,
+                CppObject::get(expression),
+            )
+        };
+        OrderingTerm {
+            identifier: Identifier::new(CPPType::OrderingTerm, Some(cpp_obj)),
+        }
     }
 }
 

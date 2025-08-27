@@ -8,7 +8,6 @@ pub mod conflict_action;
 pub mod expression;
 pub mod expression_convertible;
 pub mod expression_operable;
-pub mod expression_operable_trait;
 pub mod frame_spec;
 pub mod identifier;
 pub mod identifier_convertible;

@@ -1,9 +1,11 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
-use crate::winq::identifier::{CPPType, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::pragma::Pragma;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_float, c_int, c_void};
-use std::ptr::null;
+use libc::{c_double, c_longlong};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 
 extern "C" {
     fn WCDBRustStatementPragma_create() -> *mut c_void;
@@ -16,20 +18,14 @@ extern "C" {
     fn WCDBRustStatementPragma_configToValue(
         cpp_obj: *mut c_void,
         val_type: c_int,
-        long_value: i64,
-        double_value: c_float,
+        long_value: c_longlong,
+        double_value: c_double,
         string_value: *const c_char,
     );
 }
 
 pub struct StatementPragma {
     statement: Statement,
-}
-
-impl IdentifierTrait for StatementPragma {
-    fn get_description(&self) -> String {
-        self.statement.get_description()
-    }
 }
 
 impl CppObjectTrait for StatementPragma {
@@ -46,6 +42,28 @@ impl CppObjectTrait for StatementPragma {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementPragma {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
+impl IdentifierTrait for StatementPragma {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.statement.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for StatementPragma {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
+    }
+}
+
 impl StatementTrait for StatementPragma {
     fn is_write_statement(&self) -> bool {
         self.statement.is_write_statement()
@@ -56,7 +74,7 @@ impl StatementPragma {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementPragma_create() };
         StatementPragma {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::PragmaSTMT, Some(cpp_obj)),
         }
     }
 
@@ -75,9 +93,9 @@ impl StatementPragma {
             WCDBRustStatementPragma_configToValue(
                 self.statement.get_cpp_obj(),
                 CPPType::Int as c_int,
-                value as i64,
-                0 as c_float,
-                null(),
+                value as c_longlong,
+                0 as c_double,
+                std::ptr::null(),
             );
         }
         self
@@ -90,8 +108,8 @@ impl StatementPragma {
                 self.statement.get_cpp_obj(),
                 CPPType::Bool as c_int,
                 value,
-                0 as c_float,
-                null(),
+                0 as c_double,
+                std::ptr::null(),
             );
         }
         self

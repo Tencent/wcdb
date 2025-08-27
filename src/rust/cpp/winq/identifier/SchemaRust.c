@@ -23,14 +23,14 @@
 #include "SchemaBridge.h"
 
 void* WCDBRustSchemaClassMethod(createWithName, const char* nameString) {
-    void* ret = (void*)WCDBSchemaCreateWithName(nameString).innerValue;
+    void* ret = WCDBSchemaCreateWithName(nameString).innerValue;
     return ret;
 }
 
 void* WCDBRustSchemaClassMethodWithNoArg(main) {
-    return (void*)WCDBSchemaMain().innerValue;
+    return WCDBSchemaMain().innerValue;
 }
 
 void* WCDBRustSchemaClassMethodWithNoArg(temp) {
-    return (void*)WCDBSchemaTemp().innerValue;
+    return WCDBSchemaTemp().innerValue;
 }

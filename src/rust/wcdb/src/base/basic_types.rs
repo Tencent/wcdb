@@ -4,12 +4,18 @@ use std::any::Any;
 /// support : i8、i16、i32、i64、f32、f64、bool、String、&str
 pub trait WCDBBasicTypes: 'static {
     fn get_value(&self) -> Self;
+
     fn get_bool(&self) -> bool;
+
     fn get_i64(&self) -> i64;
+
     fn get_f64(&self) -> f64;
+
     fn get_string(&self) -> String;
+
     fn get_type(&self) -> ColumnType;
 }
+
 impl WCDBBasicTypes for i8 {
     fn get_value(&self) -> i8 {
         let any_value = self as &dyn Any;
@@ -47,6 +53,7 @@ impl WCDBBasicTypes for i8 {
         ColumnType::Integer
     }
 }
+
 impl WCDBBasicTypes for i16 {
     fn get_value(&self) -> i16 {
         let any_value = self as &dyn Any;
@@ -84,6 +91,7 @@ impl WCDBBasicTypes for i16 {
         ColumnType::Integer
     }
 }
+
 impl WCDBBasicTypes for i32 {
     fn get_value(&self) -> i32 {
         let any_value = self as &dyn Any;
@@ -121,6 +129,7 @@ impl WCDBBasicTypes for i32 {
         ColumnType::Integer
     }
 }
+
 impl WCDBBasicTypes for i64 {
     fn get_value(&self) -> i64 {
         let any_value = self as &dyn Any;
@@ -158,6 +167,7 @@ impl WCDBBasicTypes for i64 {
         ColumnType::Integer
     }
 }
+
 impl WCDBBasicTypes for f32 {
     fn get_value(&self) -> f32 {
         let any_value = self as &dyn Any;
@@ -308,6 +318,7 @@ impl WCDBBasicTypes for String {
         ColumnType::Text
     }
 }
+
 impl WCDBBasicTypes for &'static str {
     fn get_value(&self) -> &'static str {
         let any_value = self as &dyn Any;
@@ -319,17 +330,17 @@ impl WCDBBasicTypes for &'static str {
 
     fn get_bool(&self) -> bool {
         eprintln!("WCDB BasicTypes: &'static str can't convert to bool");
-        return false;
+        false
     }
 
     fn get_i64(&self) -> i64 {
         eprintln!("WCDB BasicTypes: &'static str can't convert to i64");
-        return -1i64;
+        -1i64
     }
 
     fn get_f64(&self) -> f64 {
         eprintln!("WCDB BasicTypes: &'static str can't convert to f64");
-        return -1f64;
+        -1f64
     }
 
     fn get_string(&self) -> String {

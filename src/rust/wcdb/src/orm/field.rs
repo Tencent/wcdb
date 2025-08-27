@@ -1,7 +1,9 @@
 use crate::base::cpp_object::CppObjectTrait;
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::column::Column;
-use crate::winq::identifier::IdentifierTrait;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::c_void;
 
 pub struct Field<T> {
@@ -27,7 +29,23 @@ impl<T> CppObjectTrait for Field<T> {
     }
 }
 
+impl<T> IdentifierConvertibleTrait for Field<T> {
+    fn as_identifier(&self) -> &Identifier {
+        self.column.as_identifier()
+    }
+}
+
+impl<T> CppObjectConvertibleTrait for Field<T> {
+    fn as_cpp_object(&self) -> *mut c_void {
+        self.column.as_cpp_object()
+    }
+}
+
 impl<T> IdentifierTrait for Field<T> {
+    fn get_type(&self) -> CPPType {
+        self.column.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.column.get_description()
     }
@@ -43,7 +61,7 @@ impl<T> Field<T> {
     ) -> Field<T> {
         let bind = unsafe { &*binding };
         Field {
-            column: Column::new_with_binding(name, bind.base_binding().get_base_binding()),
+            column: Column::new(name, Some(bind.base_binding().get_base_binding())),
             name: name.to_string(),
             binding,
             field_id,

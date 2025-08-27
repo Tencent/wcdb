@@ -1,19 +1,26 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::orm::field::Field;
+use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::conflict_action::ConflictAction;
-use crate::winq::identifier::{CPPType, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::multi_type_array::MultiTypeArray;
 use crate::winq::object::Object;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::upsert::Upsert;
+use libc::c_longlong;
 use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
     fn WCDBRustStatementInsert_create() -> *mut c_void;
+
     fn WCDBRustStatementInsert_configTableName(cpp_obj: *mut c_void, table_name: *const c_char);
+
     fn WCDBRustStatementInsert_configConflictAction(cpp_obj: *mut c_void, action: c_int);
+
     fn WCDBRustStatementInsert_configColumns(
         cpp_obj: *mut c_void,
         columns_type: c_int,
@@ -21,6 +28,7 @@ extern "C" {
         columns_string_vec: *const *const c_char,
         columns_vec_len: c_int,
     );
+
     fn WCDBRustStatementInsert_configValuesWithBindParameters(cpp_obj: *mut c_void, count: c_int);
 
     fn WCDBRustStatementInsert_configDefaultValues(cpp_obj: *mut c_void);
@@ -28,11 +36,12 @@ extern "C" {
     fn WCDBRustStatementInsert_configValues(
         cpp_obj: *mut c_void,
         types: *const c_int,
-        long_values: *const i64,
+        long_values: *const c_longlong,
         double_values: *const c_double,
         string_values: *const *const c_char,
         value_len: c_int,
     );
+
     fn WCDBRustStatementInsert_configUpsert(cpp_obj: *mut c_void, upsert: *mut c_void);
 }
 
@@ -55,15 +64,25 @@ impl CppObjectTrait for StatementInsert {
     }
 }
 
+impl CppObjectConvertibleTrait for StatementInsert {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
 impl IdentifierTrait for StatementInsert {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.statement.get_description()
     }
 }
 
-impl IdentifierStaticTrait for StatementInsert {
-    fn get_type() -> i32 {
-        CPPType::InsertSTMT as i32
+impl IdentifierConvertibleTrait for StatementInsert {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
     }
 }
 
@@ -77,14 +96,16 @@ impl StatementInsert {
     pub fn new() -> Self {
         let cpp_obj = unsafe { WCDBRustStatementInsert_create() };
         StatementInsert {
-            statement: Statement::new_with_obj(cpp_obj),
+            statement: Statement::new(CPPType::InsertSTMT, Some(cpp_obj)),
         }
     }
 
     pub fn insert_into(&self, table_name: &str) -> &Self {
-        let c_table_name = CString::new(table_name).unwrap_or_default();
         unsafe {
-            WCDBRustStatementInsert_configTableName(self.get_cpp_obj(), c_table_name.as_ptr());
+            WCDBRustStatementInsert_configTableName(
+                self.get_cpp_obj(),
+                table_name.to_cstring().as_ptr(),
+            );
         }
         self
     }

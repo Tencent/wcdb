@@ -3,10 +3,9 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
-use crate::winq::expression_operable_trait::ExpressionOperableTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierStaticTrait, IdentifierTrait};
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_void};
 
 extern "C" {
     fn WCDBRustExpressionOperable_nullOperate(
@@ -14,6 +13,7 @@ extern "C" {
         operand: *mut c_void,
         is_not: bool,
     ) -> *mut c_void;
+
     fn WCDBRustExpressionOperable_binaryOperate(
         left_type: c_int,
         left: *mut c_void,
@@ -39,7 +39,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    fn WCDBRustExpressionOperable_inOperate(
+    fn WCDBRustExpressionOperable_in(
         operand_type: c_int,
         operand: *mut c_void,
         cpp_type: c_int,
@@ -50,17 +50,17 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    fn WCDBRustExpressionOperable_collateOperate(
-        cpp_type: c_int,
-        operand: *mut c_void,
-        collation: *const c_char,
-    ) -> *mut c_void;
-
-    fn WCDBRustExpressionOperable_inTableOperate(
+    fn WCDBRustExpressionOperable_inTable(
         cpp_type: c_int,
         operand: *mut c_void,
         table: *const c_char,
         is_not: bool,
+    ) -> *mut c_void;
+
+    fn WCDBRustExpressionOperable_collate(
+        cpp_type: c_int,
+        operand: *mut c_void,
+        collation: *const c_char,
     ) -> *mut c_void;
 }
 
@@ -83,1758 +83,577 @@ impl CppObjectTrait for ExpressionOperable {
     }
 }
 
+impl CppObjectConvertibleTrait for ExpressionOperable {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
+impl IdentifierConvertibleTrait for ExpressionOperable {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
 impl IdentifierTrait for ExpressionOperable {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
     fn get_description(&self) -> String {
         self.identifier.get_description()
     }
 }
 
-impl IdentifierStaticTrait for ExpressionOperable {
-    fn get_type() -> i32 {
-        CPPType::Expression as i32
+impl ExpressionConvertibleTrait for ExpressionOperable {}
+
+pub(crate) trait OperateParam {
+    /// 对应 C++ 入参 type, long, double, string
+    fn get_params(&self) -> (CPPType, i64, f64, *const c_char);
+}
+
+impl<T: ExpressionConvertibleTrait> OperateParam for T {
+    fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
+        (
+            self.as_identifier().get_type(),
+            self.as_cpp_object().get_cpp_obj() as i64,
+            0.0,
+            std::ptr::null_mut(),
+        )
+    }
+}
+
+impl OperateParam for bool {
+    fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
+        (
+            CPPType::Int,
+            if *self { 1 } else { 0 } as i64,
+            0.0,
+            std::ptr::null(),
+        )
+    }
+}
+
+macro_rules! impl_binary_operate_param_for_int {
+    ($($t:ty),*) => {
+        $(
+            impl OperateParam for $t {
+                fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
+                    (CPPType::Int, *self as i64, 0.0, std::ptr::null())
+                }
+            }
+        )*
+    };
+}
+
+impl_binary_operate_param_for_int!(i8, i16, i32, i64);
+
+macro_rules! impl_binary_operate_param_for_float {
+    ($($t:ty),*) => {
+        $(
+            impl OperateParam for $t {
+                fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
+                    (CPPType::Double, 0, *self as f64, std::ptr::null())
+                }
+            }
+        )*
+    };
+}
+
+impl_binary_operate_param_for_float!(f32, f64);
+
+impl OperateParam for &str {
+    fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
+        (
+            CPPType::String,
+            0,
+            0.0,
+            self.into().to_cstring().as_ptr(),
+        )
+    }
+}
+
+pub(crate) trait ExpressionOperableTrait {
+    fn is_null(&self) -> Expression;
+
+    fn not_null(&self) -> Expression;
+
+    fn or<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression;
+
+    fn and<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression;
+
+    fn multiply<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn divide<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn modulo<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn add<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn minus<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn left_shift<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn right_shift<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn bit_and<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn bit_or<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn lt<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn le<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn gt<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn ge<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn eq<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn not_eq<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn concat<T: OperateParam>(&self, operand: T) -> Expression;
+
+    fn between<T: OperateParam>(&self, begin: T, end: T) -> Expression;
+
+    fn not_between<T: OperateParam>(&self, begin: T, end: T) -> Expression;
+
+    fn r#in<T: OperateParam>(&self, operands: &[T]) -> Expression;
+
+    fn not_in<T: OperateParam>(&self, operands: &[T]) -> Expression;
+
+    fn in_table(&self, table: &str) -> Expression;
+
+    fn not_in_table(&self, table: &str) -> Expression;
+
+    fn collate(&self, collation: &str) -> Expression;
+
+    fn like(&self, content: &str) -> Expression;
+
+    fn not_like(&self, content: &str) -> Expression;
+
+    fn glob(&self, content: &str) -> Expression;
+
+    fn not_glob(&self, content: &str) -> Expression;
+
+    fn r#match(&self, content: &str) -> Expression;
+
+    fn not_match(&self, content: &str) -> Expression;
+
+    fn regexp(&self, content: &str) -> Expression;
+
+    fn not_regexp(&self, content: &str) -> Expression;
+
+    fn is(&self, operand: bool) -> Expression;
+
+    fn is_not(&self, operand: bool) -> Expression;
+
+    fn avg(&self) -> Expression;
+
+    fn count(&self) -> Expression;
+
+    fn group_concat(&self) -> Expression;
+
+    fn group_concat_string(&self, separator: &str) -> Expression;
+
+    fn max(&self) -> Expression;
+
+    fn min(&self) -> Expression;
+
+    fn sum(&self) -> Expression;
+
+    fn total(&self) -> Expression;
+
+    fn abs(&self) -> Expression;
+
+    fn hex(&self) -> Expression;
+
+    fn length(&self) -> Expression;
+
+    fn lower(&self) -> Expression;
+
+    fn upper(&self) -> Expression;
+
+    fn round(&self) -> Expression;
+
+    fn match_info(&self) -> Expression;
+
+    fn offsets(&self) -> Expression;
+
+    fn snippet(&self) -> Expression;
+
+    fn bm25(&self) -> Expression;
+
+    fn highlight(&self) -> Expression;
+
+    fn substring_match_info(&self) -> Expression;
+}
+
+impl ExpressionOperableTrait for ExpressionOperable {
+    fn is_null(&self) -> Expression {
+        self.null_operate(false)
+    }
+
+    fn not_null(&self) -> Expression {
+        self.null_operate(true)
+    }
+
+    fn or<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Or, false)
+    }
+
+    fn and<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::And, false)
+    }
+
+    fn multiply<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Multiply, false)
+    }
+
+    fn divide<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Divide, false)
+    }
+
+    fn modulo<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Modulo, false)
+    }
+
+    fn add<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Plus, false)
+    }
+
+    fn minus<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Minus, false)
+    }
+
+    fn left_shift<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::LeftShift, false)
+    }
+
+    fn right_shift<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::RightShift, false)
+    }
+
+    fn bit_and<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::BitwiseAnd, false)
+    }
+
+    fn bit_or<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::BitwiseOr, false)
+    }
+
+    fn lt<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Less, false)
+    }
+
+    fn le<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::LessOrEqual, false)
+    }
+
+    fn gt<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Greater, false)
+    }
+
+    fn ge<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::GreaterOrEqual, false)
+    }
+
+    fn eq<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Equal, false)
+    }
+
+    fn not_eq<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::NotEqual, false)
+    }
+
+    fn concat<T: OperateParam>(&self, operand: T) -> Expression {
+        self.binary_operate(operand, BinaryOperatorType::Concatenate, false)
+    }
+
+    fn between<T: OperateParam>(&self, begin: T, end: T) -> Expression {
+        self.between_operate(begin, end, false)
+    }
+
+    fn not_between<T: OperateParam>(&self, begin: T, end: T) -> Expression {
+        self.between_operate(begin, end, true)
+    }
+
+    fn r#in<T: OperateParam>(&self, operands: &[T]) -> Expression {
+        self.in_operate(operands, false)
+    }
+
+    fn not_in<T: OperateParam>(&self, operands: &[T]) -> Expression {
+        self.in_operate(operands, true)
+    }
+
+    // fn in_operate<T: OperateParam>(&self, operands: &Vec<T>, is_not: bool) -> Expression {
+    //     let (mut operands_type, mut operands_long, mut operands_double, mut operands_cpp_obj) = (
+    //         CPPType::Int,
+    //         operands.as_ptr() as i64,
+    //         operands.as_ptr() as i64,
+    //         operands.as_ptr() as i64,
+    //     );
+    //     for operand in operands {
+    //     }
+    //
+    //     let cpp_obj = unsafe {
+    //         WCDBRustExpressionOperable_in(
+    //             self.get_type() as i32,
+    //             self.get_cpp_obj(),
+    //             operands_type as i32,
+    //             operands_long as *const i64,
+    //             operands_double as *const f64,
+    //             operands_cpp_obj as *const c_void,
+    //             operands.len() as i32,
+    //             is_not,
+    //         )
+    //     };
+    //     Expression::new(Some(cpp_obj))
+    // }
+
+    fn in_table(&self, table: &str) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inTable(
+                self.get_type() as i32,
+                self.get_cpp_obj(),
+                table.into().to_cstring().as_ptr(),
+                true,
+            )
+        };
+        Expression::new(Some(cpp_obj))
+    }
+
+    fn not_in_table(&self, table: &str) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inTable(
+                self.get_type() as i32,
+                self.get_cpp_obj(),
+                table.into().to_cstring().as_ptr(),
+                false,
+            )
+        };
+        Expression::new(Some(cpp_obj))
+    }
+
+    fn collate(&self, collation: &str) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_collate(
+                self.get_type() as i32,
+                self.get_cpp_obj(),
+                collation.into().to_cstring().as_ptr(),
+            )
+        };
+        Expression::new(Some(cpp_obj))
+    }
+
+    // pub fn substr_int(&self, start: i32, length: i32) -> Expression {
+    //     Expression::function("SUBSTR")
+    //         .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    //         .argument_int(start)
+    //         .argument_int(length)
+    // }
+
+    // pub fn substr_long(&self, start: i64, length: i64) -> Expression {
+    //     Expression::function("SUBSTR")
+    //         .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+    //         .argument_long(start)
+    //         .argument_long(length)
+    // }
+
+    fn like(&self, content: &str) -> Expression {
+        self.binary_operate(&content.into().to_string(), BinaryOperatorType::Like, false)
+    }
+
+    fn not_like(&self, content: &str) -> Expression {
+        self.binary_operate(&content.into().to_string(), BinaryOperatorType::Like, true)
+    }
+
+    fn glob(&self, content: &str) -> Expression {
+        self.binary_operate(&content.into().to_string(), BinaryOperatorType::GLOB, false)
+    }
+
+    fn not_glob(&self, content: &str) -> Expression {
+        self.binary_operate(&content.into().to_string(), BinaryOperatorType::GLOB, true)
+    }
+
+    fn r#match(&self, content: &str) -> Expression {
+        self.binary_operate(
+            &content.into().to_string(),
+            BinaryOperatorType::Match,
+            false,
+        )
+    }
+
+    fn not_match(&self, content: &str) -> Expression {
+        self.binary_operate(&content.into().to_string(), BinaryOperatorType::Match, true)
+    }
+
+    fn regexp(&self, content: &str) -> Expression {
+        self.binary_operate(
+            &content.into().to_string(),
+            BinaryOperatorType::RegExp,
+            false,
+        )
+    }
+
+    fn not_regexp(&self, content: &str) -> Expression {
+        self.binary_operate(
+            &content.into().to_string(),
+            BinaryOperatorType::RegExp,
+            true,
+        )
+    }
+
+    fn is(&self, operand: bool) -> Expression {
+        self.binary_operate(&operand, BinaryOperatorType::Is, false)
+    }
+
+    fn is_not(&self, operand: bool) -> Expression {
+        self.binary_operate(&operand, BinaryOperatorType::Is, true)
+    }
+
+    fn avg(&self) -> Expression {
+        Expression::function("AVG").argument(self)
+    }
+
+    fn count(&self) -> Expression {
+        Expression::function("COUNT").argument(self)
+    }
+
+    fn group_concat(&self) -> Expression {
+        Expression::function("GROUP_CONCAT").argument(self)
+    }
+
+    fn group_concat_string(&self, separator: &str) -> Expression {
+        Expression::function("GROUP_CONCAT")
+            .argument(self)
+            .argument(separator)
+    }
+
+    fn max(&self) -> Expression {
+        Expression::function("MAX").argument(self)
+    }
+
+    fn min(&self) -> Expression {
+        Expression::function("MIN").argument(self)
+    }
+
+    fn sum(&self) -> Expression {
+        Expression::function("SUM").argument(self)
+    }
+
+    fn total(&self) -> Expression {
+        Expression::function("TOTAL").argument(self)
+    }
+
+    fn abs(&self) -> Expression {
+        Expression::function("ABS").argument(self)
+    }
+
+    fn hex(&self) -> Expression {
+        Expression::function("HEX").argument(self)
+    }
+
+    fn length(&self) -> Expression {
+        Expression::function("LENGTH").argument(self)
+    }
+
+    fn lower(&self) -> Expression {
+        Expression::function("LOWER").argument(self)
+    }
+
+    fn upper(&self) -> Expression {
+        Expression::function("UPPER").argument(self)
+    }
+
+    fn round(&self) -> Expression {
+        Expression::function("ROUND").argument(self)
+    }
+
+    fn match_info(&self) -> Expression {
+        Expression::function("matchInfo").argument(self)
+    }
+
+    fn offsets(&self) -> Expression {
+        Expression::function("offsets").argument(self)
+    }
+
+    fn snippet(&self) -> Expression {
+        Expression::function("snippet").argument(self)
+    }
+
+    fn bm25(&self) -> Expression {
+        Expression::function("bm25").argument(self)
+    }
+
+    fn highlight(&self) -> Expression {
+        Expression::function("highlight").argument(self)
+    }
+
+    fn substring_match_info(&self) -> Expression {
+        Expression::function("substring_match_info").argument(self)
     }
 }
 
 impl ExpressionOperable {
-    pub fn new() -> Self {
+    pub(crate) fn new(cpp_type: CPPType, cpp_obj_opt: Option<*mut c_void>) -> Self {
         ExpressionOperable {
-            identifier: Identifier::new(),
+            identifier: Identifier::new(cpp_type, cpp_obj_opt),
         }
     }
 
-    pub fn new_with_obj(cpp_obj: *mut c_void) -> Self {
-        ExpressionOperable {
-            identifier: Identifier::new_with_obj(cpp_obj),
-        }
-    }
-
-    pub fn as_identifier(&self) -> &Identifier {
-        self.identifier.as_identifier()
-    }
-
-    pub(crate) fn or<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Or,
-            false,
-        )
-    }
-
-    pub(crate) fn and<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::And,
-            false,
-        )
-    }
-
-    pub(crate) fn multiply_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Multiply,
-            false,
-        )
-    }
-
-    pub(crate) fn multiply_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Multiply, false)
-    }
-
-    pub(crate) fn multiply_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Multiply, false)
-    }
-
-    pub(crate) fn divide_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Divide,
-            false,
-        )
-    }
-
-    pub(crate) fn divide_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Divide, false)
-    }
-
-    pub(crate) fn divide_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Divide, false)
-    }
-
-    pub(crate) fn mod_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Modulo,
-            false,
-        )
-    }
-
-    pub(crate) fn mod_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Modulo, false)
-    }
-
-    pub(crate) fn mod_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Modulo, false)
-    }
-
-    pub(crate) fn add_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Plus,
-            false,
-        )
-    }
-
-    pub(crate) fn add_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Plus, false)
-    }
-
-    pub(crate) fn add_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Plus, false)
-    }
-
-    pub(crate) fn minus_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Minus,
-            false,
-        )
-    }
-
-    pub(crate) fn minus_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Minus, false)
-    }
-
-    pub(crate) fn minus_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Minus, false)
-    }
-
-    pub(crate) fn left_shift_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::LeftShift,
-            false,
-        )
-    }
-
-    pub(crate) fn left_shift_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::LeftShift, false)
-    }
-
-    pub(crate) fn right_shift_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::RightShift,
-            false,
-        )
-    }
-
-    pub(crate) fn right_shift_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::RightShift,
-            false,
-        )
-    }
-
-    pub(crate) fn bit_and_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::BitwiseAnd,
-            false,
-        )
-    }
-
-    pub(crate) fn bit_and_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::BitwiseAnd,
-            false,
-        )
-    }
-
-    pub(crate) fn bit_or_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::BitwiseOr,
-            false,
-        )
-    }
-
-    pub(crate) fn bit_or_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::BitwiseOr, false)
-    }
-
-    pub(crate) fn lt_expression_convertible<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Less,
-            false,
-        )
-    }
-
-    pub(crate) fn lt_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Less, false)
-    }
-
-    pub(crate) fn lt_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Less, false)
-    }
-
-    pub(crate) fn lt_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(left_cpp_type, operand, BinaryOperatorType::Less, false)
-    }
-
-    pub(crate) fn le_expression_convertible<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::LessOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn le_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::LessOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn le_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::LessOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn le_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::LessOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn gt_expression_convertible<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Greater,
-            false,
-        )
-    }
-
-    pub(crate) fn gt_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Greater, false)
-    }
-
-    pub(crate) fn gt_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Greater, false)
-    }
-
-    pub(crate) fn gt_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(left_cpp_type, operand, BinaryOperatorType::Greater, false)
-    }
-
-    pub(crate) fn ge_expression_convertible<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::GreaterOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn ge_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::GreaterOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn ge_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::GreaterOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn ge_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::GreaterOrEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn eq_expression_convertible<T>(&self, left_cpp_type: i32, operand: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Equal,
-            false,
-        )
-    }
-
-    pub(crate) fn eq_bool(&self, left_cpp_type: i32, operand: bool) -> Expression {
-        self.binary_operate_with_bool(left_cpp_type, operand, BinaryOperatorType::Equal, false)
-    }
-
-    pub(crate) fn eq_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Equal, false)
-    }
-
-    pub(crate) fn eq_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Equal, false)
-    }
-
-    pub(crate) fn eq_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(left_cpp_type, operand, BinaryOperatorType::Equal, false)
-    }
-
-    pub(crate) fn not_eq_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::NotEqual,
-            false,
-        )
-    }
-
-    pub(crate) fn not_eq_bool(&self, left_cpp_type: i32, operand: bool) -> Expression {
-        self.binary_operate_with_bool(left_cpp_type, operand, BinaryOperatorType::NotEqual, false)
-    }
-
-    pub(crate) fn not_eq_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::NotEqual, false)
-    }
-
-    pub(crate) fn not_eq_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::NotEqual, false)
-    }
-
-    pub(crate) fn not_eq_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(left_cpp_type, operand, BinaryOperatorType::NotEqual, false)
-    }
-
-    pub(crate) fn concat_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Concatenate,
-            false,
-        )
-    }
-
-    pub(crate) fn concat_long(&self, left_cpp_type: i32, operand: i64) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Concatenate,
-            false,
-        )
-    }
-
-    pub(crate) fn concat_double(&self, left_cpp_type: i32, operand: f64) -> Expression {
-        self.binary_operate_with_double(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Concatenate,
-            false,
-        )
-    }
-
-    pub(crate) fn concat_string(&self, left_cpp_type: i32, operand: &str) -> Expression {
-        self.binary_operate_text(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Concatenate,
-            false,
-        )
-    }
-
-    pub fn binary_operate_long(
-        &self,
-        left_cpp_type: i32,
-        operand: i64,
-        binary_operator_type: BinaryOperatorType,
-        is_not: bool,
-    ) -> Expression {
+    fn null_operate(&self, is_not: bool) -> Expression {
         let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_binaryOperate(
-                left_cpp_type,
-                self.identifier.get_cpp_obj(),
-                CPPType::Int as i32,
-                operand,
-                0.0,
-                std::ptr::null(),
-                binary_operator_type as i32,
+            WCDBRustExpressionOperable_nullOperate(
+                self.get_type() as i32,
+                self.get_cpp_obj(),
                 is_not,
             )
         };
-        Self::create_expression(cpp_obj)
+        Expression::new(Some(cpp_obj))
     }
 
-    fn binary_operate_text(
+    fn binary_operate<T: OperateParam>(
         &self,
-        left_cpp_type: i32,
-        operand: &str,
-        binary_operator_type: BinaryOperatorType,
+        operand: T,
+        operand_type: BinaryOperatorType,
         is_not: bool,
     ) -> Expression {
-        let c_operand = operand.to_cstring();
+        let (right_type, right_long, right_double, right_cpp_obj) = operand.get_params();
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_binaryOperate(
-                left_cpp_type,
-                self.identifier.get_cpp_obj(),
-                CPPType::String as i32,
-                0,
-                0.0,
-                c_operand.as_ptr(),
-                binary_operator_type as i32,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    fn binary_operate_with_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-        binary_operator_type: BinaryOperatorType,
-        is_not: bool,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let operand_option = Option::Some(operand);
-        let right_long = CppObject::get_by_cpp_object_convertible_trait(&operand_option);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_binaryOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&operand_option),
+                self.get_type() as i32,
+                self.get_cpp_obj(),
+                right_type as i32,
                 right_long,
-                0.0,
-                std::ptr::null(),
-                binary_operator_type as c_int,
+                right_double,
+                right_cpp_obj as *const c_char,
+                operand_type as i32,
                 is_not,
             )
         };
-        Self::create_expression(cpp_obj)
+        Expression::new(Some(cpp_obj))
     }
 
-    fn binary_operate_with_long(
-        &self,
-        left_cpp_type: i32,
-        operand: i64,
-        binary_operator_type: BinaryOperatorType,
-        is_not: bool,
-    ) -> Expression {
+    fn between_operate<T: OperateParam>(&self, begin: T, end: T, is_not: bool) -> Expression {
+        let (begin_type, begin_long, begin_double, begin_cpp_obj) = begin.get_params();
+        let (end_type, end_long, end_double, end_cpp_obj) = end.get_params();
         let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_binaryOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as i32,
-                operand,
-                0.0,
-                std::ptr::null(),
-                binary_operator_type as i32,
+            WCDBRustExpressionOperable_betweenOperate(
+                self.get_type() as i32,
+                self.get_cpp_obj(),
+                begin_type as i32,
+                begin_long as usize as *mut c_void,
+                begin_double,
+                begin_cpp_obj as *const c_char,
+                end_type as i32,
+                end_long as usize as *mut c_void,
+                end_double,
+                end_cpp_obj as *const c_char,
                 is_not,
             )
         };
-        Self::create_expression(cpp_obj)
-    }
-
-    fn binary_operate_with_double(
-        &self,
-        left_cpp_type: i32,
-        operand: f64,
-        binary_operator_type: BinaryOperatorType,
-        is_not: bool,
-    ) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_binaryOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as i32,
-                0,
-                operand,
-                std::ptr::null(),
-                binary_operator_type as i32,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    fn binary_operate_with_bool(
-        &self,
-        left_cpp_type: i32,
-        operand: bool,
-        binary_operator_type: BinaryOperatorType,
-        is_not: bool,
-    ) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_binaryOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Bool as i32,
-                operand as i64,
-                0.0,
-                std::ptr::null(),
-                binary_operator_type as i32,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub(crate) fn create_expression(cpp_obj: *mut c_void) -> Expression {
-        let mut expression = Expression::new();
-        expression.set_cpp_obj(cpp_obj);
-        expression
-    }
-
-    pub(crate) fn null_operate(&self, cpp_type: i32, is_not: bool) -> Expression {
-        let mut expression = Expression::new();
-        let cpp_obj =
-            unsafe { WCDBRustExpressionOperable_nullOperate(cpp_type, self.get_cpp_obj(), is_not) };
-        expression.set_cpp_obj(cpp_obj);
-        expression
-    }
-
-    pub fn between_operate_with_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        begin: &T,
-        end: &T,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let end_option = Option::Some(end);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_expr_long<T>(&self, left_cpp_type: i32, begin: &T, end: i64) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_expr_double<T>(&self, left_cpp_type: i32, begin: &T, end: f64) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_expr_string<T>(&self, left_cpp_type: i32, begin: &T, end: &str) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let c_operand = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_operand.as_ptr(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_long_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let end_option = Option::Some(end);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_long_long(&self, left_cpp_type: i32, begin: i64, end: i64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_long_double(&self, left_cpp_type: i32, begin: i64, end: f64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_long_string(&self, left_cpp_type: i32, begin: i64, end: &str) -> Expression {
-        let c_end = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_end.as_ptr(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_double_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let end_option = Option::Some(end);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin as c_double,
-                std::ptr::null(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_double_long(&self, left_cpp_type: i32, begin: f64, end: i64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin,
-                std::ptr::null(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_double_double(&self, left_cpp_type: i32, begin: f64, end: f64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin,
-                std::ptr::null(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_double_string(&self, left_cpp_type: i32, begin: f64, end: &str) -> Expression {
-        let c_end = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin,
-                std::ptr::null(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_end.as_ptr(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_string_expr<T>(&self, left_cpp_type: i32, begin: &str, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let end_option = Option::Some(end);
-        let c_begin = begin.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0 as c_double,
-                c_begin.as_ptr(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_string_long(&self, left_cpp_type: i32, begin: &str, end: i64) -> Expression {
-        let c_begin = begin.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_begin.as_ptr(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_string_double(&self, left_cpp_type: i32, begin: &str, end: f64) -> Expression {
-        let c_begin = begin.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_begin.as_ptr(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn between_string_string(&self, left_cpp_type: i32, begin: &str, end: &str) -> Expression {
-        let c_begin = begin.to_cstring();
-        let c_end = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_begin.as_ptr(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_end.as_ptr(),
-                false,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_expr_expr<T>(&self, left_cpp_type: i32, begin: &T, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let end_option = Option::Some(end);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_expr_long<T>(&self, left_cpp_type: i32, begin: &T, end: i64) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_expr_double<T>(&self, left_cpp_type: i32, begin: &T, end: f64) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_expr_string<T>(&self, left_cpp_type: i32, begin: &T, end: &str) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let begin_cpp_obj: *mut c_void = begin.as_cpp_object();
-        let begin_option = Option::Some(begin);
-        let c_operand = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                Identifier::get_cpp_type_with_option(&begin_option),
-                begin_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_operand.as_ptr(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_long_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let end_option = Option::Some(end);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_long_long(&self, left_cpp_type: i32, begin: i64, end: i64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_long_double(&self, left_cpp_type: i32, begin: i64, end: f64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_long_string(&self, left_cpp_type: i32, begin: i64, end: &str) -> Expression {
-        let c_end = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                begin as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_end.as_ptr(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_double_expr<T>(&self, left_cpp_type: i32, begin: i64, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let end_option = Option::Some(end);
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin as c_double,
-                std::ptr::null(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_double_long(&self, left_cpp_type: i32, begin: f64, end: i64) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin,
-                std::ptr::null(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_double_double(
-        &self,
-        left_cpp_type: i32,
-        begin: f64,
-        end: f64,
-    ) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin,
-                std::ptr::null(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_double_string(
-        &self,
-        left_cpp_type: i32,
-        begin: f64,
-        end: &str,
-    ) -> Expression {
-        let c_end = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                begin,
-                std::ptr::null(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_end.as_ptr(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_string_expr<T>(&self, left_cpp_type: i32, begin: &str, end: &T) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        let end_cpp_obj: *mut c_void = end.as_cpp_object();
-        let end_option = Option::Some(end);
-        let c_begin = begin.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0 as c_double,
-                c_begin.as_ptr(),
-                Identifier::get_cpp_type_with_option(&end_option),
-                end_cpp_obj,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_string_long(&self, left_cpp_type: i32, begin: &str, end: i64) -> Expression {
-        let c_begin = begin.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_begin.as_ptr(),
-                CPPType::Int as c_int,
-                end as *mut c_void,
-                0.0,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_string_double(
-        &self,
-        left_cpp_type: i32,
-        begin: &str,
-        end: f64,
-    ) -> Expression {
-        let c_begin = begin.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_begin.as_ptr(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                end,
-                std::ptr::null(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn not_between_string_string(
-        &self,
-        left_cpp_type: i32,
-        begin: &str,
-        end: &str,
-    ) -> Expression {
-        let c_begin = begin.to_cstring();
-        let c_end = end.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_betweenOperate(
-                left_cpp_type,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_begin.as_ptr(),
-                CPPType::String as c_int,
-                0 as *mut c_void,
-                0.0,
-                c_end.as_ptr(),
-                true,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn in_short(&self, left_cpp_type: i32, operands: Vec<i16>, is_not: bool) -> Expression {
-        let val: Vec<i64> = operands.iter().map(|&i| i as i64).collect();
-        self.in_long(left_cpp_type, val, is_not)
-    }
-
-    pub fn in_int(&self, left_cpp_type: i32, operands: Vec<i32>, is_not: bool) -> Expression {
-        let val: Vec<i64> = operands.iter().map(|&i| i as i64).collect();
-        self.in_long(left_cpp_type, val, is_not)
-    }
-
-    pub fn in_float(&self, left_cpp_type: i32, operands: Vec<f32>, is_not: bool) -> Expression {
-        let val: Vec<f64> = operands.iter().map(|&i| i as f64).collect();
-        self.in_double(left_cpp_type, val, is_not)
-    }
-
-    pub fn in_double(&self, left_cpp_type: i32, operands: Vec<f64>, is_not: bool) -> Expression {
-        self.in_double_operate(left_cpp_type, operands, is_not)
-    }
-
-    pub fn in_long(&self, left_cpp_type: i32, operands: Vec<i64>, is_not: bool) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inOperate(
-                left_cpp_type as c_int,
-                CppObject::get(self),
-                CPPType::Int as c_int,
-                operands.as_ptr(),
-                std::ptr::null(),
-                std::ptr::null(),
-                operands.len() as c_int,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn in_long_with_cpp_type(
-        &self,
-        left_cpp_type: i32,
-        cpp_type: i32,
-        operands: Vec<i64>,
-        is_not: bool,
-    ) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inOperate(
-                left_cpp_type as c_int,
-                CppObject::get(self),
-                cpp_type as c_int,
-                operands.as_ptr(),
-                std::ptr::null(),
-                std::ptr::null(),
-                operands.len() as c_int,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn in_double_operate(
-        &self,
-        left_cpp_type: i32,
-        operands: Vec<f64>,
-        is_not: bool,
-    ) -> Expression {
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inOperate(
-                left_cpp_type as c_int,
-                CppObject::get(self),
-                CPPType::Double as c_int,
-                std::ptr::null(),
-                operands.as_ptr(),
-                std::ptr::null(),
-                operands.len() as c_int,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn in_string(&self, left_cpp_type: i32, operands: Vec<&str>, is_not: bool) -> Expression {
-        let mut c_strings = Vec::new();
-        let mut c_string_array: Vec<*const c_char> = Vec::new();
-        for x in operands {
-            let c_string = CString::new(x).unwrap_or_default();
-            c_string_array.push(c_string.as_ptr());
-            c_strings.push(c_string);
-        }
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inOperate(
-                left_cpp_type as c_int,
-                CppObject::get(self),
-                CPPType::String as c_int,
-                std::ptr::null(),
-                std::ptr::null(),
-                c_string_array.as_ptr(),
-                c_string_array.len() as c_int,
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn in_object<T>(
-        &self,
-        operands: Option<Vec<T>>,
-        left_cpp_type: i32,
-        is_not: bool,
-    ) -> Expression {
-        //todo dengxudong
-        Expression::new()
-        // match operands {
-        //     None => {
-        //         self.in_long(left_cpp_type, Vec::new(), is_not)
-        //     }
-        //     Some(val) => {
-        //         let first = val.first();
-        //         let data_type: ObjectType = MultiTypeArray::get_object_type(Box::new(first));
-        //         match data_type {
-        //             ObjectType::Identifier => {
-        //                 // let mut vector: Vec<i64> = Vec::new();
-        //                 // for x in val {
-        //                 //     let few = x as Identifier.get_cpp_obj();
-        //                 //     vector.push(few as i64);
-        //                 // }
-        //                 //
-        //                 // let cpp_type = crate::winq::identifier::Identifier::get_cpp_type(first);
-        //                 // self.in_long_with_cpp_type(left_cpp_type, cpp_type, vector, is_not)
-        //                 Expression::new()
-        //             }
-        //             ObjectType::Value => {
-        //                 Expression::new()
-        //             }
-        //             ObjectType::String => {
-        //                 // if val.is_empty() {
-        //                 //     self.in_string(left_cpp_type, Vec::new(), is_not)
-        //                 // } else {
-        //                 //     let mut string_vec:Vec<&str> = Vec::new();
-        //                 //     for x in val {
-        //                 //         string_vec.push(x);
-        //                 //     }
-        //                 //     self.in_string(left_cpp_type, string_vec, is_not)
-        //                 // }
-        //                 Expression::new()
-        //             }
-        //             ObjectType::Float => {
-        //                 Expression::new()
-        //             }
-        //             ObjectType::Bool | ObjectType::Char | ObjectType::Byte | ObjectType::Short | ObjectType::Int
-        //             | ObjectType::Long | ObjectType::Double => {
-        //                 Expression::new()
-        //             }
-        //             ObjectType::Null | ObjectType::Unknown => {
-        //                 Expression::new()
-        //             }
-        //         }
-        //     }
-        // }
-    }
-
-    pub fn in_table(&self, left_cpp_type: i32, table: &str) -> Expression {
-        self.in_table_inner(left_cpp_type, table, false)
-    }
-
-    fn in_table_inner(&self, left_cpp_type: i32, table: &str, is_not: bool) -> Expression {
-        let c_string = table.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inTableOperate(
-                left_cpp_type as c_int,
-                CppObject::get(self),
-                c_string.as_ptr(),
-                is_not,
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn collate(&self, left_cpp_type: i32, collation: &str) -> Expression {
-        let c_string = collation.to_cstring();
-        let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_collateOperate(
-                left_cpp_type as c_int,
-                CppObject::get(self),
-                c_string.as_ptr(),
-            )
-        };
-        Self::create_expression(cpp_obj)
-    }
-
-    pub fn substr_int(&self, left_cpp_type: i32, start: i32, length: i32) -> Expression {
-        Expression::function("SUBSTR")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-            .argument_int(start)
-            .argument_int(length)
-    }
-
-    pub fn substr_long(&self, left_cpp_type: i32, start: i64, length: i64) -> Expression {
-        Expression::function("SUBSTR")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-            .argument_long(start)
-            .argument_long(length)
-    }
-
-    pub fn like(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
-        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::Like, is_not)
-    }
-
-    pub fn glob(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
-        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::GLOB, is_not)
-    }
-
-    pub fn match_string(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
-        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::Match, is_not)
-    }
-
-    pub fn regexp(&self, left_cpp_type: i32, content: &str, is_not: bool) -> Expression {
-        self.binary_operate_text(left_cpp_type, content, BinaryOperatorType::RegExp, is_not)
-    }
-
-    pub fn is_bool(&self, left_cpp_type: i32, operand: bool, is_not: bool) -> Expression {
-        self.binary_operate_with_bool(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
-    }
-
-    pub fn is_byte(&self, left_cpp_type: i32, operand: u8, is_not: bool) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand as i64,
-            BinaryOperatorType::Is,
-            is_not,
-        )
-    }
-
-    pub fn is_short(&self, left_cpp_type: i32, operand: i16, is_not: bool) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand as i64,
-            BinaryOperatorType::Is,
-            is_not,
-        )
-    }
-
-    pub fn is_i32(&self, left_cpp_type: i32, operand: i32, is_not: bool) -> Expression {
-        self.binary_operate_with_long(
-            left_cpp_type,
-            operand as i64,
-            BinaryOperatorType::Is,
-            is_not,
-        )
-    }
-
-    pub fn is_long(&self, left_cpp_type: i32, operand: i64, is_not: bool) -> Expression {
-        self.binary_operate_with_long(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
-    }
-
-    pub fn is_float(&self, left_cpp_type: i32, operand: f32, is_not: bool) -> Expression {
-        self.binary_operate_with_double(
-            left_cpp_type,
-            operand as f64,
-            BinaryOperatorType::Is,
-            is_not,
-        )
-    }
-
-    pub fn is_double(&self, left_cpp_type: i32, operand: f64, is_not: bool) -> Expression {
-        self.binary_operate_with_double(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
-    }
-
-    pub fn is_string(&self, left_cpp_type: i32, operand: &str, is_not: bool) -> Expression {
-        self.binary_operate_text(left_cpp_type, operand, BinaryOperatorType::Is, is_not)
-    }
-
-    pub fn is_expression_convertible<T>(
-        &self,
-        left_cpp_type: i32,
-        operand: &T,
-        is_not: bool,
-    ) -> Expression
-    where
-        T: IdentifierStaticTrait + IdentifierConvertibleTrait + ExpressionConvertibleTrait,
-    {
-        self.binary_operate_with_expression_convertible(
-            left_cpp_type,
-            operand,
-            BinaryOperatorType::Is,
-            is_not,
-        )
-    }
-
-    pub fn avg(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("AVG")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn count(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("COUNT")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn group_concat(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("GROUP_CONCAT")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn group_concat_string(&self, left_cpp_type: i32, sperator: &str) -> Expression {
-        Expression::function("GROUP_CONCAT")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-            .argument_string(sperator)
-    }
-
-    pub fn max(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("MAX")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn min(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("MIN")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn sum(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("SUM")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn total(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("TOTAL")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn abs(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("ABS")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn hex(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("HEX")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn length(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("LENGTH")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn lower(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("LOWER")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn upper(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("UPPER")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn round(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("ROUND")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn match_info(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("matchInfo")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn offsets(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("offsets")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn snippet(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("snippet")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn bm25(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("bm25")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn highlight(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("highlight")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    }
-
-    pub fn substring_match_info(&self, left_cpp_type: i32) -> Expression {
-        Expression::function("substring_match_info")
-            .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
+        Expression::new(Some(cpp_obj))
     }
 }
 
