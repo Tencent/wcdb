@@ -6,7 +6,7 @@ use crate::orm::field::Field;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
-use crate::winq::statement_select::StatementSelect;
+use crate::winq::statement_select::{StatementSelect, StatementSelectSelectParam};
 use std::sync::Arc;
 
 pub struct Select<'a, T> {
@@ -41,14 +41,23 @@ impl<'a, T> Select<'a, T> {
         }
     }
 
+    // pub fn select(mut self, fields: Vec<&'a Field<T>>) -> Self {
+    //     self.fields = fields;
+    //     self.chain_call
+    //         .statement
+    //         .select(&self.fields);
+    //     self
+    // }
+
     pub fn select(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
         self.chain_call.statement.select(&self.fields);
         self
     }
 
-    pub fn where_expression(self, condition: &Expression) -> Self {
-        self.chain_call.statement.where_expression(condition);
+
+    pub fn r#where(self, condition: &Expression) -> Self {
+        self.chain_call.statement.r#where(condition);
         self
     }
 
@@ -73,7 +82,7 @@ impl<'a, T> Select<'a, T> {
     }
 
     pub fn from(self, table_name: &str) -> Self {
-        self.chain_call.statement.from(table_name);
+        // self.chain_call.statement.from(&vec![table_name.to_string()]);
         self
     }
 

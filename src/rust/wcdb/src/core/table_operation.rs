@@ -212,7 +212,7 @@ impl<'a> TableOperation<'a> {
         let binding = StatementDelete::new();
         binding.delete_from(self.table_name.as_ref());
         if let Some(expression) = expression {
-            binding.where_expression(&expression);
+            binding.r#where(&expression);
         }
         if let Some(order) = order {
             binding.order_by(&vec![order]);
@@ -239,7 +239,7 @@ impl TableOperation<'_> {
     ) -> Result<Vec<Vec<Value>>, WCDBException> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
-        binding.from(self.table_name.as_ref());
+        binding.from(&vec![self.table_name.to_string()]);
         binding.select(&columns);
         if let Some(expression) = expression {
             binding.r#where(&expression);

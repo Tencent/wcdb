@@ -8,7 +8,7 @@ extern "C" {
 
 #[derive(Debug, Clone)]
 pub(crate) struct CppObject {
-    cpp_obj: *mut c_void,
+    pub(crate) cpp_obj: *mut c_void,
 }
 
 impl Deref for CppObject {

@@ -486,7 +486,7 @@ impl StatementUpdate {
         unsafe {
             WCDBRustStatementUpdate_configCondition(
                 self.get_cpp_obj(),
-                CppObject::get(condition.get_expression_operable()),
+                CppObject::get(condition),
             );
         }
         self

@@ -40,7 +40,7 @@ impl<'a> Delete<'a> {
     }
 
     pub fn where_expression(self, condition: &Expression) -> Self {
-        self.chain_call.statement.where_expression(condition);
+        self.chain_call.statement.r#where(condition);
         self
     }
 

@@ -117,7 +117,7 @@ fn delete_data_performance(database: &Database, size: i64) {
     let condition = Column::new("add_time").gt_int(1);
     statement
         .delete_from("FriendProfileTable")
-        .where_expression(&condition)
+        .r#where(&condition)
         .limit(size);
     // DELETE FROM FriendProfileTable WHERE add_time > 1 LIMIT 1
     let ret = database.execute(&statement);

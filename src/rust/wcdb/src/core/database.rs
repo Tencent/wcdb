@@ -1042,7 +1042,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(expression)
+            .r#where(expression)
             .first_object()
     }
 
@@ -1055,7 +1055,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .first_object()
     }
 
@@ -1069,7 +1069,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .first_object()
     }
@@ -1085,7 +1085,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(1)
             .offset(offset)
@@ -1137,7 +1137,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .all_objects()
     }
 
@@ -1151,7 +1151,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .all_objects()
     }
@@ -1167,7 +1167,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(limit)
             .all_objects()
@@ -1185,7 +1185,7 @@ impl HandleORMOperationTrait for Database {
         self.prepare_select()
             .select(fields)
             .from(table_name)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(limit)
             .offset(offset)

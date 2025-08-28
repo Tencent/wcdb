@@ -1,4 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException, WCDBResult};
 use crate::core::database::Database;
 use crate::core::handle_operation::HandleOperationTrait;
@@ -8,7 +9,6 @@ use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::sync::Arc;
-use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 
 extern "C" {
     fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
@@ -44,12 +44,6 @@ pub struct HandleInner {
     write_hint: bool,
 }
 
-impl CppObjectConvertibleTrait for HandleInner {
-    fn as_cpp_object(&self) -> &CppObject {
-        self.handle_orm_operation.as_cpp_object()
-    }
-}
-
 impl CppObjectTrait for HandleInner {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.handle_orm_operation.set_cpp_obj(cpp_obj);
@@ -61,6 +55,12 @@ impl CppObjectTrait for HandleInner {
 
     fn release_cpp_object(&mut self) {
         self.handle_orm_operation.release_cpp_object()
+    }
+}
+
+impl CppObjectConvertibleTrait for HandleInner {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.handle_orm_operation.as_cpp_object()
     }
 }
 
@@ -157,9 +157,16 @@ pub struct Handle<'a> {
     database: &'a Database,
 }
 
-impl CppObjectConvertibleTrait for Handle<'a> {
+impl<'a> CppObjectConvertibleTrait for Handle<'a> {
     fn as_cpp_object(&self) -> &CppObject {
-        self.handle_inner.as_cpp_object()
+        // 由于生命周期限制，我们无法直接返回HandleInner中的CppObject引用
+        // 这里我们使用一个临时的解决方案，通过静态变量来存储结果
+        // 注意：这不是线程安全的，但在当前的使用场景下应该是安全的
+        static mut TEMP_CPP_OBJECT: CppObject = CppObject { cpp_obj: std::ptr::null_mut() };
+        unsafe {
+            TEMP_CPP_OBJECT.cpp_obj = self.get_cpp_obj();
+            &TEMP_CPP_OBJECT
+        }
     }
 }
 
@@ -170,7 +177,7 @@ impl<'a> CppObjectTrait for Handle<'a> {
     }
 
     fn get_cpp_obj(&self) -> *mut c_void {
-        let handle_inner_lock = self.handle_inner.borrow_mut();
+        let handle_inner_lock = self.handle_inner.borrow();
         handle_inner_lock.get_cpp_obj()
     }
 

@@ -61,11 +61,11 @@ impl IdentifierConvertibleTrait for IndexedColumn {
 impl IndexedColumnConvertibleTrait for IndexedColumn {}
 
 pub trait IndexedColumnParam {
-    fn get_cpp_obj(&self) -> *mut c_void;
+    fn create_cpp_obj(&self) -> *mut c_void;
 }
 
-impl<T: IndexedColumnConvertibleTrait> IndexedColumnParam for &T {
-    fn get_cpp_obj(&self) -> *mut c_void {
+impl<T: IndexedColumnConvertibleTrait + IdentifierTrait> IndexedColumnParam for T {
+    fn create_cpp_obj(&self) -> *mut c_void {
         unsafe {
             WCDBRustIndexedColumn_create(
                 Identifier::get_cpp_type(self) as c_int,
@@ -77,7 +77,7 @@ impl<T: IndexedColumnConvertibleTrait> IndexedColumnParam for &T {
 }
 
 impl IndexedColumnParam for &str {
-    fn get_cpp_obj(&self) -> *mut c_void {
+    fn create_cpp_obj(&self) -> *mut c_void {
         unsafe {
             WCDBRustIndexedColumn_create(
                 CPPType::String as c_int,
@@ -90,7 +90,7 @@ impl IndexedColumnParam for &str {
 
 impl IndexedColumn {
     pub fn new<T: IndexedColumnParam>(param: T) -> Self {
-        let cpp_obj = param.get_cpp_obj();
+        let cpp_obj = param.create_cpp_obj();
         IndexedColumn {
             identifier: Identifier::new(CPPType::IndexedColumn, Some(cpp_obj)),
         }

@@ -64,46 +64,46 @@ impl IdentifierConvertibleTrait for TableConstraint {
     }
 }
 
-pub trait TableConstraintIndexedByParam {
-    fn get_params(
-        &self,
-        column_vec: &mut Vec<*const c_longlong>,
-        column_name_vec: &mut Vec<*const c_char>,
-    ) -> CPPType;
-}
-
-impl<'a, T, R> TableConstraintIndexedByParam for T
-where
-    T: IntoIterator<Item = Cow<'a, R>>,
-    R: IndexedColumnConvertibleTrait,
-{
-    fn get_params(
-        &self,
-        column_vec: &mut Vec<*const c_longlong>,
-        column_name_vec: &mut Vec<*const c_char>,
-    ) -> CPPType {
-        for item in self {
-            column_vec.push(item.get_cpp_obj());
-        }
-        CPPType::String
-    }
-}
-
-impl<'a, T> TableConstraintIndexedByParam for T
-where
-    T: IntoIterator<Item = Cow<'a, str>>,
-{
-    fn get_params(
-        &self,
-        column_vec: &mut Vec<*const c_longlong>,
-        column_name_vec: &mut Vec<*const c_char>,
-    ) -> CPPType {
-        for item in self {
-
-        }
-        CPPType::String
-    }
-}
+// pub trait TableConstraintIndexedByParam {
+//     fn get_params(
+//         &self,
+//         column_vec: &mut Vec<*const c_longlong>,
+//         column_name_vec: &mut Vec<*const c_char>,
+//     ) -> CPPType;
+// }
+//
+// impl<'a, T, R> TableConstraintIndexedByParam for T
+// where
+//     T: IntoIterator<Item = Cow<'a, R>>,
+//     R: IndexedColumnConvertibleTrait,
+// {
+//     fn get_params(
+//         &self,
+//         column_vec: &mut Vec<*const c_longlong>,
+//         column_name_vec: &mut Vec<*const c_char>,
+//     ) -> CPPType {
+//         for item in self {
+//             column_vec.push(item.get_cpp_obj());
+//         }
+//         CPPType::String
+//     }
+// }
+//
+// impl<'a, T> TableConstraintIndexedByParam for T
+// where
+//     T: IntoIterator<Item = Cow<'a, str>>,
+// {
+//     fn get_params(
+//         &self,
+//         column_vec: &mut Vec<*const c_longlong>,
+//         column_name_vec: &mut Vec<*const c_char>,
+//     ) -> CPPType {
+//         for item in self {
+//
+//         }
+//         CPPType::String
+//     }
+// }
 
 impl TableConstraint {
     pub fn new(name_opt: Option<&str>) -> Self {

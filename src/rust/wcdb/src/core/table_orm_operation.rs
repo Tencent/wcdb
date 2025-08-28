@@ -615,7 +615,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     fn get_all_objects_by_expression(&self, condition: &Expression) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .where_expression(condition)
+            .r#where(condition)
             .all_objects()
     }
 
@@ -626,7 +626,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .all_objects()
     }
@@ -639,7 +639,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(limit)
             .all_objects()
@@ -654,7 +654,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(limit)
             .offset(offset)
@@ -701,7 +701,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .where_expression(condition)
+            .r#where(condition)
             .all_objects()
     }
 
@@ -713,7 +713,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .all_objects()
     }
@@ -727,7 +727,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(limit)
             .all_objects()
@@ -743,7 +743,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(order)
             .limit(limit)
             .offset(offset)
@@ -800,7 +800,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)
-            .where_expression(expression)
+            .r#where(expression)
             .first_object()
     }
 }

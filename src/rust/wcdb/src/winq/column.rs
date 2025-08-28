@@ -12,6 +12,8 @@ use crate::winq::ordering_term::{Order, OrderingTerm};
 use crate::winq::result_column::ResultColumn;
 use crate::winq::schema::Schema;
 use std::ffi::{c_char, c_int, c_void};
+use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
+use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 
 extern "C" {
     fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;
@@ -53,8 +55,8 @@ impl CppObjectTrait for Column {
 }
 
 impl CppObjectConvertibleTrait for Column {
-    fn as_cpp_object(&self) -> *mut c_void {
-        self.expression_operable.get_cpp_obj()
+    fn as_cpp_object(&self) -> &CppObject {
+        self.expression_operable.as_cpp_object()
     }
 }
 
@@ -305,6 +307,10 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.substring_match_info()
     }
 }
+
+impl IndexedColumnConvertibleTrait for Column {}
+
+impl ResultColumnConvertibleTrait for Column {}
 
 pub trait ColumnOfParam {
     fn call_of_schema(&self, column: &Column);

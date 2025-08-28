@@ -11,12 +11,12 @@ pub mod statement_select_test {
         let test_table = "testTable";
         let statement = StatementSelect::new();
 
-        let column = Column::new("column1");
-        let test = statement.from(test_table).select_columns(&vec![&column]);
+        let column = Column::new("column1", None);
+        let test = statement.from(vec![test_table]).select(&vec![&column]);
         WinqTool::winq_equal(test, "SELECT column1 FROM testTable");
 
-        let expression = column.gt_long(100);
-        let test = statement.where_expression(&expression);
+        let expression = column.gt(100);
+        let test = statement.r#where(&expression);
         WinqTool::winq_equal(test, "SELECT column1 FROM testTable WHERE column1 > 100");
 
         let test = statement.limit(100);
@@ -25,7 +25,7 @@ pub mod statement_select_test {
             "SELECT column1 FROM testTable WHERE column1 > 100 LIMIT 100",
         );
 
-        let column2 = Column::new("column2");
+        let column2 = Column::new("column2", None);
         let order = vec![column2.order(Order::Desc)];
         let test = statement.order_by(&order);
         WinqTool::winq_equal(
@@ -39,7 +39,7 @@ pub mod statement_select_test {
             "SELECT column1 FROM testTable WHERE column1 > 100 ORDER BY column2 DESC LIMIT 100 OFFSET 100",
         );
 
-        let test = statement.group_by(&vec!["column3".to_string()]);
+        let test = statement.group_by(&vec!["column3"]);
         WinqTool::winq_equal(
             test,
             "SELECT column1 FROM testTable WHERE column1 > 100 GROUP BY column3 ORDER BY column2 DESC LIMIT 100 OFFSET 100",

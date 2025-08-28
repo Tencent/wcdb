@@ -36,7 +36,9 @@ impl CppObjectTrait for OrderingTerm {
 }
 
 impl CppObjectConvertibleTrait for OrderingTerm {
-    fn as_cpp_object(&self) -> &CppObject {}
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
 }
 
 impl IdentifierTrait for OrderingTerm {
@@ -56,7 +58,7 @@ impl IdentifierConvertibleTrait for OrderingTerm {
 }
 
 impl OrderingTerm {
-    pub fn new<T: ExpressionConvertibleTrait>(expression: &T) -> Self {
+    pub fn new<T: ExpressionConvertibleTrait + IdentifierTrait>(expression: &T) -> Self {
         let cpp_obj = unsafe {
             WCDBRustOrderingTerm_create(
                 Identifier::get_cpp_type(expression) as c_int,

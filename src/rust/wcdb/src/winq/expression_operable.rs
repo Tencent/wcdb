@@ -112,7 +112,7 @@ pub(crate) trait OperateParam {
     fn get_params(&self) -> (CPPType, i64, f64, *const c_char);
 }
 
-impl<T: ExpressionConvertibleTrait> OperateParam for T {
+impl<T: ExpressionConvertibleTrait> OperateParam for &T {
     fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
         (
             self.as_identifier().get_type(),
@@ -168,7 +168,7 @@ impl OperateParam for &str {
             CPPType::String,
             0,
             0.0,
-            self.into().to_cstring().as_ptr(),
+            self.to_cstring().as_ptr(),
         )
     }
 }
@@ -299,11 +299,11 @@ impl ExpressionOperableTrait for ExpressionOperable {
     }
 
     fn or<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression {
-        self.binary_operate(operand, BinaryOperatorType::Or, false)
+        self.binary_operate(&operand, BinaryOperatorType::Or, false)
     }
 
     fn and<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression {
-        self.binary_operate(operand, BinaryOperatorType::And, false)
+        self.binary_operate(&operand, BinaryOperatorType::And, false)
     }
 
     fn multiply<T: OperateParam>(&self, operand: T) -> Expression {
@@ -379,44 +379,19 @@ impl ExpressionOperableTrait for ExpressionOperable {
     }
 
     fn r#in<T: OperateParam>(&self, operands: &[T]) -> Expression {
-        self.in_operate(operands, false)
+        self.r#in(operands)
     }
 
     fn not_in<T: OperateParam>(&self, operands: &[T]) -> Expression {
-        self.in_operate(operands, true)
+        self.not_in(operands)
     }
-
-    // fn in_operate<T: OperateParam>(&self, operands: &Vec<T>, is_not: bool) -> Expression {
-    //     let (mut operands_type, mut operands_long, mut operands_double, mut operands_cpp_obj) = (
-    //         CPPType::Int,
-    //         operands.as_ptr() as i64,
-    //         operands.as_ptr() as i64,
-    //         operands.as_ptr() as i64,
-    //     );
-    //     for operand in operands {
-    //     }
-    //
-    //     let cpp_obj = unsafe {
-    //         WCDBRustExpressionOperable_in(
-    //             self.get_type() as i32,
-    //             self.get_cpp_obj(),
-    //             operands_type as i32,
-    //             operands_long as *const i64,
-    //             operands_double as *const f64,
-    //             operands_cpp_obj as *const c_void,
-    //             operands.len() as i32,
-    //             is_not,
-    //         )
-    //     };
-    //     Expression::new(Some(cpp_obj))
-    // }
 
     fn in_table(&self, table: &str) -> Expression {
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_inTable(
                 self.get_type() as i32,
                 self.get_cpp_obj(),
-                table.into().to_cstring().as_ptr(),
+                table.to_cstring().as_ptr(),
                 true,
             )
         };
@@ -428,7 +403,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
             WCDBRustExpressionOperable_inTable(
                 self.get_type() as i32,
                 self.get_cpp_obj(),
-                table.into().to_cstring().as_ptr(),
+                table.to_cstring().as_ptr(),
                 false,
             )
         };
@@ -440,7 +415,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
             WCDBRustExpressionOperable_collate(
                 self.get_type() as i32,
                 self.get_cpp_obj(),
-                collation.into().to_cstring().as_ptr(),
+                collation.to_cstring().as_ptr(),
             )
         };
         Expression::new(Some(cpp_obj))
@@ -461,36 +436,36 @@ impl ExpressionOperableTrait for ExpressionOperable {
     // }
 
     fn like(&self, content: &str) -> Expression {
-        self.binary_operate(&content.into().to_string(), BinaryOperatorType::Like, false)
+        self.binary_operate(content, BinaryOperatorType::Like, false)
     }
 
     fn not_like(&self, content: &str) -> Expression {
-        self.binary_operate(&content.into().to_string(), BinaryOperatorType::Like, true)
+        self.binary_operate(content, BinaryOperatorType::Like, true)
     }
 
     fn glob(&self, content: &str) -> Expression {
-        self.binary_operate(&content.into().to_string(), BinaryOperatorType::GLOB, false)
+        self.binary_operate(content, BinaryOperatorType::GLOB, false)
     }
 
     fn not_glob(&self, content: &str) -> Expression {
-        self.binary_operate(&content.into().to_string(), BinaryOperatorType::GLOB, true)
+        self.binary_operate(content, BinaryOperatorType::GLOB, true)
     }
 
     fn r#match(&self, content: &str) -> Expression {
         self.binary_operate(
-            &content.into().to_string(),
+            content,
             BinaryOperatorType::Match,
             false,
         )
     }
 
     fn not_match(&self, content: &str) -> Expression {
-        self.binary_operate(&content.into().to_string(), BinaryOperatorType::Match, true)
+        self.binary_operate(content, BinaryOperatorType::Match, true)
     }
 
     fn regexp(&self, content: &str) -> Expression {
         self.binary_operate(
-            &content.into().to_string(),
+            content,
             BinaryOperatorType::RegExp,
             false,
         )
@@ -498,18 +473,18 @@ impl ExpressionOperableTrait for ExpressionOperable {
 
     fn not_regexp(&self, content: &str) -> Expression {
         self.binary_operate(
-            &content.into().to_string(),
+            content,
             BinaryOperatorType::RegExp,
             true,
         )
     }
 
     fn is(&self, operand: bool) -> Expression {
-        self.binary_operate(&operand, BinaryOperatorType::Is, false)
+        self.binary_operate(operand, BinaryOperatorType::Is, false)
     }
 
     fn is_not(&self, operand: bool) -> Expression {
-        self.binary_operate(&operand, BinaryOperatorType::Is, true)
+        self.binary_operate(operand, BinaryOperatorType::Is, true)
     }
 
     fn avg(&self) -> Expression {

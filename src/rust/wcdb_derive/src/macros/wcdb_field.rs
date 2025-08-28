@@ -2,7 +2,6 @@ use crate::macros::wcdb_default::WCDBDefault;
 use crate::macros::wcdb_index::WCDBIndex;
 use darling::FromField;
 use proc_macro2::Ident;
-use syn::spanned::Spanned;
 use syn::{GenericArgument, Type};
 
 #[derive(Debug, FromField)]

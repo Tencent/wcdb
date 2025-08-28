@@ -459,7 +459,7 @@ impl ExpressionSchemaParam for &str {
     }
 }
 
-impl ExpressionSchemaParam for &Schema {
+impl ExpressionSchemaParam for Schema {
     fn call_schema(&self, expression_cpp_obj: *mut c_void) {
         unsafe {
             WCDBRustExpression_setWithSchema(
@@ -489,7 +489,7 @@ impl ExpressionCastParam for &str {
     }
 }
 
-impl<T: ExpressionConvertibleTrait> ExpressionCastParam for &T {
+impl<T: ExpressionConvertibleTrait + IdentifierTrait> ExpressionCastParam for T {
     fn create_cpp_obj(&self) -> *mut c_void {
         unsafe {
             WCDBRustExpression_cast(
@@ -518,7 +518,7 @@ impl ExpressionCaseParam for &str {
     }
 }
 
-impl<T: ExpressionConvertibleTrait> ExpressionCaseParam for &T {
+impl<T: ExpressionConvertibleTrait + IdentifierTrait> ExpressionCaseParam for T {
     fn create_cpp_obj(&self) -> *mut c_void {
         unsafe {
             WCDBRustExpression_caseWithExp(
@@ -534,7 +534,7 @@ pub trait ExpressionOverParam {
     fn call_native(&self, cpp_obj: *mut c_void);
 }
 
-impl ExpressionOverParam for &WindowDef {
+impl ExpressionOverParam for WindowDef {
     fn call_native(&self, cpp_obj: *mut c_void) {
         unsafe { WCDBRustExpression_overWindowDef(cpp_obj, CppObject::get(self)) }
     }
@@ -586,8 +586,8 @@ impl Expression {
         self
     }
 
-    pub fn argument<T: OperateParam>(self, arg: T) -> Self {
-        let (arg_type, arg_long, arg_double, arg_cpp_obj) = arg.get_params();
+    pub fn argument<T: OperateParam>(self, param: T) -> Self {
+        let (arg_type, arg_long, arg_double, arg_cpp_obj) = param.get_params();
         unsafe {
             WCDBRustExpression_argument(
                 self.get_cpp_obj(),

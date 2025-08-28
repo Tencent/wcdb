@@ -83,18 +83,7 @@ fn config_cmake(target: &str) -> PathBuf {
     let mut cmake = cmake::Config::new("../cpp");
     cmake.very_verbose(true);
 
-    let mut cc = String::new();
-    let mut cxx = String::new();
-    if target.contains("apple") {
-        cc = env::var("CC").unwrap_or("/usr/bin/clang".to_string());
-        cxx = env::var("CXX").unwrap_or("/usr/bin/clang++".to_string());
-    } else if target.contains("windows") {
-        cc = env::var("CC").unwrap_or_else(|_| "cl.exe".into());
-        cxx = env::var("CXX").unwrap_or_else(|_| "cl.exe".into());
-    } else {
-        cc = env::var("CC").expect(&format!("wcdb: {} is not set CC", &target));
-        cxx = env::var("CXX").expect(&format!("wcdb: {} is not set CXX", &target));
-    }
+    let (cc, cxx) = get_compiler_config(target);
     cmake
         .define("CMAKE_ASM_COMPILER", &cc) // 指定 asm 编译器：zstd huf_decompress_amd64.S 是汇编
         .define("CMAKE_ASM_FLAGS", "-x assembler-with-cpp")
@@ -151,6 +140,24 @@ fn config_cmake(target: &str) -> PathBuf {
     }
 
     cmake.build()
+}
+
+fn get_compiler_config(target: &str) -> (String, String) {
+    let (default_cc, default_cxx) = match target {
+        t if t.contains("apple") => ("/usr/bin/clang", "/usr/bin/clang++"),
+        t if t.contains("windows") => ("cl.exe", "cl.exe"),
+        _ => {
+            return (
+                env::var("CC").expect(&format!("wcdb: {} is not set CC", target)),
+                env::var("CXX").expect(&format!("wcdb: {} is not set CXX", target)),
+            )
+        }
+    };
+
+    let cc = env::var("CC").unwrap_or_else(|_| default_cc.to_string());
+    let cxx = env::var("CXX").unwrap_or_else(|_| default_cxx.to_string());
+
+    (cc, cxx)
 }
 
 fn ios_sdk_arch_from_target(target: &str) -> Option<(&'static str, &'static str, &'static str)> {

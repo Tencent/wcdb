@@ -3,7 +3,7 @@ use crate::core::handle::Handle;
 use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
 
-pub struct ChainCall<'a, T: StatementTrait> {
+pub(crate) struct ChainCall<'a, T: StatementTrait> {
     pub(crate) handle: Handle<'a>,
     changes: RefCell<i32>,
     pub(crate) statement: T,

@@ -68,7 +68,7 @@ impl ResultColumnParam for *mut c_void {
     }
 }
 
-impl<T: ResultColumnConvertibleTrait> ResultColumnParam for T {
+impl<T: ResultColumnConvertibleTrait + IdentifierTrait> ResultColumnParam for T {
     fn create_cpp_obj(&self) -> *mut c_void {
         unsafe {
             WCDBRustResultColumn_create(
