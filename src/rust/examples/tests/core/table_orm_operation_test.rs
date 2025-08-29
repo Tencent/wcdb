@@ -56,7 +56,6 @@ pub mod table_orm_operation_test_case {
     use std::sync::{Arc, RwLock};
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
-    use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
 
     pub fn setup() {
         let arc_clone = Arc::clone(&table_orm_operation_TEST);

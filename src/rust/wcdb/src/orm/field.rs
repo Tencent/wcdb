@@ -81,8 +81,8 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.divide(operand)
     }
 
-    fn modulo<T: OperateParam>(&self, operand: T) -> Expression {
-        self.column.modulo(operand)
+    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression {
+        self.column.r#mod(operand)
     }
 
     fn add<T: OperateParam>(&self, operand: T) -> Expression {

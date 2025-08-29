@@ -33,7 +33,7 @@ pub mod statement_insert_test {
         let statement = StatementInsert::new();
         statement
             .insert_into("testTable")
-            .column_objs(&vec![Column::new("testColumn")])
+            .column_objs(&vec![Column::new("testColumn", None)])
             .values(Some(vec![Object::Int(1)]))
             .upsert(&upsert);
         WinqTool::winq_equal(

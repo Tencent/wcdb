@@ -3,9 +3,7 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use core::ffi::c_size_t;
-use std::borrow::Cow;
 use std::ffi::{c_char, c_int, c_longlong, c_void};
 
 extern "C" {

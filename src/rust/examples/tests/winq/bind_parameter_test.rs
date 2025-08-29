@@ -7,8 +7,8 @@ pub mod bind_parameter_test_test {
 
     #[test]
     pub fn test() {
-        WinqTool::winq_equal(&BindParameter::new_with_i32(1), "?1");
-        WinqTool::winq_equal(&BindParameter::new_with_str("testName"), ":testName");
+        WinqTool::winq_equal(&BindParameter::new(1), "?1");
+        WinqTool::winq_equal(&BindParameter::new("testName"), ":testName");
         WinqTool::winq_equal(&BindParameter::at("testName"), "@testName");
         WinqTool::winq_equal(&BindParameter::dollar("testName"), "$testName");
         WinqTool::winq_equal(&BindParameter::colon("testName"), ":testName");

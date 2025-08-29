@@ -1,6 +1,5 @@
 use std::borrow::Cow;
 use std::ffi::{c_char, CStr, CString};
-use paste::paste;
 
 pub(crate) trait ToCow {
     fn to_cow(&self) -> Cow<str>;

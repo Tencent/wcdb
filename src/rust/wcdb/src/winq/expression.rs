@@ -17,16 +17,6 @@ use crate::winq::statement_select::StatementSelect;
 use crate::winq::window_def::WindowDef;
 use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 
-macro_rules! object_or_string_parameter {
-    ($base:ident) => {
-        paste! {
-            [<$base _type>]: c_int,
-            [<$base _object>]: *mut c_void,
-            [<$base _string>]: *const c_char
-        }
-    };
-}
-
 extern "C" {
     fn WCDBRustExpression_create(value_type: c_int, cpp_obj: *mut c_void) -> *mut c_void;
 
@@ -176,8 +166,8 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.divide(operand)
     }
 
-    fn modulo<T: OperateParam>(&self, operand: T) -> Expression {
-        self.expression_operable.modulo(operand)
+    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression {
+        self.expression_operable.r#mod(operand)
     }
 
     fn add<T: OperateParam>(&self, operand: T) -> Expression {

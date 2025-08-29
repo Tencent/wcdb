@@ -276,7 +276,7 @@ impl RustCodeGenerator {
             field_id += 1;
 
             token_stream.extend(quote! {
-                let #field_def_ident = wcdb::winq::column_def::ColumnDef::new_with_column_type(
+                let #field_def_ident = wcdb::winq::column_def::ColumnDef::new(
                     &field.get_column(),
                     wcdb::winq::column_type::ColumnType::#column_type_ident
                 );

@@ -2,16 +2,15 @@
 pub mod statement_update_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
-    use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
     use wcdb::winq::ordering_term::Order;
     use wcdb::winq::statement_update::StatementUpdate;
 
     #[test]
     pub fn test() {
-        let column1 = Column::new("column1");
-        let column2 = Column::new("column2");
+        let column1 = Column::new("column1", None);
+        let column2 = Column::new("column2", None);
         let test_table_str = String::from("testTable");
-        let column_vec = vec![Column::new("column1"), Column::new("column2")];
+        let column_vec = vec![Column::new("column1", None), Column::new("column2", None)];
         let column1_vec = vec![&column1];
         let column2_vec = vec![&column2];
 
@@ -84,7 +83,7 @@ pub mod statement_update_test {
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
                 .to_i32(1)
-                .where_expression(&Column::new("column1").gt_int(1)),
+                .where_expression(&Column::new("column1", None).gt(1)),
             "UPDATE testTable SET column1 = 1 WHERE column1 > 1",
         );
 
@@ -94,8 +93,8 @@ pub mod statement_update_test {
                 .set_columns(&column1_vec)
                 .to_i32(1)
                 .order_by(&vec![
-                    Column::new("column1").order(Order::Asc),
-                    Column::new("column2").order(Order::Desc),
+                    Column::new("column1", None).order(Order::Asc),
+                    Column::new("column2", None).order(Order::Desc),
                 ]),
             "UPDATE testTable SET column1 = 1 ORDER BY column1 ASC, column2 DESC",
         );

@@ -103,8 +103,8 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.divide(operand)
     }
 
-    fn modulo<T: OperateParam>(&self, operand: T) -> Expression {
-        self.expression_operable.modulo(operand)
+    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression {
+        self.expression_operable.r#mod(operand)
     }
 
     fn add<T: OperateParam>(&self, operand: T) -> Expression {

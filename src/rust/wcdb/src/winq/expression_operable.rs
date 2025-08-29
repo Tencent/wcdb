@@ -173,7 +173,7 @@ impl OperateParam for &str {
     }
 }
 
-pub(crate) trait ExpressionOperableTrait {
+pub trait ExpressionOperableTrait {
     fn is_null(&self) -> Expression;
 
     fn not_null(&self) -> Expression;
@@ -186,7 +186,7 @@ pub(crate) trait ExpressionOperableTrait {
 
     fn divide<T: OperateParam>(&self, operand: T) -> Expression;
 
-    fn modulo<T: OperateParam>(&self, operand: T) -> Expression;
+    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression;
 
     fn add<T: OperateParam>(&self, operand: T) -> Expression;
 
@@ -314,7 +314,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.binary_operate(operand, BinaryOperatorType::Divide, false)
     }
 
-    fn modulo<T: OperateParam>(&self, operand: T) -> Expression {
+    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression {
         self.binary_operate(operand, BinaryOperatorType::Modulo, false)
     }
 

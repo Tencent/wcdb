@@ -57,7 +57,6 @@ pub mod table_operation_test_case {
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
     use wcdb::core::table_operation::TableOperation;
     use wcdb::winq::column::Column;
-    use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
 
     pub fn setup() {
         let arc_clone = Arc::clone(&TABLE_OPERATION_TEST);
@@ -133,7 +132,7 @@ pub mod table_operation_test_case {
             .eq_string(obj.channel_id.as_str());
         let ret = operation.update_row(
             &vec![updated_value],
-            &vec![Column::new("value")],
+            &vec![Column::new("value", None)],
             Some(expression),
             None,
             None,
@@ -146,7 +145,7 @@ pub mod table_operation_test_case {
             .get_column()
             .eq_string(obj.channel_id.as_str());
         let ret = operation.get_values(
-            vec![&Column::new("value")],
+            vec![&Column::new("value", None)],
             Some(expression),
             None,
             None,
@@ -171,7 +170,7 @@ pub mod table_operation_test_case {
             .get_column()
             .eq_string(obj.channel_id.as_str());
         let ret = operation.get_values(
-            vec![&Column::new("value")],
+            vec![&Column::new("value", None)],
             Some(expression),
             None,
             None,

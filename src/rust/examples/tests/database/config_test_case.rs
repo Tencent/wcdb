@@ -20,7 +20,7 @@ impl TestCaseTrait for ConfigTest {
     fn teardown(&self) -> WCDBResult<()> {
         {
             let database = self.table_test_case.get_database().clone();
-            let ret = database.read().unwrap().set_config_with_default_priority::
+            let _ret = database.read().unwrap().set_config_with_default_priority::
             <Box<dyn SetDatabaseConfigTrait + 'static>, Box<dyn SetDatabaseConfigTrait + 'static>>
             (&self.table_test_case.get_table_name(), None);
         }
@@ -60,11 +60,10 @@ pub mod config_test_case {
     use crate::base::base_test_case::TestCaseTrait;
     use crate::base::database_test_case::Expect;
     use crate::base::random_tool::RandomTool;
-    use crate::base::test_object::{DbTestObject, TestObject, DB_TEST_OBJECT_INSTANCE};
+    use crate::base::test_object::{DbTestObject, DB_TEST_OBJECT_INSTANCE};
     use crate::base::wrapped_value::WrappedValue;
     use crate::database::config_test_case::CONFIG_TEST;
     use std::sync::{Arc, Mutex, RwLock, RwLockReadGuard};
-    use std::thread;
     use wcdb::core::database::{CipherVersion, ConfigPriority, Database, SetDatabaseConfigTrait};
     use wcdb::core::handle::Handle;
     use wcdb::core::table_orm_operation::TableORMOperationTrait;

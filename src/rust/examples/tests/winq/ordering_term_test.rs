@@ -6,7 +6,7 @@ pub mod ordering_term_test {
 
     #[test]
     pub fn test() {
-        let column = Column::new("testColumn");
+        let column = Column::new("testColumn", None);
         WinqTool::winq_equal(&OrderingTerm::new(&column), "testColumn");
         WinqTool::winq_equal(
             &OrderingTerm::new(&column).order(Order::Asc),

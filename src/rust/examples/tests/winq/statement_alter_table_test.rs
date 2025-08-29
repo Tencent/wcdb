@@ -22,7 +22,7 @@ pub mod statement_alter_table_test {
             "ALTER TABLE testSchema.table1 RENAME TO table2",
         );
 
-        let column_def = Column::new("column1").as_def(ColumnType::Float);
+        let column_def = Column::new("column1", None).as_def(ColumnType::Float);
         WinqTool::winq_equal(
             StatementAlterTable::new()
                 .alter_table("table1")
@@ -38,8 +38,8 @@ pub mod statement_alter_table_test {
             "ALTER TABLE table1 RENAME COLUMN column1 TO column2",
         );
 
-        let column1 = Column::new("column1");
-        let column2 = Column::new("column2");
+        let column1 = Column::new("column1", None);
+        let column2 = Column::new("column2", None);
         WinqTool::winq_equal(
             StatementAlterTable::new()
                 .alter_table("table1")

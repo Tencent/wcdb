@@ -17,11 +17,9 @@ use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb::core::table_orm_operation::TableORMOperationTrait;
 use wcdb::orm::field::Field;
 use wcdb::orm::table_binding::TableBinding;
-use wcdb::winq::column::Column;
 use wcdb::winq::column_def::ColumnDef;
 use wcdb::winq::column_type::ColumnType;
 use wcdb::winq::expression::Expression;
-use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
 use wcdb::winq::identifier::IdentifierTrait;
 use wcdb::winq::statement_alter_table::StatementAlterTable;
 use wcdb::winq::statement_create_table::StatementCreateTable;
@@ -69,7 +67,7 @@ impl OrmTest {
             .for_each(|field| {
                 if field.get_description().as_str() != column_name {
                     let column_def =
-                        ColumnDef::new_with_column_type(field.get_column(), ColumnType::Integer);
+                        ColumnDef::new(field.get_column(), ColumnType::Integer);
                     column_defs.push(column_def);
                 }
             });
@@ -321,29 +319,29 @@ pub mod orm_test {
         let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
         let _ = table.insert_objects(obj_vec, DbAllTypeObject::all_fields());
 
-        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
-            .eq_string(max.field_type.as_str());
+        let exp = Expression::new(DbAllTypeObject::field_type().get_column())
+            .eq(max.field_type.as_str());
         let db_max_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
             .unwrap();
         assert!(max == db_max_opt.unwrap());
 
-        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
-            .eq_string(min.field_type.as_str());
+        let exp = Expression::new(DbAllTypeObject::field_type().get_column())
+            .eq(min.field_type.as_str());
         let db_min_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
             .unwrap();
         assert!(min == db_min_opt.unwrap());
 
-        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
-            .eq_string(empty.field_type.as_str());
+        let exp = Expression::new(DbAllTypeObject::field_type().get_column())
+            .eq(empty.field_type.as_str());
         let db_empty_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
             .unwrap();
         assert!(empty == db_empty_opt.unwrap());
 
-        let exp = Expression::new_with_column(DbAllTypeObject::field_type().get_column())
-            .eq_string(random.field_type.as_str());
+        let exp = Expression::new(DbAllTypeObject::field_type().get_column())
+            .eq(random.field_type.as_str());
         let db_random_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
             .unwrap();

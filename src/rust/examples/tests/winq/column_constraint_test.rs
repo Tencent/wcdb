@@ -6,9 +6,9 @@ pub mod column_constraint_test {
 
     #[test]
     pub fn test() {
-        WinqTool::winq_equal(ColumnConstraint::new().primary_key(), "PRIMARY KEY");
+        WinqTool::winq_equal(ColumnConstraint::new(None).primary_key(), "PRIMARY KEY");
         WinqTool::winq_equal(
-            ColumnConstraint::new_by_column_name("testColumnConstraint").primary_key(),
+            ColumnConstraint::new(Some("testColumnConstraint")).primary_key(),
             "CONSTRAINT testColumnConstraint PRIMARY KEY",
         );
         WinqTool::winq_equal(
@@ -16,7 +16,7 @@ pub mod column_constraint_test {
             "PRIMARY KEY AUTOINCREMENT",
         );
         WinqTool::winq_equal(
-            ColumnConstraint::new_by_column_name("testColumnConstraint").not_null(),
+            ColumnConstraint::new(Some("testColumnConstraint")).not_null(),
             "CONSTRAINT testColumnConstraint NOT NULL",
         );
 
@@ -28,18 +28,18 @@ pub mod column_constraint_test {
         );
 
         WinqTool::winq_equal(
-            ColumnConstraint::new_by_column_name("testColumnConstraint").unique(),
+            ColumnConstraint::new(Some("testColumnConstraint")).unique(),
             "CONSTRAINT testColumnConstraint UNIQUE",
         );
         WinqTool::winq_equal(
-            ColumnConstraint::new_by_column_name("testColumnConstraint").un_index(),
+            ColumnConstraint::new(Some("testColumnConstraint")).un_index(),
             "CONSTRAINT testColumnConstraint UNINDEXED",
         );
-        WinqTool::winq_equal(ColumnConstraint::new().default_to(1), "DEFAULT 1");
-        WinqTool::winq_equal(ColumnConstraint::new().default_to(false), "DEFAULT FALSE");
-        WinqTool::winq_equal(ColumnConstraint::new().default_to("abc"), "DEFAULT 'abc'");
+        WinqTool::winq_equal(ColumnConstraint::new(None).default_to(1), "DEFAULT 1");
+        WinqTool::winq_equal(ColumnConstraint::new(None).default_to(false), "DEFAULT FALSE");
+        WinqTool::winq_equal(ColumnConstraint::new(None).default_to("abc"), "DEFAULT 'abc'");
         // todo dengxudong 缺逻辑，重要，不紧急
         // WinqTool::winq_equal(ColumnConstraint::new().default_to(ExpressionConvertible), "DEFAULT NULL");
-        WinqTool::winq_equal(ColumnConstraint::new().collate("BINARY"), "COLLATE BINARY");
+        WinqTool::winq_equal(ColumnConstraint::new(None).collate("BINARY"), "COLLATE BINARY");
     }
 }

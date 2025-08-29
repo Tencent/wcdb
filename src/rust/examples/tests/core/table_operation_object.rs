@@ -69,10 +69,10 @@ impl TableOperationObject {
 
     pub fn get_all_columns() -> Vec<Column> {
         vec![
-            Column::new("category"),
-            Column::new("target_id"),
-            Column::new("channel_id"),
-            Column::new("value"),
+            Column::new("category", None),
+            Column::new("target_id", None),
+            Column::new("channel_id", None),
+            Column::new("value", None),
         ]
     }
 }

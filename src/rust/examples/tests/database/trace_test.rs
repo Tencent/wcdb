@@ -324,7 +324,7 @@ impl TraceTest {
         assert!(database.can_open());
         let ret = database.execute(
             StatementSelect::new()
-                .select_with_result_column_names(&vec!["1".to_string()])
+                .select(&vec!["1"])
                 .from("dummy"),
         );
         match ret {
@@ -366,7 +366,7 @@ impl TraceTest {
         assert!(database.can_open());
         let ret = database.execute(
             StatementSelect::new()
-                .select_with_result_column_names(&vec!["1".to_string()])
+                .select(&vec!["1".to_string()])
                 .from("dummy"),
         );
         match ret {

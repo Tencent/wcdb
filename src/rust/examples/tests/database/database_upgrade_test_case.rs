@@ -326,7 +326,7 @@ pub mod database_upgrade_test {
         // 手动创建索引
         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
         let statement_create_index = StatementCreateIndex::new();
-        let column1 = Column::new("target_id");
+        let column1 = Column::new("target_id", None);
         let statement = statement_create_index
             .create_index("my_index")
             .on("ConversationTable")
@@ -370,8 +370,8 @@ pub mod database_upgrade_test {
 
         // 重命名字段
         let statement_alter_table = StatementAlterTable::new();
-        let column_is_top = Column::new("is_top");
-        let column_rename_is_top = Column::new("rename_is_top");
+        let column_is_top = Column::new("is_top", None);
+        let column_rename_is_top = Column::new("rename_is_top", None);
         let statement = statement_alter_table
             .alter_table("ConversationTable")
             .rename_column(&column_is_top)

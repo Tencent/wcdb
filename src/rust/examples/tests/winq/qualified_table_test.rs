@@ -6,21 +6,21 @@ pub mod qualified_table_test {
     #[test]
     pub fn test() {
         WinqTool::winq_equal(
-            &QualifiedTable::new_with_table_name("testTable"),
+            &QualifiedTable::new("testTable"),
             "testTable",
         );
         WinqTool::winq_equal(
-            QualifiedTable::new_with_table_name("testTable")
+            QualifiedTable::new("testTable")
                 .of_string("testSchema")
                 .as_("testAlias"),
             "testSchema.testTable AS testAlias",
         );
         WinqTool::winq_equal(
-            QualifiedTable::new_with_table_name("testTable").indexed("testIndex"),
+            QualifiedTable::new("testTable").indexed("testIndex"),
             "testTable INDEXED BY testIndex",
         );
         WinqTool::winq_equal(
-            QualifiedTable::new_with_table_name("testTable").not_indexed(),
+            QualifiedTable::new("testTable").not_indexed(),
             "testTable NOT INDEXED",
         );
     }

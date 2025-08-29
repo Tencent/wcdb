@@ -1,4 +1,4 @@
 target/
 cmake-build-*/
 
-demoDatabase.sqlite3*
+*.sqlite3*1

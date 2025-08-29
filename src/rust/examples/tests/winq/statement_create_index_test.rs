@@ -2,16 +2,14 @@
 pub mod statement_create_index_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
-    use wcdb::winq::expression::Expression;
-    use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
     use wcdb::winq::indexed_column::IndexedColumn;
     use wcdb::winq::ordering_term::Order;
     use wcdb::winq::statement_create_index::StatementCreateIndex;
 
     #[test]
     pub fn test() {
-        let index1 = IndexedColumn::new_with_column_name("column1");
-        let index2 = IndexedColumn::new_with_column_name("column2");
+        let index1 = IndexedColumn::new("column1");
+        let index2 = IndexedColumn::new("column2");
         index2.order(Order::Asc);
         let index_name = "index1";
         let table_name = "table1";
@@ -64,7 +62,7 @@ pub mod statement_create_index_test {
         let mut column_names: Vec<String> = Vec::new();
         column_names.push("column1".parse().unwrap());
         column_names.push("column2".parse().unwrap());
-        let expression = Column::new("column1").ge_long(1);
+        let expression = Column::new("column1", None).ge(1);
         WinqTool::winq_equal(
             StatementCreateIndex::new()
                 .create_index(index_name)

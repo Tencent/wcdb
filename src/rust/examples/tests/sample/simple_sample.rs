@@ -7,8 +7,7 @@ pub mod simple_sample {
     use wcdb::core::handle_operation::HandleOperationTrait;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
     use wcdb::core::table_orm_operation::TableORMOperationTrait;
-    use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
-    use wcdb::winq::ordering_term::{Order, OrderingTerm};
+    use wcdb::winq::ordering_term::Order;
 
     #[test]
     pub fn sample() {
@@ -16,7 +15,7 @@ pub mod simple_sample {
         //  database.setCipherKey("abc".getBytes(), 4096, Database.CipherVersion.version4);
         //  database.setConfig("自定义配置名", new Database.Config() {
         //             @Override
-        //             public void onInvocation(@NotNull Handle handle) throws WCDBException {
+        //             public void onInvocation(@NotNull Handle handle) thows WCDBException {
         //                 // Pragma secure_delete = true
         //                 handle.execute(new StatementPragma().pragma(Pragma.secureDelete).toValue(true));
         //             }

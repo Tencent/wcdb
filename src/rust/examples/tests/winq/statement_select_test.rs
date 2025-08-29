@@ -2,7 +2,6 @@
 pub mod statement_select_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
-    use wcdb::winq::expression_operable_trait::ExpressionOperableTrait;
     use wcdb::winq::ordering_term::Order;
     use wcdb::winq::statement_select::StatementSelect;
 
@@ -12,7 +11,7 @@ pub mod statement_select_test {
         let statement = StatementSelect::new();
 
         let column = Column::new("column1", None);
-        let test = statement.from(vec![test_table]).select(&vec![&column]);
+        let test = statement.from(&vec![test_table]).select(&vec![&column]);
         WinqTool::winq_equal(test, "SELECT column1 FROM testTable");
 
         let expression = column.gt(100);

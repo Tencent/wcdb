@@ -8,16 +8,16 @@ pub mod statement_create_table_test {
 
     #[test]
     pub fn test() {
-        let column1 = Column::new("column1");
-        let column2 = Column::new("column2");
+        let column1 = Column::new("column1", None);
+        let column2 = Column::new("column2", None);
 
         let def1 = column1.as_def(ColumnType::Integer);
         let def2 = column2.as_def(ColumnType::Text);
 
-        let constraint1 = TableConstraint::new_by_constraint_name("constraint1")
+        let constraint1 = TableConstraint::new(Some("constraint1"))
             .primary_key()
             .indexed_by(vec![&column1]);
-        let constraint2 = TableConstraint::new_by_constraint_name("constraint2")
+        let constraint2 = TableConstraint::new("constraint2")
             .unique()
             .indexed_by(vec![&column2]);
 

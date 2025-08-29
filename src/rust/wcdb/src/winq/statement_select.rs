@@ -12,8 +12,6 @@ use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertible
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 use std::fmt::Debug;
-use libc::c_long;
-use crate::orm::field::Field;
 
 extern "C" {
     fn WCDBRustStatementSelect_create() -> *mut c_void;
