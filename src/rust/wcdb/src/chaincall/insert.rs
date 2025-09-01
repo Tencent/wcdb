@@ -29,7 +29,7 @@ impl<'a, T> ChainCallTrait for Insert<'a, T> {
     }
 
     fn get_statement(&self) -> &dyn StatementTrait {
-        &self.chain_call.statement
+        self.chain_call.get_statement()
     }
 }
 
@@ -55,25 +55,25 @@ impl<'a, T> Insert<'a, T> {
 
     pub fn or_replace(mut self) -> Self {
         self.has_conflict_action = true;
-        self.chain_call.statement.or_replace();
+        self.chain_call.get_statement().or_replace();
         self
     }
 
     pub fn or_ignore(mut self) -> Self {
         self.has_conflict_action = true;
-        self.chain_call.statement.or_ignore();
+        self.chain_call.get_statement().or_ignore();
         self
     }
 
     pub fn into_table(mut self, table_name: &str) -> Self {
-        self.chain_call.statement.insert_into(table_name);
+        self.chain_call.get_statement().insert_into(table_name);
         self
     }
 
     pub fn on_fields(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
         self.chain_call
-            .statement
+            .get_statement()
             .columns(&self.fields)
             .values_with_bind_parameters(self.fields.len());
         self
@@ -115,7 +115,7 @@ impl<'a, T> Insert<'a, T> {
         let prepared_statement = self
             .chain_call
             .handle
-            .prepared_with_main_statement(&self.chain_call.statement)?;
+            .prepared_with_main_statement(self.chain_call.get_statement())?;
         *self.last_insert_row_id.borrow_mut() = 0;
         let mut values = self.values.borrow_mut();
         for object in values.iter_mut() {

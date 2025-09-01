@@ -5,8 +5,9 @@ use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::field::Field;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
+use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::StatementTrait;
-use crate::winq::statement_select::{StatementSelect, StatementSelectSelectParam};
+use crate::winq::statement_select::StatementSelect;
 use std::sync::Arc;
 
 pub struct Select<'a, T> {
@@ -41,43 +42,38 @@ impl<'a, T> Select<'a, T> {
         }
     }
 
-    // pub fn select(mut self, fields: Vec<&'a Field<T>>) -> Self {
-    //     self.fields = fields;
-    //     self.chain_call
-    //         .statement
-    //         .select(&self.fields);
-    //     self
-    // }
-
     pub fn select(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
-        self.chain_call.statement.select(&self.fields);
+        self.chain_call.get_statement().select(
+            &[] as &[&str],
+            self.fields
+                .iter()
+                .map(|f| *f as &dyn ResultColumnConvertibleTrait),
+        );
         self
     }
-
 
     pub fn r#where(self, condition: &Expression) -> Self {
-        self.chain_call.statement.r#where(condition);
+        self.chain_call.get_statement().r#where(condition);
         self
     }
 
-    pub fn order_by(self, order: OrderingTerm) -> Self {
-        self.chain_call.statement.order_by(&vec![order]);
-        self
-    }
-
-    pub fn order_by_vec(self, order_vec: &Vec<OrderingTerm>) -> Self {
-        self.chain_call.statement.order_by(order_vec);
+    pub fn order_by<O, Oi>(&self, order_vec: O) -> &Self
+    where
+        O: IntoIterator<Item = Oi>,
+        Oi: AsRef<OrderingTerm>,
+    {
+        self.chain_call.get_statement().order_by(order_vec);
         self
     }
 
     pub fn limit(self, count: i64) -> Self {
-        self.chain_call.statement.limit(count);
+        self.chain_call.get_statement().limit(count);
         self
     }
 
     pub fn offset(self, count: i64) -> Self {
-        self.chain_call.statement.offset(count);
+        self.chain_call.get_statement().offset(count);
         self
     }
 
@@ -117,6 +113,6 @@ impl<'a, T> Select<'a, T> {
     fn prepare_statement(&self) -> WCDBResult<Arc<PreparedStatement>> {
         self.chain_call
             .handle
-            .prepared_with_main_statement(&self.chain_call.statement)
+            .prepared_with_main_statement(self.chain_call.get_statement())
     }
 }

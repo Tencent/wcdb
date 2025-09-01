@@ -6,13 +6,14 @@ use std::cell::RefCell;
 pub(crate) struct ChainCall<'a, T: StatementTrait> {
     pub(crate) handle: Handle<'a>,
     changes: RefCell<i32>,
-    pub(crate) statement: T,
+    statement: T,
     need_changes: RefCell<bool>,
     auto_invalidate_handle: bool,
 }
 
 pub trait ChainCallTrait {
     fn update_changes(&self) -> WCDBResult<()>;
+
     fn get_statement(&self) -> &dyn StatementTrait;
 }
 

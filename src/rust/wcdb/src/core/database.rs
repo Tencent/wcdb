@@ -1026,6 +1026,9 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         self.prepare_select()
             .select(fields)

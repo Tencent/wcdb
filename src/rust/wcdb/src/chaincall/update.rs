@@ -23,7 +23,7 @@ impl<'a, T> ChainCallTrait for Update<'a, T> {
     }
 
     fn get_statement(&self) -> &dyn StatementTrait {
-        &self.chain_call.statement
+        self.chain_call.get_statement()
     }
 }
 
@@ -47,35 +47,35 @@ impl<'a, T> Update<'a, T> {
     }
 
     pub fn table(mut self, table_name: &str) -> Self {
-        self.chain_call.statement.update(table_name);
+        self.chain_call.get_statement().update(table_name);
         self
     }
 
     pub fn set(mut self, fields: Vec<&'a Field<T>>) -> Self {
         self.fields = fields;
         self.chain_call
-            .statement
+            .get_statement()
             .set_columns_to_bind_parameters(&self.fields);
         self
     }
 
     pub fn where_expression(self, condition: &Expression) -> Self {
-        self.chain_call.statement.where_expression(condition);
+        self.chain_call.get_statement().where_expression(condition);
         self
     }
 
     pub fn order_by(self, orders: &Vec<OrderingTerm>) -> Self {
-        self.chain_call.statement.order_by(orders);
+        self.chain_call.get_statement().order_by(orders);
         self
     }
 
     pub fn limit(self, count: i64) -> Self {
-        self.chain_call.statement.limit(count);
+        self.chain_call.get_statement().limit(count);
         self
     }
 
     pub fn offset(self, offset: i64) -> Self {
-        self.chain_call.statement.offset(offset);
+        self.chain_call.get_statement().offset(offset);
         self
     }
 
@@ -89,7 +89,7 @@ impl<'a, T> Update<'a, T> {
         let prepared_statement = self
             .chain_call
             .handle
-            .prepared_with_main_statement(&self.chain_call.statement)?;
+            .prepared_with_main_statement(self.chain_call.get_statement())?;
 
         if let Some(object) = self.object.take() {
             PreparedStatement::bind_object_by_fields(&prepared_statement, object, &self.fields);

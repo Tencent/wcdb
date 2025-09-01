@@ -57,6 +57,12 @@ impl IdentifierConvertibleTrait for OrderingTerm {
     }
 }
 
+impl AsRef<OrderingTerm> for OrderingTerm {
+    fn as_ref(&self) -> &OrderingTerm {
+        self
+    }
+}
+
 impl OrderingTerm {
     pub fn new<T: ExpressionConvertibleTrait + IdentifierTrait>(expression: &T) -> Self {
         let cpp_obj = unsafe {
