@@ -58,8 +58,8 @@ private:
     mutable std::mutex m_lock;
     Conditional m_conditionalNormals;
     Conditional m_conditionalWriters;
-    std::queue<Thread> m_pendingNormals;
-    std::queue<Thread> m_pendingWriters;
+    std::list<Thread> m_pendingNormals;
+    std::list<Thread> m_pendingWriters;
     int m_writerCount = 0;
     int m_totalCount = 0;
 };

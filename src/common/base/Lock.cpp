@@ -114,12 +114,12 @@ void SharedLock::lock()
     Thread current = Thread::current();
     std::unique_lock<std::mutex> lockGuard(m_lock);
     if (!m_locking.equal(current)) {
-        m_pendingWriters.emplace(current);
+        m_pendingWriters.push_back(current);
         while (m_readers > 0 || m_writers > 0 || !m_pendingWriters.front().equal(current)) {
             m_conditionalWriters.wait(lockGuard);
         }
         WCTAssert(m_pendingWriters.front().isCurrentThread());
-        m_pendingWriters.pop();
+        m_pendingWriters.pop_front();
     }
     // it's already locked by current thread
     // or it's not locked and it's not shared locked
