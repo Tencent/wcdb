@@ -1,6 +1,8 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait, WCDBRustWinq_isWriteStatement};
+use crate::winq::identifier::{
+    CPPType, Identifier, IdentifierTrait, WCDBRustWinq_isWriteStatement,
+};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::c_void;
 use std::fmt::Debug;

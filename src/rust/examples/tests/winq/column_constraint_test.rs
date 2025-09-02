@@ -36,10 +36,19 @@ pub mod column_constraint_test {
             "CONSTRAINT testColumnConstraint UNINDEXED",
         );
         WinqTool::winq_equal(ColumnConstraint::new(None).default_to(1), "DEFAULT 1");
-        WinqTool::winq_equal(ColumnConstraint::new(None).default_to(false), "DEFAULT FALSE");
-        WinqTool::winq_equal(ColumnConstraint::new(None).default_to("abc"), "DEFAULT 'abc'");
+        WinqTool::winq_equal(
+            ColumnConstraint::new(None).default_to(false),
+            "DEFAULT FALSE",
+        );
+        WinqTool::winq_equal(
+            ColumnConstraint::new(None).default_to("abc"),
+            "DEFAULT 'abc'",
+        );
         // todo dengxudong 缺逻辑，重要，不紧急
         // WinqTool::winq_equal(ColumnConstraint::new().default_to(ExpressionConvertible), "DEFAULT NULL");
-        WinqTool::winq_equal(ColumnConstraint::new(None).collate("BINARY"), "COLLATE BINARY");
+        WinqTool::winq_equal(
+            ColumnConstraint::new(None).collate("BINARY"),
+            "COLLATE BINARY",
+        );
     }
 }

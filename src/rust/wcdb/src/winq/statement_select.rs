@@ -143,10 +143,10 @@ impl StatementSelect {
 
     pub fn select<'a, S, O, Si, Oi>(&self, column_name_vec: S, column_obj_vec: O) -> &Self
     where
-        S: IntoIterator<Item =Si>,
+        S: IntoIterator<Item = Si>,
         O: IntoIterator<Item = &'a Oi>,
         Si: AsRef<str>,
-        Oi: ResultColumnConvertibleTrait + 'a
+        Oi: ResultColumnConvertibleTrait + 'a,
     {
         let column_name_vec: Vec<Si> = column_name_vec.into_iter().collect();
         let column_obj_vec: Vec<&'a Oi> = column_obj_vec.into_iter().collect();
@@ -180,7 +180,7 @@ impl StatementSelect {
     // todo qixinbing  IntoIterator 是否拆分成俩方法？这俩参数割裂感太强
     pub fn from<'a, S, O, Si, Oi>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
     where
-        S: IntoIterator<Item =Si>,
+        S: IntoIterator<Item = Si>,
         O: IntoIterator<Item = &'a Oi>,
         Si: AsRef<str>,
         Oi: TableOrSubqueryConvertibleTrait + 'a,
@@ -221,9 +221,9 @@ impl StatementSelect {
         self
     }
 
-    pub fn group_by<'a, S, O, Si,Oi>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
+    pub fn group_by<'a, S, O, Si, Oi>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
     where
-        S: IntoIterator<Item =Si>,
+        S: IntoIterator<Item = Si>,
         O: IntoIterator<Item = &'a Oi>,
         Si: AsRef<str>,
         Oi: ExpressionConvertibleTrait + 'a,

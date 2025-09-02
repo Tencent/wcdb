@@ -163,7 +163,9 @@ impl<'a> CppObjectConvertibleTrait for Handle<'a> {
         // 这里我们使用一个临时的解决方案，通过静态变量来存储结果
         // 注意：这不是线程安全的，但在当前的使用场景下应该是安全的
         use std::ptr::addr_of_mut;
-        static mut TEMP_CPP_OBJECT: CppObject = CppObject { cpp_obj: std::ptr::null_mut() };
+        static mut TEMP_CPP_OBJECT: CppObject = CppObject {
+            cpp_obj: std::ptr::null_mut(),
+        };
         unsafe {
             (*addr_of_mut!(TEMP_CPP_OBJECT)).cpp_obj = self.get_cpp_obj();
             &*addr_of_mut!(TEMP_CPP_OBJECT)

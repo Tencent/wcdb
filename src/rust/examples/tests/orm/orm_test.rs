@@ -66,8 +66,7 @@ impl OrmTest {
             .iter()
             .for_each(|field| {
                 if field.get_description().as_str() != column_name {
-                    let column_def =
-                        ColumnDef::new(field.get_column(), ColumnType::Integer);
+                    let column_def = ColumnDef::new(field.get_column(), ColumnType::Integer);
                     column_defs.push(column_def);
                 }
             });
@@ -319,15 +318,15 @@ pub mod orm_test {
         let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
         let _ = table.insert_objects(obj_vec, DbAllTypeObject::all_fields());
 
-        let exp = Expression::new(DbAllTypeObject::field_type().get_column())
-            .eq(max.field_type.as_str());
+        let exp =
+            Expression::new(DbAllTypeObject::field_type().get_column()).eq(max.field_type.as_str());
         let db_max_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
             .unwrap();
         assert!(max == db_max_opt.unwrap());
 
-        let exp = Expression::new(DbAllTypeObject::field_type().get_column())
-            .eq(min.field_type.as_str());
+        let exp =
+            Expression::new(DbAllTypeObject::field_type().get_column()).eq(min.field_type.as_str());
         let db_min_opt = table
             .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
             .unwrap();

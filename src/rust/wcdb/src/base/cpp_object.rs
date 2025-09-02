@@ -36,7 +36,7 @@ unsafe impl Send for CppObject {}
 unsafe impl Sync for CppObject {}
 
 /// 供“继承类”直接操作 cpp_obj
-pub trait CppObjectTrait : CppObjectConvertibleTrait {
+pub trait CppObjectTrait: CppObjectConvertibleTrait {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void);
     fn get_cpp_obj(&self) -> *mut c_void;
     fn release_cpp_object(&mut self);

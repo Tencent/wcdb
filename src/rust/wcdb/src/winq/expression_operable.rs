@@ -164,12 +164,7 @@ impl_binary_operate_param_for_float!(f32, f64);
 
 impl OperateParam for &str {
     fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
-        (
-            CPPType::String,
-            0,
-            0.0,
-            self.to_cstring().as_ptr(),
-        )
+        (CPPType::String, 0, 0.0, self.to_cstring().as_ptr())
     }
 }
 
@@ -454,11 +449,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
     }
 
     fn r#match(&self, content: &str) -> Expression {
-        self.binary_operate(
-            content,
-            BinaryOperatorType::Match,
-            false,
-        )
+        self.binary_operate(content, BinaryOperatorType::Match, false)
     }
 
     fn not_match(&self, content: &str) -> Expression {
@@ -466,19 +457,11 @@ impl ExpressionOperableTrait for ExpressionOperable {
     }
 
     fn regexp(&self, content: &str) -> Expression {
-        self.binary_operate(
-            content,
-            BinaryOperatorType::RegExp,
-            false,
-        )
+        self.binary_operate(content, BinaryOperatorType::RegExp, false)
     }
 
     fn not_regexp(&self, content: &str) -> Expression {
-        self.binary_operate(
-            content,
-            BinaryOperatorType::RegExp,
-            true,
-        )
+        self.binary_operate(content, BinaryOperatorType::RegExp, true)
     }
 
     fn is(&self, operand: bool) -> Expression {

@@ -92,7 +92,11 @@ impl<'a, T> Update<'a, T> {
             .prepared_with_main_statement(self.chain_call.get_statement())?;
 
         if let Some(object) = self.object.take() {
-            PreparedStatement::bind_object_by_fields(&prepared_statement, object, &*self.fields.borrow());
+            PreparedStatement::bind_object_by_fields(
+                &prepared_statement,
+                object,
+                &*self.fields.borrow(),
+            );
         } else {
             let row_vec = self.row.take();
             if !row_vec.is_empty() {

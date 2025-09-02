@@ -360,9 +360,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     }
 
     fn delete_objects_by_expression(&self, condition: &Expression) -> WCDBResult<()> {
-        self.prepare_delete()
-            .r#where(condition)
-            .execute()?;
+        self.prepare_delete().r#where(condition).execute()?;
         Ok(())
     }
 

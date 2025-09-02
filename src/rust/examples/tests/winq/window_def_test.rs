@@ -25,8 +25,7 @@ pub mod window_def_test {
         let column1 = Column::new("column1", None).add(1);
         let column2 = Column::new("column2", None);
         let expression = Expression::new(&column2);
-        let window_def =
-            WindowDef::new().partition(&vec![&column1, &expression]);
+        let window_def = WindowDef::new().partition(&vec![&column1, &expression]);
         WinqTool::winq_equal(&window_def, "(PARTITION BY column1 + 1, column2)");
 
         let ordering_term: OrderingTerm = Column::new("column1", None).order(Order::Asc);

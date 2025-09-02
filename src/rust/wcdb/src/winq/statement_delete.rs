@@ -1,13 +1,13 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_void, CString};
 use std::fmt::Debug;
-use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 
 extern "C" {
     fn WCDBRustStatementDelete_create() -> *mut c_void;
@@ -113,10 +113,7 @@ impl StatementDelete {
 
     pub fn r#where(&self, condition: &Expression) -> &Self {
         unsafe {
-            WCDBRustStatementDelete_configCondition(
-                self.get_cpp_obj(),
-                CppObject::get(condition),
-            );
+            WCDBRustStatementDelete_configCondition(self.get_cpp_obj(), CppObject::get(condition));
         }
         self
     }

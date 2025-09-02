@@ -5,10 +5,7 @@ pub mod qualified_table_test {
 
     #[test]
     pub fn test() {
-        WinqTool::winq_equal(
-            &QualifiedTable::new("testTable"),
-            "testTable",
-        );
+        WinqTool::winq_equal(&QualifiedTable::new("testTable"), "testTable");
         WinqTool::winq_equal(
             QualifiedTable::new("testTable")
                 .of_string("testSchema")

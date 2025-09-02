@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
@@ -9,6 +8,7 @@ use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_select::StatementSelect;
+use std::cell::RefCell;
 use std::sync::Arc;
 
 pub struct Select<'a, T> {
@@ -51,6 +51,7 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
+    // todo qixinbing r# 写法，是否可以改成下划线？java 版本中 case 相关方法的名字是 case_
     pub fn r#where(&self, condition: &Expression) -> &Self {
         self.chain_call.get_statement().r#where(condition);
         self

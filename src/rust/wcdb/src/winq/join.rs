@@ -157,7 +157,7 @@ impl Join {
     //         identifier: Identifier::new_with_obj(cpp_obj),
     //     }
     // }
-    // 
+    //
     // pub fn new_with_table_or_subquery_convertible<T>(table_or_subquery: &T) -> Self
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -173,7 +173,7 @@ impl Join {
     //         identifier: Identifier::new_with_obj(cpp_obj),
     //     }
     // }
-    // 
+    //
     // pub fn with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -186,7 +186,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -201,7 +201,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -214,7 +214,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -229,7 +229,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn left_outer_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -242,7 +242,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn left_outer_join_with_table_or_subquery_convertible<T>(
     //     &self,
     //     table_or_subquery: &T,
@@ -260,7 +260,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn left_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -273,7 +273,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn left_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -288,7 +288,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn inner_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -301,7 +301,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn inner_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -316,7 +316,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn cross_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -329,7 +329,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn cross_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -344,7 +344,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -357,7 +357,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
     // where
     //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
@@ -372,7 +372,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_left_outer_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -385,7 +385,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_left_outer_join_with_table_or_subquery_convertible<T>(
     //     &self,
     //     table_or_subquery: &T,
@@ -403,7 +403,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_left_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -416,7 +416,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_left_join_with_table_or_subquery_convertible<T>(
     //     &self,
     //     table_or_subquery: &T,
@@ -434,7 +434,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_inner_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -447,7 +447,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_inner_join_with_table_or_subquery_convertible<T>(
     //     &self,
     //     table_or_subquery: &T,
@@ -465,7 +465,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_cross_join_with_table_name(&self, table_name: &str) -> &Join {
     //     let cstr = table_name.to_cstring();
     //     unsafe {
@@ -478,7 +478,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn natural_cross_join_with_table_or_subquery_convertible<T>(
     //     &self,
     //     table_or_subquery: &T,
@@ -496,14 +496,14 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn on(&self, expression: &Expression) -> &Join {
     //     unsafe {
     //         WCDBRustJoin_configOn(self.get_cpp_obj(), CppObject::get(expression));
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn using_with_column_name(&self, column: &str) -> &Join {
     //     let cstr = column.to_cstring();
     //     let mut vec: Vec<*const c_char> = Vec::new();
@@ -519,7 +519,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn using_with_column_obj(&self, column: &Column) -> &Join {
     //     let mut vec: Vec<*mut c_void> = Vec::new();
     //     vec.push(CppObject::get(column));
@@ -534,11 +534,11 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn using_with_column_name_vector(&self, column_vec: &Vec<String>) -> &Join {
     //     let c_strings: Vec<CString> = column_vec.iter().map(|x| x.to_cstring()).collect();
     //     let vec: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
-    // 
+    //
     //     unsafe {
     //         WCDBRustJoin_configUsingColumn(
     //             self.get_cpp_obj(),
@@ -550,7 +550,7 @@ impl Join {
     //     }
     //     self
     // }
-    // 
+    //
     // pub fn using_with_column_obj_vector(&self, column_vec: &Vec<Column>) -> &Join {
     //     if column_vec.is_empty() {
     //         return self;

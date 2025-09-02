@@ -1,4 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
 use crate::base::wcdb_exception::{WCDBException, WCDBResult};
 use crate::orm::field::Field;
@@ -10,7 +11,6 @@ use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::slice;
 use std::sync::atomic::{AtomicI32, Ordering};
 use std::sync::Arc;
-use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 
 extern "C" {
     fn WCDBRustHandleStatement_getError(cpp_obj: *mut c_void) -> *mut c_void;

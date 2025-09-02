@@ -97,7 +97,12 @@ impl IndexedColumn {
     }
 
     pub fn collate(&self, collation: &str) -> &Self {
-        unsafe { WCDBRustIndexedColumn_configCollation(self.get_cpp_obj(), collation.to_cstring().as_ptr()) }
+        unsafe {
+            WCDBRustIndexedColumn_configCollation(
+                self.get_cpp_obj(),
+                collation.to_cstring().as_ptr(),
+            )
+        }
         self
     }
 

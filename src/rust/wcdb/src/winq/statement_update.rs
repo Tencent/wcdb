@@ -1,4 +1,5 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
@@ -7,6 +8,7 @@ use crate::winq::conflict_action::ConflictAction;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::qualified_table::QualifiedTable;
 use crate::winq::statement::{Statement, StatementTrait};
@@ -15,8 +17,6 @@ use std::ffi::{c_char, c_int, c_longlong, c_void, CString};
 use std::fmt::Debug;
 use std::os::raw::c_double;
 use std::ptr::{null, null_mut};
-use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 
 extern "C" {
     fn WCDBRustStatementUpdate_create() -> *mut c_void;
@@ -484,10 +484,7 @@ impl StatementUpdate {
 
     pub fn r#where(&self, condition: &Expression) -> &Self {
         unsafe {
-            WCDBRustStatementUpdate_configCondition(
-                self.get_cpp_obj(),
-                CppObject::get(condition),
-            );
+            WCDBRustStatementUpdate_configCondition(self.get_cpp_obj(), CppObject::get(condition));
         }
         self
     }

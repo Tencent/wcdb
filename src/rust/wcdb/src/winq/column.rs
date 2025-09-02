@@ -8,12 +8,12 @@ use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::{ExpressionOperable, ExpressionOperableTrait, OperateParam};
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::{Order, OrderingTerm};
 use crate::winq::result_column::ResultColumn;
+use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::schema::Schema;
 use std::ffi::{c_char, c_int, c_void};
-use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 
 extern "C" {
     fn WCDBRustColumn_createWithName(name: *const c_char, binding: *mut c_void) -> *mut c_void;

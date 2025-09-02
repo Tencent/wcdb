@@ -59,7 +59,10 @@ impl<'a> Delete<'a> {
     }
 
     pub fn execute(&self) -> WCDBResult<&Self> {
-        let ret = self.chain_call.handle.execute(self.chain_call.get_statement());
+        let ret = self
+            .chain_call
+            .handle
+            .execute(self.chain_call.get_statement());
         self.chain_call.update_changes()?;
         self.chain_call.invalidate_handle();
         ret.map(|_| self)

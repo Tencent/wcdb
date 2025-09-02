@@ -84,9 +84,8 @@ impl BindParameter {
     }
 
     pub fn at(name: &str) -> Self {
-        let cpp_obj = {
-            unsafe { WCDBRustBindParameter_createAtSignType(name.to_cstring().as_ptr()) }
-        };
+        let cpp_obj =
+            { unsafe { WCDBRustBindParameter_createAtSignType(name.to_cstring().as_ptr()) } };
         BindParameter {
             identifier: Identifier::new(CPPType::BindParameter, Some(cpp_obj)),
         }
@@ -97,9 +96,8 @@ impl BindParameter {
     }
 
     pub fn dollar(name: &str) -> Self {
-        let cpp_obj = {
-            unsafe { WCDBRustBindParameter_createDollarSignType(name.to_cstring().as_ptr()) }
-        };
+        let cpp_obj =
+            { unsafe { WCDBRustBindParameter_createDollarSignType(name.to_cstring().as_ptr()) } };
         BindParameter {
             identifier: Identifier::new(CPPType::BindParameter, Some(cpp_obj)),
         }
