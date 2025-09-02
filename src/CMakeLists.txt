@@ -501,6 +501,7 @@ endif ()
 if (ANDROID)
     message(STATUS "---- BUILD FOR ANDROID ----")
     find_library(z-lib z)
+    target_link_options(${TARGET_NAME} PRIVATE "-Wl,-z,max-page-size=16384")
     target_link_libraries(${TARGET_NAME} PUBLIC
             ${LINK_LIBRARIES}
             ${z-lib})
