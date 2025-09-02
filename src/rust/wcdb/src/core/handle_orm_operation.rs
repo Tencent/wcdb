@@ -5,13 +5,15 @@ use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
 use crate::chaincall::select::Select;
 use crate::chaincall::update::Update;
+use crate::core::handle::Handle;
 use crate::core::handle_operation::{HandleOperation, HandleOperationTrait};
 use crate::orm::field::Field;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
+use crate::winq::statement::StatementTrait;
+use crate::winq::statement_drop_table::StatementDropTable;
 use std::ffi::c_void;
-use crate::core::handle::Handle;
 
 #[derive(Debug, Clone)]
 pub struct HandleORMOperation {
@@ -28,6 +30,14 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool>;
 
     fn drop_table(&self, table_name: &str) -> WCDBResult<()>;
+
+    fn prepare_insert<T>(&self) -> Insert<T>;
+
+    fn prepare_update<T>(&self) -> Update<T>;
+
+    fn prepare_select<T>(&self) -> Select<T>;
+
+    fn prepare_delete(&self) -> Delete;
 
     fn insert_object<T>(
         &self,
@@ -71,162 +81,24 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         table_name: &str,
     ) -> WCDBResult<()>;
 
-    fn prepare_insert<T>(&self) -> Insert<T>;
-
-    fn prepare_update<T>(&self) -> Update<T>;
-
-    fn prepare_select<T>(&self) -> Select<T>;
-
-    fn prepare_delete(&self) -> Delete;
-
-    fn delete_objects(&self, table_name: &str) -> WCDBResult<()>;
-
-    fn delete_objects_by_expression(
+    fn delete_objects(
         &self,
         table_name: &str,
-        expression: &Expression,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
 
-    fn delete_objects_by_expression_order_limit(
-        &self,
-        table_name: &str,
-        expression: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<()>;
-
-    fn delete_objects_by_expression_order_limit_offset(
-        &self,
-        table_name: &str,
-        expression: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<()>;
-
-    fn delete_objects_by_order_limit(
-        &self,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<()>;
-
-    fn delete_objects_by_order_limit_offset(
-        &self,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_field<T>(
-        &self,
-        object: T,
-        field: &Field<T>,
-        table_name: &str,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_field_expression<T>(
-        &self,
-        object: T,
-        field: &Field<T>,
-        table_name: &str,
-        expression: &Expression,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_field_expression_order_limit<T>(
-        &self,
-        object: T,
-        field: &Field<T>,
-        table_name: &str,
-        expression: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_field_expression_order_limit_offset<T>(
-        &self,
-        object: T,
-        field: &Field<T>,
-        table_name: &str,
-        expression: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_field_order_limit<T>(
-        &self,
-        object: T,
-        field: &Field<T>,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_field_order_limit_offset<T>(
-        &self,
-        object: T,
-        field: &Field<T>,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_fields<T>(
+    fn update_object<T>(
         &self,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_fields_expression<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        expression: &Expression,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_fields_expression_order_limit<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        expression: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_fields_expression_order_limit_offset<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        expression: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_fields_order_limit<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<()>;
-
-    fn update_object_by_fields_order_limit_offset<T>(
-        &self,
-        object: T,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
 
     fn get_first_object<T>(
@@ -238,140 +110,15 @@ pub trait HandleORMOperationTrait: HandleOperationTrait {
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>>;
 
-    fn get_first_object_by_expression<T>(
+    fn get_all_objects<T>(
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        expression: &Expression,
-    ) -> WCDBResult<Option<T>>;
-
-    // todo dengxudong
-    // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls)
-
-    fn get_first_object_by_table_name_expression<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
-    ) -> WCDBResult<Option<T>>;
-
-    // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
-
-    fn get_first_object_by_table_name_expression_order<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
-        order: OrderingTerm,
-    ) -> WCDBResult<Option<T>>;
-
-    //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
-
-    fn get_first_object_by_table_name_expression_order_offset<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
-        order: OrderingTerm,
-        offset: i64,
-    ) -> WCDBResult<Option<T>>;
-
-    //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls)
-
-    fn get_first_object_by_table_name_order<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-    ) -> WCDBResult<Option<T>>;
-
-    //public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls)
-
-    fn get_first_object_by_table_name_order_offset<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-        offset: i64,
-    ) -> WCDBResult<Option<T>>;
-
-    // public <T, R extends T> R getFirstObject(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long offset, @NotNull Class<R> cls)
-
-    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_expression<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_expression_order<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
-        order: OrderingTerm,
-    ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_expression_order_limit<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_expression_order_limit_offset<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        condition: &Expression,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable Expression condition, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_order<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-    ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_order_limit<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-    ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, @NotNull Class<R> cls)
-
-    fn get_all_objects_by_table_name_order_limit_offset<T>(
-        &self,
-        fields: Vec<&Field<T>>,
-        table_name: &str,
-        order: OrderingTerm,
-        limit: i64,
-        offset: i64,
-    ) -> WCDBResult<Vec<T>>;
-
-    //public <T, R extends T> List<R> getAllObjects(@NotNull Field<T>[] fields, @NotNull String tableName, @Nullable OrderingTerm order, long limit, long offset, @NotNull Class<R> cls)
 }
 
 impl CppObjectTrait for HandleORMOperation {
@@ -396,201 +143,271 @@ impl CppObjectConvertibleTrait for HandleORMOperation {
 
 impl HandleOperationTrait for HandleORMOperation {
     fn get_handle(&self, write_hint: bool) -> Handle {
-        todo!()
+        unimplemented!("Stub: This method should be implemented by subclasses")
     }
 
     fn auto_invalidate_handle(&self) -> bool {
-        todo!()
+        unimplemented!("Stub: This method should be implemented by subclasses")
     }
 
     fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        todo!()
+        unimplemented!("Stub: This method should be implemented by subclasses")
+    }
+
+    fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
+        self.handle_operation.execute(statement)
+    }
+
+    fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
+        self.handle_operation.execute_sql(sql)
     }
 }
 
 impl HandleORMOperationTrait for HandleORMOperation {
-    fn create_table<T, R: TableBinding<T>>(&self, table_name: &str, binding: &R) -> WCDBResult<bool> {
-        todo!()
+    fn create_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool> {
+        let handle = self.get_handle(true);
+        binding.base_binding().create_table(table_name, handle)
     }
 
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
-        todo!()
+        let handle = self.get_handle(false);
+        let ret = Handle::table_exist(handle.get_cpp_handle()?, table_name);
+        let mut exception_opt = None;
+        if ret > 1 {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        if exception_opt.is_some() {
+            match exception_opt {
+                None => {}
+                Some(ex) => {
+                    return Err(ex);
+                }
+            }
+        }
+        Ok(ret == 1)
     }
 
     fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn insert_object<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn insert_or_replace_object<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn insert_or_ignore_object<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn insert_objects<T>(&self, objects: Vec<T>, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn insert_or_replace_objects<T>(&self, objects: Vec<T>, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn insert_or_ignore_objects<T>(&self, objects: Vec<T>, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
+        let statement = StatementDropTable::new();
+        self.execute(statement.drop_table(table_name).if_exist())
     }
 
     fn prepare_insert<T>(&self) -> Insert<T> {
-        todo!()
+        Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 
     fn prepare_update<T>(&self) -> Update<T> {
-        todo!()
+        Update::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 
     fn prepare_select<T>(&self) -> Select<T> {
-        todo!()
+        Select::new(self.get_handle(false), false, self.auto_invalidate_handle())
     }
 
     fn prepare_delete(&self) -> Delete {
-        todo!()
+        Delete::new(self.get_handle(true), false, self.auto_invalidate_handle())
     }
 
-    fn delete_objects(&self, table_name: &str) -> WCDBResult<()> {
-        todo!()
+    fn insert_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .into_table(table_name)
+            .value(object)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
-    fn delete_objects_by_expression(&self, table_name: &str, expression: &Expression) -> WCDBResult<()> {
-        todo!()
+    fn insert_or_replace_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_replace()
+            .into_table(table_name)
+            .value(object)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
-    fn delete_objects_by_expression_order_limit(&self, table_name: &str, expression: &Expression, order: OrderingTerm, limit: i64) -> WCDBResult<()> {
-        todo!()
+    fn insert_or_ignore_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_ignore()
+            .into_table(table_name)
+            .value(object)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
-    fn delete_objects_by_expression_order_limit_offset(&self, table_name: &str, expression: &Expression, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<()> {
-        todo!()
+    fn insert_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .into_table(table_name)
+            .values(objects)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
-    fn delete_objects_by_order_limit(&self, table_name: &str, order: OrderingTerm, limit: i64) -> WCDBResult<()> {
-        todo!()
+    fn insert_or_replace_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_replace()
+            .into_table(table_name)
+            .values(objects)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
-    fn delete_objects_by_order_limit_offset(&self, table_name: &str, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<()> {
-        todo!()
+    fn insert_or_ignore_objects<T>(
+        &self,
+        objects: Vec<T>,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+    ) -> WCDBResult<()> {
+        self.prepare_insert::<T>()
+            .or_ignore()
+            .into_table(table_name)
+            .values(objects)
+            .on_fields(fields)
+            .execute()?;
+        Ok(())
     }
 
-    fn update_object_by_field<T>(&self, object: T, field: &Field<T>, table_name: &str) -> WCDBResult<()> {
-        todo!()
+    fn delete_objects(
+        &self,
+        table_name: &str,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()> {
+        let delete = self.prepare_delete();
+        delete.from_table(table_name);
+        if let Some(condition) = condition_opt {
+            delete.r#where(&condition);
+        }
+        if let Some(order) = order_opt {
+            delete.order_by(&vec![order]);
+        }
+        if let Some(limit) = limit_opt {
+            delete.limit(limit);
+        }
+        if let Some(offset) = offset_opt {
+            delete.offset(offset);
+        }
+        delete.execute()?;
+        Ok(())
     }
 
-    fn update_object_by_field_expression<T>(&self, object: T, field: &Field<T>, table_name: &str, expression: &Expression) -> WCDBResult<()> {
-        todo!()
+    fn update_object<T>(
+        &self,
+        object: T,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()> {
+        let update = self.prepare_update::<T>();
+        update.table(table_name);
+        update.set(fields);
+        update.to_object(object);
+        if let Some(condition) = condition_opt {
+            update.r#where(&condition);
+        }
+        if let Some(order) = order_opt {
+            update.order_by(&vec![order]);
+        }
+        if let Some(limit) = limit_opt {
+            update.limit(limit);
+        }
+        if let Some(offset) = offset_opt {
+            update.offset(offset);
+        }
+        update.execute()?;
+        Ok(())
     }
 
-    fn update_object_by_field_expression_order_limit<T>(&self, object: T, field: &Field<T>, table_name: &str, expression: &Expression, order: OrderingTerm, limit: i64) -> WCDBResult<()> {
-        todo!()
+    fn get_first_object<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<Option<T>> {
+        let select = self.prepare_select::<T>();
+        select.select(fields);
+        select.from(table_name);
+        if let Some(condition) = condition_opt {
+            select.r#where(&condition);
+        }
+        if let Some(order) = order_opt {
+            select.order_by(&vec![order]);
+        }
+        select.limit(1);
+        if let Some(offset) = offset_opt {
+            select.offset(offset);
+        }
+        select.first_object()
     }
 
-    fn update_object_by_field_expression_order_limit_offset<T>(&self, object: T, field: &Field<T>, table_name: &str, expression: &Expression, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_field_order_limit<T>(&self, object: T, field: &Field<T>, table_name: &str, order: OrderingTerm, limit: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_field_order_limit_offset<T>(&self, object: T, field: &Field<T>, table_name: &str, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_fields<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_fields_expression<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str, expression: &Expression) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_fields_expression_order_limit<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str, expression: &Expression, order: OrderingTerm, limit: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_fields_expression_order_limit_offset<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str, expression: &Expression, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_fields_order_limit<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm, limit: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn update_object_by_fields_order_limit_offset<T>(&self, object: T, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<()> {
-        todo!()
-    }
-
-    fn get_first_object<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition_opt: Option<Expression>, order_opt: Option<OrderingTerm>, offset_opt: Option<i64>) -> WCDBResult<Option<T>> {
-        self.prepare_select()
-    }
-
-    fn get_first_object_by_expression<T>(&self, fields: Vec<&Field<T>>, table_name: &str, expression: &Expression) -> WCDBResult<Option<T>> {
-        todo!()
-    }
-
-    fn get_first_object_by_table_name_expression<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression) -> WCDBResult<Option<T>> {
-        todo!()
-    }
-
-    fn get_first_object_by_table_name_expression_order<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression, order: OrderingTerm) -> WCDBResult<Option<T>> {
-        todo!()
-    }
-
-    fn get_first_object_by_table_name_expression_order_offset<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression, order: OrderingTerm, offset: i64) -> WCDBResult<Option<T>> {
-        todo!()
-    }
-
-    fn get_first_object_by_table_name_order<T>(&self, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm) -> WCDBResult<Option<T>> {
-        todo!()
-    }
-
-    fn get_first_object_by_table_name_order_offset<T>(&self, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm, offset: i64) -> WCDBResult<Option<T>> {
-        todo!()
-    }
-
-    fn get_all_objects<T>(&self, fields: Vec<&Field<T>>, table_name: &str) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_expression<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_expression_order<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression, order: OrderingTerm) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_expression_order_limit<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression, order: OrderingTerm, limit: i64) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_expression_order_limit_offset<T>(&self, fields: Vec<&Field<T>>, table_name: &str, condition: &Expression, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_order<T>(&self, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_order_limit<T>(&self, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm, limit: i64) -> WCDBResult<Vec<T>> {
-        todo!()
-    }
-
-    fn get_all_objects_by_table_name_order_limit_offset<T>(&self, fields: Vec<&Field<T>>, table_name: &str, order: OrderingTerm, limit: i64, offset: i64) -> WCDBResult<Vec<T>> {
-        todo!()
+    fn get_all_objects<T>(
+        &self,
+        fields: Vec<&Field<T>>,
+        table_name: &str,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<Vec<T>> {
+        let select = self.prepare_select::<T>();
+        select.select(fields);
+        select.from(table_name);
+        if let Some(condition) = condition_opt {
+            select.r#where(&condition);
+        }
+        if let Some(order) = order_opt {
+            select.order_by(&vec![order]);
+        }
+        if let Some(limit) = limit_opt {
+            select.limit(limit);
+        }
+        if let Some(offset) = offset_opt {
+            select.offset(offset);
+        }
+        select.all_objects()
     }
 }
 

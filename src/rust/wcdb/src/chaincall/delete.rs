@@ -38,7 +38,7 @@ impl<'a> Delete<'a> {
         self
     }
 
-    pub fn where_expression(self, condition: &Expression) -> Self {
+    pub fn r#where(self, condition: &Expression) -> Self {
         self.chain_call.get_statement().r#where(condition);
         self
     }

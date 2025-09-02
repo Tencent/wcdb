@@ -183,7 +183,7 @@ impl<'a> TableOperation<'a> {
             update.offset(offset);
         }
         if let Some(expression) = expression {
-            update.where_expression(&expression);
+            update.r#where(&expression);
         }
         let handler = self.database.get_handle(true);
         let ret = match handler.prepared_with_main_statement(update) {

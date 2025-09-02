@@ -361,7 +361,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
 
     fn delete_objects_by_expression(&self, condition: &Expression) -> WCDBResult<()> {
         self.prepare_delete()
-            .where_expression(condition)
+            .r#where(condition)
             .execute()?;
         Ok(())
     }
@@ -373,7 +373,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         limit: i64,
     ) -> WCDBResult<()> {
         self.prepare_delete()
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(&vec![order])
             .limit(limit)
             .execute()?;
@@ -388,7 +388,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         offset: i64,
     ) -> WCDBResult<()> {
         self.prepare_delete()
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(&vec![order])
             .limit(limit)
             .offset(offset)
@@ -435,7 +435,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_update()
             .set(vec![field])
             .to_object(object)
-            .where_expression(condition)
+            .r#where(condition)
             .execute()?;
         Ok(())
     }
@@ -451,7 +451,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_update()
             .set(vec![field])
             .to_object(object)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(&vec![order])
             .limit(limit)
             .execute()?;
@@ -470,7 +470,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_update()
             .set(vec![field])
             .to_object(object)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(&vec![order])
             .limit(limit)
             .offset(offset)
@@ -529,7 +529,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_update()
             .set(fields)
             .to_object(object)
-            .where_expression(condition)
+            .r#where(condition)
             .execute()?;
         Ok(())
     }
@@ -545,7 +545,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_update()
             .set(fields)
             .to_object(object)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(&vec![order])
             .limit(limit)
             .execute()?;
@@ -564,7 +564,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_update()
             .set(fields)
             .to_object(object)
-            .where_expression(condition)
+            .r#where(condition)
             .order_by(&vec![order])
             .limit(limit)
             .offset(offset)

@@ -83,7 +83,7 @@ pub mod statement_update_test {
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
                 .to_i32(1)
-                .where_expression(&Column::new("column1", None).gt(1)),
+                .r#where(&Column::new("column1", None).gt(1)),
             "UPDATE testTable SET column1 = 1 WHERE column1 > 1",
         );
 
