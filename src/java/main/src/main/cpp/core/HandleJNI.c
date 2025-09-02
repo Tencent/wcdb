@@ -141,16 +141,12 @@ bool WCDBJNIHandleTransactionCallBack(TransactionContext *context, CPPHandle han
         env, WCDBJNIGetHandleClass(), "onTransaction", "(JLcom/tencent/wcdb/core/Transaction;)Z");
         if (g_methodId == NULL) {
             assert(0);
-            if ((*env)->ExceptionCheck(env)) {
-                (*env)->ExceptionClear(env);
-            }
             return false;
         }
     }
     jboolean ret = (*env)->CallBooleanMethod(
     env, context->handle, g_methodId, (jlong) handle.innerValue, context->transaction);
     if ((*env)->ExceptionCheck(env)) {
-        (*env)->ExceptionClear(env);
         ret = false;
     }
     return ret;
@@ -180,16 +176,12 @@ bool WCDBJNIHandlePausableTransactionCallBack(TransactionContext *context,
         env, WCDBJNIGetHandleClass(), "onPausableTransaction", "(JLcom/tencent/wcdb/core/PausableTransaction;Z)I");
         if (g_methodId == NULL) {
             assert(0);
-            if ((*env)->ExceptionCheck(env)) {
-                (*env)->ExceptionClear(env);
-            }
             return false;
         }
     }
     jint ret = (*env)->CallIntMethod(
     env, context->handle, g_methodId, (jlong) handle.innerValue, context->transaction, isNewTransaction);
     if ((*env)->ExceptionCheck(env)) {
-        (*env)->ExceptionClear(env);
         ret = 2;
     }
     if (ret == 2) {
