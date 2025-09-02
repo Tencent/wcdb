@@ -180,6 +180,7 @@ bool WCDBJNIDatabaseConfig(jobject config, CPPHandle handle)
     jboolean ret = (*env)->CallStaticBooleanMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, (jlong) handle.innerValue, config);
     if ((*env)->ExceptionCheck(env)) {
+        (*env)->ExceptionClear(env);
         ret = false;
     }
     WCDBJNITryDetach;
@@ -522,6 +523,7 @@ bool WCDBJNIDatabaseTableShouldBeBackup(jobject filter, const char* table)
     bool ret = (*env)->CallStaticBooleanMethod(
     env, WCDBJNIGetDatabaseClass(), g_methodId, filter, jtable);
     if ((*env)->ExceptionCheck(env)) {
+        (*env)->ExceptionClear(env);
         ret = false;
     }
     WCDBJNITryDetach;
