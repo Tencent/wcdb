@@ -114,23 +114,23 @@ long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self) {
 typedef struct TransactionContext {
     RustTransactionCallback rust_callback;
     void* closure_raw;
-    void* database_raw;
+    void* rust_handle_raw;
 } TransactionContext;
 
 bool WCDBRustHandleTransactionCallBack(TransactionContext* context, CPPHandle handle) {
-    return context->rust_callback(context->closure_raw, context->database_raw, handle.innerValue);
+    return context->rust_callback(context->closure_raw, context->rust_handle_raw);
 }
 
 bool WCDBRustHandleObjectMethod(runTransaction,
                                 void* self,
                                 RustTransactionCallback rust_callback,
                                 void* closure_raw,
-                                void* database_raw) {
+                                void* rust_handle_raw) {
     WCDBRustBridgeStruct(CPPHandle, self);
     TransactionContext context;
     context.rust_callback = rust_callback;
     context.closure_raw = closure_raw;
-    context.database_raw = database_raw;
+    context.rust_handle_raw = rust_handle_raw;
     return WCDBHandleRunTransaction(selfStruct, &context,
                                     (TransactionCallback)WCDBRustHandleTransactionCallBack);
 }

@@ -87,7 +87,7 @@ pub mod simple_sample {
         //     .unwrap();
 
         // 执行事务
-        let ret = database.run_transaction(move |handle: Handle| {
+        let ret = database.run_transaction(move |handle: &Handle| {
             let test_table = TestObject::new(String::from("run_transaction"));
             table
                 .insert_object(test_table, DbTestObject::all_fields())

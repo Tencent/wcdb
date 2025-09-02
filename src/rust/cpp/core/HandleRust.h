@@ -51,13 +51,13 @@ long long WCDBRustHandleClassMethod(getLastInsertRowid, void* self);
 // jboolean WCDBRustHandleClassMethod(commitTransaction, void* self);
 // void WCDBRustHandleClassMethod(rollbackTransaction, void* self);
 
-typedef bool (*RustTransactionCallback)(void* closure_raw, void* database_raw, void* cpp_handle);
+typedef bool (*RustTransactionCallback)(void* closure_raw, void* rust_handle_raw);
 
 bool WCDBRustHandleObjectMethod(runTransaction,
                                 void* self,
                                 RustTransactionCallback rust_callback,
                                 void* closure_raw,
-                                void* database_raw);
+                                void* rust_handle_raw);
 // jboolean WCDBRustHandleObjectMethod(runPausableTransaction, void* self, jobject transaction);
 //
 // jlong WCDBRustHandleClassMethodWithNoArg(createCancellationSignal);

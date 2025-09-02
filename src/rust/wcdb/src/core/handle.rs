@@ -18,24 +18,6 @@ extern "C" {
     fn WCDBRustHandle_executeSQL(cpp_obj: *mut c_void, sql: *const c_char) -> bool;
     fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
     fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
-    fn WCDBRustHandle_runTransaction(
-        cpp_obj: *mut c_void,
-        transaction_callback: extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> bool,
-        closure_raw: *mut c_void,
-        database_raw: *mut c_void,
-    ) -> bool;
-}
-
-extern "C" fn transaction_callback(
-    closure_raw: *mut c_void,
-    database_raw: *mut c_void,
-    cpp_handle: *mut c_void,
-) -> bool {
-    let database = unsafe { *(database_raw as *const &Database) };
-    let handle = Handle::new_with_obj(cpp_handle, &database);
-    let closure: Box<Box<dyn FnOnce(Handle) -> bool>> =
-        unsafe { Box::from_raw(closure_raw as *mut Box<dyn FnOnce(Handle) -> bool>) };
-    closure(handle)
 }
 
 pub struct HandleInner {
@@ -202,29 +184,11 @@ impl<'a> HandleOperationTrait for Handle<'a> {
         false
     }
 
-    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, closure: F) -> WCDBResult<()> {
-        let mut handle = self.get_handle(true);
-        let closure_box: Box<Box<dyn FnOnce(Handle) -> bool>> = Box::new(Box::new(closure));
-        let closure_raw = Box::into_raw(closure_box) as *mut c_void;
-        let database_raw = unsafe { &self.database as *const &Database as *mut c_void };
-        let mut exception_opt = None;
-        if !unsafe {
-            WCDBRustHandle_runTransaction(
-                handle.get_cpp_handle()?,
-                transaction_callback,
-                closure_raw,
-                database_raw,
-            )
-        } {
-            exception_opt = Some(handle.create_exception());
-        }
-        if self.auto_invalidate_handle() {
-            self.invalidate();
-        }
-        match exception_opt {
-            None => Ok(()),
-            Some(exception) => Err(exception),
-        }
+    fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, closure: F) -> WCDBResult<()> {
+        self.handle_inner
+            .borrow()
+            .handle_orm_operation
+            .run_transaction(closure)
     }
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {

@@ -150,8 +150,8 @@ impl HandleOperationTrait for HandleORMOperation {
         unimplemented!("Stub: This method should be implemented by subclasses")
     }
 
-    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        unimplemented!("Stub: This method should be implemented by subclasses")
+    fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
+        self.handle_operation.run_transaction(callback)
     }
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {

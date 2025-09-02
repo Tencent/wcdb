@@ -90,9 +90,8 @@ impl<'a> TableOperation<'a> {
         if rows.len() == 1 {
             return self.insert_rows_with_handle(&rows, &insert, &handle);
         }
-        handle.run_transaction(|handle: Handle| {
-            self.insert_rows_with_handle(&rows, &insert, &handle)
-                .is_ok()
+        handle.run_transaction(|handle: &Handle| {
+            self.insert_rows_with_handle(&rows, &insert, handle).is_ok()
         })
     }
 

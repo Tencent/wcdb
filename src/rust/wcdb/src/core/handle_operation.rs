@@ -5,6 +5,25 @@ use crate::core::handle::Handle;
 use crate::winq::statement::StatementTrait;
 use std::ffi::c_void;
 
+extern "C" {
+    fn WCDBRustHandle_runTransaction(
+        cpp_obj: *mut c_void,
+        transaction_callback: extern "C" fn(
+            cb_raw: *mut c_void,
+            cpp_handle_raw: *mut c_void,
+        ) -> bool,
+        cb_raw: *mut c_void,
+        rust_handle_raw: *mut c_void,
+    ) -> bool;
+}
+
+extern "C" fn transaction_callback(cb_raw: *mut c_void, rust_handle_raw: *mut c_void) -> bool {
+    let handle = unsafe { *(rust_handle_raw as *const &Handle) };
+    let closure: Box<Box<dyn FnOnce(&Handle) -> bool>> =
+        unsafe { Box::from_raw(cb_raw as *mut Box<dyn FnOnce(&Handle) -> bool>) };
+    closure(handle)
+}
+
 #[derive(Debug, Clone)]
 pub struct HandleOperation {
     cpp_obj: CppObject,
@@ -15,7 +34,7 @@ pub trait HandleOperationTrait: CppObjectTrait {
 
     fn auto_invalidate_handle(&self) -> bool;
 
-    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()>;
+    fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()>;
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()>;
 
@@ -51,8 +70,29 @@ impl HandleOperationTrait for HandleOperation {
         unimplemented!("Stub: This method should be implemented by subclasses")
     }
 
-    fn run_transaction<F: FnOnce(Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        unimplemented!("Stub: This method should be implemented by subclasses")
+    fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
+        let handle = self.get_handle(true);
+        let closure_box: Box<Box<dyn FnOnce(&Handle) -> bool>> = Box::new(Box::new(callback));
+        let closure_raw = Box::into_raw(closure_box) as *mut c_void;
+        let rust_handle_raw = unsafe { &(&handle) as *const &Handle as *mut c_void };
+        let mut exception_opt = None;
+        if !unsafe {
+            WCDBRustHandle_runTransaction(
+                handle.get_cpp_handle()?,
+                transaction_callback,
+                closure_raw,
+                rust_handle_raw,
+            )
+        } {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
