@@ -314,7 +314,8 @@ bool Backup::incrementalBackup()
         for (auto pageIter = iter->verifiedPagenos.begin();
              pageIter != iter->verifiedPagenos.end();
              pageIter++) {
-            if (pageIter->number > 0 && m_unchangedLeaves[pageIter->number - 1]) {
+            if (pageIter->number > 0 && pageIter->number <= m_unchangedLeaves.size()
+                && m_unchangedLeaves[pageIter->number - 1]) {
                 // Deleted page
                 pageIter->number = 0;
             }
