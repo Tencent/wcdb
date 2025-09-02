@@ -7,7 +7,7 @@ extern "C" {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct CppObject {
+pub struct CppObject {
     pub(crate) cpp_obj: *mut c_void,
 }
 
@@ -69,7 +69,7 @@ impl CppObject {
         CppObject { cpp_obj }
     }
 
-    pub fn get<T: CppObjectConvertibleTrait>(obj: &T) -> *mut c_void {
+    pub fn get<T: CppObjectConvertibleTrait + ?Sized>(obj: &T) -> *mut c_void {
         obj.as_cpp_object().cpp_obj
     }
 }

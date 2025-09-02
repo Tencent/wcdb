@@ -141,12 +141,15 @@ impl StatementSelect {
         }
     }
 
-    pub fn select<'a, S, O, Si>(&self, column_name_vec: S, column_obj_vec: O) -> &Self
+    pub fn select<'a, S, O, Si, Oi>(&self, column_name_vec: S, column_obj_vec: O) -> &Self
     where
         S: IntoIterator<Item =Si>,
-        O: IntoIterator<Item = &'a dyn ResultColumnConvertibleTrait>,
+        O: IntoIterator<Item = &'a Oi>,
         Si: AsRef<str>,
+        Oi: ResultColumnConvertibleTrait + 'a
     {
+        let column_name_vec: Vec<Si> = column_name_vec.into_iter().collect();
+        let column_obj_vec: Vec<&'a Oi> = column_obj_vec.into_iter().collect();
         if column_name_vec.is_empty() && column_obj_vec.is_empty() {
             return self;
         }
@@ -175,15 +178,15 @@ impl StatementSelect {
     }
 
     // todo qixinbing  IntoIterator 是否拆分成俩方法？这俩参数割裂感太强
-    pub fn from<S, O, Si, Oi>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
+    pub fn from<'a, S, O, Si, Oi>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
     where
         S: IntoIterator<Item =Si>,
-        O: IntoIterator<Item = &Oi>,
+        O: IntoIterator<Item = &'a Oi>,
         Si: AsRef<str>,
-        Oi: TableOrSubqueryConvertibleTrait,
+        Oi: TableOrSubqueryConvertibleTrait + 'a,
     {
         let table_name_vec: Vec<Si> = table_name_vec.into_iter().collect();
-        let table_subquery_obj_vec: Vec<&Oi> = table_subquery_obj_vec.into_iter().collect();
+        let table_subquery_obj_vec: Vec<&'a Oi> = table_subquery_obj_vec.into_iter().collect();
         if table_name_vec.is_empty() && table_subquery_obj_vec.is_empty() {
             return self;
         }
@@ -218,15 +221,15 @@ impl StatementSelect {
         self
     }
 
-    pub fn group_by<S, O, Si,Oi>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
+    pub fn group_by<'a, S, O, Si,Oi>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
     where
         S: IntoIterator<Item =Si>,
-        O: IntoIterator<Item = &Oi>,
+        O: IntoIterator<Item = &'a Oi>,
         Si: AsRef<str>,
-        Oi: ExpressionConvertibleTrait,
+        Oi: ExpressionConvertibleTrait + 'a,
     {
         let column_name_vec: Vec<Si> = column_name_vec.into_iter().collect();
-        let expression_obj_vec: Vec<&Oi> = expression_obj_vec.into_iter().collect();
+        let expression_obj_vec: Vec<&'a Oi> = expression_obj_vec.into_iter().collect();
         if column_name_vec.is_empty() && expression_obj_vec.is_empty() {
             return self;
         }

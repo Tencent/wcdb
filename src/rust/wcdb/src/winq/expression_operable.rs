@@ -107,7 +107,7 @@ impl IdentifierTrait for ExpressionOperable {
 
 impl ExpressionConvertibleTrait for ExpressionOperable {}
 
-pub(crate) trait OperateParam {
+pub trait OperateParam {
     /// 对应 C++ 入参 type, long, double, string
     fn get_params(&self) -> (CPPType, i64, f64, *const c_char);
 }

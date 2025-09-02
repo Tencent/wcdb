@@ -58,7 +58,7 @@ impl IdentifierConvertibleTrait for ResultColumn {
 
 impl ResultColumnConvertibleTrait for ResultColumn {}
 
-pub(crate) trait ResultColumnParam {
+pub trait ResultColumnParam {
     fn create_cpp_obj(&self) -> *mut c_void;
 }
 

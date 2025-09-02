@@ -239,8 +239,8 @@ impl TableOperation<'_> {
     ) -> Result<Vec<Vec<Value>>, WCDBException> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
-        binding.from(&vec![self.table_name.to_string()], vec![]);
-        binding.select(vec![], columns);
+        binding.from(&vec![self.table_name.to_string()], Vec::<&StatementSelect>::new());
+        binding.select(&[] as &[&str], columns.iter().copied());
         if let Some(expression) = expression {
             binding.r#where(&expression);
         }
