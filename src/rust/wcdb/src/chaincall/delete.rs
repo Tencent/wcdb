@@ -33,32 +33,32 @@ impl<'a> Delete<'a> {
         }
     }
 
-    pub fn from_table(self, table_name: &str) -> Self {
+    pub fn from_table(&self, table_name: &str) -> &Self {
         self.chain_call.get_statement().delete_from(table_name);
         self
     }
 
-    pub fn r#where(self, condition: &Expression) -> Self {
+    pub fn r#where(&self, condition: &Expression) -> &Self {
         self.chain_call.get_statement().r#where(condition);
         self
     }
 
-    pub fn order_by(self, orders: &Vec<OrderingTerm>) -> Self {
+    pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
         self.chain_call.get_statement().order_by(orders);
         self
     }
 
-    pub fn limit(self, count: i64) -> Self {
+    pub fn limit(&self, count: i64) -> &Self {
         self.chain_call.get_statement().limit(count);
         self
     }
 
-    pub fn offset(self, offset: i64) -> Self {
+    pub fn offset(&self, offset: i64) -> &Self {
         self.chain_call.get_statement().offset(offset);
         self
     }
 
-    pub fn execute(mut self) -> WCDBResult<Self> {
+    pub fn execute(&self) -> WCDBResult<&Self> {
         let ret = self.chain_call.handle.execute(self.chain_call.get_statement());
         self.chain_call.update_changes()?;
         self.chain_call.invalidate_handle();

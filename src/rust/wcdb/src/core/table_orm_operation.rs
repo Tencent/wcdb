@@ -331,26 +331,26 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     }
 
     fn prepare_insert(&self) -> Insert<T> {
-        let mut insert = Insert::new(self.table_operation.get_handle(true), false, true);
-        insert = insert.into_table(self.table_operation.get_table_name());
+        let insert = Insert::new(self.table_operation.get_handle(true), false, true);
+        insert.into_table(self.table_operation.get_table_name());
         insert
     }
 
     fn prepare_update(&self) -> Update<T> {
-        let mut update = Update::new(self.table_operation.get_handle(true), false, true);
-        update = update.table(self.table_operation.get_table_name());
+        let update = Update::new(self.table_operation.get_handle(true), false, true);
+        update.table(self.table_operation.get_table_name());
         update
     }
 
     fn prepare_select(&self) -> Select<T> {
-        let mut select = Select::new(self.table_operation.get_handle(false), false, true);
-        select = select.from(self.table_operation.get_table_name());
+        let select = Select::new(self.table_operation.get_handle(false), false, true);
+        select.from(self.table_operation.get_table_name());
         select
     }
 
     fn prepare_delete(&self) -> Delete {
-        let mut delete = Delete::new(self.table_operation.get_handle(true), false, true);
-        delete = delete.from_table(self.table_operation.get_table_name());
+        let delete = Delete::new(self.table_operation.get_handle(true), false, true);
+        delete.from_table(self.table_operation.get_table_name());
         delete
     }
 
@@ -619,6 +619,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
             .all_objects()
     }
 
+    // todo qixinbing 把所有的 OrderingTerm 改为 &OrderingTerm
     fn get_all_objects_by_expression_order(
         &self,
         condition: &Expression,
@@ -627,7 +628,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_select()
             .select(self.binding.all_binding_fields())
             .r#where(condition)
-            .order_by(order)
+            .order_by(vec![order])
             .all_objects()
     }
 
@@ -640,7 +641,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_select()
             .select(self.binding.all_binding_fields())
             .r#where(condition)
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .all_objects()
     }
@@ -655,7 +656,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_select()
             .select(self.binding.all_binding_fields())
             .r#where(condition)
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .offset(offset)
             .all_objects()
@@ -664,14 +665,14 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     fn get_all_objects_order(&self, order: OrderingTerm) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .order_by(order)
+            .order_by(vec![order])
             .all_objects()
     }
 
     fn get_all_objects_order_limit(&self, order: OrderingTerm, limit: i64) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .all_objects()
     }
@@ -684,7 +685,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(self.binding.all_binding_fields())
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .offset(offset)
             .all_objects()
@@ -714,7 +715,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_select()
             .select(fields)
             .r#where(condition)
-            .order_by(order)
+            .order_by(vec![order])
             .all_objects()
     }
 
@@ -728,7 +729,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_select()
             .select(fields)
             .r#where(condition)
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .all_objects()
     }
@@ -744,7 +745,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
         self.prepare_select()
             .select(fields)
             .r#where(condition)
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .offset(offset)
             .all_objects()
@@ -757,7 +758,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .order_by(order)
+            .order_by(vec![order])
             .all_objects()
     }
 
@@ -769,7 +770,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .all_objects()
     }
@@ -783,7 +784,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<T> for TableORMOperation<
     ) -> WCDBResult<Vec<T>> {
         self.prepare_select()
             .select(fields)
-            .order_by(order)
+            .order_by(vec![order])
             .limit(limit)
             .offset(offset)
             .all_objects()

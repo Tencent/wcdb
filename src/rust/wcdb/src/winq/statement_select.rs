@@ -174,6 +174,7 @@ impl StatementSelect {
         self
     }
 
+    // todo qixinbing  IntoIterator 是否拆分成俩方法？这俩参数割裂感太强
     pub fn from<'a, S, O, Si>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
     where
         S: IntoIterator<Item =Si>,

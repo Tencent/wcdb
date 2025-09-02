@@ -11,8 +11,8 @@ use std::fmt::Debug;
 
 pub struct Insert<'a, T> {
     chain_call: ChainCall<'a, StatementInsert>,
-    has_conflict_action: bool,
-    fields: Vec<&'a Field<T>>,
+    has_conflict_action: RefCell<bool>,
+    fields: RefCell<Vec<&'a Field<T>>>,
     values: RefCell<Vec<T>>,
     last_insert_row_id: RefCell<i64>,
 }
@@ -46,32 +46,32 @@ impl<'a, T> Insert<'a, T> {
                 need_changes,
                 auto_invalidate_handle,
             ),
-            has_conflict_action: false,
-            fields: Vec::new(),
+            has_conflict_action: RefCell::new(false),
+            fields: RefCell::new(Vec::new()),
             values: RefCell::new(Vec::new()),
             last_insert_row_id: RefCell::new(0),
         }
     }
 
-    pub fn or_replace(mut self) -> Self {
-        self.has_conflict_action = true;
+    pub fn or_replace(&self) -> &Self {
+        self.has_conflict_action.replace(true);
         self.chain_call.get_statement().or_replace();
         self
     }
 
-    pub fn or_ignore(mut self) -> Self {
-        self.has_conflict_action = true;
+    pub fn or_ignore(&self) -> &Self {
+        self.has_conflict_action.replace(true);
         self.chain_call.get_statement().or_ignore();
         self
     }
 
-    pub fn into_table(mut self, table_name: &str) -> Self {
+    pub fn into_table(&self, table_name: &str) -> &Self {
         self.chain_call.get_statement().insert_into(table_name);
         self
     }
 
-    pub fn on_fields(mut self, fields: Vec<&'a Field<T>>) -> Self {
-        self.fields = fields;
+    pub fn on_fields(&self, fields: Vec<&'a Field<T>>) -> &Self {
+        self.fields.replace(fields);
         self.chain_call
             .get_statement()
             .columns(&self.fields)
@@ -79,19 +79,19 @@ impl<'a, T> Insert<'a, T> {
         self
     }
 
-    pub fn value(mut self, object: T) -> Self {
+    pub fn value(&self, object: T) -> &Self {
         self.values.borrow_mut().clear();
         self.values.borrow_mut().push(object);
         self
     }
 
-    pub fn values(mut self, objects: Vec<T>) -> Self {
+    pub fn values(&self, objects: Vec<T>) -> &Self {
         self.values.borrow_mut().clear();
         self.values.borrow_mut().extend(objects);
         self
     }
 
-    pub fn execute(mut self) -> WCDBResult<Self> {
+    pub fn execute(&self) -> WCDBResult<&Self> {
         if self.values.borrow().is_empty() {
             return Ok(self);
         }
@@ -121,7 +121,7 @@ impl<'a, T> Insert<'a, T> {
         for object in values.iter_mut() {
             prepared_statement.reset();
             let mut index: usize = 1;
-            let is_auto_increment = !self.has_conflict_action && binding.is_auto_increment(object);
+            let is_auto_increment = !self.has_conflict_action.borrow() && binding.is_auto_increment(object);
             for field in &self.fields {
                 if is_auto_increment && field.is_auto_increment() {
                     prepared_statement.bind_null(index);

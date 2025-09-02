@@ -47,7 +47,7 @@ impl<'a> TableOperation<'a> {
         self.insert_rows_with_conflict_action(rows, columns, ConflictAction::None)
     }
 
-    pub fn insert_rows_or_replace(
+    pub fn insert_or_replace_rows(
         &self,
         rows: Vec<Vec<Value>>,
         columns: Vec<Column>,
@@ -55,7 +55,7 @@ impl<'a> TableOperation<'a> {
         self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Replace)
     }
 
-    pub fn insert_rows_or_ignore(
+    pub fn insert_or_ignore_rows(
         &self,
         rows: Vec<Vec<Value>>,
         columns: Vec<Column>,
@@ -239,8 +239,8 @@ impl TableOperation<'_> {
     ) -> Result<Vec<Vec<Value>>, WCDBException> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
-        binding.from(&vec![self.table_name.to_string()]);
-        binding.select(&columns);
+        binding.from(&vec![self.table_name.to_string()], vec![]);
+        binding.select(vec![], &columns);
         if let Some(expression) = expression {
             binding.r#where(&expression);
         }

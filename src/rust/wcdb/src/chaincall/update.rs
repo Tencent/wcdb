@@ -12,7 +12,7 @@ use std::cell::RefCell;
 
 pub struct Update<'a, T> {
     chain_call: ChainCall<'a, StatementUpdate>,
-    fields: Vec<&'a Field<T>>,
+    fields: RefCell<Vec<&'a Field<T>>>,
     object: RefCell<Option<T>>,
     row: RefCell<Vec<Value>>,
 }
@@ -40,51 +40,51 @@ impl<'a, T> Update<'a, T> {
                 need_changes,
                 auto_invalidate_handle,
             ),
-            fields: Vec::new(),
+            fields: RefCell::new(Vec::new()),
             object: RefCell::new(None),
             row: RefCell::new(Vec::new()),
         }
     }
 
-    pub fn table(mut self, table_name: &str) -> Self {
+    pub fn table(&self, table_name: &str) -> &Self {
         self.chain_call.get_statement().update(table_name);
         self
     }
 
-    pub fn set(mut self, fields: Vec<&'a Field<T>>) -> Self {
-        self.fields = fields;
+    pub fn set(&self, fields: Vec<&'a Field<T>>) -> &Self {
+        self.fields.replace(fields);
         self.chain_call
             .get_statement()
             .set_columns_to_bind_parameters(&self.fields);
         self
     }
 
-    pub fn r#where(self, condition: &Expression) -> Self {
+    pub fn r#where(&self, condition: &Expression) -> &Self {
         self.chain_call.get_statement().r#where(condition);
         self
     }
 
-    pub fn order_by(self, orders: &Vec<OrderingTerm>) -> Self {
+    pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
         self.chain_call.get_statement().order_by(orders);
         self
     }
 
-    pub fn limit(self, count: i64) -> Self {
+    pub fn limit(&self, count: i64) -> &Self {
         self.chain_call.get_statement().limit(count);
         self
     }
 
-    pub fn offset(self, offset: i64) -> Self {
+    pub fn offset(&self, offset: i64) -> &Self {
         self.chain_call.get_statement().offset(offset);
         self
     }
 
-    pub fn to_object(mut self, object: T) -> Self {
+    pub fn to_object(&self, object: T) -> &Self {
         self.object.replace(Some(object));
         self
     }
 
-    pub fn execute(mut self) -> WCDBResult<Self> {
+    pub fn execute(&self) -> WCDBResult<&Self> {
         // let binding = Field::get_binding_from_fields(&self.fields);
         let prepared_statement = self
             .chain_call

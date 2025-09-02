@@ -111,7 +111,7 @@ pub mod table_operation_test_case {
         assert!(!ret.is_ok());
 
         // insert or replace
-        let ret = operation.insert_rows_or_replace(
+        let ret = operation.insert_or_replace_rows(
             vec![obj.get_values_vec()],
             TableOperationObject::get_all_columns(),
         );
@@ -120,7 +120,7 @@ pub mod table_operation_test_case {
         // insert or ignore
         let objs = TableOperationObject::get_obj_vec(2);
         let values = objs.iter().map(|v| v.get_values_vec()).collect();
-        let ret = operation.insert_rows_or_ignore(values, TableOperationObject::get_all_columns());
+        let ret = operation.insert_or_ignore_rows(values, TableOperationObject::get_all_columns());
         assert!(ret.is_ok());
 
         // 测试更新数据。

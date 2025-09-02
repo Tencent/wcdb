@@ -1,3 +1,4 @@
+use std::cell::RefCell;
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
@@ -12,7 +13,7 @@ use std::sync::Arc;
 
 pub struct Select<'a, T> {
     chain_call: ChainCall<'a, StatementSelect>,
-    fields: Vec<&'a Field<T>>,
+    fields: RefCell<Vec<&'a Field<T>>>,
 }
 
 impl<'a, T> ChainCallTrait for Select<'a, T> {
@@ -38,12 +39,12 @@ impl<'a, T> Select<'a, T> {
                 need_changes,
                 auto_invalidate_handle,
             ),
-            fields: Vec::new(),
+            fields: RefCell::new(Vec::new()),
         }
     }
 
-    pub fn select(mut self, fields: Vec<&'a Field<T>>) -> Self {
-        self.fields = fields;
+    pub fn select(&self, fields: Vec<&'a Field<T>>) -> &Self {
+        self.fields.replace( fields);
         self.chain_call.get_statement().select(
             &[] as &[&str],
             self.fields
@@ -53,7 +54,7 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
-    pub fn r#where(self, condition: &Expression) -> Self {
+    pub fn r#where(&self, condition: &Expression) -> &Self {
         self.chain_call.get_statement().r#where(condition);
         self
     }
@@ -67,18 +68,18 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
-    pub fn limit(self, count: i64) -> Self {
+    pub fn limit(&self, count: i64) -> &Self {
         self.chain_call.get_statement().limit(count);
         self
     }
 
-    pub fn offset(self, count: i64) -> Self {
+    pub fn offset(&self, count: i64) -> &Self {
         self.chain_call.get_statement().offset(count);
         self
     }
 
-    pub fn from(self, table_name: &str) -> Self {
-        // self.chain_call.statement.from(&vec![table_name.to_string()]);
+    pub fn from(&self, table_name: &str) -> &Self {
+        self.chain_call.get_statement().from(&vec![table_name.to_string()], vec![]);
         self
     }
 
