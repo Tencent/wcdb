@@ -175,12 +175,15 @@ impl StatementSelect {
     }
 
     // todo qixinbing  IntoIterator 是否拆分成俩方法？这俩参数割裂感太强
-    pub fn from<'a, S, O, Si>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
+    pub fn from<S, O, Si, Oi>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
     where
         S: IntoIterator<Item =Si>,
-        O: IntoIterator<Item = &'a dyn TableOrSubqueryConvertibleTrait>,
+        O: IntoIterator<Item = &Oi>,
         Si: AsRef<str>,
+        Oi: TableOrSubqueryConvertibleTrait,
     {
+        let table_name_vec: Vec<Si> = table_name_vec.into_iter().collect();
+        let table_subquery_obj_vec: Vec<&Oi> = table_subquery_obj_vec.into_iter().collect();
         if table_name_vec.is_empty() && table_subquery_obj_vec.is_empty() {
             return self;
         }
@@ -215,12 +218,15 @@ impl StatementSelect {
         self
     }
 
-    pub fn group_by<'a, S, O, Si>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
+    pub fn group_by<S, O, Si,Oi>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
     where
         S: IntoIterator<Item =Si>,
-        O: IntoIterator<Item = &'a dyn ExpressionConvertibleTrait>,
+        O: IntoIterator<Item = &Oi>,
         Si: AsRef<str>,
+        Oi: ExpressionConvertibleTrait,
     {
+        let column_name_vec: Vec<Si> = column_name_vec.into_iter().collect();
+        let expression_obj_vec: Vec<&Oi> = expression_obj_vec.into_iter().collect();
         if column_name_vec.is_empty() && expression_obj_vec.is_empty() {
             return self;
         }
@@ -253,12 +259,13 @@ impl StatementSelect {
         O: IntoIterator<Item = Oi>,
         Oi: AsRef<OrderingTerm>,
     {
+        let order_vec: Vec<Oi> = order_vec.into_iter().collect();
         if order_vec.is_empty() {
             return self;
         }
         let mut cpp_orders = vec![];
         for order in order_vec {
-            cpp_orders.push(order.get_cpp_obj() as c_longlong);
+            cpp_orders.push(order.as_ref().get_cpp_obj() as c_longlong);
         }
         let orders_length = cpp_orders.len();
         unsafe {
