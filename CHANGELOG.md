@@ -1,3 +1,10 @@
+## v2.1.14
+
+* Support 16kb pagesize for Android
+* Supports using ksp in Kotlin version 2.1.0+
+* Fix stack overflow crash
+* Fix some known bugs
+
 ## v2.1.13
 
 * Fix compile error of Swift Package Manager
