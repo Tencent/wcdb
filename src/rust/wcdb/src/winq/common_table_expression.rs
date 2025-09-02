@@ -64,7 +64,7 @@ impl CommonTableExpression {
         }
     }
 
-    pub fn column(mut self, column: Column) -> Self {
+    pub fn column(&self, column: Column) -> &Self {
         unsafe {
             WCDBRustCommonTableExpression_configColumn(
                 self.identifier.get_cpp_obj(),
