@@ -223,6 +223,14 @@ impl<'a> HandleOperationTrait for Handle<'a> {
             Some(exception) => Err(exception),
         }
     }
+
+    fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
+        unimplemented!("todo qixinbing")
+    }
+
+    fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
+        unimplemented!("todo qixinbing")
+    }
 }
 
 impl<'a> Handle<'a> {

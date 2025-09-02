@@ -71,11 +71,12 @@ impl<'a, T> Insert<'a, T> {
     }
 
     pub fn on_fields(&self, fields: Vec<&'a Field<T>>) -> &Self {
+        let fields_clone = fields.clone();
         self.fields.replace(fields);
         self.chain_call
             .get_statement()
-            .columns(&self.fields)
-            .values_with_bind_parameters(self.fields.len());
+            .columns(&fields_clone)
+            .values_with_bind_parameters(fields_clone.len());
         self
     }
 
@@ -95,7 +96,7 @@ impl<'a, T> Insert<'a, T> {
         if self.values.borrow().is_empty() {
             return Ok(self);
         }
-        assert!(!self.fields.is_empty());
+        assert!(!self.fields.borrow().is_empty());
         if self.values.borrow().len() > 1 {
             self.chain_call
                 .handle
@@ -111,7 +112,7 @@ impl<'a, T> Insert<'a, T> {
     }
 
     pub fn real_execute(&self) -> WCDBResult<()> {
-        let binding: &dyn TableBinding<T> = Field::get_binding_from_fields(&self.fields);
+        let binding: &dyn TableBinding<T> = Field::get_binding_from_fields(&self.fields.borrow());
         let prepared_statement = self
             .chain_call
             .handle
@@ -121,8 +122,9 @@ impl<'a, T> Insert<'a, T> {
         for object in values.iter_mut() {
             prepared_statement.reset();
             let mut index: usize = 1;
-            let is_auto_increment = !self.has_conflict_action.borrow() && binding.is_auto_increment(object);
-            for field in &self.fields {
+            let has_conflict_action = *self.has_conflict_action.borrow();
+            let is_auto_increment = !has_conflict_action && binding.is_auto_increment(object);
+            for field in &*self.fields.borrow() {
                 if is_auto_increment && field.is_auto_increment() {
                     prepared_statement.bind_null(index);
                 } else {

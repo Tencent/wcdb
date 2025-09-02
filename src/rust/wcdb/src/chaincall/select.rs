@@ -47,7 +47,7 @@ impl<'a, T> Select<'a, T> {
         self.fields.replace( fields);
         self.chain_call.get_statement().select(
             &[] as &[&str],
-            self.fields
+            self.fields.borrow()
                 .iter()
                 .map(|f| *f as &dyn ResultColumnConvertibleTrait),
         );
@@ -92,7 +92,7 @@ impl<'a, T> Select<'a, T> {
         prepared_statement.step()?;
         let mut ret = Ok(None);
         if !prepared_statement.is_done() {
-            ret = prepared_statement.get_one_object(&self.fields);
+            ret = prepared_statement.get_one_object(&self.fields.borrow());
         }
         prepared_statement.finalize_statement();
         self.chain_call.invalidate_handle();
@@ -105,7 +105,7 @@ impl<'a, T> Select<'a, T> {
 
     pub fn all_objects_by_class(&self) -> WCDBResult<Vec<T>> {
         let prepared_statement = self.prepare_statement()?;
-        let ret = prepared_statement.get_all_objects(&self.fields);
+        let ret = prepared_statement.get_all_objects(&self.fields.borrow());
         prepared_statement.finalize_statement();
         self.chain_call.invalidate_handle();
         ret

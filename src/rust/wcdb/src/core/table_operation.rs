@@ -240,7 +240,7 @@ impl TableOperation<'_> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
         binding.from(&vec![self.table_name.to_string()], vec![]);
-        binding.select(vec![], &columns);
+        binding.select(vec![], columns);
         if let Some(expression) = expression {
             binding.r#where(&expression);
         }

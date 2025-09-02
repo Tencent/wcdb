@@ -379,11 +379,13 @@ impl ExpressionOperableTrait for ExpressionOperable {
     }
 
     fn r#in<T: OperateParam>(&self, operands: &[T]) -> Expression {
-        self.r#in(operands)
+        todo!("qixinbing")
+        // self.r#in(operands)
     }
 
     fn not_in<T: OperateParam>(&self, operands: &[T]) -> Expression {
-        self.not_in(operands)
+        todo!("qixinbing")
+        // self.not_in(operands)
     }
 
     fn in_table(&self, table: &str) -> Expression {
