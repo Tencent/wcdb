@@ -25,6 +25,7 @@ package com.tencent.wcdb.compiler.resolvedInfo
 
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotation
+import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeParameter
 import com.tencent.wcdb.*
@@ -46,13 +47,21 @@ data class FTSModuleInfo(
                 val value = argument.value ?: continue
                 when (argument.name?.asString()) {
                     "version" -> {
-                        when ((value as KSType).declaration.toString()) {
+                        val valueName = when (value) {
+                            is KSType -> value.declaration.toString()
+                            is KSClassDeclaration -> value.simpleName.asString()
+                            else -> {
+                                logger.error("Invalid type of 'version' argument value")
+                                return null
+                            }
+                        }
+                        when (valueName) {
                             FTSVersion.NONE.name -> resolvedInfo.ftsVersion = ""
                             FTSVersion.FTS3.name -> resolvedInfo.ftsVersion = "fts3"
                             FTSVersion.FTS4.name -> resolvedInfo.ftsVersion = "fts4"
                             FTSVersion.FTS5.name -> resolvedInfo.ftsVersion = "fts5"
                             else -> {
-                                logger.error("Unrecognized FTSVersion ${value.declaration} in FTSModule")
+                                logger.error("Unrecognized FTSVersion ${valueName} in FTSModule")
                                 return null
                             }
                         }
