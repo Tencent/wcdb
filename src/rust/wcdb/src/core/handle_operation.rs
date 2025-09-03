@@ -71,7 +71,7 @@ impl HandleOperationTrait for HandleOperation {
     }
 
     fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        let handle = self.get_handle(true);
+        let mut handle = self.get_handle(true);
         let closure_box: Box<Box<dyn FnOnce(&Handle) -> bool>> = Box::new(Box::new(callback));
         let closure_raw = Box::into_raw(closure_box) as *mut c_void;
         let rust_handle_raw = unsafe { &(&handle) as *const &Handle as *mut c_void };
@@ -96,7 +96,7 @@ impl HandleOperationTrait for HandleOperation {
     }
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
-        let handle = self.get_handle(statement.is_write_statement());
+        let mut handle = self.get_handle(statement.is_write_statement());
         let mut exception_opt = None;
         if !Handle::execute_inner(handle.get_cpp_handle()?, statement) {
             exception_opt = Some(handle.create_exception());
@@ -111,7 +111,7 @@ impl HandleOperationTrait for HandleOperation {
     }
 
     fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let mut exception_opt = None;
         if !Handle::execute_sql(handle.get_cpp_handle()?, sql) {
             exception_opt = Some(handle.create_exception());

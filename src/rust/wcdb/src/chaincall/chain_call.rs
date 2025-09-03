@@ -4,7 +4,7 @@ use crate::winq::statement::StatementTrait;
 use std::cell::RefCell;
 
 pub(crate) struct ChainCall<'a, T: StatementTrait> {
-    pub(crate) handle: Handle<'a>,
+    pub(crate) handle: RefCell<Handle<'a>>,
     changes: RefCell<i32>,
     statement: T,
     need_changes: RefCell<bool>,
@@ -20,7 +20,7 @@ pub trait ChainCallTrait {
 impl<'a, T: StatementTrait> ChainCallTrait for ChainCall<'a, T> {
     fn update_changes(&self) -> WCDBResult<()> {
         if *self.need_changes.borrow() {
-            *self.changes.borrow_mut() = self.handle.get_changes()?;
+            *self.changes.borrow_mut() = self.handle.borrow().get_changes()?;
         }
         Ok(())
     }
@@ -38,7 +38,7 @@ impl<'a, T: StatementTrait> ChainCall<'a, T> {
         auto_invalidate_handle: bool,
     ) -> ChainCall<'a, T> {
         ChainCall {
-            handle,
+            handle: RefCell::new(handle),
             changes: RefCell::new(0),
             statement,
             need_changes: RefCell::new(need_changes),
@@ -51,6 +51,6 @@ impl<'a, T: StatementTrait> ChainCall<'a, T> {
     }
 
     pub fn invalidate_handle(&self) {
-        self.handle.invalidate();
+        self.handle.borrow_mut().invalidate();
     }
 }

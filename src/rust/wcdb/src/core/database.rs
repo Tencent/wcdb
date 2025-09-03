@@ -575,8 +575,7 @@ impl HandleOperationTrait for Database {
     }
 
     fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        let handle = self.get_handle(true);
-        handle.run_transaction(callback)
+        self.handle_orm_operation.run_transaction(callback)
     }
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
@@ -1228,7 +1227,7 @@ impl Database {
         &self,
         statement: &T,
     ) -> WCDBResult<Vec<Vec<Value>>> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement(statement);
         match result {
             Ok(val) => {
@@ -1262,7 +1261,7 @@ impl Database {
     }
 
     pub fn get_value_from_statement<T: StatementTrait>(&self, statement: &T) -> WCDBResult<Value> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement(statement);
         match result {
             Ok(val) => {
@@ -1284,7 +1283,7 @@ impl Database {
     }
 
     pub fn get_value_from_sql(&self, sql: &str) -> WCDBResult<Value> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement_and_sql(sql);
         match result {
             Ok(val) => {
@@ -1306,7 +1305,7 @@ impl Database {
     }
 
     pub fn get_values_from_sql(&self, sql: &str) -> WCDBResult<Vec<Vec<Value>>> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement_and_sql(sql);
         match result {
             Ok(val) => {
@@ -1327,7 +1326,7 @@ impl Database {
     }
 
     pub fn get_objects_from_sql<T>(&self, fields: Vec<&Field<T>>, sql: &str) -> WCDBResult<Vec<T>> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let result = handle.prepared_with_main_statement_and_sql(sql);
         match result {
             Ok(val) => {

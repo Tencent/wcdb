@@ -89,6 +89,7 @@ impl<'a, T> Update<'a, T> {
         let prepared_statement = self
             .chain_call
             .handle
+            .borrow()
             .prepared_with_main_statement(self.chain_call.get_statement())?;
 
         if let Some(object) = self.object.take() {

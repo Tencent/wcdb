@@ -100,6 +100,7 @@ impl<'a, T> Insert<'a, T> {
         if self.values.borrow().len() > 1 {
             self.chain_call
                 .handle
+                .borrow()
                 .run_transaction(|handle| self.real_execute().is_ok())?;
         } else {
             self.real_execute()?;
@@ -116,6 +117,7 @@ impl<'a, T> Insert<'a, T> {
         let prepared_statement = self
             .chain_call
             .handle
+            .borrow()
             .prepared_with_main_statement(self.chain_call.get_statement())?;
         *self.last_insert_row_id.borrow_mut() = 0;
         let mut values = self.values.borrow_mut();
@@ -136,13 +138,13 @@ impl<'a, T> Insert<'a, T> {
             if is_auto_increment {
                 binding.set_last_insert_row_id(
                     object,
-                    self.chain_call.handle.get_last_inserted_row_id()?,
+                    self.chain_call.handle.borrow().get_last_inserted_row_id()?,
                 );
             }
         }
         if values.len() > 0 {
             *self.last_insert_row_id.borrow_mut() =
-                self.chain_call.handle.get_last_inserted_row_id()?;
+                self.chain_call.handle.borrow().get_last_inserted_row_id()?;
         }
         self.update_changes()?;
         prepared_statement.finalize_statement();

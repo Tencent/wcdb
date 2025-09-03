@@ -62,6 +62,7 @@ impl<'a> Delete<'a> {
         let ret = self
             .chain_call
             .handle
+            .borrow()
             .execute(self.chain_call.get_statement());
         self.chain_call.update_changes()?;
         self.chain_call.invalidate_handle();

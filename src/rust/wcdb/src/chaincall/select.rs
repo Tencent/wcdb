@@ -114,6 +114,7 @@ impl<'a, T> Select<'a, T> {
     fn prepare_statement(&self) -> WCDBResult<Arc<PreparedStatement>> {
         self.chain_call
             .handle
+            .borrow()
             .prepared_with_main_statement(self.chain_call.get_statement())
     }
 }

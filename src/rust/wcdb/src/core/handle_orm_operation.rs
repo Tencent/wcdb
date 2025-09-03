@@ -174,7 +174,7 @@ impl HandleORMOperationTrait for HandleORMOperation {
     }
 
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
-        let handle = self.get_handle(false);
+        let mut handle = self.get_handle(false);
         let ret = Handle::table_exist(handle.get_cpp_handle()?, table_name);
         let mut exception_opt = None;
         if ret > 1 {

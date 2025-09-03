@@ -184,7 +184,7 @@ impl<'a> TableOperation<'a> {
         if let Some(expression) = expression {
             update.r#where(&expression);
         }
-        let handler = self.database.get_handle(true);
+        let mut handler = self.database.get_handle(true);
         let ret = match handler.prepared_with_main_statement(update) {
             Ok(statement) => {
                 statement.bind_row(row);
