@@ -1,6 +1,6 @@
 use crate::base::basic_types::WCDBBasicTypes;
 use crate::base::value::Value;
-use crate::base::wcdb_exception::WCDBException;
+use crate::base::wcdb_exception::WCDBResult;
 use crate::core::database::Database;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
@@ -20,6 +20,194 @@ pub struct TableOperation<'a> {
     database: &'a Database,
 }
 
+pub trait TableOperationTrait {
+    fn get_table_name(&self) -> &str;
+
+    fn get_database(&self) -> &Database;
+
+    fn insert_rows(&self, rows: Vec<Vec<Value>>, columns: Vec<Column>) -> WCDBResult<()>;
+
+    fn insert_or_replace_rows(&self, rows: Vec<Vec<Value>>, columns: Vec<Column>)
+        -> WCDBResult<()>;
+
+    fn insert_or_ignore_rows(&self, rows: Vec<Vec<Value>>, columns: Vec<Column>) -> WCDBResult<()>;
+
+    // todo qixinbing 修改 WCDBBasicTypes
+    fn update_value<V: WCDBBasicTypes>(
+        &self,
+        value: &V,
+        column: Column,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()>;
+
+    fn update_row(
+        &self,
+        row: &Vec<Value>,
+        columns: &Vec<Column>,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()>;
+
+    fn delete_value(
+        &self,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()>;
+
+    fn get_values(
+        &self,
+        columns: Vec<&Column>,
+        condition_opt: Option<Expression>,
+        order_opt: Option<Vec<OrderingTerm>>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<Vec<Vec<Value>>>;
+}
+
+impl<'a> TableOperationTrait for TableOperation<'a> {
+    fn get_table_name(&self) -> &str {
+        &self.table_name
+    }
+
+    fn get_database(&self) -> &Database {
+        self.database
+    }
+
+    fn insert_rows(&self, rows: Vec<Vec<Value>>, columns: Vec<Column>) -> WCDBResult<()> {
+        self.insert_rows_with_conflict_action(rows, columns, ConflictAction::None)
+    }
+
+    fn insert_or_replace_rows(
+        &self,
+        rows: Vec<Vec<Value>>,
+        columns: Vec<Column>,
+    ) -> WCDBResult<()> {
+        self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Replace)
+    }
+
+    fn insert_or_ignore_rows(&self, rows: Vec<Vec<Value>>, columns: Vec<Column>) -> WCDBResult<()> {
+        self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Ignore)
+    }
+
+    fn update_value<V: WCDBBasicTypes>(
+        &self,
+        value: &V,
+        column: Column,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()> {
+        let row_item = match value.get_type() {
+            ColumnType::Integer => Value::from(value.get_i64()),
+            ColumnType::Float => Value::from(value.get_f64()),
+            ColumnType::Text => Value::from(value.get_string().as_ref()),
+            _ => {
+                eprintln!("basic types not define.");
+                return Ok(());
+            }
+        };
+        self.update_row(
+            &vec![row_item],
+            &vec![column],
+            condition_opt,
+            order_opt,
+            limit_opt,
+            offset_opt,
+        )
+    }
+
+    fn update_row(
+        &self,
+        row: &Vec<Value>,
+        columns: &Vec<Column>,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()> {
+        let binding = StatementUpdate::new();
+        binding
+            .update(self.table_name.as_ref())
+            .set_column_objs_to_bind_parameters(columns);
+        self.execute_update(
+            row,
+            &binding,
+            condition_opt,
+            order_opt,
+            limit_opt,
+            offset_opt,
+        )
+    }
+
+    fn delete_value(
+        &self,
+        condition_opt: Option<Expression>,
+        order_opt: Option<OrderingTerm>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<()> {
+        let binding = StatementDelete::new();
+        binding.delete_from(self.table_name.as_ref());
+        if let Some(expression) = condition_opt {
+            binding.r#where(&expression);
+        }
+        if let Some(order) = order_opt {
+            binding.order_by(&vec![order]);
+        }
+        if let Some(limit) = limit_opt {
+            binding.limit(limit);
+        }
+        if let Some(offset) = offset_opt {
+            binding.offset(offset);
+        }
+        self.database.get_handle(true).execute(&binding)
+    }
+
+    fn get_values(
+        &self,
+        columns: Vec<&Column>,
+        condition_opt: Option<Expression>,
+        order_opt: Option<Vec<OrderingTerm>>,
+        limit_opt: Option<i64>,
+        offset_opt: Option<i64>,
+    ) -> WCDBResult<Vec<Vec<Value>>> {
+        let handle = self.database.get_handle(false);
+        let binding = StatementSelect::new();
+        binding.from(
+            &vec![self.table_name.to_string()],
+            Vec::<&StatementSelect>::new(),
+        );
+        binding.select(&[] as &[&str], columns.iter().copied());
+        if let Some(expression) = condition_opt {
+            binding.r#where(&expression);
+        }
+        if let Some(order) = order_opt {
+            binding.order_by(&order);
+        }
+        if let Some(limit) = limit_opt {
+            binding.limit(limit);
+        }
+        if let Some(offset) = offset_opt {
+            binding.offset(offset);
+        }
+        match handle.prepared_with_main_statement(&binding) {
+            Ok(statement) => match statement.get_all_values() {
+                Ok(ret) => Ok(ret),
+                Err(err) => Err(err),
+            },
+            Err(err) => Err(err),
+        }
+    }
+}
+
 impl<'a> TableOperation<'a> {
     pub fn new(table_name: &str, database: &'a Database) -> TableOperation<'a> {
         TableOperation {
@@ -27,48 +215,15 @@ impl<'a> TableOperation<'a> {
             database,
         }
     }
-
-    pub fn get_table_name(&self) -> &str {
-        &self.table_name
-    }
-
-    pub fn get_database(&self) -> &Database {
-        self.database
-    }
 }
 
-/// Insert
 impl<'a> TableOperation<'a> {
-    pub fn insert_rows(
-        &self,
-        rows: Vec<Vec<Value>>,
-        columns: Vec<Column>,
-    ) -> Result<(), WCDBException> {
-        self.insert_rows_with_conflict_action(rows, columns, ConflictAction::None)
-    }
-
-    pub fn insert_or_replace_rows(
-        &self,
-        rows: Vec<Vec<Value>>,
-        columns: Vec<Column>,
-    ) -> Result<(), WCDBException> {
-        self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Replace)
-    }
-
-    pub fn insert_or_ignore_rows(
-        &self,
-        rows: Vec<Vec<Value>>,
-        columns: Vec<Column>,
-    ) -> Result<(), WCDBException> {
-        self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Ignore)
-    }
-
     fn insert_rows_with_conflict_action(
         &self,
         rows: Vec<Vec<Value>>,
         columns: Vec<Column>,
         action: ConflictAction,
-    ) -> Result<(), WCDBException> {
+    ) -> WCDBResult<()> {
         if rows.len() == 0 {
             return Ok(());
         }
@@ -100,7 +255,7 @@ impl<'a> TableOperation<'a> {
         rows: &Vec<Vec<Value>>,
         insert: &StatementInsert,
         handle: &Handle,
-    ) -> Result<(), WCDBException> {
+    ) -> WCDBResult<()> {
         println!("statement: {:?}", insert.get_description());
         match handle.prepared_with_main_statement(insert) {
             Ok(prepared_stmt) => {
@@ -119,61 +274,17 @@ impl<'a> TableOperation<'a> {
 
 /// Update
 impl<'a> TableOperation<'a> {
-    pub fn update_value<V: WCDBBasicTypes>(
-        &self,
-        value: &V,
-        column: Column,
-        expression: Option<Expression>,
-        order: Option<Vec<OrderingTerm>>,
-        limit: Option<i64>,
-        offset: Option<i64>,
-    ) -> Result<(), WCDBException> {
-        let row_item = match value.get_type() {
-            ColumnType::Integer => Value::from(value.get_i64()),
-            ColumnType::Float => Value::from(value.get_f64()),
-            ColumnType::Text => Value::from(value.get_string().as_ref()),
-            _ => {
-                eprintln!("basic types not define.");
-                return Ok(());
-            }
-        };
-        self.update_row(
-            &vec![row_item],
-            &vec![column],
-            expression,
-            order,
-            limit,
-            offset,
-        )
-    }
-
-    pub fn update_row(
-        &self,
-        row: &Vec<Value>,
-        columns: &Vec<Column>,
-        expression: Option<Expression>,
-        order: Option<Vec<OrderingTerm>>,
-        limit: Option<i64>,
-        offset: Option<i64>,
-    ) -> Result<(), WCDBException> {
-        let binding = StatementUpdate::new();
-        binding
-            .update(self.table_name.as_ref())
-            .set_column_objs_to_bind_parameters(columns);
-        self.execute_update(row, &binding, expression, order, limit, offset)
-    }
-
     fn execute_update(
         &self,
         row: &Vec<Value>,
         update: &StatementUpdate,
         expression: Option<Expression>,
-        order: Option<Vec<OrderingTerm>>,
+        order: Option<OrderingTerm>,
         limit: Option<i64>,
         offset: Option<i64>,
-    ) -> Result<(), WCDBException> {
+    ) -> WCDBResult<()> {
         if let Some(order) = order {
-            update.order_by(&order);
+            update.order_by(&vec![order]);
         }
         if let Some(limit) = limit {
             update.limit(limit);
@@ -196,72 +307,6 @@ impl<'a> TableOperation<'a> {
         };
         handler.invalidate();
         ret
-    }
-}
-
-/// Delete
-impl<'a> TableOperation<'a> {
-    pub fn delete_value(
-        &self,
-        expression: Option<Expression>,
-        order: Option<OrderingTerm>,
-        limit: Option<i64>,
-        offset: Option<i64>,
-    ) -> Result<(), WCDBException> {
-        let binding = StatementDelete::new();
-        binding.delete_from(self.table_name.as_ref());
-        if let Some(expression) = expression {
-            binding.r#where(&expression);
-        }
-        if let Some(order) = order {
-            binding.order_by(&vec![order]);
-        }
-        if let Some(limit) = limit {
-            binding.limit(limit);
-        }
-        if let Some(offset) = offset {
-            binding.offset(offset);
-        }
-        self.database.get_handle(true).execute(&binding)
-    }
-}
-
-/// Select
-impl TableOperation<'_> {
-    pub fn get_values(
-        &self,
-        columns: Vec<&Column>,
-        expression: Option<Expression>,
-        order: Option<Vec<OrderingTerm>>,
-        limit: Option<i64>,
-        offset: Option<i64>,
-    ) -> Result<Vec<Vec<Value>>, WCDBException> {
-        let handle = self.database.get_handle(false);
-        let binding = StatementSelect::new();
-        binding.from(
-            &vec![self.table_name.to_string()],
-            Vec::<&StatementSelect>::new(),
-        );
-        binding.select(&[] as &[&str], columns.iter().copied());
-        if let Some(expression) = expression {
-            binding.r#where(&expression);
-        }
-        if let Some(order) = order {
-            binding.order_by(&order);
-        }
-        if let Some(limit) = limit {
-            binding.limit(limit);
-        }
-        if let Some(offset) = offset {
-            binding.offset(offset);
-        }
-        match handle.prepared_with_main_statement(&binding) {
-            Ok(statement) => match statement.get_all_values() {
-                Ok(ret) => Ok(ret),
-                Err(err) => Err(err),
-            },
-            Err(err) => Err(err),
-        }
     }
 }
 
