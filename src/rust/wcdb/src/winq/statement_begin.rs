@@ -7,9 +7,9 @@ use std::ffi::{c_int, c_void};
 
 pub struct TransactionType;
 impl TransactionType {
-    pub const Deferred: i32 = 0;
-    pub const Immediate: i32 = 1;
-    pub const Exclusive: i32 = 2;
+    pub const DEFERRED: i32 = 0;
+    pub const IMMEDIATE: i32 = 1;
+    pub const EXCLUSIVE: i32 = 2;
 }
 
 extern "C" {
@@ -66,7 +66,7 @@ impl StatementTrait for StatementBegin {
 impl StatementBegin {
     pub fn new(cpp_type: Option<i32>) -> Self {
         let transaction_type: i32 = match cpp_type {
-            None => TransactionType::Deferred as i32,
+            None => TransactionType::DEFERRED as i32,
             Some(data) => data,
         };
         let cpp_obj = unsafe { WCDBRustStatementBegin_createCppObj(transaction_type) };
@@ -76,14 +76,14 @@ impl StatementBegin {
     }
 
     pub fn begin_deferred() -> StatementBegin {
-        StatementBegin::new(Some(TransactionType::Deferred))
+        StatementBegin::new(Some(TransactionType::DEFERRED))
     }
 
     pub fn begin_immediate() -> StatementBegin {
-        StatementBegin::new(Some(TransactionType::Immediate))
+        StatementBegin::new(Some(TransactionType::IMMEDIATE))
     }
 
     pub fn begin_exclusive() -> StatementBegin {
-        StatementBegin::new(Some(TransactionType::Exclusive))
+        StatementBegin::new(Some(TransactionType::EXCLUSIVE))
     }
 }
