@@ -234,6 +234,7 @@ pub mod database_upgrade_test {
     use std::panic::AssertUnwindSafe;
     use std::{panic, thread};
     use wcdb::core::database::Database;
+    use wcdb::core::handle_operation::HandleOperationTrait;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
     use wcdb::core::table_orm_operation::TableORMOperationTrait;
     use wcdb::orm::table_binding::TableBinding;
@@ -259,12 +260,12 @@ pub mod database_upgrade_test {
             database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE);
         let insert_result = conversation_table.insert_object(
             ConversationTableV1::insert("t1"),
-            DbConversationTableV1::all_fields(),
+            Some(DbConversationTableV1::all_fields()),
         );
         assert!(insert_result.is_ok());
         let insert_result = conversation_table.insert_object(
             ConversationTableV1::insert("t2"),
-            DbConversationTableV1::all_fields(),
+            Some(DbConversationTableV1::all_fields()),
         );
         assert!(insert_result.is_ok());
         database.close(Some(|| {}));
@@ -292,7 +293,7 @@ pub mod database_upgrade_test {
             .unwrap();
         let conversation_table =
             database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V2_INSTANCE);
-        let result = conversation_table.get_all_objects();
+        let result = conversation_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
         match result {
             Ok(vec) => {
@@ -350,7 +351,7 @@ pub mod database_upgrade_test {
             .unwrap();
         let conversation_table =
             database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V3_INSTANCE);
-        let result = conversation_table.get_all_objects();
+        let result = conversation_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
         match result {
             Ok(vec) => {
@@ -393,15 +394,19 @@ pub mod database_upgrade_test {
             .unwrap();
         let msg_table = database.get_table("MessageTable", &*DB_MESSAGE_TABLE_V1_INSTANCE);
         // insert
-        let insert_result =
-            msg_table.insert_object(MessageTableV1::insert("t1"), DbMessageTableV1::all_fields());
+        let insert_result = msg_table.insert_object(
+            MessageTableV1::insert("t1"),
+            Some(DbMessageTableV1::all_fields()),
+        );
         assert!(insert_result.is_ok());
 
-        let insert_result =
-            msg_table.insert_object(MessageTableV1::insert("t2"), DbMessageTableV1::all_fields());
+        let insert_result = msg_table.insert_object(
+            MessageTableV1::insert("t2"),
+            Some(DbMessageTableV1::all_fields()),
+        );
         assert!(insert_result.is_ok());
 
-        let result = msg_table.get_all_objects();
+        let result = msg_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
         match result {
             Ok(vec) => {
@@ -433,7 +438,7 @@ pub mod database_upgrade_test {
         database.execute(&statement).unwrap();
 
         let msg_table = database.get_table("MsgTable", &*DB_MESSAGE_TABLE_V1_1_INSTANCE);
-        let result = msg_table.get_all_objects();
+        let result = msg_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
         match result {
             Ok(vec) => {
@@ -462,10 +467,12 @@ pub mod database_upgrade_test {
             .unwrap();
         let tag_table = database.get_table("TagTable", &*DB_TAG_TABLE_V1_INSTANCE);
         // insert
-        let insert_result = tag_table.insert_object(TagTableV1::new(), DbTagTableV1::all_fields());
+        let insert_result =
+            tag_table.insert_object(TagTableV1::new(), Some(DbTagTableV1::all_fields()));
         assert!(insert_result.is_ok());
 
-        let insert_result = tag_table.insert_object(TagTableV1::new(), DbTagTableV1::all_fields());
+        let insert_result =
+            tag_table.insert_object(TagTableV1::new(), Some(DbTagTableV1::all_fields()));
         assert!(insert_result.is_ok());
 
         // 删除表
@@ -474,7 +481,7 @@ pub mod database_upgrade_test {
         assert_eq!("DROP TABLE IF EXISTS TagTable", statement.get_description());
         database.execute(&statement).unwrap();
 
-        let result = tag_table.get_all_objects();
+        let result = tag_table.get_all_objects(None, None, None, None, None);
         match result {
             Ok(tag_vec) => {
                 assert!(tag_vec.is_empty());
@@ -505,7 +512,7 @@ pub mod database_upgrade_test {
             ));
         }
         let insert_result =
-            conversation_table.insert_objects(vec, DbConversationTableV1::all_fields());
+            conversation_table.insert_objects(vec, Some(DbConversationTableV1::all_fields()));
         assert!(insert_result.is_ok());
 
         database.close(Some(|| {}));
@@ -527,7 +534,7 @@ pub mod database_upgrade_test {
         handle.join().unwrap();
         let conversation_table =
             database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_1_INSTANCE);
-        let result = conversation_table.get_all_objects();
+        let result = conversation_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
         match result {
             Ok(vec) => {
@@ -559,7 +566,7 @@ pub mod database_upgrade_test {
             ));
         }
         let insert_result =
-            conversation_table.insert_objects(vec, DbConversationTableV1::all_fields());
+            conversation_table.insert_objects(vec, Some(DbConversationTableV1::all_fields()));
         assert!(insert_result.is_ok());
 
         database.close(Some(|| {}));
@@ -570,17 +577,17 @@ pub mod database_upgrade_test {
             .unwrap();
         let conversation_table =
             database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_2_INSTANCE);
-        let result = conversation_table.get_all_objects();
+        let result = conversation_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
         let insert_result = conversation_table.insert_object(
             ConversationTableV1_2::new(),
-            DbConversationTableV1_2::all_fields(),
+            Some(DbConversationTableV1_2::all_fields()),
         );
         assert!(insert_result.is_ok());
 
         let conversation_table =
             database.get_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_2_INSTANCE);
-        let result = conversation_table.get_all_objects();
+        let result = conversation_table.get_all_objects(None, None, None, None, None);
         assert!(result.is_ok());
 
         database.close(Some(|| {}));

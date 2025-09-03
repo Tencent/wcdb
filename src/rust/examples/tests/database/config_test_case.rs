@@ -282,7 +282,7 @@ pub mod config_test_case {
             table_clone
                 .insert_objects(
                     RandomTool::auto_increment_test_case_objects(2),
-                    DbTestObject::all_fields(),
+                    Some(DbTestObject::all_fields()),
                 )
                 .unwrap();
         }

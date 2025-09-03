@@ -124,11 +124,14 @@ pub mod table_orm_operation_test_case {
             value: updated_text.to_string(),
             ..obj.clone()
         };
-        let ret = database.update_object_by_field_expression(
+        let ret = database.update_object(
             update_obj,
-            &field_value,
+            vec![field_value],
             TABLE_NAME,
-            &expression,
+            Some(expression),
+            None,
+            None,
+            None,
         );
         assert!(ret.is_ok());
 
@@ -136,7 +139,7 @@ pub mod table_orm_operation_test_case {
             .get_column()
             .eq_string(obj.channel_id.as_str());
         let ret =
-            database.get_first_object_by_expression(vec![&field_value], TABLE_NAME, &expression);
+            database.get_first_object(vec![&field_value], TABLE_NAME, Some(expression), None, None);
         assert!(ret.is_ok());
 
         let ret_value_opt = ret.unwrap();
@@ -145,7 +148,7 @@ pub mod table_orm_operation_test_case {
         let expression = field_channel_id
             .get_column()
             .eq_string(obj.channel_id.as_str());
-        let ret = database.delete_objects_by_expression(TABLE_NAME, &expression);
+        let ret = database.delete_objects(TABLE_NAME, Some(expression), None, None, None);
         assert!(ret.is_ok());
 
         teardown();

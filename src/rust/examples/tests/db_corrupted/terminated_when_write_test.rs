@@ -1,6 +1,7 @@
 use crate::db_corrupted::corrupted_base_test_case::CorruptedBaseTestCase;
 use crate::db_corrupted::testclass::table_goods_object::{DbTableGoodsObject, TableGoodsObject};
 use crate::db_corrupted::utils::run_cmd;
+use wcdb::core::handle_operation::HandleOperationTrait;
 use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
 
 struct TerminatedWhenWriteTest {
@@ -90,6 +91,7 @@ pub mod terminated_when_write_test_exception {
 
 pub mod terminated_when_write_test_success {
     use crate::db_corrupted::terminated_when_write_test::TerminatedWhenWriteTest;
+    use wcdb::core::handle_operation::HandleOperationTrait;
 
     // #[test] // todo qixinbing: 本地运行正常，ci 运行卡死，原因待查
     pub fn test_terminated_when_write_then_backup_success() {

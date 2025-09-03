@@ -112,7 +112,7 @@ pub mod repair_test_case {
                 ));
             });
             table_clone
-                .insert_objects(tmp_vec, DbTestObject::all_fields())
+                .insert_objects(tmp_vec, Some(DbTestObject::all_fields()))
                 .expect("insert objects failure");
         }
         execute();
@@ -145,7 +145,7 @@ pub mod repair_test_case {
                 ));
             });
             table
-                .insert_objects(tmp_vec, DbTestObject::all_fields())
+                .insert_objects(tmp_vec, Some(DbTestObject::all_fields()))
                 .expect("insert objects failure");
         }
         execute();
@@ -266,7 +266,7 @@ pub mod repair_test_case {
             table_clone
                 .insert_objects(
                     RandomTool::auto_increment_test_case_objects(2),
-                    DbTestObject::all_fields(),
+                    Some(DbTestObject::all_fields()),
                 )
                 .expect("Inserting objects failed");
         }
@@ -405,7 +405,14 @@ pub mod repair_test_case {
 
         let table_name: &str = repair_test.get_table_test_case().get_table_name();
 
-        let objects = database.get_all_objects(DbTestObject::all_fields(), table_name);
+        let objects = database.get_all_objects(
+            DbTestObject::all_fields(),
+            table_name,
+            None,
+            None,
+            None,
+            None,
+        );
         match objects {
             Ok(object_vec) => {
                 if success {

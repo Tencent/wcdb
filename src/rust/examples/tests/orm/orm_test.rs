@@ -13,6 +13,7 @@ use crate::orm::testclass::table_primary_key_object::{
 use rand::Rng;
 use std::cmp::PartialEq;
 use wcdb::base::wcdb_exception::{WCDBException, WCDBResult};
+use wcdb::core::handle_operation::HandleOperationTrait;
 use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb::core::table_orm_operation::TableORMOperationTrait;
 use wcdb::orm::field::Field;
@@ -218,7 +219,14 @@ impl OrmTest {
             .get_database()
             .read()
             .unwrap()
-            .get_all_objects(DbColumnRenameObjectNew::all_fields(), table_name);
+            .get_all_objects(
+                DbColumnRenameObjectNew::all_fields(),
+                table_name,
+                None,
+                None,
+                None,
+                None,
+            );
         match ret {
             Ok(new_obj_vec) => {
                 assert_eq!(new_obj_vec.len(), data_num as usize);
@@ -316,33 +324,33 @@ pub mod orm_test {
         let empty = AllTypeObjectHelper::empty_object();
 
         let obj_vec = vec![max.clone(), min.clone(), random.clone(), empty.clone()];
-        let _ = table.insert_objects(obj_vec, DbAllTypeObject::all_fields());
+        let _ = table.insert_objects(obj_vec, Some(DbAllTypeObject::all_fields()));
 
         let exp =
             Expression::new(DbAllTypeObject::field_type().get_column()).eq(max.field_type.as_str());
         let db_max_opt = table
-            .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
             .unwrap();
         assert!(max == db_max_opt.unwrap());
 
         let exp =
             Expression::new(DbAllTypeObject::field_type().get_column()).eq(min.field_type.as_str());
         let db_min_opt = table
-            .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
             .unwrap();
         assert!(min == db_min_opt.unwrap());
 
         let exp = Expression::new(DbAllTypeObject::field_type().get_column())
             .eq(empty.field_type.as_str());
         let db_empty_opt = table
-            .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
             .unwrap();
         assert!(empty == db_empty_opt.unwrap());
 
         let exp = Expression::new(DbAllTypeObject::field_type().get_column())
             .eq(random.field_type.as_str());
         let db_random_opt = table
-            .get_first_object_by_expression(DbAllTypeObject::all_fields(), &exp)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
             .unwrap();
         assert!(random == db_random_opt.unwrap());
 
@@ -466,7 +474,9 @@ pub mod orm_test {
                 &*DB_PRIMARY_ENABLE_AUTO_INCREMENT_OBJECT_INSTANCE,
             )
             .unwrap();
-        database_lock.delete_objects(table_name).unwrap();
+        database_lock
+            .delete_objects(table_name, None, None, None, None)
+            .unwrap();
 
         let obj2 = PrimaryEnableAutoIncrementObject::new();
         database_lock
@@ -477,7 +487,14 @@ pub mod orm_test {
             )
             .unwrap();
         let obj_vec = database_lock
-            .get_all_objects(DbPrimaryEnableAutoIncrementObject::all_fields(), table_name)
+            .get_all_objects(
+                DbPrimaryEnableAutoIncrementObject::all_fields(),
+                table_name,
+                None,
+                None,
+                None,
+                None,
+            )
             .unwrap();
         assert_eq!(obj_vec.last().unwrap().id, 2);
 

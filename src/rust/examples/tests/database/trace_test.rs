@@ -7,6 +7,7 @@ use wcdb::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException};
 use wcdb::core::database::{
     Database, PerformanceInfo, TraceExceptionCallback, TracePerformanceCallback, TraceSqlCallback,
 };
+use wcdb::core::handle_operation::HandleOperationTrait;
 use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb::winq::identifier::IdentifierTrait;
 use wcdb::winq::ordering_term::Order;
@@ -173,7 +174,14 @@ impl TraceTest {
 
         assert_eq!(
             database
-                .get_all_objects(DbTestObject::all_fields(), TABLE_NAME)
+                .get_all_objects(
+                    DbTestObject::all_fields(),
+                    TABLE_NAME,
+                    None,
+                    None,
+                    None,
+                    None
+                )
                 .unwrap()
                 .len(),
             obj_size as usize
@@ -181,10 +189,13 @@ impl TraceTest {
 
         assert_eq!(
             database
-                .get_all_objects_by_table_name_order(
+                .get_all_objects(
                     DbTestObject::all_fields(),
                     TABLE_NAME,
-                    DbTestObject::content().get_column().order(Order::Desc)
+                    None,
+                    Some(DbTestObject::content().get_column().order(Order::Desc)),
+                    None,
+                    None
                 )
                 .unwrap()
                 .len(),
@@ -278,7 +289,14 @@ impl TraceTest {
 
         assert_eq!(
             database
-                .get_all_objects(DbTestObject::all_fields(), TABLE_NAME)
+                .get_all_objects(
+                    DbTestObject::all_fields(),
+                    TABLE_NAME,
+                    None,
+                    None,
+                    None,
+                    None
+                )
                 .unwrap()
                 .len(),
             obj_size as usize
@@ -286,10 +304,13 @@ impl TraceTest {
 
         assert_eq!(
             database
-                .get_all_objects_by_table_name_order(
+                .get_all_objects(
                     DbTestObject::all_fields(),
                     TABLE_NAME,
-                    DbTestObject::content().get_column().order(Order::Desc)
+                    None,
+                    Some(DbTestObject::content().get_column().order(Order::Desc)),
+                    None,
+                    None
                 )
                 .unwrap()
                 .len(),

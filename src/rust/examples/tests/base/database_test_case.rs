@@ -9,6 +9,7 @@ use std::thread;
 use std::thread::ThreadId;
 use wcdb::base::wcdb_exception::WCDBResult;
 use wcdb::core::database::{Database, TraceExceptionCallbackTrait};
+use wcdb::core::handle_operation::HandleOperationTrait;
 use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
 use wcdb::orm::field::Field;
 use wcdb::orm::table_binding::TableBinding;

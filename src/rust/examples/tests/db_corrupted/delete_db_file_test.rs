@@ -23,6 +23,7 @@ impl DeleteDbFileTest {
 #[cfg(test)]
 pub mod delete_db_file_test_exception {
     use crate::db_corrupted::delete_db_file_test::DeleteDbFileTest;
+    use wcdb::core::handle_operation::HandleOperationTrait;
 
     pub fn delete_db_file_when_write_operation(db_name: &str) {
         let delete_db_file_test = DeleteDbFileTest::new(db_name, true);

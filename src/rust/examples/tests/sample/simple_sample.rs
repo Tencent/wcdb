@@ -28,7 +28,7 @@ pub mod simple_sample {
 
         let test_table = TestObject::new(String::from("abc"));
         table
-            .insert_object(test_table, DbTestObject::all_fields())
+            .insert_object(test_table, Some(DbTestObject::all_fields()))
             .unwrap();
         let mut messages = Vec::new();
         for x in 0..100 {
@@ -37,7 +37,7 @@ pub mod simple_sample {
         }
         // 批量插入，自动开事务
         table
-            .insert_objects(messages, DbTestObject::all_fields())
+            .insert_objects(messages, Some(DbTestObject::all_fields()))
             .unwrap();
         let test_table = TestObject::new(String::from("updateContent"));
 
@@ -49,7 +49,14 @@ pub mod simple_sample {
         let filed_content = unsafe { &*content };
         let express_content = filed_content.get_column().eq_string("updateContent");
         let express = filed_id.get_column().eq_long(100).and(&express_content);
-        let ret = table.update_object_by_field_expression(test_table, filed_id, &express);
+        let ret = table.update_object(
+            test_table,
+            Some(vec![filed_id]),
+            Some(express),
+            None,
+            None,
+            None,
+        );
         match ret {
             Ok(_) => {}
             Err(error) => {
@@ -63,7 +70,7 @@ pub mod simple_sample {
         let express = filed_id.get_column().lt_int(10);
         // table.delete_objects_by_expression(express).unwrap();
         let ordering_term = filed_id.get_column().order(Order::Desc);
-        let ret = table.delete_objects_by_order_limit(ordering_term, 10);
+        let ret = table.delete_objects(None, Some(ordering_term), Some(10), None);
         match ret {
             Ok(_) => {}
             Err(error) => {
@@ -73,7 +80,7 @@ pub mod simple_sample {
 
         // 读取
         let data = table
-            .get_all_objects_by_fields(DbTestObject::all_fields())
+            .get_all_objects(Some(DbTestObject::all_fields()), None, None, None, None)
             .unwrap();
         // let id = DB_TEST_OBJECT_INSTANCE.id;
         // let filed_id = unsafe { &*id };
@@ -90,7 +97,7 @@ pub mod simple_sample {
         let ret = database.run_transaction(move |handle: &Handle| {
             let test_table = TestObject::new(String::from("run_transaction"));
             table
-                .insert_object(test_table, DbTestObject::all_fields())
+                .insert_object(test_table, Some(DbTestObject::all_fields()))
                 .unwrap();
             return true; //返回 false 回滚整个事务
         });
@@ -100,6 +107,8 @@ pub mod simple_sample {
                 println!("run_transaction-->insert_object error {:?}", error);
             }
         }
-        database.delete_objects("testTable").unwrap()
+        database
+            .delete_objects("testTable", None, None, None, None)
+            .unwrap()
     }
 }

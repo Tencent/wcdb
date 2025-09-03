@@ -56,7 +56,7 @@ impl CorruptedBaseTestCase {
             .database
             .get_table(self.table_name.as_str(), &*DB_TABLE_GOODS_OBJECT_INSTANCE);
         table
-            .insert_objects(obj_vec, DbTableGoodsObject::all_fields())
+            .insert_objects(obj_vec, Some(DbTableGoodsObject::all_fields()))
             .unwrap();
     }
 
@@ -65,7 +65,7 @@ impl CorruptedBaseTestCase {
             .database
             .get_table(self.table_name.as_str(), &*DB_TABLE_GOODS_OBJECT_INSTANCE);
 
-        table.get_all_objects().unwrap()
+        table.get_all_objects(None, None, None, None, None).unwrap()
     }
 
     fn delete_all(&self) {

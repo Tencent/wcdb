@@ -29,6 +29,7 @@ impl TruncateFileTest {
 #[cfg(test)]
 pub mod truncate_file_exception_test_case {
     use crate::db_corrupted::truncate_file_test::TruncateFileTest;
+    use wcdb::core::handle_operation::HandleOperationTrait;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
     use wcdb::core::table_orm_operation::TableORMOperationTrait;
 

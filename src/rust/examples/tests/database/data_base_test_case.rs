@@ -50,6 +50,7 @@ pub mod data_base_test {
     use std::thread::JoinHandle;
     use std::time::{Duration, SystemTime, UNIX_EPOCH};
     use wcdb::core::database::Database;
+    use wcdb::core::handle_operation::HandleOperationTrait;
     use wcdb::winq::pragma::Pragma;
     use wcdb::winq::statement_pragma::StatementPragma;
 

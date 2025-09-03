@@ -162,6 +162,7 @@ pub mod delete_wal_shm_exception_test {
 pub mod delete_wal_shm_success_test {
     use crate::db_corrupted::delete_wal_shm_test::DeleteWalTest;
     use wcdb::base::wcdb_exception::WCDBException;
+    use wcdb::core::handle_operation::HandleOperationTrait;
 
     // 手动回写用例连续调用两次做完整的测试
     // 第一次写入数据，并手动回写 wal 文件

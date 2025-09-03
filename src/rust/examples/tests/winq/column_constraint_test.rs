@@ -12,7 +12,7 @@ pub mod column_constraint_test {
             "CONSTRAINT testColumnConstraint PRIMARY KEY",
         );
         WinqTool::winq_equal(
-            ColumnConstraint::new().primary_key().auto_increment(),
+            ColumnConstraint::new(None).primary_key().auto_increment(),
             "PRIMARY KEY AUTOINCREMENT",
         );
         WinqTool::winq_equal(
@@ -21,7 +21,7 @@ pub mod column_constraint_test {
         );
 
         WinqTool::winq_equal(
-            ColumnConstraint::new()
+            ColumnConstraint::new(None)
                 .not_null()
                 .conflict(ConflictAction::Abort),
             "NOT NULL ON CONFLICT ABORT",

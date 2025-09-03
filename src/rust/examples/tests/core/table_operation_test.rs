@@ -55,7 +55,7 @@ pub mod table_operation_test_case {
     use wcdb::base::value::Value;
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
-    use wcdb::core::table_operation::TableOperation;
+    use wcdb::core::table_operation::{TableOperation, TableOperationTrait};
     use wcdb::winq::column::Column;
 
     pub fn setup() {

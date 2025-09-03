@@ -33,6 +33,7 @@ impl ModifyDbFileTest {
 #[cfg(test)]
 pub mod modify_db_file_exception_test_case {
     use crate::db_corrupted::modify_db_file_test::ModifyDbFileTest;
+    use wcdb::core::handle_operation::HandleOperationTrait;
 
     // #[test] // todo qixinbing: 本地运行正常，ci 运行卡死，原因待查
     pub fn test_modify_then_backup_exception() {
