@@ -11,7 +11,7 @@ pub mod simple_sample {
 
     #[test]
     pub fn sample() {
-        let database = Database::new("./tests/sample/demoDatabase.sqlite3");
+        let database = Database::new("./tests/sample/demoDatabase.sqlite3", None);
         //  database.setCipherKey("abc".getBytes(), 4096, Database.CipherVersion.version4);
         //  database.setConfig("自定义配置名", new Database.Config() {
         //             @Override

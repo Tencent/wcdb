@@ -381,7 +381,7 @@
 //     // 新增的联表查询单测，Java 没有该用例
 //     #[test]
 //     pub fn join_test1() {
-//         let database = Database::new("./tests/winq/custom/JoinDatabase.sqlite3");
+//         let database = Database::new("./tests/winq/custom/JoinDatabase.sqlite3", None);
 //         database
 //             .create_table("MessageTagTable", &*DB_MESSAGE_TAG_TABLE_INSTANCE)
 //             .unwrap();

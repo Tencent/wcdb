@@ -247,10 +247,10 @@ pub mod database_upgrade_test {
     #[test]
     pub fn upgrade() {
         {
-            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
             database.remove_files().unwrap();
         }
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE)
             .unwrap();
@@ -276,7 +276,7 @@ pub mod database_upgrade_test {
         upgrade_to_v6();
 
         {
-            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
             database.remove_files().unwrap();
         }
     }
@@ -286,7 +286,7 @@ pub mod database_upgrade_test {
     //      2.id 字段增加自增主键约束
     //      3.给 "target_id", "category_id", "channel_id" 增加索引
     fn upgrade_to_v2() {
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V2_INSTANCE)
             .unwrap();
@@ -306,7 +306,7 @@ pub mod database_upgrade_test {
         database.close(Some(|| {}));
 
         // id 字段增加自增主键约束
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V2_1_INSTANCE)
             .unwrap();
@@ -316,7 +316,7 @@ pub mod database_upgrade_test {
         database.close(Some(|| {}));
 
         // 验证删除索引
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         let statement_drop_index = StatementDropIndex::new();
         statement_drop_index.drop_index("index1");
         assert_eq!("DROP INDEX index1", statement_drop_index.get_description());
@@ -324,7 +324,7 @@ pub mod database_upgrade_test {
         database.close(Some(|| {}));
 
         // 手动创建索引
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         let statement_create_index = StatementCreateIndex::new();
         let column1 = Column::new("target_id", None);
         let statement = statement_create_index
@@ -344,7 +344,7 @@ pub mod database_upgrade_test {
     //      2.删除 last_time 字段
     //      3.重命名字段 is_top 为 rename_is_top
     fn upgrade_to_v3() {
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V3_INSTANCE)
             .unwrap();
@@ -387,7 +387,7 @@ pub mod database_upgrade_test {
     //      3.修改表名
     //      4.
     fn upgrade_to_v4() {
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("MessageTable", &*DB_MESSAGE_TABLE_V1_INSTANCE)
             .unwrap();
@@ -414,7 +414,7 @@ pub mod database_upgrade_test {
         database.close(Some(|| {}));
 
         // 2.给表增加主键
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("MessageTable", &*DB_MESSAGE_TABLE_V1_1_INSTANCE)
             .unwrap();
@@ -423,7 +423,7 @@ pub mod database_upgrade_test {
         assert!(target_id.is_primary_key());
 
         // 3.修改表名
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         // database
         //     .execute_sql("ALTER TABLE MessageTable RENAME TO MsgTable")
         //     .unwrap();
@@ -456,7 +456,7 @@ pub mod database_upgrade_test {
 
     // 1.删除 TagTable 表
     fn upgrade_to_v5() {
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("TagTable", &*DB_TAG_TABLE_V1_INSTANCE)
             .unwrap();
@@ -487,10 +487,10 @@ pub mod database_upgrade_test {
     // 升级中断
     fn upgrade_to_v6() {
         {
-            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
             database.remove_files().unwrap();
         }
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_INSTANCE)
             .unwrap();
@@ -512,7 +512,7 @@ pub mod database_upgrade_test {
 
         // 模拟升级崩溃，ConversationTableV1_1 结构体增加了3个字段，删除了2个字段
         let handle = thread::spawn(move || {
-            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+            let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
             let result = panic::catch_unwind(AssertUnwindSafe(|| {
                 database
                     .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_1_INSTANCE)
@@ -521,7 +521,7 @@ pub mod database_upgrade_test {
             if let Err(e) = result {}
         });
         thread::sleep(std::time::Duration::from_millis(100));
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         let is_exist = database.table_exist("ConversationTable").unwrap();
         assert!(is_exist);
         handle.join().unwrap();
@@ -541,7 +541,7 @@ pub mod database_upgrade_test {
         // 结论：
         //  1.其他3个字段任然在表里 数据也在
         //  2.当给3个字段的结构体代表的表插入数据时，其他字段数据为空
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         let statement = StatementDropTable::new();
         statement.drop_table("ConversationTable").if_exist();
         database.execute(&statement).unwrap();
@@ -564,7 +564,7 @@ pub mod database_upgrade_test {
 
         database.close(Some(|| {}));
 
-        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+        let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
         database
             .create_table("ConversationTable", &*DB_CONVERSATION_TABLE_V1_2_INSTANCE)
             .unwrap();

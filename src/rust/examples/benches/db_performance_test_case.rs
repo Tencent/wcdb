@@ -135,10 +135,10 @@
 //
 // fn benchmark_function(c: &mut Criterion) {
 //     {
-//         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+//         let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
 //         database.remove_files().unwrap();
 //     }
-//     let database = Database::new("./tests/database/custom/upgrade_db.sqlite3");
+//     let database = Database::new("./tests/database/custom/upgrade_db.sqlite3", None);
 //     database
 //         .create_table("FriendProfileTable", &*DB_FRIEND_PROFILE_TABLE_INSTANCE)
 //         .unwrap();

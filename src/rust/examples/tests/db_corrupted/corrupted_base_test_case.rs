@@ -17,7 +17,7 @@ impl CorruptedBaseTestCase {
         let path = format!("./target/tmp/{}", db_name);
         let table_name = "table_goods_object";
         let test = CorruptedBaseTestCase {
-            database: Database::new(path.as_str()),
+            database: Database::new(path.as_str(), None),
             db_name: db_name.to_string(),
             table_name: table_name.to_string(),
         };

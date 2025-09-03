@@ -29,7 +29,7 @@ impl DatabaseTestCase {
             base_test_case: BaseTestCase::new(),
             path: Arc::new(Mutex::new("".to_string())),
             file_name: Arc::new(Mutex::new("".to_string())),
-            database: Arc::new(RwLock::new(Database::new("./target/tmp/test.db"))),
+            database: Arc::new(RwLock::new(Database::new("./target/tmp/test.db", None))),
             expect_mode: Arc::new(Mutex::new(Expect::AllSQLs)),
         }
     }
@@ -230,7 +230,7 @@ impl TestCaseTrait for DatabaseTestCase {
             let _ = std::fs::remove_file(path.as_str());
         }
         self.set_path(path.clone());
-        self.set_database(Database::new(path.as_str()));
+        self.set_database(Database::new(path.as_str(), None));
         let binding = self.get_database();
         let database = binding.read().unwrap();
         database.set_tag(10001);

@@ -87,7 +87,7 @@ pub mod data_base_test {
         let database_arc = get_arc_database();
         let database = database_arc.read().unwrap();
         assert_ne!(database.get_tag(), 0);
-        let new_database = Database::new(database.get_path().as_str());
+        let new_database = Database::new(database.get_path().as_str(), None);
         assert_eq!(database.get_tag(), new_database.get_tag());
         teardown();
     }
