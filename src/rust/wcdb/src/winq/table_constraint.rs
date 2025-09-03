@@ -5,6 +5,7 @@ use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use core::ffi::c_size_t;
 use std::ffi::{c_char, c_int, c_longlong, c_void};
+use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 
 extern "C" {
     fn WCDBRustTableConstraint_create(name: *const c_char) -> *mut c_void;
@@ -128,30 +129,30 @@ impl TableConstraint {
         self
     }
 
-    // pub fn indexed_by<'a, T, R>(&self, param_vec: T)
-    // where
-    //     T: IntoIterator<Item = Cow<'a, R>>,
-    //     R: TableConstraintIndexedByParam,
-    // {
-    //     let mut cpp_type = param_vec[0];
-    //     let mut cpp_obj_vec = vec![];
-    //     let mut cstr_vec = vec![];
-    //     for param in param_vec {
-    //         let params = param.get_params();
-    //         match params.0 {
-    //             CPPType::String => cstr_vec.push(params.1 as *const c_char),
-    //             _ => cpp_obj_vec.push(params.1 as c_longlong),
-    //         }
-    //     }
-    //     unsafe {
-    //         WCDBRustTableConstraint_configIndexedColumn(
-    //             self.get_cpp_obj(),
-    //             cpp_type as c_int,
-    //             c_void_vec.as_ptr(),
-    //             std::ptr::null(),
-    //             columns_void_vec_len,
-    //         );
-    //     }
-    //     self
-    // }
+
+    pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
+    where
+        T: IndexedColumnConvertibleTrait,
+    {
+        if column_convertible_vec.is_empty() {
+            return self;
+        }
+        let columns_void_vec_len = column_convertible_vec.len();
+        let mut cpp_obj_vec = Vec::with_capacity(column_convertible_vec.len());
+        let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]) as c_int;
+        for item in column_convertible_vec {
+            cpp_obj_vec.push(CppObject::get(item) as c_longlong);
+        }
+        unsafe {
+            WCDBRustTableConstraint_configIndexedColumn(
+                self.get_cpp_obj(),
+                cpp_type,
+                cpp_obj_vec.as_ptr(),
+                std::ptr::null(),
+                columns_void_vec_len,
+            );
+        }
+        self
+    }
+
 }

@@ -1,3 +1,4 @@
+use core::ffi::c_size_t;
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
@@ -6,7 +7,6 @@ use crate::orm::field::Field;
 use crate::utils::{ToCString, ToCow};
 use crate::winq::column_type::ColumnType;
 use crate::winq::statement::StatementTrait;
-use core::ffi::c_size_t;
 use std::ffi::{c_char, c_double, c_int, c_void, CString};
 use std::slice;
 use std::sync::atomic::{AtomicI32, Ordering};

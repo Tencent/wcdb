@@ -276,14 +276,15 @@ impl RustCodeGenerator {
             field_id += 1;
 
             token_stream.extend(quote! {
-                let #field_def_ident = wcdb::winq::column_def::ColumnDef::new(
+                let param = wcdb::winq::column_def::ColumnDefParam::Column(
                     &field.get_column(),
-                    wcdb::winq::column_type::ColumnType::#column_type_ident
+                    Some(wcdb::winq::column_type::ColumnType::#column_type_ident)
                 );
+                let #field_def_ident = wcdb::winq::column_def::ColumnDef::new(param);
             });
 
             token_stream.extend(quote! {
-                let column_constraint = wcdb::winq::column_constraint::ColumnConstraint::new();
+                let column_constraint = wcdb::winq::column_constraint::ColumnConstraint::new(None);
             });
 
             if is_primary_key {
@@ -339,7 +340,7 @@ impl RustCodeGenerator {
             }
 
             token_stream.extend(quote! {
-                #field_def_ident.constraint(column_constraint);
+                #field_def_ident.constraint(&column_constraint);
             });
 
             token_stream.extend(quote! {
@@ -427,7 +428,7 @@ impl RustCodeGenerator {
                 for primaries in multi_primaries {
                     let ident_vec: Vec<Ident> = primaries.columns_ident_vec(&all_columns_map);
                     token_stream.extend(quote::quote! {
-                        let table_constraint = wcdb::winq::table_constraint::TableConstraint::new();
+                        let table_constraint = wcdb::winq::table_constraint::TableConstraint::new(None);
                         table_constraint.primary_key();
                         table_constraint.indexed_by(
                             unsafe {vec![
@@ -445,7 +446,7 @@ impl RustCodeGenerator {
                 for uniques in multi_unique_vec {
                     let ident_vec: Vec<Ident> = uniques.columns_ident_vec(&all_columns_map);
                     token_stream.extend(quote::quote! {
-                        let table_constraint = wcdb::winq::table_constraint::TableConstraint::new();
+                        let table_constraint = wcdb::winq::table_constraint::TableConstraint::new(None);
                         table_constraint.unique();
                         table_constraint.indexed_by(
                             unsafe {vec![

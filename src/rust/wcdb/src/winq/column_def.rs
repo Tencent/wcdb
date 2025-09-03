@@ -6,7 +6,6 @@ use crate::winq::column_constraint::ColumnConstraint;
 use crate::winq::column_type::ColumnType;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::borrow::Cow;
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {

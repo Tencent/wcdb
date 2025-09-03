@@ -1,3 +1,3 @@
-use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use crate::winq::identifier::IdentifierTrait;
 
-pub trait IndexedColumnConvertibleTrait: IdentifierConvertibleTrait {}
+pub trait IndexedColumnConvertibleTrait: IdentifierTrait {}

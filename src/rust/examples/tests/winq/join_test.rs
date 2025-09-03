@@ -424,7 +424,7 @@
 //
 //         // 连表查询
 //         let column_vec = vec![
-//             ResultColumn::new_with_column_name("tag_id").as_("a_tag_id"),
+//             ResultColumn::new_with_column_name("tag_id").r#as("a_tag_id"),
 //             ResultColumn::new_with_column_name("tag_name"),
 //             ResultColumn::new_with_column_name("create_time"),
 //         ];

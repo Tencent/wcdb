@@ -1,3 +1,4 @@
+use core::ffi::c_size_t;
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
@@ -7,6 +8,7 @@ use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
+use libc::c_longlong;
 
 extern "C" {
     fn WCDBRustStatementCreateIndex_create() -> *mut c_void;
@@ -25,9 +27,9 @@ extern "C" {
     fn WCDBRustStatementCreateIndex_configIndexedColumns(
         cpp_obj: *mut c_void,
         columns_type: c_int,
-        columns_void_vec: *const *mut c_void,
+        columns_void_vec: *const c_longlong,
         columns_string_vec: *const *const c_char,
-        columns_vec_len: c_int,
+        columns_vec_len: c_size_t,
     );
 
     fn WCDBRustStatementCreateIndex_configSchema(
@@ -152,30 +154,30 @@ impl StatementCreateIndex {
         self
     }
 
-    // pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     if column_convertible_vec.is_empty() {
-    //         return self;
-    //     }
-    //     let columns_void_vec_len = column_convertible_vec.len() as i32;
-    //     let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(column_convertible_vec.len());
-    //     let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]);
-    //     for column_convertible in column_convertible_vec {
-    //         c_void_vec.push(column_convertible.get_cpp_obj());
-    //     }
-    //     unsafe {
-    //         WCDBRustStatementCreateIndex_configIndexedColumns(
-    //             self.get_cpp_obj(),
-    //             cpp_type,
-    //             c_void_vec.as_ptr(),
-    //             std::ptr::null(),
-    //             columns_void_vec_len,
-    //         );
-    //     }
-    //     self
-    // }
+    pub fn indexed_by<T>(&self, column_convertible_vec: Vec<&T>) -> &Self
+    where
+        T: IndexedColumnConvertibleTrait,
+    {
+        if column_convertible_vec.is_empty() {
+            return self;
+        }
+        let columns_void_vec_len = column_convertible_vec.len();
+        let mut c_void_vec = Vec::with_capacity(column_convertible_vec.len());
+        let cpp_type = Identifier::get_cpp_type(column_convertible_vec[0]) as c_int;
+        for column_convertible in column_convertible_vec {
+            c_void_vec.push(CppObject::get(column_convertible) as c_longlong);
+        }
+        unsafe {
+            WCDBRustStatementCreateIndex_configIndexedColumns(
+                self.get_cpp_obj(),
+                cpp_type,
+                c_void_vec.as_ptr(),
+                std::ptr::null(),
+                columns_void_vec_len,
+            );
+        }
+        self
+    }
 
     pub fn indexed_by_column_names(&self, column_names: &Vec<String>) -> &Self {
         let mut c_strings = Vec::new();
@@ -191,7 +193,7 @@ impl StatementCreateIndex {
                 CPPType::String as c_int,
                 std::ptr::null(),
                 c_string_array.as_ptr(),
-                c_string_array.len() as c_int,
+                c_string_array.len(),
             );
         }
         self

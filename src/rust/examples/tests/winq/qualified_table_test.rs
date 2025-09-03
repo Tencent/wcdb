@@ -9,7 +9,7 @@ pub mod qualified_table_test {
         WinqTool::winq_equal(
             QualifiedTable::new("testTable")
                 .of_string("testSchema")
-                .as_("testAlias"),
+                .r#as("testAlias"),
             "testSchema.testTable AS testAlias",
         );
         WinqTool::winq_equal(
