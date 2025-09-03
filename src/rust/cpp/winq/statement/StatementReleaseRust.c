@@ -21,17 +21,17 @@
  * limitations under the License.
  */
 
-#include "StatementRollbackRust.h"
+#include "StatementReleaseRust.h"
 
-#include "StatementRollbackBridge.h"
+#include "StatementReleaseBridge.h"
 
-void* WCDBRustStatementRollbackClassMethodWithNoArg(createCppObj) {
-    return (void*)WCDBStatementRollbackCreate().innerValue;
+void* WCDBRustStatementReleaseClassMethodWithNoArg(createCppObj) {
+    return (void*)WCDBStatementReleaseCreate().innerValue;
 }
 
-void WCDBRustStatementRollbackClassMethod(configSavepoint, void* self, const char* savepoint) {
-    WCDBRustBridgeStruct(CPPStatementRollback, self);
+void WCDBRustStatementReleaseClassMethod(configSavepoint, void* self, const char* savepoint) {
+    WCDBRustBridgeStruct(CPPStatementRelease, self);
     // WCDBRustGetStringCritical(savepoint);
-    WCDBStatementRollbackConfigSavepoint(selfStruct, savepoint);
+    WCDBStatementReleaseConfigSavepoint(selfStruct, savepoint);
     // WCDBRustReleaseStringCritical(savepoint);
 }

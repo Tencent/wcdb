@@ -1,4 +1,4 @@
-// Created by qiuwenchen on 2023/6/12.
+// Created by qiuwenchen on 2023/6/13.
 //
 
 /*
@@ -21,17 +21,21 @@
  * limitations under the License.
  */
 
-#include "StatementRollbackRust.h"
+#include "StatementVacuumRust.h"
 
-#include "StatementRollbackBridge.h"
+#include "StatementVacuumBridge.h"
 
-void* WCDBRustStatementRollbackClassMethodWithNoArg(createCppObj) {
-    return (void*)WCDBStatementRollbackCreate().innerValue;
+void* WCDBRustStatementVacuumClassMethodWithNoArg(createCppObj) {
+    CPPStatementVacuum vacuum = WCDBStatementVacuumCreate();
+    WCDBStatementVacuumConfigAll(vacuum);
+    return (void*)vacuum.innerValue;
 }
 
-void WCDBRustStatementRollbackClassMethod(configSavepoint, void* self, const char* savepoint) {
-    WCDBRustBridgeStruct(CPPStatementRollback, self);
-    // WCDBRustGetStringCritical(savepoint);
-    WCDBStatementRollbackConfigSavepoint(selfStruct, savepoint);
-    // WCDBRustReleaseStringCritical(savepoint);
+void WCDBRustStatementVacuumClassMethod(configSchema,
+                                        void* self,
+                                        WCDBRustObjectOrStringParameter(schema)) {
+    WCDBRustBridgeStruct(CPPStatementVacuum, self);
+    WCDBRustCreateObjectOrStringCommonValue(schema, true);
+    WCDBStatementVacuumConfigSchema2(selfStruct, schema_common);
+    // WCDBRustTryReleaseStringInCommonValue(schema);
 }

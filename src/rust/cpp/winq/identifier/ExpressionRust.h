@@ -37,8 +37,8 @@ void* WCDBRustExpressionClassMethod(createWithExistStatement, void* select);
 void* WCDBRustExpressionClassMethod(createWithNotExistStatement, void* select);
 
 void WCDBRustExpressionClassMethod(setWithSchema,
-                                  void* expression,
-                                  WCDBRustObjectOrStringParameter(schema));
+                                   void* expression,
+                                   WCDBRustObjectOrStringParameter(schema));
 void WCDBRustExpressionClassMethod(argument,
                                    void* expression,
                                    WCDBRustCommonValueParameter(argument));

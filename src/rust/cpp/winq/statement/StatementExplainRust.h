@@ -22,18 +22,17 @@
  */
 
 #pragma once
-
 #include "WCDBRust.h"
 
-#define WCDBRustStatementRollbackFuncName(funcName) WCDBRust(StatementRollback, funcName)
-#define WCDBRustStatementRollbackObjectMethod(funcName, ...) \
-    WCDBRustObjectMethod(StatementRollback, funcName, __VA_ARGS__)
-#define WCDBRustStatementRollbackObjectMethodWithNoArg(funcName) \
-    WCDBRustObjectMethodWithNoArg(StatementRollback, funcName)
-#define WCDBRustStatementRollbackClassMethodWithNoArg(funcName) \
-    WCDBRustClassMethodWithNoArg(StatementRollback, funcName)
-#define WCDBRustStatementRollbackClassMethod(funcName, ...) \
-    WCDBRustClassMethod(StatementRollback, funcName, __VA_ARGS__)
+#define WCDBRustStatementExplainFuncName(funcName) WCDBRust(StatementExplain, funcName)
+#define WCDBRustStatementExplainObjectMethod(funcName, ...) \
+    WCDBRustObjectMethod(StatementExplain, funcName, __VA_ARGS__)
+#define WCDBRustStatementExplainObjectMethodWithNoArg(funcName) \
+    WCDBRustObjectMethodWithNoArg(StatementExplain, funcName)
+#define WCDBRustStatementExplainClassMethodWithNoArg(funcName) \
+    WCDBRustClassMethodWithNoArg(StatementExplain, funcName)
+#define WCDBRustStatementExplainClassMethod(funcName, ...) \
+    WCDBRustClassMethod(StatementExplain, funcName, __VA_ARGS__)
 
-void* WCDBRustStatementRollbackClassMethodWithNoArg(createCppObj);
-void WCDBRustStatementRollbackClassMethod(configSavepoint, void* self, const char* savepoint);
+void* WCDBRustStatementExplainClassMethodWithNoArg(createCppObj);
+void WCDBRustStatementExplainClassMethod(explain, void* self, void* statement, bool queryPlan);

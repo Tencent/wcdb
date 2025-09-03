@@ -50,15 +50,14 @@ void* WCDBRustExpressionClassMethod(createWithNotExistStatement, void* select) {
     return WCDBExpressionCreateWithNotExistStatement(selectStruct).innerValue;
 }
 
- void WCDBRustExpressionClassMethod(setWithSchema,
+void WCDBRustExpressionClassMethod(setWithSchema,
                                    void* expression,
-                                   WCDBRustObjectOrStringParameter(schema))
-{
-     WCDBRustBridgeStruct(CPPExpression, expression);
-     WCDBRustCreateObjectOrStringCommonValue(schema, true);
-     WCDBExpressionSetWithSchema2(expressionStruct, schema_common);
-     // WCDBRustTryReleaseStringInCommonValue(schema);
- }
+                                   WCDBRustObjectOrStringParameter(schema)) {
+    WCDBRustBridgeStruct(CPPExpression, expression);
+    WCDBRustCreateObjectOrStringCommonValue(schema, true);
+    WCDBExpressionSetWithSchema2(expressionStruct, schema_common);
+    // WCDBRustTryReleaseStringInCommonValue(schema);
+}
 
 void WCDBRustExpressionClassMethod(argument,
                                    void* expression,

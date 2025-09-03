@@ -1,3 +1,4 @@
+//
 // Created by qiuwenchen on 2023/6/12.
 //
 
@@ -21,17 +22,15 @@
  * limitations under the License.
  */
 
-#include "StatementRollbackRust.h"
+#include "StatementExplainRust.h"
 
-#include "StatementRollbackBridge.h"
+#include "StatementExplainBridge.h"
 
-void* WCDBRustStatementRollbackClassMethodWithNoArg(createCppObj) {
-    return (void*)WCDBStatementRollbackCreate().innerValue;
+void* WCDBRustStatementExplainClassMethodWithNoArg(createCppObj) {
+    return (void*)WCDBStatementExplainCreate().innerValue;
 }
 
-void WCDBRustStatementRollbackClassMethod(configSavepoint, void* self, const char* savepoint) {
-    WCDBRustBridgeStruct(CPPStatementRollback, self);
-    // WCDBRustGetStringCritical(savepoint);
-    WCDBStatementRollbackConfigSavepoint(selfStruct, savepoint);
-    // WCDBRustReleaseStringCritical(savepoint);
+void WCDBRustStatementExplainClassMethod(explain, void* self, void* statement, bool queryPlan) {
+    WCDBRustBridgeStruct(CPPStatementExplain, self);
+    WCDBStatementExplain(selfStruct, (CPPObject*)statement, queryPlan);
 }

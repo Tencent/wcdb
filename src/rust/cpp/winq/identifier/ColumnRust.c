@@ -40,11 +40,10 @@ void* WCDBRustColumn_createWithName(const char* name, void* binding) {
 //     return (jlong) WCDBColumnCopy(columnStruct).innerValue;
 // }
 
-void WCDBRustColumnClassMethod(inTable, void* column, const char* table)
-{
-     WCDBRustBridgeStruct(CPPColumn, column);
-     WCDBColumnInTable(columnStruct, table);
- }
+void WCDBRustColumnClassMethod(inTable, void* column, const char* table) {
+    WCDBRustBridgeStruct(CPPColumn, column);
+    WCDBColumnInTable(columnStruct, table);
+}
 
 // void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema))
 //{
@@ -54,8 +53,7 @@ void WCDBRustColumnClassMethod(inTable, void* column, const char* table)
 //     WCDBRustTryReleaseStringInCommonValue(schema);
 // }
 
-void* WCDBRustColumnClassMethod(configAlias, void* column, const char* alias)
-{
-     WCDBRustBridgeStruct(CPPColumn, column);
-     return WCDBColumnConfigAlias(columnStruct, alias).innerValue;
- }
+void* WCDBRustColumnClassMethod(configAlias, void* column, const char* alias) {
+    WCDBRustBridgeStruct(CPPColumn, column);
+    return WCDBColumnConfigAlias(columnStruct, alias).innerValue;
+}
