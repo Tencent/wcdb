@@ -53,12 +53,12 @@ pub mod exception_test {
     use wcdb::base::wcdb_exception::ExceptionExtendCode;
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
-    use wcdb::core::table_operation::TableOperation;
+    use wcdb::core::table_operation::{TableOperation, TableOperationTrait};
 
     #[test]
     pub fn test() {
         let db_path = "./target/tmp/exception_test.db";
-        let database = Database::new(db_path);
+        let database = Database::new(db_path, Some(false));
 
         let table_name = "test_table";
         // 需要删除表，验证没有表的情况。

@@ -32,6 +32,7 @@ pub mod statement_drop_index;
 pub mod statement_drop_table;
 pub mod statement_insert;
 pub mod statement_pragma;
+pub mod statement_rollback;
 pub mod statement_select;
 pub mod statement_update;
 pub mod table_constraint;
