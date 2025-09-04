@@ -6,7 +6,7 @@ pub mod statement_release_test {
     #[test]
     pub fn test() {
         WinqTool::winq_equal(
-            &StatementRelease::new().release("testSavepoint"),
+            StatementRelease::new().release("testSavepoint"),
             "RELEASE testSavepoint",
         );
     }

@@ -7,7 +7,7 @@ pub mod statement_vacuum_test {
     pub fn test() {
         WinqTool::winq_equal(&StatementVacuum::new(), "VACUUM");
         WinqTool::winq_equal(
-            &StatementVacuum::new().vacuum_with_string("testSchema"),
+            StatementVacuum::new().vacuum_with_string("testSchema"),
             "VACUUM testSchema",
         );
     }

@@ -10,12 +10,12 @@ pub mod statement_explain_test {
             .select(vec!["testColumn"], vec![])
             .from(vec!["testTable"], vec![]);
         WinqTool::winq_equal(
-            &StatementExplain::new().explain(select),
+            StatementExplain::new().explain(select),
             "EXPLAIN SELECT testColumn FROM testTable",
         );
 
         WinqTool::winq_equal(
-            &StatementExplain::new().explain_query_plan(select),
+            StatementExplain::new().explain_query_plan(select),
             "EXPLAIN QUERY PLAN SELECT testColumn FROM testTable",
         );
     }

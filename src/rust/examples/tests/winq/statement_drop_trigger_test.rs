@@ -6,17 +6,17 @@ pub mod statement_drop_trigger_test {
     #[test]
     pub fn test() {
         WinqTool::winq_equal(
-            &StatementDropTrigger::new().drop_trigger("testTrigger"),
+            StatementDropTrigger::new().drop_trigger("testTrigger"),
             "DROP TRIGGER testTrigger",
         );
         WinqTool::winq_equal(
-            &StatementDropTrigger::new()
+            StatementDropTrigger::new()
                 .drop_trigger("testTrigger")
                 .if_exist(),
             "DROP TRIGGER IF EXISTS testTrigger",
         );
         WinqTool::winq_equal(
-            &StatementDropTrigger::new()
+            StatementDropTrigger::new()
                 .drop_trigger("testTrigger")
                 .of_with_string("testSchema"),
             "DROP TRIGGER testSchema.testTrigger",

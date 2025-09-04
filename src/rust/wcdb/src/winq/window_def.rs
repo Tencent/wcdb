@@ -101,35 +101,32 @@ impl WindowDef {
         self
     }
 
-    // pub fn partition_by_with_expression_convertible<T>(self, expressions: &Vec<&T>) -> Self
-    // where
-    //     T: IdentifierStaticTrait
-    //         + IdentifierConvertibleTrait
-    //         + ExpressionConvertibleTrait
-    //         + CppObjectTrait,
-    // {
-    //     if expressions.is_empty() {
-    //         return self;
-    //     }
-    //     let size = expressions.len();
-    //     let mut types: Vec<c_int> = Vec::with_capacity(size);
-    //     let mut cpp_objs: Vec<*mut c_void> = Vec::with_capacity(size);
-    //     for index in 0..size {
-    //         types.push(Identifier::get_cpp_type(expressions[index]) as c_int);
-    //         cpp_objs.push(CppObject::get(expressions[index]));
-    //     }
-    //     unsafe {
-    //         WCDBRustWindowDef_configPartitions(
-    //             self.get_cpp_obj(),
-    //             types.as_ptr(),
-    //             cpp_objs.as_ptr(),
-    //             std::ptr::null_mut(),
-    //             std::ptr::null_mut(),
-    //             size as c_int,
-    //         );
-    //     }
-    //     self
-    // }
+    pub fn partition<T>(self, expressions: &Vec<&T>) -> Self
+    where
+        T: ExpressionConvertibleTrait,
+    {
+        if expressions.is_empty() {
+            return self;
+        }
+        let size = expressions.len();
+        let mut types: Vec<c_int> = Vec::with_capacity(size);
+        let mut cpp_objs: Vec<*mut c_void> = Vec::with_capacity(size);
+        for index in 0..size {
+            types.push(Identifier::get_cpp_type(expressions[index]) as c_int);
+            cpp_objs.push(CppObject::get(expressions[index]));
+        }
+        unsafe {
+            WCDBRustWindowDef_configPartitions(
+                self.get_cpp_obj(),
+                types.as_ptr(),
+                cpp_objs.as_ptr(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                size as c_int,
+            );
+        }
+        self
+    }
 
     pub fn order_by(self, orders: &Vec<&OrderingTerm>) -> Self {
         if orders.is_empty() {

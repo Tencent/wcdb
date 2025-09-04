@@ -7,7 +7,7 @@ pub mod statement_rollback_test {
     pub fn test() {
         WinqTool::winq_equal(&StatementRollback::new(), "ROLLBACK");
         WinqTool::winq_equal(
-            &StatementRollback::new().rollback_to("testSavepoint"),
+            StatementRollback::new().rollback_to("testSavepoint"),
             "ROLLBACK TO testSavepoint",
         );
     }

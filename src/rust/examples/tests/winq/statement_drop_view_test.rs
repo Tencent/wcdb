@@ -6,11 +6,11 @@ pub mod statement_drop_view_test {
     #[test]
     pub fn test() {
         WinqTool::winq_equal(
-            &StatementDropView::new().drop_view("testView"),
+            StatementDropView::new().drop_view("testView"),
             "DROP VIEW testView",
         );
         WinqTool::winq_equal(
-            &StatementDropView::new().drop_view("testView").if_exist(),
+            StatementDropView::new().drop_view("testView").if_exist(),
             "DROP VIEW IF EXISTS testView",
         );
         WinqTool::winq_equal(
