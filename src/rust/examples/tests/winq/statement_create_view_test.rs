@@ -10,8 +10,8 @@ pub mod statement_create_view_test {
         let column1 = Column::new("column1", None);
         let column2 = Column::new("column2", None);
         let select = StatementSelect::new()
-            .select(vec![], vec![column1, column2])
-            .from("testTable", vec![]);
+            .select(Vec::<String>::new(), &vec![column1, column2])
+            .from(&vec!["testTable"], Vec::<&StatementSelect>::new());
         let view = "testView";
 
         WinqTool::winq_equal(
@@ -23,7 +23,7 @@ pub mod statement_create_view_test {
         );
 
         WinqTool::winq_equal(
-            &StatementCreateView::new()
+            StatementCreateView::new()
                 .create_temp_view("testView")
                 .with_columns(&vec![column1, column2])
                 .as_statement_select(&select),
@@ -31,12 +31,12 @@ pub mod statement_create_view_test {
         );
 
         WinqTool::winq_equal(
-            &StatementCreateView::new().create_view("testView").of_with_string("testSchema").with_columns(&vec![column1, column2]).as_statement_select(&select),
+            StatementCreateView::new().create_view("testView").of_with_string("testSchema").with_columns(&vec![column1, column2]).as_statement_select(&select),
             "CREATE VIEW testSchema.testView(column1, column2) AS SELECT column1, column2 FROM testTable"
         );
 
         WinqTool::winq_equal(
-            &StatementCreateView::new().create_view("testView").if_not_exist().with_columns(&vec![column1, column2]).as_statement_select(&select),
+            StatementCreateView::new().create_view("testView").if_not_exist().with_columns(&vec![column1, column2]).as_statement_select(&select),
             "CREATE VIEW IF NOT EXISTS testView(column1, column2) AS SELECT column1, column2 FROM testTable"
         );
     }
