@@ -125,7 +125,7 @@ impl StatementSelect {
     pub fn select<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<SelectArg<'a>>,
+        S: Into<StatementSelectSelectParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -136,11 +136,11 @@ impl StatementSelect {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                SelectArg::String(str) => {
+                StatementSelectSelectParam::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                SelectArg::ResultColumn(obj) => {
+                StatementSelectSelectParam::ResultColumn(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -162,7 +162,7 @@ impl StatementSelect {
     pub fn from<'a, I, S>(&self, table_arg_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<FromArg<'a>>,
+        S: Into<StatementSelectFromParam<'a>>,
     {
         let mut data_vec = table_arg_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -174,11 +174,11 @@ impl StatementSelect {
 
         for item in data_vec {
             match item {
-                FromArg::String(str) => {
+                StatementSelectFromParam::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                FromArg::TableOrSubquery(obj) => {
+                StatementSelectFromParam::TableOrSubquery(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -207,7 +207,7 @@ impl StatementSelect {
     pub fn group_by<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<GroupByArg<'a>>,
+        S: Into<StatementSelectGroupByParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -218,11 +218,11 @@ impl StatementSelect {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                GroupByArg::String(str) => {
+                StatementSelectGroupByParam::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                GroupByArg::ExpressionConvertible(obj) => {
+                StatementSelectGroupByParam::ExpressionConvertible(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -284,71 +284,71 @@ impl StatementSelect {
     }
 }
 
-pub enum SelectArg<'a> {
+pub enum StatementSelectSelectParam<'a> {
     String(String),
     ResultColumn(&'a dyn ResultColumnConvertibleTrait),
 }
 
-impl<'a> From<String> for SelectArg<'a> {
+impl<'a> From<String> for StatementSelectSelectParam<'a> {
     fn from(value: String) -> Self {
-        SelectArg::String(value)
+        StatementSelectSelectParam::String(value)
     }
 }
 
-impl<'a> From<&str> for SelectArg<'a> {
+impl<'a> From<&str> for StatementSelectSelectParam<'a> {
     fn from(value: &str) -> Self {
-        SelectArg::String(value.to_string())
+        StatementSelectSelectParam::String(value.to_string())
     }
 }
 
-impl<'a, T: ResultColumnConvertibleTrait> From<&'a T> for SelectArg<'a> {
+impl<'a, T: ResultColumnConvertibleTrait> From<&'a T> for StatementSelectSelectParam<'a> {
     fn from(value: &'a T) -> Self {
-        SelectArg::ResultColumn(value)
+        StatementSelectSelectParam::ResultColumn(value)
     }
 }
 
-pub enum FromArg<'a> {
+pub enum StatementSelectFromParam<'a> {
     String(String),
     TableOrSubquery(&'a dyn TableOrSubqueryConvertibleTrait),
 }
 
-impl<'a> From<String> for FromArg<'a> {
+impl<'a> From<String> for StatementSelectFromParam<'a> {
     fn from(value: String) -> Self {
-        FromArg::String(value)
+        StatementSelectFromParam::String(value)
     }
 }
 
-impl<'a> From<&str> for FromArg<'a> {
+impl<'a> From<&str> for StatementSelectFromParam<'a> {
     fn from(value: &str) -> Self {
-        FromArg::String(value.to_string())
+        StatementSelectFromParam::String(value.to_string())
     }
 }
 
-impl<'a, T: TableOrSubqueryConvertibleTrait + 'a> From<&'a T> for FromArg<'a> {
+impl<'a, T: TableOrSubqueryConvertibleTrait + 'a> From<&'a T> for StatementSelectFromParam<'a> {
     fn from(value: &'a T) -> Self {
-        FromArg::TableOrSubquery(value)
+        StatementSelectFromParam::TableOrSubquery(value)
     }
 }
 
-pub enum GroupByArg<'a> {
+pub enum StatementSelectGroupByParam<'a> {
     String(String),
     ExpressionConvertible(&'a dyn ExpressionConvertibleTrait),
 }
 
-impl<'a> From<String> for GroupByArg<'a> {
+impl<'a> From<String> for StatementSelectGroupByParam<'a> {
     fn from(value: String) -> Self {
-        GroupByArg::String(value)
+        StatementSelectGroupByParam::String(value)
     }
 }
 
-impl<'a> From<&str> for GroupByArg<'a> {
+impl<'a> From<&str> for StatementSelectGroupByParam<'a> {
     fn from(value: &str) -> Self {
-        GroupByArg::String(value.to_string())
+        StatementSelectGroupByParam::String(value.to_string())
     }
 }
 
-impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for GroupByArg<'a> {
+impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for StatementSelectGroupByParam<'a> {
     fn from(value: &'a T) -> Self {
-        GroupByArg::ExpressionConvertible(value)
+        StatementSelectGroupByParam::ExpressionConvertible(value)
     }
 }

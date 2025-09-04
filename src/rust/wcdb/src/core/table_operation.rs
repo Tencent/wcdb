@@ -16,7 +16,7 @@ use crate::winq::statement_select::StatementSelect;
 use crate::winq::statement_update::StatementUpdate;
 
 pub struct TableOperation<'a> {
-    table_name: &'a str,
+    table_name: String,
     database: &'a Database,
 }
 
@@ -181,7 +181,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
     ) -> WCDBResult<Vec<Vec<Value>>> {
         let handle = self.database.get_handle(false);
         let binding = StatementSelect::new();
-        binding.from(vec![self.table_name]);
+        binding.from(vec![self.table_name.as_str()]);
         binding.select(columns);
         if let Some(expression) = condition_opt {
             binding.r#where(&expression);
@@ -206,9 +206,9 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
 }
 
 impl<'a> TableOperation<'a> {
-    pub fn new(table_name: &'a str, database: &'a Database) -> TableOperation<'a> {
+    pub fn new(table_name: &str, database: &'a Database) -> TableOperation<'a> {
         TableOperation {
-            table_name,
+            table_name: table_name.to_string(),
             database,
         }
     }
