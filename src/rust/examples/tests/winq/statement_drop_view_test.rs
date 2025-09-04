@@ -14,9 +14,9 @@ pub mod statement_drop_view_test {
             "DROP VIEW IF EXISTS testView",
         );
         WinqTool::winq_equal(
-            &StatementDropView::new()
+            StatementDropView::new()
                 .drop_view("testView")
-                .of("testSchema"),
+                .of_with_string("testSchema"),
             "DROP VIEW testSchema.testView",
         );
     }

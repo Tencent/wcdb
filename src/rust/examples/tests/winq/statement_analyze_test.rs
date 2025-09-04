@@ -5,26 +5,26 @@ pub mod statement_analyze_test {
 
     #[test]
     pub fn test() {
-        WinqTool::winq_equal(&StatementAnalyze::new().analyze(), "ANALYZE");
+        WinqTool::winq_equal(StatementAnalyze::new().analyze(), "ANALYZE");
         WinqTool::winq_equal(
-            &StatementAnalyze::new()
+            StatementAnalyze::new()
                 .analyze()
                 .schema_with_name("testSchema"),
             "ANALYZE testSchema",
         );
         WinqTool::winq_equal(
-            &StatementAnalyze::new()
+            StatementAnalyze::new()
                 .analyze()
                 .schema_with_name("testSchema")
                 .table("testTable"),
             "ANALYZE testSchema.testTable",
         );
         WinqTool::winq_equal(
-            &StatementAnalyze::new().analyze().table("testTable"),
+            StatementAnalyze::new().analyze().table("testTable"),
             "ANALYZE testTable",
         );
         WinqTool::winq_equal(
-            &StatementAnalyze::new()
+            StatementAnalyze::new()
                 .analyze()
                 .schema_with_name("testSchema")
                 .index("testIndex"),

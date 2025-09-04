@@ -15,7 +15,7 @@ pub mod statement_create_view_test {
         let view = "testView";
 
         WinqTool::winq_equal(
-            &StatementCreateView::new()
+            StatementCreateView::new()
                 .create_view("testView")
                 .with_columns(&vec![column1, column2])
                 .as_statement_select(&select),

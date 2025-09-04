@@ -6,7 +6,7 @@ pub mod statement_detach_test {
     #[test]
     pub fn test() {
         WinqTool::winq_equal(
-            &StatementDetach::new().detach_with_string("testSchema"),
+            StatementDetach::new().detach_with_string("testSchema"),
             "DETACH testSchema",
         );
     }
