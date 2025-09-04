@@ -26,6 +26,7 @@ pub mod schema;
 pub mod statement;
 pub mod statement_alter_table;
 pub mod statement_analyze;
+pub mod statement_attach;
 pub mod statement_begin;
 pub mod statement_commit;
 pub mod statement_create_index;

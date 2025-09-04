@@ -9,6 +9,7 @@ pub(crate) mod result_column_test;
 pub(crate) mod schema_test;
 pub(crate) mod statement_alter_table_test;
 pub(crate) mod statement_analyze_test;
+pub(crate) mod statement_attach_test;
 pub(crate) mod statement_begin_test;
 pub(crate) mod statement_commit_test;
 pub(crate) mod statement_create_index_test;
