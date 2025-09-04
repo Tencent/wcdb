@@ -12,6 +12,7 @@ pub(crate) mod statement_begin_test;
 pub(crate) mod statement_create_index_test;
 pub(crate) mod statement_create_table_test;
 pub(crate) mod statement_delete_test;
+pub(crate) mod statement_detach_test;
 pub(crate) mod statement_drop_index_test;
 pub(crate) mod statement_drop_table_test;
 pub(crate) mod statement_drop_view_test;
