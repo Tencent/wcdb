@@ -31,6 +31,7 @@ pub mod statement_create_table;
 pub mod statement_delete;
 pub mod statement_drop_index;
 pub mod statement_drop_table;
+pub mod statement_drop_view;
 pub mod statement_explain;
 pub mod statement_insert;
 pub mod statement_pragma;
