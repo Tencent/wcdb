@@ -7,11 +7,10 @@ pub mod statement_explain_test {
 
     #[test]
     pub fn test() {
-        let select = StatementSelect::new()
-            .select(vec!["testColumn"], Vec::<&Column>::new())
-            .from(vec!["testTable"], Vec::<&StatementSelect>::new());
+        let select = StatementSelect::new();
+        select.select(vec!["testColumn"]).from(vec!["testTable"]);
         WinqTool::winq_equal(
-            StatementExplain::new().explain(select),
+            StatementExplain::new().explain(&select),
             "EXPLAIN SELECT testColumn FROM testTable",
         );
 

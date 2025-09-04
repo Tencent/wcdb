@@ -408,7 +408,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
 
 impl<'a, K, R: TableBinding<K>> TableORMOperation<'a, K, R> {
     pub fn new(
-        table_name: &str,
+        table_name: &'a str,
         binding: &'a R,
         database: &'a Database,
     ) -> TableORMOperation<'a, K, R> {

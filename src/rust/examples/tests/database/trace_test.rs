@@ -343,7 +343,11 @@ impl TraceTest {
             .unwrap();
 
         assert!(database.can_open());
-        let ret = database.execute(StatementSelect::new().select(&vec!["1"]).from("dummy"));
+        let ret = database.execute(
+            StatementSelect::new()
+                .select(vec!["1"])
+                .from("dummy" /* table_subquery_obj_vec */),
+        );
         match ret {
             Ok(_) => {
                 assert!(tested_clone.lock().unwrap().bool_value);
@@ -383,7 +387,7 @@ impl TraceTest {
         assert!(database.can_open());
         let ret = database.execute(
             StatementSelect::new()
-                .select(&vec!["1".to_string()])
+                .select(vec!["1".to_string()])
                 .from("dummy"),
         );
         match ret {

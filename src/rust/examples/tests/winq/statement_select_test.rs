@@ -12,7 +12,7 @@ pub mod statement_select_test {
         let statement = StatementSelect::new();
 
         let column = Column::new("column1", None);
-        let test = statement.from(&vec![test_table]).select(&vec![&column]);
+        let test = statement.from(&vec![test_table]).select(&vec![column]);
         WinqTool::winq_equal(test, "SELECT column1 FROM testTable");
 
         let expression = column.gt(100);

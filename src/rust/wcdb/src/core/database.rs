@@ -962,7 +962,7 @@ impl Database {
 
     pub fn get_table<'a, T, R: TableBinding<T>>(
         &'a self,
-        table_name: &str,
+        table_name: &'a str,
         binding: &'a R,
     ) -> Arc<Table<'a, T, R>> {
         assert!(!table_name.is_empty());

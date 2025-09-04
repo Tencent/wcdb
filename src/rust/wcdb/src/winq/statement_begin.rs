@@ -65,10 +65,7 @@ impl StatementTrait for StatementBegin {
 
 impl StatementBegin {
     pub fn new(cpp_type: Option<i32>) -> Self {
-        let transaction_type: i32 = match cpp_type {
-            None => TransactionType::DEFERRED as i32,
-            Some(data) => data,
-        };
+        let transaction_type: i32 = cpp_type.unwrap_or_else(|| TransactionType::DEFERRED);
         let cpp_obj = unsafe { WCDBRustStatementBegin_createCppObj(transaction_type) };
         StatementBegin {
             statement: Statement::new(CPPType::CommitSTMT, Some(cpp_obj)),

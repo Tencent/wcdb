@@ -10,8 +10,8 @@ pub mod statement_create_view_test {
         let column1 = Column::new("column1", None);
         let column2 = Column::new("column2", None);
         let select = StatementSelect::new()
-            .select(Vec::<String>::new(), &vec![column1, column2])
-            .from(&vec!["testTable"], Vec::<&StatementSelect>::new());
+            .select(&vec![column1, column2])
+            .from(&vec!["testTable"]);
         let view = "testView";
 
         WinqTool::winq_equal(

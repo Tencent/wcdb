@@ -47,7 +47,7 @@ impl<'a, T> Select<'a, T> {
         self.fields.replace(fields);
         self.chain_call
             .get_statement()
-            .select(&[] as &[&str], self.fields.borrow().iter().copied());
+            .select(self.fields.borrow().iter().copied());
         self
     }
 
@@ -77,9 +77,7 @@ impl<'a, T> Select<'a, T> {
     }
 
     pub fn from(&self, table_name: &str) -> &Self {
-        self.chain_call
-            .get_statement()
-            .from(vec![table_name], Vec::<&StatementSelect>::new());
+        self.chain_call.get_statement().from(vec![table_name]);
         self
     }
 

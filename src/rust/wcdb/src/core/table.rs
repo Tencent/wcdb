@@ -243,7 +243,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for Table<'a, T
 }
 
 impl<'a, T, R: TableBinding<T>> Table<'a, T, R> {
-    pub fn new(table_name: &str, binding: &'a R, database: &'a Database) -> Table<'a, T, R> {
+    pub fn new(table_name: &'a str, binding: &'a R, database: &'a Database) -> Table<'a, T, R> {
         Table {
             table_orm_operation: TableORMOperation::new(table_name, binding, database),
             _phantom: PhantomData,

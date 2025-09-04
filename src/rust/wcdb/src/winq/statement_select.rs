@@ -106,30 +106,11 @@ impl IdentifierConvertibleTrait for StatementSelect {
     }
 }
 
+impl TableOrSubqueryConvertibleTrait for StatementSelect {}
+
 impl StatementTrait for StatementSelect {
     fn is_write_statement(&self) -> bool {
         self.statement.is_write_statement()
-    }
-}
-
-impl TableOrSubqueryConvertibleTrait for StatementSelect {}
-
-pub trait StatementSelectGroupByParam {
-    fn get_params(self) -> (CPPType, *mut c_void);
-}
-
-impl<T: ExpressionConvertibleTrait> StatementSelectGroupByParam for &T {
-    fn get_params(self) -> (CPPType, *mut c_void) {
-        (
-            Identifier::get_type(self.as_identifier()),
-            CppObject::get(self),
-        )
-    }
-}
-
-impl StatementSelectGroupByParam for String {
-    fn get_params(self) -> (CPPType, *mut c_void) {
-        (CPPType::String, self.to_cstring().as_ptr() as *mut c_void)
     }
 }
 
@@ -141,31 +122,32 @@ impl StatementSelect {
         }
     }
 
-    pub fn select<'a, S, O, Si, Oi>(&self, column_name_vec: S, column_obj_vec: O) -> &Self
+    pub fn select<'a, I, S>(&self, column_vec: I) -> &Self
     where
-        S: IntoIterator<Item = Si>,
-        O: IntoIterator<Item = &'a Oi>,
-        Si: AsRef<str>,
-        Oi: ResultColumnConvertibleTrait + 'a,
+        I: IntoIterator<Item = S>,
+        S: Into<SelectArg<'a>>,
     {
-        let column_name_vec: Vec<Si> = column_name_vec.into_iter().collect();
-        let column_obj_vec: Vec<&'a Oi> = column_obj_vec.into_iter().collect();
-        if column_name_vec.is_empty() && column_obj_vec.is_empty() {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
         let mut cpp_type_vec = vec![];
         let mut cpp_str_vec = vec![];
         let mut cpp_obj_vec = vec![];
-        for str in column_name_vec {
-            cpp_type_vec.push(CPPType::String as c_int);
-            cpp_str_vec.push(str.as_ref().to_cstring().as_ptr());
-        }
-        for obj in column_obj_vec {
-            cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
-            cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+        for item in data_vec {
+            match item {
+                SelectArg::String(str) => {
+                    cpp_type_vec.push(CPPType::String as c_int);
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                SelectArg::ResultColumn(obj) => {
+                    cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
+                    cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+                }
+            }
         }
         unsafe {
-            WCDBRustStatementSelect_configResultColumns(
+            WCDBRustStatementSelect_configTableOrSubqueries(
                 self.get_cpp_obj(),
                 cpp_type_vec.as_ptr(),
                 cpp_obj_vec.as_ptr(),
@@ -177,29 +159,30 @@ impl StatementSelect {
         self
     }
 
-    // todo qixinbing  IntoIterator 是否拆分成俩方法？这俩参数割裂感太强
-    pub fn from<'a, S, O, Si, Oi>(&self, table_name_vec: S, table_subquery_obj_vec: O) -> &Self
+    pub fn from<'a, I, S>(&self, table_arg_vec: I) -> &Self
     where
-        S: IntoIterator<Item = Si>,
-        O: IntoIterator<Item = &'a Oi>,
-        Si: AsRef<str>,
-        Oi: TableOrSubqueryConvertibleTrait + 'a,
+        I: IntoIterator<Item = S>,
+        S: Into<FromArg<'a>>,
     {
-        let table_name_vec: Vec<Si> = table_name_vec.into_iter().collect();
-        let table_subquery_obj_vec: Vec<&'a Oi> = table_subquery_obj_vec.into_iter().collect();
-        if table_name_vec.is_empty() && table_subquery_obj_vec.is_empty() {
+        let mut data_vec = table_arg_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
         let mut cpp_type_vec = vec![];
         let mut cpp_str_vec = vec![];
         let mut cpp_obj_vec = vec![];
-        for str in table_name_vec {
-            cpp_type_vec.push(CPPType::String as c_int);
-            cpp_str_vec.push(str.as_ref().to_cstring().as_ptr());
-        }
-        for obj in table_subquery_obj_vec {
-            cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
-            cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+
+        for item in data_vec {
+            match item {
+                FromArg::String(str) => {
+                    cpp_type_vec.push(CPPType::String as c_int);
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                FromArg::TableOrSubquery(obj) => {
+                    cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
+                    cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+                }
+            }
         }
         unsafe {
             WCDBRustStatementSelect_configTableOrSubqueries(
@@ -221,28 +204,29 @@ impl StatementSelect {
         self
     }
 
-    pub fn group_by<'a, S, O, Si, Oi>(&self, column_name_vec: S, expression_obj_vec: O) -> &Self
+    pub fn group_by<'a, I, S>(&self, column_vec: I) -> &Self
     where
-        S: IntoIterator<Item = Si>,
-        O: IntoIterator<Item = &'a Oi>,
-        Si: AsRef<str>,
-        Oi: ExpressionConvertibleTrait + 'a,
+        I: IntoIterator<Item = S>,
+        S: Into<GroupByArg<'a>>,
     {
-        let column_name_vec: Vec<Si> = column_name_vec.into_iter().collect();
-        let expression_obj_vec: Vec<&'a Oi> = expression_obj_vec.into_iter().collect();
-        if column_name_vec.is_empty() && expression_obj_vec.is_empty() {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
         let mut cpp_type_vec = vec![];
         let mut cpp_str_vec = vec![];
         let mut cpp_obj_vec = vec![];
-        for str in column_name_vec {
-            cpp_type_vec.push(CPPType::String as c_int);
-            cpp_str_vec.push(str.as_ref().to_cstring().as_ptr());
-        }
-        for obj in expression_obj_vec {
-            cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
-            cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+        for item in data_vec {
+            match item {
+                GroupByArg::String(str) => {
+                    cpp_type_vec.push(CPPType::String as c_int);
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                GroupByArg::ExpressionConvertible(obj) => {
+                    cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
+                    cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+                }
+            }
         }
         unsafe {
             WCDBRustStatementSelect_configGroups(
@@ -297,5 +281,74 @@ impl StatementSelect {
             WCDBRustStatementSelect_configOffset(self.get_cpp_obj(), CPPType::Int as c_int, offset)
         }
         self
+    }
+}
+
+pub enum SelectArg<'a> {
+    String(String),
+    ResultColumn(&'a dyn ResultColumnConvertibleTrait),
+}
+
+impl<'a> From<String> for SelectArg<'a> {
+    fn from(value: String) -> Self {
+        SelectArg::String(value)
+    }
+}
+
+impl<'a> From<&str> for SelectArg<'a> {
+    fn from(value: &str) -> Self {
+        SelectArg::String(value.to_string())
+    }
+}
+
+impl<'a, T: ResultColumnConvertibleTrait> From<&'a T> for SelectArg<'a> {
+    fn from(value: &'a T) -> Self {
+        SelectArg::ResultColumn(value)
+    }
+}
+
+pub enum FromArg<'a> {
+    String(String),
+    TableOrSubquery(&'a dyn TableOrSubqueryConvertibleTrait),
+}
+
+impl<'a> From<String> for FromArg<'a> {
+    fn from(value: String) -> Self {
+        FromArg::String(value)
+    }
+}
+
+impl<'a> From<&str> for FromArg<'a> {
+    fn from(value: &str) -> Self {
+        FromArg::String(value.to_string())
+    }
+}
+
+impl<'a, T: TableOrSubqueryConvertibleTrait + 'a> From<&'a T> for FromArg<'a> {
+    fn from(value: &'a T) -> Self {
+        FromArg::TableOrSubquery(value)
+    }
+}
+
+pub enum GroupByArg<'a> {
+    String(String),
+    ExpressionConvertible(&'a dyn ExpressionConvertibleTrait),
+}
+
+impl<'a> From<String> for GroupByArg<'a> {
+    fn from(value: String) -> Self {
+        GroupByArg::String(value)
+    }
+}
+
+impl<'a> From<&str> for GroupByArg<'a> {
+    fn from(value: &str) -> Self {
+        GroupByArg::String(value.to_string())
+    }
+}
+
+impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for GroupByArg<'a> {
+    fn from(value: &'a T) -> Self {
+        GroupByArg::ExpressionConvertible(value)
     }
 }
