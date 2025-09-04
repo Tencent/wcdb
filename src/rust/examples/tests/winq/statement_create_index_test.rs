@@ -2,6 +2,7 @@
 pub mod statement_create_index_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::indexed_column::IndexedColumn;
     use wcdb::winq::ordering_term::Order;
     use wcdb::winq::statement_create_index::StatementCreateIndex;

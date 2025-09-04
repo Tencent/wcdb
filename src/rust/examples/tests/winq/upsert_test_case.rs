@@ -2,6 +2,7 @@
 pub mod upsert_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::upsert::Upsert;
 
     #[test]

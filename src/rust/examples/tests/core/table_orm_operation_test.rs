@@ -56,6 +56,7 @@ pub mod table_orm_operation_test_case {
     use std::sync::{Arc, RwLock};
     use wcdb::core::database::Database;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
 
     pub fn setup() {
         let arc_clone = Arc::clone(&table_orm_operation_TEST);
@@ -117,9 +118,7 @@ pub mod table_orm_operation_test_case {
         let field_value = DbTableOperationObject::value();
 
         let updated_text = "updated_row";
-        let expression = field_channel_id
-            .get_column()
-            .eq_string(obj.channel_id.as_str());
+        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
         let update_obj = TableOperationObject {
             value: updated_text.to_string(),
             ..obj.clone()
@@ -135,9 +134,7 @@ pub mod table_orm_operation_test_case {
         );
         assert!(ret.is_ok());
 
-        let expression = field_channel_id
-            .get_column()
-            .eq_string(obj.channel_id.as_str());
+        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
         let ret =
             database.get_first_object(vec![&field_value], TABLE_NAME, Some(expression), None, None);
         assert!(ret.is_ok());
@@ -145,9 +142,7 @@ pub mod table_orm_operation_test_case {
         let ret_value_opt = ret.unwrap();
         assert_eq!(ret_value_opt.unwrap().value, updated_text);
 
-        let expression = field_channel_id
-            .get_column()
-            .eq_string(obj.channel_id.as_str());
+        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
         let ret = database.delete_objects(TABLE_NAME, Some(expression), None, None, None);
         assert!(ret.is_ok());
 

@@ -272,6 +272,7 @@ pub mod orm_test {
         DB_PRIMARY_NOT_AUTO_INCREMENT_OBJECT_INSTANCE,
     };
     use crate::orm::testclass::table_constraint_object::DB_TABLE_CONSTRAINT_OBJECT_INSTANCE;
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
 
     fn setup(orm_test: &OrmTest) {
         orm_test.setup().unwrap();

@@ -7,6 +7,7 @@ pub mod simple_sample {
     use wcdb::core::handle_operation::HandleOperationTrait;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
     use wcdb::core::table_orm_operation::TableORMOperationTrait;
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::ordering_term::Order;
 
     #[test]
@@ -47,8 +48,8 @@ pub mod simple_sample {
         let filed_id = unsafe { &*id };
         let content = DB_TEST_OBJECT_INSTANCE.content;
         let filed_content = unsafe { &*content };
-        let express_content = filed_content.get_column().eq_string("updateContent");
-        let express = filed_id.get_column().eq_long(100).and(&express_content);
+        let express_content = filed_content.get_column().eq("updateContent");
+        let express = filed_id.get_column().eq(100).and(express_content);
         let ret = table.update_object(
             test_table,
             Some(vec![filed_id]),
@@ -67,7 +68,7 @@ pub mod simple_sample {
         // 删除
         let id = DB_TEST_OBJECT_INSTANCE.id;
         let filed_id = unsafe { &*id };
-        let express = filed_id.get_column().lt_int(10);
+        let express = filed_id.get_column().lt(10);
         // table.delete_objects_by_expression(express).unwrap();
         let ordering_term = filed_id.get_column().order(Order::Desc);
         let ret = table.delete_objects(None, Some(ordering_term), Some(10), None);
