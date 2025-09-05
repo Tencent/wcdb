@@ -140,6 +140,7 @@ impl StatementCreateView {
         self
     }
 
+    // todo qixinbing 合并
     pub fn with_columns(&self, columns: &Vec<Column>) -> &Self {
         let cpp_type = CPPType::Column;
         let len = columns.len();

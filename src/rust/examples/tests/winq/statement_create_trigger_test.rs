@@ -155,7 +155,7 @@ pub mod statement_create_trigger_test {
                 .create_trigger(name)
                 .of_with_string(schema)
                 .before().update()
-                .of_with_column_names(&vec![String::from("column1"), String::from("column2")])
+                .of_columns(vec![String::from("column1"), String::from("column2")])
                 .on_table(table).execute(update),
             "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1, column2 ON testTable BEGIN UPDATE testTable SET column1 = 2; END"
         );

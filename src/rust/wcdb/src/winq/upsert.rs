@@ -1,13 +1,13 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::{
+    ExpressionConvertibleParam, StringColumnParam, StringIndexedColumnConvertibleParam,
+};
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::expression::Expression;
-use crate::winq::expression_convertible::{ExpressionConvertibleParam, ExpressionConvertibleTrait};
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_longlong, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_void};
 
 extern "C" {
     fn WCDBRustUpsert_createCppObj() -> *mut c_void;
@@ -98,7 +98,7 @@ impl Upsert {
     pub fn indexed_by<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<UpsertIndexedByParam<'a>>,
+        S: Into<StringIndexedColumnConvertibleParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -109,10 +109,10 @@ impl Upsert {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                UpsertIndexedByParam::String(str) => {
+                StringIndexedColumnConvertibleParam::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                UpsertIndexedByParam::IndexedColumnConvertible(obj) => {
+                StringIndexedColumnConvertibleParam::IndexedColumnConvertible(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }
@@ -163,10 +163,10 @@ impl Upsert {
         self
     }
 
-    pub fn set<I, S>(&self, column_vec: I) -> &Self
+    pub fn set<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<UpsertSetParam>,
+        S: Into<StringColumnParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -177,12 +177,12 @@ impl Upsert {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                UpsertSetParam::String(str) => {
+                StringColumnParam::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                UpsertSetParam::Column(obj) => {
+                StringColumnParam::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
-                    cpp_obj_vec.push(CppObject::get(&obj));
+                    cpp_obj_vec.push(CppObject::get(obj));
                 }
             }
         }
@@ -260,51 +260,5 @@ impl Upsert {
             }
         }
         self
-    }
-}
-
-pub enum UpsertIndexedByParam<'a> {
-    String(String),
-    IndexedColumnConvertible(&'a dyn IndexedColumnConvertibleTrait),
-}
-
-impl<'a> From<String> for UpsertIndexedByParam<'a> {
-    fn from(value: String) -> Self {
-        UpsertIndexedByParam::String(value)
-    }
-}
-
-impl<'a> From<&'a str> for UpsertIndexedByParam<'a> {
-    fn from(value: &'a str) -> Self {
-        UpsertIndexedByParam::String(value.to_string())
-    }
-}
-
-impl<'a, T: IndexedColumnConvertibleTrait> From<&'a T> for UpsertIndexedByParam<'a> {
-    fn from(value: &'a T) -> Self {
-        UpsertIndexedByParam::IndexedColumnConvertible(value)
-    }
-}
-
-pub enum UpsertSetParam {
-    String(String),
-    Column(Column),
-}
-
-impl From<String> for UpsertSetParam {
-    fn from(value: String) -> Self {
-        UpsertSetParam::String(value)
-    }
-}
-
-impl From<&str> for UpsertSetParam {
-    fn from(value: &str) -> Self {
-        UpsertSetParam::String(value.to_string())
-    }
-}
-
-impl From<Column> for UpsertSetParam {
-    fn from(value: Column) -> Self {
-        UpsertSetParam::Column(value)
     }
 }

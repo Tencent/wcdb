@@ -1,12 +1,11 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::ExpressionConvertibleParam;
 use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
-use crate::winq::expression_convertible::{ExpressionConvertibleParam, ExpressionConvertibleTrait};
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::any::TypeId;
-use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
+use std::ffi::{c_char, c_double, c_int, c_void};
 
 extern "C" {
     fn WCDBRustColumnConstraint_create(name: *const c_char) -> *mut c_void;

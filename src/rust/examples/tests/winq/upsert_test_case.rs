@@ -31,7 +31,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set(vec![Column::new("column1", None)])
+                .set(vec![&Column::new("column1", None)])
                 .to(None),
             "ON CONFLICT DO UPDATE SET column1 = NULL",
         );
@@ -39,7 +39,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set(vec![Column::new("column1", None)])
+                .set(vec![&Column::new("column1", None)])
                 .to(true),
             "ON CONFLICT DO UPDATE SET column1 = TRUE",
         );

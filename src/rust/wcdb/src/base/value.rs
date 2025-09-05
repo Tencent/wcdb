@@ -8,6 +8,7 @@ pub enum ValueObject {
     Double(f64),
     String(String),
     BLOB(Vec<u8>),
+    // todo qixinbing 处理 struct Value
 }
 
 impl From<bool> for ValueObject {
@@ -76,6 +77,7 @@ pub struct Value {
 }
 
 impl Value {
+    // todo qixinbing 是否支持 None？
     pub fn default() -> Self {
         Value {
             value: ValueObject::None,

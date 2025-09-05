@@ -1,16 +1,17 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::{
+    StringExpressionConvertibleParam, StringResultColumnConvertibleParam,
+    StringTableOrSubqueryConvertibleParam,
+};
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
-use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
-use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
-use std::borrow::Cow;
 use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 use std::fmt::Debug;
 
@@ -125,7 +126,7 @@ impl StatementSelect {
     pub fn select<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StatementSelectSelectParam<'a>>,
+        S: Into<StringResultColumnConvertibleParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -136,11 +137,11 @@ impl StatementSelect {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StatementSelectSelectParam::String(str) => {
+                StringResultColumnConvertibleParam::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StatementSelectSelectParam::ResultColumn(obj) => {
+                StringResultColumnConvertibleParam::ResultColumn(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -162,7 +163,7 @@ impl StatementSelect {
     pub fn from<'a, I, S>(&self, table_arg_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StatementSelectFromParam<'a>>,
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
     {
         let mut data_vec = table_arg_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -174,11 +175,11 @@ impl StatementSelect {
 
         for item in data_vec {
             match item {
-                StatementSelectFromParam::String(str) => {
+                StringTableOrSubqueryConvertibleParam::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StatementSelectFromParam::TableOrSubquery(obj) => {
+                StringTableOrSubqueryConvertibleParam::TableOrSubquery(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -207,7 +208,7 @@ impl StatementSelect {
     pub fn group_by<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StatementSelectGroupByParam<'a>>,
+        S: Into<StringExpressionConvertibleParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -218,11 +219,11 @@ impl StatementSelect {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StatementSelectGroupByParam::String(str) => {
+                StringExpressionConvertibleParam::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StatementSelectGroupByParam::ExpressionConvertible(obj) => {
+                StringExpressionConvertibleParam::ExpressionConvertible(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -281,74 +282,5 @@ impl StatementSelect {
             WCDBRustStatementSelect_configOffset(self.get_cpp_obj(), CPPType::Int as c_int, offset)
         }
         self
-    }
-}
-
-pub enum StatementSelectSelectParam<'a> {
-    String(String),
-    ResultColumn(&'a dyn ResultColumnConvertibleTrait),
-}
-
-impl<'a> From<String> for StatementSelectSelectParam<'a> {
-    fn from(value: String) -> Self {
-        StatementSelectSelectParam::String(value)
-    }
-}
-
-impl<'a> From<&str> for StatementSelectSelectParam<'a> {
-    fn from(value: &str) -> Self {
-        StatementSelectSelectParam::String(value.to_string())
-    }
-}
-
-impl<'a, T: ResultColumnConvertibleTrait> From<&'a T> for StatementSelectSelectParam<'a> {
-    fn from(value: &'a T) -> Self {
-        StatementSelectSelectParam::ResultColumn(value)
-    }
-}
-
-pub enum StatementSelectFromParam<'a> {
-    String(String),
-    TableOrSubquery(&'a dyn TableOrSubqueryConvertibleTrait),
-}
-
-impl<'a> From<String> for StatementSelectFromParam<'a> {
-    fn from(value: String) -> Self {
-        StatementSelectFromParam::String(value)
-    }
-}
-
-impl<'a> From<&str> for StatementSelectFromParam<'a> {
-    fn from(value: &str) -> Self {
-        StatementSelectFromParam::String(value.to_string())
-    }
-}
-
-impl<'a, T: TableOrSubqueryConvertibleTrait + 'a> From<&'a T> for StatementSelectFromParam<'a> {
-    fn from(value: &'a T) -> Self {
-        StatementSelectFromParam::TableOrSubquery(value)
-    }
-}
-
-pub enum StatementSelectGroupByParam<'a> {
-    String(String),
-    ExpressionConvertible(&'a dyn ExpressionConvertibleTrait),
-}
-
-impl<'a> From<String> for StatementSelectGroupByParam<'a> {
-    fn from(value: String) -> Self {
-        StatementSelectGroupByParam::String(value)
-    }
-}
-
-impl<'a> From<&str> for StatementSelectGroupByParam<'a> {
-    fn from(value: &str) -> Self {
-        StatementSelectGroupByParam::String(value.to_string())
-    }
-}
-
-impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for StatementSelectGroupByParam<'a> {
-    fn from(value: &'a T) -> Self {
-        StatementSelectGroupByParam::ExpressionConvertible(value)
     }
 }
