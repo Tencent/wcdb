@@ -346,7 +346,7 @@ impl TraceTest {
         let ret = database.execute(
             StatementSelect::new()
                 .select(vec!["1"])
-                .from("dummy" /* table_subquery_obj_vec */),
+                .from(vec!["dummy"] /* table_subquery_obj_vec */),
         );
         match ret {
             Ok(_) => {
@@ -388,7 +388,7 @@ impl TraceTest {
         let ret = database.execute(
             StatementSelect::new()
                 .select(vec!["1".to_string()])
-                .from("dummy"),
+                .from(vec!["dummy"]),
         );
         match ret {
             Ok(_) => {

@@ -7,7 +7,7 @@ use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void, CString};
 
 extern "C" {
     fn WCDBRustUpsert_createCppObj() -> *mut c_void;
@@ -15,7 +15,7 @@ extern "C" {
     fn WCDBRustUpsert_configIndexedColumn(
         cpp_obj: *mut c_void,
         cpp_obj_type: c_int,
-        columns: *const *mut c_void,
+        columns: *const c_longlong,
         columns_string_vec: *const *const c_char,
         vec_len: c_int,
     );
@@ -95,47 +95,52 @@ impl Upsert {
         self
     }
 
-    pub fn indexed_by_column_names(&self, column_names: &Vec<String>) -> &Self {
-        let len = column_names.len();
-        let c_strings: Vec<CString> = column_names.iter().map(|x| x.to_cstring()).collect();
-        let c_char_vec: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
-
-        unsafe {
-            WCDBRustUpsert_configIndexedColumn(
-                self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                c_char_vec.as_ptr(),
-                len as c_int,
-            );
+    pub fn indexed_by<'a, I, S>(&self, column_vec: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<UpsertIndexedByParam<'a>>,
+    {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
+            return self;
+        }
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                UpsertIndexedByParam::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                UpsertIndexedByParam::IndexedColumnConvertible(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+                }
+            }
+        }
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustUpsert_configIndexedColumn(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    std::ptr::null_mut(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len() as c_int,
+                );
+            }
+        } else {
+            unsafe {
+                WCDBRustUpsert_configIndexedColumn(
+                    self.get_cpp_obj(),
+                    cpp_type as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    std::ptr::null(),
+                    cpp_obj_vec.len() as c_int,
+                );
+            }
         }
         self
     }
-
-    // pub fn indexed_by_indexed_column_convertible_trait<T>(&self, indexed_columns: Vec<&T>) -> &Self
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     if indexed_columns.is_empty() {
-    //         return self;
-    //     }
-    //     let len = indexed_columns.len();
-    //     let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
-    //     let cpp_type = Identifier::get_cpp_type(indexed_columns[0]);
-    //     for x in indexed_columns {
-    //         i64_vec.push(CppObject::get(x));
-    //     }
-    //     unsafe {
-    //         WCDBRustUpsert_configIndexedColumn(
-    //             self.get_cpp_obj(),
-    //             cpp_type as c_int,
-    //             i64_vec.as_ptr(),
-    //             std::ptr::null(),
-    //             len as c_int,
-    //         );
-    //     }
-    //     self
-    // }
 
     pub fn where_(&self, condition: &Expression) -> &Self {
         unsafe {
@@ -197,148 +202,146 @@ impl Upsert {
         self
     }
 
-    pub fn to_bool(&self, value: bool) -> &Self {
-        let value = if value { 1 } else { 0 };
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Bool as c_int,
-                value as *mut c_void,
-                0 as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_u8(&self, value: u8) -> &Self {
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Int as c_int,
-                value as *mut c_void,
-                0 as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_u16(&self, value: u16) -> &Self {
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Int as c_int,
-                value as *mut c_void,
-                0 as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_i32(&self, value: i32) -> &Self {
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Int as c_int,
-                value as *mut c_void,
-                0 as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_i64(&self, value: i64) -> &Self {
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Int as c_int,
-                value as *mut c_void,
-                0 as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_f32(&self, value: f32) -> &Self {
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                value as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_f64(&self, value: f64) -> &Self {
-        unsafe {
-            WCDBRustUpsert_configToValue(
-                self.get_cpp_obj(),
-                CPPType::Double as c_int,
-                0 as *mut c_void,
-                value as c_double,
-                std::ptr::null_mut(),
-            );
-        }
-        self
-    }
-
-    pub fn to_string(&self, value: String) -> &Self {
-        if !value.is_empty() {
-            let c_str = value.to_cstring();
-            unsafe {
+    pub fn to<'a, V>(&self, value: V) -> &Self
+    where
+        V: Into<UpsertToParam<'a>>,
+    {
+        let value = value.into();
+        match value {
+            UpsertToParam::Int(cpp_type, num) => unsafe {
+                WCDBRustUpsert_configToValue(
+                    self.get_cpp_obj(),
+                    cpp_type as c_int,
+                    num as *mut c_void,
+                    0 as c_double,
+                    std::ptr::null_mut(),
+                );
+            },
+            UpsertToParam::Double(cpp_type, num) => unsafe {
+                WCDBRustUpsert_configToValue(
+                    self.get_cpp_obj(),
+                    cpp_type as c_int,
+                    0 as *mut c_void,
+                    num as c_double,
+                    std::ptr::null_mut(),
+                );
+            },
+            UpsertToParam::String(str) => unsafe {
                 WCDBRustUpsert_configToValue(
                     self.get_cpp_obj(),
                     CPPType::String as c_int,
                     0 as *mut c_void,
                     0 as c_double,
-                    c_str.as_ptr(),
+                    str.as_str().to_cstring().as_ptr(),
                 );
-            }
-        } else {
-            unsafe {
-                WCDBRustUpsert_configToValue(
-                    self.get_cpp_obj(),
-                    CPPType::Null as c_int,
-                    0 as *mut c_void,
-                    0 as c_double,
-                    std::ptr::null_mut(),
-                );
+            },
+            UpsertToParam::ExpressionConvertible(obj_opt) => {
+                let (cpp_type, cpp_obj) = match obj_opt {
+                    None => (CPPType::Null, 0 as *mut c_void),
+                    Some(obj) => (Identifier::get_cpp_type(obj), CppObject::get(obj)),
+                };
+                unsafe {
+                    WCDBRustUpsert_configToValue(
+                        self.get_cpp_obj(),
+                        cpp_type as c_int,
+                        cpp_obj,
+                        0 as c_double,
+                        std::ptr::null_mut(),
+                    );
+                };
             }
         }
         self
     }
+}
 
-    // pub fn to_expression_convertible_trait<T>(&self, value: Option<T>) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     match value {
-    //         None => unsafe {
-    //             WCDBRustUpsert_configToValue(
-    //                 self.get_cpp_obj(),
-    //                 CPPType::Null as c_int,
-    //                 0 as *mut c_void,
-    //                 0 as c_double,
-    //                 std::ptr::null_mut(),
-    //             );
-    //         },
-    //         Some(value) => unsafe {
-    //             WCDBRustUpsert_configToValue(
-    //                 self.get_cpp_obj(),
-    //                 Identifier::get_cpp_type(&value) as c_int,
-    //                 CppObject::get(&value),
-    //                 0 as c_double,
-    //                 std::ptr::null_mut(),
-    //             );
-    //         },
-    //     }
-    //     self
-    // }
+pub enum UpsertIndexedByParam<'a> {
+    String(String),
+    IndexedColumnConvertible(&'a dyn IndexedColumnConvertibleTrait),
+}
+
+impl<'a> From<String> for UpsertIndexedByParam<'a> {
+    fn from(value: String) -> Self {
+        UpsertIndexedByParam::String(value)
+    }
+}
+
+impl<'a> From<&'a str> for UpsertIndexedByParam<'a> {
+    fn from(value: &'a str) -> Self {
+        UpsertIndexedByParam::String(value.to_string())
+    }
+}
+
+impl<'a, T: IndexedColumnConvertibleTrait> From<&'a T> for UpsertIndexedByParam<'a> {
+    fn from(value: &'a T) -> Self {
+        UpsertIndexedByParam::IndexedColumnConvertible(value)
+    }
+}
+
+pub enum UpsertToParam<'a> {
+    Int(CPPType, i64),
+    Double(CPPType, f64),
+    String(String),
+    ExpressionConvertible(Option<&'a dyn ExpressionConvertibleTrait>),
+}
+
+impl<'a> From<bool> for UpsertToParam<'a> {
+    fn from(value: bool) -> Self {
+        let value = if value { 1 } else { 0 };
+        UpsertToParam::Int(CPPType::Bool, value)
+    }
+}
+
+impl<'a> From<i8> for UpsertToParam<'a> {
+    fn from(value: i8) -> Self {
+        UpsertToParam::Int(CPPType::Int, value as i64)
+    }
+}
+
+impl<'a> From<i16> for UpsertToParam<'a> {
+    fn from(value: i16) -> Self {
+        UpsertToParam::Int(CPPType::Int, value as i64)
+    }
+}
+
+impl<'a> From<i32> for UpsertToParam<'a> {
+    fn from(value: i32) -> Self {
+        UpsertToParam::Int(CPPType::Int, value as i64)
+    }
+}
+
+impl<'a> From<i64> for UpsertToParam<'a> {
+    fn from(value: i64) -> Self {
+        UpsertToParam::Int(CPPType::Int, value)
+    }
+}
+
+impl<'a> From<f32> for UpsertToParam<'a> {
+    fn from(value: f32) -> Self {
+        UpsertToParam::Double(CPPType::Double, value as f64)
+    }
+}
+
+impl<'a> From<f64> for UpsertToParam<'a> {
+    fn from(value: f64) -> Self {
+        UpsertToParam::Double(CPPType::Double, value)
+    }
+}
+
+impl<'a> From<String> for UpsertToParam<'a> {
+    fn from(value: String) -> Self {
+        UpsertToParam::String(value)
+    }
+}
+
+impl<'a> From<&'a str> for UpsertToParam<'a> {
+    fn from(value: &'a str) -> Self {
+        UpsertToParam::String(value.to_string())
+    }
+}
+
+impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for UpsertToParam<'a> {
+    fn from(value: Option<&'a dyn ExpressionConvertibleTrait>) -> Self {
+        UpsertToParam::ExpressionConvertible(value)
+    }
 }

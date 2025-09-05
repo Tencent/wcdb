@@ -131,7 +131,7 @@ impl Identifier {
         }
     }
 
-    pub(crate) fn get_cpp_type<T: IdentifierConvertibleTrait>(identifier: &T) -> CPPType {
+    pub(crate) fn get_cpp_type<T: IdentifierConvertibleTrait + ?Sized>(identifier: &T) -> CPPType {
         identifier.as_identifier().get_type()
     }
 }

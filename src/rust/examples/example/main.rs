@@ -90,7 +90,13 @@ fn test_func(db: &Database) {
         .unwrap();
 
     let msg_box_opt = db
-        .get_first_object(DbTableMessageBox::all_fields(), "rct_message_box",None,None,None)
+        .get_first_object(
+            DbTableMessageBox::all_fields(),
+            "rct_message_box",
+            None,
+            None,
+            None,
+        )
         .unwrap();
     println!("qxb test_func");
 }
