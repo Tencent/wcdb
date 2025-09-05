@@ -3,9 +3,8 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::base::param::i64_expression_convertible_param::I64ExpressionConvertibleParam;
 use crate::base::param::string_column_trait_param::StringColumnTraitParam;
-use crate::orm::field::Field;
+use crate::base::param::string_qualified_table_param::StringQualifiedTableParam;
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::common_table_expression::CommonTableExpression;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::expression::Expression;
@@ -60,7 +59,11 @@ extern "C" {
         limit: i64,
     );
 
-    fn WCDBRustStatementUpdate_configOffset(cpp_obj: *mut c_void, config_type: c_int, offset: i64);
+    fn WCDBRustStatementUpdate_configOffset(
+        cpp_obj: *mut c_void,
+        config_type: c_int,
+        offset: *mut c_void,
+    );
 
     fn WCDBRustStatementUpdate_configConfliction(cpp_obj: *mut c_void, action: c_int);
 
@@ -164,46 +167,48 @@ impl StatementUpdate {
         self
     }
 
-    // pub fn with_recursive(&self, expressions: &Vec<CommonTableExpression>) -> &Self {
-    //     if expressions.is_empty() {
-    //         return self;
-    //     }
-    //     let mut cpp_obj_vec: Vec<*mut c_void> = Vec::with_capacity(expressions.len());
-    //     for x in expressions {
-    //         cpp_obj_vec.push(CppObject::get(x));
-    //     }
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configWith(
-    //             self.get_cpp_obj(),
-    //             cpp_obj_vec.as_ptr(),
-    //             cpp_obj_vec.len() as c_int,
-    //         );
-    //     }
-    //     unsafe { WCDBRustStatementUpdate_configRecursive(self.get_cpp_obj()) }
-    //     self
-    // }
-
-    pub fn update(&self, table_name: &str) -> &Self {
-        let c_table_name = CString::new(table_name).unwrap_or_default();
+    pub fn with_recursive(&self, expressions: &Vec<CommonTableExpression>) -> &Self {
+        if expressions.is_empty() {
+            return self;
+        }
+        let mut cpp_obj_vec: Vec<*mut c_void> = Vec::with_capacity(expressions.len());
+        for x in expressions {
+            cpp_obj_vec.push(CppObject::get(x));
+        }
         unsafe {
-            WCDBRustStatementUpdate_configTable(
+            WCDBRustStatementUpdate_configWith(
                 self.get_cpp_obj(),
-                CPPType::String as c_int,
-                null_mut(),
-                c_table_name.as_ptr(),
+                cpp_obj_vec.as_ptr(),
+                cpp_obj_vec.len() as c_int,
             );
         }
+        // todo qixinbing 待实现
+        // unsafe { WCDBRustStatementUpdate_configRecursive(self.get_cpp_obj()) }
         self
     }
 
-    pub fn update_qualified_table(&self, table: QualifiedTable) -> &Self {
+    pub fn update<'a, S>(&self, table_vec: S) -> &Self
+    where
+        S: Into<StringQualifiedTableParam<'a>>,
+    {
+        let value = table_vec.into();
+        let (cpp_type, table, table_name) = match value {
+            StringQualifiedTableParam::String(str) => {
+                let table_name = str.as_str().to_cstring().as_ptr();
+                (CPPType::String, null_mut(), table_name)
+            }
+            StringQualifiedTableParam::QualifiedTable(obj) => {
+                let cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                (cpp_type, CppObject::get(obj), null())
+            }
+        };
         unsafe {
             WCDBRustStatementUpdate_configTable(
                 self.get_cpp_obj(),
-                Identifier::get_cpp_type(&table) as c_int,
-                CppObject::get(&table),
-                null(),
-            )
+                cpp_type as c_int,
+                table,
+                table_name,
+            );
         }
         self
     }
@@ -537,24 +542,21 @@ impl StatementUpdate {
         }
     }
 
-    pub fn offset(&self, offset: i64) -> &Self {
+    pub fn offset<'a, V>(&self, offset: V) -> &Self
+    where
+        V: Into<I64ExpressionConvertibleParam<'a>>,
+    {
+        let offset = offset.into();
+        let (config_type, offset) = match offset {
+            I64ExpressionConvertibleParam::I64(value) => (CPPType::Int, value as *mut c_void),
+            I64ExpressionConvertibleParam::ExpressionConvertible(value_opt) => match value_opt {
+                None => (CPPType::Null, 0 as *mut c_void),
+                Some(value) => unsafe { (Identifier::get_cpp_type(value), CppObject::get(value)) },
+            },
+        };
         unsafe {
-            WCDBRustStatementUpdate_configOffset(self.get_cpp_obj(), CPPType::Int as c_int, offset);
+            WCDBRustStatementUpdate_configOffset(self.get_cpp_obj(), config_type as c_int, offset);
         }
         self
     }
-
-    // pub fn offset_expression_convertible<T>(&self, offset: &T) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configOffset(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(offset) as c_int,
-    //             CppObject::get(offset) as i64,
-    //         );
-    //     }
-    //     self
-    // }
 }

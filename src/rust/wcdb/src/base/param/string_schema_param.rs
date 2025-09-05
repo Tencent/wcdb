@@ -1,5 +1,6 @@
 use crate::winq::schema::Schema;
 
+/// 支持 String, &str, Option<&Schema>
 pub enum StringSchemaParam<'a> {
     String(String),
     Schema(Option<&'a Schema>),

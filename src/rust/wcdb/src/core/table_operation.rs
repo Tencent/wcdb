@@ -125,7 +125,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
     ) -> WCDBResult<()> {
         let binding = StatementUpdate::new();
         binding
-            .update(self.table_name.as_ref())
+            .update(self.table_name.as_str())
             .set_columns_to_bind_parameters(columns);
         self.execute_update(
             row,

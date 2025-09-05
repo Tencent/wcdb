@@ -3,6 +3,7 @@ pub mod i64_expression_convertible_param;
 pub mod string_column_trait_param;
 pub mod string_expression_convertible_param;
 pub mod string_indexed_column_convertible_param;
+pub mod string_qualified_table_param;
 pub mod string_result_column_convertible_param;
 pub mod string_schema_param;
 pub mod string_table_or_subquery_convertible_param;

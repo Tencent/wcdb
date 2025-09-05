@@ -10,14 +10,14 @@ pub mod statement_update_test {
     pub fn test() {
         let column1 = Column::new("column1", None);
         let column2 = Column::new("column2", None);
-        let test_table_str = String::from("testTable");
+        let test_table_str = "testTable";
         let column_vec = vec![Column::new("column1", None), Column::new("column2", None)];
         let column1_vec = vec![column1];
         let column2_vec = vec![column2];
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str.clone())
                 .set(&column1_vec)
                 .to(1),
             "UPDATE testTable SET column1 = 1",
@@ -25,7 +25,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(true),
             "UPDATE testTable SET column1 = TRUE",
@@ -33,7 +33,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to("abc".to_string()),
             "UPDATE testTable SET column1 = 'abc'",
@@ -41,7 +41,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1.1),
             "UPDATE testTable SET column1 = 1.1000000000000001",
@@ -49,7 +49,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(None),
             "UPDATE testTable SET column1 = NULL",
@@ -57,7 +57,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .or_replace()
                 .set(&column1_vec)
                 .to(1)
@@ -68,7 +68,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set_columns_to_bind_parameters(&column_vec),
             "UPDATE testTable SET column1 = ?1, column2 = ?2",
         );
@@ -81,7 +81,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
                 .r#where(&Column::new("column1", None).gt(1)),
@@ -90,7 +90,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
                 .order_by(&vec![
@@ -102,7 +102,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
                 .limit(1, None),
@@ -111,7 +111,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
                 .limit(1, 2),
@@ -120,7 +120,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(&test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
                 .limit(1, None)
