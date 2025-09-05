@@ -31,6 +31,7 @@ pub mod statement_begin;
 pub mod statement_commit;
 pub mod statement_create_index;
 pub mod statement_create_table;
+pub mod statement_create_trigger;
 pub mod statement_create_view;
 pub mod statement_create_virtual_table;
 pub mod statement_delete;

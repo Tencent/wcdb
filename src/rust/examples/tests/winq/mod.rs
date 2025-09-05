@@ -14,6 +14,7 @@ pub(crate) mod statement_begin_test;
 pub(crate) mod statement_commit_test;
 pub(crate) mod statement_create_index_test;
 pub(crate) mod statement_create_table_test;
+pub(crate) mod statement_create_trigger_test;
 pub(crate) mod statement_create_view_test;
 pub(crate) mod statement_create_virtual_table_test;
 pub(crate) mod statement_delete_test;
