@@ -276,6 +276,7 @@ impl StatementUpdate {
         self
     }
 
+    // todo qixinbing 合并代码
     pub fn set_column_objs_to_bind_parameters(&self, columns: &Vec<Column>) -> &Self {
         if columns.is_empty() {
             return self;

@@ -7,7 +7,6 @@ pub mod upsert_test {
 
     #[test]
     pub fn test() {
-        let column_vec = vec![Column::new("column2", None), Column::new("column3", None)];
         WinqTool::winq_equal(
             Upsert::new().on_conflict().do_no_thing(),
             "ON CONFLICT DO NOTHING",
@@ -47,7 +46,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set(vec![Column::new("column1", None)])
+                .set(vec![&Column::new("column1", None)])
                 .to(1),
             "ON CONFLICT DO UPDATE SET column1 = 1",
         );
@@ -55,7 +54,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set(vec![Column::new("column1", None)])
+                .set(vec![&Column::new("column1", None)])
                 .to("abc"),
             "ON CONFLICT DO UPDATE SET column1 = 'abc'",
         );
@@ -63,9 +62,12 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set(vec![Column::new("column1", None)])
+                .set(vec![&Column::new("column1", None)])
                 .to(1)
-                .set(column_vec)
+                .set(vec![
+                    &Column::new("column2", None),
+                    &Column::new("column3", None),
+                ])
                 .to(2),
             "ON CONFLICT DO UPDATE SET column1 = 1, (column2, column3) = 2",
         );
@@ -73,7 +75,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set(vec![Column::new("column1", None)])
+                .set(vec![&Column::new("column1", None)])
                 .to(1)
                 .where_(&Column::new("column1", None).eq(2)),
             "ON CONFLICT DO UPDATE SET column1 = 1 WHERE column1 == 2",

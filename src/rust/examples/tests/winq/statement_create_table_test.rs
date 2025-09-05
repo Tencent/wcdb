@@ -16,10 +16,10 @@ pub mod statement_create_table_test {
 
         let constraint1 = TableConstraint::new(Some("constraint1"))
             .primary_key()
-            .indexed_by(vec![&column1]);
+            .indexed_by(&vec![column1]);
         let constraint2 = TableConstraint::new(Some("constraint2"))
             .unique()
-            .indexed_by(vec![&column2]);
+            .indexed_by(&vec![column2]);
 
         let table1 = "table1";
 

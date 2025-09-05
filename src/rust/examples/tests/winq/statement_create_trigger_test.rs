@@ -122,7 +122,7 @@ pub mod statement_create_trigger_test {
                 .create_trigger(name)
                 .of_with_string(schema)
                 .before().update()
-                .of_columns(&vec![column1])
+                .of_columns(vec![&column1])
                 .on_table(table)
                 .execute(update),
             "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1 ON testTable BEGIN UPDATE testTable SET column1 = 2; END"

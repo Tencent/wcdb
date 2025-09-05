@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::{StringColumnParam, StringIndexedColumnConvertibleParam};
 use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
@@ -140,42 +141,49 @@ impl StatementCreateView {
         self
     }
 
-    // todo qixinbing 合并
-    pub fn with_columns(&self, columns: &Vec<Column>) -> &Self {
-        let cpp_type = CPPType::Column;
-        let len = columns.len();
-        let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
-        for x in columns {
-            i64_vec.push(CppObject::get(x));
-        }
-        unsafe {
-            WCDBRustStatementCreateView_configColumns(
-                self.get_cpp_obj(),
-                cpp_type as c_int,
-                i64_vec.as_ptr(),
-                std::ptr::null_mut(),
-                len as c_int,
-            )
-        }
-        self
-    }
-
-    pub fn with_column_names(&self, column_names: &Vec<String>) -> &Self {
-        if column_names.is_empty() {
+    pub fn with_columns<'a, I, S>(&self, column_vec: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<StringColumnParam<'a>>,
+    {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
-        let len = column_names.len();
-        let c_strings: Vec<CString> = column_names.iter().map(|x| x.to_cstring()).collect();
-        let c_char_vec: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
-
-        unsafe {
-            WCDBRustStatementCreateView_configColumns(
-                self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                c_char_vec.as_ptr(),
-                len as c_int,
-            )
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                StringColumnParam::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                StringColumnParam::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj));
+                }
+            }
+        }
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustStatementCreateView_configColumns(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    std::ptr::null_mut(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_obj_vec.len() as c_int,
+                )
+            }
+        } else {
+            unsafe {
+                WCDBRustStatementCreateView_configColumns(
+                    self.get_cpp_obj(),
+                    cpp_type as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    std::ptr::null_mut(),
+                    cpp_obj_vec.len() as c_int,
+                )
+            }
         }
         self
     }
