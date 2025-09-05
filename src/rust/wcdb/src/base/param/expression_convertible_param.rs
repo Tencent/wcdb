@@ -7,8 +7,8 @@ use std::ffi::{c_char, c_double, c_void};
 /// 支持 bool, i8, i16, i32, i64, f32, f64, String, &str, Option<&dyn ExpressionConvertibleTrait>
 pub enum ExpressionConvertibleParam<'a> {
     Bool(bool),
-    Int(i64),
-    Double(f64),
+    I64(i64),
+    F64(f64),
     String(String),
     ExpressionConvertible(Option<&'a dyn ExpressionConvertibleTrait>),
 }
@@ -25,13 +25,13 @@ impl ExpressionConvertibleParam<'_> {
                     std::ptr::null_mut(),
                 )
             }
-            ExpressionConvertibleParam::Int(value) => (
+            ExpressionConvertibleParam::I64(value) => (
                 CPPType::Int,
                 value as *mut c_void,
                 0 as c_double,
                 std::ptr::null_mut(),
             ),
-            ExpressionConvertibleParam::Double(value) => (
+            ExpressionConvertibleParam::F64(value) => (
                 CPPType::Double,
                 0 as *mut c_void,
                 value as c_double,
@@ -62,37 +62,37 @@ impl<'a> From<bool> for ExpressionConvertibleParam<'a> {
 
 impl<'a> From<i8> for ExpressionConvertibleParam<'a> {
     fn from(value: i8) -> Self {
-        ExpressionConvertibleParam::Int(value as i64)
+        ExpressionConvertibleParam::I64(value as i64)
     }
 }
 
 impl<'a> From<i16> for ExpressionConvertibleParam<'a> {
     fn from(value: i16) -> Self {
-        ExpressionConvertibleParam::Int(value as i64)
+        ExpressionConvertibleParam::I64(value as i64)
     }
 }
 
 impl<'a> From<i32> for ExpressionConvertibleParam<'a> {
     fn from(value: i32) -> Self {
-        ExpressionConvertibleParam::Int(value as i64)
+        ExpressionConvertibleParam::I64(value as i64)
     }
 }
 
 impl<'a> From<i64> for ExpressionConvertibleParam<'a> {
     fn from(value: i64) -> Self {
-        ExpressionConvertibleParam::Int(value)
+        ExpressionConvertibleParam::I64(value)
     }
 }
 
 impl<'a> From<f32> for ExpressionConvertibleParam<'a> {
     fn from(value: f32) -> Self {
-        ExpressionConvertibleParam::Double(value as f64)
+        ExpressionConvertibleParam::F64(value as f64)
     }
 }
 
 impl<'a> From<f64> for ExpressionConvertibleParam<'a> {
     fn from(value: f64) -> Self {
-        ExpressionConvertibleParam::Double(value)
+        ExpressionConvertibleParam::F64(value)
     }
 }
 

@@ -105,7 +105,7 @@ pub mod statement_update_test {
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
                 .to(1)
-                .limit(1),
+                .limit(1, None),
             "UPDATE testTable SET column1 = 1 LIMIT 1",
         );
 
@@ -114,7 +114,7 @@ pub mod statement_update_test {
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
                 .to(1)
-                .limit_i64_i64(1, 2),
+                .limit(1, 2),
             "UPDATE testTable SET column1 = 1 LIMIT 1, 2",
         );
 
@@ -123,7 +123,7 @@ pub mod statement_update_test {
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
                 .to(1)
-                .limit(1)
+                .limit(1, None)
                 .offset(3),
             "UPDATE testTable SET column1 = 1 LIMIT 1 OFFSET 3",
         );

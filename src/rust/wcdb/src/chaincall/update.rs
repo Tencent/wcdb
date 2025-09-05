@@ -70,7 +70,7 @@ impl<'a, T> Update<'a, T> {
     }
 
     pub fn limit(&self, count: i64) -> &Self {
-        self.chain_call.get_statement().limit(count);
+        self.chain_call.get_statement().limit(count, None);
         self
     }
 

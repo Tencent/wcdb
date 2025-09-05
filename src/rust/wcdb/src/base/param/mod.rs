@@ -1,4 +1,5 @@
 pub mod expression_convertible_param;
+pub mod i64_expression_convertible_param;
 pub mod string_column_param;
 pub mod string_expression_convertible_param;
 pub mod string_indexed_column_convertible_param;

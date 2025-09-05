@@ -131,6 +131,7 @@ impl Identifier {
         }
     }
 
+    // todo qixinbing 是否将参数用 Option 包？
     pub(crate) fn get_cpp_type<T: IdentifierConvertibleTrait + ?Sized>(identifier: &T) -> CPPType {
         identifier.as_identifier().get_type()
     }

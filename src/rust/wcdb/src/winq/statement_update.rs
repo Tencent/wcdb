@@ -1,6 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
+use crate::base::param::i64_expression_convertible_param::I64ExpressionConvertibleParam;
 use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
@@ -390,91 +391,144 @@ impl StatementUpdate {
         self
     }
 
-    pub fn limit_i64_i64(&self, from: i64, to: i64) -> &Self {
-        unsafe {
-            WCDBRustStatementUpdate_configLimitRange(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                from as i64,
-                CPPType::Int as i32,
-                to as i64,
-            )
+    pub fn limit<'a, V, T>(&self, from: V, to: T) -> &Self
+    where
+        V: Into<I64ExpressionConvertibleParam<'a>>,
+        T: Into<I64ExpressionConvertibleParam<'a>>,
+    {
+        let to = to.into();
+
+        match to {
+            I64ExpressionConvertibleParam::I64(to_value) => {
+                self.config_limit_range_to_i64(from, to_value);
+            }
+            I64ExpressionConvertibleParam::ExpressionConvertible(to_value_obj) => {
+                match to_value_obj {
+                    None => {
+                        self.config_limit_count(from);
+                    }
+                    Some(to_value) => {
+                        self.config_limit_range(from, to_value);
+                    }
+                }
+            }
         }
         self
     }
 
-    // pub fn limit_i64_expression_convertible<T>(&self, from: i64, to: &T) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configLimitRange(
-    //             self.get_cpp_obj(),
-    //             CPPType::Int as c_int,
-    //             from,
-    //             Identifier::get_cpp_type(to) as c_int,
-    //             CppObject::get(to) as c_longlong,
-    //         )
-    //     }
-    //     self
-    // }
-    //
-    // pub fn limit_expression_convertible<T>(&self, from: &T, to: &T) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configLimitRange(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(from),
-    //             CppObject::get(from) as i64,
-    //             Identifier::get_cpp_type(to),
-    //             CppObject::get(to) as i64,
-    //         )
-    //     }
-    //     self
-    // }
-    //
-    // pub fn limit_expression_convertible_i64<T>(&self, from: &T, to: i64) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configLimitRange(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(from) as c_int,
-    //             CppObject::get(from) as i64,
-    //             CPPType::Int as i32,
-    //             to as i64,
-    //         )
-    //     }
-    //     self
-    // }
-
-    pub fn limit(&self, count: i64) -> &Self {
-        unsafe {
-            WCDBRustStatementUpdate_configLimitCount(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                count,
-            );
+    fn config_limit_count<'a, V>(&self, from: V)
+    where
+        V: Into<I64ExpressionConvertibleParam<'a>>,
+    {
+        let from = from.into();
+        match from {
+            I64ExpressionConvertibleParam::I64(from_value) => unsafe {
+                WCDBRustStatementUpdate_configLimitCount(
+                    self.get_cpp_obj(),
+                    CPPType::Int as i32,
+                    from_value,
+                );
+            },
+            I64ExpressionConvertibleParam::ExpressionConvertible(from_value_opt) => {
+                match from_value_opt {
+                    None => unsafe {
+                        WCDBRustStatementUpdate_configLimitCount(
+                            self.get_cpp_obj(),
+                            CPPType::Null as c_int,
+                            0,
+                        );
+                    },
+                    Some(from_value) => unsafe {
+                        WCDBRustStatementUpdate_configLimitCount(
+                            self.get_cpp_obj(),
+                            Identifier::get_cpp_type(from_value) as c_int,
+                            CppObject::get(from_value) as c_longlong,
+                        );
+                    },
+                }
+            }
         }
-        self
     }
 
-    // pub fn limit_count_expression_convertible<T>(&self, count: &T) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configLimitCount(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(count) as c_int,
-    //             CppObject::get(count) as i64,
-    //         );
-    //     }
-    //     self
-    // }
+    fn config_limit_range<'a, V>(&self, from: V, to: &'a dyn ExpressionConvertibleTrait)
+    where
+        V: Into<I64ExpressionConvertibleParam<'a>>,
+    {
+        let from = from.into();
+        match from {
+            I64ExpressionConvertibleParam::I64(from_value) => unsafe {
+                WCDBRustStatementUpdate_configLimitRange(
+                    self.get_cpp_obj(),
+                    CPPType::Int as c_int,
+                    from_value as c_longlong,
+                    Identifier::get_cpp_type(to) as c_int,
+                    CppObject::get(to) as c_longlong,
+                )
+            },
+            I64ExpressionConvertibleParam::ExpressionConvertible(from_value_opt) => {
+                match from_value_opt {
+                    None => unsafe {
+                        WCDBRustStatementUpdate_configLimitRange(
+                            self.get_cpp_obj(),
+                            CPPType::Null as c_int,
+                            0 as c_longlong,
+                            Identifier::get_cpp_type(to) as c_int,
+                            CppObject::get(to) as c_longlong,
+                        )
+                    },
+                    Some(from_value) => unsafe {
+                        WCDBRustStatementUpdate_configLimitRange(
+                            self.get_cpp_obj(),
+                            Identifier::get_cpp_type(from_value) as c_int,
+                            CppObject::get(from_value) as c_longlong,
+                            Identifier::get_cpp_type(to) as c_int,
+                            CppObject::get(to) as c_longlong,
+                        )
+                    },
+                }
+            }
+        }
+    }
+
+    fn config_limit_range_to_i64<'a, V>(&self, from: V, to: i64)
+    where
+        V: Into<I64ExpressionConvertibleParam<'a>>,
+    {
+        let from = from.into();
+        match from {
+            I64ExpressionConvertibleParam::I64(from_value) => unsafe {
+                WCDBRustStatementUpdate_configLimitRange(
+                    self.get_cpp_obj(),
+                    CPPType::Int as c_int,
+                    from_value as c_longlong,
+                    CPPType::Int as c_int,
+                    to as c_longlong,
+                )
+            },
+            I64ExpressionConvertibleParam::ExpressionConvertible(from_value_opt) => {
+                match from_value_opt {
+                    None => unsafe {
+                        WCDBRustStatementUpdate_configLimitRange(
+                            self.get_cpp_obj(),
+                            CPPType::Null as c_int,
+                            0 as c_longlong,
+                            CPPType::Int as c_int,
+                            to as c_longlong,
+                        )
+                    },
+                    Some(from_value) => unsafe {
+                        WCDBRustStatementUpdate_configLimitRange(
+                            self.get_cpp_obj(),
+                            Identifier::get_cpp_type(from_value) as c_int,
+                            CppObject::get(from_value) as c_longlong,
+                            CPPType::Int as c_int,
+                            to as c_longlong,
+                        )
+                    },
+                }
+            }
+        }
+    }
 
     pub fn offset(&self, offset: i64) -> &Self {
         unsafe {
