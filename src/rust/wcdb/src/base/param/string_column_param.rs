@@ -1,4 +1,9 @@
+use crate::base::cpp_object::CppObject;
+use crate::utils::ToCString;
 use crate::winq::column::Column;
+use crate::winq::identifier::{CPPType, Identifier};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use std::ffi::{c_char, c_void};
 
 /// 支持 String, &str, Column
 pub enum StringColumnParam<'a> {

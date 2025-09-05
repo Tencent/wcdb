@@ -19,7 +19,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_i32(1),
+                .to(1),
             "UPDATE testTable SET column1 = 1",
         );
 
@@ -27,7 +27,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_bool(true),
+                .to(true),
             "UPDATE testTable SET column1 = TRUE",
         );
 
@@ -35,7 +35,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_string(Some("abc".to_string())),
+                .to("abc".to_string()),
             "UPDATE testTable SET column1 = 'abc'",
         );
 
@@ -43,7 +43,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_f64(1.1),
+                .to(1.1),
             "UPDATE testTable SET column1 = 1.1000000000000001",
         );
 
@@ -51,7 +51,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_string(None),
+                .to(None),
             "UPDATE testTable SET column1 = NULL",
         );
 
@@ -60,9 +60,9 @@ pub mod statement_update_test {
                 .update(&test_table_str.clone())
                 .or_replace()
                 .set_columns(&column1_vec)
-                .to_i32(1)
+                .to(1)
                 .set_columns(&column2_vec)
-                .to_string(Some("abc".to_string())),
+                .to("abc".to_string()),
             "UPDATE OR REPLACE testTable SET column1 = 1, column2 = 'abc'",
         );
 
@@ -83,7 +83,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_i32(1)
+                .to(1)
                 .r#where(&Column::new("column1", None).gt(1)),
             "UPDATE testTable SET column1 = 1 WHERE column1 > 1",
         );
@@ -92,7 +92,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_i32(1)
+                .to(1)
                 .order_by(&vec![
                     Column::new("column1", None).order(Order::Asc),
                     Column::new("column2", None).order(Order::Desc),
@@ -104,7 +104,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_i32(1)
+                .to(1)
                 .limit(1),
             "UPDATE testTable SET column1 = 1 LIMIT 1",
         );
@@ -113,7 +113,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_i32(1)
+                .to(1)
                 .limit_i64_i64(1, 2),
             "UPDATE testTable SET column1 = 1 LIMIT 1, 2",
         );
@@ -122,7 +122,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(&test_table_str.clone())
                 .set_columns(&column1_vec)
-                .to_i32(1)
+                .to(1)
                 .limit(1)
                 .offset(3),
             "UPDATE testTable SET column1 = 1 LIMIT 1 OFFSET 3",

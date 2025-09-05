@@ -215,49 +215,15 @@ impl Upsert {
         V: Into<ExpressionConvertibleParam<'a>>,
     {
         let value = value.into();
-        match value {
-            ExpressionConvertibleParam::Int(cpp_type, num) => unsafe {
-                WCDBRustUpsert_configToValue(
-                    self.get_cpp_obj(),
-                    cpp_type as c_int,
-                    num as *mut c_void,
-                    0 as c_double,
-                    std::ptr::null_mut(),
-                );
-            },
-            ExpressionConvertibleParam::Double(cpp_type, num) => unsafe {
-                WCDBRustUpsert_configToValue(
-                    self.get_cpp_obj(),
-                    cpp_type as c_int,
-                    0 as *mut c_void,
-                    num as c_double,
-                    std::ptr::null_mut(),
-                );
-            },
-            ExpressionConvertibleParam::String(str) => unsafe {
-                WCDBRustUpsert_configToValue(
-                    self.get_cpp_obj(),
-                    CPPType::String as c_int,
-                    0 as *mut c_void,
-                    0 as c_double,
-                    str.as_str().to_cstring().as_ptr(),
-                );
-            },
-            ExpressionConvertibleParam::ExpressionConvertible(obj_opt) => {
-                let (cpp_type, cpp_obj) = match obj_opt {
-                    None => (CPPType::Null, 0 as *mut c_void),
-                    Some(obj) => (Identifier::get_cpp_type(obj), CppObject::get(obj)),
-                };
-                unsafe {
-                    WCDBRustUpsert_configToValue(
-                        self.get_cpp_obj(),
-                        cpp_type as c_int,
-                        cpp_obj,
-                        0 as c_double,
-                        std::ptr::null_mut(),
-                    );
-                };
-            }
+        let (cpp_type, int_value, double_value, string_value) = value.get_params();
+        unsafe {
+            WCDBRustUpsert_configToValue(
+                self.get_cpp_obj(),
+                cpp_type as c_int,
+                int_value,
+                double_value,
+                string_value,
+            );
         }
         self
     }

@@ -126,30 +126,7 @@ impl ColumnConstraint {
         V: Into<ExpressionConvertibleParam<'a>>,
     {
         let value = value.into();
-        let (cpp_type, int_value, double_value, string_value) = match value {
-            ExpressionConvertibleParam::Int(cpp_type, num) => {
-                (cpp_type, num as *mut c_void, 0f64, std::ptr::null())
-            }
-            ExpressionConvertibleParam::Double(cpp_type, num) => {
-                (cpp_type, 0 as *mut c_void, num, std::ptr::null())
-            }
-            ExpressionConvertibleParam::String(str) => (
-                CPPType::String,
-                0 as *mut c_void,
-                0f64,
-                str.to_cstring().as_ptr(),
-            ),
-            ExpressionConvertibleParam::ExpressionConvertible(obj_opt) => match obj_opt {
-                None => (CPPType::Null, 0 as *mut c_void, 0f64, std::ptr::null()),
-                Some(obj) => (
-                    Identifier::get_cpp_type(obj),
-                    CppObject::get(obj),
-                    0f64,
-                    std::ptr::null(),
-                ),
-            },
-        };
-
+        let (cpp_type, int_value, double_value, string_value) = value.get_params();
         unsafe {
             WCDBRustColumnConstraint_configDefaultValue(
                 self.get_cpp_obj(),

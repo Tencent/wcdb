@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
@@ -346,143 +347,23 @@ impl StatementUpdate {
         self
     }
 
-    /// todo qixinbing 重构 to_xx
-    pub fn to_bool(&self, arg: bool) -> &Self {
-        let ret = if arg { 1 } else { 0 } as *mut c_void;
+    pub fn to<'a, V>(&self, value: V) -> &Self
+    where
+        V: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let value = value.into();
+        let (cpp_type, int_value, double_value, string_value) = value.get_params();
         unsafe {
             WCDBRustStatementUpdate_configValue(
                 self.get_cpp_obj(),
-                CPPType::Bool as i32,
-                ret,
-                0 as c_double,
-                null(),
+                cpp_type as c_int,
+                int_value,
+                double_value,
+                string_value,
             )
         }
         self
     }
-
-    pub fn to_u8(&self, arg: u8) -> &Self {
-        let ret = arg as *mut c_void;
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                ret,
-                0 as c_double,
-                null(),
-            )
-        }
-        self
-    }
-
-    pub fn to_u16(&self, arg: u16) -> &Self {
-        let ret = arg as *mut c_void;
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                ret,
-                0 as c_double,
-                null(),
-            )
-        }
-        self
-    }
-
-    pub fn to_i32(&self, arg: i32) -> &Self {
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                arg as *mut c_void,
-                0 as c_double,
-                null(),
-            )
-        }
-        self
-    }
-
-    pub fn to_i64(&self, arg: i64) -> &Self {
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                CPPType::Int as i32,
-                arg as *mut c_void,
-                0 as c_double,
-                null(),
-            )
-        }
-        self
-    }
-
-    pub fn to_f32(&self, arg: f32) -> &Self {
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                CPPType::Double as i32,
-                0 as *mut c_void,
-                arg as c_double,
-                null(),
-            )
-        }
-        self
-    }
-
-    pub fn to_f64(&self, arg: f64) -> &Self {
-        unsafe {
-            WCDBRustStatementUpdate_configValue(
-                self.get_cpp_obj(),
-                CPPType::Double as i32,
-                0 as *mut c_void,
-                arg as c_double,
-                null(),
-            )
-        }
-        self
-    }
-
-    pub fn to_string(&self, arg: Option<String>) -> &Self {
-        match arg {
-            None => unsafe {
-                WCDBRustStatementUpdate_configValue(
-                    self.get_cpp_obj(),
-                    CPPType::Null as i32,
-                    0 as *mut c_void,
-                    0 as c_double,
-                    null(),
-                )
-            },
-            Some(str) => {
-                let c_str = str.to_cstring();
-                unsafe {
-                    WCDBRustStatementUpdate_configValue(
-                        self.get_cpp_obj(),
-                        CPPType::String as i32,
-                        0 as *mut c_void,
-                        0 as c_double,
-                        c_str.as_ptr(),
-                    )
-                }
-            }
-        }
-        self
-    }
-
-    // pub fn to_expression_convertible<T>(&self, arg: &T) -> &Self
-    // where
-    //     T: ExpressionConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustStatementUpdate_configValue(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(arg) as c_int,
-    //             CppObject::get(arg),
-    //             0 as c_double,
-    //             null(),
-    //         )
-    //     }
-    //     self
-    // }
 
     pub fn r#where(&self, condition: &Expression) -> &Self {
         unsafe {
