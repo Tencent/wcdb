@@ -1,4 +1,3 @@
-use wcdb::base::basic_types::WCDBBasicTypes;
 use wcdb::base::value::Value;
 use wcdb::winq::column::Column;
 use wcdb_derive::WCDBTableCoding;
@@ -30,10 +29,10 @@ impl ExceptionObject {
 
     pub fn get_values(&self) -> Vec<Value> {
         vec![
-            Value::from(self.category as i64),
-            Value::from(self.target_id.as_str()),
-            Value::from(self.channel_id.as_str()),
-            Value::from(self.value.as_str()),
+            Value::new(self.category as i64),
+            Value::new(self.target_id.as_str()),
+            Value::new(self.channel_id.as_str()),
+            Value::new(self.value.as_str()),
         ]
     }
 

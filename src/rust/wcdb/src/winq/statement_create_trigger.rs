@@ -230,6 +230,7 @@ impl StatementCreateTrigger {
         self
     }
 
+    // todo qixinbing 归并
     pub fn of_columns(&self, columns: &Vec<Column>) -> &Self {
         let cpp_type = CPPType::Column;
         let len = columns.len();

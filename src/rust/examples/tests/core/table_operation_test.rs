@@ -127,7 +127,7 @@ pub mod table_operation_test_case {
         // 测试更新数据。
         // update row
         let updated_text = "updated_row";
-        let updated_value = Value::from(updated_text);
+        let updated_value = Value::new(updated_text);
         let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
         let ret = operation.update_row(
             &vec![updated_value],

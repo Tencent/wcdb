@@ -1,13 +1,73 @@
 use crate::winq::column_type::ColumnType;
 use std::str::from_utf8;
 
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub enum ValueObject {
     None,
-    Long(i64),
+    Int(i64),
     Double(f64),
     String(String),
     BLOB(Vec<u8>),
+}
+
+impl From<bool> for ValueObject {
+    fn from(value: bool) -> Self {
+        ValueObject::Int(if value { 1 } else { 0 })
+    }
+}
+
+impl From<i8> for ValueObject {
+    fn from(value: i8) -> Self {
+        ValueObject::Int(value as i64)
+    }
+}
+
+impl From<i16> for ValueObject {
+    fn from(value: i16) -> Self {
+        ValueObject::Int(value as i64)
+    }
+}
+
+impl From<i32> for ValueObject {
+    fn from(value: i32) -> Self {
+        ValueObject::Int(value as i64)
+    }
+}
+
+impl From<i64> for ValueObject {
+    fn from(value: i64) -> Self {
+        ValueObject::Int(value)
+    }
+}
+
+impl From<f32> for ValueObject {
+    fn from(value: f32) -> Self {
+        ValueObject::Double(value as f64)
+    }
+}
+
+impl From<f64> for ValueObject {
+    fn from(value: f64) -> Self {
+        ValueObject::Double(value)
+    }
+}
+
+impl From<&str> for ValueObject {
+    fn from(value: &str) -> Self {
+        ValueObject::String(value.to_string())
+    }
+}
+
+impl From<String> for ValueObject {
+    fn from(value: String) -> Self {
+        ValueObject::String(value)
+    }
+}
+
+impl From<Vec<u8>> for ValueObject {
+    fn from(value: Vec<u8>) -> Self {
+        ValueObject::BLOB(value)
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -15,112 +75,64 @@ pub struct Value {
     value: ValueObject,
 }
 
-impl From<bool> for Value {
-    fn from(value: bool) -> Self {
-        Self {
-            value: ValueObject::Long(if value { 1 } else { 0 }),
-        }
-    }
-}
-
-impl From<i64> for Value {
-    fn from(value: i64) -> Self {
-        Self {
-            value: ValueObject::Long(value),
-        }
-    }
-}
-
-impl From<f64> for Value {
-    fn from(value: f64) -> Self {
-        Self {
-            value: ValueObject::Double(value),
-        }
-    }
-}
-
-impl From<&str> for Value {
-    fn from(value: &str) -> Self {
-        Self {
-            value: ValueObject::String(value.to_string()),
-        }
-    }
-}
-
 impl Value {
-    pub fn new() -> Self {
+    pub fn default() -> Self {
         Value {
             value: ValueObject::None,
         }
     }
-
-    pub fn new_long(value: i64) -> Self {
+    pub fn new<T>(value: T) -> Self
+    where
+        T: Into<ValueObject>,
+    {
         Value {
-            value: ValueObject::Long(value),
-        }
-    }
-
-    pub fn new_double(value: f64) -> Self {
-        Value {
-            value: ValueObject::Double(value),
-        }
-    }
-
-    pub fn new_string(value: &str) -> Self {
-        Value {
-            value: ValueObject::String(value.to_string()),
-        }
-    }
-
-    pub fn new_blob(value: Vec<u8>) -> Self {
-        Value {
-            value: ValueObject::BLOB(value),
+            value: value.into(),
         }
     }
 
     pub fn get_type(&self) -> ColumnType {
-        match self.value {
+        match &self.value {
             ValueObject::None => ColumnType::Null,
-            ValueObject::Long(_) => ColumnType::Integer,
+            ValueObject::Int(_) => ColumnType::Integer,
+            ValueObject::Double(_) => ColumnType::Float,
             ValueObject::String(_) => ColumnType::Text,
             ValueObject::BLOB(_) => ColumnType::BLOB,
-            ValueObject::Double(_) => ColumnType::Float,
         }
     }
 
     pub fn get_bool(&self) -> bool {
-        self.get_long() != 0
+        self.get_i64() != 0
     }
 
-    pub fn get_byte(&self) -> i8 {
-        self.get_long() as i8
+    pub fn get_i8(&self) -> i8 {
+        self.get_i64() as i8
     }
 
-    pub fn get_short(&self) -> i16 {
-        self.get_long() as i16
+    pub fn get_i16(&self) -> i16 {
+        self.get_i64() as i16
     }
 
-    pub fn get_int(&self) -> i32 {
-        self.get_long() as i32
+    pub fn get_i32(&self) -> i32 {
+        self.get_i64() as i32
     }
 
-    pub fn get_long(&self) -> i64 {
+    pub fn get_i64(&self) -> i64 {
         match &self.value {
-            ValueObject::Long(val) => *val,
+            ValueObject::Int(val) => *val,
             ValueObject::Double(val) => (*val).round() as i64,
             ValueObject::String(val) => val.parse::<i64>().unwrap_or(0),
             _ => 0,
         }
     }
 
-    pub fn get_float(&self) -> f32 {
-        self.get_double() as f32
+    pub fn get_f32(&self) -> f32 {
+        self.get_f64() as f32
     }
 
-    pub fn get_double(&self) -> f64 {
+    pub fn get_f64(&self) -> f64 {
         match &self.value {
             ValueObject::Double(val) => *val,
-            ValueObject::Long(val) => (*val) as f64,
+            ValueObject::Int(val) => (*val) as f64,
             ValueObject::String(val) => val.parse::<f64>().unwrap_or(0.0),
             _ => 0.0,
         }

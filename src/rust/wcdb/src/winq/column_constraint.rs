@@ -1,8 +1,8 @@
-use crate::base::basic_types::WCDBBasicTypes;
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
+use crate::winq::expression_convertible::{ExpressionConvertibleParam, ExpressionConvertibleTrait};
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::any::TypeId;
@@ -23,7 +23,7 @@ extern "C" {
     fn WCDBRustColumnConstraint_configDefaultValue(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
-        int_value: c_longlong,
+        int_value: *mut c_void,
         double_value: c_double,
         string_value: *const c_char,
     );
@@ -122,27 +122,43 @@ impl ColumnConstraint {
         self
     }
 
-    pub fn default_to<T: WCDBBasicTypes>(&self, value: T) -> &Self {
-        let type_id = TypeId::of::<T>();
-        if type_id == TypeId::of::<bool>() {
-            let mut int_value = 1;
-            if value.get_bool() {
-                int_value = 1;
-            } else {
-                int_value = 0;
+    pub fn default_to<'a, V>(&self, value: V) -> &Self
+    where
+        V: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let value = value.into();
+        let (cpp_type, int_value, double_value, string_value) = match value {
+            ExpressionConvertibleParam::Int(cpp_type, num) => {
+                (cpp_type, num as *mut c_void, 0f64, std::ptr::null())
             }
-            self.inner_default_to(CPPType::Bool, int_value, 0f64, std::ptr::null());
-        } else if type_id == TypeId::of::<i8>()
-            || type_id == TypeId::of::<u8>()
-            || type_id == TypeId::of::<i32>()
-            || type_id == TypeId::of::<i64>()
-        {
-            self.inner_default_to(CPPType::Int, value.get_i64(), 0f64, std::ptr::null());
-        } else if type_id == TypeId::of::<f32>() || type_id == TypeId::of::<f64>() {
-            self.inner_default_to(CPPType::Double, 0, value.get_f64(), std::ptr::null());
-        } else if type_id == TypeId::of::<&str>() || type_id == TypeId::of::<String>() {
-            let c_str = value.get_string().to_cstring();
-            self.inner_default_to(CPPType::String, 0, 0f64, c_str.as_ptr());
+            ExpressionConvertibleParam::Double(cpp_type, num) => {
+                (cpp_type, 0 as *mut c_void, num, std::ptr::null())
+            }
+            ExpressionConvertibleParam::String(str) => (
+                CPPType::String,
+                0 as *mut c_void,
+                0f64,
+                str.to_cstring().as_ptr(),
+            ),
+            ExpressionConvertibleParam::ExpressionConvertible(obj_opt) => match obj_opt {
+                None => (CPPType::Null, 0 as *mut c_void, 0f64, std::ptr::null()),
+                Some(obj) => (
+                    Identifier::get_cpp_type(obj),
+                    CppObject::get(obj),
+                    0f64,
+                    std::ptr::null(),
+                ),
+            },
+        };
+
+        unsafe {
+            WCDBRustColumnConstraint_configDefaultValue(
+                self.get_cpp_obj(),
+                cpp_type as c_int,
+                int_value,
+                double_value,
+                string_value,
+            );
         }
         self
     }
@@ -158,7 +174,7 @@ impl ColumnConstraint {
             WCDBRustColumnConstraint_configDefaultValue(
                 self.get_cpp_obj(),
                 cpp_type as i32,
-                int_value,
+                int_value as *mut c_void,
                 double_value as c_double,
                 string_value,
             );

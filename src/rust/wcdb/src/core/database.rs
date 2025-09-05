@@ -1275,7 +1275,7 @@ impl Database {
                     }
                     Ok(ret)
                 } else {
-                    Ok(Value::new())
+                    Ok(Value::default())
                 }
             }
             Err(error) => Err(error),
@@ -1297,7 +1297,7 @@ impl Database {
                     }
                     Ok(ret)
                 } else {
-                    Ok(Value::new())
+                    Ok(Value::default())
                 }
             }
             Err(error) => Err(error),

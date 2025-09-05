@@ -1,5 +1,4 @@
 pub(crate) mod base_test_case;
-pub(crate) mod basic_types_test;
 pub(crate) mod database_test_case;
 pub(crate) mod exception_test;
 pub(crate) mod file_tool;

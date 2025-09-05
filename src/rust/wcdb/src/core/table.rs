@@ -1,5 +1,4 @@
-use crate::base::basic_types::WCDBBasicTypes;
-use crate::base::value::Value;
+use crate::base::value::{Value, ValueObject};
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::delete::Delete;
 use crate::chaincall::insert::Insert;
@@ -47,9 +46,9 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for Table<'a, T, R> {
             .insert_or_ignore_rows(rows, columns)
     }
 
-    fn update_value<V: WCDBBasicTypes>(
+    fn update_value<V: Into<ValueObject>>(
         &self,
-        value: &V,
+        value: V,
         column: Column,
         condition_opt: Option<Expression>,
         order_opt: Option<OrderingTerm>,

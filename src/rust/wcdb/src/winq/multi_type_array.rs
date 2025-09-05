@@ -106,12 +106,12 @@ impl MultiTypeArray {
                     }
                     ColumnType::Integer => {
                         types[i] = CPPType::Int as i32;
-                        long_values[long_index] = value_obj.get_long() as i64;
+                        long_values[long_index] = value_obj.get_i64() as i64;
                         long_index += 1;
                     }
                     ColumnType::Float => {
                         types[i] = CPPType::Double as i32;
-                        double_values[double_index] = value_obj.get_double() as c_double;
+                        double_values[double_index] = value_obj.get_f64() as c_double;
                         double_index += 1;
                     }
                     ColumnType::Text => {

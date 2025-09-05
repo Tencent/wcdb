@@ -28,7 +28,7 @@ pub mod statement_create_trigger_test {
             .insert_into(table)
             .values(Some(vec![Object::Int(1)]));
         let binding_select = StatementSelect::new();
-        let select = binding_select.select(&vec![&column1]);
+        let select = binding_select.select(vec![&column1]);
         let binding_delete = StatementDelete::new();
         let delete = binding_delete.delete_from(table);
 
@@ -134,7 +134,7 @@ pub mod statement_create_trigger_test {
                 .of_with_string(schema)
                 .before()
                 .update()
-                .of_columns(&vec![column1])
+                .of_columns(vec![&column1])
                 .on_table(table)
                 .execute(update),
             "CREATE TRIGGER testSchema.testTrigger BEFORE UPDATE OF column1 ON testTable BEGIN UPDATE testTable SET column1 = 2; END"

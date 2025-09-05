@@ -3,7 +3,7 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::expression::Expression;
-use crate::winq::expression_convertible::ExpressionConvertibleTrait;
+use crate::winq::expression_convertible::{ExpressionConvertibleParam, ExpressionConvertibleTrait};
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
@@ -212,11 +212,11 @@ impl Upsert {
 
     pub fn to<'a, V>(&self, value: V) -> &Self
     where
-        V: Into<UpsertToParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         let value = value.into();
         match value {
-            UpsertToParam::Int(cpp_type, num) => unsafe {
+            ExpressionConvertibleParam::Int(cpp_type, num) => unsafe {
                 WCDBRustUpsert_configToValue(
                     self.get_cpp_obj(),
                     cpp_type as c_int,
@@ -225,7 +225,7 @@ impl Upsert {
                     std::ptr::null_mut(),
                 );
             },
-            UpsertToParam::Double(cpp_type, num) => unsafe {
+            ExpressionConvertibleParam::Double(cpp_type, num) => unsafe {
                 WCDBRustUpsert_configToValue(
                     self.get_cpp_obj(),
                     cpp_type as c_int,
@@ -234,7 +234,7 @@ impl Upsert {
                     std::ptr::null_mut(),
                 );
             },
-            UpsertToParam::String(str) => unsafe {
+            ExpressionConvertibleParam::String(str) => unsafe {
                 WCDBRustUpsert_configToValue(
                     self.get_cpp_obj(),
                     CPPType::String as c_int,
@@ -243,7 +243,7 @@ impl Upsert {
                     str.as_str().to_cstring().as_ptr(),
                 );
             },
-            UpsertToParam::ExpressionConvertible(obj_opt) => {
+            ExpressionConvertibleParam::ExpressionConvertible(obj_opt) => {
                 let (cpp_type, cpp_obj) = match obj_opt {
                     None => (CPPType::Null, 0 as *mut c_void),
                     Some(obj) => (Identifier::get_cpp_type(obj), CppObject::get(obj)),
@@ -283,74 +283,6 @@ impl<'a> From<&'a str> for UpsertIndexedByParam<'a> {
 impl<'a, T: IndexedColumnConvertibleTrait> From<&'a T> for UpsertIndexedByParam<'a> {
     fn from(value: &'a T) -> Self {
         UpsertIndexedByParam::IndexedColumnConvertible(value)
-    }
-}
-
-pub enum UpsertToParam<'a> {
-    Int(CPPType, i64),
-    Double(CPPType, f64),
-    String(String),
-    ExpressionConvertible(Option<&'a dyn ExpressionConvertibleTrait>),
-}
-
-impl<'a> From<bool> for UpsertToParam<'a> {
-    fn from(value: bool) -> Self {
-        let value = if value { 1 } else { 0 };
-        UpsertToParam::Int(CPPType::Bool, value)
-    }
-}
-
-impl<'a> From<i8> for UpsertToParam<'a> {
-    fn from(value: i8) -> Self {
-        UpsertToParam::Int(CPPType::Int, value as i64)
-    }
-}
-
-impl<'a> From<i16> for UpsertToParam<'a> {
-    fn from(value: i16) -> Self {
-        UpsertToParam::Int(CPPType::Int, value as i64)
-    }
-}
-
-impl<'a> From<i32> for UpsertToParam<'a> {
-    fn from(value: i32) -> Self {
-        UpsertToParam::Int(CPPType::Int, value as i64)
-    }
-}
-
-impl<'a> From<i64> for UpsertToParam<'a> {
-    fn from(value: i64) -> Self {
-        UpsertToParam::Int(CPPType::Int, value)
-    }
-}
-
-impl<'a> From<f32> for UpsertToParam<'a> {
-    fn from(value: f32) -> Self {
-        UpsertToParam::Double(CPPType::Double, value as f64)
-    }
-}
-
-impl<'a> From<f64> for UpsertToParam<'a> {
-    fn from(value: f64) -> Self {
-        UpsertToParam::Double(CPPType::Double, value)
-    }
-}
-
-impl<'a> From<String> for UpsertToParam<'a> {
-    fn from(value: String) -> Self {
-        UpsertToParam::String(value)
-    }
-}
-
-impl<'a> From<&'a str> for UpsertToParam<'a> {
-    fn from(value: &'a str) -> Self {
-        UpsertToParam::String(value.to_string())
-    }
-}
-
-impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for UpsertToParam<'a> {
-    fn from(value: Option<&'a dyn ExpressionConvertibleTrait>) -> Self {
-        UpsertToParam::ExpressionConvertible(value)
     }
 }
 

@@ -208,11 +208,11 @@ impl PreparedStatement {
     pub fn bind_value(&self, value: &Value, index: usize) {
         let value_type = value.get_type();
         if ColumnType::Integer == value_type {
-            self.bind_i64(value.get_long(), index);
+            self.bind_i64(value.get_i64(), index);
             return;
         }
         if ColumnType::Float == value_type {
-            self.bind_f64(value.get_double(), index);
+            self.bind_f64(value.get_f64(), index);
             return;
         }
         if ColumnType::Text == value_type {
@@ -458,15 +458,15 @@ impl PreparedStatement {
     pub fn get_value(&self, index: i32) -> Value {
         let ret = unsafe { WCDBRustHandleStatement_getColumnType(*self.cpp_obj, index as c_int) };
         if ret == 1 {
-            Value::new_long(self.get_i64(index as usize))
+            Value::new(self.get_i64(index as usize))
         } else if ret == 2 {
-            Value::new_double(self.get_f64(index as usize))
+            Value::new(self.get_f64(index as usize))
         } else if ret == 3 {
-            Value::new_string(&*self.get_text(index as usize))
+            Value::new(&*self.get_text(index as usize))
         } else if ret == 4 {
-            Value::new_blob(self.get_blob(index as usize))
+            Value::new(self.get_blob(index as usize))
         } else {
-            Value::new()
+            Value::default()
         }
     }
 

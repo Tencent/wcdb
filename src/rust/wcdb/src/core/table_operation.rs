@@ -1,5 +1,4 @@
-use crate::base::basic_types::WCDBBasicTypes;
-use crate::base::value::Value;
+use crate::base::value::{Value, ValueObject};
 use crate::base::wcdb_exception::WCDBResult;
 use crate::core::database::Database;
 use crate::core::handle::Handle;
@@ -32,10 +31,9 @@ pub trait TableOperationTrait {
 
     fn insert_or_ignore_rows(&self, rows: Vec<Vec<Value>>, columns: Vec<Column>) -> WCDBResult<()>;
 
-    // todo qixinbing 修改 WCDBBasicTypes
-    fn update_value<V: WCDBBasicTypes>(
+    fn update_value<V: Into<ValueObject>>(
         &self,
-        value: &V,
+        value: V,
         column: Column,
         condition_opt: Option<Expression>,
         order_opt: Option<OrderingTerm>,
@@ -96,24 +94,16 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         self.insert_rows_with_conflict_action(rows, columns, ConflictAction::Ignore)
     }
 
-    fn update_value<V: WCDBBasicTypes>(
+    fn update_value<V: Into<ValueObject>>(
         &self,
-        value: &V,
+        value: V,
         column: Column,
         condition_opt: Option<Expression>,
         order_opt: Option<OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
-        let row_item = match value.get_type() {
-            ColumnType::Integer => Value::from(value.get_i64()),
-            ColumnType::Float => Value::from(value.get_f64()),
-            ColumnType::Text => Value::from(value.get_string().as_ref()),
-            _ => {
-                eprintln!("basic types not define.");
-                return Ok(());
-            }
-        };
+        let row_item = Value::new(value);
         self.update_row(
             &vec![row_item],
             &vec![column],
