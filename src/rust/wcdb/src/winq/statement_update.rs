@@ -258,45 +258,49 @@ impl StatementUpdate {
         self
     }
 
-    pub fn set_columns_to_bind_parameters<T>(&self, fields: &Vec<&Field<T>>) -> &Self {
-        if fields.is_empty() {
+    pub fn set_columns_to_bind_parameters<'a, I, S>(&self, column_vec: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<StringColumnTraitParam<'a>>,
+    {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
-        let columns_void_vec_len = fields.len();
-        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(fields.len());
-        for field in fields {
-            c_void_vec.push(field.get_cpp_obj());
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                StringColumnTraitParam::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                StringColumnTraitParam::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj));
+                }
+            }
         }
-        unsafe {
-            WCDBRustStatementUpdate_configColumnsToBindParameters(
-                self.get_cpp_obj(),
-                CPPType::Column as c_int,
-                c_void_vec.as_ptr(),
-                null(),
-                columns_void_vec_len,
-            );
-        }
-        self
-    }
-
-    // todo qixinbing 合并代码
-    pub fn set_column_objs_to_bind_parameters(&self, columns: &Vec<Column>) -> &Self {
-        if columns.is_empty() {
-            return self;
-        }
-        let columns_vec_len = columns.len();
-        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(columns_vec_len);
-        for column in columns {
-            c_void_vec.push(column.get_cpp_obj());
-        }
-        unsafe {
-            WCDBRustStatementUpdate_configColumnsToBindParameters(
-                self.get_cpp_obj(),
-                CPPType::Column as i32,
-                c_void_vec.as_ptr(),
-                null(),
-                columns_vec_len,
-            );
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustStatementUpdate_configColumnsToBindParameters(
+                    self.get_cpp_obj(),
+                    CPPType::String as i32,
+                    null(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len(),
+                );
+            }
+        } else {
+            unsafe {
+                WCDBRustStatementUpdate_configColumnsToBindParameters(
+                    self.get_cpp_obj(),
+                    CPPType::Column as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    null(),
+                    cpp_obj_vec.len(),
+                );
+            }
         }
         self
     }

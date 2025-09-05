@@ -21,7 +21,7 @@ pub mod statement_create_trigger_test {
         let binding_update = StatementUpdate::new();
         let update = binding_update
             .update(table)
-            .set_column_objs_to_bind_parameters(vec![&column1])
+            .set_columns_to_bind_parameters(vec![&column1])
             .to(2);
         let binding_insert = StatementInsert::new();
         let insert = binding_insert

@@ -52,10 +52,10 @@ impl<'a, T> Update<'a, T> {
     }
 
     pub fn set(&self, fields: Vec<&'a Field<T>>) -> &Self {
-        self.fields.replace(fields);
+        self.fields.replace(fields.clone());
         self.chain_call
             .get_statement()
-            .set_columns_to_bind_parameters(&*self.fields.borrow());
+            .set_columns_to_bind_parameters(fields);
         self
     }
 

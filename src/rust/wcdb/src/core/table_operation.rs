@@ -126,7 +126,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         let binding = StatementUpdate::new();
         binding
             .update(self.table_name.as_ref())
-            .set_column_objs_to_bind_parameters(columns);
+            .set_columns_to_bind_parameters(columns);
         self.execute_update(
             row,
             &binding,

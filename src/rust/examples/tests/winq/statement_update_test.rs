@@ -69,7 +69,7 @@ pub mod statement_update_test {
         WinqTool::winq_equal(
             StatementUpdate::new()
                 .update(&test_table_str.clone())
-                .set_column_objs_to_bind_parameters(&column_vec),
+                .set_columns_to_bind_parameters(&column_vec),
             "UPDATE testTable SET column1 = ?1, column2 = ?2",
         );
 
