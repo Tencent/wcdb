@@ -16,6 +16,11 @@ pub struct Schema {
     identifier: Identifier,
 }
 
+pub trait SchemaTrait: IdentifierTrait {
+    fn main() -> Schema;
+    fn temp() -> Schema;
+}
+
 impl CppObjectTrait for Schema {
     fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
         self.identifier.set_cpp_obj(cpp_obj)
@@ -52,6 +57,18 @@ impl IdentifierConvertibleTrait for Schema {
     }
 }
 
+impl SchemaTrait for Schema {
+    fn main() -> Schema {
+        let cpp_obj = unsafe { WCDBRustSchema_main() };
+        Schema::new_with_cpp_obj(cpp_obj)
+    }
+
+    fn temp() -> Schema {
+        let cpp_obj = unsafe { WCDBRustSchema_temp() };
+        Schema::new_with_cpp_obj(cpp_obj)
+    }
+}
+
 impl Schema {
     pub fn new(name: &str) -> Self {
         let cstr = name.to_cstring();
@@ -65,15 +82,5 @@ impl Schema {
         Schema {
             identifier: Identifier::new(CPPType::Schema, Some(cpp_obj)),
         }
-    }
-
-    pub fn main() -> Schema {
-        let cpp_obj = unsafe { WCDBRustSchema_main() };
-        Schema::new_with_cpp_obj(cpp_obj)
-    }
-
-    pub fn temp() -> Schema {
-        let cpp_obj = unsafe { WCDBRustSchema_temp() };
-        Schema::new_with_cpp_obj(cpp_obj)
     }
 }

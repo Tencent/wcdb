@@ -1,7 +1,7 @@
 #[cfg(test)]
 pub mod statement_create_table_test {
     use crate::base::winq_tool::WinqTool;
-    use wcdb::winq::column::Column;
+    use wcdb::winq::column::{Column, ColumnTrait};
     use wcdb::winq::column_type::ColumnType;
     use wcdb::winq::statement_create_table::StatementCreateTable;
     use wcdb::winq::table_constraint::TableConstraint;

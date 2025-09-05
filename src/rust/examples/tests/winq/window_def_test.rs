@@ -1,7 +1,7 @@
 #[cfg(test)]
 pub mod window_def_test {
     use crate::base::winq_tool::WinqTool;
-    use wcdb::winq::column::Column;
+    use wcdb::winq::column::{Column, ColumnTrait};
     use wcdb::winq::expression::Expression;
     use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::frame_spec::FrameSpec;

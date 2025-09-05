@@ -1,13 +1,18 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::string_schema_param::StringSchemaParam;
 use crate::orm::table_binding::TableBinding;
-use crate::winq::column::Column;
+use crate::winq::column::{Column, ColumnStaticTrait, ColumnTrait};
+use crate::winq::column_def::ColumnDef;
+use crate::winq::column_type::ColumnType;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::{ExpressionOperableTrait, OperateParam};
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
+use crate::winq::ordering_term::{Order, OrderingTerm};
+use crate::winq::result_column::ResultColumn;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use std::ffi::c_void;
 
@@ -289,6 +294,40 @@ impl<U> ExpressionOperableTrait for Field<U> {
 impl<U> IndexedColumnConvertibleTrait for Field<U> {}
 
 impl<U> ResultColumnConvertibleTrait for Field<U> {}
+
+impl<U> ExpressionConvertibleTrait for Field<U> {}
+
+impl<U> ColumnTrait for Field<U> {
+    fn r#as(&self, alias: &str) -> ResultColumn {
+        self.column.r#as(alias)
+    }
+
+    fn order(&self, order: Order) -> OrderingTerm {
+        self.column.order(order)
+    }
+
+    fn as_def(&self, column_type: ColumnType) -> ColumnDef {
+        self.column.as_def(column_type)
+    }
+}
+
+impl<U> ColumnStaticTrait for Field<U> {
+    fn table(&self, table: &str) -> &Column {
+        self.column.table(table)
+    }
+
+    fn of<'a, T: Into<StringSchemaParam<'a>>>(&self, schema: T) -> &Column {
+        self.column.of(schema)
+    }
+
+    fn all() -> Column {
+        Column::all()
+    }
+
+    fn row_id() -> Column {
+        Column::row_id()
+    }
+}
 
 impl<U> Field<U> {
     pub fn new(

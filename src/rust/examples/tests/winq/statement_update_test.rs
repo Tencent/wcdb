@@ -1,7 +1,7 @@
 #[cfg(test)]
 pub mod statement_update_test {
     use crate::base::winq_tool::WinqTool;
-    use wcdb::winq::column::Column;
+    use wcdb::winq::column::{Column, ColumnTrait};
     use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::ordering_term::Order;
     use wcdb::winq::statement_update::StatementUpdate;

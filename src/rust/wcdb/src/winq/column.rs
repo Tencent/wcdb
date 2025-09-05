@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::string_schema_param::StringSchemaParam;
 use crate::utils::ToCString;
 use crate::winq::column_def::{ColumnDef, ColumnDefParam};
 use crate::winq::column_type::ColumnType;
@@ -38,6 +39,24 @@ extern "C" {
 
 pub struct Column {
     expression_operable: ExpressionOperable,
+}
+
+pub trait ColumnTrait:
+    ExpressionConvertibleTrait + IndexedColumnConvertibleTrait + ResultColumnConvertibleTrait
+{
+    fn r#as(&self, alias: &str) -> ResultColumn;
+
+    fn order(&self, order: Order) -> OrderingTerm;
+
+    fn as_def(&self, column_type: ColumnType) -> ColumnDef;
+}
+
+pub trait ColumnStaticTrait {
+    fn table(&self, table: &str) -> &Column;
+    fn of<'a, T: Into<StringSchemaParam<'a>>>(&self, schema: T) -> &Column;
+    fn all() -> Column;
+
+    fn row_id() -> Column;
 }
 
 impl CppObjectTrait for Column {
@@ -312,6 +331,50 @@ impl IndexedColumnConvertibleTrait for Column {}
 
 impl ResultColumnConvertibleTrait for Column {}
 
+impl ColumnTrait for Column {
+    fn r#as(&self, alias: &str) -> ResultColumn {
+        let c_alias = alias.to_cstring();
+        let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), c_alias.as_ptr()) };
+        ResultColumn::new(cpp_obj)
+    }
+
+    fn order(&self, order: Order) -> OrderingTerm {
+        OrderingTerm::new(self).order(order)
+    }
+
+    fn as_def(&self, column_type: ColumnType) -> ColumnDef {
+        ColumnDef::new(ColumnDefParam::Column(self, Some(column_type)))
+    }
+}
+
+impl ColumnStaticTrait for Column {
+    fn table(&self, table: &str) -> &Column {
+        let c_table = table.to_cstring();
+        unsafe { WCDBRustColumn_inTable(self.get_cpp_obj(), c_table.as_ptr()) };
+        self
+    }
+
+    fn of<'a, T: Into<StringSchemaParam<'a>>>(&self, schema: T) -> &Column {
+        // todo qixinbing
+        // schema.call_of_schema(self);
+        self
+    }
+
+    fn all() -> Column {
+        let cpp_obj = unsafe { WCDBRustColumn_createAll() };
+        Column {
+            expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
+        }
+    }
+
+    fn row_id() -> Column {
+        let cpp_obj = unsafe { WCDBRustColumn_createRowId() };
+        Column {
+            expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
+        }
+    }
+}
+
 pub trait ColumnOfParam {
     fn call_of_schema(&self, column: &Column);
 }
@@ -355,44 +418,5 @@ impl Column {
         Self {
             expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
         }
-    }
-
-    pub fn table(&self, table: &str) -> &Self {
-        let c_table = table.to_cstring();
-        unsafe { WCDBRustColumn_inTable(self.get_cpp_obj(), c_table.as_ptr()) };
-        self
-    }
-
-    pub fn of<T: ColumnOfParam>(&self, param: T) -> &Self {
-        param.call_of_schema(self);
-        self
-    }
-
-    pub fn r#as(&self, alias: &str) -> ResultColumn {
-        let c_alias = alias.to_cstring();
-        let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), c_alias.as_ptr()) };
-        ResultColumn::new(cpp_obj)
-    }
-
-    pub fn all() -> Column {
-        let cpp_obj = unsafe { WCDBRustColumn_createAll() };
-        Column {
-            expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
-        }
-    }
-
-    pub fn row_id() -> Column {
-        let cpp_obj = unsafe { WCDBRustColumn_createRowId() };
-        Column {
-            expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
-        }
-    }
-
-    pub fn order(&self, order: Order) -> OrderingTerm {
-        OrderingTerm::new(self).order(order)
-    }
-
-    pub fn as_def(&self, column_type: ColumnType) -> ColumnDef {
-        ColumnDef::new(ColumnDefParam::Column(self, Some(column_type)))
     }
 }

@@ -2,7 +2,7 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::utils::ToCString;
 use crate::winq::bind_parameter::BindParameter;
-use crate::winq::column::Column;
+use crate::winq::column::{Column, ColumnTrait};
 use crate::winq::column_type::ColumnType;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::{ExpressionOperable, ExpressionOperableTrait, OperateParam};

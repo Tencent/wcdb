@@ -7,6 +7,7 @@ pub mod simple_sample {
     use wcdb::core::handle_operation::HandleOperationTrait;
     use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
     use wcdb::core::table_orm_operation::TableORMOperationTrait;
+    use wcdb::winq::column::ColumnTrait;
     use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::ordering_term::Order;
 

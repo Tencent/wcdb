@@ -2,7 +2,7 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::base::param::i64_expression_convertible_param::I64ExpressionConvertibleParam;
-use crate::base::param::string_column_param::StringColumnParam;
+use crate::base::param::string_column_trait_param::StringColumnTraitParam;
 use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
@@ -307,7 +307,7 @@ impl StatementUpdate {
     pub fn set<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringColumnParam<'a>>,
+        S: Into<StringColumnTraitParam<'a>>,
     {
         let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
         if data_vec.peek().is_none() {
@@ -318,10 +318,10 @@ impl StatementUpdate {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringColumnParam::String(str) => {
+                StringColumnTraitParam::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StringColumnParam::Column(obj) => {
+                StringColumnTraitParam::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }

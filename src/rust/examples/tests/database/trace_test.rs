@@ -9,6 +9,7 @@ use wcdb::core::database::{
 };
 use wcdb::core::handle_operation::HandleOperationTrait;
 use wcdb::core::handle_orm_operation::HandleORMOperationTrait;
+use wcdb::winq::column::ColumnTrait;
 use wcdb::winq::identifier::IdentifierTrait;
 use wcdb::winq::ordering_term::Order;
 use wcdb::winq::pragma::Pragma;
