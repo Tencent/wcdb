@@ -5,7 +5,6 @@ use crate::core::prepared_statement::PreparedStatement;
 use crate::orm::field::Field;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
-use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 use crate::winq::statement::StatementTrait;
 use crate::winq::statement_select::StatementSelect;
 use std::cell::RefCell;

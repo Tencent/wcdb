@@ -390,20 +390,18 @@ extern "C" fn backup_filter_callback_wrapper(table_name: *const c_char) -> bool 
             if let Some(cb) = &*callback {
                 let cstr = unsafe { CStr::from_ptr(table_name) };
                 match cstr.to_str() {
-                    Ok(str) => {
-                        return cb(str);
-                    }
+                    Ok(str) => cb(str),
                     Err(error) => {
                         eprintln!(
                             "Method: backup_filter_callback_wrapper, CStr parsing error: {:?}",
                             error
                         );
-                        return false;
+                        false
                     }
                 }
             } else {
                 eprintln!("Method: backup_filter_callback_wrapper, No callback found.");
-                return false;
+                false
             }
         }
         Err(error) => {
@@ -411,7 +409,7 @@ extern "C" fn backup_filter_callback_wrapper(table_name: *const c_char) -> bool 
                 "Method: backup_filter_callback_wrapper, Failed to acquire lock: {:?}",
                 error
             );
-            return false;
+            false
         }
     }
 }
@@ -425,10 +423,10 @@ extern "C" fn retrieve_progress_monitor_trait_wrapper(
     match global_callback {
         Ok(callback) => {
             if let Some(cb) = &*callback {
-                return cb(percentage as f64, increment as f64);
+                cb(percentage as f64, increment as f64)
             } else {
                 eprintln!("Method: retrieve_progress_monitor_trait_wrapper, No callback found.");
-                return false;
+                false
             }
         }
         Err(error) => {
@@ -436,7 +434,7 @@ extern "C" fn retrieve_progress_monitor_trait_wrapper(
                 "Method: retrieve_progress_monitor_trait_wrapper, Failed to acquire lock: {:?}",
                 error
             );
-            return false;
+            false
         }
     }
 }
@@ -450,10 +448,10 @@ extern "C" fn vacuum_progress_monitor_trait_wrapper(
     match global_callback {
         Ok(callback) => {
             if let Some(cb) = &*callback {
-                return cb(percentage as f64, increment as f64);
+                cb(percentage as f64, increment as f64)
             } else {
                 eprintln!("Method: vacuum_progress_monitor_trait_wrapper, No callback found.");
-                return false;
+                false
             }
         }
         Err(error) => {
@@ -461,7 +459,7 @@ extern "C" fn vacuum_progress_monitor_trait_wrapper(
                 "Method: vacuum_progress_monitor_trait_wrapper, Failed to acquire lock: {:?}",
                 error
             );
-            return false;
+            false
         }
     }
 }
@@ -470,9 +468,7 @@ extern "C" fn set_config_invocation_callback(cpp_handle: *mut c_void) -> bool {
     let global_callback = GLOBAL_INVOCATION_CONFIG_CALLBACK.lock();
     match global_callback {
         Ok(callback) => match &*callback {
-            None => {
-                return true;
-            }
+            None => true,
             Some(cb) => {
                 let db = Database::create_invalid_database();
                 let handle = Handle::new_with_obj(cpp_handle, &db);
@@ -484,7 +480,7 @@ extern "C" fn set_config_invocation_callback(cpp_handle: *mut c_void) -> bool {
                 "Method: set_config_invocation_callback, Failed to acquire lock: {:?}",
                 error
             );
-            return false;
+            false
         }
     }
 }
@@ -1249,14 +1245,10 @@ impl Database {
                         }
                         Ok(rows)
                     }
-                    Err(error) => {
-                        return Err(error);
-                    }
+                    Err(error) => Err(error),
                 }
             }
-            Err(error) => {
-                return Err(error);
-            }
+            Err(error) => Err(error),
         }
     }
 

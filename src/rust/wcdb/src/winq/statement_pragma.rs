@@ -5,7 +5,7 @@ use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::pragma::Pragma;
 use crate::winq::statement::{Statement, StatementTrait};
 use libc::{c_double, c_longlong};
-use std::ffi::{c_char, c_float, c_int, c_void};
+use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustStatementPragma_create() -> *mut c_void;

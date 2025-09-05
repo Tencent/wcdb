@@ -6,7 +6,6 @@ use crate::winq::column_def::ColumnDef;
 use crate::winq::statement_create_index::StatementCreateIndex;
 use crate::winq::table_constraint::TableConstraint;
 use std::ffi::{c_char, c_void, CString};
-use std::ptr::null_mut;
 use std::sync::RwLock;
 
 extern "C" {
@@ -48,7 +47,7 @@ impl Binding {
     pub fn new() -> Binding {
         Binding {
             cpp_obj: CppObject::new(Some(unsafe { WCDBRustBinding_create() })),
-            base_binding: RwLock::new(null_mut()),
+            base_binding: RwLock::new(std::ptr::null_mut()),
         }
     }
 

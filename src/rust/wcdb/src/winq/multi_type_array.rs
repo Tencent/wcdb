@@ -76,7 +76,7 @@ impl MultiTypeArray {
                 }
                 Object::Long(l) => {
                     types[i] = CPPType::Int as i32;
-                    long_values[long_index] = *l as i64;
+                    long_values[long_index] = *l;
                     long_index += 1;
                 }
                 Object::Float(f) => {
@@ -106,7 +106,7 @@ impl MultiTypeArray {
                     }
                     ColumnType::Integer => {
                         types[i] = CPPType::Int as i32;
-                        long_values[long_index] = value_obj.get_i64() as i64;
+                        long_values[long_index] = value_obj.get_i64();
                         long_index += 1;
                     }
                     ColumnType::Float => {

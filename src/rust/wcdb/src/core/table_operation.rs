@@ -4,7 +4,6 @@ use crate::core::database::Database;
 use crate::core::handle::Handle;
 use crate::core::handle_operation::HandleOperationTrait;
 use crate::winq::column::Column;
-use crate::winq::column_type::ColumnType;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::IdentifierTrait;
