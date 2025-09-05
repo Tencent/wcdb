@@ -2,6 +2,7 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::base::param::i64_expression_convertible_param::I64ExpressionConvertibleParam;
+use crate::base::param::string_column_param::StringColumnParam;
 use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
@@ -303,47 +304,49 @@ impl StatementUpdate {
     // todo dengxudong 重要不紧急
     // public StatementUpdate setColumnsToValues(@NotNull Column[] columns, @NotNull Object[] values)
 
-    pub fn set_columns(&self, columns: &Vec<&Column>) -> &Self {
-        if columns.is_empty() {
+    pub fn set<'a, I, S>(&self, column_vec: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<StringColumnParam<'a>>,
+    {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
-        let mut columns_void_vec: Vec<*mut c_void> = Vec::with_capacity(columns.len());
-        for x in columns {
-            columns_void_vec.push(CppObject::get(*x));
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                StringColumnParam::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                StringColumnParam::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj));
+                }
+            }
         }
-        unsafe {
-            WCDBRustStatementUpdate_configColumns(
-                self.get_cpp_obj(),
-                CPPType::Column as c_int,
-                columns_void_vec.as_ptr(),
-                null(),
-                columns_void_vec.len(),
-            )
-        }
-        self
-    }
-
-    pub fn set_column_names(&self, columns: &Vec<String>) -> &Self {
-        if columns.is_empty() {
-            return self;
-        }
-
-        let mut c_strings = Vec::new();
-        let mut columns_void_vec: Vec<*const c_char> = Vec::with_capacity(columns.len());
-        for x in columns {
-            let c_string = x.to_cstring();
-            columns_void_vec.push(c_string.as_ptr());
-            c_strings.push(c_string);
-        }
-
-        unsafe {
-            WCDBRustStatementUpdate_configColumns(
-                self.get_cpp_obj(),
-                CPPType::String as c_int,
-                null(),
-                columns_void_vec.as_ptr(),
-                columns_void_vec.len(),
-            )
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustStatementUpdate_configColumns(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    null(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len(),
+                )
+            }
+        } else {
+            unsafe {
+                WCDBRustStatementUpdate_configColumns(
+                    self.get_cpp_obj(),
+                    CPPType::Column as i32,
+                    cpp_obj_vec.as_ptr(),
+                    null(),
+                    cpp_obj_vec.len(),
+                );
+            }
         }
         self
     }
