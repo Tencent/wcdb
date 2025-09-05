@@ -31,7 +31,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set_with_columns(&vec![Column::new("column1", None)])
+                .set(vec![Column::new("column1", None)])
                 .to(None),
             "ON CONFLICT DO UPDATE SET column1 = NULL",
         );
@@ -39,7 +39,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set_with_columns(&vec![Column::new("column1", None)])
+                .set(vec![Column::new("column1", None)])
                 .to(true),
             "ON CONFLICT DO UPDATE SET column1 = TRUE",
         );
@@ -47,7 +47,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set_with_columns(&vec![Column::new("column1", None)])
+                .set(vec![Column::new("column1", None)])
                 .to(1),
             "ON CONFLICT DO UPDATE SET column1 = 1",
         );
@@ -55,7 +55,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set_with_columns(&vec![Column::new("column1", None)])
+                .set(vec![Column::new("column1", None)])
                 .to("abc"),
             "ON CONFLICT DO UPDATE SET column1 = 'abc'",
         );
@@ -63,9 +63,9 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set_with_columns(&vec![Column::new("column1", None)])
+                .set(vec![Column::new("column1", None)])
                 .to(1)
-                .set_with_columns(&column_vec)
+                .set(column_vec)
                 .to(2),
             "ON CONFLICT DO UPDATE SET column1 = 1, (column2, column3) = 2",
         );
@@ -73,7 +73,7 @@ pub mod upsert_test {
             Upsert::new()
                 .on_conflict()
                 .do_update()
-                .set_with_columns(&vec![Column::new("column1", None)])
+                .set(vec![Column::new("column1", None)])
                 .to(1)
                 .where_(&Column::new("column1", None).eq(2)),
             "ON CONFLICT DO UPDATE SET column1 = 1 WHERE column1 == 2",

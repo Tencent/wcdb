@@ -15,7 +15,7 @@ extern "C" {
     fn WCDBRustUpsert_configIndexedColumn(
         cpp_obj: *mut c_void,
         cpp_obj_type: c_int,
-        columns: *const c_longlong,
+        columns: *const *mut c_void,
         columns_string_vec: *const *const c_char,
         vec_len: c_int,
     );
@@ -114,7 +114,7 @@ impl Upsert {
                 }
                 UpsertIndexedByParam::IndexedColumnConvertible(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
-                    cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
+                    cpp_obj_vec.push(CppObject::get(obj));
                 }
             }
         }
@@ -163,41 +163,49 @@ impl Upsert {
         self
     }
 
-    pub fn set_with_column_names(&self, column_names: &Vec<String>) -> &Self {
-        if column_names.is_empty() {
+    pub fn set<I, S>(&self, column_vec: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<UpsertSetParam>,
+    {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
             return self;
         }
-        let len = column_names.len();
-        let c_strings: Vec<CString> = column_names.iter().map(|x| x.to_cstring()).collect();
-        let c_char_vec: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
-
-        unsafe {
-            WCDBRustUpsert_configSetColumns(
-                self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                c_char_vec.as_ptr(),
-                len as c_int,
-            )
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                UpsertSetParam::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                UpsertSetParam::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(&obj));
+                }
+            }
         }
-        self
-    }
-
-    pub fn set_with_columns(&self, columns: &Vec<Column>) -> &Self {
-        let cpp_type = Identifier::get_cpp_type(&columns[0]);
-        let len = columns.len();
-        let mut i64_vec: Vec<*mut c_void> = Vec::with_capacity(len);
-        for x in columns {
-            i64_vec.push(CppObject::get(x));
-        }
-        unsafe {
-            WCDBRustUpsert_configSetColumns(
-                self.get_cpp_obj(),
-                cpp_type as c_int,
-                i64_vec.as_ptr(),
-                std::ptr::null_mut(),
-                len as c_int,
-            )
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustUpsert_configSetColumns(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    std::ptr::null_mut(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len() as c_int,
+                );
+            }
+        } else {
+            unsafe {
+                WCDBRustUpsert_configSetColumns(
+                    self.get_cpp_obj(),
+                    cpp_type as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    std::ptr::null_mut(),
+                    cpp_obj_vec.len() as c_int,
+                )
+            }
         }
         self
     }
@@ -343,5 +351,28 @@ impl<'a> From<&'a str> for UpsertToParam<'a> {
 impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for UpsertToParam<'a> {
     fn from(value: Option<&'a dyn ExpressionConvertibleTrait>) -> Self {
         UpsertToParam::ExpressionConvertible(value)
+    }
+}
+
+pub enum UpsertSetParam {
+    String(String),
+    Column(Column),
+}
+
+impl From<String> for UpsertSetParam {
+    fn from(value: String) -> Self {
+        UpsertSetParam::String(value)
+    }
+}
+
+impl From<&str> for UpsertSetParam {
+    fn from(value: &str) -> Self {
+        UpsertSetParam::String(value.to_string())
+    }
+}
+
+impl From<Column> for UpsertSetParam {
+    fn from(value: Column) -> Self {
+        UpsertSetParam::Column(value)
     }
 }
