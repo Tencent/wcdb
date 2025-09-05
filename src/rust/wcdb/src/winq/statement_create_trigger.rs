@@ -1,19 +1,14 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::StringColumnParam;
+use crate::base::param::string_column_param::StringColumnParam;
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::schema::Schema;
 use crate::winq::statement::{Statement, StatementTrait};
-use crate::winq::statement_delete::StatementDelete;
-use crate::winq::statement_insert::StatementInsert;
-use crate::winq::statement_select::StatementSelect;
-use crate::winq::statement_update::StatementUpdate;
 use libc::c_int;
-use std::ffi::{c_char, c_void, CString};
+use std::ffi::{c_char, c_void};
 
 extern "C" {
     fn WCDBRustStatementCreateTrigger_createCppObj() -> *mut c_void;

@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::ExpressionConvertibleParam;
+use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};

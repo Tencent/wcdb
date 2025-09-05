@@ -1,0 +1,25 @@
+use crate::winq::column::Column;
+
+/// 支持 String, &str, Column
+pub enum StringColumnParam<'a> {
+    String(String),
+    Column(&'a Column),
+}
+
+impl<'a> From<String> for StringColumnParam<'a> {
+    fn from(value: String) -> Self {
+        StringColumnParam::String(value)
+    }
+}
+
+impl<'a> From<&str> for StringColumnParam<'a> {
+    fn from(value: &str) -> Self {
+        StringColumnParam::String(value.to_string())
+    }
+}
+
+impl<'a> From<&'a Column> for StringColumnParam<'a> {
+    fn from(value: &'a Column) -> Self {
+        StringColumnParam::Column(value)
+    }
+}

@@ -1,8 +1,8 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::{
-    ExpressionConvertibleParam, StringColumnParam, StringIndexedColumnConvertibleParam,
-};
+use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
+use crate::base::param::string_column_param::StringColumnParam;
+use crate::base::param::string_indexed_column_convertible_param::StringIndexedColumnConvertibleParam;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};

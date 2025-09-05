@@ -346,6 +346,7 @@ impl StatementUpdate {
         self
     }
 
+    /// todo qixinbing 重构 to_xx
     pub fn to_bool(&self, arg: bool) -> &Self {
         let ret = if arg { 1 } else { 0 } as *mut c_void;
         unsafe {

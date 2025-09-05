@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::StringIndexedColumnConvertibleParam;
+use crate::base::param::string_indexed_column_convertible_param::StringIndexedColumnConvertibleParam;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
