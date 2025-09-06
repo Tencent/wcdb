@@ -26,6 +26,7 @@ pub(crate) mod statement_drop_view_test;
 pub(crate) mod statement_explain_test;
 pub(crate) mod statement_insert_test;
 pub(crate) mod statement_pragma_test;
+pub(crate) mod statement_reindex_test;
 pub(crate) mod statement_release_test;
 pub(crate) mod statement_rollback_test;
 pub(crate) mod statement_select_test;

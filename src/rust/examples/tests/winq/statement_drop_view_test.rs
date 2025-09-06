@@ -16,7 +16,7 @@ pub mod statement_drop_view_test {
         WinqTool::winq_equal(
             StatementDropView::new()
                 .drop_view("testView")
-                .of_with_string("testSchema"),
+                .of("testSchema"),
             "DROP VIEW testSchema.testView",
         );
     }

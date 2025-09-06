@@ -88,7 +88,7 @@ impl StatementDropTrigger {
         self
     }
 
-    pub fn of_with_string(&self, schema_name: &str) -> &Self {
+    pub fn of(&self, schema_name: &str) -> &Self {
         let c_str = schema_name.to_string().to_cstring();
         unsafe {
             WCDBRustStatementDropTrigger_configSchema(

@@ -18,7 +18,7 @@ pub mod statement_drop_trigger_test {
         WinqTool::winq_equal(
             StatementDropTrigger::new()
                 .drop_trigger("testTrigger")
-                .of_with_string("testSchema"),
+                .of("testSchema"),
             "DROP TRIGGER testSchema.testTrigger",
         );
     }

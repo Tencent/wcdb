@@ -43,6 +43,7 @@ pub mod statement_drop_view;
 pub mod statement_explain;
 pub mod statement_insert;
 pub mod statement_pragma;
+pub mod statement_reindex;
 pub mod statement_release;
 pub mod statement_rollback;
 pub mod statement_select;
