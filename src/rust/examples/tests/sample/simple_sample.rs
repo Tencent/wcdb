@@ -50,7 +50,7 @@ pub mod simple_sample {
         let content = DB_TEST_OBJECT_INSTANCE.content;
         let filed_content = unsafe { &*content };
         let express_content = filed_content.get_column().eq("updateContent");
-        let express = filed_id.get_column().eq(100).and(express_content);
+        let express = filed_id.get_column().eq(100).and(Some(&express_content));
         let ret = table.update_object(
             test_table,
             Some(vec![filed_id]),

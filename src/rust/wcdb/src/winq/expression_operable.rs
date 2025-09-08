@@ -113,13 +113,9 @@ pub trait ExpressionOperableTrait {
 
     fn not_null(&self) -> Expression;
 
-    fn or<'a, T>(&self, operand: T) -> Expression
-    where
-        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>;
+    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression;
 
-    fn and<'a, T>(&self, operand: T) -> Expression
-    where
-        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>;
+    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression;
 
     fn multiply<'a, T>(&self, operand: T) -> Expression
     where
@@ -279,18 +275,14 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.null_operate(true)
     }
 
-    fn or<'a, T>(&self, operand: T) -> Expression
-    where
-        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>,
+    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
     {
-        self.binary_operate(operand.into(), BinaryOperatorType::Or, false)
+        self.binary_operate(operand, BinaryOperatorType::Or, false)
     }
 
-    fn and<'a, T>(&self, operand: T) -> Expression
-    where
-        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>,
+    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
     {
-        self.binary_operate(operand.into(), BinaryOperatorType::And, false)
+        self.binary_operate(operand, BinaryOperatorType::And, false)
     }
 
     fn multiply<'a, T>(&self, operand: T) -> Expression

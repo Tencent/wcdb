@@ -67,7 +67,7 @@ impl OrmTest {
             .iter()
             .for_each(|field| {
                 if field.get_description().as_str() != column_name {
-                    let column_def = ColumnDef::new(field.get_column(), ColumnType::Integer);
+                    let column_def = ColumnDef::new((field.get_column(), ColumnType::Integer));
                     column_defs.push(column_def);
                 }
             });

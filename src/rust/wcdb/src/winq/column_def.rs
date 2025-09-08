@@ -59,14 +59,12 @@ impl IdentifierConvertibleTrait for ColumnDef {
     }
 }
 
-pub enum ColumnDefParam<'a> {
-    String(&'a str, Option<ColumnType>),
-    Column(&'a Column, Option<ColumnType>),
-}
-
 impl ColumnDef {
-    pub fn new(param: ColumnDefParam) -> ColumnDef {
-        let cpp_obj = match param {
+    pub fn new<'a, T>(param: T) -> ColumnDef
+    where
+        T: Into<ColumnDefParam<'a>>,
+    {
+        let cpp_obj = match param.into() {
             ColumnDefParam::String(str, column_type_opt) => {
                 let cpp_type = match column_type_opt {
                     Some(column_type) => column_type as c_int,
@@ -107,5 +105,46 @@ impl ColumnDef {
             WCDBRustColumnDef_constraint(self.get_cpp_obj(), CppObject::get(constraint));
         }
         self
+    }
+}
+
+pub enum ColumnDefParam<'a> {
+    String(&'a str, Option<ColumnType>),
+    Column(&'a Column, Option<ColumnType>),
+}
+
+impl<'a> From<&'a str> for ColumnDefParam<'a> {
+    fn from(name: &'a str) -> Self {
+        ColumnDefParam::String(name, None)
+    }
+}
+
+impl<'a> From<(&'a str, ColumnType)> for ColumnDefParam<'a> {
+    fn from((name, ty): (&'a str, ColumnType)) -> Self {
+        ColumnDefParam::String(name, Some(ty))
+    }
+}
+
+impl<'a> From<(&'a str, Option<ColumnType>)> for ColumnDefParam<'a> {
+    fn from((name, ty_opt): (&'a str, Option<ColumnType>)) -> Self {
+        ColumnDefParam::String(name, ty_opt)
+    }
+}
+
+impl<'a> From<&'a Column> for ColumnDefParam<'a> {
+    fn from(col: &'a Column) -> Self {
+        ColumnDefParam::Column(col, None)
+    }
+}
+
+impl<'a> From<(&'a Column, ColumnType)> for ColumnDefParam<'a> {
+    fn from((col, ty): (&'a Column, ColumnType)) -> Self {
+        ColumnDefParam::Column(col, Some(ty))
+    }
+}
+
+impl<'a> From<(&'a Column, Option<ColumnType>)> for ColumnDefParam<'a> {
+    fn from((col, ty_opt): (&'a Column, Option<ColumnType>)) -> Self {
+        ColumnDefParam::Column(col, ty_opt)
     }
 }
