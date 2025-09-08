@@ -7,7 +7,7 @@ use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_void};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 
 extern "C" {
     fn WCDBRustUpsert_createCppObj() -> *mut c_void;
@@ -37,7 +37,7 @@ extern "C" {
     fn WCDBRustUpsert_configToValue(
         cpp_obj: *mut c_void,
         cpp_obj_type: c_int,
-        int_value: *mut c_void,
+        int_value: c_longlong,
         double_value: c_double,
         string_value: *const c_char,
     );

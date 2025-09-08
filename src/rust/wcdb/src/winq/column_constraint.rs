@@ -5,7 +5,7 @@ use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use std::ffi::{c_char, c_double, c_int, c_void};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 
 extern "C" {
     fn WCDBRustColumnConstraint_create(name: *const c_char) -> *mut c_void;
@@ -22,7 +22,7 @@ extern "C" {
     fn WCDBRustColumnConstraint_configDefaultValue(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
-        int_value: *mut c_void,
+        int_value: c_longlong,
         double_value: c_double,
         string_value: *const c_char,
     );
@@ -150,7 +150,7 @@ impl ColumnConstraint {
             WCDBRustColumnConstraint_configDefaultValue(
                 self.get_cpp_obj(),
                 cpp_type as i32,
-                int_value as *mut c_void,
+                int_value as c_longlong,
                 double_value as c_double,
                 string_value,
             );

@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
@@ -107,115 +108,100 @@ impl IdentifierTrait for ExpressionOperable {
 
 impl ExpressionConvertibleTrait for ExpressionOperable {}
 
-pub trait OperateParam {
-    /// 对应 C++ 入参 type, long, double, string
-    fn get_params(&self) -> (CPPType, i64, f64, *const c_char);
-}
-
-impl<T: ExpressionConvertibleTrait> OperateParam for &T {
-    fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
-        (
-            self.as_identifier().get_type(),
-            self.as_cpp_object().get_cpp_obj() as i64,
-            0.0,
-            std::ptr::null_mut(),
-        )
-    }
-}
-
-impl OperateParam for bool {
-    fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
-        (
-            CPPType::Int,
-            if *self { 1 } else { 0 } as i64,
-            0.0,
-            std::ptr::null(),
-        )
-    }
-}
-
-macro_rules! impl_binary_operate_param_for_int {
-    ($($t:ty),*) => {
-        $(
-            impl OperateParam for $t {
-                fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
-                    (CPPType::Int, *self as i64, 0.0, std::ptr::null())
-                }
-            }
-        )*
-    };
-}
-
-impl_binary_operate_param_for_int!(i8, i16, i32, i64);
-
-macro_rules! impl_binary_operate_param_for_float {
-    ($($t:ty),*) => {
-        $(
-            impl OperateParam for $t {
-                fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
-                    (CPPType::Double, 0, *self as f64, std::ptr::null())
-                }
-            }
-        )*
-    };
-}
-
-impl_binary_operate_param_for_float!(f32, f64);
-
-impl OperateParam for &str {
-    fn get_params(&self) -> (CPPType, i64, f64, *const c_char) {
-        (CPPType::String, 0, 0.0, self.to_cstring().as_ptr())
-    }
-}
-
 pub trait ExpressionOperableTrait {
     fn is_null(&self) -> Expression;
 
     fn not_null(&self) -> Expression;
 
-    fn or<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression;
+    fn or<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>;
 
-    fn and<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression;
+    fn and<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>;
 
-    fn multiply<T: OperateParam>(&self, operand: T) -> Expression;
+    fn multiply<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn divide<T: OperateParam>(&self, operand: T) -> Expression;
+    fn divide<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression;
+    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn add<T: OperateParam>(&self, operand: T) -> Expression;
+    fn add<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn minus<T: OperateParam>(&self, operand: T) -> Expression;
+    fn minus<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn left_shift<T: OperateParam>(&self, operand: T) -> Expression;
+    fn left_shift<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn right_shift<T: OperateParam>(&self, operand: T) -> Expression;
+    fn right_shift<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn bit_and<T: OperateParam>(&self, operand: T) -> Expression;
+    fn bit_and<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn bit_or<T: OperateParam>(&self, operand: T) -> Expression;
+    fn bit_or<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn lt<T: OperateParam>(&self, operand: T) -> Expression;
+    fn lt<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn le<T: OperateParam>(&self, operand: T) -> Expression;
+    fn le<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn gt<T: OperateParam>(&self, operand: T) -> Expression;
+    fn gt<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn ge<T: OperateParam>(&self, operand: T) -> Expression;
+    fn ge<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn eq<T: OperateParam>(&self, operand: T) -> Expression;
+    fn eq<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn not_eq<T: OperateParam>(&self, operand: T) -> Expression;
+    fn not_eq<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn concat<T: OperateParam>(&self, operand: T) -> Expression;
+    fn concat<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn between<T: OperateParam>(&self, begin: T, end: T) -> Expression;
+    fn between<'a, T>(&self, begin: T, end: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn not_between<T: OperateParam>(&self, begin: T, end: T) -> Expression;
+    fn not_between<'a, T>(&self, begin: T, end: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn r#in<T: OperateParam>(&self, operands: &[T]) -> Expression;
+    fn r#in<'a, I, S>(&self, operands: I) -> Expression
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<ExpressionConvertibleParam<'a>>;
 
-    fn not_in<T: OperateParam>(&self, operands: &[T]) -> Expression;
+    fn not_in<'a, I, S>(&self, operands: I) -> Expression
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<ExpressionConvertibleParam<'a>>;
 
     fn in_table(&self, table: &str) -> Expression;
 
@@ -293,92 +279,160 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.null_operate(true)
     }
 
-    fn or<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression {
-        self.binary_operate(&operand, BinaryOperatorType::Or, false)
+    fn or<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>,
+    {
+        self.binary_operate(operand.into(), BinaryOperatorType::Or, false)
     }
 
-    fn and<T: ExpressionConvertibleTrait>(&self, operand: T) -> Expression {
-        self.binary_operate(&operand, BinaryOperatorType::And, false)
+    fn and<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<Option<&'a dyn ExpressionConvertibleTrait>>,
+    {
+        self.binary_operate(operand.into(), BinaryOperatorType::And, false)
     }
 
-    fn multiply<T: OperateParam>(&self, operand: T) -> Expression {
+    fn multiply<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Multiply, false)
     }
 
-    fn divide<T: OperateParam>(&self, operand: T) -> Expression {
+    fn divide<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Divide, false)
     }
 
-    fn r#mod<T: OperateParam>(&self, operand: T) -> Expression {
+    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Modulo, false)
     }
 
-    fn add<T: OperateParam>(&self, operand: T) -> Expression {
+    fn add<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Plus, false)
     }
 
-    fn minus<T: OperateParam>(&self, operand: T) -> Expression {
+    fn minus<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Minus, false)
     }
 
-    fn left_shift<T: OperateParam>(&self, operand: T) -> Expression {
+    fn left_shift<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::LeftShift, false)
     }
 
-    fn right_shift<T: OperateParam>(&self, operand: T) -> Expression {
+    fn right_shift<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::RightShift, false)
     }
 
-    fn bit_and<T: OperateParam>(&self, operand: T) -> Expression {
+    fn bit_and<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::BitwiseAnd, false)
     }
 
-    fn bit_or<T: OperateParam>(&self, operand: T) -> Expression {
+    fn bit_or<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::BitwiseOr, false)
     }
 
-    fn lt<T: OperateParam>(&self, operand: T) -> Expression {
+    fn lt<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Less, false)
     }
 
-    fn le<T: OperateParam>(&self, operand: T) -> Expression {
+    fn le<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::LessOrEqual, false)
     }
 
-    fn gt<T: OperateParam>(&self, operand: T) -> Expression {
+    fn gt<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Greater, false)
     }
 
-    fn ge<T: OperateParam>(&self, operand: T) -> Expression {
+    fn ge<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::GreaterOrEqual, false)
     }
 
-    fn eq<T: OperateParam>(&self, operand: T) -> Expression {
+    fn eq<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Equal, false)
     }
 
-    fn not_eq<T: OperateParam>(&self, operand: T) -> Expression {
+    fn not_eq<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::NotEqual, false)
     }
 
-    fn concat<T: OperateParam>(&self, operand: T) -> Expression {
+    fn concat<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Concatenate, false)
     }
 
-    fn between<T: OperateParam>(&self, begin: T, end: T) -> Expression {
+    fn between<'a, T>(&self, begin: T, end: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.between_operate(begin, end, false)
     }
 
-    fn not_between<T: OperateParam>(&self, begin: T, end: T) -> Expression {
+    fn not_between<'a, T>(&self, begin: T, end: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.between_operate(begin, end, true)
     }
 
-    fn r#in<T: OperateParam>(&self, operands: &[T]) -> Expression {
+    fn r#in<'a, I, S>(&self, operands: I) -> Expression
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<ExpressionConvertibleParam<'a>>,
+    {
         todo!("qixinbing")
         // self.r#in(operands)
     }
 
-    fn not_in<T: OperateParam>(&self, operands: &[T]) -> Expression {
+    fn not_in<'a, I, S>(&self, operands: I) -> Expression
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<ExpressionConvertibleParam<'a>>,
+    {
         todo!("qixinbing")
         // self.not_in(operands)
     }
@@ -473,85 +527,85 @@ impl ExpressionOperableTrait for ExpressionOperable {
     }
 
     fn avg(&self) -> Expression {
-        Expression::function("AVG").argument(self)
+        Expression::function("AVG").argument(Some(self))
     }
 
     fn count(&self) -> Expression {
-        Expression::function("COUNT").argument(self)
+        Expression::function("COUNT").argument(Some(self))
     }
 
     fn group_concat(&self) -> Expression {
-        Expression::function("GROUP_CONCAT").argument(self)
+        Expression::function("GROUP_CONCAT").argument(Some(self))
     }
 
     fn group_concat_string(&self, separator: &str) -> Expression {
         Expression::function("GROUP_CONCAT")
-            .argument(self)
+            .argument(Some(self))
             .argument(separator)
     }
 
     fn max(&self) -> Expression {
-        Expression::function("MAX").argument(self)
+        Expression::function("MAX").argument(Some(self))
     }
 
     fn min(&self) -> Expression {
-        Expression::function("MIN").argument(self)
+        Expression::function("MIN").argument(Some(self))
     }
 
     fn sum(&self) -> Expression {
-        Expression::function("SUM").argument(self)
+        Expression::function("SUM").argument(Some(self))
     }
 
     fn total(&self) -> Expression {
-        Expression::function("TOTAL").argument(self)
+        Expression::function("TOTAL").argument(Some(self))
     }
 
     fn abs(&self) -> Expression {
-        Expression::function("ABS").argument(self)
+        Expression::function("ABS").argument(Some(self))
     }
 
     fn hex(&self) -> Expression {
-        Expression::function("HEX").argument(self)
+        Expression::function("HEX").argument(Some(self))
     }
 
     fn length(&self) -> Expression {
-        Expression::function("LENGTH").argument(self)
+        Expression::function("LENGTH").argument(Some(self))
     }
 
     fn lower(&self) -> Expression {
-        Expression::function("LOWER").argument(self)
+        Expression::function("LOWER").argument(Some(self))
     }
 
     fn upper(&self) -> Expression {
-        Expression::function("UPPER").argument(self)
+        Expression::function("UPPER").argument(Some(self))
     }
 
     fn round(&self) -> Expression {
-        Expression::function("ROUND").argument(self)
+        Expression::function("ROUND").argument(Some(self))
     }
 
     fn match_info(&self) -> Expression {
-        Expression::function("matchInfo").argument(self)
+        Expression::function("matchInfo").argument(Some(self))
     }
 
     fn offsets(&self) -> Expression {
-        Expression::function("offsets").argument(self)
+        Expression::function("offsets").argument(Some(self))
     }
 
     fn snippet(&self) -> Expression {
-        Expression::function("snippet").argument(self)
+        Expression::function("snippet").argument(Some(self))
     }
 
     fn bm25(&self) -> Expression {
-        Expression::function("bm25").argument(self)
+        Expression::function("bm25").argument(Some(self))
     }
 
     fn highlight(&self) -> Expression {
-        Expression::function("highlight").argument(self)
+        Expression::function("highlight").argument(Some(self))
     }
 
     fn substring_match_info(&self) -> Expression {
-        Expression::function("substring_match_info").argument(self)
+        Expression::function("substring_match_info").argument(Some(self))
     }
 }
 
@@ -573,13 +627,16 @@ impl ExpressionOperable {
         Expression::new(Some(cpp_obj))
     }
 
-    fn binary_operate<T: OperateParam>(
+    fn binary_operate<'a, T>(
         &self,
         operand: T,
         operand_type: BinaryOperatorType,
         is_not: bool,
-    ) -> Expression {
-        let (right_type, right_long, right_double, right_cpp_obj) = operand.get_params();
+    ) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let (right_type, right_long, right_double, right_cpp_obj) = operand.into().get_params();
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_binaryOperate(
                 self.get_type() as i32,
@@ -595,9 +652,12 @@ impl ExpressionOperable {
         Expression::new(Some(cpp_obj))
     }
 
-    fn between_operate<T: OperateParam>(&self, begin: T, end: T, is_not: bool) -> Expression {
-        let (begin_type, begin_long, begin_double, begin_cpp_obj) = begin.get_params();
-        let (end_type, end_long, end_double, end_cpp_obj) = end.get_params();
+    fn between_operate<'a, T>(&self, begin: T, end: T, is_not: bool) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let (begin_type, begin_long, begin_double, begin_cpp_obj) = begin.into().get_params();
+        let (end_type, end_long, end_double, end_cpp_obj) = end.into().get_params();
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_betweenOperate(
                 self.get_type() as i32,

@@ -2,6 +2,7 @@
 pub mod upsert_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::Column;
+    use wcdb::winq::expression_convertible::ExpressionConvertibleTrait;
     use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::upsert::Upsert;
 
@@ -31,7 +32,7 @@ pub mod upsert_test {
                 .on_conflict()
                 .do_update()
                 .set(vec![&Column::new("column1", None)])
-                .to(None),
+                .to::<Option<&dyn ExpressionConvertibleTrait>>(None),
             "ON CONFLICT DO UPDATE SET column1 = NULL",
         );
         WinqTool::winq_equal(

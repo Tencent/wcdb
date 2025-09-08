@@ -2,6 +2,7 @@
 pub mod statement_update_test {
     use crate::base::winq_tool::WinqTool;
     use wcdb::winq::column::{Column, ColumnTrait};
+    use wcdb::winq::expression_convertible::ExpressionConvertibleTrait;
     use wcdb::winq::expression_operable::ExpressionOperableTrait;
     use wcdb::winq::ordering_term::Order;
     use wcdb::winq::statement_update::StatementUpdate;
@@ -51,7 +52,7 @@ pub mod statement_update_test {
             StatementUpdate::new()
                 .update(test_table_str)
                 .set(&column1_vec)
-                .to(None),
+                .to::<Option<&dyn ExpressionConvertibleTrait>>(None),
             "UPDATE testTable SET column1 = NULL",
         );
 

@@ -71,7 +71,7 @@ extern "C" {
         cpp_type: c_int,
         // todo denxudong 补充 *mut c_void
         // arg_cpp_obj: *mut c_void,
-        int_value: *mut c_void,
+        int_value: c_longlong,
         double_value: c_double,
         string_value: *const c_char,
     );

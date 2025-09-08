@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::winq::expression_operable::OperateParam;
+use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_void};
@@ -55,8 +55,11 @@ impl IdentifierConvertibleTrait for LiteralValue {
 }
 
 impl LiteralValue {
-    pub fn new<T: OperateParam>(param: T) -> Self {
-        let (arg_type, arg_long, arg_double, arg_string) = param.get_params();
+    pub fn new<'a, T>(param: T) -> Self
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let (arg_type, arg_long, arg_double, arg_string) = param.into().get_params();
         let cpp_obj = unsafe {
             WCDBRustLiteralValue_create(arg_type as c_int, arg_long, arg_double, arg_string)
         };

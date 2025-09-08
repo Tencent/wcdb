@@ -2,7 +2,7 @@
 // pub mod expression_test {
 //     use crate::base::winq_tool::WinqTool;
 //     use wcdb::winq::bind_parameter::BindParameter;
-//     use wcdb::winq::column::Column;
+//     use wcdb::winq::column::{Column, ColumnStaticTrait};
 //     use wcdb::winq::column_type::ColumnType;
 //     use wcdb::winq::expression::Expression;
 //     use wcdb::winq::expression_operable::ExpressionOperableTrait;
@@ -143,8 +143,8 @@
 //
 //     #[test]
 //     pub fn test_binary_operation() {
-//         let mut column_left = Column::new("left");
-//         let column_right = Column::new("right");
+//         let mut column_left = Column::new("left", None);
+//         let column_right = Column::new("right", None);
 //
 //         let desc = column_left.or(&column_right).get_description();
 //         assert_eq!(desc.as_str(), "left OR right");
