@@ -18,7 +18,7 @@ pub mod statement_update_test {
 
         WinqTool::winq_equal(
             StatementUpdate::new()
-                .update(test_table_str.clone())
+                .update(test_table_str)
                 .set(&column1_vec)
                 .to(1),
             "UPDATE testTable SET column1 = 1",

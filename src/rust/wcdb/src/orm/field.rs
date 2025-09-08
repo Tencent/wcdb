@@ -71,13 +71,11 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.not_null()
     }
 
-    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
-    {
+    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
         self.column.or(operand)
     }
 
-    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
-    {
+    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
         self.column.and(operand)
     }
 

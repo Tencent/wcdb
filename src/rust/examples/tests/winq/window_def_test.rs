@@ -39,7 +39,7 @@ pub mod window_def_test {
         let column1 = Column::new("column1", None).add(1);
         column1.add(1);
         let column2 = Column::new("column2", None);
-        let expression = Expression::new(column2);
+        let expression = Expression::new(&column2);
         let ordering_term: OrderingTerm = Column::new("column1", None).order(Order::Asc);
         let frame_spec = FrameSpec::new().range().unbounded_preceding();
         let window_def = WindowDef::new()

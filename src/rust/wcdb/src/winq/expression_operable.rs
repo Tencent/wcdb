@@ -275,13 +275,11 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.null_operate(true)
     }
 
-    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
-    {
+    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
         self.binary_operate(operand, BinaryOperatorType::Or, false)
     }
 
-    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
-    {
+    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
         self.binary_operate(operand, BinaryOperatorType::And, false)
     }
 
@@ -438,7 +436,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
                 true,
             )
         };
-        Expression::new(Some(cpp_obj))
+        Self::create_expression(cpp_obj)
     }
 
     fn not_in_table(&self, table: &str) -> Expression {
@@ -450,7 +448,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
                 false,
             )
         };
-        Expression::new(Some(cpp_obj))
+        Self::create_expression(cpp_obj)
     }
 
     fn collate(&self, collation: &str) -> Expression {
@@ -461,7 +459,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
                 collation.to_cstring().as_ptr(),
             )
         };
-        Expression::new(Some(cpp_obj))
+        Self::create_expression(cpp_obj)
     }
 
     // pub fn substr_int(&self, start: i32, length: i32) -> Expression {
@@ -616,7 +614,13 @@ impl ExpressionOperable {
                 is_not,
             )
         };
-        Expression::new(Some(cpp_obj))
+        Self::create_expression(cpp_obj)
+    }
+
+    pub(crate) fn create_expression(cpp_obj: *mut c_void) -> Expression {
+        let mut expression = Expression::new_empty();
+        expression.set_cpp_obj(cpp_obj);
+        expression
     }
 
     fn binary_operate<'a, T>(
@@ -641,7 +645,7 @@ impl ExpressionOperable {
                 is_not,
             )
         };
-        Expression::new(Some(cpp_obj))
+        Self::create_expression(cpp_obj)
     }
 
     fn between_operate<'a, T>(&self, begin: T, end: T, is_not: bool) -> Expression
@@ -665,7 +669,7 @@ impl ExpressionOperable {
                 is_not,
             )
         };
-        Expression::new(Some(cpp_obj))
+        Self::create_expression(cpp_obj)
     }
 }
 

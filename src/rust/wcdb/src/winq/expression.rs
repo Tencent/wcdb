@@ -151,13 +151,11 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.not_null()
     }
 
-    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
-    {
+    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
         self.expression_operable.or(operand)
     }
 
-    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression
-    {
+    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
         self.expression_operable.and(operand)
     }
 
@@ -603,16 +601,39 @@ impl ExpressionOverParam for &str {
 }
 
 impl Expression {
-    pub fn new(cpp_obj_opt: Option<*mut c_void>) -> Self {
+    pub(crate) fn new_empty() -> Self {
         Expression {
-            expression_operable: ExpressionOperable::new(CPPType::Expression, cpp_obj_opt),
+            expression_operable: ExpressionOperable::new(CPPType::Expression, None),
+        }
+    }
+
+    pub fn new<'a, T>(value: T) -> Self
+    where
+        T: Into<ExpressionNewParam<'a>>,
+    {
+        let (cpp_type, cpp_obj) = match value.into() {
+            ExpressionNewParam::BindParameter(value) => {
+                (Identifier::get_cpp_type(value), CppObject::get(value))
+            }
+            ExpressionNewParam::LiteralValue(value) => {
+                (Identifier::get_cpp_type(value), CppObject::get(value))
+            }
+            ExpressionNewParam::Column(value) => {
+                (Identifier::get_cpp_type(value), CppObject::get(value))
+            }
+            ExpressionNewParam::StatementSelect(value) => {
+                (Identifier::get_cpp_type(value), CppObject::get(value))
+            }
+        };
+        Expression {
+            expression_operable: ExpressionOperable::new(cpp_type, Some(cpp_obj)),
         }
     }
 
     pub fn function(func_name: &str) -> Self {
         let cpp_obj =
             unsafe { WCDBRustExpression_createWithFunction(func_name.to_cstring().as_ptr()) };
-        Expression::new(Some(cpp_obj))
+        ExpressionOperable::create_expression(cpp_obj)
     }
 
     pub fn schema<T: ExpressionSchemaParam>(&self, param: T) -> &Self {
@@ -784,5 +805,36 @@ impl Expression {
     pub fn over<T: ExpressionOverParam>(&self, param: T) -> &Self {
         param.call_native(self.get_cpp_obj());
         self
+    }
+}
+
+pub enum ExpressionNewParam<'a> {
+    BindParameter(&'a BindParameter),
+    LiteralValue(&'a LiteralValue),
+    Column(&'a Column),
+    StatementSelect(&'a StatementSelect),
+}
+
+impl<'a> From<&'a BindParameter> for ExpressionNewParam<'a> {
+    fn from(value: &'a BindParameter) -> Self {
+        ExpressionNewParam::BindParameter(value)
+    }
+}
+
+impl<'a> From<&'a LiteralValue> for ExpressionNewParam<'a> {
+    fn from(value: &'a LiteralValue) -> Self {
+        ExpressionNewParam::LiteralValue(value)
+    }
+}
+
+impl<'a> From<&'a Column> for ExpressionNewParam<'a> {
+    fn from(value: &'a Column) -> Self {
+        ExpressionNewParam::Column(value)
+    }
+}
+
+impl<'a> From<&'a StatementSelect> for ExpressionNewParam<'a> {
+    fn from(value: &'a StatementSelect) -> Self {
+        ExpressionNewParam::StatementSelect(value)
     }
 }
