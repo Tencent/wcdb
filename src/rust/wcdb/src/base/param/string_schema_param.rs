@@ -1,9 +1,31 @@
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::utils::ToCString;
+use crate::winq::identifier::{CPPType, Identifier};
 use crate::winq::schema::Schema;
+use std::ffi::{c_char, c_void};
 
 /// 支持 String, &str, Option<&Schema>
 pub enum StringSchemaParam<'a> {
     String(String),
     Schema(Option<&'a Schema>),
+}
+
+impl StringSchemaParam<'_> {
+    pub(crate) fn get_params(self) -> (CPPType, *mut c_void, *const c_char) {
+        match self {
+            StringSchemaParam::String(str) => {
+                (CPPType::String, 0 as *mut c_void, str.to_cstring().as_ptr())
+            }
+            StringSchemaParam::Schema(schema_opt) => match schema_opt {
+                None => (CPPType::Null, 0 as *mut c_void, std::ptr::null()),
+                Some(sc) => (
+                    Identifier::get_cpp_type(sc),
+                    CppObject::get(sc),
+                    std::ptr::null(),
+                ),
+            },
+        }
+    }
 }
 
 impl<'a> From<String> for StringSchemaParam<'a> {

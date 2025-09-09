@@ -1,6 +1,8 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
+use crate::base::param::string_expression_convertible_param::StringExpressionConvertibleParam;
+use crate::base::param::string_schema_param::StringSchemaParam;
 use crate::utils::ToCString;
 use crate::winq::bind_parameter::BindParameter;
 use crate::winq::column::Column;
@@ -13,9 +15,7 @@ use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::literal_value::LiteralValue;
 use crate::winq::result_column::ResultColumn;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
-use crate::winq::schema::Schema;
 use crate::winq::statement_select::StatementSelect;
-use crate::winq::window_def::WindowDef;
 use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 
 extern "C" {
@@ -494,112 +494,6 @@ impl From<&StatementSelect> for Expression {
     }
 }
 
-pub trait ExpressionSchemaParam {
-    fn call_schema(&self, expression_cpp_obj: *mut c_void);
-}
-
-impl ExpressionSchemaParam for &str {
-    fn call_schema(&self, expression_cpp_obj: *mut c_void) {
-        let cstr = self.to_cstring();
-        unsafe {
-            WCDBRustExpression_setWithSchema(
-                expression_cpp_obj,
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                cstr.as_ptr(),
-            )
-        }
-    }
-}
-
-impl ExpressionSchemaParam for Schema {
-    fn call_schema(&self, expression_cpp_obj: *mut c_void) {
-        unsafe {
-            WCDBRustExpression_setWithSchema(
-                expression_cpp_obj,
-                Identifier::get_cpp_type(self) as c_int,
-                CppObject::get(self),
-                std::ptr::null_mut(),
-            )
-        }
-    }
-}
-
-pub trait ExpressionCastParam {
-    fn create_cpp_obj(&self) -> *mut c_void;
-}
-
-impl ExpressionCastParam for &str {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        let cstr = self.to_cstring();
-        unsafe {
-            WCDBRustExpression_cast(
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                cstr.as_ptr(),
-            )
-        }
-    }
-}
-
-impl<T: ExpressionConvertibleTrait + IdentifierTrait> ExpressionCastParam for T {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        unsafe {
-            WCDBRustExpression_cast(
-                Identifier::get_cpp_type(self) as c_int,
-                CppObject::get(self),
-                std::ptr::null_mut(),
-            )
-        }
-    }
-}
-
-pub trait ExpressionCaseParam {
-    fn create_cpp_obj(&self) -> *mut c_void;
-}
-
-impl ExpressionCaseParam for &str {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        let cstr = self.to_cstring();
-        unsafe {
-            WCDBRustExpression_caseWithExp(
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                cstr.as_ptr(),
-            )
-        }
-    }
-}
-
-impl<T: ExpressionConvertibleTrait + IdentifierTrait> ExpressionCaseParam for T {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        unsafe {
-            WCDBRustExpression_caseWithExp(
-                Identifier::get_cpp_type(self) as c_int,
-                CppObject::get(self),
-                std::ptr::null_mut(),
-            )
-        }
-    }
-}
-
-pub trait ExpressionOverParam {
-    fn call_native(&self, cpp_obj: *mut c_void);
-}
-
-impl ExpressionOverParam for WindowDef {
-    fn call_native(&self, cpp_obj: *mut c_void) {
-        unsafe { WCDBRustExpression_overWindowDef(cpp_obj, CppObject::get(self)) }
-    }
-}
-
-impl ExpressionOverParam for &str {
-    fn call_native(&self, cpp_obj: *mut c_void) {
-        let cstr = self.to_cstring();
-        unsafe { WCDBRustExpression_overWindow(cpp_obj, cstr.as_ptr()) }
-    }
-}
-
 impl Expression {
     pub(crate) fn new_empty() -> Self {
         Expression {
@@ -636,8 +530,14 @@ impl Expression {
         ExpressionOperable::create_expression(cpp_obj)
     }
 
-    pub fn schema<T: ExpressionSchemaParam>(&self, param: T) -> &Self {
-        param.call_schema(self.get_cpp_obj());
+    pub fn schema<'a, T>(&self, param: T) -> &Self
+    where
+        T: Into<StringSchemaParam<'a>>,
+    {
+        let (cpp_type, cpp_obj, name) = param.into().get_params();
+        unsafe {
+            WCDBRustExpression_setWithSchema(self.get_cpp_obj(), cpp_type as c_int, cpp_obj, name)
+        }
         self
     }
 
@@ -703,8 +603,14 @@ impl Expression {
         }
     }
 
-    pub fn cast<T: ExpressionCastParam>(param: T) -> Self {
-        let cpp_obj = param.create_cpp_obj();
+    pub fn cast<'a, T>(param: T) -> Self
+    where
+        T: Into<StringExpressionConvertibleParam<'a>>,
+    {
+        let (cpp_type, cpp_obj, name) = param.into().get_params();
+
+        let cpp_obj = unsafe { WCDBRustExpression_cast(cpp_type as c_int, cpp_obj, name) };
+
         Self {
             expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
         }
@@ -722,17 +628,26 @@ impl Expression {
         ResultColumn::new(cpp_obj)
     }
 
-    pub fn r#case<T: ExpressionCaseParam>(param_opt: Option<T>) -> Self {
-        let cpp_obj = match param_opt {
-            None => unsafe {
-                WCDBRustExpression_caseWithExp(
-                    CPPType::Invalid as c_int,
-                    std::ptr::null_mut(),
-                    std::ptr::null_mut(),
-                )
-            },
-            Some(param) => param.create_cpp_obj(),
+    fn case_() -> Self {
+        let mut ret = Expression::new_empty();
+        let cpp_obj =
+            unsafe { WCDBRustExpression_caseWithExp(0, 0 as *mut c_void, std::ptr::null()) };
+        ret.set_cpp_obj(cpp_obj);
+        ret
+    }
+
+    pub fn r#case<'a, T>(param_opt: Option<T>) -> Self
+    where
+        T: Into<StringExpressionConvertibleParam<'a>>,
+    {
+        let param = match param_opt {
+            None => {
+                return Self::case_();
+            }
+            Some(val) => val,
         };
+        let (cpp_type, cpp_obj, name) = param.into().get_params();
+        let cpp_obj = unsafe { WCDBRustExpression_caseWithExp(cpp_type as c_int, cpp_obj, name) };
         Self {
             expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
         }
@@ -802,10 +717,10 @@ impl Expression {
         self
     }
 
-    pub fn over<T: ExpressionOverParam>(&self, param: T) -> &Self {
-        param.call_native(self.get_cpp_obj());
-        self
-    }
+    // pub fn over<T: ExpressionOverParam>(&self, param: T) -> &Self {
+    //     param.call_native(self.get_cpp_obj());
+    //     self
+    // }
 }
 
 pub enum ExpressionNewParam<'a> {

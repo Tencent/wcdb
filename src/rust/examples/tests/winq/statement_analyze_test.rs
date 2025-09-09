@@ -7,15 +7,13 @@ pub mod statement_analyze_test {
     pub fn test() {
         WinqTool::winq_equal(StatementAnalyze::new().analyze(), "ANALYZE");
         WinqTool::winq_equal(
-            StatementAnalyze::new()
-                .analyze()
-                .schema_with_name("testSchema"),
+            StatementAnalyze::new().analyze().schema("testSchema"),
             "ANALYZE testSchema",
         );
         WinqTool::winq_equal(
             StatementAnalyze::new()
                 .analyze()
-                .schema_with_name("testSchema")
+                .schema("testSchema")
                 .table("testTable"),
             "ANALYZE testSchema.testTable",
         );
@@ -26,7 +24,7 @@ pub mod statement_analyze_test {
         WinqTool::winq_equal(
             StatementAnalyze::new()
                 .analyze()
-                .schema_with_name("testSchema")
+                .schema("testSchema")
                 .index("testIndex"),
             "ANALYZE testSchema.testIndex",
         );

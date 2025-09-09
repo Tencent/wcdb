@@ -418,8 +418,8 @@ impl ColumnStaticTrait for Column {
     }
 
     fn of<'a, T: Into<StringSchemaParam<'a>>>(&self, schema: T) -> &Column {
-        // todo qixinbing
-        // schema.call_of_schema(self);
+        let (cpp_type, cpp_obj, name) = schema.into().get_params();
+        unsafe { WCDBRustColumn_ofSchema(self.get_cpp_obj(), cpp_type as c_int, cpp_obj, name) }
         self
     }
 
@@ -434,37 +434,6 @@ impl ColumnStaticTrait for Column {
         let cpp_obj = unsafe { WCDBRustColumn_createRowId() };
         Column {
             expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
-        }
-    }
-}
-
-pub trait ColumnOfParam {
-    fn call_of_schema(&self, column: &Column);
-}
-
-impl ColumnOfParam for Schema {
-    fn call_of_schema(&self, column: &Column) {
-        unsafe {
-            WCDBRustColumn_ofSchema(
-                column.get_cpp_obj(),
-                Identifier::get_cpp_type(self) as c_int,
-                CppObject::get(self),
-                std::ptr::null_mut(),
-            )
-        }
-    }
-}
-
-impl ColumnOfParam for &str {
-    fn call_of_schema(&self, column: &Column) {
-        let c_name = self.to_cstring();
-        unsafe {
-            WCDBRustColumn_ofSchema(
-                column.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                c_name.as_ptr(),
-            )
         }
     }
 }

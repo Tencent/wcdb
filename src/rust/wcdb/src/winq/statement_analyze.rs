@@ -1,12 +1,12 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::string_schema_param::StringSchemaParam;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::schema::Schema;
 use crate::winq::statement::{Statement, StatementTrait};
-use libc::c_int;
-use std::ffi::{c_char, c_void};
+use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustStatementAnalyze_createCppObj() -> *mut c_void;
@@ -87,27 +87,18 @@ impl StatementAnalyze {
         self
     }
 
-    pub fn schema_with_name(&self, schema_name: &str) -> &Self {
-        let c_str = schema_name.to_string().to_cstring();
+    pub fn schema<'a, T>(&self, schema: T) -> &Self
+    where
+        T: Into<StringSchemaParam<'a>>,
+    {
+        let (cpp_type, cpp_obj, name) = schema.into().get_params();
         unsafe {
             WCDBRustStatementAnalyze_configSchema(
                 self.get_cpp_obj(),
-                CPPType::String as std::ffi::c_int,
-                std::ptr::null(),
-                c_str.as_ptr(),
+                cpp_type as c_int,
+                cpp_obj,
+                name,
             );
-        }
-        self
-    }
-
-    pub fn schema(&self, schema: Schema) -> &Self {
-        unsafe {
-            WCDBRustStatementAnalyze_configSchema(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(&schema) as std::ffi::c_int,
-                CppObject::get(&schema),
-                std::ptr::null(),
-            )
         }
         self
     }

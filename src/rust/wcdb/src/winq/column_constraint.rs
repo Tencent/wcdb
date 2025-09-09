@@ -125,8 +125,7 @@ impl ColumnConstraint {
     where
         V: Into<ExpressionConvertibleParam<'a>>,
     {
-        let value = value.into();
-        let (cpp_type, int_value, double_value, string_value) = value.get_params();
+        let (cpp_type, int_value, double_value, string_value) = value.into().get_params();
         unsafe {
             WCDBRustColumnConstraint_configDefaultValue(
                 self.get_cpp_obj(),
