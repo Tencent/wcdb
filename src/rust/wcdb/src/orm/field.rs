@@ -207,20 +207,20 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.not_between(begin, end)
     }
 
-    fn r#in<'a, I, S>(&self, operands: I) -> Expression
+    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.column.r#in(operands)
+        self.column
+            .r#in_(Identifier::get_cpp_type(self), operands, false)
     }
 
-    fn not_in<'a, I, S>(&self, operands: I) -> Expression
+    fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.column.not_in(operands)
+        self.column
+            .not_in_(Identifier::get_cpp_type(self), operands, true)
     }
 
     fn in_table(&self, table: &str) -> Expression {

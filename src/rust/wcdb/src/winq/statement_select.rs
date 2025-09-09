@@ -132,7 +132,7 @@ impl StatementSelect {
             return self;
         }
         let mut cpp_type_vec = vec![];
-        let mut cstrings: Vec<std::ffi::CString> = vec![];
+        let mut c_strings: Vec<std::ffi::CString> = vec![];
         let mut cpp_str_ptrs: Vec<*const c_char> = vec![];
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
@@ -141,7 +141,7 @@ impl StatementSelect {
                     cpp_type_vec.push(CPPType::String as c_int);
                     let c = str.as_str().to_cstring();
                     cpp_str_ptrs.push(c.as_ptr());
-                    cstrings.push(c);
+                    c_strings.push(c);
                 }
                 StringResultColumnConvertibleParam::ResultColumn(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj) as c_int);
@@ -172,7 +172,7 @@ impl StatementSelect {
             return self;
         }
         let mut cpp_type_vec = vec![];
-        let mut cstrings: Vec<std::ffi::CString> = vec![];
+        let mut c_strings: Vec<std::ffi::CString> = vec![];
         let mut cpp_str_ptrs: Vec<*const c_char> = vec![];
         let mut cpp_obj_vec = vec![];
 
@@ -182,7 +182,7 @@ impl StatementSelect {
                     cpp_type_vec.push(CPPType::String as c_int);
                     let c = str.as_str().to_cstring();
                     cpp_str_ptrs.push(c.as_ptr());
-                    cstrings.push(c);
+                    c_strings.push(c);
                 }
                 StringTableOrSubqueryConvertibleParam::TableOrSubquery(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
@@ -220,7 +220,7 @@ impl StatementSelect {
             return self;
         }
         let mut cpp_type_vec = vec![];
-        let mut cstrings: Vec<std::ffi::CString> = vec![];
+        let mut c_strings: Vec<std::ffi::CString> = vec![];
         let mut cpp_str_ptrs: Vec<*const c_char> = vec![];
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
@@ -229,7 +229,7 @@ impl StatementSelect {
                     cpp_type_vec.push(CPPType::String as c_int);
                     let c = str.as_str().to_cstring();
                     cpp_str_ptrs.push(c.as_ptr());
-                    cstrings.push(c);
+                    c_strings.push(c);
                 }
                 StringExpressionConvertibleParam::ExpressionConvertible(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);

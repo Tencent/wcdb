@@ -40,7 +40,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    fn WCDBRustExpressionOperable_in(
+    fn WCDBRustExpressionOperable_inOperate(
         operand_type: c_int,
         operand: *mut c_void,
         cpp_type: c_int,
@@ -191,14 +191,12 @@ pub trait ExpressionOperableTrait {
         T: Into<ExpressionConvertibleParam<'a>>,
         V: Into<ExpressionConvertibleParam<'a>>;
 
-    fn r#in<'a, I, S>(&self, operands: I) -> Expression
+    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>;
 
-    fn not_in<'a, I, S>(&self, operands: I) -> Expression
+    fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>;
 
     fn in_table(&self, table: &str) -> Expression;
@@ -417,22 +415,18 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.between_operate(begin, end, true)
     }
 
-    fn r#in<'a, I, S>(&self, operands: I) -> Expression
+    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        todo!("qixinbing")
-        // self.r#in(operands)
+        self.r#in_(CPPType::Expression, operands, false)
     }
 
-    fn not_in<'a, I, S>(&self, operands: I) -> Expression
+    fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        todo!("qixinbing")
-        // self.not_in(operands)
+        self.not_in_(CPPType::Expression, operands, true)
     }
 
     fn in_table(&self, table: &str) -> Expression {
@@ -673,6 +667,146 @@ impl ExpressionOperable {
         let mut expression = Expression::new_empty();
         expression.set_cpp_obj(cpp_obj);
         expression
+    }
+
+    pub(crate) fn r#in_<'a, S>(
+        &self,
+        left_cpp_type: CPPType,
+        operands: Vec<S>,
+        is_not: bool,
+    ) -> Expression
+    where
+        S: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let value_vec: Vec<ExpressionConvertibleParam<'a>> =
+            operands.into_iter().map(|operand| operand.into()).collect();
+
+        let len = value_vec.len();
+
+        let mut i64_vec = Vec::new();
+        let mut f64_vec = Vec::new();
+        let mut c_strings: Vec<std::ffi::CString> = vec![];
+        let mut string_vec = Vec::new();
+        let mut expr_vec = Vec::new();
+        let mut cpp_type = CPPType::Null;
+
+        for param in value_vec {
+            match param {
+                ExpressionConvertibleParam::Bool(bool) => {
+                    cpp_type = CPPType::Int;
+                    let value = if bool { 1 } else { 0 };
+                    i64_vec.push(value);
+                }
+                ExpressionConvertibleParam::I64(i64) => {
+                    cpp_type = CPPType::Int;
+                    i64_vec.push(i64);
+                }
+                ExpressionConvertibleParam::F64(f64) => {
+                    cpp_type = CPPType::Double;
+                    f64_vec.push(f64);
+                }
+                ExpressionConvertibleParam::String(string) => {
+                    cpp_type = CPPType::String;
+                    let c = string.as_str().to_cstring();
+                    string_vec.push(c.as_ptr());
+                    c_strings.push(c);
+                }
+                ExpressionConvertibleParam::ExpressionConvertible(expr_opt) => {
+                    cpp_type = CPPType::Expression;
+                    match expr_opt {
+                        None => {
+                            expr_vec.push(std::ptr::null());
+                        }
+                        Some(expr) => {
+                            expr_vec.push(CppObject::get(expr));
+                        }
+                    }
+                }
+            }
+        }
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                cpp_type as c_int,
+                i64_vec.as_ptr(),
+                f64_vec.as_ptr(),
+                string_vec.as_ptr(),
+                len as c_int,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    pub(crate) fn not_in_<'a, S>(
+        &self,
+        left_cpp_type: CPPType,
+        operands: Vec<S>,
+        is_not: bool,
+    ) -> Expression
+    where
+        S: Into<ExpressionConvertibleParam<'a>>,
+    {
+        let value_vec: Vec<ExpressionConvertibleParam<'a>> =
+            operands.into_iter().map(|operand| operand.into()).collect();
+
+        let len = value_vec.len();
+
+        let mut i64_vec = Vec::new();
+        let mut f64_vec = Vec::new();
+        let mut c_strings: Vec<std::ffi::CString> = vec![];
+        let mut string_vec = Vec::new();
+        let mut expr_vec = Vec::new();
+        let mut cpp_type = CPPType::Null;
+
+        for param in value_vec {
+            match param {
+                ExpressionConvertibleParam::Bool(bool) => {
+                    cpp_type = CPPType::Int;
+                    let value = if bool { 1 } else { 0 };
+                    i64_vec.push(value);
+                }
+                ExpressionConvertibleParam::I64(i64) => {
+                    cpp_type = CPPType::Int;
+                    i64_vec.push(i64);
+                }
+                ExpressionConvertibleParam::F64(f64) => {
+                    cpp_type = CPPType::Double;
+                    f64_vec.push(f64);
+                }
+                ExpressionConvertibleParam::String(string) => {
+                    cpp_type = CPPType::String;
+                    let c = string.as_str().to_cstring();
+                    string_vec.push(c.as_ptr());
+                    c_strings.push(c);
+                }
+                ExpressionConvertibleParam::ExpressionConvertible(expr_opt) => {
+                    cpp_type = CPPType::Expression;
+                    match expr_opt {
+                        None => {
+                            expr_vec.push(std::ptr::null());
+                        }
+                        Some(expr) => {
+                            expr_vec.push(CppObject::get(expr));
+                        }
+                    }
+                }
+            }
+        }
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inOperate(
+                left_cpp_type as c_int,
+                CppObject::get(self),
+                cpp_type as c_int,
+                i64_vec.as_ptr(),
+                f64_vec.as_ptr(),
+                string_vec.as_ptr(),
+                len as c_int,
+                is_not,
+            )
+        };
+        Self::create_expression(cpp_obj)
     }
 
     fn binary_operate<'a, T>(

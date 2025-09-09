@@ -243,20 +243,20 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.not_between(begin, end)
     }
 
-    fn r#in<'a, I, S>(&self, operands: I) -> Expression
+    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.expression_operable.r#in(operands)
+        self.expression_operable
+            .r#in_(Identifier::get_cpp_type(self), operands, false)
     }
 
-    fn not_in<'a, I, S>(&self, operands: I) -> Expression
+    fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        I: IntoIterator<Item = S>,
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.expression_operable.not_in(operands)
+        self.expression_operable
+            .not_in_(Identifier::get_cpp_type(self), operands, true)
     }
 
     fn in_table(&self, table: &str) -> Expression {
@@ -462,5 +462,31 @@ impl Column {
         Self {
             expression_operable: ExpressionOperable::new(CPPType::Column, Some(cpp_obj)),
         }
+    }
+
+    pub(crate) fn r#in_<'a, S>(
+        &self,
+        left_cpp_type: CPPType,
+        operands: Vec<S>,
+        is_not: bool,
+    ) -> Expression
+    where
+        S: Into<ExpressionConvertibleParam<'a>>,
+    {
+        self.expression_operable
+            .r#in_(left_cpp_type, operands, is_not)
+    }
+
+    pub(crate) fn not_in_<'a, S>(
+        &self,
+        left_cpp_type: CPPType,
+        operands: Vec<S>,
+        is_not: bool,
+    ) -> Expression
+    where
+        S: Into<ExpressionConvertibleParam<'a>>,
+    {
+        self.expression_operable
+            .r#in_(left_cpp_type, operands, is_not)
     }
 }
