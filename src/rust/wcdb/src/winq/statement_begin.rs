@@ -13,7 +13,7 @@ impl TransactionType {
 }
 
 extern "C" {
-    fn WCDBRustStatementBegin_createCppObj(type_i: c_int) -> *mut c_void;
+    fn WCDBRustStatementBegin_create(type_i: c_int) -> *mut c_void;
 }
 
 #[derive(Debug)]
@@ -66,7 +66,7 @@ impl StatementTrait for StatementBegin {
 impl StatementBegin {
     pub fn new(cpp_type: Option<i32>) -> Self {
         let transaction_type: i32 = cpp_type.unwrap_or_else(|| TransactionType::DEFERRED);
-        let cpp_obj = unsafe { WCDBRustStatementBegin_createCppObj(transaction_type) };
+        let cpp_obj = unsafe { WCDBRustStatementBegin_create(transaction_type) };
         StatementBegin {
             statement: Statement::new(CPPType::CommitSTMT, Some(cpp_obj)),
         }

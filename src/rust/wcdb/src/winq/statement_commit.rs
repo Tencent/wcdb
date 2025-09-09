@@ -6,7 +6,7 @@ use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::c_void;
 
 extern "C" {
-    fn WCDBRustStatementCommit_createCppObj() -> *mut c_void;
+    fn WCDBRustStatementCommit_create() -> *mut c_void;
 }
 
 #[derive(Debug)]
@@ -58,7 +58,7 @@ impl StatementTrait for StatementCommit {
 
 impl StatementCommit {
     pub fn new() -> Self {
-        let cpp_obj = unsafe { WCDBRustStatementCommit_createCppObj() };
+        let cpp_obj = unsafe { WCDBRustStatementCommit_create() };
         StatementCommit {
             statement: Statement::new(CPPType::CommitSTMT, Some(cpp_obj)),
         }

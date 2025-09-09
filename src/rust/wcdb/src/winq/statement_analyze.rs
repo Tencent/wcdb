@@ -11,7 +11,7 @@ use std::ffi::{c_char, c_int, c_void};
 extern "C" {
     fn WCDBRustStatementAnalyze_createCppObj() -> *mut c_void;
 
-    fn WCDBRustStatementAnalyze_configToAnalyze(cpp_obj: *mut c_void);
+    fn WCDBRustStatementAnalyze_toAnalyze(cpp_obj: *mut c_void);
 
     fn WCDBRustStatementAnalyze_configSchema(
         cpp_obj: *mut c_void,
@@ -82,7 +82,7 @@ impl StatementAnalyze {
 
     pub fn analyze(&self) -> &Self {
         unsafe {
-            WCDBRustStatementAnalyze_configToAnalyze(self.get_cpp_obj());
+            WCDBRustStatementAnalyze_toAnalyze(self.get_cpp_obj());
         }
         self
     }

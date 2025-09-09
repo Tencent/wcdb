@@ -28,9 +28,9 @@ pub enum Initially {
 }
 
 extern "C" {
-    fn WCDBRustForeignKey_createCppObj() -> *mut c_void;
+    fn WCDBRustForeignKey_createCppObject() -> *mut c_void;
 
-    fn WCDBRustForeignKey_configReference(cpp_obj: *mut c_void, table: *const c_char);
+    fn WCDBRustForeignKey_configReferencesTable(cpp_obj: *mut c_void, table: *const c_char);
 
     fn WCDBRustForeignKey_configColumns(
         cpp_obj: *mut c_void,
@@ -93,7 +93,7 @@ impl IdentifierConvertibleTrait for ForeignKey {
 
 impl ForeignKey {
     pub fn new() -> Self {
-        let cpp_obj = unsafe { WCDBRustForeignKey_createCppObj() };
+        let cpp_obj = unsafe { WCDBRustForeignKey_createCppObject() };
         ForeignKey {
             identifier: Identifier::new(CPPType::ForeignKeyClause, Some(cpp_obj)),
         }
@@ -102,7 +102,7 @@ impl ForeignKey {
     pub fn references(&self, table: &str) -> &Self {
         let c_str = table.to_string().to_cstring();
         unsafe {
-            WCDBRustForeignKey_configReference(self.get_cpp_obj(), c_str.as_ptr());
+            WCDBRustForeignKey_configReferencesTable(self.get_cpp_obj(), c_str.as_ptr());
         }
         self
     }

@@ -58,7 +58,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    fn WCDBRustExpressionOperable_collate(
+    fn WCDBRustExpressionOperable_collateOperate(
         cpp_type: c_int,
         operand: *mut c_void,
         collation: *const c_char,
@@ -461,7 +461,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
 
     fn collate(&self, collation: &str) -> Expression {
         let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_collate(
+            WCDBRustExpressionOperable_collateOperate(
                 self.get_type() as i32,
                 self.get_cpp_obj(),
                 collation.to_cstring().as_ptr(),
