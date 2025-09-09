@@ -1,4 +1,4 @@
-use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object::CppObject;
 use crate::utils::ToCString;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier};

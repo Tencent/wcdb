@@ -227,16 +227,18 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.concat(operand)
     }
 
-    fn between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable.between(begin, end)
     }
 
-    fn not_between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn not_between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable.not_between(begin, end)
     }
@@ -301,11 +303,17 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.not_regexp(content)
     }
 
-    fn is(&self, operand: bool) -> Expression {
+    fn is<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.expression_operable.is(operand)
     }
 
-    fn is_not(&self, operand: bool) -> Expression {
+    fn is_not<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.expression_operable.is_not(operand)
     }
 

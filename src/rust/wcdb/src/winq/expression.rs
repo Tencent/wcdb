@@ -271,16 +271,18 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.concat(operand)
     }
 
-    fn between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable.between(begin, end)
     }
 
-    fn not_between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn not_between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable.not_between(begin, end)
     }
@@ -345,11 +347,17 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.not_regexp(content)
     }
 
-    fn is(&self, operand: bool) -> Expression {
+    fn is<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.expression_operable.is(operand)
     }
 
-    fn is_not(&self, operand: bool) -> Expression {
+    fn is_not<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.expression_operable.is_not(operand)
     }
 
@@ -562,7 +570,7 @@ impl Expression {
         self
     }
 
-    pub fn argument<'a, T>(self, param: T) -> Self
+    pub fn argument<'a, T>(&self, param: T) -> &Self
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
@@ -616,6 +624,7 @@ impl Expression {
         }
     }
 
+    // todo qixinbing as 方法合并
     pub fn r#as(&self, column_type: ColumnType) -> &Self {
         unsafe { WCDBRustExpression_as(self.get_cpp_obj(), column_type as c_int) };
         &self
@@ -628,7 +637,7 @@ impl Expression {
         ResultColumn::new(cpp_obj)
     }
 
-    fn case_() -> Self {
+    pub fn case_() -> Self {
         let mut ret = Expression::new_empty();
         let cpp_obj =
             unsafe { WCDBRustExpression_caseWithExp(0, 0 as *mut c_void, std::ptr::null()) };
@@ -636,7 +645,8 @@ impl Expression {
         ret
     }
 
-    pub fn r#case<'a, T>(param_opt: Option<T>) -> Self
+    // todo qixinbing 是否把 Option 放到 T 内部？
+    pub fn case<'a, T>(param_opt: Option<T>) -> Self
     where
         T: Into<StringExpressionConvertibleParam<'a>>,
     {

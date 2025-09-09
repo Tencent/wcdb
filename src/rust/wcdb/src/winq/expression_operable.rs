@@ -181,13 +181,15 @@ pub trait ExpressionOperableTrait {
     where
         T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>;
+        T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>;
 
-    fn not_between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn not_between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>;
+        T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>;
 
     fn r#in<'a, I, S>(&self, operands: I) -> Expression
     where
@@ -221,9 +223,13 @@ pub trait ExpressionOperableTrait {
 
     fn not_regexp(&self, content: &str) -> Expression;
 
-    fn is(&self, operand: bool) -> Expression;
+    fn is<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn is_not(&self, operand: bool) -> Expression;
+    fn is_not<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>;
 
     fn avg(&self) -> Expression;
 
@@ -395,16 +401,18 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.binary_operate(operand, BinaryOperatorType::Concatenate, false)
     }
 
-    fn between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         self.between_operate(begin, end, false)
     }
 
-    fn not_between<'a, T>(&self, begin: T, end: T) -> Expression
+    fn not_between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         self.between_operate(begin, end, true)
     }
@@ -508,94 +516,138 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.binary_operate(content, BinaryOperatorType::RegExp, true)
     }
 
-    fn is(&self, operand: bool) -> Expression {
+    fn is<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Is, false)
     }
 
-    fn is_not(&self, operand: bool) -> Expression {
+    fn is_not<'a, T>(&self, operand: T) -> Expression
+    where
+        T: Into<ExpressionConvertibleParam<'a>>,
+    {
         self.binary_operate(operand, BinaryOperatorType::Is, true)
     }
 
     fn avg(&self) -> Expression {
-        Expression::function("AVG").argument(Some(self))
+        let exp = Expression::function("AVG");
+        exp.argument(Some(self));
+        exp
     }
 
     fn count(&self) -> Expression {
-        Expression::function("COUNT").argument(Some(self))
+        let exp = Expression::function("COUNT");
+        exp.argument(Some(self));
+        exp
     }
 
     fn group_concat(&self) -> Expression {
-        Expression::function("GROUP_CONCAT").argument(Some(self))
+        let exp = Expression::function("GROUP_CONCAT");
+        exp.argument(Some(self));
+        exp
     }
 
     fn group_concat_string(&self, separator: &str) -> Expression {
-        Expression::function("GROUP_CONCAT")
-            .argument(Some(self))
-            .argument(separator)
+        let exp = Expression::function("GROUP_CONCAT");
+        exp.argument(Some(self)).argument(separator);
+        exp
     }
 
     fn max(&self) -> Expression {
-        Expression::function("MAX").argument(Some(self))
+        let exp = Expression::function("MAX");
+        exp.argument(Some(self));
+        exp
     }
 
     fn min(&self) -> Expression {
-        Expression::function("MIN").argument(Some(self))
+        let exp = Expression::function("MIN");
+        exp.argument(Some(self));
+        exp
     }
 
     fn sum(&self) -> Expression {
-        Expression::function("SUM").argument(Some(self))
+        let exp = Expression::function("SUM");
+        exp.argument(Some(self));
+        exp
     }
 
     fn total(&self) -> Expression {
-        Expression::function("TOTAL").argument(Some(self))
+        let exp = Expression::function("TOTAL");
+        exp.argument(Some(self));
+        exp
     }
 
     fn abs(&self) -> Expression {
-        Expression::function("ABS").argument(Some(self))
+        let exp = Expression::function("ABS");
+        exp.argument(Some(self));
+        exp
     }
 
     fn hex(&self) -> Expression {
-        Expression::function("HEX").argument(Some(self))
+        let exp = Expression::function("HEX");
+        exp.argument(Some(self));
+        exp
     }
 
     fn length(&self) -> Expression {
-        Expression::function("LENGTH").argument(Some(self))
+        let exp = Expression::function("LENGTH");
+        exp.argument(Some(self));
+        exp
     }
 
     fn lower(&self) -> Expression {
-        Expression::function("LOWER").argument(Some(self))
+        let exp = Expression::function("LOWER");
+        exp.argument(Some(self));
+        exp
     }
 
     fn upper(&self) -> Expression {
-        Expression::function("UPPER").argument(Some(self))
+        let exp = Expression::function("UPPER");
+        exp.argument(Some(self));
+        exp
     }
 
     fn round(&self) -> Expression {
-        Expression::function("ROUND").argument(Some(self))
+        let exp = Expression::function("ROUND");
+        exp.argument(Some(self));
+        exp
     }
 
     fn match_info(&self) -> Expression {
-        Expression::function("matchInfo").argument(Some(self))
+        let exp = Expression::function("matchInfo");
+        exp.argument(Some(self));
+        exp
     }
 
     fn offsets(&self) -> Expression {
-        Expression::function("offsets").argument(Some(self))
+        let exp = Expression::function("offsets");
+        exp.argument(Some(self));
+        exp
     }
 
     fn snippet(&self) -> Expression {
-        Expression::function("snippet").argument(Some(self))
+        let exp = Expression::function("snippet");
+        exp.argument(Some(self));
+        exp
     }
 
     fn bm25(&self) -> Expression {
-        Expression::function("bm25").argument(Some(self))
+        let exp = Expression::function("bm25");
+        exp.argument(Some(self));
+        exp
     }
 
     fn highlight(&self) -> Expression {
-        Expression::function("highlight").argument(Some(self))
+        let exp = Expression::function("highlight");
+        exp.argument(Some(self));
+        exp
     }
 
     fn substring_match_info(&self) -> Expression {
-        Expression::function("substring_match_info").argument(Some(self))
+        let exp = Expression::function("substring_match_info");
+        exp.argument(Some(self));
+        exp
     }
 }
 
@@ -648,9 +700,10 @@ impl ExpressionOperable {
         Self::create_expression(cpp_obj)
     }
 
-    fn between_operate<'a, T>(&self, begin: T, end: T, is_not: bool) -> Expression
+    fn between_operate<'a, T, V>(&self, begin: T, end: V, is_not: bool) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<ExpressionConvertibleParam<'a>>,
     {
         let (begin_type, begin_long, begin_double, begin_cpp_obj) = begin.into().get_params();
         let (end_type, end_long, end_double, end_cpp_obj) = end.into().get_params();
