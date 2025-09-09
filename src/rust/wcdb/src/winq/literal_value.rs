@@ -59,9 +59,13 @@ impl LiteralValue {
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (arg_type, arg_long, arg_double, arg_string) = param.into().get_params();
+        let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
+        let arg_string_ptr = match arg_string_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         let cpp_obj = unsafe {
-            WCDBRustLiteralValue_create(arg_type as c_int, arg_long, arg_double, arg_string)
+            WCDBRustLiteralValue_create(arg_type as c_int, arg_long, arg_double, arg_string_ptr)
         };
         LiteralValue {
             identifier: Identifier::new(CPPType::LiteralValue, Some(cpp_obj)),

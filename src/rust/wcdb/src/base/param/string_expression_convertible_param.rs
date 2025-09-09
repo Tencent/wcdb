@@ -2,7 +2,7 @@ use crate::base::cpp_object::CppObject;
 use crate::utils::ToCString;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier};
-use std::ffi::{c_char, c_void};
+use std::ffi::{c_void, CString};
 
 /// 支持 String, &str, &dyn ExpressionConvertibleTrait
 pub enum StringExpressionConvertibleParam<'a> {
@@ -11,16 +11,14 @@ pub enum StringExpressionConvertibleParam<'a> {
 }
 
 impl StringExpressionConvertibleParam<'_> {
-    pub(crate) fn get_params(self) -> (CPPType, *mut c_void, *const c_char) {
+    pub(crate) fn get_params(self) -> (CPPType, *mut c_void, Option<CString>) {
         match self {
             StringExpressionConvertibleParam::String(str) => {
-                (CPPType::String, 0 as *mut c_void, str.to_cstring().as_ptr())
+                (CPPType::String, 0 as *mut c_void, Some(str.to_cstring()))
             }
-            StringExpressionConvertibleParam::ExpressionConvertible(exp) => (
-                Identifier::get_cpp_type(exp),
-                CppObject::get(exp),
-                std::ptr::null(),
-            ),
+            StringExpressionConvertibleParam::ExpressionConvertible(exp) => {
+                (Identifier::get_cpp_type(exp), CppObject::get(exp), None)
+            }
         }
     }
 }

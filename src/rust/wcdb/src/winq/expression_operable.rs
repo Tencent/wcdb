@@ -684,7 +684,11 @@ impl ExpressionOperable {
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (right_type, right_long, right_double, right_cpp_obj) = operand.into().get_params();
+        let (right_type, right_long, right_double, right_cstr_opt) = operand.into().get_params();
+        let right_string_ptr = match right_cstr_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_binaryOperate(
                 self.get_type() as i32,
@@ -692,7 +696,7 @@ impl ExpressionOperable {
                 right_type as i32,
                 right_long,
                 right_double,
-                right_cpp_obj as *const c_char,
+                right_string_ptr,
                 operand_type as i32,
                 is_not,
             )
@@ -705,8 +709,16 @@ impl ExpressionOperable {
         T: Into<ExpressionConvertibleParam<'a>>,
         V: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (begin_type, begin_long, begin_double, begin_cpp_obj) = begin.into().get_params();
-        let (end_type, end_long, end_double, end_cpp_obj) = end.into().get_params();
+        let (begin_type, begin_long, begin_double, begin_cstr_opt) = begin.into().get_params();
+        let (end_type, end_long, end_double, end_cstr_opt) = end.into().get_params();
+        let begin_string_ptr = match begin_cstr_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
+        let end_string_ptr = match end_cstr_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         let cpp_obj = unsafe {
             WCDBRustExpressionOperable_betweenOperate(
                 self.get_type() as i32,
@@ -714,11 +726,11 @@ impl ExpressionOperable {
                 begin_type as i32,
                 begin_long as usize as *mut c_void,
                 begin_double,
-                begin_cpp_obj as *const c_char,
+                begin_string_ptr,
                 end_type as i32,
                 end_long as usize as *mut c_void,
                 end_double,
-                end_cpp_obj as *const c_char,
+                end_string_ptr,
                 is_not,
             )
         };

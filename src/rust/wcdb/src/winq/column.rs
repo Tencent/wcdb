@@ -426,8 +426,12 @@ impl ColumnStaticTrait for Column {
     }
 
     fn of<'a, T: Into<StringSchemaParam<'a>>>(&self, schema: T) -> &Column {
-        let (cpp_type, cpp_obj, name) = schema.into().get_params();
-        unsafe { WCDBRustColumn_ofSchema(self.get_cpp_obj(), cpp_type as c_int, cpp_obj, name) }
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
+        unsafe { WCDBRustColumn_ofSchema(self.get_cpp_obj(), cpp_type as c_int, cpp_obj, name_ptr) }
         self
     }
 

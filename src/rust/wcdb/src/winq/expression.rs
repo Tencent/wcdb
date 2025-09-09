@@ -513,7 +513,7 @@ impl Expression {
     where
         T: Into<ExpressionNewParam<'a>>,
     {
-        let (cpp_type, cpp_obj) = match value.into() {
+        let (value_cpp_type, value_cpp_obj) = match value.into() {
             ExpressionNewParam::BindParameter(value) => {
                 (Identifier::get_cpp_type(value), CppObject::get(value))
             }
@@ -527,8 +527,9 @@ impl Expression {
                 (Identifier::get_cpp_type(value), CppObject::get(value))
             }
         };
+        let cpp_obj = unsafe { WCDBRustExpression_create(value_cpp_type as c_int, value_cpp_obj) };
         Expression {
-            expression_operable: ExpressionOperable::new(cpp_type, Some(cpp_obj)),
+            expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
         }
     }
 
@@ -542,9 +543,18 @@ impl Expression {
     where
         T: Into<StringSchemaParam<'a>>,
     {
-        let (cpp_type, cpp_obj, name) = param.into().get_params();
+        let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
+        let name_ptr = match name_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         unsafe {
-            WCDBRustExpression_setWithSchema(self.get_cpp_obj(), cpp_type as c_int, cpp_obj, name)
+            WCDBRustExpression_setWithSchema(
+                self.get_cpp_obj(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
+            )
         }
         self
     }
@@ -574,14 +584,18 @@ impl Expression {
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (arg_type, arg_long, arg_double, arg_cpp_obj) = param.into().get_params();
+        let (arg_type, arg_long, arg_double, arg_cstr_opt) = param.into().get_params();
+        let arg_string_ptr = match arg_cstr_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         unsafe {
             WCDBRustExpression_argument(
                 self.get_cpp_obj(),
                 arg_type as c_int,
                 arg_long,
                 arg_double,
-                arg_cpp_obj as *const c_char,
+                arg_string_ptr,
             );
         }
         self
@@ -615,9 +629,12 @@ impl Expression {
     where
         T: Into<StringExpressionConvertibleParam<'a>>,
     {
-        let (cpp_type, cpp_obj, name) = param.into().get_params();
-
-        let cpp_obj = unsafe { WCDBRustExpression_cast(cpp_type as c_int, cpp_obj, name) };
+        let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
+        let cpp_obj = unsafe { WCDBRustExpression_cast(cpp_type as c_int, cpp_obj, name_ptr) };
 
         Self {
             expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
@@ -656,8 +673,13 @@ impl Expression {
             }
             Some(val) => val,
         };
-        let (cpp_type, cpp_obj, name) = param.into().get_params();
-        let cpp_obj = unsafe { WCDBRustExpression_caseWithExp(cpp_type as c_int, cpp_obj, name) };
+        let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
+        let cpp_obj =
+            unsafe { WCDBRustExpression_caseWithExp(cpp_type as c_int, cpp_obj, name_ptr) };
         Self {
             expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
         }
@@ -667,14 +689,18 @@ impl Expression {
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (arg_type, arg_long, arg_double, arg_string) = param.into().get_params();
+        let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
+        let arg_string_ptr = match arg_string_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         unsafe {
             WCDBRustExpression_setWithWhenExp(
                 self.get_cpp_obj(),
                 arg_type as c_int,
                 arg_long as c_longlong,
                 arg_double,
-                arg_string,
+                arg_string_ptr,
             );
         }
         self
@@ -684,14 +710,18 @@ impl Expression {
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (arg_type, arg_long, arg_double, arg_string) = param.into().get_params();
+        let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
+        let arg_string_ptr = match arg_string_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         unsafe {
             WCDBRustExpression_setWithThenExp(
                 self.get_cpp_obj(),
                 arg_type as c_int,
                 arg_long as c_longlong,
                 arg_double,
-                arg_string,
+                arg_string_ptr,
             );
         }
         self
@@ -701,14 +731,18 @@ impl Expression {
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (arg_type, arg_long, arg_double, arg_string) = param.into().get_params();
+        let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
+        let arg_string_ptr = match arg_string_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         unsafe {
             WCDBRustExpression_setWithElseExp(
                 self.get_cpp_obj(),
                 arg_type as c_int,
                 arg_long as c_longlong,
                 arg_double,
-                arg_string,
+                arg_string_ptr,
             );
         }
         self

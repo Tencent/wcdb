@@ -214,14 +214,18 @@ impl Upsert {
     where
         V: Into<ExpressionConvertibleParam<'a>>,
     {
-        let (cpp_type, int_value, double_value, string_value) = value.into().get_params();
+        let (cpp_type, int_value, double_value, string_value_opt) = value.into().get_params();
+        let string_ptr: *const c_char = match string_value_opt.as_ref() {
+            Some(s) => s.as_ptr(),
+            None => std::ptr::null(),
+        };
         unsafe {
             WCDBRustUpsert_configToValue(
                 self.get_cpp_obj(),
                 cpp_type as c_int,
                 int_value,
                 double_value,
-                string_value,
+                string_ptr,
             );
         }
         self

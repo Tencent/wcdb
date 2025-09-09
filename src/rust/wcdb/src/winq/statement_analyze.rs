@@ -91,13 +91,17 @@ impl StatementAnalyze {
     where
         T: Into<StringSchemaParam<'a>>,
     {
-        let (cpp_type, cpp_obj, name) = schema.into().get_params();
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAnalyze_configSchema(
                 self.get_cpp_obj(),
                 cpp_type as c_int,
                 cpp_obj,
-                name,
+                name_ptr,
             );
         }
         self
