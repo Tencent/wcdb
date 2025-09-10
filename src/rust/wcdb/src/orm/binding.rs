@@ -101,13 +101,14 @@ impl Binding {
         unsafe { WCDBRustBinding_configWithoutRowId(*self.cpp_obj) }
     }
 
-    pub fn create_table(&self, table_name: &str, mut handle: Handle) -> WCDBResult<bool> {
+    pub fn create_table(&self, table_name: &str, handle: Handle) -> WCDBResult<bool> {
         let c_table_name = table_name.to_cstring();
+        let cpp_handle = handle.get_cpp_handle()?;
         Ok(unsafe {
             WCDBRustBinding_createTable(
                 self.cpp_obj.get_cpp_obj(),
                 c_table_name.as_ptr(),
-                handle.get_cpp_handle()?,
+                cpp_handle,
             )
         })
     }

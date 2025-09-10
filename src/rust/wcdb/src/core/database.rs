@@ -571,15 +571,27 @@ impl HandleOperationTrait for Database {
     }
 
     fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        self.handle_orm_operation.run_transaction(callback)
+        self.handle_orm_operation.run_transaction(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            callback,
+        )
     }
 
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
-        self.handle_orm_operation.execute(statement)
+        self.handle_orm_operation.execute(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            statement,
+        )
     }
 
     fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
-        self.handle_orm_operation.execute_sql(sql)
+        self.handle_orm_operation.execute_sql(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            sql,
+        )
     }
 }
 
@@ -589,31 +601,44 @@ impl HandleORMOperationTrait for Database {
         table_name: &str,
         binding: &R,
     ) -> WCDBResult<bool> {
-        self.handle_orm_operation.create_table(table_name, binding)
+        self.handle_orm_operation
+            .create_table(self.get_handle(true), table_name, binding)
     }
 
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
-        self.handle_orm_operation.table_exist(table_name)
+        self.handle_orm_operation.table_exist(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            table_name,
+        )
     }
 
     fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
-        self.handle_orm_operation.drop_table(table_name)
+        self.handle_orm_operation.drop_table(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            table_name,
+        )
     }
 
     fn prepare_insert<T>(&self) -> Insert<T> {
-        self.handle_orm_operation.prepare_insert()
+        self.handle_orm_operation
+            .prepare_insert(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn prepare_update<T>(&self) -> Update<T> {
-        self.handle_orm_operation.prepare_update()
+        self.handle_orm_operation
+            .prepare_update(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn prepare_select<T>(&self) -> Select<T> {
-        self.handle_orm_operation.prepare_select()
+        self.handle_orm_operation
+            .prepare_select(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn prepare_delete(&self) -> Delete {
-        self.handle_orm_operation.prepare_delete()
+        self.handle_orm_operation
+            .prepare_delete(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn insert_object<T>(
@@ -622,8 +647,13 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.handle_orm_operation
-            .insert_object(object, fields, table_name)
+        self.handle_orm_operation.insert_object(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            object,
+            fields,
+            table_name,
+        )
     }
 
     fn insert_or_replace_object<T>(
@@ -632,8 +662,13 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.handle_orm_operation
-            .insert_or_replace_object(object, fields, table_name)
+        self.handle_orm_operation.insert_or_replace_object(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            object,
+            fields,
+            table_name,
+        )
     }
 
     fn insert_or_ignore_object<T>(
@@ -642,8 +677,13 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.handle_orm_operation
-            .insert_or_ignore_object(object, fields, table_name)
+        self.handle_orm_operation.insert_or_ignore_object(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            object,
+            fields,
+            table_name,
+        )
     }
 
     fn insert_objects<T>(
@@ -652,8 +692,13 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.handle_orm_operation
-            .insert_objects(objects, fields, table_name)
+        self.handle_orm_operation.insert_objects(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            objects,
+            fields,
+            table_name,
+        )
     }
 
     fn insert_or_replace_objects<T>(
@@ -662,8 +707,13 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.handle_orm_operation
-            .insert_or_replace_objects(objects, fields, table_name)
+        self.handle_orm_operation.insert_or_replace_objects(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            objects,
+            fields,
+            table_name,
+        )
     }
 
     fn insert_or_ignore_objects<T>(
@@ -672,8 +722,13 @@ impl HandleORMOperationTrait for Database {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.handle_orm_operation
-            .insert_or_ignore_objects(objects, fields, table_name)
+        self.handle_orm_operation.insert_or_ignore_objects(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
+            objects,
+            fields,
+            table_name,
+        )
     }
 
     fn delete_objects(
@@ -685,6 +740,8 @@ impl HandleORMOperationTrait for Database {
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
         self.handle_orm_operation.delete_objects(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
             table_name,
             condition_opt,
             order_opt,
@@ -704,6 +761,8 @@ impl HandleORMOperationTrait for Database {
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
         self.handle_orm_operation.update_object(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
             object,
             fields,
             table_name,
@@ -723,6 +782,8 @@ impl HandleORMOperationTrait for Database {
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         self.handle_orm_operation.get_first_object(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
             fields,
             table_name,
             condition_opt,
@@ -741,6 +802,8 @@ impl HandleORMOperationTrait for Database {
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {
         self.handle_orm_operation.get_all_objects(
+            self.get_handle(true),
+            self.auto_invalidate_handle(),
             fields,
             table_name,
             condition_opt,

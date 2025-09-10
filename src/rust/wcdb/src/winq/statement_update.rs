@@ -191,10 +191,13 @@ impl StatementUpdate {
         S: Into<StringQualifiedTableParam<'a>>,
     {
         let value = table_vec.into();
+        let mut c_string_opt = None; // 持有 CString ，避免被提前释放
         let (cpp_type, table, table_name) = match value {
             StringQualifiedTableParam::String(str) => {
-                let table_name = str.as_str().to_cstring().as_ptr();
-                (CPPType::String, null_mut(), table_name)
+                let table_name = str.as_str().to_cstring();
+                let c_ptr = table_name.as_ptr();
+                c_string_opt = Some(table_name);
+                (CPPType::String, null_mut(), c_ptr)
             }
             StringQualifiedTableParam::QualifiedTable(obj) => {
                 let cpp_type = Identifier::get_cpp_type(obj.as_identifier());

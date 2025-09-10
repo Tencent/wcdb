@@ -20,7 +20,7 @@ pub struct HandleORMOperation {
     handle_operation: HandleOperation,
 }
 
-pub trait HandleORMOperationTrait: HandleOperationTrait {
+pub trait HandleORMOperationTrait {
     fn create_table<T, R: TableBinding<T>>(
         &self,
         table_name: &str,
@@ -141,46 +141,65 @@ impl CppObjectConvertibleTrait for HandleORMOperation {
     }
 }
 
-impl HandleOperationTrait for HandleORMOperation {
-    fn get_handle(&self, write_hint: bool) -> Handle {
-        unimplemented!("Stub: This method should be implemented by subclasses")
+impl HandleORMOperation {
+    pub fn new(cpp_obj_opt: Option<*mut c_void>) -> Self {
+        HandleORMOperation {
+            handle_operation: HandleOperation::new(cpp_obj_opt),
+        }
     }
 
-    fn auto_invalidate_handle(&self) -> bool {
-        unimplemented!("Stub: This method should be implemented by subclasses")
-    }
-
-    fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, callback: F) -> WCDBResult<()> {
-        self.handle_operation.run_transaction(callback)
-    }
-
-    fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
-        self.handle_operation.execute(statement)
-    }
-
-    fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
-        self.handle_operation.execute_sql(sql)
-    }
-}
-
-impl HandleORMOperationTrait for HandleORMOperation {
-    fn create_table<T, R: TableBinding<T>>(
+    pub(crate) fn run_transaction<F: FnOnce(&Handle) -> bool>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
+        callback: F,
+    ) -> WCDBResult<()> {
+        self.handle_operation
+            .run_transaction(handle, auto_invalidate_handle, callback)
+    }
+
+    pub(crate) fn execute<T: StatementTrait>(
+        &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
+        statement: &T,
+    ) -> WCDBResult<()> {
+        self.handle_operation
+            .execute(handle, auto_invalidate_handle, statement)
+    }
+
+    pub(crate) fn execute_sql(
+        &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
+        sql: &str,
+    ) -> WCDBResult<()> {
+        self.handle_operation
+            .execute_sql(handle, auto_invalidate_handle, sql)
+    }
+
+    pub(crate) fn create_table<T, R: TableBinding<T>>(
+        &self,
+        handle: Handle,
         table_name: &str,
         binding: &R,
     ) -> WCDBResult<bool> {
-        let handle = self.get_handle(true);
         binding.base_binding().create_table(table_name, handle)
     }
 
-    fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
-        let mut handle = self.get_handle(false);
+    pub(crate) fn table_exist(
+        &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
+        table_name: &str,
+    ) -> WCDBResult<bool> {
+        let mut handle = handle;
         let ret = Handle::table_exist(handle.get_cpp_handle()?, table_name);
         let mut exception_opt = None;
         if ret > 1 {
             exception_opt = Some(handle.create_exception());
         }
-        if self.auto_invalidate_handle() {
+        if auto_invalidate_handle {
             handle.invalidate();
         }
         if exception_opt.is_some() {
@@ -194,34 +213,61 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(ret == 1)
     }
 
-    fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
+    pub(crate) fn drop_table(
+        &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
+        table_name: &str,
+    ) -> WCDBResult<()> {
         let statement = StatementDropTable::new();
-        self.execute(statement.drop_table(table_name).if_exist())
+        self.handle_operation.execute(
+            handle,
+            auto_invalidate_handle,
+            statement.drop_table(table_name).if_exist(),
+        )
     }
 
-    fn prepare_insert<T>(&self) -> Insert<T> {
-        Insert::new(self.get_handle(true), false, self.auto_invalidate_handle())
-    }
-
-    fn prepare_update<T>(&self) -> Update<T> {
-        Update::new(self.get_handle(true), false, self.auto_invalidate_handle())
-    }
-
-    fn prepare_select<T>(&self) -> Select<T> {
-        Select::new(self.get_handle(false), false, self.auto_invalidate_handle())
-    }
-
-    fn prepare_delete(&self) -> Delete {
-        Delete::new(self.get_handle(true), false, self.auto_invalidate_handle())
-    }
-
-    fn insert_object<T>(
+    pub(crate) fn prepare_insert<'a, T>(
         &self,
+        handle: Handle<'a>,
+        auto_invalidate_handle: bool,
+    ) -> Insert<'a, T> {
+        Insert::new(handle, false, auto_invalidate_handle)
+    }
+
+    pub(crate) fn prepare_update<'a, T>(
+        &self,
+        handle: Handle<'a>,
+        auto_invalidate_handle: bool,
+    ) -> Update<'a, T> {
+        Update::new(handle, false, auto_invalidate_handle)
+    }
+
+    pub(crate) fn prepare_select<'a, T>(
+        &self,
+        handle: Handle<'a>,
+        auto_invalidate_handle: bool,
+    ) -> Select<'a, T> {
+        Select::new(handle, false, auto_invalidate_handle)
+    }
+
+    pub(crate) fn prepare_delete<'a>(
+        &self,
+        handle: Handle<'a>,
+        auto_invalidate_handle: bool,
+    ) -> Delete<'a> {
+        Delete::new(handle, false, auto_invalidate_handle)
+    }
+
+    pub(crate) fn insert_object<T>(
+        &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.prepare_insert::<T>()
+        self.prepare_insert::<T>(handle, auto_invalidate_handle)
             .into_table(table_name)
             .value(object)
             .on_fields(fields)
@@ -229,13 +275,15 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn insert_or_replace_object<T>(
+    pub(crate) fn insert_or_replace_object<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.prepare_insert::<T>()
+        self.prepare_insert::<T>(handle, auto_invalidate_handle)
             .or_replace()
             .into_table(table_name)
             .value(object)
@@ -244,13 +292,15 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn insert_or_ignore_object<T>(
+    pub(crate) fn insert_or_ignore_object<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.prepare_insert::<T>()
+        self.prepare_insert::<T>(handle, auto_invalidate_handle)
             .or_ignore()
             .into_table(table_name)
             .value(object)
@@ -259,13 +309,15 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn insert_objects<T>(
+    pub(crate) fn insert_objects<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.prepare_insert::<T>()
+        self.prepare_insert::<T>(handle, auto_invalidate_handle)
             .into_table(table_name)
             .values(objects)
             .on_fields(fields)
@@ -273,13 +325,15 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn insert_or_replace_objects<T>(
+    pub(crate) fn insert_or_replace_objects<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.prepare_insert::<T>()
+        self.prepare_insert::<T>(handle, auto_invalidate_handle)
             .or_replace()
             .into_table(table_name)
             .values(objects)
@@ -288,13 +342,15 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn insert_or_ignore_objects<T>(
+    pub(crate) fn insert_or_ignore_objects<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         objects: Vec<T>,
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        self.prepare_insert::<T>()
+        self.prepare_insert::<T>(handle, auto_invalidate_handle)
             .or_ignore()
             .into_table(table_name)
             .values(objects)
@@ -303,15 +359,17 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn delete_objects(
+    pub(crate) fn delete_objects(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         table_name: &str,
         condition_opt: Option<Expression>,
         order_opt: Option<OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
-        let delete = self.prepare_delete();
+        let delete = self.prepare_delete(handle, auto_invalidate_handle);
         delete.from_table(table_name);
         if let Some(condition) = condition_opt {
             delete.r#where(&condition);
@@ -329,8 +387,10 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn update_object<T>(
+    pub(crate) fn update_object<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
@@ -339,7 +399,7 @@ impl HandleORMOperationTrait for HandleORMOperation {
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
-        let update = self.prepare_update::<T>();
+        let update = self.prepare_update::<T>(handle, auto_invalidate_handle);
         update.table(table_name);
         update.set(fields);
         update.to_object(object);
@@ -359,15 +419,17 @@ impl HandleORMOperationTrait for HandleORMOperation {
         Ok(())
     }
 
-    fn get_first_object<T>(
+    pub(crate) fn get_first_object<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         fields: Vec<&Field<T>>,
         table_name: &str,
         condition_opt: Option<Expression>,
         order_opt: Option<OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
-        let select = self.prepare_select::<T>();
+        let select = self.prepare_select::<T>(handle, auto_invalidate_handle);
         select.select(fields);
         select.from(table_name);
         if let Some(condition) = condition_opt {
@@ -383,8 +445,10 @@ impl HandleORMOperationTrait for HandleORMOperation {
         select.first_object()
     }
 
-    fn get_all_objects<T>(
+    pub(crate) fn get_all_objects<T>(
         &self,
+        handle: Handle,
+        auto_invalidate_handle: bool,
         fields: Vec<&Field<T>>,
         table_name: &str,
         condition_opt: Option<Expression>,
@@ -392,7 +456,7 @@ impl HandleORMOperationTrait for HandleORMOperation {
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {
-        let select = self.prepare_select::<T>();
+        let select = self.prepare_select::<T>(handle, auto_invalidate_handle);
         select.select(fields);
         select.from(table_name);
         if let Some(condition) = condition_opt {
@@ -408,13 +472,5 @@ impl HandleORMOperationTrait for HandleORMOperation {
             select.offset(offset);
         }
         select.all_objects()
-    }
-}
-
-impl HandleORMOperation {
-    pub fn new(cpp_obj_opt: Option<*mut c_void>) -> Self {
-        HandleORMOperation {
-            handle_operation: HandleOperation::new(cpp_obj_opt),
-        }
     }
 }

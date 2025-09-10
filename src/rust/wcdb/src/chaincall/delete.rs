@@ -1,6 +1,7 @@
 use crate::base::wcdb_exception::WCDBResult;
 use crate::chaincall::chain_call::{ChainCall, ChainCallTrait};
 use crate::core::handle::Handle;
+use crate::core::handle_operation::HandleOperationTrait;
 use crate::winq::expression::Expression;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
