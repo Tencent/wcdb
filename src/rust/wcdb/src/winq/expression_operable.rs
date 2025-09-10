@@ -51,7 +51,7 @@ extern "C" {
         is_not: bool,
     ) -> *mut c_void;
 
-    fn WCDBRustExpressionOperable_inTable(
+    fn WCDBRustExpressionOperable_inTableOperate(
         cpp_type: c_int,
         operand: *mut c_void,
         table: *const c_char,
@@ -431,7 +431,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
 
     fn in_table(&self, table: &str) -> Expression {
         let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inTable(
+            WCDBRustExpressionOperable_inTableOperate(
                 self.get_type() as i32,
                 self.get_cpp_obj(),
                 table.to_cstring().as_ptr(),
@@ -443,7 +443,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
 
     fn not_in_table(&self, table: &str) -> Expression {
         let cpp_obj = unsafe {
-            WCDBRustExpressionOperable_inTable(
+            WCDBRustExpressionOperable_inTableOperate(
                 self.get_type() as i32,
                 self.get_cpp_obj(),
                 table.to_cstring().as_ptr(),

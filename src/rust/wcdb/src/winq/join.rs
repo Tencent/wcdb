@@ -1,5 +1,9 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::string_column_trait_param::StringColumnTraitParam;
+use crate::base::param::string_table_or_subquery_convertible_param::StringTableOrSubqueryConvertibleParam;
+use crate::utils::ToCString;
+use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
@@ -144,426 +148,387 @@ impl IdentifierConvertibleTrait for Join {
 impl TableOrSubqueryConvertibleTrait for Join {}
 
 impl Join {
-    // pub fn new_with_table_name(table_name: &str) -> Self {
-    //     let cstr = table_name.to_cstring();
-    //     let cpp_obj = unsafe {
-    //         WCDBRustJoin_createCppObj(CPPType::String as c_int, 0 as *mut c_void, cstr.as_ptr())
-    //     };
-    //     Join {
-    //         identifier: Identifier::new_with_obj(cpp_obj),
-    //     }
-    // }
-    //
-    // pub fn new_with_table_or_subquery_convertible<T>(table_or_subquery: &T) -> Self
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     let cpp_obj = unsafe {
-    //         WCDBRustJoin_createCppObj(
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         )
-    //     };
-    //     Join {
-    //         identifier: Identifier::new_with_obj(cpp_obj),
-    //     }
-    // }
-    //
-    // pub fn with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWith(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWith(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn left_outer_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithLeftOuterJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn left_outer_join_with_table_or_subquery_convertible<T>(
-    //     &self,
-    //     table_or_subquery: &T,
-    // ) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithLeftOuterJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn left_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithLeftJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn left_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithLeftJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn inner_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithInnerJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn inner_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithInnerJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn cross_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithCrossJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn cross_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithCrossJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_join_with_table_or_subquery_convertible<T>(&self, table_or_subquery: &T) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_left_outer_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalLeftOuterJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_left_outer_join_with_table_or_subquery_convertible<T>(
-    //     &self,
-    //     table_or_subquery: &T,
-    // ) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalLeftOuterJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_left_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalLeftJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_left_join_with_table_or_subquery_convertible<T>(
-    //     &self,
-    //     table_or_subquery: &T,
-    // ) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalLeftJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_inner_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalInnerJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_inner_join_with_table_or_subquery_convertible<T>(
-    //     &self,
-    //     table_or_subquery: &T,
-    // ) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalInnerJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_cross_join_with_table_name(&self, table_name: &str) -> &Join {
-    //     let cstr = table_name.to_cstring();
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalCrossJoin(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             cstr.as_ptr(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn natural_cross_join_with_table_or_subquery_convertible<T>(
-    //     &self,
-    //     table_or_subquery: &T,
-    // ) -> &Join
-    // where
-    //     T: IndexedColumnConvertibleTrait + IdentifierStaticTrait + CppObjectTrait,
-    // {
-    //     unsafe {
-    //         WCDBRustJoin_configWithNaturalCrossJoin(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(table_or_subquery) as c_int,
-    //             CppObject::get(table_or_subquery),
-    //             null(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn on(&self, expression: &Expression) -> &Join {
-    //     unsafe {
-    //         WCDBRustJoin_configOn(self.get_cpp_obj(), CppObject::get(expression));
-    //     }
-    //     self
-    // }
-    //
-    // pub fn using_with_column_name(&self, column: &str) -> &Join {
-    //     let cstr = column.to_cstring();
-    //     let mut vec: Vec<*const c_char> = Vec::new();
-    //     vec.push(cstr.as_ptr());
-    //     unsafe {
-    //         WCDBRustJoin_configUsingColumn(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             null(),
-    //             vec.as_ptr(),
-    //             0,
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn using_with_column_obj(&self, column: &Column) -> &Join {
-    //     let mut vec: Vec<*mut c_void> = Vec::new();
-    //     vec.push(CppObject::get(column));
-    //     unsafe {
-    //         WCDBRustJoin_configUsingColumn(
-    //             self.get_cpp_obj(),
-    //             Identifier::get_cpp_type(column),
-    //             vec.as_ptr(),
-    //             null(),
-    //             0,
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn using_with_column_name_vector(&self, column_vec: &Vec<String>) -> &Join {
-    //     let c_strings: Vec<CString> = column_vec.iter().map(|x| x.to_cstring()).collect();
-    //     let vec: Vec<*const c_char> = c_strings.iter().map(|cs| cs.as_ptr()).collect();
-    //
-    //     unsafe {
-    //         WCDBRustJoin_configUsingColumn(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             null(),
-    //             vec.as_ptr(),
-    //             vec.len(),
-    //         );
-    //     }
-    //     self
-    // }
-    //
-    // pub fn using_with_column_obj_vector(&self, column_vec: &Vec<Column>) -> &Join {
-    //     if column_vec.is_empty() {
-    //         return self;
-    //     }
-    //     let mut vec: Vec<*mut c_void> = Vec::new();
-    //     for x in column_vec {
-    //         vec.push(CppObject::get(x));
-    //     }
-    //     unsafe {
-    //         WCDBRustJoin_configUsingColumn(
-    //             self.get_cpp_obj(),
-    //             CPPType::Column as c_int,
-    //             vec.as_ptr(),
-    //             null(),
-    //             vec.len(),
-    //         );
-    //     }
-    //     self
-    // }
+    pub fn new<'a, S>(value: S) -> Self
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        let cpp_obj = match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => unsafe {
+                let cstr = table_name.to_cstring();
+                WCDBRustJoin_createCppObj(CPPType::String as c_int, 0 as *mut c_void, cstr.as_ptr())
+            },
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_createCppObj(
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                )
+            },
+        };
+        Join {
+            identifier: Identifier::new(CPPType::JoinClause, Some(cpp_obj)),
+        }
+    }
+
+    pub fn with<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWith(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWith(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn left_outer_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithLeftOuterJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithLeftOuterJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn left_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithLeftJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithLeftJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn inner_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithInnerJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithInnerJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn cross_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithCrossJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithCrossJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn natural_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithNaturalJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithNaturalJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn natural_left_outer_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithNaturalLeftOuterJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithNaturalLeftOuterJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn natural_left_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithNaturalLeftJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithNaturalLeftJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn natural_inner_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithNaturalInnerJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithNaturalInnerJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn natural_cross_join<'a, S>(&self, value: S) -> &Join
+    where
+        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+    {
+        match value.into() {
+            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+                let cstr = table_name.to_cstring();
+                unsafe {
+                    WCDBRustJoin_configWithNaturalCrossJoin(
+                        self.get_cpp_obj(),
+                        CPPType::String as c_int,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    );
+                }
+            }
+            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+                WCDBRustJoin_configWithNaturalCrossJoin(
+                    self.get_cpp_obj(),
+                    Identifier::get_cpp_type(table_or_subquery) as c_int,
+                    CppObject::get(table_or_subquery),
+                    std::ptr::null(),
+                );
+            },
+        }
+        self
+    }
+
+    pub fn on(&self, expression: &Expression) -> &Join {
+        unsafe {
+            WCDBRustJoin_configOn(self.get_cpp_obj(), CppObject::get(expression));
+        }
+        self
+    }
+
+    pub fn using<'a, I, S>(&self, column_vec: I) -> &Join
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<StringColumnTraitParam<'a>>,
+    {
+        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
+        if data_vec.peek().is_none() {
+            return self;
+        }
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                StringColumnTraitParam::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                StringColumnTraitParam::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj));
+                }
+            }
+        }
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustJoin_configUsingColumn(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    std::ptr::null(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len(),
+                );
+            }
+        } else {
+            unsafe {
+                WCDBRustJoin_configUsingColumn(
+                    self.get_cpp_obj(),
+                    CPPType::Column as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    std::ptr::null(),
+                    cpp_obj_vec.len(),
+                );
+            }
+        }
+        self
+    }
 }
