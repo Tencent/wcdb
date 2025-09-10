@@ -24,7 +24,7 @@ extern "C" fn transaction_callback(cb_raw: *mut c_void, rust_handle_raw: *mut c_
     closure(handle)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct HandleOperation {
     cpp_obj: CppObject,
 }

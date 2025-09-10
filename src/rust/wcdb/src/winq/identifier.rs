@@ -75,7 +75,7 @@ pub enum CPPType {
     ExplainSTMT = 56,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Identifier {
     cpp_type: CPPType,
     cpp_obj: CppObject,

@@ -15,7 +15,7 @@ use crate::winq::statement::StatementTrait;
 use crate::winq::statement_drop_table::StatementDropTable;
 use std::ffi::c_void;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct HandleORMOperation {
     handle_operation: HandleOperation,
 }

@@ -26,6 +26,22 @@ extern "C" {
     fn WCDBRustHandle_executeSQL(cpp_obj: *mut c_void, sql: *const c_char) -> bool;
     fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
     fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
+    fn WCDBRustHandle_runTransaction(
+        cpp_obj: *mut c_void,
+        transaction_callback: extern "C" fn(
+            cb_raw: *mut c_void,
+            cpp_handle_raw: *mut c_void,
+        ) -> bool,
+        cb_raw: *mut c_void,
+        rust_handle_raw: *mut c_void,
+    ) -> bool;
+}
+
+extern "C" fn transaction_callback(cb_raw: *mut c_void, rust_handle_raw: *mut c_void) -> bool {
+    let handle = unsafe { *(rust_handle_raw as *const &Handle) };
+    let closure: Box<Box<dyn FnOnce(&Handle) -> bool>> =
+        unsafe { Box::from_raw(cb_raw as *mut Box<dyn FnOnce(&Handle) -> bool>) };
+    closure(handle)
 }
 
 pub struct HandleInner {
@@ -145,12 +161,15 @@ impl HandleInner {
 pub struct Handle<'a> {
     handle_inner: Arc<RefCell<HandleInner>>,
     database: &'a Database,
-    cpp_object: CppObject,
 }
 
 impl<'a> CppObjectConvertibleTrait for Handle<'a> {
     fn as_cpp_object(&self) -> &CppObject {
-        self.cpp_object.as_cpp_object()
+        // todo qixinbing 这里用的是占位，待完善
+        static DUMMY: CppObject = CppObject {
+            cpp_obj: std::ptr::null_mut(),
+        };
+        &DUMMY
     }
 }
 
@@ -173,11 +192,9 @@ impl<'a> CppObjectTrait for Handle<'a> {
 
 impl<'a> HandleOperationTrait for Handle<'a> {
     fn get_handle(&self, _: bool) -> Handle {
-        let cpp_obj = self.cpp_object.get_cpp_obj();
         Handle {
             handle_inner: self.handle_inner.clone(),
             database: self.database,
-            cpp_object: CppObject::new(Some(cpp_obj)),
         }
     }
 
@@ -185,27 +202,62 @@ impl<'a> HandleOperationTrait for Handle<'a> {
         false
     }
 
+    // todo qixibing 考虑该方法和 handle_operation 同名方法保留哪个？
     fn run_transaction<F: FnOnce(&Handle) -> bool>(&self, closure: F) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.run_transaction(
-            self.get_handle(true),
-            self.auto_invalidate_handle(),
-            closure,
-        )
+        let mut handle = self.get_handle(true);
+        let closure_box: Box<Box<dyn FnOnce(&Handle) -> bool>> = Box::new(Box::new(closure));
+        let closure_raw = Box::into_raw(closure_box) as *mut c_void;
+        let rust_handle_raw = unsafe { &(&handle) as *const &Handle as *mut c_void };
+        let mut exception_opt = None;
+        if !unsafe {
+            WCDBRustHandle_runTransaction(
+                handle.get_cpp_handle()?,
+                transaction_callback,
+                closure_raw,
+                rust_handle_raw,
+            )
+        } {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 
+    // todo qixibing 考虑该方法和 handle_operation 同名方法保留哪个？
     fn execute<T: StatementTrait>(&self, statement: &T) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.execute(
-            self.get_handle(true),
-            self.auto_invalidate_handle(),
-            statement,
-        )
+        let mut handle = self.get_handle(true);
+        let mut exception_opt = None;
+        if !Handle::execute_inner(handle.get_cpp_handle()?, statement) {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 
+    // todo qixibing 考虑该方法和 handle_operation 同名方法保留哪个？
     fn execute_sql(&self, sql: &str) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.execute_sql(self.get_handle(true), self.auto_invalidate_handle(), sql)
+        let mut handle = self.get_handle(true);
+        let mut exception_opt = None;
+        if !Handle::execute_sql(handle.get_cpp_handle()?, sql) {
+            exception_opt = Some(handle.create_exception());
+        }
+        if self.auto_invalidate_handle() {
+            handle.invalidate();
+        }
+        match exception_opt {
+            None => Ok(()),
+            Some(exception) => Err(exception),
+        }
     }
 }
 
@@ -215,13 +267,15 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         table_name: &str,
         binding: &R,
     ) -> WCDBResult<bool> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.create_table(self.get_handle(true), table_name, binding)
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner
+            .handle_orm_operation
+            .create_table(self.get_handle(true), table_name, binding)
     }
 
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.table_exist(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.table_exist(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             table_name,
@@ -229,8 +283,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
     }
 
     fn drop_table(&self, table_name: &str) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.drop_table(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.drop_table(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             table_name,
@@ -238,23 +292,31 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
     }
 
     fn prepare_insert<T>(&self) -> Insert<T> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.prepare_insert(self.get_handle(true), self.auto_invalidate_handle())
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner
+            .handle_orm_operation
+            .prepare_insert(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn prepare_update<T>(&self) -> Update<T> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.prepare_update(self.get_handle(true), self.auto_invalidate_handle())
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner
+            .handle_orm_operation
+            .prepare_update(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn prepare_select<T>(&self) -> Select<T> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.prepare_select(self.get_handle(true), self.auto_invalidate_handle())
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner
+            .handle_orm_operation
+            .prepare_select(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn prepare_delete(&self) -> Delete {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.prepare_delete(self.get_handle(true), self.auto_invalidate_handle())
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner
+            .handle_orm_operation
+            .prepare_delete(self.get_handle(true), self.auto_invalidate_handle())
     }
 
     fn insert_object<T>(
@@ -263,8 +325,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.insert_object(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.insert_object(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             object,
@@ -279,8 +341,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.insert_or_replace_object(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.insert_or_replace_object(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             object,
@@ -295,8 +357,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.insert_or_ignore_object(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.insert_or_ignore_object(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             object,
@@ -311,8 +373,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.insert_objects(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.insert_objects(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             objects,
@@ -327,8 +389,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.insert_or_replace_objects(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.insert_or_replace_objects(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             objects,
@@ -343,8 +405,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         fields: Vec<&Field<T>>,
         table_name: &str,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.insert_or_ignore_objects(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.insert_or_ignore_objects(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             objects,
@@ -361,8 +423,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.delete_objects(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.delete_objects(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             table_name,
@@ -383,8 +445,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.update_object(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.update_object(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             object,
@@ -405,8 +467,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         order_opt: Option<OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.get_first_object(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.get_first_object(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             fields,
@@ -426,8 +488,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {
-        let handle_orm_operation = { self.handle_inner.borrow().handle_orm_operation.clone() };
-        handle_orm_operation.get_all_objects(
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.get_all_objects(
             self.get_handle(true),
             self.auto_invalidate_handle(),
             fields,
@@ -447,11 +509,9 @@ impl<'a> Handle<'a> {
             main_statement: None,
             write_hint,
         }));
-        let cpp_obj = handle_inner.borrow().get_cpp_obj();
         Self {
             handle_inner,
             database,
-            cpp_object: CppObject::new(Some(cpp_obj)),
         }
     }
 
@@ -464,7 +524,6 @@ impl<'a> Handle<'a> {
         Self {
             handle_inner,
             database,
-            cpp_object: CppObject::new(Some(cpp_obj)),
         }
     }
 

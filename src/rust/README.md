@@ -38,6 +38,7 @@ Rust 语言接口适配以源仓库自带的 Java 接口适配为蓝本进行翻
 11. 提交要求满足 `cargo fmt -- --check` 检查。除此以外，空行需要跟现有风格对齐，如函数之间有空行，逻辑块与块之间有空行，勿多勿少。
 12. 其余未详述细节，参照现有代码规范编写即可。
 13. 根目录下执行 `cargo bench` 开始执行性能测试，输出内容在控制台和 `wcdb_rust/src/rust/target/criterion` 目录中。
+14. 所有包含 CppObject 的类，不能实现 `Clone` 宏：`Clone` 宏在 clone 时底层的 C 指针被复制，出现两个 Rust 对象持有相同的 C 指针，会发生重复释放的崩溃。
 
 ## CI 检查点
 1. [Git Commit Lint](https://github.com/conventional-changelog/commitlint) （另附：结尾标点符号必须是 [.!?] 之一）

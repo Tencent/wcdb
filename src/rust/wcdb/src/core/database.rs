@@ -517,7 +517,6 @@ pub enum ConfigPriority {
     Highest,
 }
 
-#[derive(Clone)]
 pub struct Database {
     handle_orm_operation: HandleORMOperation,
     close_callback: Arc<Mutex<Option<Box<dyn FnOnce() + Send>>>>,

@@ -1,7 +1,7 @@
 use crate::base::value::Value;
 use crate::winq::identifier::Identifier;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub enum Object {
     Null,
     Bool(bool),
