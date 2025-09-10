@@ -65,7 +65,6 @@ void WCDBRustExpressionClassMethod(argument,
     WCDBRustBridgeStruct(CPPExpression, expression);
     WCDBRustCreateCommonValue(argument);
     WCDBExpressionSetArgument(expressionStruct, argument_common);
-    //    WCDBRustTryReleaseStringInCommonValue(argument); // todo qixinbing : 需要释放？
 }
 
 void WCDBRustExpressionClassMethod(invoke, void* expression) {

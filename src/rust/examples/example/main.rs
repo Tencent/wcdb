@@ -23,7 +23,6 @@ pub struct TableMessageBox {
     item_float: f32,
     #[WCDBField]
     item_double: f64,
-    // todo qixinbing-需要支持 blob 类型
     #[WCDBField]
     item_text: String,
     #[WCDBField]

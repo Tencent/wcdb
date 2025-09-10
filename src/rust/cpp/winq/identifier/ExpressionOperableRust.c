@@ -46,7 +46,6 @@ void* WCDBRustExpressionOperableClassMethod(binaryOperate,
     WCDBRustCreateCommonValue(right);
     void* ret = (void*)WCDBExpressionBinaryOperate2(left_common, right_common, operatorType, isNot)
                     .innerValue;
-    //    WCDBRustTryReleaseStringInCommonValue(right); // todo qixinbing : 需要释放？
     return ret;
 }
 
