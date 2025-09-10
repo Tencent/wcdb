@@ -3,7 +3,7 @@ use std::ffi::c_void;
 use std::ops::{Deref, DerefMut};
 
 extern "C" {
-    fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
+    pub(crate) fn WCDBRustBase_releaseObject(cpp_obj: *mut c_void);
 }
 
 #[derive(Debug)]

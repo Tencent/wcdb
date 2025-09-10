@@ -1,4 +1,4 @@
-use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object::{CppObject, CppObjectTrait, WCDBRustBase_releaseObject};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::value::Value;
 use crate::base::wcdb_exception::{ExceptionCode, ExceptionLevel, WCDBException, WCDBResult};
@@ -128,7 +128,7 @@ extern "C" {
         cb: DatabaseCloseCallback,
     );
 
-    pub fn WCDBRustDatabase_config(
+    pub(crate) fn WCDBRustDatabase_config(
         cpp_obj: *mut c_void,
         config_name: *const c_char,
         invocation: *const c_void,
@@ -336,6 +336,9 @@ extern "C" fn trace_sql_callback(
 }
 
 extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
+    if exp_cpp_obj.is_null() {
+        return;
+    }
     let global_callback = GLOBAL_TRACE_EXCEPTION_CALLBACK.lock();
     match global_callback {
         Ok(callback) => {
@@ -356,12 +359,13 @@ extern "C" fn global_trace_exception_callback(exp_cpp_obj: *mut c_void) {
 }
 
 extern "C" fn trace_exception_callback(cb_raw: *mut c_void, exp_cpp_obj: *mut c_void) {
-    if cb_raw.is_null() {
+    if cb_raw.is_null() || exp_cpp_obj.is_null() {
         return;
     }
     let closure = unsafe { &*(cb_raw as *mut Box<dyn TraceExceptionCallbackTrait>) };
     let ex = WCDBException::create_exception(exp_cpp_obj);
     closure(ex);
+    unsafe { WCDBRustBase_releaseObject(exp_cpp_obj) };
 }
 
 extern "C" fn global_corruption_notification_callback_wrapper(cpp_obj: *mut c_void) {
