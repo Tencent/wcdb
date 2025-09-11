@@ -24,9 +24,7 @@ impl BasicExpression<'_> {
                 let value = if value { 1 } else { 0 };
                 (CPPType::Bool, value as c_longlong, 0 as c_double, None)
             }
-            BasicExpression::Int(value) => {
-                (CPPType::Int, value as c_longlong, 0 as c_double, None)
-            }
+            BasicExpression::Int(value) => (CPPType::Int, value as c_longlong, 0 as c_double, None),
             BasicExpression::Float(value) => {
                 (CPPType::Double, 0 as c_longlong, value as c_double, None)
             }

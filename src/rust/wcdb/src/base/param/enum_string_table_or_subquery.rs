@@ -18,9 +18,7 @@ impl<'a> From<&str> for StringTableOrSubquery<'a> {
     }
 }
 
-impl<'a, T: TableOrSubqueryConvertibleTrait + 'a> From<&'a T>
-    for StringTableOrSubquery<'a>
-{
+impl<'a, T: TableOrSubqueryConvertibleTrait + 'a> From<&'a T> for StringTableOrSubquery<'a> {
     fn from(value: &'a T) -> Self {
         StringTableOrSubquery::TableOrSubquery(value)
     }

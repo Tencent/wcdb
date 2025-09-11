@@ -419,16 +419,14 @@ impl StatementUpdate {
             IntExpression::Int(to_value) => {
                 self.config_limit_range_to_i64(from, to_value);
             }
-            IntExpression::ExpressionConvertible(to_value_obj) => {
-                match to_value_obj {
-                    None => {
-                        self.config_limit_count(from);
-                    }
-                    Some(to_value) => {
-                        self.config_limit_range(from, to_value);
-                    }
+            IntExpression::ExpressionConvertible(to_value_obj) => match to_value_obj {
+                None => {
+                    self.config_limit_count(from);
                 }
-            }
+                Some(to_value) => {
+                    self.config_limit_range(from, to_value);
+                }
+            },
         }
         self
     }
@@ -446,24 +444,22 @@ impl StatementUpdate {
                     from_value,
                 );
             },
-            IntExpression::ExpressionConvertible(from_value_opt) => {
-                match from_value_opt {
-                    None => unsafe {
-                        WCDBRustStatementUpdate_configLimitCount(
-                            self.get_cpp_obj(),
-                            CPPType::Null as c_int,
-                            0,
-                        );
-                    },
-                    Some(from_value) => unsafe {
-                        WCDBRustStatementUpdate_configLimitCount(
-                            self.get_cpp_obj(),
-                            Identifier::get_cpp_type(from_value) as c_int,
-                            CppObject::get(from_value) as c_longlong,
-                        );
-                    },
-                }
-            }
+            IntExpression::ExpressionConvertible(from_value_opt) => match from_value_opt {
+                None => unsafe {
+                    WCDBRustStatementUpdate_configLimitCount(
+                        self.get_cpp_obj(),
+                        CPPType::Null as c_int,
+                        0,
+                    );
+                },
+                Some(from_value) => unsafe {
+                    WCDBRustStatementUpdate_configLimitCount(
+                        self.get_cpp_obj(),
+                        Identifier::get_cpp_type(from_value) as c_int,
+                        CppObject::get(from_value) as c_longlong,
+                    );
+                },
+            },
         }
     }
 
@@ -482,28 +478,26 @@ impl StatementUpdate {
                     CppObject::get(to) as c_longlong,
                 )
             },
-            IntExpression::ExpressionConvertible(from_value_opt) => {
-                match from_value_opt {
-                    None => unsafe {
-                        WCDBRustStatementUpdate_configLimitRange(
-                            self.get_cpp_obj(),
-                            CPPType::Null as c_int,
-                            0 as c_longlong,
-                            Identifier::get_cpp_type(to) as c_int,
-                            CppObject::get(to) as c_longlong,
-                        )
-                    },
-                    Some(from_value) => unsafe {
-                        WCDBRustStatementUpdate_configLimitRange(
-                            self.get_cpp_obj(),
-                            Identifier::get_cpp_type(from_value) as c_int,
-                            CppObject::get(from_value) as c_longlong,
-                            Identifier::get_cpp_type(to) as c_int,
-                            CppObject::get(to) as c_longlong,
-                        )
-                    },
-                }
-            }
+            IntExpression::ExpressionConvertible(from_value_opt) => match from_value_opt {
+                None => unsafe {
+                    WCDBRustStatementUpdate_configLimitRange(
+                        self.get_cpp_obj(),
+                        CPPType::Null as c_int,
+                        0 as c_longlong,
+                        Identifier::get_cpp_type(to) as c_int,
+                        CppObject::get(to) as c_longlong,
+                    )
+                },
+                Some(from_value) => unsafe {
+                    WCDBRustStatementUpdate_configLimitRange(
+                        self.get_cpp_obj(),
+                        Identifier::get_cpp_type(from_value) as c_int,
+                        CppObject::get(from_value) as c_longlong,
+                        Identifier::get_cpp_type(to) as c_int,
+                        CppObject::get(to) as c_longlong,
+                    )
+                },
+            },
         }
     }
 
@@ -522,28 +516,26 @@ impl StatementUpdate {
                     to as c_longlong,
                 )
             },
-            IntExpression::ExpressionConvertible(from_value_opt) => {
-                match from_value_opt {
-                    None => unsafe {
-                        WCDBRustStatementUpdate_configLimitRange(
-                            self.get_cpp_obj(),
-                            CPPType::Null as c_int,
-                            0 as c_longlong,
-                            CPPType::Int as c_int,
-                            to as c_longlong,
-                        )
-                    },
-                    Some(from_value) => unsafe {
-                        WCDBRustStatementUpdate_configLimitRange(
-                            self.get_cpp_obj(),
-                            Identifier::get_cpp_type(from_value) as c_int,
-                            CppObject::get(from_value) as c_longlong,
-                            CPPType::Int as c_int,
-                            to as c_longlong,
-                        )
-                    },
-                }
-            }
+            IntExpression::ExpressionConvertible(from_value_opt) => match from_value_opt {
+                None => unsafe {
+                    WCDBRustStatementUpdate_configLimitRange(
+                        self.get_cpp_obj(),
+                        CPPType::Null as c_int,
+                        0 as c_longlong,
+                        CPPType::Int as c_int,
+                        to as c_longlong,
+                    )
+                },
+                Some(from_value) => unsafe {
+                    WCDBRustStatementUpdate_configLimitRange(
+                        self.get_cpp_obj(),
+                        Identifier::get_cpp_type(from_value) as c_int,
+                        CppObject::get(from_value) as c_longlong,
+                        CPPType::Int as c_int,
+                        to as c_longlong,
+                    )
+                },
+            },
         }
     }
 
