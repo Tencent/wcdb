@@ -69,7 +69,7 @@ pub mod statement_create_index_test {
                 .create_index(index_name)
                 .on(table_name)
                 .indexed_by_column_names(&column_names)
-                .r#where(expression),
+                .where_(&expression),
             "CREATE INDEX index1 ON table1(column1, column2) WHERE column1 >= 1",
         );
     }

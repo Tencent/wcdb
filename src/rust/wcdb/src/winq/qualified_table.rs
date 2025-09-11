@@ -94,7 +94,7 @@ impl QualifiedTable {
         self
     }
 
-    pub fn r#as(&self, alias: &str) -> &Self {
+    pub fn as_(&self, alias: &str) -> &Self {
         unsafe {
             WCDBRustQualifiedTable_configAlias(self.get_cpp_obj(), alias.to_cstring().as_ptr())
         }

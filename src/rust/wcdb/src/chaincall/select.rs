@@ -50,9 +50,8 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
-    // todo qixinbing r# 写法，是否可以改成下划线？java 版本中 case 相关方法的名字是 case_
-    pub fn r#where(&self, condition: &Expression) -> &Self {
-        self.chain_call.get_statement().r#where(condition);
+    pub fn where_(&self, condition: &Expression) -> &Self {
+        self.chain_call.get_statement().where_(condition);
         self
     }
 

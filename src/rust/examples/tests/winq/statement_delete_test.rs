@@ -15,7 +15,7 @@ pub mod statement_delete_test {
         WinqTool::winq_equal(test, "DELETE FROM testTable");
 
         let column1 = Column::new("column1", None);
-        let test = statement.r#where(&column1.gt(100));
+        let test = statement.where_(&column1.gt(100));
         WinqTool::winq_equal(test, "DELETE FROM testTable WHERE column1 > 100");
 
         let test = statement.limit(100);

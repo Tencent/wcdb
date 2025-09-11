@@ -44,7 +44,7 @@ extern "C" {
 
     fn WCDBRustForeignKey_configOnUpdateAction(cpp_obj: *mut c_void, action: c_int);
 
-    fn WCDBRustForeignKey_configMatch(cpp_obj: *mut c_void, r#match: c_int);
+    fn WCDBRustForeignKey_configMatch(cpp_obj: *mut c_void, match_: c_int);
 
     fn WCDBRustForeignKey_configDeferrable(cpp_obj: *mut c_void, r#type: c_int);
 

@@ -372,7 +372,7 @@ impl HandleORMOperation {
         let delete = self.prepare_delete(handle, auto_invalidate_handle);
         delete.from_table(table_name);
         if let Some(condition) = condition_opt {
-            delete.r#where(&condition);
+            delete.where_(&condition);
         }
         if let Some(order) = order_opt {
             delete.order_by(vec![order]);
@@ -404,7 +404,7 @@ impl HandleORMOperation {
         update.set(fields);
         update.to_object(object);
         if let Some(condition) = condition_opt {
-            update.r#where(&condition);
+            update.where_(&condition);
         }
         if let Some(order) = order_opt {
             update.order_by(vec![order]);
@@ -433,7 +433,7 @@ impl HandleORMOperation {
         select.select(fields);
         select.from(table_name);
         if let Some(condition) = condition_opt {
-            select.r#where(&condition);
+            select.where_(&condition);
         }
         if let Some(order) = order_opt {
             select.order_by(&vec![order]);
@@ -460,7 +460,7 @@ impl HandleORMOperation {
         select.select(fields);
         select.from(table_name);
         if let Some(condition) = condition_opt {
-            select.r#where(&condition);
+            select.where_(&condition);
         }
         if let Some(order) = order_opt {
             select.order_by(&vec![order]);

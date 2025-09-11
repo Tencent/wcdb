@@ -94,7 +94,7 @@ impl ResultColumn {
         }
     }
 
-    pub fn r#as(&self, alias: &str) -> &ResultColumn {
+    pub fn as_(&self, alias: &str) -> &ResultColumn {
         unsafe { WCDBRustResultColumn_configAlias(self.get_cpp_obj(), alias.to_cstring().as_ptr()) }
         self
     }

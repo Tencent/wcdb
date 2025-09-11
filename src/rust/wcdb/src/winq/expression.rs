@@ -173,11 +173,11 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.divide(operand)
     }
 
-    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    fn mod_<'a, T>(&self, operand: T) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.expression_operable.r#mod(operand)
+        self.expression_operable.mod_(operand)
     }
 
     fn add<'a, T>(&self, operand: T) -> Expression
@@ -287,12 +287,12 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.not_between(begin, end)
     }
 
-    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
+    fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable
-            .r#in_(Identifier::get_cpp_type(self), operands, false)
+            .in_(Identifier::get_cpp_type(self), operands, false)
     }
 
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
@@ -331,8 +331,8 @@ impl ExpressionOperableTrait for Expression {
         self.expression_operable.not_glob(content)
     }
 
-    fn r#match(&self, content: &str) -> Expression {
-        self.expression_operable.r#match(content)
+    fn match_(&self, content: &str) -> Expression {
+        self.expression_operable.match_(content)
     }
 
     fn not_match(&self, content: &str) -> Expression {
@@ -642,7 +642,7 @@ impl Expression {
     }
 
     // todo qixinbing as 方法合并
-    pub fn r#as(&self, column_type: ColumnType) -> &Self {
+    pub fn as_(&self, column_type: ColumnType) -> &Self {
         unsafe { WCDBRustExpression_as(self.get_cpp_obj(), column_type as c_int) };
         &self
     }
@@ -727,7 +727,7 @@ impl Expression {
         self
     }
 
-    pub fn r#else<'a, T>(&self, param: T) -> &Self
+    pub fn else_<'a, T>(&self, param: T) -> &Self
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {

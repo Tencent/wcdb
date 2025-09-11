@@ -146,7 +146,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         let binding = StatementDelete::new();
         binding.delete_from(self.table_name.as_ref());
         if let Some(expression) = condition_opt {
-            binding.r#where(&expression);
+            binding.where_(&expression);
         }
         if let Some(order) = order_opt {
             binding.order_by(vec![order]);
@@ -173,7 +173,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         binding.from(vec![self.table_name.as_str()]);
         binding.select(columns);
         if let Some(expression) = condition_opt {
-            binding.r#where(&expression);
+            binding.where_(&expression);
         }
         if let Some(order) = order_opt {
             binding.order_by(&order);
@@ -279,7 +279,7 @@ impl<'a> TableOperation<'a> {
             update.offset(offset);
         }
         if let Some(expression) = expression {
-            update.r#where(&expression);
+            update.where_(&expression);
         }
         let mut handler = self.database.get_handle(true);
         let ret = match handler.prepared_with_main_statement(update) {

@@ -39,11 +39,11 @@ pub mod expression_test {
         WinqTool::winq_equal(&expression, "NOT EXISTS(SELECT testColumn)");
 
         let expression = Expression::cast("testColumn");
-        expression.r#as(ColumnType::Integer);
+        expression.as_(ColumnType::Integer);
         WinqTool::winq_equal(&expression, "CAST(testColumn AS INTEGER)");
 
         let expression = Expression::cast(&column);
-        expression.r#as(ColumnType::Integer);
+        expression.as_(ColumnType::Integer);
         WinqTool::winq_equal(&expression, "CAST(testColumn AS INTEGER)");
 
         let column_row = Column::row_id().add(1).as_result_column("rowidAddOne");
@@ -55,7 +55,7 @@ pub mod expression_test {
             .then("a")
             .when(&column.eq(2))
             .then("b")
-            .r#else("c");
+            .else_("c");
         WinqTool::winq_equal(
             &expression,
             "CASE WHEN testColumn == 1 THEN 'a' WHEN testColumn == 2 THEN 'b' ELSE 'c' END",
@@ -67,21 +67,21 @@ pub mod expression_test {
             .then(1)
             .when(&column.eq("b"))
             .then(2)
-            .r#else(3);
+            .else_(3);
         WinqTool::winq_equal(
             &expression,
             "CASE WHEN testColumn == 'a' THEN 1 WHEN testColumn == 'b' THEN 2 ELSE 3 END",
         );
 
         let expression = Expression::case(Some(&column));
-        expression.when("a").then(1).when("b").then(2).r#else(3);
+        expression.when("a").then(1).when("b").then(2).else_(3);
         WinqTool::winq_equal(
             &expression,
             "CASE testColumn WHEN 'a' THEN 1 WHEN 'b' THEN 2 ELSE 3 END",
         );
 
         let expression = Expression::case(Some(&column));
-        expression.when(1).then("a").then(2).then("b").r#else("c");
+        expression.when(1).then("a").then(2).then("b").else_("c");
         WinqTool::winq_equal(
             &expression,
             "CASE testColumn WHEN 1 THEN 'a' WHEN 2 THEN 'b' ELSE 'c' END",
@@ -182,18 +182,18 @@ pub mod expression_test {
         assert_eq!(desc.as_str(), "left / 1.1000000000000001");
 
         // mod assert
-        let desc = column_left.r#mod(&column_right).get_description();
+        let desc = column_left.mod_(&column_right).get_description();
         assert_eq!(desc.as_str(), "left % right");
 
         let operand: i32 = 1;
-        let desc = column_left.r#mod(operand).get_description();
+        let desc = column_left.mod_(operand).get_description();
         assert_eq!(
             desc.as_str(),
             "left % ".to_owned() + operand.to_string().as_str()
         );
 
         let operand: f64 = 1.1;
-        let desc = column_left.r#mod(operand).get_description();
+        let desc = column_left.mod_(operand).get_description();
         assert_eq!(desc.as_str(), "left % 1.1000000000000001");
 
         // add assert
@@ -477,26 +477,26 @@ pub mod expression_test {
         let column = Column::new("testColumn", None);
 
         let operands: Vec<i16> = vec![1, 2, 3];
-        let desc = column.r#in(operands).get_description();
+        let desc = column.in_(operands).get_description();
         assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
 
         let operands: Vec<i32> = vec![1, 2, 3];
-        let desc = column.r#in(operands).get_description();
+        let desc = column.in_(operands).get_description();
         assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
 
         let operands: Vec<i64> = vec![1, 2, 3];
-        let desc = column.r#in(operands).get_description();
+        let desc = column.in_(operands).get_description();
         assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
 
         let operands: Vec<f32> = vec![1.1f32, 2.1f32, 3.1f32];
-        let desc = column.r#in(operands).get_description();
+        let desc = column.in_(operands).get_description();
         assert_eq!(
             desc.as_str(),
             "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)"
         );
 
         let operands: Vec<f64> = vec![1.1f64, 2.1f64, 3.1f64];
-        let desc = column.r#in(operands).get_description();
+        let desc = column.in_(operands).get_description();
         assert_eq!(
             desc.as_str(),
             "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)"
@@ -506,7 +506,7 @@ pub mod expression_test {
         operands.push("abc");
         operands.push("def");
         operands.push("ghi");
-        let desc = column.r#in(operands).get_description();
+        let desc = column.in_(operands).get_description();
         assert_eq!(desc.as_str(), "testColumn IN('abc', 'def', 'ghi')");
     }
 
@@ -569,7 +569,7 @@ pub mod expression_test {
         let desc = left.glob(right).get_description();
         assert_eq!(desc.as_str(), "left GLOB 'right'");
 
-        let desc = left.r#match(right).get_description();
+        let desc = left.match_(right).get_description();
         assert_eq!(desc.as_str(), "left MATCH 'right'");
 
         let desc = left.regexp(right).get_description();
@@ -593,7 +593,7 @@ pub mod expression_test {
         let desc = left.glob(right).escape("%").get_description();
         assert_eq!(desc.as_str(), "left GLOB 'right' ESCAPE '%'");
 
-        let desc = left.r#match(right).escape("%").get_description();
+        let desc = left.match_(right).escape("%").get_description();
         assert_eq!(desc.as_str(), "left MATCH 'right' ESCAPE '%'");
 
         let desc = left.regexp(right).escape("%").get_description();

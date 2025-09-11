@@ -203,7 +203,7 @@ impl StatementSelect {
         self
     }
 
-    pub fn r#where(&self, condition: &Expression) -> &Self {
+    pub fn where_(&self, condition: &Expression) -> &Self {
         unsafe {
             WCDBRustStatementSelect_configCondition(self.get_cpp_obj(), CppObject::get(condition));
         }

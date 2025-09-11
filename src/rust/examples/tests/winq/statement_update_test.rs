@@ -85,7 +85,7 @@ pub mod statement_update_test {
                 .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
-                .r#where(&Column::new("column1", None).gt(1)),
+                .where_(&Column::new("column1", None).gt(1)),
             "UPDATE testTable SET column1 = 1 WHERE column1 > 1",
         );
 

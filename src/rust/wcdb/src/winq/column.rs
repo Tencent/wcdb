@@ -44,7 +44,7 @@ pub struct Column {
 pub trait ColumnTrait:
     ExpressionConvertibleTrait + IndexedColumnConvertibleTrait + ResultColumnConvertibleTrait
 {
-    fn r#as(&self, alias: &str) -> ResultColumn;
+    fn as_(&self, alias: &str) -> ResultColumn;
 
     fn order(&self, order: Order) -> OrderingTerm;
 
@@ -128,11 +128,11 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.divide(operand)
     }
 
-    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    fn mod_<'a, T>(&self, operand: T) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.expression_operable.r#mod(operand)
+        self.expression_operable.mod_(operand)
     }
 
     fn add<'a, T>(&self, operand: T) -> Expression
@@ -242,12 +242,12 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.not_between(begin, end)
     }
 
-    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
+    fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable
-            .r#in_(Identifier::get_cpp_type(self), operands, false)
+            .in_(Identifier::get_cpp_type(self), operands, false)
     }
 
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
@@ -286,8 +286,8 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.not_glob(content)
     }
 
-    fn r#match(&self, content: &str) -> Expression {
-        self.expression_operable.r#match(content)
+    fn match_(&self, content: &str) -> Expression {
+        self.expression_operable.match_(content)
     }
 
     fn not_match(&self, content: &str) -> Expression {
@@ -402,7 +402,7 @@ impl IndexedColumnConvertibleTrait for Column {}
 impl ResultColumnConvertibleTrait for Column {}
 
 impl ColumnTrait for Column {
-    fn r#as(&self, alias: &str) -> ResultColumn {
+    fn as_(&self, alias: &str) -> ResultColumn {
         let c_alias = alias.to_cstring();
         let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), c_alias.as_ptr()) };
         ResultColumn::new_with_cpp_obj(cpp_obj)
@@ -463,7 +463,7 @@ impl Column {
         }
     }
 
-    pub(crate) fn r#in_<'a, S>(
+    pub(crate) fn in_<'a, S>(
         &self,
         left_cpp_type: CPPType,
         operands: Vec<S>,
@@ -473,7 +473,7 @@ impl Column {
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable
-            .r#in_(left_cpp_type, operands, is_not)
+            .in_(left_cpp_type, operands, is_not)
     }
 
     pub(crate) fn not_in_<'a, S>(
@@ -486,6 +486,6 @@ impl Column {
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable
-            .r#in_(left_cpp_type, operands, is_not)
+            .in_(left_cpp_type, operands, is_not)
     }
 }

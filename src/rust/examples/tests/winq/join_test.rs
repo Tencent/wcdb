@@ -412,7 +412,7 @@ pub mod join_test {
             .insert_object(conversation, Some(DbConversationTagTable::all_fields()));
 
         let result_column1 = ResultColumn::new("tag_id");
-        result_column1.r#as("a_tag_id");
+        result_column1.as_("a_tag_id");
         let result_column2 = ResultColumn::new("tag_name");
         let result_column3 = ResultColumn::new("create_time");
         // 连表查询

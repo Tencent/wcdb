@@ -199,9 +199,9 @@ impl StatementCreateIndex {
         self
     }
 
-    pub fn r#where(&self, condition: Expression) -> &Self {
+    pub fn where_(&self, condition: &Expression) -> &Self {
         unsafe {
-            WCDBRustStatementCreateIndex_configWhere(self.get_cpp_obj(), CppObject::get(&condition))
+            WCDBRustStatementCreateIndex_configWhere(self.get_cpp_obj(), CppObject::get(condition))
         }
         self
     }

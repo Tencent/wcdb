@@ -88,7 +88,7 @@
 //     let statement = binding
 //         .select_with_result_column_convertible_trait(&column_vec)
 //         .from("FriendProfileTable")
-//         .r#where(&condition)
+//         .where_(&condition)
 //         .limit(size);
 //     // SELECT user_id, remark, friend_type, is_top, add_time FROM FriendProfileTable WHERE add_time > 1 LIMIT 1
 //     let ret: WCDBResult<Vec<Vec<Value>>> = database.get_all_rows_from_statement(statement);
@@ -105,7 +105,7 @@
 //         .update("FriendProfileTable")
 //         .set_columns(&column_vec)
 //         .to_bool(true)
-//         .r#where(&condition)
+//         .where_(&condition)
 //         .limit(size);
 //     // UPDATE FriendProfileTable SET is_top = TRUE WHERE (is_top != TRUE) AND (add_time > 1) LIMIT 1
 //     let ret = database.execute(&statement);
@@ -116,7 +116,7 @@
 //     let condition = Column::new("add_time").gt_int(1);
 //     statement
 //         .delete_from("FriendProfileTable")
-//         .r#where(&condition)
+//         .where_(&condition)
 //         .limit(size);
 //     // DELETE FROM FriendProfileTable WHERE add_time > 1 LIMIT 1
 //     let ret = database.execute(&statement);

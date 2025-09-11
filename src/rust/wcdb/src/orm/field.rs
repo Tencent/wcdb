@@ -93,11 +93,11 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.divide(operand)
     }
 
-    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    fn mod_<'a, T>(&self, operand: T) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.column.r#mod(operand)
+        self.column.mod_(operand)
     }
 
     fn add<'a, T>(&self, operand: T) -> Expression
@@ -207,12 +207,12 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.not_between(begin, end)
     }
 
-    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
+    fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.column
-            .r#in_(Identifier::get_cpp_type(self), operands, false)
+            .in_(Identifier::get_cpp_type(self), operands, false)
     }
 
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
@@ -251,8 +251,8 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.not_glob(content)
     }
 
-    fn r#match(&self, content: &str) -> Expression {
-        self.column.r#match(content)
+    fn match_(&self, content: &str) -> Expression {
+        self.column.match_(content)
     }
 
     fn not_match(&self, content: &str) -> Expression {
@@ -369,8 +369,8 @@ impl<U> ResultColumnConvertibleTrait for Field<U> {}
 impl<U> ExpressionConvertibleTrait for Field<U> {}
 
 impl<U> ColumnTrait for Field<U> {
-    fn r#as(&self, alias: &str) -> ResultColumn {
-        self.column.r#as(alias)
+    fn as_(&self, alias: &str) -> ResultColumn {
+        self.column.as_(alias)
     }
 
     fn order(&self, order: Order) -> OrderingTerm {

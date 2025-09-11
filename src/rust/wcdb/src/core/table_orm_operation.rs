@@ -304,7 +304,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
     ) -> WCDBResult<()> {
         let delete = self.prepare_delete();
         if let Some(condition) = condition_opt {
-            delete.r#where(&condition);
+            delete.where_(&condition);
         }
         if let Some(order) = order_opt {
             delete.order_by(vec![order]);
@@ -333,7 +333,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             update.set(fields);
         }
         if let Some(condition) = condition_opt {
-            update.r#where(&condition);
+            update.where_(&condition);
         }
         if let Some(order) = order_opt {
             update.order_by(vec![order]);
@@ -363,7 +363,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             select.select(self.binding.all_binding_fields());
         }
         if let Some(condition) = condition_opt {
-            select.r#where(&condition);
+            select.where_(&condition);
         }
         if let Some(order) = order_opt {
             select.order_by(&vec![order]);
@@ -390,7 +390,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             select.select(self.binding.all_binding_fields());
         }
         if let Some(condition) = condition_opt {
-            select.r#where(&condition);
+            select.where_(&condition);
         }
         if let Some(order) = order_opt {
             select.order_by(&vec![order]);

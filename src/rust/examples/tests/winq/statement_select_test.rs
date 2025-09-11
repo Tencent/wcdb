@@ -16,7 +16,7 @@ pub mod statement_select_test {
         WinqTool::winq_equal(test, "SELECT column1 FROM testTable");
 
         let expression = column.gt(100);
-        let test = statement.r#where(&expression);
+        let test = statement.where_(&expression);
         WinqTool::winq_equal(test, "SELECT column1 FROM testTable WHERE column1 > 100");
 
         let test = statement.limit(100);

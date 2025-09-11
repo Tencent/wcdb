@@ -125,7 +125,7 @@ pub trait ExpressionOperableTrait {
     where
         T: Into<ExpressionConvertibleParam<'a>>;
 
-    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    fn mod_<'a, T>(&self, operand: T) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>;
 
@@ -191,7 +191,7 @@ pub trait ExpressionOperableTrait {
         T: Into<ExpressionConvertibleParam<'a>>,
         V: Into<ExpressionConvertibleParam<'a>>;
 
-    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
+    fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
         S: Into<ExpressionConvertibleParam<'a>>;
 
@@ -213,7 +213,7 @@ pub trait ExpressionOperableTrait {
 
     fn not_glob(&self, content: &str) -> Expression;
 
-    fn r#match(&self, content: &str) -> Expression;
+    fn match_(&self, content: &str) -> Expression;
 
     fn not_match(&self, content: &str) -> Expression;
 
@@ -301,7 +301,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.binary_operate(operand, BinaryOperatorType::Divide, false)
     }
 
-    fn r#mod<'a, T>(&self, operand: T) -> Expression
+    fn mod_<'a, T>(&self, operand: T) -> Expression
     where
         T: Into<ExpressionConvertibleParam<'a>>,
     {
@@ -415,11 +415,11 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.between_operate(begin, end, true)
     }
 
-    fn r#in<'a, S>(&self, operands: Vec<S>) -> Expression
+    fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.r#in_(CPPType::Expression, operands, false)
+        self.in_(CPPType::Expression, operands, false)
     }
 
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
@@ -494,7 +494,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.binary_operate(content, BinaryOperatorType::GLOB, true)
     }
 
-    fn r#match(&self, content: &str) -> Expression {
+    fn match_(&self, content: &str) -> Expression {
         self.binary_operate(content, BinaryOperatorType::Match, false)
     }
 
@@ -669,7 +669,7 @@ impl ExpressionOperable {
         expression
     }
 
-    pub(crate) fn r#in_<'a, S>(
+    pub(crate) fn in_<'a, S>(
         &self,
         left_cpp_type: CPPType,
         operands: Vec<S>,
