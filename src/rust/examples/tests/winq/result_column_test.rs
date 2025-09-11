@@ -9,15 +9,15 @@ pub mod result_column_test {
     pub fn test() {
         WinqTool::winq_equal(&ResultColumn::new("testColumn"), "testColumn");
         WinqTool::winq_equal(
-            &ResultColumn::new(Column::new("testColumn", None)),
+            &ResultColumn::new(&Column::new("testColumn", None)),
             "testColumn",
         );
         WinqTool::winq_equal(
-            ResultColumn::new(Column::new("testColumn", None)).r#as("testColumn2"),
+            ResultColumn::new(&Column::new("testColumn", None)).r#as("testColumn2"),
             "testColumn AS testColumn2",
         );
         WinqTool::winq_equal(
-            ResultColumn::new(Column::new("testColumn", None).sum()).r#as("sum"),
+            ResultColumn::new(&Column::new("testColumn", None).sum()).r#as("sum"),
             "SUM(testColumn) AS sum",
         );
     }

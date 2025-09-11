@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::string_result_column_convertible_param::StringResultColumnConvertibleParam;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -58,44 +59,38 @@ impl IdentifierConvertibleTrait for ResultColumn {
 
 impl ResultColumnConvertibleTrait for ResultColumn {}
 
-pub trait ResultColumnParam {
-    fn create_cpp_obj(&self) -> *mut c_void;
-}
-
-impl ResultColumnParam for *mut c_void {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        *self
-    }
-}
-
-impl<T: ResultColumnConvertibleTrait + IdentifierTrait> ResultColumnParam for T {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        unsafe {
-            WCDBRustResultColumn_create(
-                Identifier::get_cpp_type(self) as c_int,
-                CppObject::get(self),
-                std::ptr::null(),
-            )
-        }
-    }
-}
-
-impl ResultColumnParam for &str {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        unsafe {
-            WCDBRustResultColumn_create(
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                self.to_cstring().as_ptr(),
-            )
-        }
-    }
-}
-
 impl ResultColumn {
-    pub fn new<T: ResultColumnParam>(param: T) -> Self {
+    pub(crate) fn new_with_cpp_obj(cpp_obj: *mut c_void) -> Self {
         ResultColumn {
-            identifier: Identifier::new(CPPType::ResultColumn, Some(param.create_cpp_obj())),
+            identifier: Identifier::new(CPPType::ResultColumn, Some(cpp_obj)),
+        }
+    }
+
+    pub fn new<'a, T>(param: T) -> Self
+    where
+        T: Into<StringResultColumnConvertibleParam<'a>>,
+    {
+        let cpp_obj = match param.into() {
+            StringResultColumnConvertibleParam::String(column_name) => {
+                let cstr = column_name.to_cstring();
+                unsafe {
+                    WCDBRustResultColumn_create(
+                        CPPType::String as i32,
+                        0 as *mut c_void,
+                        cstr.as_ptr(),
+                    )
+                }
+            }
+            StringResultColumnConvertibleParam::ResultColumn(result_column_convertible) => unsafe {
+                WCDBRustResultColumn_create(
+                    Identifier::get_cpp_type(result_column_convertible) as c_int,
+                    CppObject::get(result_column_convertible),
+                    std::ptr::null(),
+                )
+            },
+        };
+        ResultColumn {
+            identifier: Identifier::new(CPPType::ResultColumn, Some(cpp_obj)),
         }
     }
 

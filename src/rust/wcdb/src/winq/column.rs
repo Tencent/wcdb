@@ -14,7 +14,6 @@ use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::{Order, OrderingTerm};
 use crate::winq::result_column::ResultColumn;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
-use crate::winq::schema::Schema;
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
@@ -406,7 +405,7 @@ impl ColumnTrait for Column {
     fn r#as(&self, alias: &str) -> ResultColumn {
         let c_alias = alias.to_cstring();
         let cpp_obj = unsafe { WCDBRustColumn_configAlias(self.get_cpp_obj(), c_alias.as_ptr()) };
-        ResultColumn::new(cpp_obj)
+        ResultColumn::new_with_cpp_obj(cpp_obj)
     }
 
     fn order(&self, order: Order) -> OrderingTerm {

@@ -651,7 +651,7 @@ impl Expression {
         let c_string = alias.to_cstring();
         let cpp_obj =
             unsafe { WCDBRustExpression_configAlias(self.get_cpp_obj(), c_string.as_ptr()) };
-        ResultColumn::new(cpp_obj)
+        ResultColumn::new_with_cpp_obj(cpp_obj)
     }
 
     pub fn case_() -> Self {
