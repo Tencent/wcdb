@@ -24,6 +24,7 @@
 
 #include "Config.hpp"
 #include "Lock.hpp"
+#include <vector>
 
 namespace WCDB {
 
