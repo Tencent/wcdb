@@ -99,7 +99,7 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for Table<'a, T, R> {
         &self,
         columns: Vec<&Column>,
         condition_opt: Option<&Expression>,
-        order_opt: Option<Vec<OrderingTerm>>,
+        order_opt: Option<Vec<&OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<Vec<Value>>> {

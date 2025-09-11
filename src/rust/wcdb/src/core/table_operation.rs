@@ -62,7 +62,7 @@ pub trait TableOperationTrait {
         &self,
         columns: Vec<&Column>,
         condition_opt: Option<&Expression>,
-        order_opt: Option<Vec<OrderingTerm>>,
+        order_opt: Option<Vec<&OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<Vec<Value>>>;
@@ -164,7 +164,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         &self,
         columns: Vec<&Column>,
         condition_opt: Option<&Expression>,
-        order_opt: Option<Vec<OrderingTerm>>,
+        order_opt: Option<Vec<&OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<Vec<Value>>> {
@@ -175,8 +175,8 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         if let Some(expression) = condition_opt {
             binding.where_(&expression);
         }
-        if let Some(order) = order_opt {
-            binding.order_by(&order);
+        if let Some(order_vec) = order_opt {
+            binding.order_by(order_vec);
         }
         if let Some(limit) = limit_opt {
             binding.limit(limit);

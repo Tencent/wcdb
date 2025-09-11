@@ -436,7 +436,7 @@ impl HandleORMOperation {
             select.where_(&condition);
         }
         if let Some(order) = order_opt {
-            select.order_by(&vec![order]);
+            select.order_by(vec![order]);
         }
         select.limit(1);
         if let Some(offset) = offset_opt {
@@ -463,7 +463,7 @@ impl HandleORMOperation {
             select.where_(&condition);
         }
         if let Some(order) = order_opt {
-            select.order_by(&vec![order]);
+            select.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             select.limit(limit);

@@ -173,7 +173,7 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for TableORMOperation<'a, T,
         &self,
         columns: Vec<&Column>,
         condition_opt: Option<&Expression>,
-        order_opt: Option<Vec<OrderingTerm>>,
+        order_opt: Option<Vec<&OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<Vec<Value>>> {
@@ -366,7 +366,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             select.where_(&condition);
         }
         if let Some(order) = order_opt {
-            select.order_by(&vec![order]);
+            select.order_by(vec![order]);
         }
         select.limit(1);
         if let Some(offset) = offset_opt {
@@ -393,7 +393,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             select.where_(&condition);
         }
         if let Some(order) = order_opt {
-            select.order_by(&vec![order]);
+            select.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             select.limit(limit);

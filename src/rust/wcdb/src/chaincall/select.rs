@@ -55,11 +55,7 @@ impl<'a, T> Select<'a, T> {
         self
     }
 
-    pub fn order_by<O, Oi>(&self, order_vec: O) -> &Self
-    where
-        O: IntoIterator<Item = Oi>,
-        Oi: AsRef<OrderingTerm>,
-    {
+    pub fn order_by(&self, order_vec: Vec<&OrderingTerm>) -> &Self {
         self.chain_call.get_statement().order_by(order_vec);
         self
     }

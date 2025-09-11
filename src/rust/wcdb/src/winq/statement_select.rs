@@ -250,18 +250,13 @@ impl StatementSelect {
         self
     }
 
-    pub fn order_by<O, Oi>(&self, order_vec: O) -> &Self
-    where
-        O: IntoIterator<Item = Oi>,
-        Oi: AsRef<OrderingTerm>,
-    {
-        let order_vec: Vec<Oi> = order_vec.into_iter().collect();
+    pub fn order_by(&self, order_vec: Vec<&OrderingTerm>) -> &Self {
         if order_vec.is_empty() {
             return self;
         }
         let mut cpp_orders = vec![];
         for order in order_vec {
-            cpp_orders.push(order.as_ref().get_cpp_obj() as c_longlong);
+            cpp_orders.push(order.get_cpp_obj() as c_longlong);
         }
         let orders_length = cpp_orders.len();
         unsafe {

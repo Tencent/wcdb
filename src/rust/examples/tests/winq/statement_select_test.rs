@@ -26,8 +26,9 @@ pub mod statement_select_test {
         );
 
         let column2 = Column::new("column2", None);
-        let order = vec![column2.order(Order::Desc)];
-        let test = statement.order_by(&order);
+        let order_term = column2.order(Order::Desc);
+        let order_vec = vec![&order_term];
+        let test = statement.order_by(order_vec);
         WinqTool::winq_equal(
             test,
             "SELECT column1 FROM testTable WHERE column1 > 100 ORDER BY column2 DESC LIMIT 100",
