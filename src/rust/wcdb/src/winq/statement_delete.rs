@@ -118,7 +118,7 @@ impl StatementDelete {
         self
     }
 
-    pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
+    pub fn order_by(&self, orders: Vec<&OrderingTerm>) -> &Self {
         if orders.is_empty() {
             return self;
         }

@@ -54,7 +54,7 @@ pub mod simple_sample {
         let ret = table.update_object(
             test_table,
             Some(vec![filed_id]),
-            Some(express),
+            Some(&express),
             None,
             None,
             None,
@@ -72,7 +72,7 @@ pub mod simple_sample {
         let express = filed_id.get_column().lt(10);
         // table.delete_objects_by_expression(express).unwrap();
         let ordering_term = filed_id.get_column().order(Order::Desc);
-        let ret = table.delete_objects(None, Some(ordering_term), Some(10), None);
+        let ret = table.delete_objects(None, Some(&ordering_term), Some(10), None);
         match ret {
             Ok(_) => {}
             Err(error) => {

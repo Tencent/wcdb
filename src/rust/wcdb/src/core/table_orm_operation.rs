@@ -61,8 +61,8 @@ pub trait TableORMOperationTrait<'a, T, R: TableBinding<T>>: TableOperationTrait
 
     fn delete_objects(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
@@ -71,8 +71,8 @@ pub trait TableORMOperationTrait<'a, T, R: TableBinding<T>>: TableOperationTrait
         &self,
         object: T,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
@@ -80,16 +80,16 @@ pub trait TableORMOperationTrait<'a, T, R: TableBinding<T>>: TableOperationTrait
     fn get_first_object(
         &self,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>>;
 
     fn get_all_objects(
         &self,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>>;
@@ -124,8 +124,8 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for TableORMOperation<'a, T,
         &self,
         value: V,
         column: Column,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -143,8 +143,8 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for TableORMOperation<'a, T,
         &self,
         row: &Vec<Value>,
         columns: &Vec<Column>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -160,8 +160,8 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for TableORMOperation<'a, T,
 
     fn delete_value(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -172,7 +172,7 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for TableORMOperation<'a, T,
     fn get_values(
         &self,
         columns: Vec<&Column>,
-        condition_opt: Option<Expression>,
+        condition_opt: Option<&Expression>,
         order_opt: Option<Vec<OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
@@ -297,8 +297,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
 
     fn delete_objects(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -307,7 +307,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             delete.r#where(&condition);
         }
         if let Some(order) = order_opt {
-            delete.order_by(&vec![order]);
+            delete.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             delete.limit(limit);
@@ -323,8 +323,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
         &self,
         object: T,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -336,7 +336,7 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
             update.r#where(&condition);
         }
         if let Some(order) = order_opt {
-            update.order_by(&vec![order]);
+            update.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             update.limit(limit);
@@ -352,8 +352,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
     fn get_first_object(
         &self,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         let select = self.prepare_select();
@@ -378,8 +378,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
     fn get_all_objects(
         &self,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {

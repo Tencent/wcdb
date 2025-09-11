@@ -737,8 +737,8 @@ impl HandleORMOperationTrait for Database {
     fn delete_objects(
         &self,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -758,8 +758,8 @@ impl HandleORMOperationTrait for Database {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -780,8 +780,8 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         self.handle_orm_operation.get_first_object(
@@ -799,8 +799,8 @@ impl HandleORMOperationTrait for Database {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {

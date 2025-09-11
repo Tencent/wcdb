@@ -50,8 +50,8 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for Table<'a, T, R> {
         &self,
         value: V,
         column: Column,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -69,8 +69,8 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for Table<'a, T, R> {
         &self,
         row: &Vec<Value>,
         columns: &Vec<Column>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -86,8 +86,8 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for Table<'a, T, R> {
 
     fn delete_value(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -98,7 +98,7 @@ impl<'a, T, R: TableBinding<T>> TableOperationTrait for Table<'a, T, R> {
     fn get_values(
         &self,
         columns: Vec<&Column>,
-        condition_opt: Option<Expression>,
+        condition_opt: Option<&Expression>,
         order_opt: Option<Vec<OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
@@ -184,8 +184,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for Table<'a, T
 
     fn delete_objects(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -197,8 +197,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for Table<'a, T
         &self,
         object: T,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -215,8 +215,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for Table<'a, T
     fn get_first_object(
         &self,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         self.table_orm_operation
@@ -226,8 +226,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for Table<'a, T
     fn get_all_objects(
         &self,
         fields_opt: Option<Vec<&Field<T>>>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {

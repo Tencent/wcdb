@@ -330,28 +330,28 @@ pub mod orm_test {
         let exp =
             Expression::new(DbAllTypeObject::field_type().get_column()).eq(max.field_type.as_str());
         let db_max_opt = table
-            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(&exp), None, None)
             .unwrap();
         assert!(max == db_max_opt.unwrap());
 
         let exp =
             Expression::new(DbAllTypeObject::field_type().get_column()).eq(min.field_type.as_str());
         let db_min_opt = table
-            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(&exp), None, None)
             .unwrap();
         assert!(min == db_min_opt.unwrap());
 
         let exp = Expression::new(DbAllTypeObject::field_type().get_column())
             .eq(empty.field_type.as_str());
         let db_empty_opt = table
-            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(&exp), None, None)
             .unwrap();
         assert!(empty == db_empty_opt.unwrap());
 
         let exp = Expression::new(DbAllTypeObject::field_type().get_column())
             .eq(random.field_type.as_str());
         let db_random_opt = table
-            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(exp), None, None)
+            .get_first_object(Some(DbAllTypeObject::all_fields()), Some(&exp), None, None)
             .unwrap();
         assert!(random == db_random_opt.unwrap());
 

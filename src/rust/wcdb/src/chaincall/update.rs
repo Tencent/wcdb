@@ -64,7 +64,7 @@ impl<'a, T> Update<'a, T> {
         self
     }
 
-    pub fn order_by(&self, orders: &Vec<OrderingTerm>) -> &Self {
+    pub fn order_by(&self, orders: Vec<&OrderingTerm>) -> &Self {
         self.chain_call.get_statement().order_by(orders);
         self
     }

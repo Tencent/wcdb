@@ -22,8 +22,10 @@ pub mod statement_delete_test {
         WinqTool::winq_equal(test, "DELETE FROM testTable WHERE column1 > 100 LIMIT 100");
 
         let column2 = Column::new("column2", None);
-        let order = vec![column1.order(Order::Asc), column2.order(Order::Desc)];
-        let test = statement.order_by(&order);
+        let order1 = column1.order(Order::Asc);
+        let order2 = column2.order(Order::Desc);
+        let order_vec = vec![&order1, &order2];
+        let test = statement.order_by(order_vec);
         WinqTool::winq_equal(test, "DELETE FROM testTable WHERE column1 > 100 ORDER BY column1 ASC, column2 DESC LIMIT 100");
 
         let test = statement.offset(100);

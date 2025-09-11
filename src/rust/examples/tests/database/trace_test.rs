@@ -194,7 +194,7 @@ impl TraceTest {
                     DbTestObject::all_fields(),
                     TABLE_NAME,
                     None,
-                    Some(DbTestObject::content().get_column().order(Order::Desc)),
+                    Some(&DbTestObject::content().get_column().order(Order::Desc)),
                     None,
                     None
                 )
@@ -309,7 +309,7 @@ impl TraceTest {
                     DbTestObject::all_fields(),
                     TABLE_NAME,
                     None,
-                    Some(DbTestObject::content().get_column().order(Order::Desc)),
+                    Some(&DbTestObject::content().get_column().order(Order::Desc)),
                     None,
                     None
                 )

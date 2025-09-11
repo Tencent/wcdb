@@ -94,9 +94,9 @@ pub mod statement_update_test {
                 .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
-                .order_by(&vec![
-                    Column::new("column1", None).order(Order::Asc),
-                    Column::new("column2", None).order(Order::Desc),
+                .order_by(vec![
+                    &Column::new("column1", None).order(Order::Asc),
+                    &Column::new("column2", None).order(Order::Desc),
                 ]),
             "UPDATE testTable SET column1 = 1 ORDER BY column1 ASC, column2 DESC",
         );

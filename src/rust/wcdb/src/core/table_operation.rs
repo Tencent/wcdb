@@ -34,8 +34,8 @@ pub trait TableOperationTrait {
         &self,
         value: V,
         column: Column,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
@@ -44,16 +44,16 @@ pub trait TableOperationTrait {
         &self,
         row: &Vec<Value>,
         columns: &Vec<Column>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
 
     fn delete_value(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
@@ -61,7 +61,7 @@ pub trait TableOperationTrait {
     fn get_values(
         &self,
         columns: Vec<&Column>,
-        condition_opt: Option<Expression>,
+        condition_opt: Option<&Expression>,
         order_opt: Option<Vec<OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
@@ -97,8 +97,8 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         &self,
         value: V,
         column: Column,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -117,8 +117,8 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
         &self,
         row: &Vec<Value>,
         columns: &Vec<Column>,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -138,8 +138,8 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
 
     fn delete_value(
         &self,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -149,7 +149,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
             binding.r#where(&expression);
         }
         if let Some(order) = order_opt {
-            binding.order_by(&vec![order]);
+            binding.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             binding.limit(limit);
@@ -163,7 +163,7 @@ impl<'a> TableOperationTrait for TableOperation<'a> {
     fn get_values(
         &self,
         columns: Vec<&Column>,
-        condition_opt: Option<Expression>,
+        condition_opt: Option<&Expression>,
         order_opt: Option<Vec<OrderingTerm>>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
@@ -264,13 +264,13 @@ impl<'a> TableOperation<'a> {
         &self,
         row: &Vec<Value>,
         update: &StatementUpdate,
-        expression: Option<Expression>,
-        order: Option<OrderingTerm>,
+        expression: Option<&Expression>,
+        order: Option<&OrderingTerm>,
         limit: Option<i64>,
         offset: Option<i64>,
     ) -> WCDBResult<()> {
         if let Some(order) = order {
-            update.order_by(&vec![order]);
+            update.order_by(vec![order]);
         }
         if let Some(limit) = limit {
             update.limit(limit, None);

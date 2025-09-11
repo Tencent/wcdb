@@ -84,8 +84,8 @@ pub trait HandleORMOperationTrait {
     fn delete_objects(
         &self,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
@@ -95,8 +95,8 @@ pub trait HandleORMOperationTrait {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()>;
@@ -105,8 +105,8 @@ pub trait HandleORMOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>>;
 
@@ -114,8 +114,8 @@ pub trait HandleORMOperationTrait {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>>;
@@ -364,8 +364,8 @@ impl HandleORMOperation {
         handle: Handle,
         auto_invalidate_handle: bool,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -375,7 +375,7 @@ impl HandleORMOperation {
             delete.r#where(&condition);
         }
         if let Some(order) = order_opt {
-            delete.order_by(&vec![order]);
+            delete.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             delete.limit(limit);
@@ -394,8 +394,8 @@ impl HandleORMOperation {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -407,7 +407,7 @@ impl HandleORMOperation {
             update.r#where(&condition);
         }
         if let Some(order) = order_opt {
-            update.order_by(&vec![order]);
+            update.order_by(vec![order]);
         }
         if let Some(limit) = limit_opt {
             update.limit(limit);
@@ -425,8 +425,8 @@ impl HandleORMOperation {
         auto_invalidate_handle: bool,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         let select = self.prepare_select::<T>(handle, auto_invalidate_handle);
@@ -451,8 +451,8 @@ impl HandleORMOperation {
         auto_invalidate_handle: bool,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {

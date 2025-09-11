@@ -418,8 +418,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
     fn delete_objects(
         &self,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -440,8 +440,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         object: T,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<()> {
@@ -463,8 +463,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Option<T>> {
         let handle_inner = self.handle_inner.borrow();
@@ -483,8 +483,8 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
         &self,
         fields: Vec<&Field<T>>,
         table_name: &str,
-        condition_opt: Option<Expression>,
-        order_opt: Option<OrderingTerm>,
+        condition_opt: Option<&Expression>,
+        order_opt: Option<&OrderingTerm>,
         limit_opt: Option<i64>,
         offset_opt: Option<i64>,
     ) -> WCDBResult<Vec<T>> {
