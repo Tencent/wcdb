@@ -426,7 +426,7 @@ impl ExpressionOperableTrait for ExpressionOperable {
     where
         S: Into<ExpressionConvertibleParam<'a>>,
     {
-        self.not_in_(CPPType::Expression, operands, true)
+        self.not_in(CPPType::Expression, operands, true)
     }
 
     fn in_table(&self, table: &str) -> Expression {
@@ -739,7 +739,7 @@ impl ExpressionOperable {
         Self::create_expression(cpp_obj)
     }
 
-    pub(crate) fn not_in_<'a, S>(
+    pub(crate) fn not_in<'a, S>(
         &self,
         left_cpp_type: CPPType,
         operands: Vec<S>,

@@ -255,7 +255,7 @@ impl ExpressionOperableTrait for Column {
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.expression_operable
-            .not_in_(Identifier::get_cpp_type(self), operands, true)
+            .not_in(Identifier::get_cpp_type(self), operands, true)
     }
 
     fn in_table(&self, table: &str) -> Expression {
@@ -476,7 +476,7 @@ impl Column {
             .in_(left_cpp_type, operands, is_not)
     }
 
-    pub(crate) fn not_in_<'a, S>(
+    pub(crate) fn not_in<'a, S>(
         &self,
         left_cpp_type: CPPType,
         operands: Vec<S>,

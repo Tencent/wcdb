@@ -220,7 +220,7 @@ impl<U> ExpressionOperableTrait for Field<U> {
         S: Into<ExpressionConvertibleParam<'a>>,
     {
         self.column
-            .not_in_(Identifier::get_cpp_type(self), operands, true)
+            .not_in(Identifier::get_cpp_type(self), operands, true)
     }
 
     fn in_table(&self, table: &str) -> Expression {
