@@ -5,38 +5,38 @@ use crate::winq::identifier::{CPPType, Identifier};
 use std::ffi::{c_void, CString};
 
 /// 支持 String, &str, &dyn ExpressionConvertibleTrait
-pub enum StringExpressionConvertibleParam<'a> {
+pub enum StringExpression<'a> {
     String(String),
     ExpressionConvertible(&'a dyn ExpressionConvertibleTrait),
 }
 
-impl StringExpressionConvertibleParam<'_> {
+impl StringExpression<'_> {
     pub(crate) fn get_params(self) -> (CPPType, *mut c_void, Option<CString>) {
         match self {
-            StringExpressionConvertibleParam::String(str) => {
+            StringExpression::String(str) => {
                 (CPPType::String, 0 as *mut c_void, Some(str.to_cstring()))
             }
-            StringExpressionConvertibleParam::ExpressionConvertible(exp) => {
+            StringExpression::ExpressionConvertible(exp) => {
                 (Identifier::get_cpp_type(exp), CppObject::get(exp), None)
             }
         }
     }
 }
 
-impl<'a> From<String> for StringExpressionConvertibleParam<'a> {
+impl<'a> From<String> for StringExpression<'a> {
     fn from(value: String) -> Self {
-        StringExpressionConvertibleParam::String(value)
+        StringExpression::String(value)
     }
 }
 
-impl<'a> From<&str> for StringExpressionConvertibleParam<'a> {
+impl<'a> From<&str> for StringExpression<'a> {
     fn from(value: &str) -> Self {
-        StringExpressionConvertibleParam::String(value.to_string())
+        StringExpression::String(value.to_string())
     }
 }
 
-impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for StringExpressionConvertibleParam<'a> {
+impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for StringExpression<'a> {
     fn from(value: &'a T) -> Self {
-        StringExpressionConvertibleParam::ExpressionConvertible(value)
+        StringExpression::ExpressionConvertible(value)
     }
 }

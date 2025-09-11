@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
+use crate::base::param::enum_basic_expression::BasicExpression;
 use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
@@ -123,7 +123,7 @@ impl ColumnConstraint {
 
     pub fn default_to<'a, V>(&self, value: V) -> &Self
     where
-        V: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<BasicExpression<'a>>,
     {
         let (cpp_type, int_value, double_value, string_value_opt) = value.into().get_params();
         let string_ptr = match string_value_opt.as_ref() {

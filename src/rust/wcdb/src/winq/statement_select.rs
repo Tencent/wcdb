@@ -1,8 +1,8 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::string_expression_convertible_param::StringExpressionConvertibleParam;
-use crate::base::param::string_result_column_convertible_param::StringResultColumnConvertibleParam;
-use crate::base::param::string_table_or_subquery_convertible_param::StringTableOrSubqueryConvertibleParam;
+use crate::base::param::enum_string_expression::StringExpression;
+use crate::base::param::enum_string_result_column::StringResultColumn;
+use crate::base::param::enum_string_table_or_subquery::StringTableOrSubquery;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
@@ -125,7 +125,7 @@ impl StatementSelect {
     pub fn select<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringResultColumnConvertibleParam<'a>>,
+        S: Into<StringResultColumn<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -137,13 +137,13 @@ impl StatementSelect {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringResultColumnConvertibleParam::String(str) => {
+                StringResultColumn::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     let c = str.as_str().to_cstring();
                     cpp_str_ptrs.push(c.as_ptr());
                     c_strings.push(c);
                 }
-                StringResultColumnConvertibleParam::ResultColumn(obj) => {
+                StringResultColumn::ResultColumn(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -165,7 +165,7 @@ impl StatementSelect {
     pub fn from<'a, I, S>(&self, table_arg_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         let data_vec = table_arg_vec
             .into_iter()
@@ -181,13 +181,13 @@ impl StatementSelect {
 
         for item in data_vec {
             match item {
-                StringTableOrSubqueryConvertibleParam::String(str) => {
+                StringTableOrSubquery::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     let c = str.as_str().to_cstring();
                     cpp_str_ptrs.push(c.as_ptr());
                     c_strings.push(c);
                 }
-                StringTableOrSubqueryConvertibleParam::TableOrSubquery(obj) => {
+                StringTableOrSubquery::TableOrSubquery(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }
@@ -216,7 +216,7 @@ impl StatementSelect {
     pub fn group_by<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringExpressionConvertibleParam<'a>>,
+        S: Into<StringExpression<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -228,13 +228,13 @@ impl StatementSelect {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringExpressionConvertibleParam::String(str) => {
+                StringExpression::String(str) => {
                     cpp_type_vec.push(CPPType::String as c_int);
                     let c = str.as_str().to_cstring();
                     cpp_str_ptrs.push(c.as_ptr());
                     c_strings.push(c);
                 }
-                StringExpressionConvertibleParam::ExpressionConvertible(obj) => {
+                StringExpression::ExpressionConvertible(obj) => {
                     cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
                     cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
                 }

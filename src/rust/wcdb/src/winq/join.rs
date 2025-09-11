@@ -1,7 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::string_column_trait_param::StringColumnTraitParam;
-use crate::base::param::string_table_or_subquery_convertible_param::StringTableOrSubqueryConvertibleParam;
+use crate::base::param::enum_string_column::StringColumn;
+use crate::base::param::enum_string_table_or_subquery::StringTableOrSubquery;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
@@ -150,14 +150,14 @@ impl TableOrSubqueryConvertibleTrait for Join {}
 impl Join {
     pub fn new<'a, S>(value: S) -> Self
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         let cpp_obj = match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => unsafe {
+            StringTableOrSubquery::String(table_name) => unsafe {
                 let cstr = table_name.to_cstring();
                 WCDBRustJoin_createCppObj(CPPType::String as c_int, 0 as *mut c_void, cstr.as_ptr())
             },
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_createCppObj(
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
                     CppObject::get(table_or_subquery),
@@ -172,10 +172,10 @@ impl Join {
 
     pub fn with<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWith(
@@ -186,7 +186,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWith(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -200,10 +200,10 @@ impl Join {
 
     pub fn join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithJoin(
@@ -214,7 +214,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -228,10 +228,10 @@ impl Join {
 
     pub fn left_outer_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithLeftOuterJoin(
@@ -242,7 +242,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithLeftOuterJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -256,10 +256,10 @@ impl Join {
 
     pub fn left_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithLeftJoin(
@@ -270,7 +270,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithLeftJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -284,10 +284,10 @@ impl Join {
 
     pub fn inner_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithInnerJoin(
@@ -298,7 +298,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithInnerJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -312,10 +312,10 @@ impl Join {
 
     pub fn cross_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithCrossJoin(
@@ -326,7 +326,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithCrossJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -340,10 +340,10 @@ impl Join {
 
     pub fn natural_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithNaturalJoin(
@@ -354,7 +354,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithNaturalJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -368,10 +368,10 @@ impl Join {
 
     pub fn natural_left_outer_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithNaturalLeftOuterJoin(
@@ -382,7 +382,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithNaturalLeftOuterJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -396,10 +396,10 @@ impl Join {
 
     pub fn natural_left_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithNaturalLeftJoin(
@@ -410,7 +410,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithNaturalLeftJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -424,10 +424,10 @@ impl Join {
 
     pub fn natural_inner_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithNaturalInnerJoin(
@@ -438,7 +438,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithNaturalInnerJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -452,10 +452,10 @@ impl Join {
 
     pub fn natural_cross_join<'a, S>(&self, value: S) -> &Join
     where
-        S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
+        S: Into<StringTableOrSubquery<'a>>,
     {
         match value.into() {
-            StringTableOrSubqueryConvertibleParam::String(table_name) => {
+            StringTableOrSubquery::String(table_name) => {
                 let cstr = table_name.to_cstring();
                 unsafe {
                     WCDBRustJoin_configWithNaturalCrossJoin(
@@ -466,7 +466,7 @@ impl Join {
                     );
                 }
             }
-            StringTableOrSubqueryConvertibleParam::TableOrSubquery(table_or_subquery) => unsafe {
+            StringTableOrSubquery::TableOrSubquery(table_or_subquery) => unsafe {
                 WCDBRustJoin_configWithNaturalCrossJoin(
                     self.get_cpp_obj(),
                     Identifier::get_cpp_type(table_or_subquery) as c_int,
@@ -488,7 +488,7 @@ impl Join {
     pub fn using<'a, I, S>(&self, column_vec: I) -> &Join
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringColumnTraitParam<'a>>,
+        S: Into<StringColumn<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -499,10 +499,10 @@ impl Join {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringColumnTraitParam::String(str) => {
+                StringColumn::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StringColumnTraitParam::Column(obj) => {
+                StringColumn::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }

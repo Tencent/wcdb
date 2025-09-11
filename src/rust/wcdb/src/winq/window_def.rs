@@ -10,6 +10,7 @@ use std::ffi::{c_char, c_double, c_int, c_void};
 
 extern "C" {
     fn WCDBRustWindowDef_createCppObj() -> *mut c_void;
+
     fn WCDBRustWindowDef_configPartitions(
         cpp_obj: *mut c_void,
         types: *const c_int,

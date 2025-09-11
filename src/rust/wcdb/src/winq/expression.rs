@@ -1,8 +1,8 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
-use crate::base::param::string_expression_convertible_param::StringExpressionConvertibleParam;
-use crate::base::param::string_schema_param::StringSchemaParam;
+use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::base::param::enum_string_expression::StringExpression;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
 use crate::winq::bind_parameter::BindParameter;
 use crate::winq::column::Column;
@@ -161,135 +161,135 @@ impl ExpressionOperableTrait for Expression {
 
     fn multiply<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.multiply(operand)
     }
 
     fn divide<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.divide(operand)
     }
 
     fn mod_<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.mod_(operand)
     }
 
     fn add<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.add(operand)
     }
 
     fn minus<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.minus(operand)
     }
 
     fn left_shift<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.left_shift(operand)
     }
 
     fn right_shift<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.right_shift(operand)
     }
 
     fn bit_and<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.bit_and(operand)
     }
 
     fn bit_or<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.bit_or(operand)
     }
 
     fn lt<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.lt(operand)
     }
 
     fn le<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.le(operand)
     }
 
     fn gt<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.gt(operand)
     }
 
     fn ge<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.ge(operand)
     }
 
     fn eq<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.eq(operand)
     }
 
     fn not_eq<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.not_eq(operand)
     }
 
     fn concat<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.concat(operand)
     }
 
     fn between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
-        V: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
+        V: Into<BasicExpression<'a>>,
     {
         self.expression_operable.between(begin, end)
     }
 
     fn not_between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
-        V: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
+        V: Into<BasicExpression<'a>>,
     {
         self.expression_operable.not_between(begin, end)
     }
 
     fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        S: Into<ExpressionConvertibleParam<'a>>,
+        S: Into<BasicExpression<'a>>,
     {
         self.expression_operable
             .in_(Identifier::get_cpp_type(self), operands, false)
@@ -297,7 +297,7 @@ impl ExpressionOperableTrait for Expression {
 
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        S: Into<ExpressionConvertibleParam<'a>>,
+        S: Into<BasicExpression<'a>>,
     {
         self.expression_operable
             .not_in(Identifier::get_cpp_type(self), operands, true)
@@ -349,14 +349,14 @@ impl ExpressionOperableTrait for Expression {
 
     fn is<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.is(operand)
     }
 
     fn is_not<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.expression_operable.is_not(operand)
     }
@@ -541,7 +541,7 @@ impl Expression {
 
     pub fn schema<'a, T>(&self, param: T) -> &Self
     where
-        T: Into<StringSchemaParam<'a>>,
+        T: Into<StringSchema<'a>>,
     {
         let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
         let name_ptr = match name_opt.as_ref() {
@@ -582,7 +582,7 @@ impl Expression {
 
     pub fn argument<'a, T>(&self, param: T) -> &Self
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         let (arg_type, arg_long, arg_double, arg_cstr_opt) = param.into().get_params();
         let arg_string_ptr = match arg_cstr_opt.as_ref() {
@@ -627,7 +627,7 @@ impl Expression {
 
     pub fn cast<'a, T>(param: T) -> Self
     where
-        T: Into<StringExpressionConvertibleParam<'a>>,
+        T: Into<StringExpression<'a>>,
     {
         let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
         let name_ptr = name_opt
@@ -665,7 +665,7 @@ impl Expression {
     // todo qixinbing 是否把 Option 放到 T 内部？
     pub fn case<'a, T>(param_opt: Option<T>) -> Self
     where
-        T: Into<StringExpressionConvertibleParam<'a>>,
+        T: Into<StringExpression<'a>>,
     {
         let param = match param_opt {
             None => {
@@ -687,7 +687,7 @@ impl Expression {
 
     pub fn when<'a, T>(&self, param: T) -> &Self
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
         let arg_string_ptr = match arg_string_opt.as_ref() {
@@ -708,7 +708,7 @@ impl Expression {
 
     pub fn then<'a, T>(&self, param: T) -> &Self
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
         let arg_string_ptr = match arg_string_opt.as_ref() {
@@ -729,7 +729,7 @@ impl Expression {
 
     pub fn else_<'a, T>(&self, param: T) -> &Self
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
         let arg_string_ptr = match arg_string_opt.as_ref() {

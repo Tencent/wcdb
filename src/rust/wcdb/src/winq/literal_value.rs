@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
+use crate::base::param::enum_basic_expression::BasicExpression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_void};
@@ -57,7 +57,7 @@ impl IdentifierConvertibleTrait for LiteralValue {
 impl LiteralValue {
     pub fn new<'a, T>(param: T) -> Self
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         let (arg_type, arg_long, arg_double, arg_string_opt) = param.into().get_params();
         let arg_string_ptr = match arg_string_opt.as_ref() {

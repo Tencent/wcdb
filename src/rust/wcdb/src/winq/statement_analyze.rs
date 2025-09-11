@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::string_schema_param::StringSchemaParam;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -89,7 +89,7 @@ impl StatementAnalyze {
 
     pub fn schema<'a, T>(&self, schema: T) -> &Self
     where
-        T: Into<StringSchemaParam<'a>>,
+        T: Into<StringSchema<'a>>,
     {
         let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
         let name_ptr = name_opt

@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::string_indexed_column_convertible_param::StringIndexedColumnConvertibleParam;
+use crate::base::param::enum_string_indexed_column::StringIndexedColumn;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -91,7 +91,7 @@ impl TableConstraint {
     pub fn indexed_by<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringIndexedColumnConvertibleParam<'a>>,
+        S: Into<StringIndexedColumn<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -102,10 +102,10 @@ impl TableConstraint {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringIndexedColumnConvertibleParam::String(str) => {
+                StringIndexedColumn::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StringIndexedColumnConvertibleParam::IndexedColumnConvertible(obj) => {
+                StringIndexedColumn::IndexedColumnConvertible(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }

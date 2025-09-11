@@ -24,9 +24,10 @@ use std::sync::{Arc, Mutex};
 
 // 定义性能跟踪回调的特性
 pub trait TracePerformanceCallbackTrait:
-Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/PerformanceInfo) + Send
-{}
+Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/PerformanceInfo) + Send {}
+
 pub type TracePerformanceCallback = Box<dyn TracePerformanceCallbackTrait>;
+
 impl<T> TracePerformanceCallbackTrait for T where
     T: Fn(
             /*tag*/ i64,
@@ -40,7 +41,9 @@ impl<T> TracePerformanceCallbackTrait for T where
 
 // 定义 sql 执行回调的特性
 pub trait TraceSqlCallbackTrait: Fn(/*tag*/i64, /*path*/String, /*handleId*/i64, /*sql*/String, /*info*/String) + Send {}
+
 pub type TraceSqlCallback = Box<dyn TraceSqlCallbackTrait>;
+
 impl<T> TraceSqlCallbackTrait for T where
     T: Fn(
             /*tag*/ i64,
@@ -54,12 +57,16 @@ impl<T> TraceSqlCallbackTrait for T where
 
 // 定义异常回调的特性
 pub trait TraceExceptionCallbackTrait: Fn(WCDBException) + Send {}
+
 pub type TraceExceptionCallback = Box<dyn TraceExceptionCallbackTrait>;
+
 impl<T> TraceExceptionCallbackTrait for T where T: Fn(WCDBException) + Send {}
 
 // 定义损坏检测回调的特性
 pub trait CorruptionNotificationTrait: Fn(Database) + Send {}
+
 impl<T> CorruptionNotificationTrait for T where T: Fn(Database) + Send {}
+
 pub type CorruptionNotificationCallback = Box<dyn CorruptionNotificationTrait>;
 
 pub trait BackupFilterTrait {
@@ -68,16 +75,22 @@ pub trait BackupFilterTrait {
 
 // 定义备份回调的特性
 pub trait BackupFilterCallbackTrait: Fn(&str) -> bool + Send {}
+
 impl<T> BackupFilterCallbackTrait for T where T: Fn(&str) -> bool + Send {}
+
 pub type BackupFilterCallback = Box<dyn BackupFilterCallbackTrait>;
 
 // return True to continue current operation.
 pub trait ProgressMonitorTrait: Fn(/*percentage*/f64, /*increment*/f64) -> bool + Send {}
+
 impl<T> ProgressMonitorTrait for T where T: Fn(/*percentage*/ f64, /*increment*/ f64) -> bool + Send {}
+
 pub type ProgressMonitorTraitCallback = Box<dyn ProgressMonitorTrait>;
 
 pub trait SetDatabaseConfigTrait: Fn(Handle) -> bool + Send + Sync {}
+
 pub type SetDatabaseConfigCallback = Box<dyn SetDatabaseConfigTrait>;
+
 impl<T> SetDatabaseConfigTrait for T where T: Fn(Handle) -> bool + Send + Sync {}
 
 // 定义一个全局静态变量来存储闭包
@@ -113,6 +126,7 @@ extern "C" {
     fn WCDBRustDatabase_getPath(cpp_obj: *mut c_void) -> *const c_char;
 
     fn WCDBRustDatabase_removeFiles(cpp_obj: *mut c_void) -> bool;
+
     fn WCDBRustDatabase_configCipher(
         cpp_obj: *mut c_void,
         key: *const u8,
@@ -120,6 +134,7 @@ extern "C" {
         page_size: c_int,
         version: c_int,
     );
+
     fn WCDBRustCore_setDefaultCipherConfig(version: c_int);
 
     fn WCDBRustDatabase_close(
@@ -141,6 +156,7 @@ extern "C" {
     fn WCDBRustDatabase_unblockade(cpp_obj: *mut c_void);
 
     fn WCDBRustDatabase_isBlockaded(cpp_obj: *mut c_void) -> bool;
+
     fn WCDBRustDatabase_canOpen(cpp_obj: *mut c_void) -> bool;
 
     fn WCDBRustDatabase_isOpened(cpp_obj: *mut c_void) -> bool;
@@ -219,6 +235,7 @@ extern "C" {
     fn WCDBRustDatabase_removeDepositedFiles(cpp_obj: *mut c_void) -> bool;
 
     fn WCDBRustDatabase_containDepositedFiles(cpp_obj: *mut c_void) -> bool;
+
     fn WCDBRustDatabase_truncateCheckpoint(cpp_obj: *mut c_void) -> bool;
 
     fn WCDBRustDatabase_setAutoCheckpointEnable(cpp_obj: *mut c_void, enable: bool);

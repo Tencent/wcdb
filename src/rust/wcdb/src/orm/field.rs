@@ -1,7 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
-use crate::base::param::string_schema_param::StringSchemaParam;
+use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::column::{Column, ColumnStaticTrait, ColumnTrait};
 use crate::winq::column_def::ColumnDef;
@@ -81,135 +81,135 @@ impl<U> ExpressionOperableTrait for Field<U> {
 
     fn multiply<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.multiply(operand)
     }
 
     fn divide<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.divide(operand)
     }
 
     fn mod_<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.mod_(operand)
     }
 
     fn add<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.add(operand)
     }
 
     fn minus<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.minus(operand)
     }
 
     fn left_shift<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.left_shift(operand)
     }
 
     fn right_shift<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.right_shift(operand)
     }
 
     fn bit_and<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.bit_and(operand)
     }
 
     fn bit_or<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.bit_or(operand)
     }
 
     fn lt<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.lt(operand)
     }
 
     fn le<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.le(operand)
     }
 
     fn gt<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.gt(operand)
     }
 
     fn ge<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.ge(operand)
     }
 
     fn eq<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.eq(operand)
     }
 
     fn not_eq<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.not_eq(operand)
     }
 
     fn concat<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.concat(operand)
     }
 
     fn between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
-        V: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
+        V: Into<BasicExpression<'a>>,
     {
         self.column.between(begin, end)
     }
 
     fn not_between<'a, T, V>(&self, begin: T, end: V) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
-        V: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
+        V: Into<BasicExpression<'a>>,
     {
         self.column.not_between(begin, end)
     }
 
     fn in_<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        S: Into<ExpressionConvertibleParam<'a>>,
+        S: Into<BasicExpression<'a>>,
     {
         self.column
             .in_(Identifier::get_cpp_type(self), operands, false)
@@ -217,7 +217,7 @@ impl<U> ExpressionOperableTrait for Field<U> {
 
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
-        S: Into<ExpressionConvertibleParam<'a>>,
+        S: Into<BasicExpression<'a>>,
     {
         self.column
             .not_in(Identifier::get_cpp_type(self), operands, true)
@@ -269,14 +269,14 @@ impl<U> ExpressionOperableTrait for Field<U> {
 
     fn is<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.is(operand)
     }
 
     fn is_not<'a, T>(&self, operand: T) -> Expression
     where
-        T: Into<ExpressionConvertibleParam<'a>>,
+        T: Into<BasicExpression<'a>>,
     {
         self.column.is_not(operand)
     }
@@ -387,7 +387,7 @@ impl<U> ColumnStaticTrait for Field<U> {
         self.column.table(table)
     }
 
-    fn of<'a, T: Into<StringSchemaParam<'a>>>(&self, schema: T) -> &Column {
+    fn of<'a, T: Into<StringSchema<'a>>>(&self, schema: T) -> &Column {
         self.column.of(schema)
     }
 

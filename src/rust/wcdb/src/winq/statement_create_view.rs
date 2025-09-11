@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::string_column_trait_param::StringColumnTraitParam;
+use crate::base::param::enum_string_column::StringColumn;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -143,7 +143,7 @@ impl StatementCreateView {
     pub fn with_columns<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringColumnTraitParam<'a>>,
+        S: Into<StringColumn<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -154,10 +154,10 @@ impl StatementCreateView {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringColumnTraitParam::String(str) => {
+                StringColumn::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StringColumnTraitParam::Column(obj) => {
+                StringColumn::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }

@@ -20,12 +20,19 @@ use std::sync::Arc;
 
 extern "C" {
     fn WCDBRustHandle_getError(cpp_obj: *mut c_void) -> *mut c_void;
+
     fn WCDBRustHandle_getMainStatement(cpp_obj: *mut c_void) -> *mut c_void;
+
     fn WCDBRustHandle_tableExist(cpp_obj: *mut c_void, table_name: *const c_char) -> c_int;
+
     fn WCDBRustHandle_execute(cpp_obj: *mut c_void, statement: *mut c_void) -> bool;
+
     fn WCDBRustHandle_executeSQL(cpp_obj: *mut c_void, sql: *const c_char) -> bool;
+
     fn WCDBRustHandle_getChanges(cpp_obj: *mut c_void) -> c_int;
+
     fn WCDBRustHandle_getLastInsertRowid(cpp_obj: *mut c_void) -> i64;
+
     fn WCDBRustHandle_runTransaction(
         cpp_obj: *mut c_void,
         transaction_callback: extern "C" fn(

@@ -10,7 +10,9 @@ use std::sync::RwLock;
 
 extern "C" {
     fn WCDBRustBinding_create() -> *mut c_void;
+
     fn WCDBRustBinding_addColumnDef(cpp_obj: *mut c_void, column_def: *mut c_void);
+
     fn WCDBRustBinding_enableAutoIncrementForExistingTable(cpp_obj: *mut c_void);
 
     fn WCDBRustBinding_addIndex(
@@ -23,6 +25,7 @@ extern "C" {
     fn WCDBRustBinding_configWithoutRowId(cpp_obj: *mut c_void);
 
     fn WCDBRustBinding_addTableConstraint(cpp_obj: *mut c_void, table_constraint: *mut c_void);
+
     fn WCDBRustBinding_configVirtualModule(cpp_obj: *mut c_void, module: *const c_char);
 
     fn WCDBRustBinding_configVirtualModuleArgument(cpp_obj: *mut c_void, argument: *const c_char);
@@ -32,6 +35,7 @@ extern "C" {
         path: *const c_char,
         handle: *mut c_void,
     ) -> bool;
+
     fn WCDBRustBinding_getBaseBinding(cpp_obj: *mut c_void) -> *mut c_void;
 }
 

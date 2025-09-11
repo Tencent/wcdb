@@ -1,6 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::string_result_column_convertible_param::StringResultColumnConvertibleParam;
+use crate::base::param::enum_string_result_column::StringResultColumn;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -68,10 +68,10 @@ impl ResultColumn {
 
     pub fn new<'a, T>(param: T) -> Self
     where
-        T: Into<StringResultColumnConvertibleParam<'a>>,
+        T: Into<StringResultColumn<'a>>,
     {
         let cpp_obj = match param.into() {
-            StringResultColumnConvertibleParam::String(column_name) => {
+            StringResultColumn::String(column_name) => {
                 let cstr = column_name.to_cstring();
                 unsafe {
                     WCDBRustResultColumn_create(
@@ -81,7 +81,7 @@ impl ResultColumn {
                     )
                 }
             }
-            StringResultColumnConvertibleParam::ResultColumn(result_column_convertible) => unsafe {
+            StringResultColumn::ResultColumn(result_column_convertible) => unsafe {
                 WCDBRustResultColumn_create(
                     Identifier::get_cpp_type(result_column_convertible) as c_int,
                     CppObject::get(result_column_convertible),

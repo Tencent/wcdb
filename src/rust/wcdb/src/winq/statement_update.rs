@@ -1,9 +1,9 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::base::param::expression_convertible_param::ExpressionConvertibleParam;
-use crate::base::param::i64_expression_convertible_param::I64ExpressionConvertibleParam;
-use crate::base::param::string_column_trait_param::StringColumnTraitParam;
-use crate::base::param::string_qualified_table_param::StringQualifiedTableParam;
+use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::base::param::enum_int_expression::IntExpression;
+use crate::base::param::enum_string_column::StringColumn;
+use crate::base::param::enum_string_qualified_table::StringQualifiedTable;
 use crate::utils::ToCString;
 use crate::winq::common_table_expression::CommonTableExpression;
 use crate::winq::conflict_action::ConflictAction;
@@ -188,18 +188,18 @@ impl StatementUpdate {
 
     pub fn update<'a, S>(&self, table_vec: S) -> &Self
     where
-        S: Into<StringQualifiedTableParam<'a>>,
+        S: Into<StringQualifiedTable<'a>>,
     {
         let value = table_vec.into();
         let mut c_string_opt = None; // 持有 CString ，避免被提前释放
         let (cpp_type, table, table_name) = match value {
-            StringQualifiedTableParam::String(str) => {
+            StringQualifiedTable::String(str) => {
                 let table_name = str.as_str().to_cstring();
                 let c_ptr = table_name.as_ptr();
                 c_string_opt = Some(table_name);
                 (CPPType::String, null_mut(), c_ptr)
             }
-            StringQualifiedTableParam::QualifiedTable(obj) => {
+            StringQualifiedTable::QualifiedTable(obj) => {
                 let cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                 (cpp_type, CppObject::get(obj), null())
             }
@@ -268,7 +268,7 @@ impl StatementUpdate {
     pub fn set_columns_to_bind_parameters<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringColumnTraitParam<'a>>,
+        S: Into<StringColumn<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -279,10 +279,10 @@ impl StatementUpdate {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringColumnTraitParam::String(str) => {
+                StringColumn::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StringColumnTraitParam::Column(obj) => {
+                StringColumn::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }
@@ -318,7 +318,7 @@ impl StatementUpdate {
     pub fn set<'a, I, S>(&self, column_vec: I) -> &Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<StringColumnTraitParam<'a>>,
+        S: Into<StringColumn<'a>>,
     {
         let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
         if data_vec.is_empty() {
@@ -329,10 +329,10 @@ impl StatementUpdate {
         let mut cpp_obj_vec = vec![];
         for item in data_vec {
             match item {
-                StringColumnTraitParam::String(str) => {
+                StringColumn::String(str) => {
                     cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
                 }
-                StringColumnTraitParam::Column(obj) => {
+                StringColumn::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
                     cpp_obj_vec.push(CppObject::get(obj));
                 }
@@ -364,7 +364,7 @@ impl StatementUpdate {
 
     pub fn to<'a, V>(&self, value: V) -> &Self
     where
-        V: Into<ExpressionConvertibleParam<'a>>,
+        V: Into<BasicExpression<'a>>,
     {
         let (cpp_type, int_value, double_value, string_value_opt) = value.into().get_params();
         let string_ptr = match string_value_opt.as_ref() {
@@ -410,16 +410,16 @@ impl StatementUpdate {
 
     pub fn limit<'a, V, T>(&self, from: V, to: T) -> &Self
     where
-        V: Into<I64ExpressionConvertibleParam<'a>>,
-        T: Into<I64ExpressionConvertibleParam<'a>>,
+        V: Into<IntExpression<'a>>,
+        T: Into<IntExpression<'a>>,
     {
         let to = to.into();
 
         match to {
-            I64ExpressionConvertibleParam::I64(to_value) => {
+            IntExpression::Int(to_value) => {
                 self.config_limit_range_to_i64(from, to_value);
             }
-            I64ExpressionConvertibleParam::ExpressionConvertible(to_value_obj) => {
+            IntExpression::ExpressionConvertible(to_value_obj) => {
                 match to_value_obj {
                     None => {
                         self.config_limit_count(from);
@@ -435,18 +435,18 @@ impl StatementUpdate {
 
     fn config_limit_count<'a, V>(&self, from: V)
     where
-        V: Into<I64ExpressionConvertibleParam<'a>>,
+        V: Into<IntExpression<'a>>,
     {
         let from = from.into();
         match from {
-            I64ExpressionConvertibleParam::I64(from_value) => unsafe {
+            IntExpression::Int(from_value) => unsafe {
                 WCDBRustStatementUpdate_configLimitCount(
                     self.get_cpp_obj(),
                     CPPType::Int as i32,
                     from_value,
                 );
             },
-            I64ExpressionConvertibleParam::ExpressionConvertible(from_value_opt) => {
+            IntExpression::ExpressionConvertible(from_value_opt) => {
                 match from_value_opt {
                     None => unsafe {
                         WCDBRustStatementUpdate_configLimitCount(
@@ -469,11 +469,11 @@ impl StatementUpdate {
 
     fn config_limit_range<'a, V>(&self, from: V, to: &'a dyn ExpressionConvertibleTrait)
     where
-        V: Into<I64ExpressionConvertibleParam<'a>>,
+        V: Into<IntExpression<'a>>,
     {
         let from = from.into();
         match from {
-            I64ExpressionConvertibleParam::I64(from_value) => unsafe {
+            IntExpression::Int(from_value) => unsafe {
                 WCDBRustStatementUpdate_configLimitRange(
                     self.get_cpp_obj(),
                     CPPType::Int as c_int,
@@ -482,7 +482,7 @@ impl StatementUpdate {
                     CppObject::get(to) as c_longlong,
                 )
             },
-            I64ExpressionConvertibleParam::ExpressionConvertible(from_value_opt) => {
+            IntExpression::ExpressionConvertible(from_value_opt) => {
                 match from_value_opt {
                     None => unsafe {
                         WCDBRustStatementUpdate_configLimitRange(
@@ -509,11 +509,11 @@ impl StatementUpdate {
 
     fn config_limit_range_to_i64<'a, V>(&self, from: V, to: i64)
     where
-        V: Into<I64ExpressionConvertibleParam<'a>>,
+        V: Into<IntExpression<'a>>,
     {
         let from = from.into();
         match from {
-            I64ExpressionConvertibleParam::I64(from_value) => unsafe {
+            IntExpression::Int(from_value) => unsafe {
                 WCDBRustStatementUpdate_configLimitRange(
                     self.get_cpp_obj(),
                     CPPType::Int as c_int,
@@ -522,7 +522,7 @@ impl StatementUpdate {
                     to as c_longlong,
                 )
             },
-            I64ExpressionConvertibleParam::ExpressionConvertible(from_value_opt) => {
+            IntExpression::ExpressionConvertible(from_value_opt) => {
                 match from_value_opt {
                     None => unsafe {
                         WCDBRustStatementUpdate_configLimitRange(
@@ -549,12 +549,12 @@ impl StatementUpdate {
 
     pub fn offset<'a, V>(&self, offset: V) -> &Self
     where
-        V: Into<I64ExpressionConvertibleParam<'a>>,
+        V: Into<IntExpression<'a>>,
     {
         let offset = offset.into();
         let (config_type, offset) = match offset {
-            I64ExpressionConvertibleParam::I64(value) => (CPPType::Int, value as *mut c_void),
-            I64ExpressionConvertibleParam::ExpressionConvertible(value_opt) => match value_opt {
+            IntExpression::Int(value) => (CPPType::Int, value as *mut c_void),
+            IntExpression::ExpressionConvertible(value_opt) => match value_opt {
                 None => (CPPType::Null, 0 as *mut c_void),
                 Some(value) => unsafe { (Identifier::get_cpp_type(value), CppObject::get(value)) },
             },
