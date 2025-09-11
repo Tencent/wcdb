@@ -61,7 +61,7 @@ Tag DatabasePool::getTag(const UnsafeStringView &path)
     SharedLockGuard lockGuard(m_lock);
     auto iter = m_databases.find(path);
     if (iter != m_databases.end()) {
-        return get(iter).get()->getTag();
+        return iter->second.database->getTag();
     } else {
         return Tag::invalid();
     }

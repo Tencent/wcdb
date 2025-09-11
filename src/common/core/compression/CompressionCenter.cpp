@@ -229,7 +229,7 @@ CompressionCenter::compressContent(const UnsafeData& data, DictId dictId, InnerH
         errorReportHandle->notifyError(
         Error::Code::ZstdError,
         nullptr,
-        StringView::formatted("Compress fail: %s", ZSTD_getErrorName(boundSize)));
+        StringView::formatted("Compress fail: %s", ZSTD_getErrorName(compressSize)));
         return NullOpt;
     }
     if (compressSize >= data.size()) {

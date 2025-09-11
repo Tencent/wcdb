@@ -1,7 +1,7 @@
 # WCDB
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/wcdb/pulls)
-[![Release Version](https://img.shields.io/badge/Release-2.1.13-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
+[![Release Version](https://img.shields.io/badge/Release-2.1.14-brightgreen.svg)](https://github.com/Tencent/wcdb/releases)
 [![Language](https://img.shields.io/badge/Language-%20C++%20%7C%20Java%20%7C%20Kotlin%20%7C%20Swift%20%7C%20Objc-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)[![Platform](https://img.shields.io/badge/Platform-%20iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux%20%7C%20OpenHarmony-brightgreen.svg)](https://github.com/Tencent/wcdb/wiki)
 
 中文版本请参看[这里][wcdb-wiki]
@@ -114,6 +114,8 @@ Tutorials of different languages can be found below:
 # Contributing
 
 If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
+
+WCDB 正式加入[TDS 腾讯端服务产品联盟](https://tds-union.qq.com/)，携手联盟其他成员，共同致力于构建开放共赢的大前端技术产品生态。
 
 # 信息公示
 

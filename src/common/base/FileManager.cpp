@@ -167,6 +167,9 @@ bool FileManager::createFileHardLink(const UnsafeStringView &from, const UnsafeS
     if (CreateHardLinkW(GetPathString(to), GetPathString(from), NULL)) {
         return true;
     }
+    if (CopyFile(GetPathString(from), GetPathString(to), true)) {
+        return true;
+    }
     setThreadedWinError(to);
     return false;
 #endif
@@ -319,23 +322,27 @@ Optional<uint32_t> FileManager::getFileIdentifier(const UnsafeStringView &path)
         setThreadedWinError(path);
         return NullOpt;
     }
-    FILE_ID_INFO fileIdInfo;
-    if (!GetFileInformationByHandleEx(hFile, FileIdInfo, &fileIdInfo, sizeof(fileIdInfo))) {
-        setThreadedWinError(path);
+    BY_HANDLE_FILE_INFORMATION fileInfo;
+    if (GetFileInformationByHandle(hFile, &fileInfo)) {
         CloseHandle(hFile);
-        return NullOpt;
-    }
-    CloseHandle(hFile);
 
-    // Copy FileID and VolumeSerialNumber to a buffer
-    constexpr size_t size
-    = sizeof(fileIdInfo.FileId) + sizeof(fileIdInfo.VolumeSerialNumber);
-    unsigned char buffer[size];
-    memcpy(buffer, &fileIdInfo.FileId, sizeof(fileIdInfo.FileId));
-    memcpy(buffer + sizeof(fileIdInfo.FileId),
-           &fileIdInfo.VolumeSerialNumber,
-           sizeof(fileIdInfo.VolumeSerialNumber));
-    return UnsafeData(buffer, size).hash();
+        constexpr size_t size = sizeof(fileInfo.nFileIndexHigh)
+                                + sizeof(fileInfo.nFileIndexLow)
+                                + sizeof(fileInfo.dwVolumeSerialNumber);
+        unsigned char buffer[size];
+        memcpy(buffer, &fileInfo.nFileIndexHigh, sizeof(fileInfo.nFileIndexHigh));
+        memcpy(buffer + sizeof(fileInfo.nFileIndexHigh),
+               &fileInfo.nFileIndexLow,
+               sizeof(fileInfo.nFileIndexLow));
+        memcpy(buffer + sizeof(fileInfo.nFileIndexHigh) + sizeof(fileInfo.nFileIndexLow),
+               &fileInfo.dwVolumeSerialNumber,
+               sizeof(fileInfo.dwVolumeSerialNumber));
+        return UnsafeData(buffer, size).hash();
+    }
+
+    setThreadedWinError(path);
+    CloseHandle(hFile);
+    return NullOpt;
 #endif
 }
 
