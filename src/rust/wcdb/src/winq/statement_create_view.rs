@@ -145,8 +145,8 @@ impl StatementCreateView {
         I: IntoIterator<Item = S>,
         S: Into<StringColumnTraitParam<'a>>,
     {
-        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
-        if data_vec.peek().is_none() {
+        let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
         let mut cpp_type = CPPType::String;

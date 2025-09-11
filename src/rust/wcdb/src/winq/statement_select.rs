@@ -127,8 +127,8 @@ impl StatementSelect {
         I: IntoIterator<Item = S>,
         S: Into<StringResultColumnConvertibleParam<'a>>,
     {
-        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
-        if data_vec.peek().is_none() {
+        let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
         let mut cpp_type_vec = vec![];
@@ -167,8 +167,11 @@ impl StatementSelect {
         I: IntoIterator<Item = S>,
         S: Into<StringTableOrSubqueryConvertibleParam<'a>>,
     {
-        let mut data_vec = table_arg_vec.into_iter().map(Into::into).peekable();
-        if data_vec.peek().is_none() {
+        let data_vec = table_arg_vec
+            .into_iter()
+            .map(Into::into)
+            .collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
         let mut cpp_type_vec = vec![];
@@ -215,8 +218,8 @@ impl StatementSelect {
         I: IntoIterator<Item = S>,
         S: Into<StringExpressionConvertibleParam<'a>>,
     {
-        let mut data_vec = column_vec.into_iter().map(Into::into).peekable();
-        if data_vec.peek().is_none() {
+        let data_vec = column_vec.into_iter().map(Into::into).collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
         let mut cpp_type_vec = vec![];
