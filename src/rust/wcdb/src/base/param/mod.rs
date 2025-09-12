@@ -1,4 +1,5 @@
 pub mod enum_basic_expression;
+pub mod enum_expression_ref;
 pub mod enum_int_expression;
 pub mod enum_string_column;
 pub mod enum_string_expression;

@@ -27,3 +27,9 @@ impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for IntExpression<'a> 
         IntExpression::ExpressionConvertible(value)
     }
 }
+
+impl<'a> From<&'a dyn ExpressionConvertibleTrait> for IntExpression<'a> {
+    fn from(value: &'a dyn ExpressionConvertibleTrait) -> Self {
+        IntExpression::ExpressionConvertible(Some(value))
+    }
+}

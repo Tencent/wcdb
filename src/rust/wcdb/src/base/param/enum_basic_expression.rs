@@ -99,15 +99,30 @@ impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for BasicExpression<'a
     }
 }
 
+impl<'a> From<&'a dyn ExpressionConvertibleTrait> for BasicExpression<'a> {
+    fn from(value: &'a dyn ExpressionConvertibleTrait) -> Self {
+        BasicExpression::ExpressionConvertible(Some(value))
+    }
+}
+
 impl<'a> From<Option<&'a ExpressionOperable>> for BasicExpression<'a> {
-    fn from(v: Option<&'a ExpressionOperable>) -> Self {
-        v.map(|x| x as &dyn ExpressionConvertibleTrait).into()
+    fn from(value: Option<&'a ExpressionOperable>) -> Self {
+        let v = value.map(|x| x as &dyn ExpressionConvertibleTrait).into();
+        BasicExpression::ExpressionConvertible(v)
+    }
+}
+
+impl<'a> From<&'a ExpressionOperable> for BasicExpression<'a> {
+    fn from(value: &'a ExpressionOperable) -> Self {
+        let v = value as &dyn ExpressionConvertibleTrait;
+        BasicExpression::ExpressionConvertible(Some(v))
     }
 }
 
 impl<'a> From<Option<&'a Expression>> for BasicExpression<'a> {
     fn from(value: Option<&'a Expression>) -> Self {
-        value.map(|x| x as &dyn ExpressionConvertibleTrait).into()
+        let v = value.map(|x| x as &dyn ExpressionConvertibleTrait).into();
+        BasicExpression::ExpressionConvertible(v)
     }
 }
 

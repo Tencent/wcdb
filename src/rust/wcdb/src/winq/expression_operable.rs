@@ -1,6 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::base::param::enum_expression_ref::ExpressionRef;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
@@ -113,9 +114,13 @@ pub trait ExpressionOperableTrait {
 
     fn not_null(&self) -> Expression;
 
-    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression;
+    fn or<'a, E>(&self, operand: E) -> Expression
+    where
+        E: Into<ExpressionRef<'a>>;
 
-    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression;
+    fn and<'a, E>(&self, operand: E) -> Expression
+    where
+        E: Into<ExpressionRef<'a>>;
 
     fn multiply<'a, T>(&self, operand: T) -> Expression
     where
@@ -279,12 +284,24 @@ impl ExpressionOperableTrait for ExpressionOperable {
         self.null_operate(true)
     }
 
-    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
-        self.binary_operate(operand, BinaryOperatorType::Or, false)
+    fn or<'a, E>(&self, operand: E) -> Expression
+    where
+        E: Into<ExpressionRef<'a>>,
+    {
+        let exp = match operand.into() {
+            ExpressionRef::ExpressionConvertible(obj) => obj,
+        };
+        self.binary_operate(exp, BinaryOperatorType::Or, false)
     }
 
-    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
-        self.binary_operate(operand, BinaryOperatorType::And, false)
+    fn and<'a, E>(&self, operand: E) -> Expression
+    where
+        E: Into<ExpressionRef<'a>>,
+    {
+        let exp = match operand.into() {
+            ExpressionRef::ExpressionConvertible(obj) => obj,
+        };
+        self.binary_operate(exp, BinaryOperatorType::And, false)
     }
 
     fn multiply<'a, T>(&self, operand: T) -> Expression

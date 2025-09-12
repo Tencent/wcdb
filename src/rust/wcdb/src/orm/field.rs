@@ -1,6 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::base::param::enum_expression_ref::ExpressionRef;
 use crate::base::param::enum_string_schema::StringSchema;
 use crate::orm::table_binding::TableBinding;
 use crate::winq::column::{Column, ColumnStaticTrait, ColumnTrait};
@@ -71,11 +72,17 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.not_null()
     }
 
-    fn or<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
+    fn or<'a, E>(&self, operand: E) -> Expression
+    where
+        E: Into<ExpressionRef<'a>>,
+    {
         self.column.or(operand)
     }
 
-    fn and<'a>(&self, operand: Option<&'a dyn ExpressionConvertibleTrait>) -> Expression {
+    fn and<'a, E>(&self, operand: E) -> Expression
+    where
+        E: Into<ExpressionRef<'a>>,
+    {
         self.column.and(operand)
     }
 

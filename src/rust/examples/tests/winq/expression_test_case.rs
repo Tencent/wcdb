@@ -138,9 +138,9 @@ pub mod expression_test {
         let mut column_left = Column::new("left", None);
         let column_right = Column::new("right", None);
 
-        let desc = column_left.or(Some(&column_right)).get_description();
+        let desc = column_left.or(&column_right).get_description();
         assert_eq!(desc.as_str(), "left OR right");
-        let desc = column_left.and(Some(&column_right)).get_description();
+        let desc = column_left.and(&column_right).get_description();
         assert_eq!(desc.as_str(), "left AND right");
 
         // multiply assert
