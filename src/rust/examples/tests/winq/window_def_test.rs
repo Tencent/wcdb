@@ -32,8 +32,8 @@ pub mod window_def_test {
         let window_def = WindowDef::new().order_by(&vec![&ordering_term]);
         WinqTool::winq_equal(&window_def, "(ORDER BY column1 ASC)");
 
-        let frame_spec = FrameSpec::new().range().unbounded_preceding();
-        let window_def = WindowDef::new().frame_spec(&frame_spec);
+        let window_def =
+            WindowDef::new().frame_spec(FrameSpec::new().range().unbounded_preceding());
         WinqTool::winq_equal(&window_def, "(RANGE UNBOUNDED PRECEDING)");
 
         let column1 = Column::new("column1", None).add(1);
@@ -41,11 +41,10 @@ pub mod window_def_test {
         let column2 = Column::new("column2", None);
         let expression = Expression::new(&column2);
         let ordering_term: OrderingTerm = Column::new("column1", None).order(Order::Asc);
-        let frame_spec = FrameSpec::new().range().unbounded_preceding();
         let window_def = WindowDef::new()
             .partition(&vec![&column1, &expression])
             .order_by(&vec![&ordering_term])
-            .frame_spec(&frame_spec);
+            .frame_spec(&FrameSpec::new().range().unbounded_preceding());
         WinqTool::winq_equal(
             &window_def,
             "(PARTITION BY column1 + 1, column2 ORDER BY column1 ASC RANGE UNBOUNDED PRECEDING)",

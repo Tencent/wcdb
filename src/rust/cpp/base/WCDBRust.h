@@ -205,7 +205,7 @@
         parameter##_common.intValue = (long long)parameter##_object;   \
     }
 
-#define WCDBRustObjectOrIntegerParameter(parameter) jint parameter##_type, jlong parameter##_long
+#define WCDBRustObjectOrIntegerParameter(parameter) int parameter##_type, long long parameter##_long
 
 #define WCDBRustCreateObjectOrIntegerCommonValue(parameter) \
     CPPCommonValue parameter##_common;                      \

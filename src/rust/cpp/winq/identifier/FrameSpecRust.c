@@ -30,89 +30,78 @@ void WCDBRustFrameSpecClassMethod(configRange, void* self) {
     WCDBRustBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigRange(selfStruct);
 }
-//
-// void WCDBRustFrameSpecClassMethod(configRows, jlong self)
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBFrameSpecConfigRows(selfStruct);
-// }
+
+void WCDBRustFrameSpecClassMethod(configRows, void* self) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBFrameSpecConfigRows(selfStruct);
+}
 
 void WCDBRustFrameSpecClassMethod(configUnboundedPreceding, void* self) {
     WCDBRustBridgeStruct(CPPFrameSpec, self);
     WCDBFrameSpecConfigUnboundedPreceding(selfStruct);
 }
 
-// void WCDBRustFrameSpecClassMethod(configPreceding,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression))
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBRustCreateObjectOrIntegerCommonValue(expression);
-//     WCDBFrameSpecConfigPreceding2(selfStruct, expression_common);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configCurrentRow, jlong self)
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBFrameSpecConfigCurrentRow(selfStruct);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configBetweenUnboundedPreceding, jlong self)
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBFrameSpecConfigBetweenUnboundedPreceding(selfStruct);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configBetweenPreceding,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression))
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBRustCreateObjectOrIntegerCommonValue(expression);
-//     WCDBFrameSpecConfigBetweenPreceding2(selfStruct, expression_common);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configBetweenCurrentRow, jlong self)
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBFrameSpecConfigBetweenCurrentRow(selfStruct);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configBetweenFollowing,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression))
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBRustCreateObjectOrIntegerCommonValue(expression);
-//     WCDBFrameSpecConfigBetweenFollowing2(selfStruct, expression_common);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configAndPreceding,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression))
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBRustCreateObjectOrIntegerCommonValue(expression);
-//     WCDBFrameSpecConfigAndPreceding2(selfStruct, expression_common);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configAndCurrentRow, jlong self)
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBFrameSpecConfigAndCurrentRow(selfStruct);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configAndFollowing,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression))
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBRustCreateObjectOrIntegerCommonValue(expression);
-//     WCDBFrameSpecConfigAndFollowing2(selfStruct, expression_common);
-// }
-//
-// void WCDBRustFrameSpecClassMethod(configAndUnboundedFollowing, jlong self)
-// {
-//     WCDBRustBridgeStruct(CPPFrameSpec, self);
-//     WCDBFrameSpecConfigAndUnboundedFollowing(selfStruct);
-// }
+void WCDBRustFrameSpecClassMethod(configPreceding,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression)) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBRustCreateObjectOrIntegerCommonValue(expression);
+    WCDBFrameSpecConfigPreceding2(selfStruct, expression_common);
+}
+
+void WCDBRustFrameSpecClassMethod(configCurrentRow, void* self) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBFrameSpecConfigCurrentRow(selfStruct);
+}
+
+void WCDBRustFrameSpecClassMethod(configBetweenUnboundedPreceding, void* self) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBFrameSpecConfigBetweenUnboundedPreceding(selfStruct);
+}
+
+void WCDBRustFrameSpecClassMethod(configBetweenPreceding,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression)) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBRustCreateObjectOrIntegerCommonValue(expression);
+    WCDBFrameSpecConfigBetweenPreceding2(selfStruct, expression_common);
+}
+
+void WCDBRustFrameSpecClassMethod(configBetweenCurrentRow, void* self) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBFrameSpecConfigBetweenCurrentRow(selfStruct);
+}
+
+void WCDBRustFrameSpecClassMethod(configBetweenFollowing,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression)) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBRustCreateObjectOrIntegerCommonValue(expression);
+    WCDBFrameSpecConfigBetweenFollowing2(selfStruct, expression_common);
+}
+
+void WCDBRustFrameSpecClassMethod(configAndPreceding,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression)) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBRustCreateObjectOrIntegerCommonValue(expression);
+    WCDBFrameSpecConfigAndPreceding2(selfStruct, expression_common);
+}
+
+void WCDBRustFrameSpecClassMethod(configAndCurrentRow, void* self) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBFrameSpecConfigAndCurrentRow(selfStruct);
+}
+
+void WCDBRustFrameSpecClassMethod(configAndFollowing,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression)) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBRustCreateObjectOrIntegerCommonValue(expression);
+    WCDBFrameSpecConfigAndFollowing2(selfStruct, expression_common);
+}
+
+void WCDBRustFrameSpecClassMethod(configAndUnboundedFollowing, void* self) {
+    WCDBRustBridgeStruct(CPPFrameSpec, self);
+    WCDBFrameSpecConfigAndUnboundedFollowing(selfStruct);
+}

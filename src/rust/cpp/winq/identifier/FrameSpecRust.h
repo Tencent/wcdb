@@ -32,25 +32,25 @@
 
 void* WCDBRustFrameSpecClassMethodWithNoArg(createCppObj);
 void WCDBRustFrameSpecClassMethod(configRange, void* self);
-// void WCDBRustFrameSpecClassMethod(configRows, jlong self);
+void WCDBRustFrameSpecClassMethod(configRows, void* self);
 void WCDBRustFrameSpecClassMethod(configUnboundedPreceding, void* self);
-// void WCDBRustFrameSpecClassMethod(configPreceding,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression));
-// void WCDBRustFrameSpecClassMethod(configCurrentRow, jlong self);
-// void WCDBRustFrameSpecClassMethod(configBetweenUnboundedPreceding, jlong self);
-// void WCDBRustFrameSpecClassMethod(configBetweenPreceding,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression));
-// void WCDBRustFrameSpecClassMethod(configBetweenCurrentRow, jlong self);
-// void WCDBRustFrameSpecClassMethod(configBetweenFollowing,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression));
-// void WCDBRustFrameSpecClassMethod(configAndPreceding,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression));
-// void WCDBRustFrameSpecClassMethod(configAndCurrentRow, jlong self);
-// void WCDBRustFrameSpecClassMethod(configAndFollowing,
-//                                  jlong self,
-//                                  WCDBRustObjectOrIntegerParameter(expression));
-// void WCDBRustFrameSpecClassMethod(configAndUnboundedFollowing, jlong self);
+void WCDBRustFrameSpecClassMethod(configPreceding,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression));
+void WCDBRustFrameSpecClassMethod(configCurrentRow, void* self);
+void WCDBRustFrameSpecClassMethod(configBetweenUnboundedPreceding, void* self);
+void WCDBRustFrameSpecClassMethod(configBetweenPreceding,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression));
+void WCDBRustFrameSpecClassMethod(configBetweenCurrentRow, void* self);
+void WCDBRustFrameSpecClassMethod(configBetweenFollowing,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression));
+void WCDBRustFrameSpecClassMethod(configAndPreceding,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression));
+void WCDBRustFrameSpecClassMethod(configAndCurrentRow, void* self);
+void WCDBRustFrameSpecClassMethod(configAndFollowing,
+                                  void* self,
+                                  WCDBRustObjectOrIntegerParameter(expression));
+void WCDBRustFrameSpecClassMethod(configAndUnboundedFollowing, void* self);

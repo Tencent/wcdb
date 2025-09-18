@@ -5,6 +5,7 @@ pub(crate) mod column_test;
 pub(crate) mod common_table_expression_test;
 pub(crate) mod expression_test_case;
 pub(crate) mod foreign_key_test;
+pub(crate) mod frame_spec_test;
 pub(crate) mod join_test;
 pub(crate) mod ordering_term_test;
 pub(crate) mod pragma_test;
