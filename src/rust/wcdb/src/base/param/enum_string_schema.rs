@@ -41,3 +41,9 @@ impl<'a> From<Option<&'a Schema>> for StringSchema<'a> {
         StringSchema::Schema(value)
     }
 }
+
+impl<'a> From<&'a Schema> for StringSchema<'a> {
+    fn from(value: &'a Schema) -> Self {
+        StringSchema::Schema(Some(value))
+    }
+}

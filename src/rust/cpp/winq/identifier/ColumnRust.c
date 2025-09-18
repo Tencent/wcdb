@@ -45,13 +45,11 @@ void WCDBRustColumnClassMethod(inTable, void* column, const char* table) {
     WCDBColumnInTable(columnStruct, table);
 }
 
-// void WCDBRustColumnClassMethod(ofSchema, jlong column, WCDBRustObjectOrStringParameter(schema))
-//{
-//     WCDBRustBridgeStruct(CPPColumn, column);
-//     WCDBRustCreateObjectOrStringCommonValue(schema, true);
-//     WCDBColumnOfSchema2(columnStruct, schema_common);
-//     WCDBRustTryReleaseStringInCommonValue(schema);
-// }
+void WCDBRustColumnClassMethod(ofSchema, void* column, WCDBRustObjectOrStringParameter(schema)) {
+    WCDBRustBridgeStruct(CPPColumn, column);
+    WCDBRustCreateObjectOrStringCommonValue(schema, true);
+    WCDBColumnOfSchema2(columnStruct, schema_common);
+}
 
 void* WCDBRustColumnClassMethod(configAlias, void* column, const char* alias) {
     WCDBRustBridgeStruct(CPPColumn, column);

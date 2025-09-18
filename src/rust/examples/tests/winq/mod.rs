@@ -1,6 +1,7 @@
 pub(crate) mod bind_parameter_test;
 pub(crate) mod column_constraint_test;
-mod common_table_expression_test;
+pub(crate) mod column_test;
+pub(crate) mod common_table_expression_test;
 pub(crate) mod expression_test_case;
 pub(crate) mod foreign_key_test;
 pub(crate) mod join_test;
