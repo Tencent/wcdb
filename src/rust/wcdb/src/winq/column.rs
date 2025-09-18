@@ -277,6 +277,10 @@ impl ExpressionOperableTrait for Column {
         self.expression_operable.collate(collation)
     }
 
+    fn substr(&self, start: i64, length: i64) -> Expression {
+        self.expression_operable.substr(start, length)
+    }
+
     fn like(&self, content: &str) -> Expression {
         self.expression_operable.like(content)
     }

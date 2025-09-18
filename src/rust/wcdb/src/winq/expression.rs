@@ -4,6 +4,7 @@ use crate::base::param::enum_basic_expression::BasicExpression;
 use crate::base::param::enum_expression_ref::ExpressionRef;
 use crate::base::param::enum_string_expression::StringExpression;
 use crate::base::param::enum_string_schema::StringSchema;
+use crate::base::param::enum_string_window_def::StringWindowDef;
 use crate::utils::ToCString;
 use crate::winq::bind_parameter::BindParameter;
 use crate::winq::column::Column;
@@ -320,6 +321,10 @@ impl ExpressionOperableTrait for Expression {
 
     fn collate(&self, collation: &str) -> Expression {
         self.expression_operable.collate(collation)
+    }
+
+    fn substr(&self, start: i64, length: i64) -> Expression {
+        self.expression_operable.substr(start, length)
     }
 
     fn like(&self, content: &str) -> Expression {
@@ -768,10 +773,27 @@ impl Expression {
         self
     }
 
-    // pub fn over<T: ExpressionOverParam>(&self, param: T) -> &Self {
-    //     param.call_native(self.get_cpp_obj());
-    //     self
-    // }
+    pub fn over<'a, T>(&self, window: T) -> &Self
+    where
+        T: Into<StringWindowDef<'a>>,
+    {
+        match window.into() {
+            StringWindowDef::String(str) => {
+                unsafe {
+                    WCDBRustExpression_overWindow(self.get_cpp_obj(), str.to_cstring().as_ptr());
+                };
+            }
+            StringWindowDef::WindowDef(window_def) => {
+                unsafe {
+                    WCDBRustExpression_overWindowDef(
+                        self.get_cpp_obj(),
+                        CppObject::get(window_def),
+                    );
+                };
+            }
+        }
+        self
+    }
 }
 
 pub enum ExpressionNewParam<'a> {

@@ -9,6 +9,7 @@ pub mod expression_test {
     use wcdb::winq::identifier::IdentifierTrait;
     use wcdb::winq::literal_value::LiteralValue;
     use wcdb::winq::statement_select::StatementSelect;
+    use wcdb::winq::window_def::WindowDef;
 
     #[test]
     pub fn test_expression() {
@@ -97,23 +98,25 @@ pub mod expression_test {
             "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0)",
         );
 
-        // let expression = Expression::window_function("testWindowFunction")
-        //     .invoke()
-        //     .argument(&column)
-        //     .filter(&column.not_eq(0))
-        //     .over("testWindow");
-        // WinqTool::winq_equal(
-        //     &expression,
-        //     "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER testWindow",
-        // );
+        let expression = Expression::window_function("testWindowFunction");
+        expression
+            .invoke()
+            .argument(&column)
+            .filter(&column.not_eq(0))
+            .over("testWindow");
+        WinqTool::winq_equal(
+            &expression,
+            "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER testWindow",
+        );
 
-        // let window_def = WindowDef::new().partition(&vec![&column]);
-        // let expression = Expression::window_function("testWindowFunction")
-        //     .invoke()
-        //     .argument(&column)
-        //     .filter(&column.not_eq(0))
-        //     .over_with_window_def(&window_def);
-        // WinqTool::winq_equal(&expression, "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER(PARTITION BY testColumn)");
+        let window_def = WindowDef::new().partition(&vec![&column]);
+        let expression = Expression::window_function("testWindowFunction");
+        expression
+            .invoke()
+            .argument(&column)
+            .filter(&column.not_eq(0))
+            .over(&window_def);
+        WinqTool::winq_equal(&expression, "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER(PARTITION BY testColumn)");
     }
 
     #[test]
@@ -560,8 +563,8 @@ pub mod expression_test {
         let left = Column::new("left", None);
         let right: &str = "right";
 
-        // let desc = left.substr(1, 2).get_description();
-        // assert_eq!(desc.as_str(), "SUBSTR(left, 1, 2)");
+        let desc = left.substr(1, 2).get_description();
+        assert_eq!(desc.as_str(), "SUBSTR(left, 1, 2)");
 
         let desc = left.like(right).get_description();
         assert_eq!(desc.as_str(), "left LIKE 'right'");

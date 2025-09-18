@@ -210,6 +210,8 @@ pub trait ExpressionOperableTrait {
 
     fn collate(&self, collation: &str) -> Expression;
 
+    fn substr(&self, start: i64, length: i64) -> Expression;
+
     fn like(&self, content: &str) -> Expression;
 
     fn not_like(&self, content: &str) -> Expression;
@@ -481,19 +483,13 @@ impl ExpressionOperableTrait for ExpressionOperable {
         Self::create_expression(cpp_obj)
     }
 
-    // pub fn substr_int(&self, start: i32, length: i32) -> Expression {
-    //     Expression::function("SUBSTR")
-    //         .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    //         .argument_int(start)
-    //         .argument_int(length)
-    // }
-
-    // pub fn substr_long(&self, start: i64, length: i64) -> Expression {
-    //     Expression::function("SUBSTR")
-    //         .argument_expression_convertible_trait(left_cpp_type, CppObject::get(self))
-    //         .argument_long(start)
-    //         .argument_long(length)
-    // }
+    fn substr(&self, start: i64, length: i64) -> Expression {
+        let exp = Expression::function("SUBSTR");
+        exp.argument(Some(self));
+        exp.argument(start);
+        exp.argument(length);
+        exp
+    }
 
     fn like(&self, content: &str) -> Expression {
         self.binary_operate(content, BinaryOperatorType::Like, false)

@@ -242,6 +242,10 @@ impl<U> ExpressionOperableTrait for Field<U> {
         self.column.collate(collation)
     }
 
+    fn substr(&self, start: i64, length: i64) -> Expression {
+        self.column.substr(start, length)
+    }
+
     fn like(&self, content: &str) -> Expression {
         self.column.like(content)
     }
