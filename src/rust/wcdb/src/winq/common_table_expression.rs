@@ -4,6 +4,7 @@ use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use crate::winq::statement_select::StatementSelect;
 use std::ffi::{c_char, c_void};
 
 extern "C" {
@@ -11,7 +12,10 @@ extern "C" {
 
     fn WCDBRustCommonTableExpression_configColumn(self_obj: *mut c_void, column: *mut c_void);
 
-    fn WCDBRustCommonTableExpression_configSelect(self_obj: *mut c_void, select: *mut c_void);
+    fn WCDBRustCommonTableExpression_configSelectStatement(
+        self_obj: *mut c_void,
+        select: *mut c_void,
+    );
 }
 
 pub struct CommonTableExpression {
@@ -64,12 +68,22 @@ impl CommonTableExpression {
         }
     }
 
-    pub fn column(&self, column: Column) -> &Self {
+    pub fn column(&self, column: &Column) -> &Self {
         unsafe {
             WCDBRustCommonTableExpression_configColumn(
                 self.identifier.get_cpp_obj(),
                 column.get_cpp_obj(),
             );
+        }
+        self
+    }
+
+    pub fn as_(&self, select: &StatementSelect) -> &Self {
+        unsafe {
+            WCDBRustCommonTableExpression_configSelectStatement(
+                self.get_cpp_obj(),
+                CppObject::get(select),
+            )
         }
         self
     }
