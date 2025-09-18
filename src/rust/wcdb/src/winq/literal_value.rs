@@ -1,6 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_void};
@@ -12,6 +13,12 @@ extern "C" {
         value_double: c_double,
         value_string: *const c_char,
     ) -> *mut c_void;
+
+    fn WCDBRustLiteralValue_createWithCurrentTime() -> *mut c_void;
+
+    fn WCDBRustLiteralValue_createWithCurrentDate() -> *mut c_void;
+
+    fn WCDBRustLiteralValue_createWithCurrentTimestamp() -> *mut c_void;
 }
 
 pub struct LiteralValue {
@@ -54,6 +61,8 @@ impl IdentifierConvertibleTrait for LiteralValue {
     }
 }
 
+impl ExpressionConvertibleTrait for LiteralValue {}
+
 impl LiteralValue {
     pub fn new<'a, T>(param: T) -> Self
     where
@@ -70,5 +79,32 @@ impl LiteralValue {
         LiteralValue {
             identifier: Identifier::new(CPPType::LiteralValue, Some(cpp_obj)),
         }
+    }
+
+    fn default() -> Self {
+        LiteralValue {
+            identifier: Identifier::new(CPPType::LiteralValue, None),
+        }
+    }
+
+    pub fn current_time() -> Self {
+        let mut ret = LiteralValue::default();
+        let cpp_obj = unsafe { WCDBRustLiteralValue_createWithCurrentTime() };
+        ret.set_cpp_obj(cpp_obj);
+        ret
+    }
+
+    pub fn current_date() -> Self {
+        let mut ret = LiteralValue::default();
+        let cpp_obj = unsafe { WCDBRustLiteralValue_createWithCurrentDate() };
+        ret.set_cpp_obj(cpp_obj);
+        ret
+    }
+
+    pub fn current_time_stamp() -> Self {
+        let mut ret = LiteralValue::default();
+        let cpp_obj = unsafe { WCDBRustLiteralValue_createWithCurrentTimestamp() };
+        ret.set_cpp_obj(cpp_obj);
+        ret
     }
 }

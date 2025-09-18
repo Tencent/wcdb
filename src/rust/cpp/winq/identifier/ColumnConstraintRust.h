@@ -53,7 +53,7 @@ void WCDBRustColumnConstraintClassMethod(configDefaultValue,
                                          WCDBRustCommonValueParameter(value));
 
 void WCDBRustColumnConstraintClassMethod(configCollation, void* constraint, const char* collation);
-//
-// void WCDBRustColumnConstraintClassMethod(configForeignKey, jlong constraint, jlong foreignKey);
-//
+
+void WCDBRustColumnConstraintClassMethod(configForeignKey, void* constraint, void* foreignKey);
+
 void WCDBRustColumnConstraintClassMethod(configUnindexed, void* constraint);

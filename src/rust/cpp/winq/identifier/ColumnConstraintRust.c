@@ -79,14 +79,13 @@ void WCDBRustColumnConstraintClassMethod(configCollation, void* constraint, cons
     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigCollation(constraintStruct, collation);
 }
-//
-// void WCDBRustColumnConstraintClassMethod(configForeignKey, jlong constraint, jlong foreignKey)
-//{
-//    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
-//    WCDBRustBridgeStruct(CPPForeignKey, foreignKey);
-//    WCDBColumnConstraintConfigForeignKey(constraintStruct, foreignKeyStruct);
-//}
-//
+
+void WCDBRustColumnConstraintClassMethod(configForeignKey, void* constraint, void* foreignKey) {
+    WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
+    WCDBRustBridgeStruct(CPPForeignKey, foreignKey);
+    WCDBColumnConstraintConfigForeignKey(constraintStruct, foreignKeyStruct);
+}
+
 void WCDBRustColumnConstraintClassMethod(configUnIndex, void* constraint) {
     WCDBRustBridgeStruct(CPPColumnConstraint, constraint);
     WCDBColumnConstraintConfigUnIndexed(constraintStruct);

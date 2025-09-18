@@ -5,6 +5,7 @@ use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::{CPPType, Identifier};
+use crate::winq::literal_value::LiteralValue;
 use libc::c_longlong;
 use std::ffi::{c_double, c_void, CString};
 
@@ -140,6 +141,18 @@ impl<'a> From<Option<&'a Column>> for BasicExpression<'a> {
 
 impl<'a> From<&'a Column> for BasicExpression<'a> {
     fn from(value: &'a Column) -> Self {
+        BasicExpression::ExpressionConvertible(Some(value))
+    }
+}
+
+impl<'a> From<Option<&'a LiteralValue>> for BasicExpression<'a> {
+    fn from(value: Option<&'a LiteralValue>) -> Self {
+        value.map(|x| x as &dyn ExpressionConvertibleTrait).into()
+    }
+}
+
+impl<'a> From<&'a LiteralValue> for BasicExpression<'a> {
+    fn from(value: &'a LiteralValue) -> Self {
         BasicExpression::ExpressionConvertible(Some(value))
     }
 }

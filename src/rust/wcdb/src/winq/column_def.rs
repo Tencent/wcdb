@@ -1,9 +1,11 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_basic_expression::BasicExpression;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::column_constraint::ColumnConstraint;
 use crate::winq::column_type::ColumnType;
+use crate::winq::foreign_key::ForeignKey;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_int, c_void};
@@ -105,6 +107,38 @@ impl ColumnDef {
             WCDBRustColumnDef_constraint(self.get_cpp_obj(), CppObject::get(constraint));
         }
         self
+    }
+
+    pub fn make_primary(&self, is_auto_increment: Option<bool>) -> &Self {
+        let column_constraint = ColumnConstraint::new(None);
+        column_constraint.primary_key();
+        if let Some(true) = is_auto_increment {
+            column_constraint.auto_increment();
+        }
+        self.constraint(&column_constraint)
+    }
+
+    pub fn make_default_to<'a, T>(&self, value: T) -> &Self
+    where
+        T: Into<BasicExpression<'a>>,
+    {
+        self.constraint(ColumnConstraint::new(None).default_to(value))
+    }
+
+    pub fn make_unique(&self) -> &Self {
+        self.constraint(ColumnConstraint::new(None).unique())
+    }
+
+    pub fn make_not_null(&self) -> &Self {
+        self.constraint(ColumnConstraint::new(None).not_null())
+    }
+
+    pub fn make_foreign_key(&self, foreign_key: &ForeignKey) -> &Self {
+        self.constraint(ColumnConstraint::new(None).foreign_key(foreign_key))
+    }
+
+    pub fn make_not_indexed(&self) -> &Self {
+        self.constraint(ColumnConstraint::new(None).un_index())
     }
 }
 

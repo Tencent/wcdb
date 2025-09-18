@@ -3,6 +3,7 @@ use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
 use crate::utils::ToCString;
 use crate::winq::conflict_action::ConflictAction;
+use crate::winq::foreign_key::ForeignKey;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
@@ -28,6 +29,8 @@ extern "C" {
     );
 
     fn WCDBRustColumnConstraint_configCollation(cpp_obj: *mut c_void, collation: *const c_char);
+
+    fn WCDBRustColumnConstraint_configForeignKey(cpp_obj: *mut c_void, foreign_key: *mut c_void);
 
     fn WCDBRustColumnConstraint_configUnIndex(cpp_obj: *mut c_void);
 }
@@ -163,6 +166,16 @@ impl ColumnConstraint {
     pub fn collate(&self, collation: &str) -> &Self {
         let cstr = collation.to_cstring();
         unsafe { WCDBRustColumnConstraint_configCollation(self.get_cpp_obj(), cstr.as_ptr()) }
+        self
+    }
+
+    pub fn foreign_key(&self, foreign_key: &ForeignKey) -> &Self {
+        unsafe {
+            WCDBRustColumnConstraint_configForeignKey(
+                self.get_cpp_obj(),
+                CppObject::get(foreign_key),
+            );
+        }
         self
     }
 
