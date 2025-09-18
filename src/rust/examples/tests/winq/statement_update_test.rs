@@ -106,7 +106,7 @@ pub mod statement_update_test {
                 .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
-                .limit(1, None),
+                .limit(1),
             "UPDATE testTable SET column1 = 1 LIMIT 1",
         );
 
@@ -115,7 +115,7 @@ pub mod statement_update_test {
                 .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
-                .limit(1, 2),
+                .limit_range(1, 2),
             "UPDATE testTable SET column1 = 1 LIMIT 1, 2",
         );
 
@@ -124,7 +124,7 @@ pub mod statement_update_test {
                 .update(test_table_str)
                 .set(&column1_vec)
                 .to(1)
-                .limit(1, None)
+                .limit(1)
                 .offset(3),
             "UPDATE testTable SET column1 = 1 LIMIT 1 OFFSET 3",
         );

@@ -273,7 +273,7 @@ impl<'a> TableOperation<'a> {
             update.order_by(vec![order]);
         }
         if let Some(limit) = limit {
-            update.limit(limit, None);
+            update.limit(limit);
         }
         if let Some(offset) = offset {
             update.offset(offset);

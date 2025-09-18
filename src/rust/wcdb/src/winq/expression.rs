@@ -653,7 +653,6 @@ impl Expression {
         }
     }
 
-    // todo qixinbing as 方法合并
     pub fn as_(&self, column_type: ColumnType) -> &Self {
         unsafe { WCDBRustExpression_as(self.get_cpp_obj(), column_type as c_int) };
         &self

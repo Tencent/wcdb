@@ -8,7 +8,6 @@ use crate::utils::ToCString;
 use crate::winq::common_table_expression::CommonTableExpression;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::expression::Expression;
-use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
@@ -28,7 +27,7 @@ extern "C" {
         expressions_length: c_int,
     );
 
-    // fn WCDBRustStatementUpdate_configRecursive(cpp_obj: *mut c_void);
+    fn WCDBRustStatementUpdate_configRecursive(cpp_obj: *mut c_void);
 
     fn WCDBRustStatementUpdate_configTable(
         cpp_obj: *mut c_void,
@@ -181,8 +180,7 @@ impl StatementUpdate {
                 cpp_obj_vec.len() as c_int,
             );
         }
-        // todo qixinbing 待实现
-        // unsafe { WCDBRustStatementUpdate_configRecursive(self.get_cpp_obj()) }
+        unsafe { WCDBRustStatementUpdate_configRecursive(self.get_cpp_obj()) }
         self
     }
 
@@ -408,135 +406,38 @@ impl StatementUpdate {
         self
     }
 
-    pub fn limit<'a, V, T>(&self, from: V, to: T) -> &Self
+    pub fn limit<'a, T>(&self, count: T) -> &Self
     where
-        V: Into<IntExpression<'a>>,
         T: Into<IntExpression<'a>>,
     {
-        let to = to.into();
-
-        match to {
-            IntExpression::Int(to_value) => {
-                self.config_limit_range_to_i64(from, to_value);
-            }
-            IntExpression::ExpressionConvertible(to_value_obj) => match to_value_obj {
-                None => {
-                    self.config_limit_count(from);
-                }
-                Some(to_value) => {
-                    self.config_limit_range(from, to_value);
-                }
-            },
+        let (cpp_type, cpp_value) = count.into().get_params();
+        unsafe {
+            WCDBRustStatementUpdate_configLimitCount(
+                self.get_cpp_obj(),
+                cpp_type as i32,
+                cpp_value,
+            );
         }
         self
     }
 
-    fn config_limit_count<'a, V>(&self, from: V)
+    pub fn limit_range<'a, V, T>(&self, from: V, to: T) -> &Self
     where
         V: Into<IntExpression<'a>>,
+        T: Into<IntExpression<'a>>,
     {
-        let from = from.into();
-        match from {
-            IntExpression::Int(from_value) => unsafe {
-                WCDBRustStatementUpdate_configLimitCount(
-                    self.get_cpp_obj(),
-                    CPPType::Int as i32,
-                    from_value,
-                );
-            },
-            IntExpression::ExpressionConvertible(from_value_opt) => match from_value_opt {
-                None => unsafe {
-                    WCDBRustStatementUpdate_configLimitCount(
-                        self.get_cpp_obj(),
-                        CPPType::Null as c_int,
-                        0,
-                    );
-                },
-                Some(from_value) => unsafe {
-                    WCDBRustStatementUpdate_configLimitCount(
-                        self.get_cpp_obj(),
-                        Identifier::get_cpp_type(from_value) as c_int,
-                        CppObject::get(from_value) as c_longlong,
-                    );
-                },
-            },
+        let (from_cpp_type, from_cpp_value) = from.into().get_params();
+        let (to_cpp_type, to_cpp_value) = to.into().get_params();
+        unsafe {
+            WCDBRustStatementUpdate_configLimitRange(
+                self.get_cpp_obj(),
+                from_cpp_type as c_int,
+                from_cpp_value,
+                to_cpp_type as c_int,
+                to_cpp_value as c_longlong,
+            )
         }
-    }
-
-    fn config_limit_range<'a, V>(&self, from: V, to: &'a dyn ExpressionConvertibleTrait)
-    where
-        V: Into<IntExpression<'a>>,
-    {
-        let from = from.into();
-        match from {
-            IntExpression::Int(from_value) => unsafe {
-                WCDBRustStatementUpdate_configLimitRange(
-                    self.get_cpp_obj(),
-                    CPPType::Int as c_int,
-                    from_value as c_longlong,
-                    Identifier::get_cpp_type(to) as c_int,
-                    CppObject::get(to) as c_longlong,
-                )
-            },
-            IntExpression::ExpressionConvertible(from_value_opt) => match from_value_opt {
-                None => unsafe {
-                    WCDBRustStatementUpdate_configLimitRange(
-                        self.get_cpp_obj(),
-                        CPPType::Null as c_int,
-                        0 as c_longlong,
-                        Identifier::get_cpp_type(to) as c_int,
-                        CppObject::get(to) as c_longlong,
-                    )
-                },
-                Some(from_value) => unsafe {
-                    WCDBRustStatementUpdate_configLimitRange(
-                        self.get_cpp_obj(),
-                        Identifier::get_cpp_type(from_value) as c_int,
-                        CppObject::get(from_value) as c_longlong,
-                        Identifier::get_cpp_type(to) as c_int,
-                        CppObject::get(to) as c_longlong,
-                    )
-                },
-            },
-        }
-    }
-
-    fn config_limit_range_to_i64<'a, V>(&self, from: V, to: i64)
-    where
-        V: Into<IntExpression<'a>>,
-    {
-        let from = from.into();
-        match from {
-            IntExpression::Int(from_value) => unsafe {
-                WCDBRustStatementUpdate_configLimitRange(
-                    self.get_cpp_obj(),
-                    CPPType::Int as c_int,
-                    from_value as c_longlong,
-                    CPPType::Int as c_int,
-                    to as c_longlong,
-                )
-            },
-            IntExpression::ExpressionConvertible(from_value_opt) => match from_value_opt {
-                None => unsafe {
-                    WCDBRustStatementUpdate_configLimitRange(
-                        self.get_cpp_obj(),
-                        CPPType::Null as c_int,
-                        0 as c_longlong,
-                        CPPType::Int as c_int,
-                        to as c_longlong,
-                    )
-                },
-                Some(from_value) => unsafe {
-                    WCDBRustStatementUpdate_configLimitRange(
-                        self.get_cpp_obj(),
-                        Identifier::get_cpp_type(from_value) as c_int,
-                        CppObject::get(from_value) as c_longlong,
-                        CPPType::Int as c_int,
-                        to as c_longlong,
-                    )
-                },
-            },
-        }
+        self
     }
 
     pub fn offset<'a, V>(&self, offset: V) -> &Self

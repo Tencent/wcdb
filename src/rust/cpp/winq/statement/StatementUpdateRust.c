@@ -35,12 +35,11 @@ void WCDBRustStatementUpdateClassMethod(configWith,
                                   expressionsLength);
 }
 
-// void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self)
-//{
-//     WCDBRustBridgeStruct(CPPStatementUpdate, self);
-//     WCDBStatementUpdateConfigRecursive(selfStruct);
-// }
-//
+void WCDBRustStatementUpdateClassMethod(configRecursive, void* self) {
+    WCDBRustBridgeStruct(CPPStatementUpdate, self);
+    WCDBStatementUpdateConfigRecursive(selfStruct);
+}
+
 void WCDBRustStatementUpdateClassMethod(configTable,
                                         void* self,
                                         WCDBRustObjectOrStringParameter(table)) {

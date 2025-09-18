@@ -38,8 +38,8 @@ void WCDBRustStatementUpdateClassMethod(configWith,
                                         void* self,
                                         void** expressions,
                                         int expressionsLength);
-// void WCDBRustStatementUpdateClassMethod(configRecursive, jlong self);
-//
+void WCDBRustStatementUpdateClassMethod(configRecursive, void* self);
+
 void WCDBRustStatementUpdateClassMethod(configTable,
                                         void* self,
                                         WCDBRustObjectOrStringParameter(table));
