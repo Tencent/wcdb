@@ -34,6 +34,8 @@
 #else
 #define NOMINMAX
 #include <windows.h>
+#include <cstdlib>
+#include <ctime>
 #endif
 
 #ifndef O_BINARY
@@ -332,6 +334,28 @@ MappedData FileHandle::map(offset_t offset, size_t length, SharedHighWater highW
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return MappedData::null();
     }
+    __try {
+        if (roundedSize > 1) {
+            size_t randomOffset = rand() % std::min(length, roundedSize);
+            volatile unsigned char testByte = *reinterpret_cast<unsigned char *>(static_cast<char *>(mapped) + randomOffset);
+            WCDB_UNUSED(testByte);
+        } else if (roundedSize == 1) {
+            volatile unsigned char testByte = *reinterpret_cast<unsigned char *>(mapped);
+            WCDB_UNUSED(testByte);
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {
+        UnmapViewOfFile(mapped);
+        Error error;
+        error.level = m_errorIgnorable ? Error::Level::Warning : Error::Level::Error;
+        error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+        error.infos.insert_or_assign("MmapSize", roundedSize);
+        error.infos.insert_or_assign("Error", "Memory access violation during mapping test");
+        Notifier::shared().notify(error);
+        SharedThreadedErrorProne::setThreadedError(std::move(error));
+        return MappedData::null();
+    }
+    
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize, highWater)
     .subdata(offsetAlignment, std::min(length, roundedSize));
 #endif
