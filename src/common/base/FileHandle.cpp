@@ -335,13 +335,20 @@ MappedData FileHandle::map(offset_t offset, size_t length, SharedHighWater highW
         return MappedData::null();
     }
     __try {
-        if (roundedSize > 1) {
-            size_t randomOffset = rand() % std::min(length, roundedSize);
-            volatile unsigned char testByte = *reinterpret_cast<unsigned char *>(static_cast<char *>(mapped) + randomOffset);
-            WCDB_UNUSED(testByte);
-        } else if (roundedSize == 1) {
-            volatile unsigned char testByte = *reinterpret_cast<unsigned char *>(mapped);
-            WCDB_UNUSED(testByte);
+        size_t pageSize = memoryPageSize();
+        size_t numPages = (roundedSize + pageSize - 1) / pageSize; // 向上取整计算页数
+        
+        for (size_t pageIndex = 0; pageIndex < numPages; ++pageIndex) {
+            size_t pageStart = pageIndex * pageSize;
+            size_t pageSizeActual = std::min(pageSize, roundedSize - pageStart);
+            
+            if (pageSizeActual > 0) {
+                size_t randomOffsetInPage = rand() % pageSizeActual;
+                size_t absoluteOffset = pageStart + randomOffsetInPage;
+                
+                volatile unsigned char testByte = *reinterpret_cast<unsigned char *>(static_cast<char *>(mapped) + absoluteOffset);
+                WCDB_UNUSED(testByte);
+            }
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {

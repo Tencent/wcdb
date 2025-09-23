@@ -317,7 +317,7 @@ endif ()
 # set default compiler flags for each platform
 if (WIN32)
     enable_language(C CXX ASM_MASM)
-    set(COMM_FLAGS_ "/utf-8 /EHsc")
+    set(COMM_FLAGS_ "/utf-8 /EHa")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMM_FLAGS_}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMM_FLAGS_}")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
