@@ -339,6 +339,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
         let update = self.prepare_update();
         if let Some(fields) = fields_opt {
             update.set(fields);
+        } else {
+            update.set(self.binding.all_binding_fields());
         }
         if let Some(condition) = condition_opt {
             update.where_(&condition);
