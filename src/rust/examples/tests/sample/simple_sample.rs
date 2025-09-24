@@ -49,8 +49,8 @@ pub mod simple_sample {
         let filed_id = unsafe { &*id };
         let content = DB_TEST_OBJECT_INSTANCE.content;
         let filed_content = unsafe { &*content };
-        let express_content = filed_content.get_column().eq("updateContent");
-        let express = filed_id.get_column().eq(100).and(&express_content);
+        let express_content = filed_content.eq("updateContent");
+        let express = filed_id.eq(100).and(&express_content);
         let ret = table.update_object(
             test_table,
             Some(vec![filed_id]),
@@ -69,9 +69,9 @@ pub mod simple_sample {
         // 删除
         let id = DB_TEST_OBJECT_INSTANCE.id;
         let filed_id = unsafe { &*id };
-        let express = filed_id.get_column().lt(10);
+        let express = filed_id.lt(10);
         // table.delete_objects_by_expression(express).unwrap();
-        let ordering_term = filed_id.get_column().order(Order::Desc);
+        let ordering_term = filed_id.order(Order::Desc);
         let ret = table.delete_objects(None, Some(&ordering_term), Some(10), None);
         match ret {
             Ok(_) => {}
@@ -86,11 +86,11 @@ pub mod simple_sample {
             .unwrap();
         // let id = DB_TEST_OBJECT_INSTANCE.id;
         // let filed_id = unsafe { &*id };
-        // let expression = filed_id.get_column().gt_int(100);
+        // let expression = filed_id.gt_int(100);
         // table
         //     .get_all_objects_by_expression_order_limit(
         //         expression,
-        //         filed_id.get_column().order(Order::Desc),
+        //         filed_id.order(Order::Desc),
         //         10,
         //     )
         //     .unwrap();

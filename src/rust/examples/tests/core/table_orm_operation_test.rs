@@ -118,7 +118,7 @@ pub mod table_orm_operation_test_case {
         let field_value = DbTableOperationObject::value();
 
         let updated_text = "updated_row";
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let update_obj = TableOperationObject {
             value: updated_text.to_string(),
             ..obj.clone()
@@ -134,7 +134,7 @@ pub mod table_orm_operation_test_case {
         );
         assert!(ret.is_ok());
 
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let ret = database.get_first_object(
             vec![&field_value],
             TABLE_NAME,
@@ -147,7 +147,7 @@ pub mod table_orm_operation_test_case {
         let ret_value_opt = ret.unwrap();
         assert_eq!(ret_value_opt.unwrap().value, updated_text);
 
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let ret = database.delete_objects(TABLE_NAME, Some(&expression), None, None, None);
         assert!(ret.is_ok());
 

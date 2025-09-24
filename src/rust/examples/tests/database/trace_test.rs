@@ -169,7 +169,7 @@ impl TraceTest {
                 StatementCreateIndex::new()
                     .create_index("testIndex")
                     .on(TABLE_NAME)
-                    .indexed_by(vec![DbTestObject::content().get_column()]),
+                    .indexed_by(vec![DbTestObject::content()]),
             )
             .unwrap();
 
@@ -194,7 +194,7 @@ impl TraceTest {
                     DbTestObject::all_fields(),
                     TABLE_NAME,
                     None,
-                    Some(&DbTestObject::content().get_column().order(Order::Desc)),
+                    Some(&DbTestObject::content().order(Order::Desc)),
                     None,
                     None
                 )
@@ -284,7 +284,7 @@ impl TraceTest {
                 StatementCreateIndex::new()
                     .create_index("testIndex")
                     .on(TABLE_NAME)
-                    .indexed_by(vec![DbTestObject::content().get_column()]),
+                    .indexed_by(vec![DbTestObject::content()]),
             )
             .unwrap();
 
@@ -309,7 +309,7 @@ impl TraceTest {
                     DbTestObject::all_fields(),
                     TABLE_NAME,
                     None,
-                    Some(&DbTestObject::content().get_column().order(Order::Desc)),
+                    Some(&DbTestObject::content().order(Order::Desc)),
                     None,
                     None
                 )

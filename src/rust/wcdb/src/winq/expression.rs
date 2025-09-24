@@ -5,6 +5,7 @@ use crate::base::param::enum_expression_ref::ExpressionRef;
 use crate::base::param::enum_string_expression::StringExpression;
 use crate::base::param::enum_string_schema::StringSchema;
 use crate::base::param::enum_string_window_def::StringWindowDef;
+use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::bind_parameter::BindParameter;
 use crate::winq::column::Column;
@@ -817,6 +818,12 @@ impl<'a> From<&'a LiteralValue> for ExpressionNewParam<'a> {
 impl<'a> From<&'a Column> for ExpressionNewParam<'a> {
     fn from(value: &'a Column) -> Self {
         ExpressionNewParam::Column(value)
+    }
+}
+
+impl<'a, T> From<&'a Field<T>> for ExpressionNewParam<'a> {
+    fn from(value: &'a Field<T>) -> Self {
+        ExpressionNewParam::Column(value.get_column())
     }
 }
 

@@ -128,7 +128,7 @@ pub mod table_operation_test_case {
         // update row
         let updated_text = "updated_row";
         let updated_value = Value::new(updated_text);
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let ret = operation.update_row(
             &vec![updated_value],
             &vec![Column::new("value", None)],
@@ -140,7 +140,7 @@ pub mod table_operation_test_case {
         assert!(ret.is_ok());
 
         // select value
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let ret = operation.get_values(
             vec![&Column::new("value", None)],
             Some(&expression),
@@ -156,12 +156,12 @@ pub mod table_operation_test_case {
 
         // 测试删除数据。
         // delete row
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let ret = operation.delete_value(Some(&expression), None, None, None);
         assert!(ret.is_ok());
 
         // select value
-        let expression = field_channel_id.get_column().eq(obj.channel_id.as_str());
+        let expression = field_channel_id.eq(obj.channel_id.as_str());
         let ret = operation.get_values(
             vec![&Column::new("value", None)],
             Some(&expression),

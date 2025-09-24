@@ -1,6 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::orm::field::Field;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
 use crate::winq::column_constraint::ColumnConstraint;
@@ -180,5 +181,23 @@ impl<'a> From<(&'a Column, ColumnType)> for ColumnDefParam<'a> {
 impl<'a> From<(&'a Column, Option<ColumnType>)> for ColumnDefParam<'a> {
     fn from((col, ty_opt): (&'a Column, Option<ColumnType>)) -> Self {
         ColumnDefParam::Column(col, ty_opt)
+    }
+}
+
+impl<'a, T> From<&'a Field<T>> for ColumnDefParam<'a> {
+    fn from(field: &'a Field<T>) -> Self {
+        ColumnDefParam::Column(field.get_column(), None)
+    }
+}
+
+impl<'a, T> From<(&'a Field<T>, ColumnType)> for ColumnDefParam<'a> {
+    fn from((field, ty): (&'a Field<T>, ColumnType)) -> Self {
+        ColumnDefParam::Column(field.get_column(), Some(ty))
+    }
+}
+
+impl<'a, T> From<(&'a Field<T>, Option<ColumnType>)> for ColumnDefParam<'a> {
+    fn from((field, ty_opt): (&'a Field<T>, Option<ColumnType>)) -> Self {
+        ColumnDefParam::Column(field.get_column(), ty_opt)
     }
 }
