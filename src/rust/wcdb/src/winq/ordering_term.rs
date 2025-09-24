@@ -64,7 +64,7 @@ impl AsRef<OrderingTerm> for OrderingTerm {
 }
 
 impl OrderingTerm {
-    pub fn new<T: ExpressionConvertibleTrait + IdentifierTrait>(expression: &T) -> Self {
+    pub fn new<T: ExpressionConvertibleTrait>(expression: &T) -> Self {
         let cpp_obj = unsafe {
             WCDBRustOrderingTerm_create(
                 Identifier::get_cpp_type(expression) as c_int,
