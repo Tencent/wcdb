@@ -232,6 +232,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
         insert.value(object).or_replace();
         if let Some(fields) = fields_opt {
             insert.on_fields(fields);
+        } else {
+            insert.on_fields(self.binding.all_binding_fields());
         }
         insert.execute()?;
         Ok(())
@@ -246,6 +248,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
         insert.value(object).or_ignore();
         if let Some(fields) = fields_opt {
             insert.on_fields(fields);
+        } else {
+            insert.on_fields(self.binding.all_binding_fields());
         }
         insert.execute()?;
         Ok(())
@@ -276,6 +280,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
         insert.values(objects).or_replace();
         if let Some(fields) = fields_opt {
             insert.on_fields(fields);
+        } else {
+            insert.on_fields(self.binding.all_binding_fields());
         }
         insert.execute()?;
         Ok(())
@@ -290,6 +296,8 @@ impl<'a, T, R: TableBinding<T>> TableORMOperationTrait<'a, T, R> for TableORMOpe
         insert.values(objects).or_ignore();
         if let Some(fields) = fields_opt {
             insert.on_fields(fields);
+        } else {
+            insert.on_fields(self.binding.all_binding_fields());
         }
         insert.execute()?;
         Ok(())
