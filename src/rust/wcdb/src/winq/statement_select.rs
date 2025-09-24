@@ -11,7 +11,7 @@ use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
@@ -223,21 +223,16 @@ impl StatementSelect {
             return self;
         }
         let mut cpp_type_vec = vec![];
-        let mut c_strings: Vec<std::ffi::CString> = vec![];
-        let mut cpp_str_ptrs: Vec<*const c_char> = vec![];
         let mut cpp_obj_vec = vec![];
+        let mut cpp_str_ptrs: Vec<*const c_char> = vec![];
+        let mut c_strings = vec![];
         for item in data_vec {
-            match item {
-                StringExpression::String(str) => {
-                    cpp_type_vec.push(CPPType::String as c_int);
-                    let c = str.as_str().to_cstring();
-                    cpp_str_ptrs.push(c.as_ptr());
-                    c_strings.push(c);
-                }
-                StringExpression::ExpressionConvertible(obj) => {
-                    cpp_type_vec.push(Identifier::get_cpp_type(obj.as_identifier()) as c_int);
-                    cpp_obj_vec.push(CppObject::get(obj) as c_longlong);
-                }
+            let (cpp_type, cpp_obj, c_str_opt) = item.get_params();
+            cpp_type_vec.push(cpp_type as c_int);
+            cpp_obj_vec.push(cpp_obj as c_longlong);
+            if let Some(c) = c_str_opt {
+                cpp_str_ptrs.push(c.as_ptr());
+                c_strings.push(c);
             }
         }
         unsafe {

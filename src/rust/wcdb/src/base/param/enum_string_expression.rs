@@ -1,5 +1,6 @@
 use crate::base::cpp_object::CppObject;
 use crate::utils::ToCString;
+use crate::winq::column::Column;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier};
 use std::ffi::{c_void, CString};
@@ -7,11 +8,12 @@ use std::ffi::{c_void, CString};
 /// support:
 /// ```text
 /// String, &str
-/// &ExpressionConvertibleTrait
+/// &ExpressionConvertibleTrait     Option<&ExpressionConvertibleTrait>
+/// &Column                         Option<&Column>
 /// ```
 pub enum StringExpression<'a> {
     String(String),
-    ExpressionConvertible(&'a dyn ExpressionConvertibleTrait),
+    ExpressionConvertible(Option<&'a dyn ExpressionConvertibleTrait>),
 }
 
 impl StringExpression<'_> {
@@ -20,9 +22,10 @@ impl StringExpression<'_> {
             StringExpression::String(str) => {
                 (CPPType::String, 0 as *mut c_void, Some(str.to_cstring()))
             }
-            StringExpression::ExpressionConvertible(exp) => {
-                (Identifier::get_cpp_type(exp), CppObject::get(exp), None)
-            }
+            StringExpression::ExpressionConvertible(exp_opt) => match exp_opt {
+                None => (CPPType::Null, 0 as *mut c_void, None),
+                Some(exp) => (Identifier::get_cpp_type(exp), CppObject::get(exp), None),
+            },
         }
     }
 }
@@ -39,8 +42,26 @@ impl<'a> From<&str> for StringExpression<'a> {
     }
 }
 
-impl<'a, T: ExpressionConvertibleTrait> From<&'a T> for StringExpression<'a> {
-    fn from(value: &'a T) -> Self {
+impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for StringExpression<'a> {
+    fn from(value: Option<&'a dyn ExpressionConvertibleTrait>) -> Self {
         StringExpression::ExpressionConvertible(value)
+    }
+}
+
+impl<'a> From<&'a dyn ExpressionConvertibleTrait> for StringExpression<'a> {
+    fn from(value: &'a dyn ExpressionConvertibleTrait) -> Self {
+        StringExpression::ExpressionConvertible(Some(value))
+    }
+}
+
+impl<'a> From<Option<&'a Column>> for StringExpression<'a> {
+    fn from(value: Option<&'a Column>) -> Self {
+        value.map(|x| x as &dyn ExpressionConvertibleTrait).into()
+    }
+}
+
+impl<'a> From<&'a Column> for StringExpression<'a> {
+    fn from(value: &'a Column) -> Self {
+        StringExpression::ExpressionConvertible(Some(value))
     }
 }

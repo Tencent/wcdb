@@ -74,14 +74,14 @@ pub mod expression_test {
             "CASE WHEN testColumn == 'a' THEN 1 WHEN testColumn == 'b' THEN 2 ELSE 3 END",
         );
 
-        let expression = Expression::case(Some(&column));
+        let expression = Expression::case(&column);
         expression.when("a").then(1).when("b").then(2).else_(3);
         WinqTool::winq_equal(
             &expression,
             "CASE testColumn WHEN 'a' THEN 1 WHEN 'b' THEN 2 ELSE 3 END",
         );
 
-        let expression = Expression::case(Some(&column));
+        let expression = Expression::case(&column);
         expression.when(1).then("a").then(2).then("b").else_("c");
         WinqTool::winq_equal(
             &expression,

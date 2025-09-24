@@ -656,7 +656,7 @@ impl Expression {
 
     pub fn as_(&self, column_type: ColumnType) -> &Self {
         unsafe { WCDBRustExpression_as(self.get_cpp_obj(), column_type as c_int) };
-        &self
+        self
     }
 
     pub fn as_result_column(&self, alias: &str) -> ResultColumn {
@@ -674,17 +674,10 @@ impl Expression {
         ret
     }
 
-    // todo qixinbing 是否把 Option 放到 T 内部？
-    pub fn case<'a, T>(param_opt: Option<T>) -> Self
+    pub fn case<'a, T>(param: T) -> Self
     where
         T: Into<StringExpression<'a>>,
     {
-        let param = match param_opt {
-            None => {
-                return Self::case_();
-            }
-            Some(val) => val,
-        };
         let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
         let name_ptr = name_opt
             .as_ref()
