@@ -4,7 +4,11 @@ use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier};
 use std::ffi::{c_void, CString};
 
-/// 支持 String, &str, &dyn ExpressionConvertibleTrait
+/// support:
+/// ```text
+/// String, &str
+/// &ExpressionConvertibleTrait
+/// ```
 pub enum StringExpression<'a> {
     String(String),
     ExpressionConvertible(&'a dyn ExpressionConvertibleTrait),

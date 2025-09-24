@@ -4,7 +4,11 @@ use crate::winq::identifier::{CPPType, Identifier};
 use crate::winq::schema::Schema;
 use std::ffi::{c_void, CString};
 
-/// 支持 String, &str, Option<&Schema>
+/// support:
+/// ```text
+/// String, &str
+/// &Schema     Option<&Schema>
+/// ```
 pub enum StringSchema<'a> {
     String(String),
     Schema(Option<&'a Schema>),

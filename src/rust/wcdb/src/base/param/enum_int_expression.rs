@@ -3,7 +3,11 @@ use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier};
 use std::ffi::c_longlong;
 
-/// 支持 i8, i16, i32, i64, Option<&dyn ExpressionConvertibleTrait>
+/// support:
+/// ```text
+/// i8, i16, i32, i64
+/// &ExpressionConvertibleTrait     Option<&ExpressionConvertibleTrait>
+/// ```
 pub enum IntExpression<'a> {
     Int(i64),
     ExpressionConvertible(Option<&'a dyn ExpressionConvertibleTrait>),

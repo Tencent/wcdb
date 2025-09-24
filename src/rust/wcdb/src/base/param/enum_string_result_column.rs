@@ -1,6 +1,10 @@
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
 
-/// 支持 String, &str, &dyn ResultColumnConvertibleTrait
+/// support:
+/// ```text
+/// String, &str
+/// &ResultColumnConvertibleTrait
+/// ```
 pub enum StringResultColumn<'a> {
     String(String),
     ResultColumn(&'a dyn ResultColumnConvertibleTrait),

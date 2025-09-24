@@ -1,6 +1,10 @@
 use crate::winq::column::ColumnTrait;
 
-/// 支持 String, &str, Column
+/// support:
+/// ```text
+/// String, &str
+/// &ColumnTrait
+/// ```
 pub enum StringColumn<'a> {
     String(String),
     Column(&'a dyn ColumnTrait),

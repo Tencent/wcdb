@@ -1,6 +1,10 @@
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 
-/// 支持 String, &str, &dyn TableOrSubqueryConvertibleTrait
+/// support
+/// ```text
+/// String, &str
+/// &TableOrSubqueryConvertibleTrait
+/// ```
 pub enum StringTableOrSubquery<'a> {
     String(String),
     TableOrSubquery(&'a dyn TableOrSubqueryConvertibleTrait),

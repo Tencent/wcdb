@@ -1,6 +1,10 @@
 use crate::winq::window_def::WindowDef;
 
-/// 支持 String, &str, &WindowDef
+/// support:
+/// ```text
+/// String, &str
+/// &WindowDef
+/// ```
 pub enum StringWindowDef<'a> {
     String(String),
     WindowDef(&'a WindowDef),

@@ -1,6 +1,10 @@
 use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 
-/// 支持 String, &str, &dyn IndexedColumnConvertibleTrait
+/// support:
+/// ```text
+/// String, &str
+/// &IndexedColumnConvertibleTrait
+/// ```
 pub enum StringIndexedColumn<'a> {
     String(String),
     IndexedColumnConvertible(&'a dyn IndexedColumnConvertibleTrait),

@@ -9,7 +9,16 @@ use crate::winq::literal_value::LiteralValue;
 use libc::c_longlong;
 use std::ffi::{c_double, c_void, CString};
 
-/// 支持 bool, i8, i16, i32, i64, f32, f64, String, &str, Option<&dyn ExpressionConvertibleTrait>
+/// support：
+///
+/// ```text
+/// bool, i8, i16, i32, i64, f32, f64, String, &str
+/// &ExpressionConvertibleTrait     Option<&ExpressionConvertibleTrait>
+/// &ExpressionOperable             Option<&ExpressionOperable>
+/// &Expression                     Option<&Expression>
+/// &Column                         Option<&Column>
+/// &LiteralValue                   Option<&LiteralValue>
+/// ```
 pub enum BasicExpression<'a> {
     Bool(bool),
     Int(i64),

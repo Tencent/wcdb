@@ -1,6 +1,10 @@
 use crate::winq::qualified_table::QualifiedTable;
 
-/// 支持 String, &str, &QualifiedTable
+/// support:
+/// ```text
+/// String, &str
+/// &QualifiedTable
+/// ```
 pub enum StringQualifiedTable<'a> {
     String(String),
     QualifiedTable(&'a QualifiedTable),

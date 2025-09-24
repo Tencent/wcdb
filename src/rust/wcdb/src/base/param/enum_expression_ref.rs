@@ -3,7 +3,13 @@ use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::expression_operable::ExpressionOperable;
 
-/// 支持 ExpressionConvertibleTrait, ExpressionOperable, Expression, Column
+/// support:
+/// ```text
+/// &ExpressionConvertibleTrait     Option<&ExpressionConvertibleTrait>
+/// &ExpressionOperable             Option<&ExpressionOperable>
+/// &Expression                     Option<&Expression>
+/// &Column                         Option<&Column>
+/// ```
 pub enum ExpressionRef<'a> {
     ExpressionConvertible(Option<&'a dyn ExpressionConvertibleTrait>),
 }
