@@ -31,7 +31,7 @@ impl<'a, T: StatementTrait> ChainCallTrait for ChainCall<'a, T> {
 }
 
 impl<'a, T: StatementTrait> ChainCall<'a, T> {
-    pub fn new(
+    pub(crate) fn new(
         statement: T,
         handle: Handle<'a>,
         need_changes: bool,
@@ -46,11 +46,11 @@ impl<'a, T: StatementTrait> ChainCall<'a, T> {
         }
     }
 
-    pub fn get_statement(&self) -> &T {
+    pub(crate) fn get_statement(&self) -> &T {
         &self.statement
     }
 
-    pub fn invalidate_handle(&self) {
+    pub(crate) fn invalidate_handle(&self) {
         self.handle.borrow_mut().invalidate();
     }
 }

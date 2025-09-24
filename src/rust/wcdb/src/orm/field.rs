@@ -451,11 +451,13 @@ impl<U> Field<U> {
         self.is_auto_increment
     }
 
-    pub fn get_binding_from_field(field: &Field<U>) -> &dyn TableBinding<U> {
+    pub(crate) fn get_binding_from_field(field: &Field<U>) -> &dyn TableBinding<U> {
         field.get_table_binding()
     }
 
-    pub fn get_binding_from_fields<'a>(fields: &Vec<&'a Field<U>>) -> &'a dyn TableBinding<U> {
+    pub(crate) fn get_binding_from_fields<'a>(
+        fields: &Vec<&'a Field<U>>,
+    ) -> &'a dyn TableBinding<U> {
         assert!(!fields.is_empty());
         let field = fields[0];
         Self::get_binding_from_field(field)
