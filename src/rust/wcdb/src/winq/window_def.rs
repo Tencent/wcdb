@@ -1,13 +1,11 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_string_expression::StringExpression;
-use crate::utils::ToCString;
-use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::frame_spec::FrameSpec;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
-use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
+use std::ffi::{c_char, c_double, c_int, c_void};
 
 extern "C" {
     fn WCDBRustWindowDef_createCppObj() -> *mut c_void;

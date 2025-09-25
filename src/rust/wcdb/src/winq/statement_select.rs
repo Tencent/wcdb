@@ -11,7 +11,7 @@ use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::table_or_subquery_convertible_trait::TableOrSubqueryConvertibleTrait;
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_double, c_int, c_longlong, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 use std::fmt::Debug;
 
 extern "C" {

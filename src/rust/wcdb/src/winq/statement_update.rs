@@ -13,9 +13,8 @@ use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
-use std::ffi::{c_char, c_int, c_longlong, c_void};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 use std::fmt::Debug;
-use std::os::raw::c_double;
 use std::ptr::{null, null_mut};
 
 extern "C" {

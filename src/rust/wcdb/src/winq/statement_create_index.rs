@@ -6,10 +6,8 @@ use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
 use core::ffi::c_size_t;
-use libc::c_longlong;
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {

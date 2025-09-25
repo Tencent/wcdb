@@ -67,7 +67,7 @@ impl ColumnDef {
     {
         let cpp_obj = match param.into() {
             StringColumnDef::String(str, column_type_opt) => {
-                let cpp_type = match column_type_opt {
+                let column_type = match column_type_opt {
                     Some(column_type) => column_type as c_int,
                     None => 0,
                 };
@@ -77,12 +77,12 @@ impl ColumnDef {
                         CPPType::String as c_int,
                         std::ptr::null_mut(),
                         c_name.as_ptr(),
-                        cpp_type,
+                        column_type,
                     )
                 }
             }
             StringColumnDef::Column(column, column_type_opt) => {
-                let cpp_type = match column_type_opt {
+                let column_type = match column_type_opt {
                     Some(column_type) => column_type as c_int,
                     None => 0,
                 };
@@ -91,7 +91,7 @@ impl ColumnDef {
                         Identifier::get_cpp_type(column) as c_int,
                         CppObject::get(column),
                         std::ptr::null_mut(),
-                        cpp_type,
+                        column_type,
                     )
                 }
             }

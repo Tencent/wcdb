@@ -9,8 +9,7 @@ use crate::winq::multi_type_array::MultiTypeArray;
 use crate::winq::object::Object;
 use crate::winq::statement::{Statement, StatementTrait};
 use crate::winq::upsert::Upsert;
-use libc::c_longlong;
-use std::ffi::{c_char, c_double, c_int, c_void, CString};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void, CString};
 use std::fmt::Debug;
 
 extern "C" {
