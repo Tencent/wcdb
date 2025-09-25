@@ -276,7 +276,7 @@ impl RustCodeGenerator {
             field_id += 1;
 
             token_stream.extend(quote! {
-                let param = wcdb::winq::column_def::ColumnDefParam::Column(
+                let param = wcdb::base::param::enum_string_column_def::StringColumnDef::Column(
                     &field.get_column(),
                     Some(wcdb::winq::column_type::ColumnType::#column_type_ident)
                 );

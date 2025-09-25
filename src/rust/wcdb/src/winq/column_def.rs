@@ -1,11 +1,9 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
-use crate::orm::field::Field;
+use crate::base::param::enum_string_column_def::StringColumnDef;
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::column_constraint::ColumnConstraint;
-use crate::winq::column_type::ColumnType;
 use crate::winq::foreign_key::ForeignKey;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -65,10 +63,10 @@ impl IdentifierConvertibleTrait for ColumnDef {
 impl ColumnDef {
     pub fn new<'a, T>(param: T) -> ColumnDef
     where
-        T: Into<ColumnDefParam<'a>>,
+        T: Into<StringColumnDef<'a>>,
     {
         let cpp_obj = match param.into() {
-            ColumnDefParam::String(str, column_type_opt) => {
+            StringColumnDef::String(str, column_type_opt) => {
                 let cpp_type = match column_type_opt {
                     Some(column_type) => column_type as c_int,
                     None => 0,
@@ -83,7 +81,7 @@ impl ColumnDef {
                     )
                 }
             }
-            ColumnDefParam::Column(column, column_type_opt) => {
+            StringColumnDef::Column(column, column_type_opt) => {
                 let cpp_type = match column_type_opt {
                     Some(column_type) => column_type as c_int,
                     None => 0,
@@ -140,64 +138,5 @@ impl ColumnDef {
 
     pub fn make_not_indexed(&self) -> &Self {
         self.constraint(ColumnConstraint::new(None).un_index())
-    }
-}
-
-pub enum ColumnDefParam<'a> {
-    String(&'a str, Option<ColumnType>),
-    Column(&'a Column, Option<ColumnType>),
-}
-
-impl<'a> From<&'a str> for ColumnDefParam<'a> {
-    fn from(name: &'a str) -> Self {
-        ColumnDefParam::String(name, None)
-    }
-}
-
-impl<'a> From<(&'a str, ColumnType)> for ColumnDefParam<'a> {
-    fn from((name, ty): (&'a str, ColumnType)) -> Self {
-        ColumnDefParam::String(name, Some(ty))
-    }
-}
-
-impl<'a> From<(&'a str, Option<ColumnType>)> for ColumnDefParam<'a> {
-    fn from((name, ty_opt): (&'a str, Option<ColumnType>)) -> Self {
-        ColumnDefParam::String(name, ty_opt)
-    }
-}
-
-impl<'a> From<&'a Column> for ColumnDefParam<'a> {
-    fn from(col: &'a Column) -> Self {
-        ColumnDefParam::Column(col, None)
-    }
-}
-
-impl<'a> From<(&'a Column, ColumnType)> for ColumnDefParam<'a> {
-    fn from((col, ty): (&'a Column, ColumnType)) -> Self {
-        ColumnDefParam::Column(col, Some(ty))
-    }
-}
-
-impl<'a> From<(&'a Column, Option<ColumnType>)> for ColumnDefParam<'a> {
-    fn from((col, ty_opt): (&'a Column, Option<ColumnType>)) -> Self {
-        ColumnDefParam::Column(col, ty_opt)
-    }
-}
-
-impl<'a, T> From<&'a Field<T>> for ColumnDefParam<'a> {
-    fn from(field: &'a Field<T>) -> Self {
-        ColumnDefParam::Column(field.get_column(), None)
-    }
-}
-
-impl<'a, T> From<(&'a Field<T>, ColumnType)> for ColumnDefParam<'a> {
-    fn from((field, ty): (&'a Field<T>, ColumnType)) -> Self {
-        ColumnDefParam::Column(field.get_column(), Some(ty))
-    }
-}
-
-impl<'a, T> From<(&'a Field<T>, Option<ColumnType>)> for ColumnDefParam<'a> {
-    fn from((field, ty_opt): (&'a Field<T>, Option<ColumnType>)) -> Self {
-        ColumnDefParam::Column(field.get_column(), ty_opt)
     }
 }

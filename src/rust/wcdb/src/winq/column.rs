@@ -2,9 +2,10 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_basic_expression::BasicExpression;
 use crate::base::param::enum_expression_ref::ExpressionRef;
+use crate::base::param::enum_string_column_def::StringColumnDef;
 use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
-use crate::winq::column_def::{ColumnDef, ColumnDefParam};
+use crate::winq::column_def::ColumnDef;
 use crate::winq::column_type::ColumnType;
 use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
@@ -424,7 +425,7 @@ impl ColumnTrait for Column {
     }
 
     fn as_def(&self, column_type: ColumnType) -> ColumnDef {
-        ColumnDef::new(ColumnDefParam::Column(self, Some(column_type)))
+        ColumnDef::new(StringColumnDef::Column(self, Some(column_type)))
     }
 }
 
