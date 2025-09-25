@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_indexed_column::StringIndexedColumn;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -60,37 +61,17 @@ impl IdentifierConvertibleTrait for IndexedColumn {
 
 impl IndexedColumnConvertibleTrait for IndexedColumn {}
 
-pub trait IndexedColumnParam {
-    fn create_cpp_obj(&self) -> *mut c_void;
-}
-
-impl<T: IndexedColumnConvertibleTrait + IdentifierTrait> IndexedColumnParam for T {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        unsafe {
-            WCDBRustIndexedColumn_create(
-                Identifier::get_cpp_type(self) as c_int,
-                CppObject::get(self),
-                std::ptr::null(),
-            )
-        }
-    }
-}
-
-impl IndexedColumnParam for &str {
-    fn create_cpp_obj(&self) -> *mut c_void {
-        unsafe {
-            WCDBRustIndexedColumn_create(
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                self.to_cstring().as_ptr(),
-            )
-        }
-    }
-}
-
 impl IndexedColumn {
-    pub fn new<T: IndexedColumnParam>(param: T) -> Self {
-        let cpp_obj = param.create_cpp_obj();
+    pub fn new<'a, T>(param: T) -> Self
+    where
+        T: Into<StringIndexedColumn<'a>>,
+    {
+        let (cpp_type, c_obj, c_str_opt) = param.into().get_params();
+        let c_str_ptr = match c_str_opt.as_ref() {
+            None => std::ptr::null(),
+            Some(s) => s.as_ptr(),
+        };
+        let cpp_obj = unsafe { WCDBRustIndexedColumn_create(cpp_type as c_int, c_obj, c_str_ptr) };
         IndexedColumn {
             identifier: Identifier::new(CPPType::IndexedColumn, Some(cpp_obj)),
         }
