@@ -360,6 +360,10 @@ else ()
     # xcode 14.0.1 must manually set -std=c++14 since set(CMAKE_CXX_STANDARD 14) has no effect when compiler iOS-Simulator on M1
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMM_FLAGS_} -std=c++14")
 
+    # enable lto and no-plt
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto -fno-plt")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -fno-plt")
+`
     if (LINUX)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -pthread")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -pthread")
@@ -377,7 +381,7 @@ else ()
     else ()
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--gc-sections -Wl,-Bsymbolic")
     endif ()
 endif ()
 
