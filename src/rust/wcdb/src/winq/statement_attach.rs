@@ -1,8 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_bind_parameter::StringBindParameter;
 use crate::base::param::enum_string_schema::StringSchema;
-use crate::utils::ToCString;
-use crate::winq::bind_parameter::BindParameter;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
@@ -88,27 +87,21 @@ impl StatementAttach {
         }
     }
 
-    // todo qixinbing
-    pub fn attach_with_string(&self, path: &str) -> &Self {
-        let c_str = path.to_string().to_cstring();
+    pub fn attach<'a, T>(&self, param: T) -> &Self
+    where
+        T: Into<StringBindParameter<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAttach_configPath(
                 self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null(),
-                c_str.as_ptr(),
-            );
-        }
-        self
-    }
-
-    pub fn attach_with_bind_parameter(&self, bind_parameter: BindParameter) -> &Self {
-        unsafe {
-            WCDBRustStatementAttach_configPath(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(&bind_parameter) as c_int,
-                CppObject::get(&bind_parameter),
-                std::ptr::null(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
         }
         self
@@ -134,27 +127,21 @@ impl StatementAttach {
         self
     }
 
-    // todo qixinbing
-    pub fn key_with_name(&self, key: &str) -> &Self {
-        let c_str = key.to_string().to_cstring();
+    pub fn key<'a, T>(&self, param: T) -> &Self
+    where
+        T: Into<StringBindParameter<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = param.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAttach_configKey(
                 self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null(),
-                c_str.as_ptr(),
-            );
-        }
-        self
-    }
-
-    pub fn key_with_bind_parameter(&self, bind_parameter: BindParameter) -> &Self {
-        unsafe {
-            WCDBRustStatementAttach_configKey(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(&bind_parameter) as c_int,
-                CppObject::get(&bind_parameter),
-                std::ptr::null(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
         }
         self

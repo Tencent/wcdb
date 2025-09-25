@@ -2,7 +2,6 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_string_column::StringColumn;
 use crate::base::param::enum_string_schema::StringSchema;
-use crate::winq::column::Column;
 use crate::winq::column_def::ColumnDef;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;

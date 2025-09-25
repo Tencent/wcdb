@@ -7,32 +7,30 @@ pub mod statement_attach_test {
     #[test]
     pub fn test() {
         WinqTool::winq_equal(
-            StatementAttach::new()
-                .attach_with_string("testPath")
-                .as_("testSchema"),
+            StatementAttach::new().attach("testPath").as_("testSchema"),
             "ATTACH 'testPath' AS testSchema",
         );
 
         WinqTool::winq_equal(
             StatementAttach::new()
-                .attach_with_bind_parameter(BindParameter::new(1))
+                .attach(&BindParameter::new(1))
                 .as_("testSchema"),
             "ATTACH ?1 AS testSchema",
         );
 
         WinqTool::winq_equal(
             StatementAttach::new()
-                .attach_with_string("testPath")
+                .attach("testPath")
                 .as_("testSchema")
-                .key_with_name("testKey"),
+                .key("testKey"),
             "ATTACH 'testPath' AS testSchema KEY 'testKey'",
         );
 
         WinqTool::winq_equal(
             StatementAttach::new()
-                .attach_with_bind_parameter(BindParameter::new(1))
+                .attach(&BindParameter::new(1))
                 .as_("testSchema")
-                .key_with_bind_parameter(BindParameter::new(2)),
+                .key(&BindParameter::new(2)),
             "ATTACH ?1 AS testSchema KEY ?2",
         );
     }
