@@ -33,8 +33,8 @@ pub mod statement_alter_table_test {
         WinqTool::winq_equal(
             StatementAlterTable::new()
                 .alter_table("table1")
-                .rename_column_by_name("column1")
-                .to_column_by_name("column2"),
+                .rename_column("column1")
+                .to_column("column2"),
             "ALTER TABLE table1 RENAME COLUMN column1 TO column2",
         );
 

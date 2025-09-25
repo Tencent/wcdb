@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_column::StringColumn;
 use crate::base::param::enum_string_schema::StringSchema;
 use crate::winq::column::Column;
 use crate::winq::column_def::ColumnDef;
@@ -138,51 +139,41 @@ impl StatementAlterTable {
         self
     }
 
-    pub fn rename_column_by_name(&self, column_name: &str) -> &Self {
-        let c_column_name = CString::new(column_name).unwrap_or_default();
+    pub fn rename_column<'a, T>(&self, column: T) -> &Self
+    where
+        T: Into<StringColumn<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = column.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAlterTable_configRenameColumn(
                 self.get_cpp_obj(),
-                CPPType::String as i32,
-                std::ptr::null_mut(),
-                c_column_name.as_ptr(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
         }
         self
     }
 
-    pub fn rename_column(&self, column: &Column) -> &Self {
-        unsafe {
-            WCDBRustStatementAlterTable_configRenameColumn(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(column) as c_int,
-                column.get_cpp_obj(),
-                std::ptr::null(),
-            );
-        }
-        self
-    }
-
-    pub fn to_column_by_name(&self, column_name: &str) -> &Self {
-        let c_column_name = CString::new(column_name).unwrap_or_default();
+    pub fn to_column<'a, T>(&self, column: T) -> &Self
+    where
+        T: Into<StringColumn<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = column.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAlterTable_configRenameToColumn(
                 self.get_cpp_obj(),
-                CPPType::String as i32,
-                std::ptr::null_mut(),
-                c_column_name.as_ptr(),
-            );
-        }
-        self
-    }
-
-    pub fn to_column(&self, column: &Column) -> &Self {
-        unsafe {
-            WCDBRustStatementAlterTable_configRenameToColumn(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(column) as c_int,
-                column.get_cpp_obj(),
-                std::ptr::null(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
         }
         self

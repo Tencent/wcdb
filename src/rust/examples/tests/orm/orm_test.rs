@@ -196,8 +196,8 @@ impl OrmTest {
         let statement_alert_table = StatementAlterTable::new();
         let statement = statement_alert_table
             .alter_table(table_name)
-            .rename_column_by_name(column_name_old)
-            .to_column_by_name(column_name_new);
+            .rename_column(column_name_old)
+            .to_column(column_name_new);
         self.database_test_case
             .get_database()
             .write()
