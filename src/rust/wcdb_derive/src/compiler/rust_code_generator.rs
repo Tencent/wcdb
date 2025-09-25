@@ -375,7 +375,7 @@ impl RustCodeGenerator {
                 }
                 let mut column_names: Vec<String> = Vec::new();
                  column_names.push(stringify!(#property_name_ident).to_string());
-                create_index.indexed_by_column_names(&column_names);
+                create_index.indexed_by(column_names);
                 #binding_ident.add_index(stringify!(#index_name_ident), #is_full_name, create_index);
             });
         }

@@ -72,11 +72,12 @@ impl<'a, T> Insert<'a, T> {
 
     pub fn on_fields(&self, fields: Vec<&'a Field<T>>) -> &Self {
         let fields_clone = fields.clone();
+        let len = fields.len();
         self.fields.replace(fields);
         self.chain_call
             .get_statement()
-            .columns(&fields_clone)
-            .values_with_bind_parameters(fields_clone.len());
+            .columns(fields_clone)
+            .values_with_bind_parameters(len);
         self
     }
 

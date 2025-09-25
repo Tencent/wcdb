@@ -216,7 +216,7 @@ impl<'a> TableOperation<'a> {
         let binding = StatementInsert::new();
         let insert = binding
             .insert_into(self.table_name.as_ref())
-            .column_objs(&columns)
+            .columns(&columns)
             .values_with_bind_parameters(columns.len());
         match action {
             ConflictAction::Replace => {

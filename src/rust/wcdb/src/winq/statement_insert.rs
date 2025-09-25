@@ -1,8 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
-use crate::orm::field::Field;
+use crate::base::param::enum_string_column::StringColumn;
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::conflict_action::ConflictAction;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -160,66 +159,52 @@ impl StatementInsert {
         self
     }
 
-    pub fn columns<T>(&self, fields: &Vec<&Field<T>>) -> &Self {
-        if fields.is_empty() {
+    pub fn columns<'a, I, S>(&self, columns: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<StringColumn<'a>>,
+    {
+        let data_vec = columns.into_iter().map(Into::into).collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
-        let columns_void_vec_len = fields.len() as i32;
-        let mut c_void_vec: Vec<*mut c_void> = Vec::with_capacity(fields.len());
-        for field in fields {
-            c_void_vec.push(field.get_cpp_obj());
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        let mut c_strings = Vec::new();
+        for item in data_vec {
+            match item {
+                StringColumn::String(str) => {
+                    let c_string = str.to_cstring();
+                    cpp_str_vec.push(c_string.as_ptr());
+                    c_strings.push(c_string);
+                }
+                StringColumn::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj));
+                }
+            }
         }
-        unsafe {
-            WCDBRustStatementInsert_configColumns(
-                self.get_cpp_obj(),
-                CPPType::Column as i32,
-                c_void_vec.as_ptr(),
-                std::ptr::null(),
-                columns_void_vec_len,
-            );
-        }
-        self
-    }
-
-    pub fn column_objs(&self, columns: &Vec<Column>) -> &Self {
-        if columns.is_empty() {
-            return self;
-        }
-        let column_len = columns.len();
-        let mut c_vec: Vec<*mut c_void> = Vec::with_capacity(column_len);
-        for column in columns {
-            c_vec.push(column.get_cpp_obj());
-        }
-        unsafe {
-            WCDBRustStatementInsert_configColumns(
-                self.get_cpp_obj(),
-                CPPType::Column as i32,
-                c_vec.as_ptr(),
-                std::ptr::null(),
-                column_len as c_int,
-            );
-        }
-        self
-    }
-
-    pub fn column_names(&self, names: Vec<String>) -> &Self {
-        if names.is_empty() {
-            return self;
-        }
-        let column_len = names.len();
-        let mut c_vec: Vec<*const c_char> = Vec::with_capacity(column_len);
-        for name in names {
-            let c_name = CString::new(name).unwrap_or_default();
-            c_vec.push(c_name.as_ptr());
-        }
-        unsafe {
-            WCDBRustStatementInsert_configColumns(
-                self.get_cpp_obj(),
-                CPPType::String as i32,
-                std::ptr::null(),
-                c_vec.as_ptr(),
-                column_len as c_int,
-            );
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustStatementInsert_configColumns(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    std::ptr::null_mut(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len() as c_int,
+                );
+            }
+        } else {
+            unsafe {
+                WCDBRustStatementInsert_configColumns(
+                    self.get_cpp_obj(),
+                    cpp_type as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    std::ptr::null(),
+                    cpp_obj_vec.len() as c_int,
+                );
+            }
         }
         self
     }
