@@ -1,7 +1,9 @@
 use crate::base::cpp_object::CppObject;
 use crate::utils::ToCString;
 use crate::winq::column::Column;
+use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
+use crate::winq::expression_operable::ExpressionOperable;
 use crate::winq::identifier::{CPPType, Identifier};
 use std::ffi::{c_void, CString};
 
@@ -50,6 +52,33 @@ impl<'a> From<Option<&'a dyn ExpressionConvertibleTrait>> for StringExpression<'
 
 impl<'a> From<&'a dyn ExpressionConvertibleTrait> for StringExpression<'a> {
     fn from(value: &'a dyn ExpressionConvertibleTrait) -> Self {
+        StringExpression::ExpressionConvertible(Some(value))
+    }
+}
+
+impl<'a> From<Option<&'a ExpressionOperable>> for StringExpression<'a> {
+    fn from(value: Option<&'a ExpressionOperable>) -> Self {
+        let v = value.map(|x| x as &dyn ExpressionConvertibleTrait).into();
+        StringExpression::ExpressionConvertible(v)
+    }
+}
+
+impl<'a> From<&'a ExpressionOperable> for StringExpression<'a> {
+    fn from(value: &'a ExpressionOperable) -> Self {
+        let v = value as &dyn ExpressionConvertibleTrait;
+        StringExpression::ExpressionConvertible(Some(v))
+    }
+}
+
+impl<'a> From<Option<&'a Expression>> for StringExpression<'a> {
+    fn from(value: Option<&'a Expression>) -> Self {
+        let v = value.map(|x| x as &dyn ExpressionConvertibleTrait).into();
+        StringExpression::ExpressionConvertible(v)
+    }
+}
+
+impl<'a> From<&'a Expression> for StringExpression<'a> {
+    fn from(value: &'a Expression) -> Self {
         StringExpression::ExpressionConvertible(Some(value))
     }
 }

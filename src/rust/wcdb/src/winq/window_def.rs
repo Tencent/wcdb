@@ -1,12 +1,13 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_expression::StringExpression;
 use crate::utils::ToCString;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::frame_spec::FrameSpec;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::ordering_term::OrderingTerm;
-use std::ffi::{c_char, c_double, c_int, c_void};
+use std::ffi::{c_char, c_double, c_int, c_longlong, c_void};
 
 extern "C" {
     fn WCDBRustWindowDef_createCppObj() -> *mut c_void;
@@ -78,58 +79,45 @@ impl WindowDef {
         }
     }
 
-    pub fn partition_by_with_string(self, column_names: &Vec<&str>) -> Self {
-        if column_names.is_empty() {
-            return self;
-        }
-        let size = column_names.len();
-        let mut column_name_vec: Vec<*const c_char> = Vec::new();
-        for item in column_names {
-            let cstr = item.to_cstring();
-            column_name_vec.push(cstr.into_raw());
-        }
-        let mut types: Vec<c_int> = vec![CPPType::String as c_int; size];
-        unsafe {
-            WCDBRustWindowDef_configPartitions(
-                self.get_cpp_obj(),
-                types.as_ptr(),
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                column_name_vec.as_ptr(),
-                size as c_int,
-            );
-        }
-        self
-    }
-
-    pub fn partition<T>(self, expressions: &Vec<&T>) -> Self
+    pub fn partition_by<'a, I, S>(&self, column_names_or_expressions: I) -> &Self
     where
-        T: ExpressionConvertibleTrait,
+        I: IntoIterator<Item = S>,
+        S: Into<StringExpression<'a>>,
     {
-        if expressions.is_empty() {
+        let data_vec = column_names_or_expressions
+            .into_iter()
+            .map(Into::into)
+            .collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
-        let size = expressions.len();
-        let mut types: Vec<c_int> = Vec::with_capacity(size);
-        let mut cpp_objs: Vec<*mut c_void> = Vec::with_capacity(size);
-        for index in 0..size {
-            types.push(Identifier::get_cpp_type(expressions[index]) as c_int);
-            cpp_objs.push(CppObject::get(expressions[index]));
+        let mut cpp_type_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        let mut cpp_str_ptrs: Vec<*const c_char> = vec![];
+        let mut c_strings = vec![];
+        for item in data_vec {
+            let (cpp_type, cpp_obj, c_str_opt) = item.get_params();
+            cpp_type_vec.push(cpp_type as c_int);
+            cpp_obj_vec.push(cpp_obj);
+            if let Some(c) = c_str_opt {
+                cpp_str_ptrs.push(c.as_ptr());
+                c_strings.push(c);
+            }
         }
         unsafe {
             WCDBRustWindowDef_configPartitions(
                 self.get_cpp_obj(),
-                types.as_ptr(),
-                cpp_objs.as_ptr(),
-                std::ptr::null_mut(),
-                std::ptr::null_mut(),
-                size as c_int,
+                cpp_type_vec.as_ptr(),
+                cpp_obj_vec.as_ptr(),
+                std::ptr::null(),
+                cpp_str_ptrs.as_ptr(),
+                cpp_type_vec.len() as c_int,
             );
         }
         self
     }
 
-    pub fn order_by(self, orders: &Vec<&OrderingTerm>) -> Self {
+    pub fn order_by(&self, orders: &Vec<&OrderingTerm>) -> &Self {
         if orders.is_empty() {
             return self;
         }
@@ -144,7 +132,7 @@ impl WindowDef {
         self
     }
 
-    pub fn frame_spec(self, frame_spec: &FrameSpec) -> WindowDef {
+    pub fn frame_spec(&self, frame_spec: &FrameSpec) -> &Self {
         unsafe { WCDBRustWindowDef_configFrameSpec(self.get_cpp_obj(), CppObject::get(frame_spec)) }
         self
     }

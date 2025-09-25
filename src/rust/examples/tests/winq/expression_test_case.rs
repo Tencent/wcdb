@@ -109,7 +109,8 @@ pub mod expression_test {
             "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER testWindow",
         );
 
-        let window_def = WindowDef::new().partition(&vec![&column]);
+        let window_def = WindowDef::new();
+        window_def.partition_by(vec![&column]);
         let expression = Expression::window_function("testWindowFunction");
         expression
             .invoke()
