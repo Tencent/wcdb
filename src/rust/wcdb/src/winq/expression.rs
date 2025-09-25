@@ -459,62 +459,6 @@ impl IndexedColumnConvertibleTrait for Expression {}
 
 impl ResultColumnConvertibleTrait for Expression {}
 
-impl From<&LiteralValue> for Expression {
-    fn from(value: &LiteralValue) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustExpression_create(
-                Identifier::get_cpp_type(value) as c_int,
-                CppObject::get(value),
-            )
-        };
-        Self {
-            expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
-        }
-    }
-}
-
-impl From<&BindParameter> for Expression {
-    fn from(value: &BindParameter) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustExpression_create(
-                Identifier::get_cpp_type(value) as c_int,
-                CppObject::get(value),
-            )
-        };
-        Self {
-            expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
-        }
-    }
-}
-
-impl From<&Column> for Expression {
-    fn from(value: &Column) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustExpression_create(
-                Identifier::get_cpp_type(value) as c_int,
-                CppObject::get(value),
-            )
-        };
-        Self {
-            expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
-        }
-    }
-}
-
-impl From<&StatementSelect> for Expression {
-    fn from(value: &StatementSelect) -> Self {
-        let cpp_obj = unsafe {
-            WCDBRustExpression_create(
-                Identifier::get_cpp_type(value) as c_int,
-                CppObject::get(value),
-            )
-        };
-        Self {
-            expression_operable: ExpressionOperable::new(CPPType::Expression, Some(cpp_obj)),
-        }
-    }
-}
-
 impl Expression {
     pub(crate) fn new_empty() -> Self {
         Expression {
