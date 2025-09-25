@@ -6,7 +6,6 @@ use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use crate::winq::schema::Schema;
 use crate::winq::statement::{Statement, StatementTrait};
 use std::ffi::{c_char, c_int, c_void};
 
@@ -233,10 +232,13 @@ impl StatementCreateTrigger {
         let mut cpp_type = CPPType::String;
         let mut cpp_str_vec = vec![];
         let mut cpp_obj_vec = vec![];
+        let mut c_strings = vec![];
         for item in data_vec {
             match item {
                 StringColumn::String(str) => {
-                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                    let c_string = str.to_cstring();
+                    cpp_str_vec.push(c_string.as_ptr());
+                    c_strings.push(c_string);
                 }
                 StringColumn::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
@@ -248,11 +250,11 @@ impl StatementCreateTrigger {
             unsafe {
                 WCDBRustStatementCreateTrigger_configColumns(
                     self.get_cpp_obj(),
-                    CPPType::String as std::ffi::c_int,
+                    CPPType::String as c_int,
                     std::ptr::null_mut(),
                     0 as c_int,
                     cpp_str_vec.as_ptr(),
-                    cpp_str_vec.len() as std::ffi::c_int,
+                    cpp_str_vec.len() as c_int,
                 );
             }
         } else {

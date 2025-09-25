@@ -497,10 +497,13 @@ impl Join {
         let mut cpp_type = CPPType::String;
         let mut cpp_str_vec = vec![];
         let mut cpp_obj_vec = vec![];
+        let mut c_strings = vec![];
         for item in data_vec {
             match item {
                 StringColumn::String(str) => {
-                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                    let c_string = str.to_cstring();
+                    cpp_str_vec.push(c_string.as_ptr());
+                    c_strings.push(c_string);
                 }
                 StringColumn::Column(obj) => {
                     cpp_type = Identifier::get_cpp_type(obj.as_identifier());
