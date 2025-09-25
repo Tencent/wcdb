@@ -1,7 +1,7 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_column::StringColumn;
 use crate::utils::ToCString;
-use crate::winq::column::Column;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use std::ffi::{c_char, c_int, c_void};
@@ -107,76 +107,74 @@ impl ForeignKey {
         self
     }
 
-    pub fn column(&self, column: Column) -> &Self {
-        let mut objects: Vec<*mut c_void> = Vec::new();
-        objects.push(CppObject::get(&column));
+    pub fn column<'a, T>(&self, column: T) -> &Self
+    where
+        T: Into<StringColumn<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = column.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
+        let mut cpp_obj_vec = Vec::new();
+        cpp_obj_vec.push(cpp_obj);
+        let mut c_str_vec = Vec::new();
+        c_str_vec.push(name_ptr);
         unsafe {
             WCDBRustForeignKey_configColumns(
                 self.get_cpp_obj(),
-                CPPType::Column as c_int,
-                objects.as_ptr(),
-                std::ptr::null(),
+                cpp_type as c_int,
+                cpp_obj_vec.as_ptr(),
+                c_str_vec.as_ptr(),
                 1,
             );
         }
         self
     }
 
-    pub fn column_with_string(&self, column: &str) -> &Self {
-        let cstr = column.to_string().to_cstring();
-        let mut objects: Vec<*const c_char> = Vec::new();
-        objects.push(cstr.as_ptr());
-        unsafe {
-            WCDBRustForeignKey_configColumns(
-                self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null(),
-                objects.as_ptr(),
-                1,
-            );
-        }
-        self
-    }
-
-    pub fn columns(&self, column: &Vec<Column>) -> &Self {
-        if column.is_empty() {
+    pub fn columns<'a, I, S>(&self, columns: I) -> &Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<StringColumn<'a>>,
+    {
+        let data_vec = columns.into_iter().map(Into::into).collect::<Vec<_>>();
+        if data_vec.is_empty() {
             return self;
         }
-        let size = column.len();
-        let mut objects: Vec<*mut c_void> = Vec::with_capacity(size);
-        for item in column {
-            objects.push(CppObject::get(item));
+        let mut cpp_type = CPPType::String;
+        let mut cpp_str_vec = vec![];
+        let mut cpp_obj_vec = vec![];
+        for item in data_vec {
+            match item {
+                StringColumn::String(str) => {
+                    cpp_str_vec.push(str.as_str().to_cstring().as_ptr());
+                }
+                StringColumn::Column(obj) => {
+                    cpp_type = Identifier::get_cpp_type(obj.as_identifier());
+                    cpp_obj_vec.push(CppObject::get(obj));
+                }
+            }
         }
-        unsafe {
-            WCDBRustForeignKey_configColumns(
-                self.get_cpp_obj(),
-                CPPType::Column as c_int,
-                objects.as_ptr(),
-                std::ptr::null(),
-                size,
-            );
-        }
-        self
-    }
-
-    pub fn column_with_string_list(&self, column: &Vec<String>) -> &Self {
-        if column.is_empty() {
-            return self;
-        }
-        let size = column.len();
-        let mut objects: Vec<*const c_char> = Vec::with_capacity(size);
-        for item in column {
-            let cstr = item.to_string().to_cstring();
-            objects.push(cstr.as_ptr());
-        }
-        unsafe {
-            WCDBRustForeignKey_configColumns(
-                self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null(),
-                objects.as_ptr(),
-                size,
-            );
+        if !cpp_str_vec.is_empty() {
+            unsafe {
+                WCDBRustForeignKey_configColumns(
+                    self.get_cpp_obj(),
+                    CPPType::String as c_int,
+                    std::ptr::null(),
+                    cpp_str_vec.as_ptr(),
+                    cpp_str_vec.len(),
+                );
+            }
+        } else {
+            unsafe {
+                WCDBRustForeignKey_configColumns(
+                    self.get_cpp_obj(),
+                    CPPType::Column as c_int,
+                    cpp_obj_vec.as_ptr(),
+                    std::ptr::null(),
+                    cpp_obj_vec.len(),
+                );
+            }
         }
         self
     }
