@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -88,27 +89,22 @@ impl StatementDropTrigger {
         self
     }
 
-    pub fn of(&self, schema_name: &str) -> &Self {
-        let c_str = schema_name.to_string().to_cstring();
+    pub fn of<'a, T>(&self, schema: T) -> &Self
+    where
+        T: Into<StringSchema<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementDropTrigger_configSchema(
                 self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null(),
-                c_str.as_ptr(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
-        }
-        self
-    }
-
-    pub fn of_with_schema(&self, schema: Schema) -> &Self {
-        unsafe {
-            WCDBRustStatementDropTrigger_configSchema(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(&schema) as c_int,
-                CppObject::get(&schema),
-                std::ptr::null(),
-            )
         }
         self
     }

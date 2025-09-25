@@ -8,7 +8,7 @@ pub mod qualified_table_test {
         WinqTool::winq_equal(&QualifiedTable::new("testTable"), "testTable");
         WinqTool::winq_equal(
             QualifiedTable::new("testTable")
-                .of_string("testSchema")
+                .of("testSchema")
                 .as_("testAlias"),
             "testSchema.testTable AS testAlias",
         );

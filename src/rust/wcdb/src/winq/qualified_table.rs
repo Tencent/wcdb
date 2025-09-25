@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
@@ -70,25 +71,21 @@ impl QualifiedTable {
         }
     }
 
-    pub fn of_string(&self, schema: &str) -> &Self {
+    pub fn of<'a, T>(&self, schema: T) -> &Self
+    where
+        T: Into<StringSchema<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustQualifiedTable_configSchema(
                 self.get_cpp_obj(),
-                CPPType::String as i32,
-                std::ptr::null_mut(),
-                schema.to_cstring().as_ptr(),
-            )
-        }
-        self
-    }
-
-    pub fn of_schema(&self, schema: Schema) -> &Self {
-        unsafe {
-            WCDBRustQualifiedTable_configSchema(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(&schema) as c_int,
-                CppObject::get(&schema),
-                std::ptr::null(),
+                cpp_type as i32,
+                cpp_obj,
+                name_ptr,
             )
         }
         self
