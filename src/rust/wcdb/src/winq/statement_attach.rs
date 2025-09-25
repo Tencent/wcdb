@@ -1,13 +1,12 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
 use crate::winq::bind_parameter::BindParameter;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
-use crate::winq::schema::Schema;
 use crate::winq::statement::{Statement, StatementTrait};
-use libc::c_int;
-use std::ffi::{c_char, c_void};
+use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustStatementAttach_createCppObj() -> *mut c_void;
@@ -89,12 +88,13 @@ impl StatementAttach {
         }
     }
 
+    // todo qixinbing
     pub fn attach_with_string(&self, path: &str) -> &Self {
         let c_str = path.to_string().to_cstring();
         unsafe {
             WCDBRustStatementAttach_configPath(
                 self.get_cpp_obj(),
-                CPPType::String as std::ffi::c_int,
+                CPPType::String as c_int,
                 std::ptr::null(),
                 c_str.as_ptr(),
             );
@@ -106,7 +106,7 @@ impl StatementAttach {
         unsafe {
             WCDBRustStatementAttach_configPath(
                 self.get_cpp_obj(),
-                Identifier::get_cpp_type(&bind_parameter) as std::ffi::c_int,
+                Identifier::get_cpp_type(&bind_parameter) as c_int,
                 CppObject::get(&bind_parameter),
                 std::ptr::null(),
             );
@@ -114,37 +114,33 @@ impl StatementAttach {
         self
     }
 
-    pub fn as_with_name(&self, schema_name: &str) -> &Self {
-        let c_str = schema_name.to_string().to_cstring();
+    pub fn as_<'a, T>(&self, schema: T) -> &Self
+    where
+        T: Into<StringSchema<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAttach_configSchema(
                 self.get_cpp_obj(),
-                CPPType::String as std::ffi::c_int,
-                std::ptr::null(),
-                c_str.as_ptr(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
         }
         self
     }
 
-    pub fn as_with_schema(&self, schema: Schema) -> &Self {
-        unsafe {
-            WCDBRustStatementAttach_configSchema(
-                self.get_cpp_obj(),
-                Identifier::get_cpp_type(&schema) as std::ffi::c_int,
-                CppObject::get(&schema),
-                std::ptr::null(),
-            )
-        }
-        self
-    }
-
+    // todo qixinbing
     pub fn key_with_name(&self, key: &str) -> &Self {
         let c_str = key.to_string().to_cstring();
         unsafe {
             WCDBRustStatementAttach_configKey(
                 self.get_cpp_obj(),
-                CPPType::String as std::ffi::c_int,
+                CPPType::String as c_int,
                 std::ptr::null(),
                 c_str.as_ptr(),
             );

@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
@@ -120,29 +121,25 @@ impl StatementCreateIndex {
         self
     }
 
-    pub fn of(&self, schema_name: &str) -> &Self {
+    pub fn of<'a, T>(&self, schema: T) -> &Self
+    where
+        T: Into<StringSchema<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementCreateIndex_configSchema(
                 self.get_cpp_obj(),
-                CPPType::String as c_int,
-                std::ptr::null_mut(),
-                schema_name.to_cstring().as_ptr(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             )
         }
         self
     }
-
-    // pub fn of_schema(&self,schema: Schema)-> &Self {
-    //     unsafe {
-    //         WCDBRustStatementCreateIndex_configSchema(
-    //             self.get_cpp_obj(),
-    //             CPPType::String as c_int,
-    //             0 as *mut c_void,
-    //             schema_name.to_cstring().as_ptr(),
-    //         )
-    //     }
-    //     self
-    // }
 
     pub fn on(&self, table_name: &str) -> &Self {
         unsafe {

@@ -1,5 +1,6 @@
 use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_string_schema::StringSchema;
 use crate::winq::column::Column;
 use crate::winq::column_def::ColumnDef;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
@@ -106,22 +107,25 @@ impl StatementAlterTable {
         self
     }
 
-    pub fn of(&self, schema_name: &str) -> &Self {
-        let c_schema_name = CString::new(schema_name).unwrap_or_default();
+    pub fn of<'a, T>(&self, schema: T) -> &Self
+    where
+        T: Into<StringSchema<'a>>,
+    {
+        let (cpp_type, cpp_obj, name_opt) = schema.into().get_params();
+        let name_ptr = name_opt
+            .as_ref()
+            .map(|s| s.as_ptr())
+            .unwrap_or(std::ptr::null());
         unsafe {
             WCDBRustStatementAlterTable_configSchema(
                 self.get_cpp_obj(),
-                CPPType::String as i32,
-                std::ptr::null_mut(),
-                c_schema_name.as_ptr(),
+                cpp_type as c_int,
+                cpp_obj,
+                name_ptr,
             );
         }
         self
     }
-
-    // pub fn of_schema(&self, schema: Schema) -> &Self {
-    //     self
-    // }
 
     pub fn rename_to(&self, table_name: &str) -> &Self {
         let c_table_name = CString::new(table_name).unwrap_or_default();
