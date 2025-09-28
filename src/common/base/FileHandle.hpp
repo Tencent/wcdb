@@ -49,6 +49,7 @@ public:
 protected:
     int m_fd;
 #ifdef _WIN32
+    void mapExceptHandler(void **mapped, size_t absoluteOffset);
     void *m_mapHandle;
 #endif
 
