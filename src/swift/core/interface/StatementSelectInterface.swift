@@ -67,6 +67,7 @@ extension StatementSelectInterface where Self: HandleRepresentable {
         let handle = try getHandle(writeHint: false)
         try handle.prepare(statement)
         guard try handle.step() else {
+            handle.finalize()
             return nil
         }
         let result = handle.value(atIndex: 0)
@@ -86,6 +87,7 @@ extension StatementSelectInterface where Self: HandleRepresentable {
         let handle = try getHandle(writeHint: false)
         try handle.prepare(statement)
         guard try handle.step() else {
+            handle.finalize()
             return nil
         }
         let result = handle.oneRowValue()
