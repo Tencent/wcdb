@@ -90,7 +90,10 @@ Pod::Spec.new do |wcdb|
 	"src/common/base/WCDBError.hpp", 
 	"src/common/base/Data.hpp", 
 	"src/common/base/UnsafeData.hpp", 
-	"src/common/base/MemberPointer.hpp"
+	"src/common/base/MemberPointer.hpp",
+	"src/common/base/Assertion.hpp",
+	"src/common/base/Console.hpp",
+	"src/common/utility/Enum.hpp"
   ]
   wcdb.source_files  = [
   	"src/common/**/*.{h,hpp,c,cpp}", 
