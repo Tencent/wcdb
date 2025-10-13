@@ -1337,23 +1337,27 @@ impl Database {
 
     pub fn get_value_from_statement<T: StatementTrait>(&self, statement: &T) -> WCDBResult<Value> {
         let mut handle = self.get_handle(false);
+        let mut ret = Value::default();
         let result = handle.prepared_with_main_statement(statement);
         match result {
             Ok(val) => {
                 let prepared_statement = Arc::clone(&val);
                 prepared_statement.step()?;
                 if !prepared_statement.is_done() {
-                    let ret = prepared_statement.get_value(0);
-                    prepared_statement.finalize_statement();
-                    if self.auto_invalidate_handle() {
-                        handle.invalidate();
-                    }
-                    Ok(ret)
-                } else {
-                    Ok(Value::default())
+                    ret = prepared_statement.get_value(0);
                 }
+                prepared_statement.finalize_statement();
+                if self.auto_invalidate_handle() {
+                    handle.invalidate();
+                }
+                Ok(ret)
             }
-            Err(error) => Err(error),
+            Err(error) => {
+                if self.auto_invalidate_handle() {
+                    handle.invalidate();
+                }
+                Err(error)
+            },
         }
     }
 
