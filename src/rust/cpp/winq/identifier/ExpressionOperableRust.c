@@ -36,13 +36,13 @@ void* WCDBRustExpressionOperableClassMethod(nullOperate,
 
 void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             int leftType,
-                                            long left,
+                                            void* left,
                                             WCDBRustCommonValueParameter(right),
                                             int operatorType,
                                             bool isNot) {
     CPPCommonValue left_common;
     left_common.type = leftType;
-    left_common.intValue = left;
+    left_common.intValue = (long long)left;
     WCDBRustCreateCommonValue(right);
     void* ret = (void*)WCDBExpressionBinaryOperate2(left_common, right_common, operatorType, isNot)
                     .innerValue;
@@ -51,13 +51,13 @@ void* WCDBRustExpressionOperableClassMethod(binaryOperate,
 
 void* WCDBRustExpressionOperableClassMethod(betweenOperate,
                                             int operandType,
-                                            long operand,
+                                            void* operand,
                                             WCDBRustCommonValueParameter(left),
                                             WCDBRustCommonValueParameter(right),
                                             bool isNot) {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
-    operand_common.intValue = operand;
+    operand_common.intValue = (long long)operand;
     WCDBRustCreateCommonValueWithIsCritical(left, false);
     WCDBRustCreateCommonValueWithIsCritical(right, false);
     void* ret =
@@ -70,12 +70,12 @@ void* WCDBRustExpressionOperableClassMethod(betweenOperate,
 
 void* WCDBRustExpressionOperableClassMethod(inOperate,
                                             int operandType,
-                                            long operand,
+                                            void* operand,
                                             WCDBRustCommonArrayParameter(values),
                                             bool isNot) {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
-    operand_common.intValue = operand;
+    operand_common.intValue = (long long)operand;
     void* ret = 0;
     WCDBRustCreateCommonArrayWithAction(
         values,
@@ -122,10 +122,10 @@ void* WCDBRustExpressionOperableClassMethod(inTableOperate,
 
 void* WCDBRustExpressionOperableClassMethod(collateOperate,
                                             int operandType,
-                                            long operand,
+                                            void* operand,
                                             const char* collation) {
     CPPCommonValue operand_common;
     operand_common.type = operandType;
-    operand_common.intValue = operand;
+    operand_common.intValue = (long long)operand;
     return (void*)WCDBExpressionCollateOperate2(operand_common, collation).innerValue;
 }

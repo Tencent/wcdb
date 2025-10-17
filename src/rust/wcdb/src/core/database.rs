@@ -1357,7 +1357,7 @@ impl Database {
                     handle.invalidate();
                 }
                 Err(error)
-            },
+            }
         }
     }
 

@@ -27,7 +27,11 @@ impl DerefMut for CppObject {
 
 impl Drop for CppObject {
     fn drop(&mut self) {
-        unsafe { WCDBRustBase_releaseObject(self.cpp_obj) };
+        let c_obj = self.cpp_obj;
+        self.cpp_obj = std::ptr::null_mut();
+        if c_obj != std::ptr::null_mut() {
+            unsafe { WCDBRustBase_releaseObject(c_obj) };
+        }
     }
 }
 
@@ -58,8 +62,11 @@ impl CppObjectTrait for CppObject {
     }
 
     fn release_cpp_object(&mut self) {
-        unsafe { WCDBRustBase_releaseObject(self.cpp_obj) };
-        self.cpp_obj = std::ptr::null_mut()
+        let c_obj = self.cpp_obj;
+        self.cpp_obj = std::ptr::null_mut();
+        if c_obj != std::ptr::null_mut() {
+            unsafe { WCDBRustBase_releaseObject(c_obj) };
+        }
     }
 }
 

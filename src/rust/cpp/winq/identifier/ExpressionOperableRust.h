@@ -37,21 +37,21 @@ void* WCDBRustExpressionOperableClassMethod(nullOperate,
 
 void* WCDBRustExpressionOperableClassMethod(binaryOperate,
                                             int leftType,
-                                            long left,
+                                            void* left,
                                             WCDBRustCommonValueParameter(right),
                                             int operatorType,
                                             bool isNot);
 
 void* WCDBRustExpressionOperableClassMethod(betweenOperate,
                                             int operandType,
-                                            long operand,
+                                            void* operand,
                                             WCDBRustCommonValueParameter(left),
                                             WCDBRustCommonValueParameter(right),
                                             bool isNot);
 
 void* WCDBRustExpressionOperableClassMethod(inOperate,
                                             int operandType,
-                                            long operand,
+                                            void* operand,
                                             WCDBRustCommonArrayParameter(values),
                                             bool isNot);
 
@@ -70,5 +70,5 @@ void* WCDBRustExpressionOperableClassMethod(inTableOperate,
 
 void* WCDBRustExpressionOperableClassMethod(collateOperate,
                                             int operandType,
-                                            long operand,
+                                            void* operand,
                                             const char* collation);
