@@ -101,8 +101,11 @@ fn config_cmake(target: &str) -> PathBuf {
             .define("CMAKE_SYSTEM_NAME", system_name)
             .define("CMAKE_OSX_SYSROOT", &sysroot)
             .define("CMAKE_SYSROOT", &sysroot)
-            .define("CMAKE_OSX_ARCHITECTURES", arch_name)
-            .define("CMAKE_OSX_DEPLOYMENT_TARGET", "9.0");
+            .define("CMAKE_OSX_ARCHITECTURES", arch_name);
+        // support ios 9.0
+        if target.contains("ios") {
+            cmake.define("CMAKE_OSX_DEPLOYMENT_TARGET", "9.0");
+        }
     } else if target.contains("android") {
         let toolchain_file = env::var("CMAKE_TOOLCHAIN_FILE").expect(&format!(
             "wcdb: {} is not set CMAKE_TOOLCHAIN_FILE",
