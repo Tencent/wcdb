@@ -19,7 +19,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 internal extension Array {
     func joined(_ map: (Element) -> String, separateBy separator: String = ", ") -> String {

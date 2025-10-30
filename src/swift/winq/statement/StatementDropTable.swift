@@ -19,7 +19,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 public final class StatementDropTable: Identifier<CPPStatementDropTable>, Statement {
     public init() {
         super.init(with: WCDBStatementDropTableCreate())

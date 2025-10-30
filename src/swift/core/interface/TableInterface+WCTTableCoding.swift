@@ -25,7 +25,13 @@
 #if WCDB_SWIFT_BRIDGE_OBJC
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 /// Convenient interface for table related operation
 public protocol TableInterfaceForObjc: AnyObject {

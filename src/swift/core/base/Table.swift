@@ -19,7 +19,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 /// Convenient table interface
 public final class Table<Object: Any>: @unchecked Sendable {

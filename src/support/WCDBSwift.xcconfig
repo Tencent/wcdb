@@ -1,0 +1,3 @@
+#include "WCDB.xcconfig"
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) WCDB_SWIFT_TARGET
