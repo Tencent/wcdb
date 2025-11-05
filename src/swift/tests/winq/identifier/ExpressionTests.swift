@@ -28,22 +28,22 @@ import WCDB
 class ExpresssionTests: BaseTestCase {
 
     func testExpression() {
-        let integerExpression: WCDB.Expression = 1
+        let integerExpression: ModuleExpression = 1
         WINQAssertEqual(integerExpression, "1")
 
-        let floatExpression: WCDB.Expression = 1.1
+        let floatExpression: ModuleExpression = 1.1
         WINQAssertEqual(floatExpression, "1.1000000000000001")
 
-        let stringExpression: WCDB.Expression = "1"
+        let stringExpression: ModuleExpression = "1"
         WINQAssertEqual(stringExpression, "'1'")
 
-        let nilExpression: WCDB.Expression = nil
+        let nilExpression: ModuleExpression = nil
         WINQAssertEqual(nilExpression, "NULL")
 
-        let boolExpression: WCDB.Expression = false
+        let boolExpression: ModuleExpression = false
         WINQAssertEqual(boolExpression, "FALSE")
 
-        let columnExpression: WCDB.Expression = Column(named: "testColumn").asExpression()
+        let columnExpression: ModuleExpression = Column(named: "testColumn").asExpression()
         WINQAssertEqual(columnExpression.asResultColumn(), "testColumn")
         WINQAssertEqual(columnExpression.order(.descending), "testColumn DESC")
 
