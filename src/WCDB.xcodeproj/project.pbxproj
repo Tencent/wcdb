@@ -4785,6 +4785,7 @@
 		39B524DC2304F9A2001DF52D /* InnerHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InnerHandle.cpp; sourceTree = "<group>"; };
 		39C70CC52313E20E002D773C /* Assemble.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assemble.cpp; sourceTree = "<group>"; };
 		39C70CC62313E20F002D773C /* Assemble.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Assemble.hpp; sourceTree = "<group>"; };
+		3C9A56E02EB44B9D00DA1C6E /* WCDBSwift.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = WCDBSwift.xcconfig; sourceTree = "<group>"; };
 		7500829229223463009C0F38 /* WCTBridgeMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WCTBridgeMacro.h; sourceTree = "<group>"; };
 		75067CBD293F8192005DA25B /* AutoAddColumnObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AutoAddColumnObject.mm; sourceTree = "<group>"; };
 		75067CBF293F819B005DA25B /* AutoAddColumnObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoAddColumnObject.h; sourceTree = "<group>"; };
@@ -7469,6 +7470,7 @@
 				234F0369227A9E3C00DD65A2 /* Info.plist */,
 				234F0370227A9E3D00DD65A2 /* WCDBWithoutCompression.xcconfig */,
 				0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */,
+				3C9A56E02EB44B9D00DA1C6E /* WCDBSwift.xcconfig */,
 				234F036E227A9E3D00DD65A2 /* WCDB.modulemap */,
 				7521DA49291E9D9E009642EF /* WCDBCpp.modulemap */,
 				7521DA4A291E9D9E009642EF /* WCDBObjc.modulemap */,
@@ -12196,17 +12198,19 @@
 		};
 		7521DDDB291EA349009642EF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
+			baseConfigurationReference = 3C9A56E02EB44B9D00DA1C6E /* WCDBSwift.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
+				SWIFT_ENABLE_EXPLICIT_MODULES = YES;
 			};
 			name = Debug;
 		};
 		7521DDDC291EA349009642EF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
+			baseConfigurationReference = 3C9A56E02EB44B9D00DA1C6E /* WCDBSwift.xcconfig */;
 			buildSettings = {
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
+				SWIFT_ENABLE_EXPLICIT_MODULES = YES;
 			};
 			name = Release;
 		};

@@ -23,7 +23,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 internal final class ValueWrap<T> {
     var value: T

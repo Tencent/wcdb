@@ -19,7 +19,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 public final class TableConstraint: Identifier<CPPTableConstraint> {
     public init(named name: String? = nil) {
         super.init(with: WCDBTableConstraintCreate(name?.cString))

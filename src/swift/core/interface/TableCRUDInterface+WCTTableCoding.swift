@@ -25,7 +25,13 @@
 #if WCDB_SWIFT_BRIDGE_OBJC
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 public protocol InsertTableInterfaceForObjc: AnyObject {
     associatedtype Object: WCTTableCoding
