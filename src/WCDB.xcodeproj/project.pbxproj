@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3143,6 +3143,10 @@
 		757457042402D614005E3682 /* WCTPreparedStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = 757457032402D614005E3682 /* WCTPreparedStatement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		757821E1286DF5EB0092F858 /* StatementCreateTableBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 757821DF286DF5EB0092F858 /* StatementCreateTableBridge.cpp */; };
 		757821E2286DF5EB0092F858 /* StatementCreateTableBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 757821E0286DF5EB0092F858 /* StatementCreateTableBridge.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		7587F21C2EC2DF3300CC5224 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7587F21B2EC2DF3300CC5224 /* UIKit.framework */; platformFilters = (ios, maccatalyst, tvos, watchos, ); };
+		7587F21D2EC2DF4500CC5224 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7587F21B2EC2DF3300CC5224 /* UIKit.framework */; platformFilters = (ios, maccatalyst, tvos, watchos, ); };
+		7587F21E2EC2DF5200CC5224 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7587F21B2EC2DF3300CC5224 /* UIKit.framework */; platformFilters = (ios, maccatalyst, tvos, watchos, ); };
+		7587F21F2EC2DF7400CC5224 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7587F21B2EC2DF3300CC5224 /* UIKit.framework */; platformFilters = (ios, maccatalyst, tvos, watchos, ); };
 		75882C7D28C7C2EF00F95947 /* CPPColumnConstraintPrimary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75882C7B28C7C2EF00F95947 /* CPPColumnConstraintPrimary.cpp */; };
 		75882C8128C7C3E600F95947 /* CPPColumnConstraintPrimaryAsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75882C7F28C7C3E600F95947 /* CPPColumnConstraintPrimaryAsc.cpp */; };
 		75882C8428C7C4A300F95947 /* CPPColumnConstraintPrimaryDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75882C8228C7C4A300F95947 /* CPPColumnConstraintPrimaryDesc.cpp */; };
@@ -4921,6 +4925,7 @@
 		757457032402D614005E3682 /* WCTPreparedStatement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCTPreparedStatement.h; sourceTree = "<group>"; };
 		757821DF286DF5EB0092F858 /* StatementCreateTableBridge.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatementCreateTableBridge.cpp; sourceTree = "<group>"; };
 		757821E0286DF5EB0092F858 /* StatementCreateTableBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StatementCreateTableBridge.h; sourceTree = "<group>"; };
+		7587F21B2EC2DF3300CC5224 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		75882C7B28C7C2EF00F95947 /* CPPColumnConstraintPrimary.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPColumnConstraintPrimary.cpp; sourceTree = "<group>"; };
 		75882C7C28C7C2EF00F95947 /* CPPColumnConstraintPrimary.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPPColumnConstraintPrimary.hpp; sourceTree = "<group>"; };
 		75882C7F28C7C3E600F95947 /* CPPColumnConstraintPrimaryAsc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPPColumnConstraintPrimaryAsc.cpp; sourceTree = "<group>"; };
@@ -5131,6 +5136,7 @@
 				037C3A822897E33600328EC8 /* Foundation.framework in Frameworks */,
 				037C3A832897E33600328EC8 /* libz.tbd in Frameworks */,
 				037C3A842897E33600328EC8 /* sqlcipher.framework in Frameworks */,
+				7587F21E2EC2DF5200CC5224 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5174,6 +5180,7 @@
 				2366BB21221BC0D2000ED712 /* Foundation.framework in Frameworks */,
 				23F5BE132088800C000CCD37 /* libz.tbd in Frameworks */,
 				23F5BE1120888008000CCD37 /* sqlcipher.framework in Frameworks */,
+				7587F21C2EC2DF3300CC5224 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5192,6 +5199,7 @@
 				7521D88F291E9ABB009642EF /* Foundation.framework in Frameworks */,
 				7521D890291E9ABB009642EF /* libz.tbd in Frameworks */,
 				7521D891291E9ABB009642EF /* sqlcipher.framework in Frameworks */,
+				7587F21D2EC2DF4500CC5224 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5203,6 +5211,7 @@
 				7521DC25291EA349009642EF /* Foundation.framework in Frameworks */,
 				7521DC26291EA349009642EF /* libz.tbd in Frameworks */,
 				7521DC27291EA349009642EF /* sqlcipher.framework in Frameworks */,
+				7587F21F2EC2DF7400CC5224 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7125,6 +7134,7 @@
 		23B5F93E1E111CB100E58396 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7587F21B2EC2DF3300CC5224 /* UIKit.framework */,
 				2387D8A621DF0B190028ADB9 /* XCTest.framework */,
 				239E8A922160A81600BCB308 /* Foundation.framework */,
 				23F0FD7C215F1C92008399FB /* Security.framework */,
@@ -12007,6 +12017,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Debug;
 		};
@@ -12014,6 +12031,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Release;
 		};
@@ -12095,6 +12119,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"$(WCDB_VERSION_DEFINITIONS)",
@@ -12105,7 +12133,10 @@
 					"WCDB_TESTS=1",
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator maccatalyst macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "WCDB_SWIFT_BRIDGE_OBJC WCDB_QUICK_TESTS";
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Debug;
 		};
@@ -12113,6 +12144,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"$(WCDB_VERSION_DEFINITIONS)",
@@ -12122,7 +12157,10 @@
 					"WCDB_SWIFT_BRIDGE_OBJC=1",
 				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDB.modulemap";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator maccatalyst macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WCDB_SWIFT_BRIDGE_OBJC;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Release;
 		};
@@ -12184,7 +12222,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBObjc.modulemap";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Debug;
 		};
@@ -12192,7 +12237,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DACF8B22B2ADC7700CB0710 /* WCDB.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBObjc.modulemap";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Release;
 		};
@@ -12200,8 +12252,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3C9A56E02EB44B9D00DA1C6E /* WCDBSwift.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ENABLE_EXPLICIT_MODULES = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Debug;
 		};
@@ -12209,8 +12268,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3C9A56E02EB44B9D00DA1C6E /* WCDBSwift.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
+				);
 				MODULEMAP_FILE = "$(SRCROOT)/support/WCDBSwift.modulemap";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_ENABLE_EXPLICIT_MODULES = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 			};
 			name = Release;
 		};
