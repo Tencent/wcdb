@@ -1,3 +1,10 @@
+## v2.1.15
+
+* Fix build error on Xcode 26
+* Support Mac Catalyst
+* Fix mmap crash In windows
+* Fix some known bugs
+
 ## v2.1.14
 
 * Support 16kb pagesize for Android
