@@ -60,8 +60,8 @@ fn global_trace() {
     let ret = Database::global_trace_sql(Some(
         |tag: i64, path: String, handle_id: i64, sql: String, info: String| {
             println!(
-                "global_trace_sql tag: {}, path: {}, handle_id: {}, sql: {}, info: {}",
-                tag, path, handle_id, sql, info
+                "global_trace_sql tag: {}, path: {}, handle_id: {}, info: {}, sql: {}",
+                tag, path, handle_id, info, sql
             );
         },
     ));

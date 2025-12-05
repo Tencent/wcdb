@@ -1,5 +1,6 @@
 use crate::compiler::resolved_info::column_info::ColumnInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
+use crate::macros::fts_version::FTSVersion;
 use crate::macros::wcdb_table::WCDBTable;
 use proc_macro2::{Ident, Span};
 use quote::quote;
@@ -467,26 +468,27 @@ impl RustCodeGenerator {
             }
 
             if let Some(module_info) = table_config_info.fts_module() {
-                if module_info.fts_version().is_empty() {
+                if module_info.fts_version().eq(&FTSVersion::NONE.to_string()) {
                     return Ok(token_stream);
                 }
 
                 let version = module_info.fts_version();
                 token_stream.extend(quote::quote! {
-                    #binding_ident.config_virtual_module(#version.as_str());
+                    #binding_ident.config_virtual_module(#version);
                 });
 
-                let parameter = module_info.tokenizer_parameters().join(" ");
-                let tokenizer =
-                    format!("{}{}{}", "tokenize = ", module_info.tokenizer(), parameter);
+                let mut tokenizer = format!("{}{}", "tokenize = ", module_info.tokenizer());
+                for parameter in module_info.tokenizer_parameters() {
+                    tokenizer.push_str(format!(" {}", parameter).as_str());
+                }
                 token_stream.extend(quote::quote! {
-                    #binding_ident.config_virtual_module_argument(#tokenizer.as_str());
+                    #binding_ident.config_virtual_module_argument(#tokenizer);
                 });
 
                 if !module_info.external_table().is_empty() {
                     let content = format!("{}{}{}", "content='", module_info.external_table(), "'");
                     token_stream.extend(quote::quote! {
-                        #binding_ident.config_virtual_module_argument(#content.as_str());
+                        #binding_ident.config_virtual_module_argument(#content);
                     });
                 }
             }

@@ -75,16 +75,15 @@ bool WCDBRustBinding_createTable(void* self, const char* tableName, void* handle
     return ret;
 }
 
-// jboolean WCDBRustBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong
-// handle)
-//{
-//     WCDBRustBridgeStruct(CPPBinding, self);
-//     WCDBRustBridgeStruct(CPPHandle, handle);
-//     WCDBRustGetString(tableName);
-//     jboolean ret = WCDBBindingCreateVirtualTable(selfStruct, tableNameString, handleStruct);
-//     WCDBRustReleaseString(tableName);
-//     return ret;
-// }
+bool WCDBRustBindingClassMethod(createVirtualTable,
+                                void* self,
+                                const char* tableName,
+                                void* handle) {
+    WCDBRustBridgeStruct(CPPBinding, self);
+    WCDBRustBridgeStruct(CPPHandle, handle);
+    bool ret = WCDBBindingCreateVirtualTable(selfStruct, tableName, handleStruct);
+    return ret;
+}
 
 void* WCDBRustBindingClassMethod(getBaseBinding, void* self) {
     WCDBRustBridgeStruct(CPPBinding, self);

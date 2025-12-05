@@ -18,6 +18,7 @@ use crate::winq::ordering_term::OrderingTerm;
 use crate::winq::statement::StatementTrait;
 use lazy_static::lazy_static;
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::ffi::{c_char, c_double, c_int, c_void, CStr, CString};
 use std::ptr::null_mut;
 use std::sync::{Arc, Mutex};
@@ -212,6 +213,21 @@ extern "C" {
     fn WCDBRustDatabase_getTag(cpp_obj: *mut c_void) -> *mut c_void;
 
     fn WCDBRustDatabase_setTag(cpp_obj: *mut c_void, tag: i64);
+
+    fn WCDBRustDatabase_addTokenizer(cpp_obj: *mut c_void, tokenizer: *const c_char);
+
+    fn WCDBRustDatabase_configPinyinDict(
+        keys: *const *const c_char,
+        values: *const *const *const c_char,
+        values_len: *const usize,
+        keys_len: usize,
+    );
+
+    fn WCDBRustDatabase_configTraditionalChineseDict(
+        keys: *const *const c_char,
+        values: *const *const c_char,
+        len: usize,
+    );
 
     fn WCDBRustDatabase_setNotificationWhenCorrupted(
         cpp_obj: *mut c_void,
@@ -623,6 +639,15 @@ impl HandleORMOperationTrait for Database {
     ) -> WCDBResult<bool> {
         self.handle_orm_operation
             .create_table(self.get_handle(true), table_name, binding)
+    }
+
+    fn create_virtual_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool> {
+        self.handle_orm_operation
+            .create_virtual_table(self.get_handle(true), table_name, binding)
     }
 
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
@@ -1429,6 +1454,90 @@ impl Database {
                 Ok(ret_vec)
             }
             Err(error) => Err(error),
+        }
+    }
+
+    pub fn add_tokenizer(&self, tokenizer: &str) {
+        let c_tokenizer = CString::new(tokenizer).unwrap_or_default();
+        unsafe {
+            WCDBRustDatabase_addTokenizer(self.get_cpp_obj(), c_tokenizer.as_ptr());
+        }
+    }
+
+    pub fn config_pinyin_dict(pinyin_dict: HashMap<String, Vec<String>>) {
+        if pinyin_dict.keys().len() == 0 {
+            return;
+        }
+
+        let mut c_keys: Vec<CString> = Vec::new();
+        let mut c_keys_ptr: Vec<*const c_char> = Vec::new();
+
+        let mut c_values: Vec<Vec<CString>> = Vec::new();
+        let mut row_ptr_vec: Vec<Vec<*const c_char>> = Vec::new();
+        let mut c_values_ptr: Vec<*const *const c_char> = Vec::new();
+        let mut values_len: Vec<usize> = Vec::new();
+
+        for (key, vals) in pinyin_dict.iter() {
+            let ck = key.as_str().to_cstring();
+            c_keys_ptr.push(ck.as_ptr());
+            c_keys.push(ck);
+
+            let mut row_cstrings: Vec<CString> = Vec::new();
+            let mut row_ptrs: Vec<*const c_char> = Vec::new();
+
+            for v in vals {
+                let cv = v.as_str().to_cstring();
+                row_ptrs.push(cv.as_ptr());
+                row_cstrings.push(cv);
+            }
+
+            values_len.push(row_ptrs.len());
+            row_ptr_vec.push(row_ptrs);
+            c_values.push(row_cstrings);
+        }
+
+        for row_ptr in &row_ptr_vec {
+            c_values_ptr.push(row_ptr.as_ptr());
+        }
+
+        unsafe {
+            WCDBRustDatabase_configPinyinDict(
+                c_keys_ptr.as_ptr(),
+                c_values_ptr.as_ptr(),
+                values_len.as_ptr(),
+                c_keys_ptr.len(),
+            );
+        }
+    }
+
+    pub fn config_traditional_chinese_dict(traditional_chinese_dict: HashMap<String, String>) {
+        if traditional_chinese_dict.keys().len() == 0 {
+            return;
+        }
+
+        let mut key_buf: Vec<CString> = Vec::new();
+        let mut value_buf: Vec<CString> = Vec::new();
+
+        let mut key_ptrs: Vec<*const c_char> = Vec::new();
+        let mut value_ptrs: Vec<*const c_char> = Vec::new();
+        for (k, v) in traditional_chinese_dict {
+            let ck = k.to_cstring();
+            let cv = v.to_cstring();
+
+            key_ptrs.push(ck.as_ptr());
+            value_ptrs.push(cv.as_ptr());
+
+            key_buf.push(ck);
+            value_buf.push(cv);
+        }
+        let len = key_ptrs.len();
+
+        unsafe {
+            WCDBRustDatabase_configTraditionalChineseDict(
+                key_ptrs.as_ptr(),
+                value_ptrs.as_ptr(),
+                len,
+            );
         }
     }
 

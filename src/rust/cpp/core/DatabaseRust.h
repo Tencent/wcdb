@@ -133,7 +133,7 @@ bool WCDBRustDatabaseClassMethod(removeFiles, void* self);
 //
 // jlong WCDBRustDatabaseClassMethod(getFileSize, jlong self);
 //
-// void WCDBRustDatabaseClassMethod(addTokenizer, jlong self, jstring tokenizer);
+void WCDBRustDatabaseClassMethod(addTokenizer, void* self, const char* tokenizer);
 // void WCDBRustDatabaseClassMethod(addAuxiliaryFunction, jlong self, jstring auxiliaryFunction);
 
 typedef void (*RustGlobalCorruptionNotificationCallback)(void* self);

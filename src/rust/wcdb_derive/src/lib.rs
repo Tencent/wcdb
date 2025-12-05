@@ -4,10 +4,10 @@ mod compiler;
 mod macros;
 
 use crate::compiler::resolved_info::column_info::ColumnInfo;
-use crate::compiler::resolved_info::fts_module_info::FTSModuleInfo;
 use crate::compiler::resolved_info::table_config_info::TableConfigInfo;
 use crate::compiler::rust_code_generator::RustCodeGenerator;
 use crate::compiler::rust_field_orm_info::RUST_FIELD_ORM_INFO_MAP;
+use crate::macros::fts_version::FTSVersion;
 use crate::macros::wcdb_field::WCDBField;
 use crate::macros::wcdb_table::WCDBTable;
 use darling::{FromDeriveInput, FromField, FromMeta};
@@ -26,10 +26,7 @@ pub fn process(input: TokenStream) -> TokenStream {
     check_class_element(&input);
     let table = WCDBTable::from_derive_input(&input).unwrap();
     check_fts_module(&table);
-    let table_constraint_info = TableConfigInfo::resolve(
-        &table,
-        Some(FTSModuleInfo::new()), //TODO dengxudong fts module
-    );
+    let table_constraint_info = TableConfigInfo::resolve(&table);
     let all_column_info = table.get_all_column_info();
     check_field_element(&table, &all_column_info);
     check_field_default(&all_column_info);
@@ -71,7 +68,22 @@ fn check_class_element(input: &DeriveInput) {
 }
 
 fn check_fts_module(table: &WCDBTable) {
-    // todo qixinbing
+    if let Some(fts_module) = table.get_fts_module() {
+        if fts_module.version() == FTSVersion::NONE {
+            if !fts_module.tokenizer().is_empty() || !fts_module.tokenizer_parameters().is_empty() {
+                panic!(
+                    "You need to config fts version in @FTSModule : {}",
+                    table.get_struct_name()
+                );
+            }
+        }
+        if fts_module.tokenizer().is_empty() {
+            panic!(
+                "You need to config a tokenizer in @FTSModule : {}",
+                table.get_struct_name()
+            );
+        }
+    }
 }
 
 fn check_field_element(table: &WCDBTable, all_column_info: &Vec<ColumnInfo>) {

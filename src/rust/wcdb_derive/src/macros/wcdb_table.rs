@@ -1,4 +1,5 @@
 use crate::compiler::resolved_info::column_info::ColumnInfo;
+use crate::macros::fts_module::FTSModule;
 use crate::macros::multi_indexes::MultiIndexes;
 use crate::macros::multi_primary::MultiPrimary;
 use crate::macros::multi_unique::MultiUnique;
@@ -25,8 +26,8 @@ pub struct WCDBTable {
     multi_unique: Vec<MultiUnique>,
     #[darling(default)]
     is_without_row_id: bool,
-    // #[darling(default)]
-    // fts_module: ???,
+    #[darling(default)]
+    fts_module: Option<FTSModule>,
 }
 
 impl WCDBTable {
@@ -91,5 +92,9 @@ impl WCDBTable {
 
     pub(crate) fn is_without_row_id(&self) -> bool {
         self.is_without_row_id
+    }
+
+    pub(crate) fn get_fts_module(&self) -> &Option<FTSModule> {
+        &self.fts_module
     }
 }

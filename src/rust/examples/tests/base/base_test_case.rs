@@ -47,8 +47,8 @@ impl BaseTestCase {
 
         let ret = Database::global_trace_sql(Some(|tag, path, handle_id, sql, info| {
             println!(
-                "global_trace_sql tag:{} path:{} handle_id:{} sql:{} info:{:?}",
-                tag, path, handle_id, sql, info
+                "global_trace_sql tag:{} path:{} handle_id:{} info:{:?} sql:{}",
+                tag, path, handle_id, info, sql
             );
         }));
         assert!(ret.is_ok());

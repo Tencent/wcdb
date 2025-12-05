@@ -590,13 +590,10 @@ bool WCDBRustDatabaseClassMethod(removeFiles, void* self) {
 //    return size.hasValue ? size.value : -1;
 //}
 //
-// void WCDBRustDatabaseClassMethod(addTokenizer, jlong self, jstring tokenizer)
-//{
-//    WCDBRustBridgeStruct(CPPDatabase, self);
-//    WCDBRustGetString(tokenizer);
-//    WCDBDatabaseAddTokenizer(selfStruct, tokenizerString);
-//    WCDBRustReleaseString(tokenizer);
-//}
+void WCDBRustDatabaseClassMethod(addTokenizer, void* self, const char* tokenizer) {
+    WCDBRustBridgeStruct(CPPDatabase, self);
+    WCDBDatabaseAddTokenizer(selfStruct, tokenizer);
+}
 //
 // void WCDBRustDatabaseClassMethod(addAuxiliaryFunction, jlong self, jstring auxiliaryFunction)
 //{

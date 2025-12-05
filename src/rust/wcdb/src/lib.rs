@@ -9,4 +9,5 @@ pub mod core;
 pub mod orm;
 pub mod winq;
 
+pub mod fts;
 mod utils;

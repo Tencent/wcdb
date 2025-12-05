@@ -17,6 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+use crate::macros::fts_module::FTSModule;
 
 pub struct FTSModuleInfo {
     fts_version: String,
@@ -34,6 +35,21 @@ impl FTSModuleInfo {
             external_table: "".to_string(),
         }
     }
+
+    pub fn resolve(fts_module: &FTSModule) -> Self {
+        let tokenizer_parameters = fts_module
+            .tokenizer_parameters()
+            .iter()
+            .map(|s| s.value())
+            .collect::<Vec<_>>();
+        Self {
+            fts_version: fts_module.version().to_string(),
+            tokenizer: fts_module.tokenizer().to_string(),
+            tokenizer_parameters,
+            external_table: fts_module.external_table().to_string(),
+        }
+    }
+
     pub fn fts_version(&self) -> String {
         self.fts_version.clone()
     }

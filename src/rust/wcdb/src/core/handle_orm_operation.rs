@@ -27,6 +27,12 @@ pub trait HandleORMOperationTrait {
         binding: &R,
     ) -> WCDBResult<bool>;
 
+    fn create_virtual_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool>;
+
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool>;
 
     fn drop_table(&self, table_name: &str) -> WCDBResult<()>;
@@ -185,6 +191,17 @@ impl HandleORMOperation {
         binding: &R,
     ) -> WCDBResult<bool> {
         binding.base_binding().create_table(table_name, handle)
+    }
+
+    pub(crate) fn create_virtual_table<T, R: TableBinding<T>>(
+        &self,
+        handle: Handle,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool> {
+        binding
+            .base_binding()
+            .create_virtual_table(table_name, handle)
     }
 
     pub(crate) fn table_exist(

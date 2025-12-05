@@ -46,7 +46,8 @@ void WCDBRustBindingClassMethod(configVirtualModule, void* self, const char* mod
 void WCDBRustBindingClassMethod(configVirtualModuleArgument, void* self, const char* argument);
 void WCDBRustBindingClassMethod(configWithoutRowId, void* self);
 bool WCDBRustBindingClassMethod(createTable, void* self, const char* tableName, void* handle);
-
-// jboolean
-// WCDBRustBindingClassMethod(createVirtualTable, jlong self, jstring tableName, jlong handle);
+bool WCDBRustBindingClassMethod(createVirtualTable,
+                                void* self,
+                                const char* tableName,
+                                void* handle);
 void* WCDBRustBindingClassMethod(getBaseBinding, void* self);

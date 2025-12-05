@@ -23,7 +23,7 @@ impl TableConfigInfo {
         }
     }
 
-    pub fn resolve(table: &WCDBTable, fts_module_opt: Option<FTSModuleInfo>) -> TableConfigInfo {
+    pub fn resolve(table: &WCDBTable) -> TableConfigInfo {
         let mut resolved_annotation = TableConfigInfo::new();
         resolved_annotation.is_without_row_id = table.is_without_row_id();
         for multi_indexes_item in table.multi_indexes() {
@@ -45,8 +45,10 @@ impl TableConfigInfo {
                 .get_or_insert(vec![])
                 .push(MultiUniqueInfo::resolve(multi_unique))
         }
-        // todo dengxudong fts 逻辑补全
-        // resolved_annotation.fts_module = fts_module_opt;
+
+        if let Some(fts_module) = table.get_fts_module() {
+            resolved_annotation.fts_module = Some(FTSModuleInfo::resolve(fts_module));
+        }
         resolved_annotation
     }
 

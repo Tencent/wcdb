@@ -31,5 +31,7 @@ foreach (DIR ${WCDB_RUST_SRC_DIR})
     list(APPEND WCDB_RUST_INCLUDE ${DIR_INCLUDE})
 endforeach ()
 
+recursive_subdirs(WCDB_RUST_INCLUDES ${WCDB_RUST_SRC_DIR})
+
 target_sources(${TARGET_NAME} PUBLIC ${WCDB_RUST_SRC})
 target_include_directories(${TARGET_NAME} PUBLIC ${WCDB_RUST_INCLUDE})

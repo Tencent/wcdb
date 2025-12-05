@@ -280,6 +280,19 @@ impl<'a> HandleORMOperationTrait for Handle<'a> {
             .create_table(self.get_handle(true), table_name, binding)
     }
 
+    fn create_virtual_table<T, R: TableBinding<T>>(
+        &self,
+        table_name: &str,
+        binding: &R,
+    ) -> WCDBResult<bool> {
+        let handle_inner = self.handle_inner.borrow();
+        handle_inner.handle_orm_operation.create_virtual_table(
+            self.get_handle(true),
+            table_name,
+            binding,
+        )
+    }
+
     fn table_exist(&self, table_name: &str) -> WCDBResult<bool> {
         let handle_inner = self.handle_inner.borrow();
         handle_inner.handle_orm_operation.table_exist(

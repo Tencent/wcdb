@@ -214,7 +214,7 @@ impl TestCaseTrait for DatabaseTestCase {
     fn setup(&self) -> WCDBResult<()> {
         self.base_test_case.setup()?;
         self.set_expect_mode(Expect::AllSQLs);
-        let file_name = "testDatabase";
+        let file_name = "testDatabase.db";
         self.set_file_name(file_name.to_string());
         // "/Users/xxx/Rust/wcdb_rust/src/rust/wcdb_rust/BaseTestCase/target/tmp/testDatabase"
         let path = format!(

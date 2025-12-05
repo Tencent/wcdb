@@ -36,6 +36,12 @@ extern "C" {
         handle: *mut c_void,
     ) -> bool;
 
+    fn WCDBRustBinding_createVirtualTable(
+        cpp_obj: *mut c_void,
+        path: *const c_char,
+        handle: *mut c_void,
+    ) -> bool;
+
     fn WCDBRustBinding_getBaseBinding(cpp_obj: *mut c_void) -> *mut c_void;
 }
 
@@ -110,6 +116,18 @@ impl Binding {
         let cpp_handle = handle.get_cpp_handle()?;
         Ok(unsafe {
             WCDBRustBinding_createTable(
+                self.cpp_obj.get_cpp_obj(),
+                c_table_name.as_ptr(),
+                cpp_handle,
+            )
+        })
+    }
+
+    pub fn create_virtual_table(&self, table_name: &str, handle: Handle) -> WCDBResult<bool> {
+        let c_table_name = table_name.to_cstring();
+        let cpp_handle = handle.get_cpp_handle()?;
+        Ok(unsafe {
+            WCDBRustBinding_createVirtualTable(
                 self.cpp_obj.get_cpp_obj(),
                 c_table_name.as_ptr(),
                 cpp_handle,
