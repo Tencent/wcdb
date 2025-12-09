@@ -212,6 +212,7 @@ fn openssl_search_path_from_target(target: &str) -> Option<&'static str> {
         // linux
         "aarch64-unknown-linux-gnu" => Some("../../../tools/prebuild/openssl/linux/arm64"),
         "x86_64-unknown-linux-gnu" => Some("../../../tools/prebuild/openssl/linux/x86_64"),
+        "loongarch64-unknown-linux-gnu" => Some("../../../tools/prebuild/openssl/linux/loongarch64"),
         // windows
         "x86_64-pc-windows-msvc" => Some("..\\..\\..\\tools\\prebuild\\openssl\\windows\\win64"),
         "i686-pc-windows-msvc" => Some("..\\..\\..\\tools\\prebuild\\openssl\\windows\\win32"),
