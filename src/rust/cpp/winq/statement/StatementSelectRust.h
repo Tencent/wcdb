@@ -51,8 +51,8 @@ void WCDBRustStatementSelectClassMethod(configGroups,
                                         void* self,
                                         WCDBRustMultiTypeArrayParameter(groups));
 // void WCDBRustStatementSelectClassMethod(configHaving, jlong self, jlong expression);
-// void WCDBRustStatementSelectClassMethod(configUnion, jlong self);
-// void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self);
+void WCDBRustStatementSelectClassMethod(configUnion, void* self);
+void WCDBRustStatementSelectClassMethod(configUnionAll, void* self);
 // void WCDBRustStatementSelectClassMethod(configIntersect, jlong self);
 // void WCDBRustStatementSelectClassMethod(configExcept, jlong self);
 void WCDBRustStatementSelectClassMethod(configOrders, void* self, void** orders, int ordersLength);

@@ -70,6 +70,9 @@ pub struct PinyinOptions {
     pub allow_initials: bool,
 }
 
+// 单个汉字的拼音最大长度
+const PINYIN_MAX_LENGTH: usize = 6;
+
 /// 输入不带空格拼音 → 输出 WCDB 可用 token 列表
 pub fn generate_pinyin_tokens(input: &str, options: &PinyinOptions) -> Vec<String> {
     let s = input.to_lowercase();
@@ -80,8 +83,7 @@ pub fn generate_pinyin_tokens(input: &str, options: &PinyinOptions) -> Vec<Strin
 
     while i < n {
         let mut found = None;
-        // 最大匹配 6 个字母
-        for len in (1..=6).rev() {
+        for len in (1..=PINYIN_MAX_LENGTH).rev() {
             if i + len <= n {
                 let slice: String = chars[i..i + len].iter().collect();
                 if PINYIN_SET.contains(slice.as_str()) {

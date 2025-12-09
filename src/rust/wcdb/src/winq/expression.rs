@@ -312,6 +312,14 @@ impl ExpressionOperableTrait for Expression {
             .not_in(Identifier::get_cpp_type(self), operands, true)
     }
 
+    fn in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        self.expression_operable.in_statement_select(stat)
+    }
+
+    fn not_in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        self.expression_operable.not_in_statement_select(stat)
+    }
+
     fn in_table(&self, table: &str) -> Expression {
         self.expression_operable.in_table(table)
     }

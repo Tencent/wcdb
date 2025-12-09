@@ -108,17 +108,17 @@ void* WCDBRustExpressionOperableClassMethod(inTableOperate,
 //    return ret;
 //}
 //
-// jlong WCDBRustExpressionOperableClassMethod(
-// inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot)
-//{
-//    CPPCommonValue operand_common;
-//    operand_common.type = operandType;
-//    operand_common.intValue = operand;
-//    WCDBRustBridgeStruct(CPPStatementSelect, select);
-//    return (jlong) WCDBExpressionInSelectionOperate2(operand_common, selectStruct, isNot)
-//    .innerValue;
-//}
-//
+void* WCDBRustExpressionOperableClassMethod(inSelectionOperate,
+                                            int operandType,
+                                            void* operand,
+                                            void* select,
+                                            bool isNot) {
+    CPPCommonValue operand_common;
+    operand_common.type = operandType;
+    operand_common.intValue = (long long)operand;
+    WCDBRustBridgeStruct(CPPStatementSelect, select);
+    return WCDBExpressionInSelectionOperate2(operand_common, selectStruct, isNot).innerValue;
+}
 
 void* WCDBRustExpressionOperableClassMethod(collateOperate,
                                             int operandType,

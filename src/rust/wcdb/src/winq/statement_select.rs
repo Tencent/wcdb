@@ -52,6 +52,10 @@ extern "C" {
         length: c_size_t,
     );
 
+    fn WCDBRustStatementSelect_configUnion(cpp_obj: *mut c_void);
+
+    fn WCDBRustStatementSelect_configUnionAll(cpp_obj: *mut c_void);
+
     fn WCDBRustStatementSelect_configLimitCount(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
@@ -244,6 +248,20 @@ impl StatementSelect {
                 cpp_str_ptrs.as_ptr(),
                 cpp_type_vec.len(),
             );
+        }
+        self
+    }
+
+    pub fn union(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementSelect_configUnion(self.get_cpp_obj());
+        }
+        self
+    }
+
+    pub fn union_all(&self) -> &Self {
+        unsafe {
+            WCDBRustStatementSelect_configUnion(self.get_cpp_obj());
         }
         self
     }

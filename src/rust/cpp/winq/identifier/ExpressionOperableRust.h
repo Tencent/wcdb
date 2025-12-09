@@ -64,9 +64,11 @@ void* WCDBRustExpressionOperableClassMethod(inTableOperate,
 // jlong WCDBRustExpressionOperableClassMethod(
 // inFunctionOperate, jint operandType, jlong operand, jstring func, jboolean isNot);
 //
-// jlong WCDBRustExpressionOperableClassMethod(
-// inSelectionOperate, jint operandType, jlong operand, jlong select, jboolean isNot);
-//
+void* WCDBRustExpressionOperableClassMethod(inSelectionOperate,
+                                            int operandType,
+                                            void* operand,
+                                            void* select,
+                                            bool isNot);
 
 void* WCDBRustExpressionOperableClassMethod(collateOperate,
                                             int operandType,

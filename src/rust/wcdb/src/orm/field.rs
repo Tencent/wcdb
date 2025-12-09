@@ -16,6 +16,7 @@ use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::{Order, OrderingTerm};
 use crate::winq::result_column::ResultColumn;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
+use crate::winq::statement_select::StatementSelect;
 use std::ffi::c_void;
 
 pub struct Field<U> {
@@ -228,6 +229,14 @@ impl<U> ExpressionOperableTrait for Field<U> {
     {
         self.column
             .not_in(Identifier::get_cpp_type(self), operands, true)
+    }
+
+    fn in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        self.column.in_statement_select(stat)
+    }
+
+    fn not_in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        self.column.in_statement_select(stat)
     }
 
     fn in_table(&self, table: &str) -> Expression {

@@ -7,6 +7,7 @@ use crate::winq::expression::Expression;
 use crate::winq::expression_convertible::ExpressionConvertibleTrait;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use crate::winq::statement_select::StatementSelect;
 use std::ffi::{c_char, c_double, c_int, c_void};
 
 extern "C" {
@@ -49,6 +50,13 @@ extern "C" {
         double_array: *const c_double,
         string_array: *const *const c_char,
         array_length: c_int,
+        is_not: bool,
+    ) -> *mut c_void;
+
+    fn WCDBRustExpressionOperable_inSelectionOperate(
+        operand_type: c_int,
+        operand: *mut c_void,
+        select: *mut c_void,
         is_not: bool,
     ) -> *mut c_void;
 
@@ -203,6 +211,10 @@ pub trait ExpressionOperableTrait {
     fn not_in<'a, S>(&self, operands: Vec<S>) -> Expression
     where
         S: Into<BasicExpression<'a>>;
+
+    fn in_statement_select(&self, stat: &StatementSelect) -> Expression;
+
+    fn not_in_statement_select(&self, stat: &StatementSelect) -> Expression;
 
     fn in_table(&self, table: &str) -> Expression;
 
@@ -446,6 +458,30 @@ impl ExpressionOperableTrait for ExpressionOperable {
         S: Into<BasicExpression<'a>>,
     {
         self.not_in(CPPType::Expression, operands, true)
+    }
+
+    fn in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inSelectionOperate(
+                self.get_type() as i32,
+                CppObject::get(self),
+                CppObject::get(stat),
+                false,
+            )
+        };
+        Self::create_expression(cpp_obj)
+    }
+
+    fn not_in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        let cpp_obj = unsafe {
+            WCDBRustExpressionOperable_inSelectionOperate(
+                self.get_type() as i32,
+                CppObject::get(self),
+                CppObject::get(stat),
+                true,
+            )
+        };
+        Self::create_expression(cpp_obj)
     }
 
     fn in_table(&self, table: &str) -> Expression {

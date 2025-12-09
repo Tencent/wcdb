@@ -88,17 +88,15 @@ void WCDBRustStatementSelectClassMethod(configGroups,
 //    WCDBStatementSelectConfigHaving(selfStruct, expressionStruct);
 //}
 //
-// void WCDBRustStatementSelectClassMethod(configUnion, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBStatementSelectConfigUnion(selfStruct);
-//}
-//
-// void WCDBRustStatementSelectClassMethod(configUnionAll, jlong self)
-//{
-//    WCDBRustBridgeStruct(CPPStatementSelect, self);
-//    WCDBStatementSelectConfigUnionAll(selfStruct);
-//}
+void WCDBRustStatementSelectClassMethod(configUnion, void* self) {
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBStatementSelectConfigUnion(selfStruct);
+}
+
+void WCDBRustStatementSelectClassMethod(configUnionAll, void* self) {
+    WCDBRustBridgeStruct(CPPStatementSelect, self);
+    WCDBStatementSelectConfigUnionAll(selfStruct);
+}
 //
 // void WCDBRustStatementSelectClassMethod(configIntersect, jlong self)
 //{

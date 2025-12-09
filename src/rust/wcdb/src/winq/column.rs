@@ -16,6 +16,7 @@ use crate::winq::indexed_column_convertible::IndexedColumnConvertibleTrait;
 use crate::winq::ordering_term::{Order, OrderingTerm};
 use crate::winq::result_column::ResultColumn;
 use crate::winq::result_column_convertible_trait::ResultColumnConvertibleTrait;
+use crate::winq::statement_select::StatementSelect;
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
@@ -264,6 +265,14 @@ impl ExpressionOperableTrait for Column {
     {
         self.expression_operable
             .not_in(Identifier::get_cpp_type(self), operands, true)
+    }
+
+    fn in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        self.expression_operable.in_statement_select(stat)
+    }
+
+    fn not_in_statement_select(&self, stat: &StatementSelect) -> Expression {
+        self.expression_operable.not_in_statement_select(stat)
     }
 
     fn in_table(&self, table: &str) -> Expression {

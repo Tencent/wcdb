@@ -2,80 +2,64 @@ use crate::base::cpp_object::{CppObject, CppObjectTrait};
 use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
 use crate::base::param::enum_string_column::StringColumn;
 use crate::base::param::enum_string_schema::StringSchema;
+use crate::base::param::enum_trigger_statement::TriggerStatement;
 use crate::utils::ToCString;
 use crate::winq::expression::Expression;
 use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
 use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::statement::{Statement, StatementTrait};
+use crate::winq::statement_delete::StatementDelete;
+use crate::winq::statement_insert::StatementInsert;
+use crate::winq::statement_select::StatementSelect;
+use crate::winq::statement_update::StatementUpdate;
 use std::ffi::{c_char, c_int, c_void};
 
 extern "C" {
     fn WCDBRustStatementCreateTrigger_createCppObj() -> *mut c_void;
 
-    fn WCDBRustStatementCreateTrigger_configTrigger(
-        cpp_obj: *mut c_void,
-        name: *const c_char,
-    ) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configTrigger(cpp_obj: *mut c_void, name: *const c_char);
 
-    fn WCDBRustStatementCreateTrigger_configTemp(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configTemp(cpp_obj: *mut c_void);
 
     fn WCDBRustStatementCreateTrigger_configSchema(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         object: *const c_void,
         path: *const c_char,
-    ) -> *mut c_void;
+    );
 
-    fn WCDBRustStatementCreateTrigger_configIfNotExist(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configIfNotExist(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_configBefore(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configBefore(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_configAfter(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configAfter(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_configInsteadOf(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configInsteadOf(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_configDelete(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configDelete(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_configInsert(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configInsert(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_configUpdate(cpp_obj: *mut c_void) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configUpdate(cpp_obj: *mut c_void);
 
     fn WCDBRustStatementCreateTrigger_configColumns(
         cpp_obj: *mut c_void,
         cpp_type: c_int,
         object: *const *mut c_void,
-        object_len: c_int,
         column_names: *const *const c_char,
-        column_names_len: c_int,
-    ) -> *mut c_void;
+        len: c_int,
+    );
 
-    fn WCDBRustStatementCreateTrigger_configTable(
-        cpp_obj: *mut c_void,
-        table: *const c_char,
-    ) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configTable(cpp_obj: *mut c_void, table: *const c_char);
 
-    fn WCDBRustStatementCreateTrigger_configForEachRow(cpp_obj: *mut c_void) -> *mut c_void;
-    fn WCDBRustStatementCreateTrigger_configWhen(
-        cpp_obj: *mut c_void,
-        condition: *const c_void,
-    ) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configForEachRow(cpp_obj: *mut c_void);
 
-    fn WCDBRustStatementCreateTrigger_executeInsert(
-        cpp_obj: *mut c_void,
-        insert: *const c_void,
-    ) -> *mut c_void;
-    fn WCDBRustStatementCreateTrigger_executeUpdate(
-        cpp_obj: *mut c_void,
-        insert: *const c_void,
-    ) -> *mut c_void;
-    fn WCDBRustStatementCreateTrigger_executeDelete(
-        cpp_obj: *mut c_void,
-        insert: *const c_void,
-    ) -> *mut c_void;
-    fn WCDBRustStatementCreateTrigger_executeSelect(
-        cpp_obj: *mut c_void,
-        insert: *const c_void,
-    ) -> *mut c_void;
+    fn WCDBRustStatementCreateTrigger_configWhen(cpp_obj: *mut c_void, condition: *const c_void);
+
+    fn WCDBRustStatementCreateTrigger_executeInsert(cpp_obj: *mut c_void, insert: *const c_void);
+    fn WCDBRustStatementCreateTrigger_executeUpdate(cpp_obj: *mut c_void, insert: *const c_void);
+    fn WCDBRustStatementCreateTrigger_executeDelete(cpp_obj: *mut c_void, insert: *const c_void);
+    fn WCDBRustStatementCreateTrigger_executeSelect(cpp_obj: *mut c_void, insert: *const c_void);
 }
 
 #[derive(Debug)]
@@ -252,7 +236,6 @@ impl StatementCreateTrigger {
                     self.get_cpp_obj(),
                     CPPType::String as c_int,
                     std::ptr::null_mut(),
-                    0 as c_int,
                     cpp_str_vec.as_ptr(),
                     cpp_str_vec.len() as c_int,
                 );
@@ -263,9 +246,8 @@ impl StatementCreateTrigger {
                     self.get_cpp_obj(),
                     cpp_type as c_int,
                     cpp_obj_vec.as_ptr(),
-                    cpp_obj_vec.len() as c_int,
                     std::ptr::null_mut(),
-                    0 as c_int,
+                    cpp_obj_vec.len() as c_int,
                 );
             }
         }
@@ -297,12 +279,36 @@ impl StatementCreateTrigger {
         self
     }
 
-    pub fn execute<T: StatementTrait>(&self, statement: &T) -> &Self {
-        unsafe {
-            WCDBRustStatementCreateTrigger_executeInsert(
-                self.get_cpp_obj(),
-                CppObject::get(statement),
-            );
+    pub fn execute<'a, T>(&self, statement: T) -> &Self
+    where
+        T: Into<TriggerStatement<'a>>,
+    {
+        let statement_enum = statement.into();
+        match statement_enum {
+            TriggerStatement::Insert(insert) => unsafe {
+                WCDBRustStatementCreateTrigger_executeInsert(
+                    self.get_cpp_obj(),
+                    CppObject::get(insert),
+                );
+            },
+            TriggerStatement::Delete(delete) => unsafe {
+                WCDBRustStatementCreateTrigger_executeDelete(
+                    self.get_cpp_obj(),
+                    CppObject::get(delete),
+                );
+            },
+            TriggerStatement::Update(update) => unsafe {
+                WCDBRustStatementCreateTrigger_executeUpdate(
+                    self.get_cpp_obj(),
+                    CppObject::get(update),
+                );
+            },
+            TriggerStatement::Select(select) => unsafe {
+                WCDBRustStatementCreateTrigger_executeSelect(
+                    self.get_cpp_obj(),
+                    CppObject::get(select),
+                );
+            },
         }
         self
     }
