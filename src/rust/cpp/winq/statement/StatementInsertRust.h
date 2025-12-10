@@ -52,6 +52,6 @@ void WCDBRustStatementInsertClassMethod(configValues,
                                         void* self,
                                         WCDBRustMultiTypeArrayParameter(value));
 void WCDBRustStatementInsertClassMethod(configValuesWithBindParameters, void* self, int count);
-// void WCDBRustStatementInsertClassMethod(configSelect, jlong self, jlong select);
+void WCDBRustStatementInsertClassMethod(configSelect, void* self, void* select);
 void WCDBRustStatementInsertClassMethod(configDefaultValues, void* self);
 void WCDBRustStatementInsertClassMethod(configUpsert, void* self, void* upsert);

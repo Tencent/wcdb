@@ -8,6 +8,7 @@ use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
 use crate::winq::multi_type_array::MultiTypeArray;
 use crate::winq::object::Object;
 use crate::winq::statement::{Statement, StatementTrait};
+use crate::winq::statement_select::StatementSelect;
 use crate::winq::upsert::Upsert;
 use std::ffi::{c_char, c_double, c_int, c_longlong, c_void, CString};
 use std::fmt::Debug;
@@ -39,6 +40,8 @@ extern "C" {
         string_values: *const *const c_char,
         value_len: c_int,
     );
+
+    fn WCDBRustStatementInsert_configSelect(cpp_obj: *mut c_void, select: *mut c_void);
 
     fn WCDBRustStatementInsert_configUpsert(cpp_obj: *mut c_void, upsert: *mut c_void);
 }
@@ -226,6 +229,7 @@ impl StatementInsert {
     }
 
     pub fn values(&self, values: Option<Vec<Object>>) -> &Self {
+        let mut c_name_vec = vec![];
         match values {
             None => return self,
             Some(v) if v.is_empty() => return self,
@@ -240,6 +244,7 @@ impl StatementInsert {
                         for x in val {
                             let c_name = CString::new(x).unwrap_or_default();
                             c_vec.push(c_name.as_ptr());
+                            c_name_vec.push(c_name);
                         }
                     }
                 }
@@ -260,6 +265,13 @@ impl StatementInsert {
                     );
                 }
             }
+        }
+        self
+    }
+
+    pub fn values_statement_select(&self, statement: &StatementSelect) -> &Self {
+        unsafe {
+            WCDBRustStatementInsert_configSelect(self.get_cpp_obj(), CppObject::get(statement));
         }
         self
     }
