@@ -563,6 +563,8 @@ void OperationQueue::doPurge(const Parameter& parameter)
         Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to memory warning.");
         Notifier::shared().notify(error);
     } break;
+    case Parameter::Source::Other:{
+    } break;
 #ifndef _WIN32
     case Parameter::Source::FileDescriptorsWarning: {
         Error error(Error::Code::Warning, Error::Level::Warning, "Purge due to file descriptors warning.");
