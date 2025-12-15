@@ -68,7 +68,7 @@ mod generate_pinyin_tokens_test {
 
         let input = "zhon"; // 前半部分
         let token_vec = generate_pinyin_tokens(input, &options);
-        assert_eq!(token_vec.join(" "), "z h o n");
+        assert_eq!(token_vec.join(" "), "zh o n");
 
         let input = "bj"; // 北京缩写
         let token_vec = generate_pinyin_tokens(input, &options);

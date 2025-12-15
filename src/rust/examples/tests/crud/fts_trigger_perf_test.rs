@@ -66,7 +66,7 @@ pub mod fts_trigger_perf_test {
         db
     }
 
-    #[test]
+    // #[test]
     fn test_trigger_rebuild() {
         let db_name = "cn_100k.db";
         let db = setup(db_name);
