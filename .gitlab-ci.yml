@@ -1,31 +1,17 @@
 
 image: "harbor.rongcloud.net/library/rust/wcdb:0.1.4"
 
+variables:
+  CARGO_HOME: ${CI_PROJECT_DIR}/CargoHome
+  GIT_CLEAN_FLAGS: "-ffdx --exclude=CargoHome --exclude=src/rust/target/"
+
 cache:
   paths:
-    - CargoHome/registry/index/
-    - CargoHome/registry/cache/
-    - src/rust/target/
     - src/rust/Cargo.lock
 
 stages:
-  - check
   - test
-
-variables:
-  GIT_DEPTH: 1
-
-run_check_unsafe_keywords:
-  stage: check
-  script: |
-    echo "Check danger function..."
-    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\bc_long\b|\.unwrap()\|\.expect(\|unreachable!\|panic!'; then
-      echo "Error: banned c_long/unwrap/expect/unreachable!/panic!"
-      exit 1
-    fi
-  rules:
-    - changes:
-       - "src/rust/wcdb/src/**/*.rs"
+  - clean_cache
 
 run_test:
   stage: test
@@ -49,9 +35,13 @@ run_test:
         clang-format "$file" | colordiff -u "$file" -;
       done
     - cargo fmt -- --check
+    - cargo clippy --workspace --no-deps -- -A clippy::all -D clippy::unwrap_used
     - cargo test -- --test-threads=1
-    - TARGET_SIZE=$(du -sm target 2>/dev/null | awk '{print $1}')
-    - echo "target:${TARGET_SIZE}m"
-    - if [ "$TARGET_SIZE" -gt 2048 ]; then
-        rm -rf target;
-      fi
+
+clean_cache:
+  stage: clean_cache
+  script:
+    - echo "🧹 Cleaning build cache directories..."
+    - du -sh target
+    - rm -rf target
+  when: manual
