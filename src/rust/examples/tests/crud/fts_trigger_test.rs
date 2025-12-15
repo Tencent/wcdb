@@ -428,19 +428,16 @@ pub mod fts_trigger_test {
     }
 
     fn config_pinyin_dict() {
-        Database::config_pinyin_dict(HashMap::from([
-            (
-                "单".to_string(),
-                vec!["shan".into(), "dan".into(), "chan".into()],
-            ),
-            ("于".to_string(), vec!["yu".into()]),
-            ("骑".to_string(), vec!["qi".into()]),
-            ("模".to_string(), vec!["mo".into(), "mu".into()]),
-            ("具".to_string(), vec!["ju".into()]),
-            ("车".to_string(), vec!["che".into()]),
-            ("中".to_string(), vec!["zhong".into()]),
-            ("国".to_string(), vec!["guo".into()]),
-            ("人".to_string(), vec!["ren".into()]),
+        Database::config_pinyin_dict(&HashMap::from([
+            ("单", vec!["shan", "dan", "chan"]),
+            ("于", vec!["yu"]),
+            ("骑", vec!["qi"]),
+            ("模", vec!["mo", "mu"]),
+            ("具", vec!["ju"]),
+            ("车", vec!["che"]),
+            ("中", vec!["zhong"]),
+            ("国", vec!["guo"]),
+            ("人", vec!["ren"]),
         ]));
     }
 }

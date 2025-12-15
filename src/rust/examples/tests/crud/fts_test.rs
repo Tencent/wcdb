@@ -263,16 +263,13 @@ pub mod fts_test {
 
     #[test]
     fn test_pinyin() {
-        Database::config_pinyin_dict(HashMap::from([
-            (
-                "单".to_string(),
-                vec!["shan".into(), "dan".into(), "chan".into()],
-            ),
-            ("于".to_string(), vec!["yu".into()]),
-            ("骑".to_string(), vec!["qi".into()]),
-            ("模".to_string(), vec!["mo".into(), "mu".into()]),
-            ("具".to_string(), vec!["ju".into()]),
-            ("车".to_string(), vec!["che".into()]),
+        Database::config_pinyin_dict(&HashMap::from([
+            ("单", vec!["shan", "dan", "chan"]),
+            ("于", vec!["yu"]),
+            ("骑", vec!["qi"]),
+            ("模", vec!["mo", "mu"]),
+            ("具", vec!["ju"]),
+            ("车", vec!["che"]),
         ]));
 
         let fts_test = FTSTest::new();
@@ -335,10 +332,7 @@ pub mod fts_test {
         let database = arc_db.read().unwrap();
         let table_name = &fts_test.table_name;
 
-        Database::config_traditional_chinese_dict(HashMap::from([
-            ("們".to_string(), "们".to_string()),
-            ("員".to_string(), "员".to_string()),
-        ]));
+        Database::config_traditional_chinese_dict(&HashMap::from([("們", "们"), ("員", "员")]));
         database.add_tokenizer(BuiltinTokenizer::VERBATIM);
         database
             .create_virtual_table(table_name, &*DB_TRADITIONAL_CHINESE_OBJECT_INSTANCE)

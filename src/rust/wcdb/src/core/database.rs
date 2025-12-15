@@ -1464,7 +1464,7 @@ impl Database {
         }
     }
 
-    pub fn config_pinyin_dict(pinyin_dict: HashMap<String, Vec<String>>) {
+    pub fn config_pinyin_dict(pinyin_dict: &HashMap<&str, Vec<&str>>) {
         if pinyin_dict.keys().len() == 0 {
             return;
         }
@@ -1477,8 +1477,8 @@ impl Database {
         let mut c_values_ptr: Vec<*const *const c_char> = Vec::new();
         let mut values_len: Vec<usize> = Vec::new();
 
-        for (key, vals) in pinyin_dict.iter() {
-            let ck = key.as_str().to_cstring();
+        for (key, vals) in pinyin_dict {
+            let ck = key.to_cstring();
             c_keys_ptr.push(ck.as_ptr());
             c_keys.push(ck);
 
@@ -1486,7 +1486,7 @@ impl Database {
             let mut row_ptrs: Vec<*const c_char> = Vec::new();
 
             for v in vals {
-                let cv = v.as_str().to_cstring();
+                let cv = v.to_cstring();
                 row_ptrs.push(cv.as_ptr());
                 row_cstrings.push(cv);
             }
@@ -1510,7 +1510,7 @@ impl Database {
         }
     }
 
-    pub fn config_traditional_chinese_dict(traditional_chinese_dict: HashMap<String, String>) {
+    pub fn config_traditional_chinese_dict(traditional_chinese_dict: &HashMap<&str, &str>) {
         if traditional_chinese_dict.keys().len() == 0 {
             return;
         }
