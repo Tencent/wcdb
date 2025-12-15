@@ -10,8 +10,21 @@ cache:
     - src/rust/Cargo.lock
 
 stages:
+  - check
   - test
   - clean_cache
+
+run_check_unsafe_keywords:
+  stage: check
+  script: |
+    echo "Check danger function..."
+    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\bc_long\b|\.unwrap()\|\.expect(\|unreachable!\|panic!'; then
+      echo "Error: banned c_long/unwrap/expect/unreachable!/panic!"
+      exit 1
+    fi
+  rules:
+    - changes:
+       - "src/rust/wcdb/src/**/*.rs"
 
 run_test:
   stage: test
@@ -35,7 +48,6 @@ run_test:
         clang-format "$file" | colordiff -u "$file" -;
       done
     - cargo fmt -- --check
-    - cargo clippy --workspace --no-deps -- -A clippy::all -D clippy::unwrap_used
     - cargo test -- --test-threads=1
 
 clean_cache:
