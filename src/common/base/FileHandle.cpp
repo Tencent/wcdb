@@ -409,8 +409,7 @@ const size_t &FileHandle::memoryPageSize()
     if (s_memoryPageSize == 0) {
         SYSTEM_INFO system_info;
         GetSystemInfo(&system_info);
-        s_memoryPageSize
-        = std::max(system_info.dwPageSize, system_info.dwAllocationGranularity);
+        s_memoryPageSize = system_info.dwAllocationGranularity;
     }
 #endif
     return s_memoryPageSize;
