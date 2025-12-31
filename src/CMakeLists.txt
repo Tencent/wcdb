@@ -98,6 +98,7 @@ file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
     ${WCDB_SRC_DIR}/common/*/RecyclableHandle.hpp
     ${WCDB_SRC_DIR}/common/*/ResultColumn.hpp
     ${WCDB_SRC_DIR}/common/*/ScalarFunctionModule.hpp
+    ${WCDB_SRC_DIR}/common/*/ScalarFunctionTemplate.hpp
     ${WCDB_SRC_DIR}/common/*/Schema.hpp
     ${WCDB_SRC_DIR}/common/*/Shadow.hpp
     ${WCDB_SRC_DIR}/common/*/SharedThreadedErrorProne.hpp
