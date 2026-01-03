@@ -168,6 +168,22 @@ void ScalarFunctionAPI::setErrorResult(int code, const UnsafeStringView &msg)
     sqlite3_result_error_code((sqlite3_context *) m_sqliteContext, code);
 }
 
+void ScalarFunctionAPI::setAuxData(void *data, void (*destroy)(void *), int index)
+{
+    if (!m_sqliteContext) {
+        return;
+    }
+    sqlite3_set_auxdata((sqlite3_context *) m_sqliteContext, 0, data, destroy);
+}
+
+void *ScalarFunctionAPI::getAuxData(int index)
+{
+    if (!m_sqliteContext) {
+        return nullptr;
+    }
+    return sqlite3_get_auxdata((sqlite3_context *) m_sqliteContext, index);
+}
+
 void *ScalarFunctionAPI::getUserData() const
 {
     if (!m_sqliteContext) {
