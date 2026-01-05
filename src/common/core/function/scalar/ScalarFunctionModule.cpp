@@ -173,7 +173,7 @@ void ScalarFunctionAPI::setAuxData(void *data, void (*destroy)(void *), int inde
     if (!m_sqliteContext) {
         return;
     }
-    sqlite3_set_auxdata((sqlite3_context *) m_sqliteContext, 0, data, destroy);
+    sqlite3_set_auxdata((sqlite3_context *) m_sqliteContext, index, data, destroy);
 }
 
 void *ScalarFunctionAPI::getAuxData(int index)
