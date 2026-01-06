@@ -1,0 +1,49 @@
+#[cfg(test)]
+pub mod statement_select_test {
+    use crate::base::winq_tool::WinqTool;
+    use wcdb::winq::column::{Column, ColumnTrait};
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
+    use wcdb::winq::ordering_term::Order;
+    use wcdb::winq::statement_select::StatementSelect;
+
+    #[test]
+    pub fn test() {
+        let test_table = "testTable";
+        let statement = StatementSelect::new();
+
+        let column = Column::new("column1", None);
+        let test = statement.from(vec![test_table]).select(vec![&column]);
+        WinqTool::winq_equal(test, "SELECT column1 FROM testTable");
+
+        let expression = column.gt(100);
+        let test = statement.where_(&expression);
+        WinqTool::winq_equal(test, "SELECT column1 FROM testTable WHERE column1 > 100");
+
+        let test = statement.limit(100);
+        WinqTool::winq_equal(
+            test,
+            "SELECT column1 FROM testTable WHERE column1 > 100 LIMIT 100",
+        );
+
+        let column2 = Column::new("column2", None);
+        let order_term = column2.order(Order::Desc);
+        let order_vec = vec![&order_term];
+        let test = statement.order_by(order_vec);
+        WinqTool::winq_equal(
+            test,
+            "SELECT column1 FROM testTable WHERE column1 > 100 ORDER BY column2 DESC LIMIT 100",
+        );
+
+        let test = statement.offset(100);
+        WinqTool::winq_equal(
+            test,
+            "SELECT column1 FROM testTable WHERE column1 > 100 ORDER BY column2 DESC LIMIT 100 OFFSET 100",
+        );
+
+        let test = statement.group_by(vec!["column3"]);
+        WinqTool::winq_equal(
+            test,
+            "SELECT column1 FROM testTable WHERE column1 > 100 GROUP BY column3 ORDER BY column2 DESC LIMIT 100 OFFSET 100",
+        );
+    }
+}
