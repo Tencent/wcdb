@@ -105,6 +105,8 @@ fn config_cmake(target: &str) -> PathBuf {
         // support ios 9.0
         if target.contains("ios") {
             cmake.define("CMAKE_OSX_DEPLOYMENT_TARGET", "9.0");
+        } else if target.contains("darwin") {
+            cmake.define("CMAKE_OSX_DEPLOYMENT_TARGET", "10.15");
         }
     } else if target.contains("android") {
         let toolchain_file = env::var("CMAKE_TOOLCHAIN_FILE").expect(&format!(
