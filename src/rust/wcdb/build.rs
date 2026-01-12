@@ -42,7 +42,6 @@ fn main() {
         // 根据工具链选择不同的 C++ 标准库
         if target.contains("msvc") {
             // MSVC 工具链
-            println!("cargo:rustc-link-lib=dylib=msvcrt");
             println!("cargo:rustc-link-lib=dylib=user32");
             println!("cargo:rustc-link-lib=dylib=advapi32");
             println!("cargo:rustc-link-lib=dylib=crypt32");
@@ -128,7 +127,7 @@ fn config_cmake(target: &str) -> PathBuf {
         cmake.define("CMAKE_GENERATOR_PLATFORM", abi);
         cmake
             .define("WIN32", "ON")
-            .define("CMAKE_MSVC_RUNTIME_LIBRARY", "MultiThreadedDLL") // MT/MTd/MD/MDd
+            .define("CMAKE_MSVC_RUNTIME_LIBRARY", "MultiThreaded") // MT/MTd/MD/MDd
             .profile("Release"); // ← 明确设置为 Release
     }
 
