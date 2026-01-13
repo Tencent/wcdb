@@ -457,8 +457,7 @@ bool Expression::describle(std::ostream& stream) const
         break;
     case Switch::Collate:
         WCTSyntaxRemedialAssert(expressions.size() == 1);
-        streamAutoParenthesesExpression(stream, *expressions.begin());
-        stream << " COLLATE " << collation();
+        stream << *expressions.begin() << " COLLATE " << collation();
         break;
     case Switch::Between: {
         WCTSyntaxRemedialAssert(expressions.size() == 3);
