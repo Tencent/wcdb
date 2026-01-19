@@ -294,7 +294,15 @@ class KotlinCodeGenerator {
             }
         }
         if (autoIncrementColumn != null) {
-            builder.append("$TAB${TAB}return `object`.${autoIncrementColumn.propertyName} == 0\n")
+            val propertyType = autoIncrementColumn.propertyType
+            when (propertyType) {
+                "kotlin.Long" -> {
+                    builder.append("$TAB${TAB}return `object`.${autoIncrementColumn.propertyName} == 0L\n")
+                }
+                else -> {
+                    builder.append("$TAB${TAB}return `object`.${autoIncrementColumn.propertyName} == 0\n")
+                }
+            }
         } else {
             builder.append("$TAB${TAB}return false\n")
         }
