@@ -1,0 +1,22 @@
+[package]
+name = "examples"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wcdb = { path = "../wcdb" }
+wcdb_derive = { path = "../wcdb_derive" }
+once_cell = "1.19.0"
+lazy_static = "1.5.0"
+
+[dev-dependencies]
+rand = "0.8.5"
+criterion = { version = "0.4", features = ["html_reports"] }
+
+[[bench]]
+name = "db_performance_test_case"
+harness = false
+
+[[example]]
+name = "demo"
+path = "example/main.rs"

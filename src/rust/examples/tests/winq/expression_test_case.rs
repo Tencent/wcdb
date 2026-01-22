@@ -1,0 +1,681 @@
+#[cfg(test)]
+pub mod expression_test {
+    use crate::base::winq_tool::WinqTool;
+    use wcdb::winq::bind_parameter::BindParameter;
+    use wcdb::winq::column::{Column, ColumnStaticTrait};
+    use wcdb::winq::column_type::ColumnType;
+    use wcdb::winq::expression::Expression;
+    use wcdb::winq::expression_operable::ExpressionOperableTrait;
+    use wcdb::winq::identifier::IdentifierTrait;
+    use wcdb::winq::literal_value::LiteralValue;
+    use wcdb::winq::statement_select::StatementSelect;
+
+    #[test]
+    pub fn test_expression() {
+        let column = Column::new("testColumn", None);
+        let expression = Expression::new(&LiteralValue::new(1));
+        WinqTool::winq_equal(&expression, "1");
+        let expression = Expression::new(&LiteralValue::new(1.1));
+        WinqTool::winq_equal(&expression, "1.1000000000000001");
+        let expression = Expression::new(&LiteralValue::new("abc"));
+        WinqTool::winq_equal(&expression, "'abc'");
+        let expression = Expression::new(&LiteralValue::new(false));
+        WinqTool::winq_equal(&expression, "FALSE");
+        let expression = Expression::new(&LiteralValue::new(true));
+        WinqTool::winq_equal(&expression, "TRUE");
+        let expression = Expression::new(&column);
+        WinqTool::winq_equal(&expression, "testColumn");
+        let expression = Expression::new(&BindParameter::new(1));
+        WinqTool::winq_equal(&expression, "?1");
+
+        let binding = StatementSelect::new();
+        let select = binding.select(vec![&Column::new("testColumn", None)]);
+        let expression = Expression::exists(select);
+        WinqTool::winq_equal(&expression, "EXISTS(SELECT testColumn)");
+
+        let binding = StatementSelect::new();
+        let select = binding.select(vec![&Column::new("testColumn", None)]);
+        let expression = Expression::not_exists(select);
+        WinqTool::winq_equal(&expression, "NOT EXISTS(SELECT testColumn)");
+
+        let expression = Expression::cast("testColumn");
+        expression.as_(ColumnType::Integer);
+        WinqTool::winq_equal(&expression, "CAST(testColumn AS INTEGER)");
+
+        let expression = Expression::cast(&column);
+        expression.as_(ColumnType::Integer);
+        WinqTool::winq_equal(&expression, "CAST(testColumn AS INTEGER)");
+
+        let column_row = Column::row_id().add(1).as_result_column("rowidAddOne");
+        WinqTool::winq_equal(&column_row, "rowid + 1 AS rowidAddOne");
+
+        let expression = Expression::case_();
+        expression
+            .when(&column.eq(1))
+            .then("a")
+            .when(&column.eq(2))
+            .then("b")
+            .else_("c");
+        WinqTool::winq_equal(
+            &expression,
+            "CASE WHEN testColumn == 1 THEN 'a' WHEN testColumn == 2 THEN 'b' ELSE 'c' END",
+        );
+
+        let expression = Expression::case_();
+        expression
+            .when(&column.eq("a"))
+            .then(1)
+            .when(&column.eq("b"))
+            .then(2)
+            .else_(3);
+        WinqTool::winq_equal(
+            &expression,
+            "CASE WHEN testColumn == 'a' THEN 1 WHEN testColumn == 'b' THEN 2 ELSE 3 END",
+        );
+
+        let expression = Expression::case(Some(&column));
+        expression.when("a").then(1).when("b").then(2).else_(3);
+        WinqTool::winq_equal(
+            &expression,
+            "CASE testColumn WHEN 'a' THEN 1 WHEN 'b' THEN 2 ELSE 3 END",
+        );
+
+        let expression = Expression::case(Some(&column));
+        expression.when(1).then("a").then(2).then("b").else_("c");
+        WinqTool::winq_equal(
+            &expression,
+            "CASE testColumn WHEN 1 THEN 'a' WHEN 2 THEN 'b' ELSE 'c' END",
+        );
+
+        let expression = Expression::window_function("testWindowFunction");
+        expression
+            .invoke()
+            .argument(&column)
+            .filter(&column.not_eq(0));
+        WinqTool::winq_equal(
+            &expression,
+            "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0)",
+        );
+
+        // let expression = Expression::window_function("testWindowFunction")
+        //     .invoke()
+        //     .argument(&column)
+        //     .filter(&column.not_eq(0))
+        //     .over("testWindow");
+        // WinqTool::winq_equal(
+        //     &expression,
+        //     "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER testWindow",
+        // );
+
+        // let window_def = WindowDef::new().partition(&vec![&column]);
+        // let expression = Expression::window_function("testWindowFunction")
+        //     .invoke()
+        //     .argument(&column)
+        //     .filter(&column.not_eq(0))
+        //     .over_with_window_def(&window_def);
+        // WinqTool::winq_equal(&expression, "testWindowFunction(testColumn) FILTER(WHERE testColumn != 0) OVER(PARTITION BY testColumn)");
+    }
+
+    #[test]
+    pub fn test_unary_operation() {
+        let column = Column::new("testColumn", None);
+        let expression = Expression::new(&column);
+        WinqTool::winq_equal(&expression.is_null(), "testColumn ISNULL");
+        WinqTool::winq_equal(&expression.not_null(), "testColumn NOTNULL");
+
+        WinqTool::winq_equal(&column.is_null(), "testColumn ISNULL");
+        WinqTool::winq_equal(&column.not_null(), "testColumn NOTNULL");
+    }
+
+    #[test]
+    pub fn test_expression_binary_operation() {
+        let expression_left = Expression::new(&Column::new("left", None));
+        let expression_right = Expression::new(&Column::new("right", None));
+    }
+
+    #[test]
+    pub fn test_binary_operation() {
+        let mut column_left = Column::new("left", None);
+        let column_right = Column::new("right", None);
+
+        let desc = column_left.or(Some(&column_right)).get_description();
+        assert_eq!(desc.as_str(), "left OR right");
+        let desc = column_left.and(Some(&column_right)).get_description();
+        assert_eq!(desc.as_str(), "left AND right");
+
+        // multiply assert
+        let desc = column_left.multiply(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left * right");
+        let operand: i32 = 1;
+        let desc = column_left.multiply(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left * ".to_owned() + operand.to_string().as_str()
+        );
+        let operand: f64 = 1.1;
+        let desc = column_left.multiply(operand).get_description();
+        assert_eq!(desc.as_str(), "left * 1.1000000000000001");
+        let operand: i8 = 1;
+        let desc = column_left.multiply(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left * ".to_owned() + operand.to_string().as_str()
+        );
+        let operand: i16 = 1;
+        let desc = column_left.multiply(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left * ".to_owned() + operand.to_string().as_str()
+        );
+
+        // divide assert
+        let desc = column_left.divide(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left / right");
+        let operand: i32 = 1;
+        let desc = column_left.divide(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left / ".to_owned() + operand.to_string().as_str()
+        );
+        let operand: f64 = 1.1;
+        let desc = column_left.divide(operand).get_description();
+        assert_eq!(desc.as_str(), "left / 1.1000000000000001");
+
+        // mod assert
+        let desc = column_left.mod_(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left % right");
+
+        let operand: i32 = 1;
+        let desc = column_left.mod_(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left % ".to_owned() + operand.to_string().as_str()
+        );
+
+        let operand: f64 = 1.1;
+        let desc = column_left.mod_(operand).get_description();
+        assert_eq!(desc.as_str(), "left % 1.1000000000000001");
+
+        // add assert
+        let desc = column_left.add(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left + right");
+
+        let operand: i32 = 1;
+        let desc = column_left.add(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left + ".to_owned() + operand.to_string().as_str()
+        );
+
+        let operand: f64 = 1.1;
+        let desc = column_left.add(operand).get_description();
+        assert_eq!(desc.as_str(), "left + 1.1000000000000001");
+
+        // minus assert
+        let desc = column_left.minus(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left - right");
+
+        let operand: i32 = 1;
+        let desc = column_left.minus(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left - ".to_owned() + operand.to_string().as_str()
+        );
+
+        let operand: f64 = 1.1;
+        let desc = column_left.minus(operand).get_description();
+        assert_eq!(desc.as_str(), "left - 1.1000000000000001");
+
+        // left shift assert
+        let desc = column_left.left_shift(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left << right");
+
+        let operand: i32 = 1;
+        let desc = column_left.left_shift(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left << ".to_owned() + operand.to_string().as_str()
+        );
+
+        // right shift assert
+        let desc = column_left.right_shift(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left >> right");
+
+        let operand: i32 = 1;
+        let desc = column_left.right_shift(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left >> ".to_owned() + operand.to_string().as_str()
+        );
+
+        // bit and assert
+        let desc = column_left.bit_and(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left & right");
+
+        let operand: i32 = 1;
+        let desc = column_left.bit_and(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left & ".to_owned() + operand.to_string().as_str()
+        );
+
+        // bit or assert
+        let desc = column_left.bit_or(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left | right");
+
+        let operand: i32 = 1;
+        let desc = column_left.bit_or(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left | ".to_owned() + operand.to_string().as_str()
+        );
+
+        // lt or assert
+        let desc = column_left.lt(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left < right");
+
+        let operand: i32 = 1;
+        let desc = column_left.lt(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left < ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.lt(1.1).get_description();
+        assert_eq!(desc.as_str(), "left < 1.1000000000000001");
+
+        let desc = column_left.lt("abc").get_description();
+        assert_eq!(desc.as_str(), "left < 'abc'");
+
+        // le or assert
+        let desc = column_left.le(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left <= right");
+
+        let operand: i32 = 1;
+        let desc = column_left.le(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left <= ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.le(1.1).get_description();
+        assert_eq!(desc.as_str(), "left <= 1.1000000000000001");
+
+        let desc = column_left.le("abc").get_description();
+        assert_eq!(desc.as_str(), "left <= 'abc'");
+
+        // gt or assert
+        let desc = column_left.gt(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left > right");
+
+        let operand: i32 = 1;
+        let desc = column_left.gt(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left > ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.gt(1.1).get_description();
+        assert_eq!(desc.as_str(), "left > 1.1000000000000001");
+
+        let desc = column_left.gt("abc").get_description();
+        assert_eq!(desc.as_str(), "left > 'abc'");
+
+        // ge or assert
+        let desc = column_left.ge(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left >= right");
+
+        let operand: i32 = 1;
+        let desc = column_left.ge(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left >= ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.ge(1.1).get_description();
+        assert_eq!(desc.as_str(), "left >= 1.1000000000000001");
+
+        let desc = column_left.ge("abc").get_description();
+        assert_eq!(desc.as_str(), "left >= 'abc'");
+
+        // eq or assert
+        let desc = column_left.eq(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left == right");
+
+        let desc = column_left.eq(false).get_description();
+        assert_eq!(desc.as_str(), "left == FALSE");
+
+        let operand: i32 = 1;
+        let desc = column_left.eq(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left == ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.eq(1.1).get_description();
+        assert_eq!(desc.as_str(), "left == 1.1000000000000001");
+
+        let desc = column_left.eq("abc").get_description();
+        assert_eq!(desc.as_str(), "left == 'abc'");
+
+        //not eq
+        let desc = column_left.not_eq(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left != right");
+
+        let desc = column_left.not_eq(false).get_description();
+        assert_eq!(desc.as_str(), "left != FALSE");
+
+        let operand: i32 = 1;
+        let desc = column_left.not_eq(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left != ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.not_eq(1.1).get_description();
+        assert_eq!(desc.as_str(), "left != 1.1000000000000001");
+
+        let desc = column_left.not_eq("abc").get_description();
+        assert_eq!(desc.as_str(), "left != 'abc'");
+
+        // concat
+        let desc = column_left.concat(&column_right).get_description();
+        assert_eq!(desc.as_str(), "left || right");
+
+        let operand: i32 = 1;
+        let desc = column_left.concat(operand).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "left || ".to_owned() + operand.to_string().as_str()
+        );
+
+        let desc = column_left.concat(1.1).get_description();
+        assert_eq!(desc.as_str(), "left || 1.1000000000000001");
+
+        let desc = column_left.concat("abc").get_description();
+        assert_eq!(desc.as_str(), "left || 'abc'");
+    }
+
+    #[test]
+    pub fn test_between_operation() {
+        let column = Column::new("testColumn", None);
+        let start = Column::new("start", None);
+        let end = Column::new("end", None);
+
+        let desc = column.between(&start, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN start AND end");
+        let desc = column.between(&start, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN start AND 1");
+        let desc = column.between(&start, 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn BETWEEN start AND 1.1000000000000001"
+        );
+        let desc = column.between(&start, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN start AND 'abc'");
+
+        let desc = column.between(1, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND end");
+        let desc = column.between(1, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND 1");
+        let desc = column.between(1, 1.1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND 1.1000000000000001");
+        let desc = column.between(1, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 1 AND 'abc'");
+
+        let desc = column.between("abc", &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 'abc' AND end");
+        let desc = column.between("abc", 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 'abc' AND 1");
+        let desc = column.between("abc", 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn BETWEEN 'abc' AND 1.1000000000000001"
+        );
+        let desc = column.between("abc", "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn BETWEEN 'abc' AND 'abc'");
+
+        let desc = column.not_between(&start, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN start AND end");
+        let desc = column.not_between(&start, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN start AND 1");
+        let desc = column.not_between(&start, 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT BETWEEN start AND 1.1000000000000001"
+        );
+        let desc = column.not_between(&start, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN start AND 'abc'");
+
+        let desc = column.not_between(1, &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 1 AND end");
+        let desc = column.not_between(1, 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 1 AND 1");
+        let desc = column.not_between(1, 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT BETWEEN 1 AND 1.1000000000000001"
+        );
+        let desc = column.not_between(1, "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 1 AND 'abc'");
+
+        let desc = column.not_between("abc", &end).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND end");
+        let desc = column.not_between("abc", 1).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND 1");
+        let desc = column.not_between("abc", 1.1).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT BETWEEN 'abc' AND 1.1000000000000001"
+        );
+        let desc = column.not_between("abc", "abc").get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT BETWEEN 'abc' AND 'abc'");
+    }
+
+    #[test]
+    pub fn test_in_operation() {
+        let column = Column::new("testColumn", None);
+
+        let operands: Vec<i16> = vec![1, 2, 3];
+        let desc = column.in_(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
+
+        let operands: Vec<i32> = vec![1, 2, 3];
+        let desc = column.in_(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
+
+        let operands: Vec<i64> = vec![1, 2, 3];
+        let desc = column.in_(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN(1, 2, 3)");
+
+        let operands: Vec<f32> = vec![1.1f32, 2.1f32, 3.1f32];
+        let desc = column.in_(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)"
+        );
+
+        let operands: Vec<f64> = vec![1.1f64, 2.1f64, 3.1f64];
+        let desc = column.in_(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)"
+        );
+
+        let mut operands: Vec<&str> = Vec::new();
+        operands.push("abc");
+        operands.push("def");
+        operands.push("ghi");
+        let desc = column.in_(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn IN('abc', 'def', 'ghi')");
+    }
+
+    #[test]
+    pub fn test_not_in_operation() {
+        let column = Column::new("testColumn", None);
+
+        let operands: Vec<i16> = vec![1, 2, 3];
+        let desc = column.not_in(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN(1, 2, 3)");
+
+        let operands: Vec<i32> = vec![1, 2, 3];
+        let desc = column.not_in(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN(1, 2, 3)");
+
+        let operands: Vec<i64> = vec![1, 2, 3];
+        let desc = column.not_in(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN(1, 2, 3)");
+
+        let operands: Vec<f32> = vec![1.1f32, 2.1f32, 3.1f32];
+        let desc = column.not_in(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT IN(1.1000000238418579, 2.0999999046325684, 3.0999999046325684)"
+        );
+
+        let operands: Vec<f64> = vec![1.1f64, 2.1f64, 3.1f64];
+        let desc = column.not_in(operands).get_description();
+        assert_eq!(
+            desc.as_str(),
+            "testColumn NOT IN(1.1000000000000001, 2.1000000000000001, 3.1000000000000001)"
+        );
+
+        let mut operands: Vec<&str> = Vec::new();
+        operands.push("abc");
+        operands.push("def");
+        operands.push("ghi");
+        let desc = column.not_in(operands).get_description();
+        assert_eq!(desc.as_str(), "testColumn NOT IN('abc', 'def', 'ghi')");
+    }
+
+    #[test]
+    pub fn test_collate() {
+        let column = Column::new("testColumn", None);
+        let desc = column.collate("BINARY").get_description();
+        assert_eq!(desc.as_str(), "testColumn COLLATE BINARY");
+    }
+
+    #[test]
+    pub fn test_function() {
+        let left = Column::new("left", None);
+        let right: &str = "right";
+
+        // let desc = left.substr(1, 2).get_description();
+        // assert_eq!(desc.as_str(), "SUBSTR(left, 1, 2)");
+
+        let desc = left.like(right).get_description();
+        assert_eq!(desc.as_str(), "left LIKE 'right'");
+
+        let desc = left.glob(right).get_description();
+        assert_eq!(desc.as_str(), "left GLOB 'right'");
+
+        let desc = left.match_(right).get_description();
+        assert_eq!(desc.as_str(), "left MATCH 'right'");
+
+        let desc = left.regexp(right).get_description();
+        assert_eq!(desc.as_str(), "left REGEXP 'right'");
+
+        let desc = left.not_like(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT LIKE 'right'");
+
+        let desc = left.not_glob(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT GLOB 'right'");
+
+        let desc = left.not_match(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT MATCH 'right'");
+
+        let desc = left.not_regexp(right).get_description();
+        assert_eq!(desc.as_str(), "left NOT REGEXP 'right'");
+
+        let desc = left.like(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left LIKE 'right' ESCAPE '%'");
+
+        let desc = left.glob(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left GLOB 'right' ESCAPE '%'");
+
+        let desc = left.match_(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left MATCH 'right' ESCAPE '%'");
+
+        let desc = left.regexp(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left REGEXP 'right' ESCAPE '%'");
+
+        let desc = left.not_like(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT LIKE 'right' ESCAPE '%'");
+
+        let desc = left.not_glob(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT GLOB 'right' ESCAPE '%'");
+
+        let desc = left.not_match(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT MATCH 'right' ESCAPE '%'");
+
+        let desc = left.not_regexp(right).escape("%").get_description();
+        assert_eq!(desc.as_str(), "left NOT REGEXP 'right' ESCAPE '%'");
+
+        //is
+        let desc = left.is(right).get_description();
+        assert_eq!(desc.as_str(), "left IS 'right'");
+
+        let desc = left.is_not(right).get_description();
+        assert_eq!(desc.as_str(), "left IS NOT 'right'");
+
+        let desc = left.avg().get_description();
+        assert_eq!(desc.as_str(), "AVG(left)");
+
+        let desc = left.count().distinct().get_description();
+        assert_eq!(desc.as_str(), "COUNT(DISTINCT left)");
+
+        let desc = left.group_concat().get_description();
+        assert_eq!(desc.as_str(), "GROUP_CONCAT(left)");
+
+        let desc = left.group_concat_string("-").distinct().get_description();
+        assert_eq!(desc.as_str(), "GROUP_CONCAT(DISTINCT left, '-')");
+
+        let desc = left.max().get_description();
+        assert_eq!(desc.as_str(), "MAX(left)");
+
+        let desc = left.min().get_description();
+        assert_eq!(desc.as_str(), "MIN(left)");
+
+        let desc = left.sum().get_description();
+        assert_eq!(desc.as_str(), "SUM(left)");
+
+        let desc = left.total().get_description();
+        assert_eq!(desc.as_str(), "TOTAL(left)");
+
+        let desc = left.abs().get_description();
+        assert_eq!(desc.as_str(), "ABS(left)");
+
+        let desc = left.hex().get_description();
+        assert_eq!(desc.as_str(), "HEX(left)");
+
+        let desc = left.length().get_description();
+        assert_eq!(desc.as_str(), "LENGTH(left)");
+
+        let desc = left.lower().get_description();
+        assert_eq!(desc.as_str(), "LOWER(left)");
+
+        let desc = left.upper().get_description();
+        assert_eq!(desc.as_str(), "UPPER(left)");
+
+        let desc = left.round().get_description();
+        assert_eq!(desc.as_str(), "ROUND(left)");
+
+        let desc = left.match_info().get_description();
+        assert_eq!(desc.as_str(), "matchInfo(left)");
+
+        let desc = left.offsets().get_description();
+        assert_eq!(desc.as_str(), "offsets(left)");
+
+        let desc = left.snippet().get_description();
+        assert_eq!(desc.as_str(), "snippet(left)");
+
+        let desc = left.bm25().get_description();
+        assert_eq!(desc.as_str(), "bm25(left)");
+
+        let desc = left.highlight().get_description();
+        assert_eq!(desc.as_str(), "highlight(left)");
+
+        let desc = left.substring_match_info().get_description();
+        assert_eq!(desc.as_str(), "substring_match_info(left)");
+    }
+}

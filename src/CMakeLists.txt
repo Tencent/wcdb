@@ -55,6 +55,10 @@ file(GLOB_RECURSE WCDB_BRIDGE_SRC
     ${WCDB_SRC_DIR}/bridge/winqbridge/*.[ch]pp
 )
 recursive_subdirs(WCDB_BRIDGE_INCLUDES ${WCDB_SRC_DIR}/bridge)
+if (WIN32) 
+    # Ignore symlinks in src/brideg/include for windows to avoid redefinition errors
+    list(FILTER WCDB_BRIDGE_INCLUDES EXCLUDE REGEX ".*[\\\\/]include")
+endif()
 
 # Copy all headers to include folder
 file(GLOB_RECURSE WCDB_PUBLIC_HEADERS
@@ -530,12 +534,21 @@ elseif (APPLE AND NOT WCONAN_MODE)
     target_sources(${TARGET_NAME} PUBLIC ${WCDB_PUBLIC_HEADERS})
     file(STRINGS "../VERSION" WCDB_VERSION)
     message(STATUS "Xcode ${TARGET_NAME}.framework version ${WCDB_VERSION}")
-    set_target_properties(${TARGET_NAME} PROPERTIES
-        FRAMEWORK TRUE
-        FRAMEWORK_VERSION ${WCDB_VERSION}
-        MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
-        PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
-    )
+    if(BUILD_FROM_CARGO)
+        message(STATUS "---- BUILD FOR APPLE FROM CARGO ----")
+        if (BUILD_SHARED_LIBS)
+            target_link_libraries(${TARGET_NAME} PRIVATE crypto z)
+        else()
+            target_link_libraries(${TARGET_NAME} PUBLIC crypto z)
+        endif()
+    else()
+        set_target_properties(${TARGET_NAME} PROPERTIES
+            FRAMEWORK TRUE
+            FRAMEWORK_VERSION ${WCDB_VERSION}
+            MACOSX_FRAMEWORK_IDENTIFIER com.tencent.${TARGET_NAME}
+            PUBLIC_HEADER "${WCDB_PUBLIC_HEADERS}"
+        )
+    endif()
 elseif (OHOS)
     message(STATUS "---- BUILD FOR OPENHARMONY ----")
     target_link_libraries(${TARGET_NAME} PUBLIC

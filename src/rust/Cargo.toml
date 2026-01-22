@@ -1,0 +1,3 @@
+[workspace]
+members = ["examples", "wcdb_derive", "wcdb"]
+resolver = "2"

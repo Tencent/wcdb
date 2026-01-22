@@ -1,0 +1,169 @@
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::winq::expression::Expression;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use crate::winq::ordering_term::OrderingTerm;
+use crate::winq::statement::{Statement, StatementTrait};
+use core::ffi::c_size_t;
+use std::ffi::{c_char, c_int, c_void, CString};
+use std::fmt::Debug;
+
+extern "C" {
+    fn WCDBRustStatementDelete_create() -> *mut c_void;
+
+    fn WCDBRustStatementDelete_configTable(
+        cpp_obj: *mut c_void,
+        table_type: c_int,
+        table_long: i64,
+        table_string: *const c_char,
+    );
+
+    fn WCDBRustStatementDelete_configCondition(cpp_obj: *mut c_void, condition: *mut c_void);
+
+    fn WCDBRustStatementDelete_configOrders(
+        cpp_obj: *mut c_void,
+        orders: *const *mut c_void,
+        vec_len: c_size_t,
+    );
+
+    fn WCDBRustStatementDelete_configLimitCount(
+        cpp_obj: *mut c_void,
+        config_type: c_int,
+        limit: i64,
+    );
+    fn WCDBRustStatementDelete_configOffset(cpp_obj: *mut c_void, config_type: c_int, offset: i64);
+
+    fn WCDBRustStatementDelete_configLimitRange(
+        cpp_obj: *mut c_void,
+        from_type: c_int,
+        from: i64,
+        to_type: c_int,
+        to: i64,
+    );
+}
+
+#[derive(Debug)]
+pub struct StatementDelete {
+    statement: Statement,
+}
+
+impl CppObjectTrait for StatementDelete {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.statement.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.statement.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.statement.release_cpp_object();
+    }
+}
+
+impl CppObjectConvertibleTrait for StatementDelete {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.statement.as_cpp_object()
+    }
+}
+
+impl IdentifierTrait for StatementDelete {
+    fn get_type(&self) -> CPPType {
+        self.statement.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.statement.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for StatementDelete {
+    fn as_identifier(&self) -> &Identifier {
+        self.statement.as_identifier()
+    }
+}
+
+impl StatementTrait for StatementDelete {
+    fn is_write_statement(&self) -> bool {
+        self.statement.is_write_statement()
+    }
+}
+
+impl StatementDelete {
+    pub fn new() -> Self {
+        let cpp_obj = unsafe { WCDBRustStatementDelete_create() };
+        StatementDelete {
+            statement: Statement::new(CPPType::DeleteSTMT, Some(cpp_obj)),
+        }
+    }
+
+    pub fn delete_from(&self, table_name: &str) -> &Self {
+        let c_table_name = CString::new(table_name).unwrap_or_default();
+        unsafe {
+            WCDBRustStatementDelete_configTable(
+                self.get_cpp_obj(),
+                CPPType::String as i32,
+                0,
+                c_table_name.as_ptr(),
+            );
+        }
+        self
+    }
+
+    pub fn where_(&self, condition: &Expression) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configCondition(self.get_cpp_obj(), CppObject::get(condition));
+        }
+        self
+    }
+
+    pub fn order_by(&self, orders: Vec<&OrderingTerm>) -> &Self {
+        if orders.is_empty() {
+            return self;
+        }
+        let mut order_raw_vec = Vec::with_capacity(orders.len());
+        for order in orders {
+            order_raw_vec.push(order.get_cpp_obj());
+        }
+        unsafe {
+            WCDBRustStatementDelete_configOrders(
+                self.get_cpp_obj(),
+                order_raw_vec.as_ptr(),
+                order_raw_vec.len(),
+            );
+        }
+        self
+    }
+
+    pub fn limit(&self, count: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configLimitCount(
+                self.get_cpp_obj(),
+                CPPType::Int as i32,
+                count,
+            );
+        }
+        self
+    }
+
+    pub fn offset(&self, offset: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configOffset(self.get_cpp_obj(), CPPType::Int as i32, offset);
+        }
+        self
+    }
+
+    pub fn limit_range(&self, from: i64, to: i64) -> &Self {
+        unsafe {
+            WCDBRustStatementDelete_configLimitRange(
+                self.get_cpp_obj(),
+                CPPType::Int as i32,
+                from,
+                CPPType::Int as i32,
+                to,
+            );
+        }
+        self
+    }
+}

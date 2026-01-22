@@ -29,6 +29,8 @@
 #include "Notifier.hpp"
 #include "ObjectBridge.hpp"
 
+#include <climits>
+
 long WCDBErrorGetCode(CPPError error)
 {
     WCDBGetObjectOrReturnValue(error, WCDB::Error, cppError, INT_MAX);

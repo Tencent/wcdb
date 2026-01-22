@@ -1,0 +1,4 @@
+target/
+cmake-build-*/
+
+*.sqlite3*1
