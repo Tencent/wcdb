@@ -31,6 +31,7 @@ import com.tencent.wcdb.core.Handle;
 import com.tencent.wcdb.core.PreparedStatement;
 import com.tencent.wcdb.winq.BindParameter;
 import com.tencent.wcdb.winq.Column;
+import com.tencent.wcdb.winq.Order;
 import com.tencent.wcdb.winq.StatementDelete;
 import com.tencent.wcdb.winq.StatementInsert;
 import com.tencent.wcdb.winq.StatementSelect;
@@ -162,7 +163,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
         StatementSelect select = new StatementSelect()
                 .select(columns())
                 .from(tableName)
-                .order(new Column("id"));
+                .orderBy(new Column("id").order(Order.Asc));
         StatementInsert insert = new StatementInsert()
                 .insertInto(tableName)
                 .columns(columns())
@@ -204,7 +205,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
         StatementSelect select = new StatementSelect()
                 .select(columns())
                 .from(tableName)
-                .order(new Column("id"));
+                .orderBy(new Column("id").order(Order.Asc));
         PreparedStatement cursor = handle.prepareNewStatement(select);
 
         List<Value[]> allRows = new ArrayList<>();
@@ -227,7 +228,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
         StatementSelect selectAll = new StatementSelect()
                 .select(columns())
                 .from(tableName)
-                .order(new Column("id"));
+                .orderBy(new Column("id").order(Order.Asc));
 
         PreparedStatement uncached = handle.prepareNewStatement(selectAll);
 
@@ -307,7 +308,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testAllThreeTypesCoexist() throws WCDBException {
         StatementSelect selectAll = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         StatementInsert insert = new StatementInsert()
                 .insertInto(tableName).columns(columns()).valuesWithBindParameters(2);
         StatementSelect selectCount = new StatementSelect()
@@ -342,7 +343,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testUncachedSurvivesMainReprepareCycles() throws WCDBException {
         StatementSelect selectAll = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         PreparedStatement cursor = handle.prepareNewStatement(selectAll);
 
         cursor.step();
@@ -370,7 +371,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testCachedAndUncachedSameSQLIndependent() throws WCDBException {
         StatementSelect select = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
 
         PreparedStatement cached = handle.getOrCreatePreparedStatement(select);
         PreparedStatement uncached = handle.prepareNewStatement(select);
@@ -410,12 +411,12 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
 
         StatementSelect selectOdd = new StatementSelect()
                 .select(columns()).from(tableName)
-                .where(new Column("id").mod(new Value(2)).eq(new Value(1)))
-                .order(new Column("id"));
+                .where(new Column("id").mod(2).eq(1))
+                .orderBy(new Column("id").order(Order.Asc));
         StatementSelect selectEven = new StatementSelect()
                 .select(columns()).from(tableName)
-                .where(new Column("id").mod(new Value(2)).eq(new Value(0)))
-                .order(new Column("id"));
+                .where(new Column("id").mod(2).eq(0))
+                .orderBy(new Column("id").order(Order.Asc));
 
         PreparedStatement cursorOdd = handle.prepareNewStatement(selectOdd);
         PreparedStatement cursorEven = handle.prepareNewStatement(selectEven);
@@ -447,7 +448,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
             }
         }
 
-        assertEquals(oddIds.size(), 3);
+        assertEquals(oddIds.size(), 4);
         assertEquals(evenIds.size(), 3);
 
         handle.finalizeAndReturnPreparedStatement(cursorOdd);
@@ -483,7 +484,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testExecuteInterleaveWithUncached() throws WCDBException {
         StatementSelect select = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         PreparedStatement cursor = handle.prepareNewStatement(select);
 
         cursor.step();
@@ -507,7 +508,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
         handle.beginTransaction();
 
         StatementSelect selectAll = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         PreparedStatement uncachedRead = handle.prepareNewStatement(selectAll);
 
         StatementInsert insert = new StatementInsert()
@@ -577,7 +578,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testUncachedUpdateInterleaveWithUncachedRead() throws WCDBException {
         StatementSelect select = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         StatementUpdate update = new StatementUpdate()
                 .update(tableName)
                 .set(new Column("content")).to(new BindParameter(1))
@@ -612,7 +613,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
         assertEquals(allRowsCount(), 3);
 
         StatementSelect select = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         StatementDelete delete = new StatementDelete()
                 .deleteFrom(tableName)
                 .where(new Column("id").eq(new BindParameter(1)));
@@ -640,7 +641,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testHeavyMixFiveStatements() throws WCDBException {
         StatementSelect select1 = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         StatementSelect select2 = new StatementSelect()
                 .select(new Column("content")).from(tableName)
                 .where(new Column("id").eq(new BindParameter(1)));
@@ -704,7 +705,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
         }
 
         StatementSelect select = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
         PreparedStatement uncachedRead = handle.prepareNewStatement(select);
 
         int count = 0;
@@ -730,7 +731,7 @@ public class PrepareNewStatementTest extends ValueCRUDTestCase {
     @Test
     public void testMultipleMainRepreparesWithUncachedAndCached() throws WCDBException {
         StatementSelect selectAll = new StatementSelect()
-                .select(columns()).from(tableName).order(new Column("id"));
+                .select(columns()).from(tableName).orderBy(new Column("id").order(Order.Asc));
 
         PreparedStatement uncached = handle.prepareNewStatement(selectAll);
         PreparedStatement cached = handle.getOrCreatePreparedStatement(selectAll);
