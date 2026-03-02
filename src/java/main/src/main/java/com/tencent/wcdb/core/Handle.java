@@ -107,6 +107,66 @@ public class Handle extends HandleORMOperation implements AutoCloseable {
     static native long getOrCreatePreparedStatementWithSQL(long self, String sql);
 
     /**
+     * Use {@code sqlite3_prepare} internally to prepare a new statement, each call creates a brand-new {@code sqlite3_stmt}.
+     * Unlike {@link Handle#getOrCreatePreparedStatement(Statement)}, the statement will NOT be cached internally.
+     * Unlike {@link Handle#preparedWithMainStatement(Statement)}, multiple such statements can be active at the same time.
+     * This is designed for Android cursor-like patterns where you need interleaved statement usage
+     * without occupying the main statement and without automatic caching.
+     * You MUST call {@link Handle#finalizeAndReturnPreparedStatement(PreparedStatement)} when done.
+     *
+     * @param statement The statement to prepare.
+     * @return A wrapper of {@code sqlite3_stmt}.
+     * @throws WCDBException if any error occurs.
+     * @see #finalizeAndReturnPreparedStatement(PreparedStatement)
+     */
+    @NotNull
+    public PreparedStatement prepareNewStatement(@NotNull Statement statement) throws WCDBException {
+        long cppPreparedStatement = prepareNewStatement(getCppHandle(), CppObject.get(statement));
+        if (cppPreparedStatement == 0) {
+            throw createException();
+        }
+        return new PreparedStatement(cppPreparedStatement);
+    }
+
+    static native long prepareNewStatement(long self, long statement);
+
+    /**
+     * Use {@code sqlite3_prepare} internally to prepare a new statement from SQL string.
+     * Note that you should not execute sql string on any migrating or compressing table.
+     *
+     * @param sql The sql string to prepare.
+     * @return A wrapper of {@code sqlite3_stmt}.
+     * @throws WCDBException if any error occurs.
+     * @see #prepareNewStatement(Statement)
+     * @see #finalizeAndReturnPreparedStatement(PreparedStatement)
+     */
+    @NotNull
+    public PreparedStatement prepareNewStatement(@NotNull String sql) throws WCDBException {
+        long cppPreparedStatement = prepareNewStatementWithSQL(getCppHandle(), sql);
+        if (cppPreparedStatement == 0) {
+            throw createException();
+        }
+        return new PreparedStatement(cppPreparedStatement);
+    }
+
+    static native long prepareNewStatementWithSQL(long self, String sql);
+
+    /**
+     * Finalize and return a statement previously created by {@link Handle#prepareNewStatement(Statement)}.
+     * After calling this, the statement must not be used anymore.
+     *
+     * @param stmt The statement to finalize and return.
+     */
+    public void finalizeAndReturnPreparedStatement(@NotNull PreparedStatement stmt) {
+        long stmtCppObj = CppObject.get(stmt);
+        if (cppObj != 0 && stmtCppObj != 0) {
+            finalizeAndReturnPreparedStatement(cppObj, stmtCppObj);
+        }
+    }
+
+    static native void finalizeAndReturnPreparedStatement(long self, long stmt);
+
+    /**
      * Use {@code sqlite3_prepare} internally to prepare a new statement.
      * You should firstly use {@link PreparedStatement#finalizeStatement()} to finalize the previous statement prepared by this method.
      * If you need to prepare multiple statements at the same time, {@link Handle#getOrCreatePreparedStatement(Statement)} is recommended.

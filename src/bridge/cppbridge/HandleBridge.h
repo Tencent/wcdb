@@ -41,6 +41,11 @@ CPPHandleStatement
 WCDBHandleGetOrCreatePreparedStatement(CPPHandle handle, CPPObject* _Nonnull statement);
 CPPHandleStatement
 WCDBHandleGetOrCreatePreparedSQL(CPPHandle handle, const char* _Nonnull sql);
+CPPHandleStatement
+WCDBHandlePrepareNewStatement(CPPHandle handle, CPPObject* _Nonnull statement);
+CPPHandleStatement
+WCDBHandlePrepareNewStatementSQL(CPPHandle handle, const char* _Nonnull sql);
+void WCDBHandleFinalizeAndReturnPreparedStatement(CPPHandle handle, CPPHandleStatement stmt);
 void WCDBHandleFinalizeStatements(CPPHandle handle);
 bool WCDBHandleExecute(CPPHandle handle, CPPObject* _Nonnull statement);
 bool WCDBHandleExecuteSQL(CPPHandle handle, const char* _Nonnull sql);

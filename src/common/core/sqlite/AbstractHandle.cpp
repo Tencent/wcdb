@@ -300,6 +300,53 @@ HandleStatement *AbstractHandle::getOrCreatePreparedStatement(const UnsafeString
     return preparedStatement;
 }
 
+HandleStatement *AbstractHandle::prepareNewStatement(const Statement &statement)
+{
+    const StringView &sql = statement.getDescription();
+    if (sql.length() == 0) {
+        m_error.setCode(Error::Code::Error, "Invalid statement");
+        m_error.infos.erase(ErrorStringKeySQL);
+        m_error.level = Error::Level::Error;
+        Notifier::shared().notify(m_error);
+        return nullptr;
+    }
+    DecorativeHandleStatement *handleStatement = getStatement();
+    if (handleStatement == nullptr || !handleStatement->prepare(statement)) {
+        if (handleStatement != nullptr) {
+            returnStatement(handleStatement);
+        }
+        return nullptr;
+    }
+    return handleStatement;
+}
+
+HandleStatement *AbstractHandle::prepareNewStatement(const UnsafeStringView &sql)
+{
+    if (sql.length() == 0) {
+        m_error.setCode(Error::Code::Error, "Invalid statement");
+        m_error.infos.erase(ErrorStringKeySQL);
+        m_error.level = Error::Level::Error;
+        Notifier::shared().notify(m_error);
+        return nullptr;
+    }
+    DecorativeHandleStatement *handleStatement = getStatement();
+    if (handleStatement == nullptr || !handleStatement->prepareSQL(sql)) {
+        if (handleStatement != nullptr) {
+            returnStatement(handleStatement);
+        }
+        return nullptr;
+    }
+    return handleStatement;
+}
+
+void AbstractHandle::finalizeAndReturnPreparedStatement(HandleStatement *handleStatement)
+{
+    if (handleStatement != nullptr) {
+        handleStatement->finalize();
+        returnStatement(handleStatement);
+    }
+}
+
 HandleStatement *AbstractHandle::getOrCreateStatement(const UnsafeStringView &sql)
 {
     if (sql.length() == 0) {

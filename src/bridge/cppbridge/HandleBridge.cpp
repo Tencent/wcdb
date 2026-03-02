@@ -72,6 +72,32 @@ WCDBHandleGetOrCreatePreparedSQL(CPPHandle handle, const char* _Nonnull sql)
     return WCDBCreateUnmanagedCPPObject(CPPHandleStatement, stmt);
 }
 
+CPPHandleStatement
+WCDBHandlePrepareNewStatement(CPPHandle handle, CPPObject* statement)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
+    WCDB::Statement* cppStatement
+    = (WCDB::Statement*) WCDB::ObjectBridge::extractOriginalCPPObject(statement);
+    WCDB::HandleStatement* stmt = cppHandle->prepareNewStatement(*cppStatement);
+    return WCDBCreateUnmanagedCPPObject(CPPHandleStatement, stmt);
+}
+
+CPPHandleStatement
+WCDBHandlePrepareNewStatementSQL(CPPHandle handle, const char* _Nonnull sql)
+{
+    WCDBGetObjectOrReturnValue(handle, WCDB::InnerHandle, cppHandle, CPPHandleStatement());
+    WCDB::HandleStatement* stmt
+    = cppHandle->prepareNewStatement(WCDB::UnsafeStringView(sql));
+    return WCDBCreateUnmanagedCPPObject(CPPHandleStatement, stmt);
+}
+
+void WCDBHandleFinalizeAndReturnPreparedStatement(CPPHandle handle, CPPHandleStatement stmt)
+{
+    WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
+    WCDBGetObjectOrReturn(stmt, WCDB::HandleStatement, cppStmt);
+    cppHandle->finalizeAndReturnPreparedStatement(cppStmt);
+}
+
 void WCDBHandleFinalizeStatements(CPPHandle handle)
 {
     WCDBGetObjectOrReturn(handle, WCDB::InnerHandle, cppHandle);
