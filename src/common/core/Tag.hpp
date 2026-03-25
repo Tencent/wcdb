@@ -32,8 +32,12 @@ namespace WCDB {
 
 // Custom trait to identify integer-like types
 // (replaces illegal std::is_integral specialization for Tag)
+// Uses remove_cv to preserve const/volatile semantics like std::is_integral
 template<typename T>
-struct IsInteger : public std::is_integral<T> {};
+struct IsIntegerImpl : public std::is_integral<T> {};
+
+template<typename T>
+struct IsInteger : public IsIntegerImpl<typename std::remove_cv<T>::type> {};
 
 class WCDB_API Tag final {
 public:
@@ -54,6 +58,6 @@ private:
 };
 
 template<>
-struct IsInteger<Tag> : public std::true_type {};
+struct IsIntegerImpl<Tag> : public std::true_type {};
 
 } // namespace WCDB
