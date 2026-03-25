@@ -28,6 +28,7 @@
 #include "StringView.hpp"
 #include "Syntax.h"
 #include "SyntaxForwardDeclaration.h"
+#include "Tag.hpp"
 #include <cstdint>
 #include <type_traits>
 #include <vector>
@@ -159,7 +160,7 @@ public:
 
 //Integer
 template<typename T>
-struct ColumnIsIntegerType<T, typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value)>::type>
+struct ColumnIsIntegerType<T, typename std::enable_if<(WCDB::IsInteger<T>::value || std::is_enum<T>::value)>::type>
 : public std::true_type {
 public:
     static ColumnTypeInfo<ColumnType::Integer>::UnderlyingType

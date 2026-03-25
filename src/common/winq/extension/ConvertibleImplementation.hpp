@@ -25,6 +25,7 @@
 #pragma once
 
 #include "Convertible.hpp"
+#include "Tag.hpp"
 #include "Value.hpp"
 
 namespace WCDB {
@@ -63,7 +64,7 @@ struct SafeUnderlyingType<T, false> {};
 template<typename T, typename Enable = void>
 struct Is64BitUnsignedInteger : public std::false_type {};
 template<typename T>
-struct Is64BitUnsignedInteger<T, typename std::enable_if<std::is_integral<T>::value && (sizeof(T) > 4) && std::is_unsigned<T>::value>::type>
+struct Is64BitUnsignedInteger<T, typename std::enable_if<WCDB::IsInteger<T>::value && (sizeof(T) > 4) && std::is_unsigned<T>::value>::type>
 : public std::true_type {};
 
 template<typename T, typename Enable = void>
@@ -75,7 +76,7 @@ struct Is64BitUnsignedEnum<T, typename std::enable_if<std::is_enum<T>::value && 
 template<typename T>
 class LiteralValueConvertible<
 T, // 32-bit-integer/enum or 64-bit-signed-integer/enum
-typename std::enable_if<(std::is_integral<T>::value || std::is_enum<T>::value)
+typename std::enable_if<(WCDB::IsInteger<T>::value || std::is_enum<T>::value)
                         && !Is64BitUnsignedInteger<T>::value && !Is64BitUnsignedEnum<T>::value>::type>
 final : public std::true_type {
 public:

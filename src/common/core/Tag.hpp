@@ -30,6 +30,11 @@
 
 namespace WCDB {
 
+// Custom trait to identify integer-like types
+// (replaces illegal std::is_integral specialization for Tag)
+template<typename T>
+struct IsInteger : public std::is_integral<T> {};
+
 class WCDB_API Tag final {
 public:
     static const Tag& invalid();
@@ -47,5 +52,8 @@ private:
     Tag(const std::nullptr_t&);
     long m_value;
 };
+
+template<>
+struct IsInteger<Tag> : public std::true_type {};
 
 } // namespace WCDB
