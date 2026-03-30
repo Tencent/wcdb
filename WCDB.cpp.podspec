@@ -96,6 +96,8 @@ Pod::Spec.new do |wcdb|
     "VALID_ARCHS" => "arm64e arm64 x86_64",
     "VALID_ARCHS[sdk=watchos*]" => "arm64_32 armv7k",
   }
+  wcdb.preserve_path = "src/support/WCDBCpp.modulemap"
+  wcdb.module_map = "src/support/WCDBCpp.modulemap"
   wcdb.header_dir = "WCDB"
   wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.8'
 end

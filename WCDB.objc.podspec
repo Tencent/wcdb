@@ -130,6 +130,8 @@ Pod::Spec.new do |wcdb|
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
   }
+  wcdb.preserve_path = "src/support/WCDBObjc.modulemap"
+  wcdb.module_map = "src/support/WCDBObjc.modulemap"
   wcdb.header_dir = "WCDB"
   wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.8'
 end
