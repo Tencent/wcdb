@@ -1,0 +1,57 @@
+
+image: "harbor.rongcloud.net/library/rust/wcdb:0.1.4"
+
+cache:
+  paths:
+    - CargoHome/registry/index/
+    - CargoHome/registry/cache/
+    - src/rust/target/
+    - src/rust/Cargo.lock
+
+stages:
+  - check
+  - test
+
+variables:
+  GIT_DEPTH: 1
+
+run_check_unsafe_keywords:
+  stage: check
+  script: |
+    echo "Check danger function..."
+    if find src/rust/wcdb/src -name '*.rs' | xargs -P4 grep -n '\bc_long\b|\.unwrap()\|\.expect(\|unreachable!\|panic!'; then
+      echo "Error: banned c_long/unwrap/expect/unreachable!/panic!"
+      exit 1
+    fi
+  rules:
+    - changes:
+       - "src/rust/wcdb/src/**/*.rs"
+
+run_test:
+  stage: test
+  before_script:
+    - export http_proxy=http://172.19.23.87:7890
+    - export https_proxy=http://172.19.23.87:7890
+    - export NO_PROXY=localhost,127.0.0.1,rsproxy.cn
+    - git submodule update --init openssl sqlcipher zstd
+    - npm config set registry https://registry.npmmirror.com
+    - npm install --save-dev @commitlint/config-conventional @commitlint/cli
+  script:
+    - export CARGO_HOME=${CI_PROJECT_DIR}/CargoHome
+    - export RUSTFLAGS="-D warnings -A unused -A deprecated"
+    - export CC=`which cc`
+    - export CXX=`which c++`
+    - cd src/rust
+    - echo "${CI_COMMIT_MESSAGE}" | npx commitlint
+    - autocorrect --lint
+    - FILES=$(git ls-files '*.c' '*.cpp' '*.h')
+    - for file in $FILES; do
+        clang-format "$file" | colordiff -u "$file" -;
+      done
+    - cargo fmt -- --check
+    - cargo test -- --test-threads=1
+    - TARGET_SIZE=$(du -sm target 2>/dev/null | awk '{print $1}')
+    - echo "target:${TARGET_SIZE}m"
+    - if [ "$TARGET_SIZE" -gt 2048 ]; then
+        rm -rf target;
+      fi
