@@ -52,6 +52,7 @@ public class PreparedStatement extends CppObject {
     private static native long getError(long self);
 
     void prepare(Statement statement) throws WCDBException {
+        columnCount = -1;
         if (!prepare(cppObj, CppObject.get(statement))) {
             throw createException();
         }
@@ -60,6 +61,7 @@ public class PreparedStatement extends CppObject {
     private static native boolean prepare(long self, long statement);
 
     void prepare(String sql) throws WCDBException {
+        columnCount = -1;
         if (!prepareSQL(cppObj, sql)) {
             throw createException();
         }

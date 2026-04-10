@@ -29,32 +29,43 @@ public final class SQLiteStatement extends SQLiteClosable {
     private void execute(Handle handle, CancellationSignal cancellationSignal) {
         DatabaseUtils.bindCancellationSignal(handle, cancellationSignal);
 
-        PreparedStatement stmt = handle.preparedWithMainStatement(mSql);
-        int i = 1;
-        for (Object arg : mBindArgs) {
-            stmt.bindValue(new Value(arg), i++);
+        PreparedStatement stmt = null;
+        try {
+            stmt = handle.preparedWithMainStatement(mSql);
+            int i = 1;
+            for (Object arg : mBindArgs) {
+                stmt.bindValue(new Value(arg), i++);
+            }
+            do {
+                stmt.step();
+            } while (!stmt.isDone());
+        } finally {
+            if (stmt != null) {
+                stmt.finalizeStatement();
+            }
         }
-        do {
-            stmt.step();
-        } while (!stmt.isDone());
-        stmt.finalizeStatement();
     }
 
     private Value executeForValue(Handle handle, CancellationSignal cancellationSignal) {
         DatabaseUtils.bindCancellationSignal(handle, cancellationSignal);
 
-        PreparedStatement stmt = handle.preparedWithMainStatement(mSql);
-        int i = 1;
-        for (Object arg : mBindArgs) {
-            stmt.bindValue(new Value(arg), i++);
+        PreparedStatement stmt = null;
+        try {
+            stmt = handle.preparedWithMainStatement(mSql);
+            int i = 1;
+            for (Object arg : mBindArgs) {
+                stmt.bindValue(new Value(arg), i++);
+            }
+            stmt.step();
+            if (stmt.isDone()) {
+                throw new SQLiteDoneException();
+            }
+            return stmt.getValue(0);
+        } finally {
+            if (stmt != null) {
+                stmt.finalizeStatement();
+            }
         }
-        stmt.step();
-        if (stmt.isDone()) {
-            throw new SQLiteDoneException();
-        }
-        Value result = stmt.getValue(0);
-        stmt.finalizeStatement();
-        return result;
     }
 
     /**
