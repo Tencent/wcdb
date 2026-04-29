@@ -34,6 +34,8 @@
 #else
 #define NOMINMAX
 #include <windows.h>
+#include <cstdlib>
+#include <ctime>
 #endif
 
 #ifndef O_BINARY
@@ -246,6 +248,20 @@ bool FileHandle::write(const UnsafeData &unsafeData)
     return false;
 }
 
+#ifdef _WIN32
+void FileHandle::mapExceptHandler(void **mapped, size_t absoluteOffset)
+{
+    __try {
+        volatile unsigned char testByte
+        = *reinterpret_cast<unsigned char *>(static_cast<char *>(*mapped) + absoluteOffset);
+        WCDB_UNUSED(testByte);
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+        UnmapViewOfFile(*mapped);
+        *mapped = NULL;
+    }
+}
+#endif
+
 #pragma mark - Memory map
 MappedData FileHandle::map(offset_t offset, size_t length, SharedHighWater highWater)
 {
@@ -332,6 +348,31 @@ MappedData FileHandle::map(offset_t offset, size_t length, SharedHighWater highW
         SharedThreadedErrorProne::setThreadedError(std::move(error));
         return MappedData::null();
     }
+    
+    size_t numPages = (roundedSize + pageSize - 1) / pageSize;
+    for (size_t pageIndex = 0; pageIndex < numPages; ++pageIndex) {
+        size_t pageStart = pageIndex * pageSize;
+        size_t pageSizeActual = std::min(pageSize, roundedSize - pageStart);
+        if (pageSizeActual > 0) {
+            size_t randomOffsetInPage = rand() % pageSizeActual;
+            size_t absoluteOffset = pageStart + randomOffsetInPage;
+            
+            mapExceptHandler(&mapped, absoluteOffset);
+            if (mapped == NULL) {
+                Error error;
+                error.level = m_errorIgnorable ? Error::Level::Warning :
+                                                  Error::Level::Error;
+                error.infos.insert_or_assign(ErrorStringKeyAssociatePath, path);
+                error.infos.insert_or_assign("MmapSize", roundedSize);
+                error.infos.insert_or_assign(
+                "Error", "Memory access violation during mapping test");
+                Notifier::shared().notify(error);
+                SharedThreadedErrorProne::setThreadedError(std::move(error));
+                return MappedData::null();
+            }
+        }
+    }
+    
     return MappedData(reinterpret_cast<unsigned char *>(mapped), roundedSize, highWater)
     .subdata(offsetAlignment, std::min(length, roundedSize));
 #endif
@@ -368,8 +409,7 @@ const size_t &FileHandle::memoryPageSize()
     if (s_memoryPageSize == 0) {
         SYSTEM_INFO system_info;
         GetSystemInfo(&system_info);
-        s_memoryPageSize
-        = std::max(system_info.dwPageSize, system_info.dwAllocationGranularity);
+        s_memoryPageSize = system_info.dwAllocationGranularity;
     }
 #endif
     return s_memoryPageSize;

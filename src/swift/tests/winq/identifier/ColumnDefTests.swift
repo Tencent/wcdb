@@ -88,7 +88,7 @@ class ColumnDefTests: BaseTestCase {
         )
 
         WINQAssertEqual(
-            generateColumnDef().makeDefault(to: WCDB.Expression(nil)),
+            generateColumnDef().makeDefault(to: ModuleExpression(nil)),
             "testColumnDef INTEGER DEFAULT NULL"
         )
 

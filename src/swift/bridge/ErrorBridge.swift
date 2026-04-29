@@ -23,7 +23,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 internal final class ErrorBridge {
     static func getErrorFrom(cppError error: CPPError) -> WCDBError {

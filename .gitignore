@@ -35,6 +35,9 @@ Package.resolved
 # WeChat
 WeChat/conan/*
 
+# Mac Catalyst
+tools/version/build
+
 # wconan
 WeChat/.wconan2/
 WeChat/wconan_build/

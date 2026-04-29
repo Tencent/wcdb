@@ -4,7 +4,7 @@
 # pod trunk push --verbose --allow-warnings WCDB.podspec --skip-import-validation
 Pod::Spec.new do |wcdb|
   wcdb.name         = "WCDB"
-  wcdb.version      = "2.1.14"
+  wcdb.version      = "2.1.16"
   wcdb.summary      = "WCDB is a cross-platform database framework developed by WeChat."
   wcdb.description  = <<-DESC
                       The WeChat Database, for Objc/Swift/C++. (If you want to use WCDB for Objc/Swift/C++ separately, see the "WCDB.objc", "WCDB.swift" or "WCDB.cpp" pod.)
@@ -149,11 +149,10 @@ Pod::Spec.new do |wcdb|
     "VALID_ARCHS[sdk=watchos*]" => "arm64_32 arm64 86_64",
     "OTHER_CFLAGS" => "-fvisibility-inlines-hidden",
     "OTHER_CPLUSPLUSFLAGS" => "-fvisibility-inlines-hidden",
-    "SWIFT_ENABLE_EXPLICIT_MODULES" => 'NO',
     "OTHER_SWIFT_FLAGS" => "-no-verify-emitted-module-interface",
     "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "WCDB_SWIFT_BRIDGE_OBJC",
   }
   wcdb.header_dir = "WCDB"
   wcdb.swift_versions = '5'
-  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.7'
+  wcdb.dependency 'WCDBOptimizedSQLCipher', '1.4.8'
 end

@@ -21,8 +21,10 @@
 import XCTest
 #if TEST_WCDB_SWIFT
 import WCDBSwift
+typealias ModuleExpression = WCDBSwift.Expression
 #else
 import WCDB
+typealias ModuleExpression = WCDB.Expression
 #endif
 
 func XCTAssertEqual(_ expression1: @autoclosure () -> String,
@@ -46,7 +48,7 @@ func WINQAssertEqual<DescribableObject1, DescribableObject2>(
 }
 
 func WINQExpressionAssertEqual(
-    _ expression: @autoclosure () -> WCDB.Expression,
+    _ expression: @autoclosure () -> ModuleExpression,
     _ description: @autoclosure () -> String,
     file: StaticString = #file,
     line: UInt = #line) {

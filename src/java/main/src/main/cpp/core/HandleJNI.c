@@ -47,10 +47,33 @@ jlong WCDBJNIHandleClassMethod(getOrCreatePreparedStatementWithSQL, jlong self, 
     return ret;
 }
 
+jlong WCDBJNIHandleClassMethod(prepareNewStatement, jlong self, jlong statement)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    return (jlong) WCDBHandlePrepareNewStatement(selfStruct, (CPPObject *) statement)
+    .innerValue;
+}
+
+jlong WCDBJNIHandleClassMethod(prepareNewStatementWithSQL, jlong self, jstring sql)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    WCDBJNIGetString(sql);
+    jlong ret = (jlong) WCDBHandlePrepareNewStatementSQL(selfStruct, sqlString).innerValue;
+    WCDBJNIReleaseString(sql);
+    return ret;
+}
+
 jlong WCDBJNIHandleClassMethod(getMainStatement, jlong self)
 {
     WCDBJNIBridgeStruct(CPPHandle, self);
     return (jlong) WCDBHandleGetMainStatement(selfStruct).innerValue;
+}
+
+void WCDBJNIHandleClassMethod(finalizeAndReturnPreparedStatement, jlong self, jlong stmt)
+{
+    WCDBJNIBridgeStruct(CPPHandle, self);
+    WCDBJNIBridgeStruct(CPPHandleStatement, stmt);
+    WCDBHandleFinalizeAndReturnPreparedStatement(selfStruct, stmtStruct);
 }
 
 void WCDBJNIHandleClassMethod(finalizeAllStatements, jlong self)

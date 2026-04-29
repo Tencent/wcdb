@@ -1,8 +1,11 @@
 set(ZSTD_ROOT ${CMAKE_CURRENT_LIST_DIR}/../zstd)
 set(ZSTD_INSTALL_HEADER_DIR ${CMAKE_CURRENT_BINARY_DIR}/include)
 message(STATUS ${ZSTD_ROOT})
-
-enable_language(ASM)
+if (WIN32)
+    enable_language(ASM_MASM)
+else ()
+    enable_language(ASM)
+endif ()
 set(CMAKE_ASM_FLAGS "${CFLAGS} -x assembler-with-cpp")
 
 set(ZSTD_SRC
