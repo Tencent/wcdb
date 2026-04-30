@@ -28,7 +28,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 30
+#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 32
 #include <sys/syscall.h>
 #define gettid() syscall(SYS_gettid)
 #endif

@@ -1,0 +1,142 @@
+use crate::base::cpp_object::{CppObject, CppObjectTrait};
+use crate::base::cpp_object_convertible::CppObjectConvertibleTrait;
+use crate::base::param::enum_basic_expression::BasicExpression;
+use crate::base::param::enum_string_column_def::StringColumnDef;
+use crate::utils::ToCString;
+use crate::winq::column_constraint::ColumnConstraint;
+use crate::winq::foreign_key::ForeignKey;
+use crate::winq::identifier::{CPPType, Identifier, IdentifierTrait};
+use crate::winq::identifier_convertible::IdentifierConvertibleTrait;
+use std::ffi::{c_char, c_int, c_void};
+
+extern "C" {
+    fn WCDBRustColumnDef_create(
+        cpp_type: c_int,
+        column_cpp_obj: *mut c_void,
+        name: *const c_char,
+        column_type: c_int,
+    ) -> *mut c_void;
+
+    fn WCDBRustColumnDef_constraint(cpp_obj: *mut c_void, constraint_cpp_obj: *mut c_void);
+}
+
+pub struct ColumnDef {
+    identifier: Identifier,
+}
+
+impl CppObjectTrait for ColumnDef {
+    fn set_cpp_obj(&mut self, cpp_obj: *mut c_void) {
+        self.identifier.set_cpp_obj(cpp_obj);
+    }
+
+    fn get_cpp_obj(&self) -> *mut c_void {
+        self.identifier.get_cpp_obj()
+    }
+
+    fn release_cpp_object(&mut self) {
+        self.identifier.release_cpp_object();
+    }
+}
+
+impl CppObjectConvertibleTrait for ColumnDef {
+    fn as_cpp_object(&self) -> &CppObject {
+        self.identifier.as_cpp_object()
+    }
+}
+
+impl IdentifierTrait for ColumnDef {
+    fn get_type(&self) -> CPPType {
+        self.identifier.get_type()
+    }
+
+    fn get_description(&self) -> String {
+        self.identifier.get_description()
+    }
+}
+
+impl IdentifierConvertibleTrait for ColumnDef {
+    fn as_identifier(&self) -> &Identifier {
+        self.identifier.as_identifier()
+    }
+}
+
+impl ColumnDef {
+    pub fn new<'a, T>(param: T) -> ColumnDef
+    where
+        T: Into<StringColumnDef<'a>>,
+    {
+        let cpp_obj = match param.into() {
+            StringColumnDef::String(str, column_type_opt) => {
+                let column_type = match column_type_opt {
+                    Some(column_type) => column_type as c_int,
+                    None => 0,
+                };
+                let c_name = str.to_cstring();
+                unsafe {
+                    WCDBRustColumnDef_create(
+                        CPPType::String as c_int,
+                        std::ptr::null_mut(),
+                        c_name.as_ptr(),
+                        column_type,
+                    )
+                }
+            }
+            StringColumnDef::Column(column, column_type_opt) => {
+                let column_type = match column_type_opt {
+                    Some(column_type) => column_type as c_int,
+                    None => 0,
+                };
+                unsafe {
+                    WCDBRustColumnDef_create(
+                        Identifier::get_cpp_type(column) as c_int,
+                        CppObject::get(column),
+                        std::ptr::null_mut(),
+                        column_type,
+                    )
+                }
+            }
+        };
+        Self {
+            identifier: Identifier::new(CPPType::ColumnDef, Some(cpp_obj)),
+        }
+    }
+
+    pub fn constraint(&self, constraint: &ColumnConstraint) -> &Self {
+        unsafe {
+            WCDBRustColumnDef_constraint(self.get_cpp_obj(), CppObject::get(constraint));
+        }
+        self
+    }
+
+    pub fn make_primary(&self, is_auto_increment: Option<bool>) -> &Self {
+        let column_constraint = ColumnConstraint::new(None);
+        column_constraint.primary_key();
+        if let Some(true) = is_auto_increment {
+            column_constraint.auto_increment();
+        }
+        self.constraint(&column_constraint)
+    }
+
+    pub fn make_default_to<'a, T>(&self, value: T) -> &Self
+    where
+        T: Into<BasicExpression<'a>>,
+    {
+        self.constraint(ColumnConstraint::new(None).default_to(value))
+    }
+
+    pub fn make_unique(&self) -> &Self {
+        self.constraint(ColumnConstraint::new(None).unique())
+    }
+
+    pub fn make_not_null(&self) -> &Self {
+        self.constraint(ColumnConstraint::new(None).not_null())
+    }
+
+    pub fn make_foreign_key(&self, foreign_key: &ForeignKey) -> &Self {
+        self.constraint(ColumnConstraint::new(None).foreign_key(foreign_key))
+    }
+
+    pub fn make_not_indexed(&self) -> &Self {
+        self.constraint(ColumnConstraint::new(None).un_index())
+    }
+}
