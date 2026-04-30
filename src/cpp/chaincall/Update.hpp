@@ -130,6 +130,7 @@ public:
     Update<ObjectType> &toValue(const Value &value)
     {
         m_row = { value };
+        m_rowptr = &(m_row.value());
         return *this;
     }
 

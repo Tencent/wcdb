@@ -24,6 +24,79 @@
 
 #import "CoreConst.h"
 #import "TestCase.h"
+#include "ThreadLocal.hpp"
+#include <mach/mach.h>
+#include <pthread.h>
+
+// ============================================================
+// Reproduce the original crash scenario in-process.
+//
+// On a worker thread, we exploit thread_local destruction order:
+//   - A "hook" thread_local is initialized FIRST → destroyed LAST
+//   - threadedStorage()'s thread_local is initialized SECOND → destroyed FIRST
+// When the thread exits, the hook's destructor accesses ThreadLocal
+// after the underlying storage is already destroyed — exactly the
+// original crash path (SharedLockGuard → lockShared → getOrCreate).
+//
+// With the old unique_ptr code, this crashes (SIGSEGV).
+// With the fix (ThreadedStorage + nullptr guard), this succeeds.
+// ============================================================
+
+namespace ThreadLocalDestructionTest {
+
+static std::atomic<bool> s_hookSucceeded{false};
+static WCDB::ThreadLocal<int> s_tl;
+
+struct DestructionHook {
+    bool active = false;
+    ~DestructionHook()
+    {
+        if (active) {
+            s_tl.getOrCreate() = 42;
+            s_hookSucceeded.store(true);
+        }
+    }
+};
+
+static void* threadEntry(void*)
+{
+    // Hook initialized FIRST → its destructor registered first → destroyed LAST
+    thread_local DestructionHook hook;
+    hook.active = true;
+
+    // threadedStorage() initialized SECOND → registered second → destroyed FIRST
+    s_tl.getOrCreate() = 10;
+
+    return nullptr;
+}
+
+} // namespace ThreadLocalDestructionTest
+
+// ============================================================
+// Memory leak stress test helpers
+// ============================================================
+namespace ThreadLocalStressTest {
+
+static WCDB::ThreadLocal<int> s_tls[50];
+
+static void* threadEntry(void*)
+{
+    for (int j = 0; j < 50; j++) {
+        s_tls[j].getOrCreate() = j;
+    }
+    return nullptr;
+}
+
+} // namespace ThreadLocalStressTest
+
+static size_t getPhysicalFootprint()
+{
+    task_vm_info_data_t vmInfo;
+    mach_msg_type_number_t count = TASK_VM_INFO_COUNT;
+    kern_return_t kr = task_info(mach_task_self(), TASK_VM_INFO,
+                                (task_info_t) &vmInfo, &count);
+    return kr == KERN_SUCCESS ? vmInfo.phys_footprint : 0;
+}
 
 @interface ThreadTests : TableTestCase
 
@@ -404,6 +477,50 @@
     [self.dispatch waitUntilDone];
     TestCaseAssertTrue(maxHandleCount > 4 && maxHandleCount <= 32);
     [WCTDatabase globalTraceDatabaseOperation:nil];
+}
+
+// Reproduce the original crash: a thread_local destructor accesses ThreadLocal
+// after threadedStorage is already destroyed — the same code path as the crash:
+//   Database::~Database → flowBack → SharedLockGuard → lockShared → getOrCreate
+//
+// With the old code (unique_ptr), this crashes with SIGSEGV.
+// With the fix (ThreadedStorage + nullptr guard), the hook succeeds.
+- (void)test_threadLocal_access_after_storage_destruction
+{
+    ThreadLocalDestructionTest::s_hookSucceeded = false;
+
+    pthread_t thread;
+    pthread_create(&thread, nullptr, ThreadLocalDestructionTest::threadEntry, nullptr);
+    pthread_join(thread, nullptr);
+
+    TestCaseAssertTrue(ThreadLocalDestructionTest::s_hookSucceeded.load());
+}
+
+// Stress test: create & destroy many threads, each touching 50 ThreadLocal<int>.
+// Verifies thread_local storage is properly cleaned up on thread exit (no leak).
+//
+// Per-thread map with 50 entries ≈ 3.5 KB.
+// 2000 threads × 3.5 KB ≈ 7 MB if leaked; ~0 if properly cleaned up.
+- (void)test_threadLocal_no_memory_leak_under_stress
+{
+    // Warm up: let the runtime/allocator settle
+    for (int i = 0; i < 200; i++) {
+        pthread_t t;
+        pthread_create(&t, nullptr, ThreadLocalStressTest::threadEntry, nullptr);
+        pthread_join(t, nullptr);
+    }
+
+    size_t memBefore = getPhysicalFootprint();
+
+    for (int i = 0; i < 2000; i++) {
+        pthread_t t;
+        pthread_create(&t, nullptr, ThreadLocalStressTest::threadEntry, nullptr);
+        pthread_join(t, nullptr);
+    }
+
+    size_t memAfter = getPhysicalFootprint();
+    size_t growth = memAfter > memBefore ? memAfter - memBefore : 0;
+    TestCaseAssertTrue(growth < 2 * 1024 * 1024);
 }
 
 - (void)test_multithread_with_error

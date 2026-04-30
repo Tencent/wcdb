@@ -59,6 +59,10 @@ public:
     void setErrorResult(Error::Code code, const UnsafeStringView& msg);
     void setErrorResult(int code, const UnsafeStringView& msg);
 
+    // Access Auxiliary Data
+    void setAuxData(void* data, void (*destroy)(void*), int index = 0);
+    void* getAuxData(int index = 0);
+
 protected:
     ScalarFunctionAPI(SQLiteContext* ctx, SQLiteValue** values, int valueNum);
 

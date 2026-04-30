@@ -1,3 +1,17 @@
+## v2.1.16
+
+* Fix build error on Xcode 26.4
+* Fix threadedStorage crash when exit
+* Add a new interface to prepare a statement in Android
+* Fix other known bugs
+
+## v2.1.15
+
+* Fix build error on Xcode 26
+* Support Mac Catalyst
+* Fix mmap crash In windows
+* Fix some known bugs
+
 ## v2.1.14
 
 * Support 16kb pagesize for Android

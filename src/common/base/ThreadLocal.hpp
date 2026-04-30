@@ -34,6 +34,17 @@ template<typename T>
 class UntypedThreadLocal {
 protected:
     typedef unsigned int Identifier;
+
+    struct ThreadedStorage {
+        std::map<Identifier, T>* ptr;
+        ThreadedStorage() : ptr(new std::map<Identifier, T>()) {}
+        ~ThreadedStorage()
+        {
+            delete ptr;
+            ptr = nullptr;
+        }
+    };
+
     static Identifier nextIdentifier()
     {
         static std::atomic<Identifier>* s_identifier = new std::atomic<Identifier>(0);
@@ -41,9 +52,11 @@ protected:
     }
     static std::map<Identifier, T>& threadedStorage()
     {
-        thread_local std::unique_ptr<std::map<Identifier, T>> s_storage(
-        new std::map<Identifier, T>());
-        return *s_storage;
+        thread_local ThreadedStorage s_storage;
+        if (s_storage.ptr == nullptr) {
+            s_storage.ptr = new std::map<Identifier, T>();
+        }
+        return *s_storage.ptr;
     }
 };
 

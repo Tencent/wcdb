@@ -19,7 +19,13 @@
  */
 
 import Foundation
+#if SWIFT_PACKAGE
 import WCDB_Private
+#elseif WCDB_SWIFT_TARGET
+import WCDBSwift.Private
+#else
+import WCDB.Private
+#endif
 
 // nullable, Int32, Int64, Double, String, Data
 public struct Value: @unchecked Sendable {

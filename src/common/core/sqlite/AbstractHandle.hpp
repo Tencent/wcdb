@@ -112,6 +112,10 @@ public:
     HandleStatement *getOrCreatePreparedStatement(const Statement &statement);
     HandleStatement *getOrCreatePreparedStatement(const UnsafeStringView &sql);
 
+    HandleStatement *prepareNewStatement(const Statement &statement);
+    HandleStatement *prepareNewStatement(const UnsafeStringView &sql);
+    void finalizeAndReturnPreparedStatement(HandleStatement *handleStatement);
+
 private:
     HandleStatement *getOrCreateStatement(const UnsafeStringView &sql);
     std::list<DecorativeHandleStatement> m_handleStatements;

@@ -421,7 +421,11 @@
 
 - (void)test_precedence
 {
-    TestCaseAssertSQLEqual((!(((column && 1) > 2) - 3)).collate(@"NOCASE"), @"(NOT (((testColumn AND 1) > 2) - 3)) COLLATE NOCASE");
+    TestCaseAssertSQLEqual(!(((column && 1) > 2) - 3), @"NOT (((testColumn AND 1) > 2) - 3)");
+}
+
+- (void)test_collate {
+    TestCaseAssertSQLEqual(column.is("abc").collate(@"NOCASE"), @"testColumn IS 'abc' COLLATE NOCASE");
 }
 
 - (void)test_boundary

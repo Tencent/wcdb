@@ -26,6 +26,8 @@
 #include "Lock.hpp"
 #include <vector>
 
+#include <vector>
+
 namespace WCDB {
 
 class AutoMergeFTSIndexOperator {
