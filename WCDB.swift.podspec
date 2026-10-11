@@ -21,7 +21,10 @@ Pod::Spec.new do |wcdb|
   wcdb.watchos.deployment_target = "7.0"
   wcdb.tvos.deployment_target = "12.4"
   wcdb.source       = { :git => "https://github.com/Tencent/wcdb.git", :tag => "v#{wcdb.version}" }
-  wcdb.private_header_files = "src/bridge/**/*.{h}"
+  wcdb.private_header_files = [
+    "src/bridge/**/*.{h}",
+    "src/objc/orm/coding/WCTTableCoding.h"
+  ]
   wcdb.source_files  = [
   	"src/swift/**/*.{swift}",
   	"src/bridge/**/*.{swift,h,hpp,c,cpp,m,mm}",
