@@ -363,6 +363,7 @@
 
 - (void)test_compressed_join
 {
+    self.continueAfterFailure = NO;
     auto database = self.database;
     const std::string content(2048, 'a');
     const WCDB::Field contentField = WCDB_FIELD(CPPTestCaseObject::content);
@@ -370,7 +371,7 @@
     TestCaseAssertTrue(database->createTable<CPPTestCaseObject>("compressedTable"));
     TestCaseAssertTrue(database->createTable<CPPTestCaseObject>("ordinaryTable"));
     TestCaseAssertTrue(database->createTable<CPPTestCaseObject>("anotherCompressedTable"));
-    database->setCompression([&](WCDB::Database::CompressionInfo& info) {
+    database->setCompression([contentField](WCDB::Database::CompressionInfo& info) {
         if (info.getTableName().equal("compressedTable") || info.getTableName().equal("anotherCompressedTable")) {
             info.addZSTDNormalCompressField(contentField);
         }
@@ -378,7 +379,6 @@
     const WCDB::ValueArray<CPPTestCaseObject> objects = { CPPTestCaseObject(1, content) };
     TestCaseAssertTrue(database->insertObjects(objects, "compressedTable"));
     TestCaseAssertTrue(database->insertObjects(objects, "ordinaryTable"));
-
     TestCaseAssertTrue(database->insertObjects(objects, "anotherCompressedTable"));
 
     auto compressionType = database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_content")).from("compressedTable"));
