@@ -33,6 +33,8 @@
 
 WCDB_EXTERN_C_BEGIN
 
+typedef struct UBreakIterator UBreakIterator;
+
 typedef enum UErrorCode {
     U_ZERO_ERROR = 0, /**< No error, no warning. */
 } UErrorCode;
