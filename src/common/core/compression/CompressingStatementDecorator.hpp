@@ -84,6 +84,7 @@ protected:
                                 int *maxBindIndex = nullptr,
                                 const CompressionTableInfo *curInfo = nullptr);
     typedef StringViewMap<const CompressionTableInfo *> TableInfos;
+    bool parseTable(const Syntax::SelectCore &select, TableInfos &tableInfos);
     bool parseTable(const std::list<Syntax::TableOrSubquery> &tables, TableInfos &tableInfos);
     bool checkBindParametersExist(std::list<Syntax::Expression> &exps);
     Optional<int>

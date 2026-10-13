@@ -361,6 +361,101 @@
     [[Random shared] setStringType:RandomStringType_Default];
 }
 
+- (void)test_compressed_join
+{
+    self.continueAfterFailure = NO;
+    auto database = self.database;
+    const std::string content(2048, 'a');
+    const WCDB::Field contentField = WCDB_FIELD(CPPTestCaseObject::content);
+    const WCDB::Column identifier("identifier");
+    TestCaseAssertTrue(database->createTable<CPPTestCaseObject>("compressedTable"));
+    TestCaseAssertTrue(database->createTable<CPPTestCaseObject>("ordinaryTable"));
+    TestCaseAssertTrue(database->createTable<CPPTestCaseObject>("anotherCompressedTable"));
+    database->setCompression([contentField](WCDB::Database::CompressionInfo& info) {
+        if (info.getTableName().equal("compressedTable") || info.getTableName().equal("anotherCompressedTable")) {
+            info.addZSTDNormalCompressField(contentField);
+        }
+    });
+    const WCDB::ValueArray<CPPTestCaseObject> objects = { CPPTestCaseObject(1, content) };
+    TestCaseAssertTrue(database->insertObjects(objects, "compressedTable"));
+    TestCaseAssertTrue(database->insertObjects(objects, "ordinaryTable"));
+    TestCaseAssertTrue(database->insertObjects(objects, "anotherCompressedTable"));
+
+    auto compressionType = database->getValueFromStatement(WCDB::StatementSelect().select(WCDB::Column("WCDB_CT_content")).from("compressedTable"));
+    TestCaseAssertTrue(compressionType.hasValue());
+    TestCaseAssertTrue(compressionType.value() == 4);
+    auto singleTableValue = database->getValueFromStatement(WCDB::StatementSelect().select(contentField).from("compressedTable"));
+    TestCaseAssertTrue(singleTableValue.hasValue());
+    TestCaseAssertTrue(singleTableValue.value().textValue().equal(content));
+
+    for (const char* otherTable : { "ordinaryTable", "anotherCompressedTable" }) {
+        for (bool wrapped : { false, true }) {
+            for (bool reversed : { false, true }) {
+                auto firstTable = WCDB::TableOrSubquery(reversed ? otherTable : "compressedTable").as("firstTable");
+                auto secondTable = WCDB::TableOrSubquery(reversed ? "compressedTable" : otherTable).as("secondTable");
+                auto compressedContent = contentField.table(reversed ? "secondTable" : "firstTable");
+                auto join = WCDB::Join().table(firstTable).join(secondTable).on(WCDB::Column(identifier).table("firstTable") == WCDB::Column(identifier).table("secondTable"));
+                auto select = WCDB::StatementSelect().select({ contentField.table("firstTable"), contentField.table("secondTable") });
+                if (wrapped) {
+                    select.from(WCDB::TableOrSubquery(join));
+                } else {
+                    select.from(join);
+                }
+                auto rows = database->getAllRowsFromStatement(select);
+                TestCaseAssertTrue(rows.hasValue());
+                TestCaseAssertTrue(rows.value().size() == 1);
+                TestCaseAssertTrue(rows.value().front()[0].getType() == WCDB::Value::Type::Text);
+                TestCaseAssertTrue(rows.value().front()[1].getType() == WCDB::Value::Type::Text);
+                TestCaseAssertTrue(rows.value().front()[0].textValue().equal(content));
+                TestCaseAssertTrue(rows.value().front()[1].textValue().equal(content));
+
+                select.where(compressedContent == content);
+                rows = database->getAllRowsFromStatement(select);
+                TestCaseAssertTrue(rows.hasValue());
+                TestCaseAssertTrue(rows.value().size() == 1);
+
+                join.on(contentField.table("firstTable") == contentField.table("secondTable"));
+                if (wrapped) {
+                    select.from(WCDB::TableOrSubquery(join));
+                } else {
+                    select.from(join);
+                }
+                rows = database->getAllRowsFromStatement(select);
+                TestCaseAssertTrue(rows.hasValue());
+                TestCaseAssertTrue(rows.value().size() == 1);
+
+                auto nestedSelect = WCDB::StatementSelect().select(WCDB::Column("content")).from(select.as("derivedTable"));
+                auto nestedValue = database->getValueFromStatement(nestedSelect);
+                TestCaseAssertTrue(nestedValue.hasValue());
+                TestCaseAssertTrue(nestedValue.value().getType() == WCDB::Value::Type::Text);
+                TestCaseAssertTrue(nestedValue.value().textValue().equal(content));
+
+                auto compoundSelect = select;
+                compoundSelect.unionAll().select({ contentField.table("firstTable"), contentField.table("secondTable") });
+                if (wrapped) {
+                    compoundSelect.from(WCDB::TableOrSubquery(join));
+                } else {
+                    compoundSelect.from(join);
+                }
+                rows = database->getAllRowsFromStatement(compoundSelect);
+                TestCaseAssertTrue(rows.hasValue());
+                TestCaseAssertTrue(rows.value().size() == 2);
+                for (const auto& row : rows.value()) {
+                    TestCaseAssertTrue(row[0].textValue().equal(content));
+                    TestCaseAssertTrue(row[1].textValue().equal(content));
+                }
+
+                auto commaSelect = WCDB::StatementSelect().select({ contentField.table("firstTable"), contentField.table("secondTable") }).from({ firstTable, secondTable }).where(compressedContent == content);
+                rows = database->getAllRowsFromStatement(commaSelect);
+                TestCaseAssertTrue(rows.hasValue());
+                TestCaseAssertTrue(rows.value().size() == 1);
+                TestCaseAssertTrue(rows.value().front()[0].textValue().equal(content));
+                TestCaseAssertTrue(rows.value().front()[1].textValue().equal(content));
+            }
+        }
+    }
+}
+
 - (void)test_dict_compress
 {
     [[Random shared] setStringType:RandomStringType_English];

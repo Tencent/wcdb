@@ -973,14 +973,14 @@ bool CompressingStatementDecorator::adaptCompressingColumn(Statement& statement,
             Syntax::SelectSTMT& selectSTMT = (Syntax::SelectSTMT&) identifier;
             if (selectSTMT.select.hasValue()
                 && selectSTMT.select.value().switcher != Syntax::SelectCore::Switch::Values
-                && !parseTable(selectSTMT.select.value().tableOrSubqueries, tableInfos)) {
+                && !parseTable(selectSTMT.select.value(), tableInfos)) {
                 succeed = false;
                 stop = true;
                 return;
             }
             for (const auto& selectCore : selectSTMT.cores) {
                 if (selectCore.switcher != Syntax::SelectCore::Switch::Values
-                    && !parseTable(selectCore.tableOrSubqueries, tableInfos)) {
+                    && !parseTable(selectCore, tableInfos)) {
                     succeed = false;
                     stop = true;
                     return;
@@ -997,7 +997,7 @@ bool CompressingStatementDecorator::adaptCompressingColumn(Statement& statement,
                 return;
             }
             TableInfos& tableInfos = tableInfoStack.back();
-            if (!parseTable(syntax.tableOrSubqueries, tableInfos)) {
+            if (!parseTable(syntax, tableInfos)) {
                 succeed = false;
                 stop = true;
                 return;
@@ -1097,13 +1097,23 @@ bool CompressingStatementDecorator::adaptCompressingColumn(Statement& statement,
     return succeed;
 }
 
+bool CompressingStatementDecorator::parseTable(const Syntax::SelectCore& select,
+                                               TableInfos& tableInfos)
+{
+    if (!parseTable(select.tableOrSubqueries, tableInfos)) {
+        return false;
+    }
+    return !select.joinClause.hasValue()
+           || parseTable(select.joinClause.value().tableOrSubqueries, tableInfos);
+}
+
 bool CompressingStatementDecorator::parseTable(const std::list<Syntax::TableOrSubquery>& tables,
                                                StringViewMap<const CompressionTableInfo*>& tableInfos)
 {
     for (const auto& table : tables) {
         if (table.switcher == Syntax::TableOrSubquery::Switch::Table) {
             if (!table.schema.isMain()) {
-                return true;
+                continue;
             }
             auto tableInfo
             = m_compressionBinder->tryGetCompressionInfo(table.tableOrFunction);
@@ -1114,9 +1124,12 @@ bool CompressingStatementDecorator::parseTable(const std::list<Syntax::TableOrSu
             if (!table.alias.empty()) {
                 tableInfos.insert_or_assign(table.alias, tableInfo.value());
             }
-            return true;
         } else if (table.switcher == Syntax::TableOrSubquery::Switch::TableOrSubqueries) {
             if (!parseTable(table.tableOrSubqueries, tableInfos)) {
+                return false;
+            }
+        } else if (table.switcher == Syntax::TableOrSubquery::Switch::JoinClause) {
+            if (!parseTable(table.joinClause.get()->tableOrSubqueries, tableInfos)) {
                 return false;
             }
         } else if (!table.alias.empty()) {
